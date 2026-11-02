@@ -152,6 +152,38 @@ CARD_ART = {
     "metricsdoc": '<rect x="8" y="26" width="52" height="44" rx="6"/><path d="M16 62V50M26 62V42M36 62V54"/><path d="M68 22h24l8 8v56H68z"/><path d="M92 22v8h8"/><path d="M75 48h14M75 58h14M75 68h9" opacity=".45"/>',
     "finish": '<path d="M16 98c14 0 20-8 32-8s14 8 26 8 16-6 24-6" opacity=".45"/><path d="M66 94V36"/><path d="M66 36h30l-8 11 8 11H66"/><path d="M32 64l8 8 16-18"/>',
     "defense": '<rect x="12" y="24" width="52" height="38" rx="6"/><path d="M22 38h28M22 48h20" opacity=".45"/><path d="M38 62v8M28 86l10-16 10 16"/><path d="M88 50l16 6v12c0 11-7 18-16 22-9-4-16-11-16-16V56z"/>',
+    "sla": '<path d="M28 16h40l14 14v58H28z"/><path d="M68 16v14h14"/><path d="M38 40h20M38 50h16" opacity=".45"/><circle cx="60" cy="70" r="13"/><path d="M60 62v8l6 4"/>',
+    "incident": '<path d="M78 46a18 18 0 00-36 0c0 16-8 20-8 20h52s-8-4-8-20z"/><path d="M52 78a8 8 0 0016 0"/><path d="M60 18v-6" opacity=".45"/>',
+    "tree": '<circle cx="60" cy="24" r="8"/><path d="M60 32v18M60 50H34v14M60 50h26v14"/><rect x="22" y="64" width="24" height="18" rx="4"/><rect x="48" y="64" width="24" height="18" rx="4"/><rect x="74" y="64" width="24" height="18" rx="4"/>',
+    "timeline": '<path d="M16 60h88"/><circle cx="30" cy="60" r="6"/><circle cx="60" cy="60" r="6"/><circle cx="90" cy="60" r="6"/><path d="M30 54V38h18" opacity=".45"/><path d="M60 66v16h16" opacity=".45"/>',
+    "request": '<rect x="22" y="18" width="56" height="84" rx="8"/><path d="M34 38h24M34 52h24M34 66h14" opacity=".45"/><path d="M90 62v24M78 74h24"/>',
+    "monitor": '<rect x="14" y="24" width="92" height="60" rx="8"/><path d="M26 58h12l7-14 9 28 8-20 6 6h22"/><path d="M60 84v10M44 100h32"/>',
+    "logs": '<rect x="16" y="22" width="88" height="76" rx="8"/><path d="M16 40h88"/><circle cx="27" cy="31" r="2.5" fill="var(--accent)" stroke="none"/><circle cx="36" cy="31" r="2.5" fill="var(--accent)" stroke="none"/><path d="M30 56h44M30 68h34M30 80h48" opacity=".45"/>',
+    "server": '<rect x="26" y="16" width="68" height="26" rx="5"/><rect x="26" y="48" width="68" height="26" rx="5"/><rect x="26" y="80" width="68" height="26" rx="5"/><circle cx="40" cy="29" r="2.5" fill="var(--accent)" stroke="none"/><circle cx="40" cy="61" r="2.5" fill="var(--accent)" stroke="none"/><circle cx="40" cy="93" r="2.5" fill="var(--accent)" stroke="none"/><path d="M58 29h24M58 61h24M58 93h24" opacity=".45"/>',
+    "update": '<rect x="22" y="56" width="76" height="42" rx="7"/><path d="M60 46V22M46 34l14-12 14 12"/><path d="M34 70h24M34 82h16" opacity=".45"/>',
+    "rollback": '<rect x="30" y="20" width="60" height="76" rx="7"/><path d="M74 58H46M58 44L44 58l14 14"/>',
+    "access": '<circle cx="44" cy="34" r="13"/><path d="M44 47c-13 0-22 9-22 21v22h44V68"/><circle cx="84" cy="66" r="16"/><path d="M76 66l6 6 12-13"/>',
+    "roles": '<rect x="18" y="24" width="84" height="72" rx="6"/><path d="M18 46h84M18 70h84M46 24v72M74 24v72"/><rect x="46" y="46" width="28" height="24" fill="var(--accent)" stroke="none" opacity=".35"/>',
+    "knowledge": '<path d="M18 32c12-6 24-6 32 0v60c-8-6-20-6-32 0z"/><path d="M82 32c-12-6-24-6-32 0v60c8-6 20-6 32 0z"/><path d="M60 16v-8M78 20l5-6M42 20l-5-6" opacity=".45"/>',
+    "comms": '<path d="M14 30a8 8 0 018-8h36a8 8 0 018 8v16a8 8 0 01-8 8H44l-12 10V54H22a8 8 0 01-8-8z"/><path d="M62 60h24a8 8 0 018 8v10a8 8 0 01-8 8H84v8l-9-8H62a8 8 0 01-8-8V68a8 8 0 018-8z" opacity=".45"/>',
+    "report": '<rect x="26" y="20" width="68" height="80" rx="6"/><rect x="46" y="12" width="28" height="14" rx="4"/><path d="M40 78V64M54 78V50M68 78V58"/><path d="M36 92h48" opacity=".45"/>',
+    "continuity": '<path d="M34 46a30 30 0 0142-14"/><path d="M70 24l10 8-8 10"/><path d="M86 74a30 30 0 01-42 14"/><path d="M50 96l-10-8 8-10"/><circle cx="60" cy="60" r="7" opacity=".45"/>',
+    "data": '<rect x="20" y="22" width="80" height="20" rx="4"/><rect x="20" y="50" width="80" height="20" rx="4"/><rect x="20" y="78" width="80" height="20" rx="4"/><circle cx="32" cy="32" r="2.5" fill="var(--accent)" stroke="none"/><circle cx="32" cy="60" r="2.5" fill="var(--accent)" stroke="none"/><circle cx="32" cy="88" r="2.5" fill="var(--accent)" stroke="none"/><path d="M46 32h38M46 60h38M46 88h26" opacity=".45"/>',
+    "layers": '<path d="M60 18l38 18-38 18-38-18z"/><path d="M22 60l38 18 38-18"/><path d="M22 78l38 18 38-18"/>',
+    "hierarchy": '<rect x="42" y="14" width="36" height="20" rx="5"/><path d="M60 34v12M24 46h72"/><path d="M24 46v10M60 46v10M96 46v10"/><rect x="10" y="56" width="28" height="18" rx="5"/><rect x="46" y="56" width="28" height="18" rx="5"/><rect x="82" y="56" width="28" height="18" rx="5"/><rect x="36" y="86" width="48" height="18" rx="5" opacity=".45"/><path d="M60 74v12" opacity=".45"/>',
+    "flow": '<path d="M18 34h50M56 26l10 8-10 8"/><path d="M18 60h72M80 52l10 8-10 8"/><path d="M18 86h34M42 78l10 8-10 8"/>',
+    "architecture": '<rect x="12" y="30" width="34" height="26" rx="5"/><rect x="74" y="30" width="34" height="26" rx="5"/><path d="M46 43h28"/><path d="M58 37l6 6-6 6"/><rect x="42" y="74" width="36" height="26" rx="5" opacity=".45"/><path d="M60 56v18" opacity=".45"/>',
+    "lifecycle": '<circle cx="60" cy="60" r="30"/><circle cx="60" cy="30" r="5"/><circle cx="90" cy="60" r="5"/><circle cx="60" cy="90" r="5"/><circle cx="30" cy="60" r="5"/><path d="M80 38l6-6M82 82l6 6M40 82l-6 6M38 38l-6-6" opacity=".45"/>',
+    "er": '<rect x="10" y="18" width="36" height="24" rx="4"/><rect x="74" y="18" width="36" height="24" rx="4"/><rect x="42" y="76" width="36" height="24" rx="4"/><path d="M46 30h28M28 42v32h14M92 42v32H78"/>',
+    "schema": '<rect x="14" y="24" width="92" height="72" rx="6"/><path d="M14 44h92M14 62h92M14 80h92M40 24v72"/><circle cx="27" cy="34" r="3" fill="var(--accent)" stroke="none"/><path d="M50 34h40M50 54h40M50 72h40M50 90h24" opacity=".45"/>',
+    "services": '<circle cx="60" cy="60" r="14"/><circle cx="26" cy="26" r="8"/><circle cx="94" cy="26" r="8"/><circle cx="60" cy="98" r="8"/><path d="M33 32l17 17M87 32L70 49M60 74v16"/>',
+    "grid": '<rect x="16" y="16" width="30" height="30" rx="5"/><rect x="16" y="56" width="30" height="30" rx="5"/><rect x="56" y="16" width="30" height="30" rx="5"/><rect x="56" y="56" width="30" height="30" rx="5" opacity=".45"/>',
+    "replica": '<ellipse cx="32" cy="52" rx="16" ry="6"/><path d="M16 52v26c0 3 7 6 16 6s16-3 16-6V52"/><path d="M16 65c0 3 7 6 16 6s16-3 16-6" opacity=".45"/><ellipse cx="88" cy="52" rx="16" ry="6"/><path d="M72 52v26c0 3 7 6 16 6s16-3 16-6V52"/><path d="M72 65c0 3 7 6 16 6s16-3 16-6" opacity=".45"/><path d="M48 44h24M62 38l6 6-6 6M72 60H48M58 54l-6 6 6 6"/>',
+    "index": '<rect x="14" y="26" width="80" height="64" rx="6"/><path d="M14 46h80M14 66h80M48 26v64"/><rect x="48" y="26" width="24" height="64" fill="var(--accent)" stroke="none" opacity=".18"/><path d="M100 34h8M100 58h8M100 82h8" opacity=".45"/>',
+    "lock": '<rect x="30" y="54" width="60" height="44" rx="8"/><path d="M44 54V42a16 16 0 0132 0v12"/><circle cx="60" cy="72" r="6"/><path d="M60 78v8"/>',
+    "export": '<path d="M16 20h44l14 14v66H16z"/><path d="M60 20v14h14"/><path d="M28 50h22M42 42l8 8-8 8"/><path d="M28 68h16" opacity=".45"/>',
+    "standard": '<path d="M22 16h44l14 14v66H22z"/><path d="M66 16v14h14"/><path d="M34 42h26M34 54h18" opacity=".45"/><circle cx="88" cy="72" r="12"/><path d="M84 80l-2 12 6-4 6 4-2-12"/>',
+    "medal": '<circle cx="60" cy="46" r="22"/><path d="M50 46l7 7 14-15"/><path d="M48 66l-6 30 18-9 18 9-6-30" opacity=".55"/>',
     "default": '<circle cx="42" cy="48" r="18"/><circle cx="78" cy="72" r="22" opacity=".45"/><path d="M24 96h72" opacity=".4"/>',
 }
 
@@ -250,10 +282,10 @@ def build_course(root: Path) -> Path:
     write_plan_xlsx(c, dist / plan_name)
     if cards:
         plan_heading = "Разделы подготовки"
-        plan_intro = ('<article class="prose"><p>Материалы собраны в разделы: общая информация '
-                      'об экзамене, методички по шести заданиям и варианты для практики. '
-                      'В каждой методичке указано, что открыть, какие файлы создать и какие '
-                      'команды выполнить.</p></article>')
+        plan_intro = ('<article class="prose"><p>Материалы собраны в разделы: предварительная '
+                      'подготовка с разбором первых трёх заданий, общая информация об экзамене, '
+                      'методички по шести заданиям и варианты для практики. В каждом разделе '
+                      'указано, что открыть, какие файлы создать и какие команды выполнить.</p></article>')
     else:
         plan_heading = "Учебный план"
         plan_intro = ""
