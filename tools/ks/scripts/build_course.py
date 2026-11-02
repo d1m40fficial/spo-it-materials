@@ -92,7 +92,8 @@ def card_art(ch: dict) -> str:
             return "exam"
         return None
 
-    motif = choose(title) or choose(text) or "default"
+    icon = ch.get("icon")
+    motif = icon if icon in CARD_ART else (choose(title) or choose(text) or "default")
     inner = CARD_ART[motif].replace("var(--accent)", "var(--course-accent, var(--accent))")
     return (f'<div class="card-art" aria-hidden="true"><svg viewBox="0 0 120 120" fill="none" '
             f'stroke="var(--course-accent, var(--accent))" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">'
@@ -117,6 +118,40 @@ CARD_ART = {
     "support": '<path d="M34 64v-8a26 26 0 0152 0v8"/><rect x="26" y="60" width="14" height="22" rx="7"/><rect x="80" y="60" width="14" height="22" rx="7"/><path d="M86 82c0 8-8 14-18 14h-8"/><circle cx="56" cy="96" r="4" fill="var(--accent)" stroke="none"/>',
     "learn": '<rect x="20" y="26" width="80" height="54" rx="8"/><path d="M32 42h36M32 54h28M32 66h20"/><circle cx="88" cy="74" r="12"/><path d="M82 74l4 4 8-9"/>',
     "exam": '<rect x="28" y="20" width="64" height="80" rx="8"/><path d="M44 42l6 6 12-12M44 64l6 6 12-12M44 86l6 6 12-12"/><path d="M70 48h10M70 70h10M70 92h10" opacity=".45"/>',
+    "assemble": '<rect x="22" y="30" width="52" height="26" rx="7"/><path d="M32 43h20" opacity=".45"/><rect x="22" y="64" width="52" height="26" rx="7"/><path d="M32 77h12" opacity=".45"/><path d="M90 34v24M78 46h24"/>',
+    "strategy": '<circle cx="28" cy="60" r="9"/><path d="M37 60h13"/><path d="M50 60c14 0 12-26 32-26"/><path d="M50 60h32"/><path d="M50 60c14 0 12 26 32 26"/><circle cx="94" cy="34" r="7"/><circle cx="94" cy="60" r="7"/><circle cx="94" cy="86" r="7"/>',
+    "survey": '<rect x="18" y="34" width="42" height="60" rx="6"/><path d="M28 50h10M42 50h8M28 64h10M42 64h8M28 78h10M42 78h8" opacity=".45"/><circle cx="76" cy="56" r="17"/><path d="M88 68l14 14"/>',
+    "processmap": '<rect x="14" y="30" width="30" height="20" rx="5"/><rect x="14" y="76" width="30" height="20" rx="5"/><rect x="62" y="76" width="30" height="20" rx="5"/><path d="M44 40h10v48h8M44 86h18"/><path d="M58 18h32a6 6 0 016 6v14a6 6 0 01-6 6H78l-9 9v-9h-11a6 6 0 01-6-6V24a6 6 0 016-6z" opacity=".45"/>',
+    "gap": '<path d="M40 26H24v68h16"/><path d="M80 26h16v68H80"/><path d="M48 60h24"/><path d="M56 52l-8 8 8 8M64 52l8 8-8 8"/>',
+    "priorities": '<rect x="18" y="26" width="58" height="18" rx="5"/><circle cx="66" cy="35" r="4" fill="var(--accent)" stroke="none"/><rect x="18" y="52" width="44" height="18" rx="5" opacity=".45"/><rect x="18" y="78" width="30" height="18" rx="5" opacity=".45"/><path d="M94 92V58M86 66l8-8 8 8"/>',
+    "plan": '<rect x="18" y="26" width="84" height="72" rx="8"/><path d="M18 46h84"/><path d="M38 16v16M82 16v16"/><path d="M32 60h12M54 60h12M76 60h12M32 78h12M54 78h12" opacity=".45"/>',
+    "sliders": '<path d="M22 36h76M22 60h76M22 84h76" opacity=".35"/><circle cx="46" cy="36" r="9"/><circle cx="78" cy="60" r="9"/><circle cx="38" cy="84" r="9"/>',
+    "roadmap": '<path d="M22 92c16 0 12-24 28-24s10 18 26 18 16-18 16-32" stroke-dasharray="6 7"/><circle cx="22" cy="92" r="6"/><path d="M86 54V20"/><path d="M86 20h18l-5 8 5 8H86"/>',
+    "migrate": '<ellipse cx="32" cy="36" rx="15" ry="6"/><path d="M17 36v30c0 3.5 6.7 6 15 6s15-2.5 15-6V36"/><path d="M17 51c0 3.5 6.7 6 15 6s15-2.5 15-6" opacity=".45"/><ellipse cx="88" cy="36" rx="15" ry="6"/><path d="M73 36v30c0 3.5 6.7 6 15 6s15-2.5 15-6V36"/><path d="M73 51c0 3.5 6.7 6 15 6s15-2.5 15-6" opacity=".45"/><path d="M50 62h20M62 54l8 8-8 8"/>',
+    "import": '<path d="M34 18h40l14 14v54H34z"/><path d="M74 18v14h14"/><path d="M62 46v20M54 58l8 8 8-8"/><path d="M26 96h68" opacity=".45"/>',
+    "compare": '<rect x="14" y="28" width="30" height="64" rx="6"/><rect x="76" y="28" width="30" height="64" rx="6"/><path d="M22 44h14M22 56h14M22 68h9M84 44h14M84 56h14M84 68h9" opacity=".45"/><path d="M50 62l6 6 12-14"/>',
+    "link": '<rect x="10" y="40" width="32" height="40" rx="6"/><rect x="78" y="40" width="32" height="40" rx="6"/><path d="M42 60h36M50 52l-8 8 8 8M70 52l8 8-8 8"/>',
+    "browsersync": '<rect x="16" y="20" width="88" height="72" rx="8"/><path d="M16 36h88"/><circle cx="27" cy="28" r="2.5" fill="var(--accent)" stroke="none"/><circle cx="36" cy="28" r="2.5" fill="var(--accent)" stroke="none"/><path d="M34 54h30M56 46l8 8-8 8"/><path d="M86 78H56M64 70l-8 8 8 8"/>',
+    "lessonplan": '<rect x="16" y="24" width="88" height="62" rx="8"/><path d="M28 42h30M28 54h22M28 66h14" opacity=".45"/><circle cx="82" cy="58" r="12"/><path d="M78 51l10 7-10 7z"/>',
+    "memo": '<path d="M30 16h44l12 12v58H30z"/><path d="M74 16v12h12"/><path d="M42 42h26M42 54h20" opacity=".45"/><circle cx="72" cy="74" r="13"/><path d="M66 74l5 5 9-10"/>',
+    "orgchange": '<rect x="46" y="16" width="28" height="20" rx="5"/><path d="M60 36v10M60 46H32v20M60 46h28v20"/><rect x="18" y="66" width="28" height="18" rx="5"/><rect x="74" y="66" width="28" height="18" rx="5"/><path d="M40 98h40M48 90l-8 8 8 8M72 90l8 8-8 8"/>',
+    "branch": '<path d="M34 96V26"/><path d="M34 68c0-14 30-8 30-24"/><circle cx="34" cy="26" r="7"/><circle cx="34" cy="68" r="7"/><circle cx="34" cy="96" r="7"/><circle cx="64" cy="44" r="7"/>',
+    "risk": '<path d="M60 22l38 66H22z"/><path d="M60 46v22"/><circle cx="60" cy="78" r="3" fill="var(--accent)" stroke="none"/>',
+    "stamp": '<path d="M44 22h32l-4 32H48z"/><rect x="34" y="58" width="52" height="12" rx="4"/><rect x="24" y="74" width="72" height="18" rx="5"/><path d="M55 83l5 5 9-9"/>',
+    "pilot": '<circle cx="60" cy="60" r="34" stroke-dasharray="6 8" opacity=".45"/><circle cx="60" cy="60" r="21"/><path d="M55 50l16 10-16 10z"/>',
+    "testplan": '<rect x="14" y="18" width="50" height="84" rx="8"/><path d="M24 36l5 5 9-10M24 56l5 5 9-10M24 76l5 5 9-10"/><path d="M46 40h8M46 60h8M46 80h8" opacity=".45"/><path d="M84 96V34"/><path d="M84 34h22l-6 9 6 9H84"/>',
+    "gear": '<circle cx="60" cy="60" r="17"/><circle cx="60" cy="60" r="6" opacity=".45"/><path d="M60 43V34M60 77v9M77 60h9M43 60h-9M72 48l6-6M48 48l-6-6M72 72l6 6M48 72l-6 6"/>',
+    "effect": '<path d="M20 98h78" opacity=".45"/><rect x="28" y="62" width="14" height="34" rx="3"/><rect x="52" y="46" width="14" height="50" rx="3"/><rect x="76" y="30" width="14" height="66" rx="3"/><path d="M26 40l22-12 14 6 22-16"/><path d="M76 24h10v10"/>',
+    "queue": '<rect x="18" y="30" width="48" height="16" rx="4" opacity=".45"/><rect x="18" y="54" width="48" height="16" rx="4" opacity=".45"/><rect x="18" y="78" width="48" height="16" rx="4"/><path d="M88 96V48M78 58l10-10 10 10"/>',
+    "shieldkey": '<path d="M60 20l30 12v22c0 20-13 34-30 42-17-8-30-22-30-42V32z"/><circle cx="60" cy="54" r="7"/><path d="M60 61v13"/>',
+    "keylist": '<circle cx="32" cy="48" r="14"/><path d="M42 58l20 20M54 70l6-6M62 78l6-6"/><rect x="74" y="24" width="28" height="40" rx="5" opacity=".45"/><path d="M81 34h14M81 44h14M81 54h9" opacity=".3"/>',
+    "backup": '<ellipse cx="44" cy="32" rx="18" ry="7"/><path d="M26 32v34c0 4 8 7 18 7s18-3 18-7V32"/><path d="M26 49c0 4 8 7 18 7s18-3 18-7" opacity=".45"/><rect x="66" y="50" width="30" height="40" rx="6" opacity=".55"/><path d="M74 62h14M74 72h14M74 82h8" opacity=".35"/>',
+    "restore": '<circle cx="44" cy="44" r="24"/><path d="M44 30v15l10 6"/><ellipse cx="80" cy="78" rx="18" ry="7"/><path d="M62 78v14c0 4 8 7 18 7s18-3 18-7V78"/><path d="M62 85c0 4 8 7 18 7s18-3 18-7" opacity=".45"/>',
+    "inbox": '<path d="M18 48h20l6 10h32l6-10h20"/><path d="M18 48v42h84V48"/><path d="M44 18v18M36 28l8 8 8-8"/><path d="M76 18v18M68 28l8 8 8-8"/>',
+    "dashboard": '<rect x="14" y="26" width="92" height="68" rx="8"/><rect x="28" y="66" width="14" height="18" rx="3"/><rect x="53" y="52" width="14" height="32" rx="3"/><rect x="78" y="40" width="14" height="44" rx="3"/>',
+    "metricsdoc": '<rect x="8" y="26" width="52" height="44" rx="6"/><path d="M16 62V50M26 62V42M36 62V54"/><path d="M68 22h24l8 8v56H68z"/><path d="M92 22v8h8"/><path d="M75 48h14M75 58h14M75 68h9" opacity=".45"/>',
+    "finish": '<path d="M16 98c14 0 20-8 32-8s14 8 26 8 16-6 24-6" opacity=".45"/><path d="M66 94V36"/><path d="M66 36h30l-8 11 8 11H66"/><path d="M32 64l8 8 16-18"/>',
+    "defense": '<rect x="12" y="24" width="52" height="38" rx="6"/><path d="M22 38h28M22 48h20" opacity=".45"/><path d="M38 62v8M28 86l10-16 10 16"/><path d="M88 50l16 6v12c0 11-7 18-16 22-9-4-16-11-16-16V56z"/>',
     "default": '<circle cx="42" cy="48" r="18"/><circle cx="78" cy="72" r="22" opacity=".45"/><path d="M24 96h72" opacity=".4"/>',
 }
 
@@ -158,7 +193,12 @@ def build_course(root: Path) -> Path:
         else:
             status = "" if link else f' · {esc(ST.get(ch.get("status", "planned"), ch.get("status", "план")))}'
         title = esc(ch["title"])
-        cls = ' class="locked"' if locked else ""
+        classes = []
+        if locked:
+            classes.append("locked")
+        if ch.get("pinned"):
+            classes.append("pinned")
+        cls = f' class="{" ".join(classes)}"' if classes else ""
         if cards:
             label = ch.get("label") or (
                 "Справочник" if ch.get("role") == "info"
