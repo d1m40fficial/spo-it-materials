@@ -845,7 +845,7 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <li>Панель XAMPP Control Panel с запущенными Apache и MySQL, phpMyAdmin по адресу <code>http://localhost/phpmyadmin</code>.</li>
 <li>Клиент <code>mysql</code> и утилита <code>mysqldump.exe</code>.</li>
 <li>.NET SDK 10 и Visual Studio 2022 Community с рабочей нагрузкой «Разработка классических приложений .NET».</li>
-<li>Приложение <code>DeanMaintenance</code> из практики 9 и пакет <code>MySqlConnector</code>.</li>
+<li>Приложение <code>DeanMaintenance</code> из <a href="23-prakt-09.html" target="_blank" rel="noopener" title="Откроется в новой вкладке. Прогресс текущего занятия не сбросится.">практики 9</a> и пакет <code>MySqlConnector</code>.</li>
 <li>Скрипты предыдущих практик: схема, роли, индексы, данные, обслуживание.</li>
 <li>Текстовый редактор и табличный редактор для протокола.</li>
 </ul>
@@ -910,7 +910,7 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 </tr>
 </tbody>
 </table>
-<p>В <code>schema.sql</code> включите таблицу <code>maintenance_runs</code> из практики 9, таблицу <code>audit_log</code> и триггеры из практики 10, столбец <code>middle_name</code> и строку версии 2 из практики 11.</p>
+<p>В <code>schema.sql</code> включите таблицу <code>maintenance_runs</code> из <a href="23-prakt-09.html" target="_blank" rel="noopener" title="Откроется в новой вкладке. Прогресс текущего занятия не сбросится.">практики 9</a>, таблицу <code>audit_log</code> и триггеры из <a href="26-prakt-10.html" target="_blank" rel="noopener" title="Откроется в новой вкладке. Прогресс текущего занятия не сбросится.">практики 10</a>, столбец <code>middle_name</code> и строку версии 2 из <a href="28-prakt-11.html" target="_blank" rel="noopener" title="Откроется в новой вкладке. Прогресс текущего занятия не сбросится.">практики 11</a>.</p>
 <h3>Шаг 2. Соберите базу на чистом месте</h3>
 <p>Создайте пустую базу и примените скрипты по порядку. Остановка при первой ошибке обязательна: иначе сборка продолжится на неполной схеме. В <code>roles.sql</code> указывайте полные имена объектов <code>dean_final.*</code>: скрипт выполняется без выбранной базы.</p>
 <div class="codehilite" data-lang="powershell"><pre><span></span><code><span class="p">&amp;</span> <span class="n">mysql</span> <span class="n">-u</span> <span class="n">root</span> <span class="n">-e</span> <span class="s2">&quot;DROP DATABASE IF EXISTS dean_final; CREATE DATABASE dean_final CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;&quot;</span>
@@ -984,7 +984,7 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 
 <p>Приложите скриншот создания копии и сравнения числа строк. Числа должны совпасть, версия схемы в копии тоже.</p>
 <h3>Шаг 7. Запустите обслуживание из .NET-приложения</h3>
-<p>Приложению из практики 9 нужно передать имя базы, иначе оно всегда работает с <code>dean</code>. Добавьте разбор аргумента.</p>
+<p>Приложению из <a href="23-prakt-09.html" target="_blank" rel="noopener" title="Откроется в новой вкладке. Прогресс текущего занятия не сбросится.">практики 9</a> нужно передать имя базы, иначе оно всегда работает с <code>dean</code>. Добавьте разбор аргумента.</p>
 <div class="codehilite" data-lang="csharp"><pre><span></span><code><span class="kt">var</span><span class="w"> </span><span class="n">database</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">args</span><span class="p">.</span><span class="n">Length</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s">&quot;dean&quot;</span><span class="p">;</span>
 
 <span class="kt">var</span><span class="w"> </span><span class="n">secret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">@&quot;.../dean/secret/db_password.txt&quot;</span><span class="p">;</span>

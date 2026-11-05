@@ -24,7 +24,7 @@ outcomes:
 - Панель XAMPP Control Panel с запущенными Apache и MySQL, phpMyAdmin по адресу `http://localhost/phpmyadmin`.
 - Клиент `mysql` и утилита `mysqldump.exe`.
 - .NET SDK 10 и Visual Studio 2022 Community с рабочей нагрузкой «Разработка классических приложений .NET».
-- Приложение `DeanMaintenance` из практики 9 и пакет `MySqlConnector`.
+- Приложение `DeanMaintenance` из <a href="23-prakt-09.html" target="_blank" rel="noopener" title="Откроется в новой вкладке. Прогресс текущего занятия не сбросится.">практики 9</a> и пакет `MySqlConnector`.
 - Скрипты предыдущих практик: схема, роли, индексы, данные, обслуживание.
 - Текстовый редактор и табличный редактор для протокола.
 
@@ -68,7 +68,7 @@ outcomes:
 | `backup.ps1` | Дамп и проверка восстановлением | Практика 3 |
 | `README.md` | Порядок сборки и проверки | Составляется здесь |
 
-В `schema.sql` включите таблицу `maintenance_runs` из практики 9, таблицу `audit_log` и триггеры из практики 10, столбец `middle_name` и строку версии 2 из практики 11.
+В `schema.sql` включите таблицу `maintenance_runs` из <a href="23-prakt-09.html" target="_blank" rel="noopener" title="Откроется в новой вкладке. Прогресс текущего занятия не сбросится.">практики 9</a>, таблицу `audit_log` и триггеры из <a href="26-prakt-10.html" target="_blank" rel="noopener" title="Откроется в новой вкладке. Прогресс текущего занятия не сбросится.">практики 10</a>, столбец `middle_name` и строку версии 2 из <a href="28-prakt-11.html" target="_blank" rel="noopener" title="Откроется в новой вкладке. Прогресс текущего занятия не сбросится.">практики 11</a>.
 
 ### Шаг 2. Соберите базу на чистом месте
 
@@ -167,7 +167,7 @@ SELECT version FROM dean_restore.schema_version ORDER BY version;
 
 ### Шаг 7. Запустите обслуживание из .NET-приложения
 
-Приложению из практики 9 нужно передать имя базы, иначе оно всегда работает с `dean`. Добавьте разбор аргумента.
+Приложению из <a href="23-prakt-09.html" target="_blank" rel="noopener" title="Откроется в новой вкладке. Прогресс текущего занятия не сбросится.">практики 9</a> нужно передать имя базы, иначе оно всегда работает с `dean`. Добавьте разбор аргумента.
 
 ```csharp
 var database = args.Length > 0 ? args[0] : "dean";
