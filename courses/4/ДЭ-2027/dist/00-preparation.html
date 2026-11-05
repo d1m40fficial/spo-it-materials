@@ -904,127 +904,663 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 </ul>
 <p>В JSON лежат заказчики с полями <code>id</code>, <code>name</code>, <code>inn</code>, <code>addres</code>, <code>phone</code>, <code>type</code>. В CSV лежат ресурсы с полями <code>name</code>, <code>kind</code>, <code>unit</code>, <code>norm</code>, <code>time</code>, <code>price</code>. Для материалов <code>norm</code> это расход на единицу, для операций <code>time</code> это часы на единицу.</p>
 <h2 id="задание-1-er-диаграмма-в-draw-io"><span class="num">03</span>Задание 1. ER-диаграмма в draw.io</h2>
-<h3>Шаг 1. Откройте редактор</h3>
-<p>Откройте <code>app.diagrams.net</code>. Учётная запись не нужна. На стартовом экране выберите создание пустой диаграммы и хранение на устройстве, чтобы файл сохранился в папку занятия.</p>
-<p><a href="reports/screens/prep/drawio-start.png" target="_blank" rel="noopener"><img src="reports/screens/prep/drawio-start.png" alt="Стартовый экран draw.io: пустой холст, панель фигур и меню Файл"></a></p>
-<figcaption>Стартовый экран draw.io. Слева панель фигур, справа настройки холста, сверху меню файла и экспорта.</figcaption>
-
-<p>Не начинайте с готового шаблона: на защите нужно объяснить каждую таблицу. Пустой холст заставляет принимать решения по документам варианта.</p>
-<h3>Шаг 2. Соберите первую таблицу</h3>
-<p>Возьмите фигуру таблицы и назовите её <code>counterparty</code>. Внутри разместите поля:</p>
-<div class="codehilite" data-lang="text"><pre><span></span><code>PK  id          TEXT
-    name        TEXT NOT NULL
-    inn         TEXT
-    address     TEXT
-    phone       TEXT
-    party_type  TEXT
-</code></pre></div>
-
-<p><code>PK</code> отмечает первичный ключ. <code>NOT NULL</code> показывает обязательное поле. <code>party_type</code> хранит роль контрагента: покупатель, изготовитель или поставщик.</p>
-<p><a href="reports/screens/prep/drawio-step1.png" target="_blank" rel="noopener"><img src="reports/screens/prep/drawio-step1.png" alt="Первая таблица counterparty в draw.io: ключ, поля и типы"></a></p>
-<figcaption>Первая таблица. Заголовок, первичный ключ и поля с типами. Пока этого достаточно, чтобы проверить подход.</figcaption>
-
-<p>Не рисуйте таблицу обычными прямоугольниками. Фигура таблицы держит строки и столбцы, поэтому поля не разъезжаются при перемещении.</p>
-<h3>Шаг 3. Добавьте заказ и строки заказа</h3>
-<p>Заказ делится на шапку и строки. В шапке <code>customer_order</code> хранятся номер, дата, заказчик и исполнитель. В строках <code>customer_order_line</code> хранятся изделие, количество и продажная цена.</p>
-<div class="codehilite" data-lang="text"><pre><span></span><code>customer_order
-PK  id             INTEGER
-    doc_no         TEXT
-    doc_date       TEXT
-FK  customer_id    TEXT
-FK  executor_id    TEXT
-
-customer_order_line
-PK  id             INTEGER
-FK  order_id       INTEGER
-FK  product_id     INTEGER
-    qty            INTEGER
-    sale_price     REAL
-</code></pre></div>
-
-<p>Один заказ содержит много строк, поэтому связь читается как <code>1:N</code>: единица у заказа, <code>N</code> у строки.</p>
-<p><a href="reports/screens/prep/drawio-step2.png" target="_blank" rel="noopener"><img src="reports/screens/prep/drawio-step2.png" alt="Шапка заказа, строки заказа и изделие в draw.io с подписями 1:N"></a></p>
-<figcaption>Шапка, строки и изделие. У каждой связи подписана кратность, внешние ключи отмечены буквами FK.</figcaption>
-
-<h3>Шаг 4. Добавьте остальные таблицы</h3>
-<p>Полная модель варианта содержит двенадцать таблиц. В варианте меняются названия предприятия и продукции, но структура остаётся той же.</p>
+<h3>Что требуется</h3>
+<p>Нарисовать ER-диаграмму предприятия по документам варианта и сохранить её в PDF. На диаграмме должны быть таблицы, поля, первичные и внешние ключи, связи и кратность. Модель приводится к третьей нормальной форме.</p>
+<p>Сдаются два файла: PDF с диаграммой и исходник <code>.drawio</code>. PDF проверяют на экране и на печати, исходник нужен, чтобы показать, что схема собрана в редакторе, а не нарисована картинкой.</p>
+<p>В базовом наборе получается двенадцать таблиц и четырнадцать связей. В варианте другое предприятие, другая продукция и другие ресурсы, но набор сущностей тот же: контрагенты, ресурсы, цены, спецификация, состав, заказ покупателя, производственный заказ, пользователи и заметки.</p>
+<h3>Сначала разберите исходные данные</h3>
+<p>До открытия draw.io прочитайте файлы варианта и выпишите факты. Диаграмма начинается не с прямоугольников, а с ответов на вопросы о системе.</p>
 <table>
 <thead>
 <tr>
-<th>Таблица</th>
-<th>Что хранит</th>
-<th>Первичный ключ</th>
+<th>Файл</th>
+<th>Что внутри</th>
+<th>Что из него берут</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><code>counterparty</code></td>
-<td>заказчиков, изготовителей, поставщиков</td>
-<td><code>id</code></td>
+<td><code>V01_customers.json</code></td>
+<td>заказчики: код, название, ИНН, адрес, телефон, тип</td>
+<td>таблица <code>counterparty</code></td>
 </tr>
 <tr>
-<td><code>item</code></td>
-<td>продукцию, материалы и операции</td>
-<td><code>id</code></td>
+<td><code>V01_resources.csv</code></td>
+<td>ресурсы: название, вид, единица, норма, время, цена</td>
+<td>таблицы <code>item</code>, <code>price</code>, <code>specification_component</code></td>
 </tr>
 <tr>
-<td><code>price</code></td>
-<td>историю цен ресурса</td>
-<td><code>item_id</code>, <code>valid_from</code></td>
-</tr>
-<tr>
-<td><code>specification</code></td>
-<td>шапку спецификации изделия</td>
-<td><code>id</code></td>
-</tr>
-<tr>
-<td><code>specification_component</code></td>
-<td>строки состава с нормами</td>
-<td><code>specification_id</code>, <code>item_id</code></td>
-</tr>
-<tr>
-<td><code>customer_order</code></td>
-<td>шапку заказа покупателя</td>
-<td><code>id</code></td>
-</tr>
-<tr>
-<td><code>customer_order_line</code></td>
-<td>строки заказа</td>
-<td><code>id</code></td>
-</tr>
-<tr>
-<td><code>production_order</code></td>
-<td>шапку производственного заказа</td>
-<td><code>id</code></td>
-</tr>
-<tr>
-<td><code>production_product</code></td>
-<td>продукцию к выпуску</td>
-<td><code>production_id</code>, <code>product_id</code></td>
-</tr>
-<tr>
-<td><code>production_resource</code></td>
-<td>плановый расход ресурсов</td>
-<td><code>production_id</code>, <code>item_id</code></td>
-</tr>
-<tr>
-<td><code>users</code></td>
-<td>учётные записи приложения</td>
-<td><code>id</code></td>
-</tr>
-<tr>
-<td><code>notes</code></td>
-<td>заметки сотрудников</td>
-<td><code>id</code></td>
+<td>описание варианта</td>
+<td>предприятие, продукция, количество, правила расчёта</td>
+<td><code>specification</code>, <code>customer_order</code>, <code>production_order</code></td>
 </tr>
 </tbody>
 </table>
-<p><a href="reports/screens/prep/drawio-er.png" target="_blank" rel="noopener"><img src="reports/screens/prep/drawio-er.png" alt="Полная ER-диаграмма варианта V01: двенадцать таблиц и связи между ними"></a></p>
-<figcaption>Полная модель V01. Двенадцать таблиц, составные ключи в связующих таблицах и подписи кратности у каждой связи.</figcaption>
+<p>Задайте себе восемь вопросов и запишите ответы в черновик:</p>
+<ol>
+<li>Кто участники системы: заказчик, изготовитель, поставщик, кладовщик, менеджер, администратор?</li>
+<li>Какие документы есть в системе: заказ, спецификация, производственный заказ, накладная?</li>
+<li>Какие документы состоят из шапки и строк?</li>
+<li>Какие данные повторяются в строках и должны быть вынесены отдельно?</li>
+<li>Какие значения меняются со временем: цена, остаток, статус?</li>
+<li>Какие данные являются справочными: товар, материал, операция, площадка?</li>
+<li>Что вычисляется, а не хранится: стоимость заказа, сумма строки, количество изделий?</li>
+<li>Какие связи получаются один ко многим и где нужна промежуточная таблица?</li>
+</ol>
+<p>Для V01 черновик выглядит так:</p>
+<div class="codehilite" data-lang="text"><pre><span></span><code>Участники: покупатель, изготовитель, пользователь приложения.
+Документы: заказ покупателя, спецификация изделия, производственный заказ.
+Справочники: товар, материал, операция, цена.
+Строки: состав спецификации, строки заказа, продукция к выпуску, расход ресурсов.
+Вычисляется: стоимость заказа, сумма строки, число изделий в заказе.
+</code></pre></div>
 
-<p>Обратите внимание на <code>item</code>. Продукция, материалы и операции живут в одном справочнике, а различаются полем <code>kind</code>. Так состав спецификации не раздваивается на две почти одинаковые таблицы.</p>
-<h3>Шаг 5. Подпишите связи</h3>
-<p>Каждая линия идёт от внешнего ключа к первичному ключу другой таблицы. Подпись ставится по смыслу: <code>1</code> у родителя, <code>N</code> у дочерней таблицы.</p>
+<h3>Ключевые понятия простыми словами</h3>
+<p><strong>ER-диаграмма</strong> это схема данных, которая показывает, какие сущности есть в системе и как они связаны. Её читают слева направо: таблица, её поля, ключи и линии связей.</p>
+<p><strong>Сущность</strong> это тип объекта, о котором система хранит одинаковые по структуре записи. <code>counterparty</code> описывает контрагента, <code>customer_order</code> описывает заказ. Один конкретный заказ это экземпляр сущности, а не отдельная таблица.</p>
+<p><strong>Атрибут</strong> это поле сущности: название, дата, цена, количество. Атрибут отвечает на вопрос «какое свойство мы храним», а не «что делает система».</p>
+<p><strong>Ключ</strong> это поле или набор полей, по которым отличают одну запись от другой. <strong>Первичный ключ</strong> (PK) уникален внутри своей таблицы. <strong>Внешний ключ</strong> (FK) хранит ссылку на первичный ключ другой таблицы и создаёт связь.</p>
+<table>
+<thead>
+<tr>
+<th>Понятие</th>
+<th>Простыми словами</th>
+<th>Пример</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Первичный ключ</td>
+<td>номер строки в своей таблице</td>
+<td><code>counterparty.id</code></td>
+</tr>
+<tr>
+<td>Внешний ключ</td>
+<td>ссылка на строку в другой таблице</td>
+<td><code>customer_order.customer_id</code></td>
+</tr>
+<tr>
+<td>Составной ключ</td>
+<td>уникальность по двум полям сразу</td>
+<td><code>price.item_id</code> + <code>price.valid_from</code></td>
+</tr>
+<tr>
+<td>Связь один ко многим</td>
+<td>один заказ, много строк</td>
+<td><code>customer_order</code> → <code>customer_order_line</code></td>
+</tr>
+<tr>
+<td>Связь многие ко многим</td>
+<td>товар входит во много спецификаций, спецификация содержит много товаров</td>
+<td>промежуточная <code>specification_component</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Третья нормальная форма</strong> означает три простых правила: в ячейке одно значение, поле зависит от всего ключа, неключевые поля не зависят друг от друга. Цена материала хранится в <code>price</code>, а не в строке состава. Норма хранится в составе, а не в справочнике товаров. Стоимость заказа не хранится нигде, потому что её можно посчитать.</p>
+<h3>Шаг 1. Откройте draw.io и выберите фигуру</h3>
+<p>Откройте <code>app.diagrams.net</code>. Учётная запись не нужна. Выберите пустую диаграмму и хранение на устройстве.</p>
+<p>Слева найдите раздел <strong>Отношения сущностей</strong> и фигуру <strong>Entity</strong>. Это таблица с заголовком и строками. Именно она нужна для ER-диаграммы.</p>
+<p><a href="reports/screens/prep/drawio-shapes.png" target="_blank" rel="noopener"><img src="reports/screens/prep/drawio-shapes.png" alt="Панель draw.io с открытым разделом Отношения сущностей и фигурой Entity"></a></p>
+<figcaption>Раздел «Отношения сущностей» и фигура Entity. Заголовок станет именем таблицы, строки полями.</figcaption>
+
+<p>Не берите обычный прямоугольник: в нём нет строк, поля придётся рисовать линиями, и они разъедутся при первом сдвиге. Не берите и готовую таблицу из другого раздела, пока не понимаете, как она устроена.</p>
+<h3>Шаг 2. Таблица <code>counterparty</code>: кто участвует в системе</h3>
+<p>Первая таблица появляется из вопроса «кто заказчик и кто исполнитель». В JSON есть шесть заказчиков, в описании варианта есть изготовитель. Все они имеют одинаковый набор полей, значит, это одна сущность.</p>
+<table>
+<thead>
+<tr>
+<th>Поле</th>
+<th>Тип</th>
+<th>Ключ</th>
+<th>Зачем</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id</code></td>
+<td>TEXT</td>
+<td>PK</td>
+<td>код контрагента из документа, ведущие нули сохраняются</td>
+</tr>
+<tr>
+<td><code>name</code></td>
+<td>TEXT</td>
+<td></td>
+<td>название организации</td>
+</tr>
+<tr>
+<td><code>inn</code></td>
+<td>TEXT</td>
+<td></td>
+<td>налоговый номер, может быть пустым</td>
+</tr>
+<tr>
+<td><code>address</code></td>
+<td>TEXT</td>
+<td></td>
+<td>адрес для документов</td>
+</tr>
+<tr>
+<td><code>phone</code></td>
+<td>TEXT</td>
+<td></td>
+<td>контакт</td>
+</tr>
+<tr>
+<td><code>party_type</code></td>
+<td>TEXT</td>
+<td></td>
+<td>покупатель, изготовитель или поставщик</td>
+</tr>
+</tbody>
+</table>
+<p>Создайте Entity, назовите её <code>counterparty</code>, добавьте шесть строк. В строках пишите <code>PK id TEXT</code>, затем <code>name TEXT</code> и так далее. Буквы <code>PK</code> и <code>FK</code> это пометки для проверяющего, а не часть имени поля.</p>
+<p><a href="reports/screens/prep/drawio-table-01.png" target="_blank" rel="noopener"><img src="reports/screens/prep/drawio-table-01.png" alt="Первая таблица counterparty в draw.io с полями и первичным ключом"></a></p>
+<figcaption>Таблица `counterparty`. Первичный ключ `id`, остальные поля описывают контрагента.</figcaption>
+
+<p>Проверка: если убрать <code>id</code>, две организации с одинаковым названием станут неразличимы. Значит, ключ выбран правильно.</p>
+<h3>Шаг 3. Таблица <code>item</code>: один справочник ресурсов</h3>
+<p>В CSV есть материалы и операции. У них разные единицы, но общая структура: код, название, вид, единица. Если сделать отдельные таблицы <code>material</code> и <code>operation</code>, появятся две почти одинаковые сущности и два внешних ключа в составе. Проще один справочник с полем <code>kind</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Поле</th>
+<th>Тип</th>
+<th>Ключ</th>
+<th>Зачем</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id</code></td>
+<td>INTEGER</td>
+<td>PK</td>
+<td>внутренний код ресурса</td>
+</tr>
+<tr>
+<td><code>code</code></td>
+<td>TEXT</td>
+<td></td>
+<td>код из документа</td>
+</tr>
+<tr>
+<td><code>name</code></td>
+<td>TEXT</td>
+<td></td>
+<td>название материала или операции</td>
+</tr>
+<tr>
+<td><code>kind</code></td>
+<td>TEXT</td>
+<td></td>
+<td><code>product</code>, <code>material</code> или <code>operation</code></td>
+</tr>
+<tr>
+<td><code>unit</code></td>
+<td>TEXT</td>
+<td></td>
+<td>метр, штука, час</td>
+</tr>
+</tbody>
+</table>
+<p><a href="reports/screens/prep/drawio-table-02.png" target="_blank" rel="noopener"><img src="reports/screens/prep/drawio-table-02.png" alt="Таблица item с видом ресурса и единицей измерения"></a></p>
+<figcaption>Справочник `item`. Поле `kind` отличает продукцию, материал и операцию, не создавая три таблицы.</figcaption>
+
+<p>Ход мысли: «Что общего у ткани и раскроя? Оба расходуются в спецификации. Чем отличаются? Единицей и способом расчёта. Значит, общее выносим в справочник, различие в поле вида».</p>
+<h3>Шаг 4. Таблица <code>price</code>: цена меняется во времени</h3>
+<p>Цена не принадлежит товару навсегда: с 1 марта одна, с 1 апреля другая. Если хранить цену в <code>item</code>, история потеряется. Появляется отдельная сущность с составным ключом: ресурс плюс дата, с которой цена действует.</p>
+<table>
+<thead>
+<tr>
+<th>Поле</th>
+<th>Тип</th>
+<th>Ключ</th>
+<th>Зачем</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>item_id</code></td>
+<td>INTEGER</td>
+<td>PK, FK</td>
+<td>ссылка на ресурс</td>
+</tr>
+<tr>
+<td><code>valid_from</code></td>
+<td>TEXT</td>
+<td>PK</td>
+<td>дата начала действия цены</td>
+</tr>
+<tr>
+<td><code>amount</code></td>
+<td>REAL</td>
+<td></td>
+<td>цена за единицу</td>
+</tr>
+</tbody>
+</table>
+<p><a href="reports/screens/prep/drawio-table-03.png" target="_blank" rel="noopener"><img src="reports/screens/prep/drawio-table-03.png" alt="Таблица price с составным ключом из ресурса и даты"></a></p>
+<figcaption>`price` хранит историю цен. Один ресурс может иметь несколько строк с разными датами.</figcaption>
+
+<p>Составной ключ читается так: одна и та же цена не может быть записана дважды на одну дату, но на разные даты может.</p>
+<h3>Шаг 5. Таблица <code>specification</code>: шапка рецепта изделия</h3>
+<p>Спецификация описывает, из чего и как делают изделие. У неё есть номер, название, выпуск и изготовитель. Это шапка, как у заказа: одна спецификация на изделие.</p>
+<table>
+<thead>
+<tr>
+<th>Поле</th>
+<th>Тип</th>
+<th>Ключ</th>
+<th>Зачем</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id</code></td>
+<td>INTEGER</td>
+<td>PK</td>
+<td>номер спецификации</td>
+</tr>
+<tr>
+<td><code>product_id</code></td>
+<td>INTEGER</td>
+<td>FK</td>
+<td>ссылка на изделие</td>
+</tr>
+<tr>
+<td><code>name</code></td>
+<td>TEXT</td>
+<td></td>
+<td>название спецификации</td>
+</tr>
+<tr>
+<td><code>output_qty</code></td>
+<td>REAL</td>
+<td></td>
+<td>сколько единиц выпускается по нормам</td>
+</tr>
+<tr>
+<td><code>manufacturer_id</code></td>
+<td>TEXT</td>
+<td>FK</td>
+<td>кто изготавливает</td>
+</tr>
+</tbody>
+</table>
+<p><a href="reports/screens/prep/drawio-table-04.png" target="_blank" rel="noopener"><img src="reports/screens/prep/drawio-table-04.png" alt="Таблица specification с ссылкой на изделие и изготовителя"></a></p>
+<figcaption>`specification` это шапка: изделие, выпуск и изготовитель. Строки состава появятся отдельно.</figcaption>
+
+<p>Почему <code>product_id</code> отдельно, а не название изделия? Название уже есть в <code>item</code>. Повторять его в спецификации значит хранить две версии одного факта.</p>
+<h3>Шаг 6. Таблица <code>specification_component</code>: строки состава</h3>
+<p>В одной спецификации много материалов и операций. Это типичная связь многие ко многим, её нельзя оставить двумя стрелками. Появляется промежуточная таблица, где каждая строка это один ресурс в составе.</p>
+<table>
+<thead>
+<tr>
+<th>Поле</th>
+<th>Тип</th>
+<th>Ключ</th>
+<th>Зачем</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>specification_id</code></td>
+<td>INTEGER</td>
+<td>PK, FK</td>
+<td>ссылка на шапку</td>
+</tr>
+<tr>
+<td><code>item_id</code></td>
+<td>INTEGER</td>
+<td>PK, FK</td>
+<td>ссылка на ресурс</td>
+</tr>
+<tr>
+<td><code>qty</code></td>
+<td>REAL</td>
+<td></td>
+<td>норма расхода на единицу</td>
+</tr>
+<tr>
+<td><code>time_norm</code></td>
+<td>REAL</td>
+<td></td>
+<td>часы для операции, <code>1</code> для материала</td>
+</tr>
+</tbody>
+</table>
+<p><a href="reports/screens/prep/drawio-table-05.png" target="_blank" rel="noopener"><img src="reports/screens/prep/drawio-table-05.png" alt="Таблица specification_component со ссылками на спецификацию и ресурс"></a></p>
+<figcaption>`specification_component` связывает спецификацию и ресурс. Здесь хранятся норма и время.</figcaption>
+
+<p>Проверка: одну и ту же ткань нельзя добавить в спецификацию дважды с разными нормами без объяснения. Составной ключ это запрещает.</p>
+<h3>Шаг 7. Таблица <code>customer_order</code>: шапка заказа</h3>
+<p>Заказ приходит от покупателя и содержит номер, дату, заказчика и исполнителя. Это шапка документа. Строки заказа появятся в следующей таблице.</p>
+<table>
+<thead>
+<tr>
+<th>Поле</th>
+<th>Тип</th>
+<th>Ключ</th>
+<th>Зачем</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id</code></td>
+<td>INTEGER</td>
+<td>PK</td>
+<td>внутренний номер заказа</td>
+</tr>
+<tr>
+<td><code>doc_no</code></td>
+<td>TEXT</td>
+<td></td>
+<td>номер документа из бумаги</td>
+</tr>
+<tr>
+<td><code>doc_date</code></td>
+<td>TEXT</td>
+<td></td>
+<td>дата заказа</td>
+</tr>
+<tr>
+<td><code>customer_id</code></td>
+<td>TEXT</td>
+<td>FK</td>
+<td>кто заказал</td>
+</tr>
+<tr>
+<td><code>executor_id</code></td>
+<td>TEXT</td>
+<td>FK</td>
+<td>кто выполняет</td>
+</tr>
+</tbody>
+</table>
+<p><a href="reports/screens/prep/drawio-table-06.png" target="_blank" rel="noopener"><img src="reports/screens/prep/drawio-table-06.png" alt="Шапка customer_order с заказчиком и исполнителем"></a></p>
+<figcaption>`customer_order` хранит шапку. Два внешних ключа ведут в `counterparty`.</figcaption>
+
+<p>Номер документа и внутренний <code>id</code> это разные вещи. Номер может измениться при переносе, а <code>id</code> остаётся ключом.</p>
+<h3>Шаг 8. Таблица <code>customer_order_line</code>: строки заказа</h3>
+<p>В заказе несколько изделий. Если хранить их в шапке через запятую, нельзя посчитать количество и цену по каждому. Появляется таблица строк.</p>
+<table>
+<thead>
+<tr>
+<th>Поле</th>
+<th>Тип</th>
+<th>Ключ</th>
+<th>Зачем</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id</code></td>
+<td>INTEGER</td>
+<td>PK</td>
+<td>номер строки</td>
+</tr>
+<tr>
+<td><code>order_id</code></td>
+<td>INTEGER</td>
+<td>FK</td>
+<td>ссылка на шапку</td>
+</tr>
+<tr>
+<td><code>product_id</code></td>
+<td>INTEGER</td>
+<td>FK</td>
+<td>ссылка на изделие</td>
+</tr>
+<tr>
+<td><code>qty</code></td>
+<td>INTEGER</td>
+<td></td>
+<td>количество</td>
+</tr>
+<tr>
+<td><code>sale_price</code></td>
+<td>REAL</td>
+<td></td>
+<td>продажная цена</td>
+</tr>
+<tr>
+<td><code>discount</code></td>
+<td>REAL</td>
+<td></td>
+<td>скидка</td>
+</tr>
+</tbody>
+</table>
+<p><a href="reports/screens/prep/drawio-table-07.png" target="_blank" rel="noopener"><img src="reports/screens/prep/drawio-table-07.png" alt="Строки customer_order_line со ссылками на заказ и изделие"></a></p>
+<figcaption>`customer_order_line` хранит по одной строке на изделие. Шапка и строки связаны `1:N`.</figcaption>
+
+<p>Ход мысли: «Что повторяется в каждой строке? Номер заказа и дата. Значит, они остаются в шапке. Что своё у строки? Изделие, количество, цена. Значит, это поля строки».</p>
+<h3>Шаг 9. Таблица <code>production_order</code>: шапка производственного заказа</h3>
+<p>Производственный заказ запускает выпуск. У него свой номер, дата, дата запуска и подразделение. Это отдельный документ, поэтому отдельная шапка.</p>
+<table>
+<thead>
+<tr>
+<th>Поле</th>
+<th>Тип</th>
+<th>Ключ</th>
+<th>Зачем</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id</code></td>
+<td>INTEGER</td>
+<td>PK</td>
+<td>внутренний номер</td>
+</tr>
+<tr>
+<td><code>doc_no</code></td>
+<td>TEXT</td>
+<td></td>
+<td>номер документа</td>
+</tr>
+<tr>
+<td><code>doc_date</code></td>
+<td>TEXT</td>
+<td></td>
+<td>дата создания</td>
+</tr>
+<tr>
+<td><code>launch_date</code></td>
+<td>TEXT</td>
+<td></td>
+<td>дата запуска</td>
+</tr>
+<tr>
+<td><code>department</code></td>
+<td>TEXT</td>
+<td></td>
+<td>цех или участок</td>
+</tr>
+</tbody>
+</table>
+<p><a href="reports/screens/prep/drawio-table-08.png" target="_blank" rel="noopener"><img src="reports/screens/prep/drawio-table-08.png" alt="Шапка production_order с датой запуска и подразделением"></a></p>
+<figcaption>`production_order` описывает запуск выпуска. Это отдельная шапка, не часть заказа покупателя.</figcaption>
+
+<h3>Шаг 10. Таблица <code>production_product</code>: что выпускаем</h3>
+<p>В производственном заказе может быть несколько изделий. Появляется таблица продукции к выпуску с количеством.</p>
+<table>
+<thead>
+<tr>
+<th>Поле</th>
+<th>Тип</th>
+<th>Ключ</th>
+<th>Зачем</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>production_id</code></td>
+<td>INTEGER</td>
+<td>PK, FK</td>
+<td>ссылка на производственный заказ</td>
+</tr>
+<tr>
+<td><code>product_id</code></td>
+<td>INTEGER</td>
+<td>PK, FK</td>
+<td>ссылка на изделие</td>
+</tr>
+<tr>
+<td><code>qty</code></td>
+<td>INTEGER</td>
+<td></td>
+<td>сколько выпустить</td>
+</tr>
+</tbody>
+</table>
+<p><a href="reports/screens/prep/drawio-table-09.png" target="_blank" rel="noopener"><img src="reports/screens/prep/drawio-table-09.png" alt="Таблица production_product с составным ключом"></a></p>
+<figcaption>`production_product` связывает производственный заказ и изделие, хранит количество.</figcaption>
+
+<h3>Шаг 11. Таблица <code>production_resource</code>: плановый расход</h3>
+<p>Для производства нужно знать, сколько материалов и часов потребуется. Это отдельная таблица, потому что расход относится к производственному заказу, а не к заказу покупателя.</p>
+<table>
+<thead>
+<tr>
+<th>Поле</th>
+<th>Тип</th>
+<th>Ключ</th>
+<th>Зачем</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>production_id</code></td>
+<td>INTEGER</td>
+<td>PK, FK</td>
+<td>ссылка на производственный заказ</td>
+</tr>
+<tr>
+<td><code>item_id</code></td>
+<td>INTEGER</td>
+<td>PK, FK</td>
+<td>ссылка на ресурс</td>
+</tr>
+<tr>
+<td><code>qty</code></td>
+<td>REAL</td>
+<td></td>
+<td>плановое количество</td>
+</tr>
+<tr>
+<td><code>time_norm</code></td>
+<td>REAL</td>
+<td></td>
+<td>плановые часы</td>
+</tr>
+</tbody>
+</table>
+<p><a href="reports/screens/prep/drawio-table-10.png" target="_blank" rel="noopener"><img src="reports/screens/prep/drawio-table-10.png" alt="Таблица production_resource с плановым расходом ресурсов"></a></p>
+<figcaption>`production_resource` хранит план расхода. Ключ составной: заказ плюс ресурс.</figcaption>
+
+<h3>Шаг 12. Таблица <code>users</code>: кто входит в приложение</h3>
+<p>В следующих заданиях приложению нужен вход. Появляется справочник учётных записей: логин, хеш пароля, роль, число ошибок и блокировка.</p>
+<table>
+<thead>
+<tr>
+<th>Поле</th>
+<th>Тип</th>
+<th>Ключ</th>
+<th>Зачем</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id</code></td>
+<td>INTEGER</td>
+<td>PK</td>
+<td>номер пользователя</td>
+</tr>
+<tr>
+<td><code>login</code></td>
+<td>TEXT</td>
+<td></td>
+<td>имя для входа</td>
+</tr>
+<tr>
+<td><code>password_hash</code></td>
+<td>TEXT</td>
+<td></td>
+<td>хеш, не сам пароль</td>
+</tr>
+<tr>
+<td><code>role</code></td>
+<td>TEXT</td>
+<td></td>
+<td>права</td>
+</tr>
+<tr>
+<td><code>failed_attempts</code></td>
+<td>INTEGER</td>
+<td></td>
+<td>счётчик ошибок</td>
+</tr>
+<tr>
+<td><code>is_locked</code></td>
+<td>INTEGER</td>
+<td></td>
+<td>признак блокировки</td>
+</tr>
+</tbody>
+</table>
+<p><a href="reports/screens/prep/drawio-table-11.png" target="_blank" rel="noopener"><img src="reports/screens/prep/drawio-table-11.png" alt="Таблица users с логином, ролью и блокировкой"></a></p>
+<figcaption>`users` хранит учётные записи приложения. Пароль хранится хешем, а не открытым текстом.</figcaption>
+
+<h3>Шаг 13. Таблица <code>notes</code>: заметки сотрудников</h3>
+<p>Заметка принадлежит пользователю. Она не входит в заказ и не влияет на стоимость, но нужна приложению. Появляется последняя таблица с внешним ключом на <code>users</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Поле</th>
+<th>Тип</th>
+<th>Ключ</th>
+<th>Зачем</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id</code></td>
+<td>INTEGER</td>
+<td>PK</td>
+<td>номер заметки</td>
+</tr>
+<tr>
+<td><code>title</code></td>
+<td>TEXT</td>
+<td></td>
+<td>заголовок</td>
+</tr>
+<tr>
+<td><code>content</code></td>
+<td>TEXT</td>
+<td></td>
+<td>текст</td>
+</tr>
+<tr>
+<td><code>id_user</code></td>
+<td>INTEGER</td>
+<td>FK</td>
+<td>автор</td>
+</tr>
+<tr>
+<td><code>created_at</code></td>
+<td>TEXT</td>
+<td></td>
+<td>дата создания</td>
+</tr>
+</tbody>
+</table>
+<p><a href="reports/screens/prep/drawio-table-12.png" target="_blank" rel="noopener"><img src="reports/screens/prep/drawio-table-12.png" alt="Таблица notes со ссылкой на пользователя"></a></p>
+<figcaption>`notes` связана с `users` как один ко многим: у пользователя много заметок.</figcaption>
+
+<p>После двенадцатой таблицы на холсте двенадцать сущностей. Если появилась тринадцатая, проверьте, не является ли она строкой уже существующего документа.</p>
+<h3>Шаг 14. Соедините таблицы связями</h3>
+<p>Связь рисуется от внешнего ключа к первичному ключу. Наведите курсор на край таблицы, возьмите синюю стрелку и протяните к другой таблице. Подпись ставьте двойным щелчком по линии: <code>1:N</code>.</p>
 <table>
 <thead>
 <tr>
@@ -1121,27 +1657,40 @@ FK  product_id     INTEGER
 </tr>
 </tbody>
 </table>
-<p>Связи многие ко многим без промежуточной таблицы быть не должно. Если у изделия много материалов, а материал входит во много изделий, между ними стоит <code>specification_component</code>.</p>
-<h3>Шаг 6. Проверьте третью нормальную форму</h3>
-<p>К каждой таблице задайте три вопроса:</p>
+<p><a href="reports/screens/prep/drawio-er.png" target="_blank" rel="noopener"><img src="reports/screens/prep/drawio-er.png" alt="Полная ER-диаграмма V01: двенадцать таблиц и четырнадцать связей"></a></p>
+<figcaption>Полная модель V01. Проверьте, что каждая линия соединяет внешний ключ с первичным, а не два произвольных поля.</figcaption>
+
+<p>Если линия идёт от строки заказа к шапке, подпись всё равно <code>1:N</code>: один заказ содержит много строк. Направление стрелки не меняет смысл кратности.</p>
+<h3>Шаг 15. Проверьте третью нормальную форму</h3>
+<p>Пройдите по каждой таблице тремя вопросами:</p>
 <ol>
-<li>Есть ли ячейка с несколькими значениями? Если да, вынесите значение в отдельную строку или таблицу.</li>
-<li>Зависит ли поле от части составного ключа? Если да, вынесите его в таблицу, где ключ полный.</li>
-<li>Зависит ли неключевое поле от другого неключевого поля? Если да, вынесите зависимость в отдельную таблицу.</li>
+<li>Есть ли ячейка с несколькими значениями? Если да, вынесите значение в строку или отдельную таблицу.</li>
+<li>Зависит ли поле от части составного ключа? Если да, вынесите его в таблицу с полным ключом.</li>
+<li>Зависит ли неключевое поле от другого неключевого поля? Если да, вынесите зависимость отдельно.</li>
 </ol>
-<p>Цена материала хранится в <code>price</code>, а не в строке состава. Норма хранится в <code>specification_component</code>, а не в <code>item</code>. Часы операции хранятся в составе, а не в справочнике операций. Стоимость заказа не хранится нигде: она вычисляется запросом.</p>
-<h3>Шаг 7. Сохраните исходник и выгрузите PDF</h3>
+<p>Примеры для V01:</p>
+<ul>
+<li>цена хранится в <code>price</code>, потому что зависит от ресурса и даты, а не от строки заказа;</li>
+<li>норма хранится в <code>specification_component</code>, потому что относится к паре «спецификация и ресурс»;</li>
+<li>стоимость заказа не хранится: она вычисляется из количества, норм и цен;</li>
+<li>название изделия не дублируется в строке заказа: оно уже есть в <code>item</code>.</li>
+</ul>
+<h3>Шаг 16. Сохраните исходник и выгрузите PDF</h3>
 <ol>
 <li>Откройте <code>Файл</code>, затем <code>Сохранить как</code> и выберите <code>Это устройство</code>.</li>
-<li>Назовите файл <code>V01_ER.drawio</code> и сохраните в папку занятия.</li>
+<li>На рабочем столе создайте личную папку по образцу <code>/Студент/Название предмета/ФИО студента/номер практической работы</code>.</li>
+<li>Назовите файл <code>V01_ER.drawio</code> и сохраните.</li>
 <li>Откройте <code>Файл</code>, затем <code>Экспорт как</code>, затем <code>PDF</code>.</li>
 <li>Оставьте экспорт всей диаграммы, а не выделения. Проверьте, что все двенадцать таблиц попали на лист.</li>
-<li>Откройте готовый PDF и увеличьте масштаб: подписи должны читаться без догадок.</li>
+<li>Откройте PDF и увеличьте масштаб: подписи должны читаться без догадок.</li>
 </ol>
-<p><a href="reports/screens/prep/drawio-export.png" target="_blank" rel="noopener"><img src="reports/screens/prep/drawio-export.png" alt="Диалог экспорта PDF в draw.io с включённым экспортом всей диаграммы"></a></p>
-<figcaption>Экспорт PDF. В диалоге не выбирайте «Только выделение», иначе на листе останется одна таблица.</figcaption>
+<p><a href="reports/screens/prep/drawio-save-menu.png" target="_blank" rel="noopener"><img src="reports/screens/prep/drawio-save-menu.png" alt="Меню Файл в draw.io с командами сохранения и экспорта"></a></p>
+<figcaption>Меню `Файл`: здесь находятся `Сохранить как` и `Экспорт как`. Сначала сохраните `.drawio`, затем экспортируйте PDF.</figcaption>
 
-<p>Перед экспортом проверьте: двенадцать таблиц, у каждой первичный ключ, четырнадцать подписанных связей, нет вычисляемых полей. Если таблиц девять, скорее всего шапка заказа слита со строками. Если пятнадцать, появилась лишняя таблица под каждую строку документа.</p>
+<p><a href="reports/screens/prep/drawio-export.png" target="_blank" rel="noopener"><img src="reports/screens/prep/drawio-export.png" alt="Диалог экспорта PDF в draw.io"></a></p>
+<figcaption>Экспорт PDF. Не выбирайте «Только выделение», иначе на листе останется одна таблица.</figcaption>
+
+<p>Перед сдачей проверьте: двенадцать таблиц, у каждой первичный ключ, четырнадцать подписанных связей, нет вычисляемых полей. Если таблиц девять, скорее всего шапка заказа слита со строками. Если пятнадцать, появилась лишняя таблица под каждую строку документа.</p>
 <h2 id="задание-2-база-в-sqliteonline-com"><span class="num">04</span>Задание 2. База в sqliteonline.com</h2>
 <h3>Шаг 1. Откройте sqliteonline.com</h3>
 <p>Откройте <code>sqliteonline.com</code> и выберите SQLite. Слева появится список таблиц демонстрационной базы, сверху кнопки <code>Import</code> и <code>Export</code>, в центре редактор SQL, снизу результат.</p>
@@ -1149,7 +1698,108 @@ FK  product_id     INTEGER
 <figcaption>sqliteonline.com. Слева база, в центре редактор, сверху запуск и импорт, снизу таблица результата.</figcaption>
 
 <p>Демонстрационная таблица <code>demo</code> не мешает: свои таблицы создаются рядом. Перед работой закройте зелёное уведомление, чтобы оно не закрывало результат.</p>
-<h3>Шаг 2. Создайте таблицы</h3>
+<h3>Что такое база данных простыми словами</h3>
+<p><strong>База данных</strong> это набор таблиц, которые хранят факты о системе. <strong>Таблица</strong> описывает один тип факта: контрагента, заказ, цену. <strong>Строка</strong> это один факт, например один заказ. <strong>Столбец</strong> это свойство факта, например дата заказа.</p>
+<p><strong>Первичный ключ</strong> отличает строки внутри таблицы. <strong>Внешний ключ</strong> ссылается на первичный ключ другой таблицы. <strong>Ограничение</strong> (<code>CHECK</code>, <code>NOT NULL</code>, <code>UNIQUE</code>) запрещает записывать данные, которые нарушают правило. <strong>Скрипт</strong> это текст команд, который можно выполнить целиком и повторить на другом компьютере.</p>
+<p>В sqliteonline.com база живёт в памяти браузера, пока открыта страница. Чтобы результат не потерялся, скрипт сохраняют в файл <code>.sql</code>, а таблицу результата выгружают через <code>Export</code>.</p>
+<h3>Шаг 2. Создайте рабочую базу</h3>
+<ol>
+<li>Откройте <code>sqliteonline.com</code>.</li>
+<li>В левой панели нажмите <code>Private DB +</code> или откройте <code>SQLite</code>, затем <code>Create SQLite DB</code>. Назовите базу <code>v01_sklad</code>.</li>
+<li>Если создать отдельную базу нельзя, работайте в <code>Demo.Memory</code>: таблицы появятся рядом с <code>demo</code>, результат всё равно можно выгрузить.</li>
+<li>Верхние кнопки <code>Import</code> и <code>Export</code> служат для загрузки файлов и сохранения результата. <code>Import</code> принимает SQL, CSV и JSON, <code>Export</code> выгружает таблицу или базу.</li>
+</ol>
+<p><a href="reports/screens/prep/sqlite-export.png" target="_blank" rel="noopener"><img src="reports/screens/prep/sqlite-export.png" alt="Диалог Export в sqliteonline.com с выбором формата выгрузки"></a></p>
+<figcaption>Кнопка `Export` открывает выбор формата. Перед выгрузкой выберите таблицу или результат запроса, который нужно сохранить.</figcaption>
+
+<p>Не закрывайте вкладку до сохранения скрипта: память браузера очищается вместе с сессией.</p>
+<h3>Как читать SQL</h3>
+<p>SQL читается сверху вниз, но выполняется не в том порядке, в котором записан. Сначала база находит таблицы в <code>FROM</code>, соединяет их в <code>JOIN</code>, отбирает строки в <code>WHERE</code>, собирает группы в <code>GROUP BY</code>, считает агрегаты в <code>SELECT</code> и только потом сортирует результат.</p>
+<table>
+<thead>
+<tr>
+<th>Команда</th>
+<th>Что делает</th>
+<th>Пример</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>SELECT</code></td>
+<td>выбирает столбцы результата</td>
+<td><code>SELECT doc_no, doc_date FROM customer_order;</code></td>
+</tr>
+<tr>
+<td><code>FROM</code></td>
+<td>указывает таблицу</td>
+<td><code>FROM customer_order</code></td>
+</tr>
+<tr>
+<td><code>WHERE</code></td>
+<td>отбирает строки до группировки</td>
+<td><code>WHERE doc_date &gt;= '2027-03-01'</code></td>
+</tr>
+<tr>
+<td><code>ORDER BY</code></td>
+<td>сортирует результат</td>
+<td><code>ORDER BY doc_no</code></td>
+</tr>
+<tr>
+<td><code>JOIN ... ON</code></td>
+<td>соединяет строки по ключу</td>
+<td><code>JOIN customer_order_line l ON l.order_id = o.id</code></td>
+</tr>
+<tr>
+<td><code>GROUP BY</code></td>
+<td>собирает строки в группы</td>
+<td><code>GROUP BY o.doc_no</code></td>
+</tr>
+<tr>
+<td><code>SUM</code></td>
+<td>складывает значения группы</td>
+<td><code>SUM(l.qty)</code></td>
+</tr>
+<tr>
+<td><code>ROUND</code></td>
+<td>округляет число</td>
+<td><code>ROUND(total, 2)</code></td>
+</tr>
+<tr>
+<td><code>WITH</code></td>
+<td>называет промежуточный запрос</td>
+<td><code>WITH price_on_date AS (...)</code></td>
+</tr>
+</tbody>
+</table>
+<p>Схема для примеров:</p>
+<div class="codehilite" data-lang="text"><pre><span></span><code>counterparty(id, name, party_type)
+item(id, name, kind, unit)
+price(item_id, valid_from, amount)
+specification(id, product_id, output_qty)
+specification_component(specification_id, item_id, qty, time_norm)
+customer_order(id, doc_no, doc_date, customer_id, executor_id)
+customer_order_line(id, order_id, product_id, qty, sale_price)
+</code></pre></div>
+
+<p>Простые запросы:</p>
+<div class="codehilite" data-lang="sql"><pre><span></span><code><span class="c1">-- все строки таблицы</span>
+<span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">counterparty</span><span class="p">;</span>
+
+<span class="c1">-- только нужные столбцы</span>
+<span class="k">SELECT</span><span class="w"> </span><span class="n">doc_no</span><span class="p">,</span><span class="w"> </span><span class="n">doc_date</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">customer_order</span><span class="p">;</span>
+
+<span class="c1">-- фильтр по дате</span>
+<span class="k">SELECT</span><span class="w"> </span><span class="n">doc_no</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">customer_order</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">doc_date</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="s1">&#39;2027-03-01&#39;</span><span class="p">;</span>
+
+<span class="c1">-- соединение заказа и строк</span>
+<span class="k">SELECT</span><span class="w"> </span><span class="n">o</span><span class="p">.</span><span class="n">doc_no</span><span class="p">,</span><span class="w"> </span><span class="n">l</span><span class="p">.</span><span class="n">qty</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">customer_order</span><span class="w"> </span><span class="n">o</span>
+<span class="k">JOIN</span><span class="w"> </span><span class="n">customer_order_line</span><span class="w"> </span><span class="n">l</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">l</span><span class="p">.</span><span class="n">order_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">o</span><span class="p">.</span><span class="n">id</span><span class="p">;</span>
+</code></pre></div>
+
+<p><code>o</code> и <code>l</code> это псевдонимы таблиц. Они сокращают запись и позволяют обращаться к полям двух таблиц без путаницы: <code>o.doc_no</code>, <code>l.qty</code>. Если убрать псевдонимы, придётся писать полные имена таблиц в каждом столбце.</p>
+<p><code>SELECT *</code> удобен для первого знакомства, но в отчёт его не ставят: он выводит лишние столбцы и ломается при изменении схемы. Перечисляйте поля явно.</p>
+<h3>Шаг 3. Создайте таблицы</h3>
 <p>Вставьте в редактор скрипт создания схемы. В нём двенадцать таблиц, первичные и внешние ключи, проверки <code>CHECK</code> и составные ключи.</p>
 <div class="codehilite" data-lang="sql"><pre><span></span><code><span class="n">PRAGMA</span><span class="w"> </span><span class="n">foreign_keys</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">ON</span><span class="p">;</span>
 
@@ -1256,7 +1906,7 @@ FK  product_id     INTEGER
 <figcaption>Схема создана. Слева двенадцать таблиц, в результате проверочный список имён.</figcaption>
 
 <p>Составной ключ записывается двумя строками <code>PK</code> или одной строкой <code>PRIMARY KEY (item_id, valid_from)</code> в конце таблицы. Внешний ключ всегда ссылается на первичный ключ другой таблицы.</p>
-<h3>Шаг 3. Импортируйте JSON</h3>
+<h3>Шаг 4. Импортируйте JSON</h3>
 <p>JSON не нужно разбирать вручную. Загрузите его во временную таблицу и разверните функцией <code>json_each</code>.</p>
 <div class="codehilite" data-lang="sql"><pre><span></span><code><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">json_import</span><span class="w"> </span><span class="p">(</span><span class="n">payload</span><span class="w"> </span><span class="nb">TEXT</span><span class="p">);</span>
 
@@ -1279,7 +1929,7 @@ FK  product_id     INTEGER
 <figcaption>Импорт JSON. Шесть заказчиков, ведущие нули в кодах сохранены, тип записан в поле party_type.</figcaption>
 
 <p>Поле <code>id</code> объявлено как <code>TEXT</code>, поэтому код <code>001000001</code> не превращается в число и не теряет ведущие нули. Это одна из типичных ошибок импорта.</p>
-<h3>Шаг 4. Проверьте данные и ограничения</h3>
+<h3>Шаг 5. Проверьте данные и ограничения</h3>
 <p>Выполните три проверки:</p>
 <div class="codehilite" data-lang="sql"><pre><span></span><code><span class="k">SELECT</span><span class="w"> </span><span class="k">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">customers</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">counterparty</span><span class="p">;</span>
 
@@ -1295,7 +1945,7 @@ FK  product_id     INTEGER
 </code></pre></div>
 
 <p>Запрос должен завершиться ошибкой <code>CHECK constraint failed</code>, потому что тип <code>Клиент</code> не входит в список допустимых. Если ошибки нет, <code>PRAGMA foreign_keys = ON</code> не выполнился или таблица создана по старому скрипту.</p>
-<h3>Шаг 5. Сохраните скрипты</h3>
+<h3>Шаг 6. Сохраните скрипты</h3>
 <p>Скачайте готовые файлы и сохраните их в папку занятия:</p>
 <ul>
 <li><a href="reports/prep/sql/V01_schema.sql">Схема V01, SQL</a></li>
@@ -1304,6 +1954,64 @@ FK  product_id     INTEGER
 </ul>
 <p>В sqliteonline.com скрипт можно хранить в истории запросов, но на защите нужен файл. История браузера не считается артефактом.</p>
 <h2 id="задание-3-стоимость-заказа"><span class="num">05</span>Задание 3. Стоимость заказа</h2>
+<h3>Как собрать запрос стоимости</h3>
+<p>Запрос стоимости отвечает на вопрос «сколько стоит заказ по нормам и ценам». Он не берёт продажную цену из строки заказа: та включает наценку и скидку, а нормативная стоимость считается по спецификации.</p>
+<p>Понадобятся пять таблиц:</p>
+<div class="codehilite" data-lang="text"><pre><span></span><code>customer_order(id, doc_no, doc_date)
+customer_order_line(id, order_id, product_id, qty)
+specification(id, product_id, output_qty)
+specification_component(specification_id, item_id, qty, time_norm)
+price(item_id, valid_from, amount)
+</code></pre></div>
+
+<p>Сначала разберите каждую команду отдельно.</p>
+<p><strong><code>SELECT</code> и <code>FROM</code>.</strong> Выберите нужные столбцы и таблицу. Звёздочку не используйте: в отчёт идут только номер заказа и итог.</p>
+<div class="codehilite" data-lang="sql"><pre><span></span><code><span class="k">SELECT</span><span class="w"> </span><span class="n">doc_no</span><span class="p">,</span><span class="w"> </span><span class="n">doc_date</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">customer_order</span><span class="p">;</span>
+</code></pre></div>
+
+<p><strong><code>WHERE</code>.</strong> Отберите строки до группировки. Например, только заказы за март.</p>
+<div class="codehilite" data-lang="sql"><pre><span></span><code><span class="k">SELECT</span><span class="w"> </span><span class="n">doc_no</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">customer_order</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">doc_date</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="s1">&#39;2027-03-01&#39;</span><span class="p">;</span>
+</code></pre></div>
+
+<p><strong><code>JOIN ... ON</code>.</strong> Соедините строки заказа с шапкой по ключу <code>order_id</code>.</p>
+<div class="codehilite" data-lang="sql"><pre><span></span><code><span class="k">SELECT</span><span class="w"> </span><span class="n">o</span><span class="p">.</span><span class="n">doc_no</span><span class="p">,</span><span class="w"> </span><span class="n">l</span><span class="p">.</span><span class="n">product_id</span><span class="p">,</span><span class="w"> </span><span class="n">l</span><span class="p">.</span><span class="n">qty</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">customer_order</span><span class="w"> </span><span class="n">o</span>
+<span class="k">JOIN</span><span class="w"> </span><span class="n">customer_order_line</span><span class="w"> </span><span class="n">l</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">l</span><span class="p">.</span><span class="n">order_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">o</span><span class="p">.</span><span class="n">id</span><span class="p">;</span>
+</code></pre></div>
+
+<p><strong><code>GROUP BY</code> и <code>SUM</code>.</strong> Соберите строки в группы по заказу и сложите количество.</p>
+<div class="codehilite" data-lang="sql"><pre><span></span><code><span class="k">SELECT</span><span class="w"> </span><span class="n">o</span><span class="p">.</span><span class="n">doc_no</span><span class="p">,</span><span class="w"> </span><span class="k">SUM</span><span class="p">(</span><span class="n">l</span><span class="p">.</span><span class="n">qty</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">total_qty</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">customer_order</span><span class="w"> </span><span class="n">o</span>
+<span class="k">JOIN</span><span class="w"> </span><span class="n">customer_order_line</span><span class="w"> </span><span class="n">l</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">l</span><span class="p">.</span><span class="n">order_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">o</span><span class="p">.</span><span class="n">id</span>
+<span class="k">GROUP</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">o</span><span class="p">.</span><span class="n">doc_no</span><span class="p">;</span>
+</code></pre></div>
+
+<p><strong><code>ROUND</code>.</strong> Округляйте один раз, после суммы. Если округлить каждую строку, итог разойдётся с проверкой.</p>
+<div class="codehilite" data-lang="sql"><pre><span></span><code><span class="k">SELECT</span><span class="w"> </span><span class="n">ROUND</span><span class="p">(</span><span class="k">SUM</span><span class="p">(</span><span class="n">l</span><span class="p">.</span><span class="n">qty</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">640</span><span class="p">.</span><span class="mi">0</span><span class="p">),</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">total_cost</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">customer_order_line</span><span class="w"> </span><span class="n">l</span>
+<span class="k">WHERE</span><span class="w"> </span><span class="n">l</span><span class="p">.</span><span class="n">order_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+</code></pre></div>
+
+<p><strong><code>WITH</code>.</strong> Общее табличное выражение называет промежуточный результат. В расчёте стоимости так выбирают действующую цену на дату заказа.</p>
+<div class="codehilite" data-lang="sql"><pre><span></span><code><span class="k">WITH</span><span class="w"> </span><span class="n">price_on_date</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="k">SELECT</span><span class="w"> </span><span class="n">p</span><span class="p">.</span><span class="n">item_id</span><span class="p">,</span><span class="w"> </span><span class="n">p</span><span class="p">.</span><span class="n">amount</span>
+<span class="w">    </span><span class="k">FROM</span><span class="w"> </span><span class="n">price</span><span class="w"> </span><span class="n">p</span>
+<span class="w">    </span><span class="k">WHERE</span><span class="w"> </span><span class="n">p</span><span class="p">.</span><span class="n">valid_from</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span>
+<span class="w">        </span><span class="k">SELECT</span><span class="w"> </span><span class="k">MAX</span><span class="p">(</span><span class="n">p2</span><span class="p">.</span><span class="n">valid_from</span><span class="p">)</span>
+<span class="w">        </span><span class="k">FROM</span><span class="w"> </span><span class="n">price</span><span class="w"> </span><span class="n">p2</span>
+<span class="w">        </span><span class="k">WHERE</span><span class="w"> </span><span class="n">p2</span><span class="p">.</span><span class="n">item_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">p</span><span class="p">.</span><span class="n">item_id</span>
+<span class="w">          </span><span class="k">AND</span><span class="w"> </span><span class="n">p2</span><span class="p">.</span><span class="n">valid_from</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="s1">&#39;2027-03-15&#39;</span>
+<span class="w">    </span><span class="p">)</span>
+<span class="p">)</span>
+<span class="k">SELECT</span><span class="w"> </span><span class="n">item_id</span><span class="p">,</span><span class="w"> </span><span class="n">amount</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">price_on_date</span><span class="p">;</span>
+</code></pre></div>
+
+<p>Почему нельзя соединить <code>price</code> и <code>specification_component</code> напрямую? У одного ресурса несколько цен, у одной спецификации несколько строк. Прямое соединение размножит строки: каждая строка состава получит каждую цену. Сначала оставьте одну действующую цену на ресурс, потом соединяйте.</p>
+<p>Формула читается так:</p>
+<div class="codehilite" data-lang="text"><pre><span></span><code>количество в заказе / выпуск по спецификации × норма × коэффициент времени × цена
+</code></pre></div>
+
+<p>Для материала <code>time_norm</code> равно <code>1</code>, для операции это часы. Поэтому одна формула считает и материалы, и операции.</p>
 <h3>Шаг 1. Заполните справочники и заказ</h3>
 <p>Скрипт <code>V01_cost.sql</code> добавляет изготовителя, изделие, ресурсы, цены, спецификацию, заказ и производственный заказ. Ключевые строки:</p>
 <div class="codehilite" data-lang="sql"><pre><span></span><code><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">item</span><span class="w"> </span><span class="p">(</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">code</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">kind</span><span class="p">,</span><span class="w"> </span><span class="n">unit</span><span class="p">)</span><span class="w"> </span><span class="k">VALUES</span>
