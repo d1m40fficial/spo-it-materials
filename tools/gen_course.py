@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Build courses/4/uifis/course.json: the 42-lesson syllabus of MДК.06.03."""
+"""Build courses/4/МДК.06.03/course.json: the 42-lesson syllabus of MДК.06.03."""
 import json
 from pathlib import Path
 

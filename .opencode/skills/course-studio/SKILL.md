@@ -93,8 +93,9 @@ Available software policy:
 
 Rules that always hold:
 
-- One discipline is one folder `courses/<year>/<slug>/` with one `course.json` and a
-  `"year"` field. Keep the slug lowercase Latin. `"code"` is the official discipline code
+- One discipline is one folder `courses/<year>/<code>/` with one `course.json` and a
+  `"year"` field. The folder is named after the official code (`ОП.01`, `МДК.03.01`),
+  while `"slug"` stays lowercase Latin and defines the site address. `"code"` is the official discipline code
   (`ОП.01`, `МДК.03.01`), not a short label; the card and hero show it. Every course also
   has `"assessment": "Зачёт"` or `"Экзамен"`.
 - `"status": "available"` shows «Доступно». `"status": "planned"` shows «Не готово»
@@ -133,7 +134,7 @@ into `main` before publishing.
 
 | The user asks for | You produce | Read |
 |---|---|---|
-| a new discipline, its plan or syllabus ("добавь дисциплину", "план дисциплины") | worktree + `courses/<year>/<slug>/course.json` + built course page | `course-design.md`, this file |
+| a new discipline, its plan or syllabus ("добавь дисциплину", "план дисциплины") | worktree + `courses/<year>/<code>/course.json` + built course page | `course-design.md`, this file |
 | a lecture, practice or lesson ("сделай лекцию 4", "занятие 7") | `chapters/<nn-slug>/chapter.md` + its figure(s) + built page | `writing.md`, `figures.md`, `object-atlas.md` |
 | a figure for a lesson ("сделай фигуру к лекции") | `figures/<id>/brief.md` + Anatomy figure + rebuilt chapter | `figures.md`, `anatomy/ANATOMY.md` |
 | a lighter diagram, chart or widget | inline SVG/HTML in the chapter or a standalone page | `references/visualise/` |
@@ -144,7 +145,7 @@ written chapter by chapter unless the user asks for a batch.
 
 ## Workflow for a new discipline
 
-1. Read `site.json` and the closest existing discipline (`courses/4/uifis/`). Check
+1. Read `site.json` and the closest existing discipline (`courses/4/МДК.06.03/`). Check
    `_reference/miapo/` for old personal notes on the subject; they are a source to
    reconcile against, never to copy verbatim into the public site.
 2. Create the worktree and course: `python tools/new_discipline.py <year> <slug>`.
@@ -215,8 +216,8 @@ Choose the lighter tool that still teaches the idea.
 The repository has its own builders under `tools/`; prefer them over the skill's sample
 scripts so the year and landing structure stays consistent.
 
-- `python tools/build_site.py`: builds every `courses/<year>/<slug>/course.json` into
-  `courses/<year>/<slug>/dist/`, copies it to `docs/<year>/<slug>/`, and writes
+- `python tools/build_site.py`: builds every `courses/<year>/<code>/course.json` into
+  `courses/<year>/<code>/dist/`, copies it to `docs/<year>/<slug>/`, and writes
   `docs/index.html` (three year cards `2`, `3`, `4`) and `docs/<year>/index.html`
   (the discipline cards of that year). This is the publish command.
 - `python tools/ks/scripts/build_chapter.py <chapter.md>`: rebuilds one chapter page.

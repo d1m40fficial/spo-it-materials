@@ -6,7 +6,7 @@
 
 Default: creates the worktree ../<repo>-worktrees/<year>-<slug> on the branch
 discipline/<year>/<slug> from `main`, then writes
-courses/<year>/<slug>/course.json inside that worktree.
+courses/<year>/<code>/course.json inside that worktree.
 
 --here: scaffolds the discipline in the current working tree instead (use inside a
 worktree that already exists, or when you do not want a separate worktree).
@@ -79,15 +79,17 @@ def main():
     if not re.match(r"^[a-z0-9][a-z0-9-]*$", slug):
         sys.exit(f"cannot build a latin slug from {slug_raw!r}; pass a latin slug")
 
+    folder = (args["code"] or "").strip() or slug
     if args["here"]:
         target = ROOT
     else:
-        existing = [p for p in COURSES.glob(f"*/{slug}/course.json")]
+        existing = [p for p in COURSES.glob(f"*/{folder}/course.json")]
+        existing += [p for p in COURSES.glob(f"*/{slug}/course.json")]
         if existing:
             sys.exit(f"{slug} already exists at {existing[0]}")
         target = worktree.add(year, slug, args["base"])
 
-    d = target / "courses" / year / slug
+    d = target / "courses" / year / folder
     if (d / "course.json").exists():
         sys.exit(f"{d / 'course.json'} already exists")
     d.mkdir(parents=True, exist_ok=True)
