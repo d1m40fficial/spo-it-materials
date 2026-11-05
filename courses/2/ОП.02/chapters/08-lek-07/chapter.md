@@ -41,6 +41,13 @@ outcomes:
 
 Иерархия работает как система копий. Каждый уровень хранит часть данных нижнего уровня и старается угадать, что понадобится следующим. Регистры выбирает компилятор, кэш заполняет аппаратура автоматически, оперативную память распределяет система, а накопители делят файлы и программы. На каждом шаге действует одно правило: маленький быстрый уровень хранит копию того, что часто используется.
 
+<figure class="diagram">
+<svg viewBox="0 0 680 233" role="img" aria-label="Иерархия памяти">
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="#4A4740" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker></defs>
+<rect x="240.0" y="18" width="200.0" height="42" rx="10" fill="#9A7300" stroke="#9A7300" stroke-width="1.2"/><text x="340.0" y="39.0" text-anchor="middle" dominant-baseline="central" font-family="Arial, sans-serif" font-size="13" fill="#FFFFFF">Регистры</text><rect x="203.33333333333334" y="70" width="273.3333333333333" height="42" rx="10" fill="#EDE5D2" stroke="#9A7300" stroke-width="1.2"/><text x="340.0" y="91.0" text-anchor="middle" dominant-baseline="central" font-family="Arial, sans-serif" font-size="13" fill="#1A1916">Кэш</text><rect x="166.66666666666669" y="122" width="346.66666666666663" height="42" rx="10" fill="#EDE5D2" stroke="#9A7300" stroke-width="1.2"/><text x="340.0" y="143.0" text-anchor="middle" dominant-baseline="central" font-family="Arial, sans-serif" font-size="13" fill="#1A1916">ОЗУ</text><rect x="130.0" y="174" width="420.0" height="42" rx="10" fill="#EDE5D2" stroke="#9A7300" stroke-width="1.2"/><text x="340.0" y="195.0" text-anchor="middle" dominant-baseline="central" font-family="Arial, sans-serif" font-size="13" fill="#1A1916">SSD и HDD</text></svg>
+<figcaption>Иерархия памяти</figcaption>
+</figure>
+
 ::gate Как кэш понимает, что нужная строка уже у него есть?
 
 ## Как кэш находит данные

@@ -82,6 +82,14 @@ PCIe соединяет устройства point-to-point, то есть ка�
 
 Важно различать физический размер слота и число подключённых линий. Слот может выглядеть как x16, но быть распаян только на четыре линии. Видеокарта в таком слоте работает, но получает в четыре раза меньше полосы. В спецификации платы это указывают отдельно: «слот x16, электрически x4». Для видеокарты это критично, для звуковой карты или контроллера USB безразлично.
 
+<figure class="diagram">
+<svg viewBox="0 0 680 161" role="img" aria-label="Пропускная способность интерфейсов, Гбит/с">
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="#4A4740" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker></defs>
+<text x="40" y="37" font-family="Arial, sans-serif" font-size="12" fill="#1A1916">PCIe x16</text><rect x="190" y="25" width="380.0" height="22" rx="5" fill="#9A7300" fill-opacity="0.32" stroke="#9A7300" stroke-width="1.2"/><text x="578.0" y="40" font-family="Arial, sans-serif" font-size="12" fill="#4A4740">64</text><text x="40" y="79" font-family="Arial, sans-serif" font-size="12" fill="#1A1916">SATA</text><rect x="190" y="67" width="35.625" height="22" rx="5" fill="#9A7300" fill-opacity="0.32" stroke="#9A7300" stroke-width="1.2"/><text x="233.625" y="82" font-family="Arial, sans-serif" font-size="12" fill="#4A4740">6</text><text x="40" y="121" font-family="Arial, sans-serif" font-size="12" fill="#1A1916">USB 3</text><rect x="190" y="109" width="29.6875" height="22" rx="5" fill="#9A7300" fill-opacity="0.32" stroke="#9A7300" stroke-width="1.2"/><text x="227.6875" y="124" font-family="Arial, sans-serif" font-size="12" fill="#4A4740">5</text></svg>
+<figcaption>Пропускная способность интерфейсов, Гбит/с</figcaption>
+</figure>
+
+
 ::gate Почему разъём USB-C сам по себе ничего не говорит о скорости?
 
 ## SATA и мир накопителей

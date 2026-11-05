@@ -26,6 +26,13 @@ outcomes:
 | Ядра | независимые потоки | доля параллельной работы |
 | Загрузка | доля времени полезной работы | простои, ожидание ввода и вывода |
 
+<figure class="diagram">
+<svg viewBox="0 0 680 170" role="img" aria-label="Стадии конвейера">
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="#4A4740" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker></defs>
+<line x1="70" y1="85" x2="610" y2="85" stroke="#4A4740" stroke-width="1.5"/><circle cx="70.0" cy="85" r="6" fill="#9A7300" stroke="#F9F7F2" stroke-width="2"/><text x="70.0" y="55" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#1A1916">Выборка</text><circle cx="205.0" cy="85" r="6" fill="#9A7300" stroke="#F9F7F2" stroke-width="2"/><text x="205.0" y="112" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#1A1916">Декод</text><circle cx="340.0" cy="85" r="6" fill="#9A7300" stroke="#F9F7F2" stroke-width="2"/><text x="340.0" y="55" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#1A1916">Исполнение</text><circle cx="475.0" cy="85" r="6" fill="#9A7300" stroke="#F9F7F2" stroke-width="2"/><text x="475.0" y="112" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#1A1916">Память</text><circle cx="610.0" cy="85" r="6" fill="#9A7300" stroke="#F9F7F2" stroke-width="2"/><text x="610.0" y="55" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#1A1916">Запись</text></svg>
+<figcaption>Стадии конвейера</figcaption>
+</figure>
+
 ::gate Как пять стадий дают ускорение, если команда всё равно проходит их по очереди?
 
 ## Пять стадий и формула ускорения

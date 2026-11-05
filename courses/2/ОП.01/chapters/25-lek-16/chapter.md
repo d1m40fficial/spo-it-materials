@@ -38,6 +38,13 @@ outcomes:
 
 С RTO та же логика. Если восстановление каталога занимает 12 минут, а развёртывание всей машины вместе с установкой системы два часа, то обещание «вернём за час» выполнимо только для каталога. Для машины нужен готовый образ или снимок, который разворачивается быстрее. Требование и способ восстановления выбирают вместе, иначе обещание остаётся на бумаге.
 
+<figure class="diagram">
+<svg viewBox="0 0 680 241" role="img" aria-label="Уровни защиты данных">
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="#4A4740" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker></defs>
+<rect x="90" y="20" width="500" height="44" rx="10" fill="#0077D6" stroke="#0077D6" stroke-width="1.2"/><text x="340.0" y="42.0" text-anchor="middle" dominant-baseline="central" font-family="Arial, sans-serif" font-size="13" fill="#FFFFFF">Рабочая копия</text><rect x="90" y="74" width="500" height="44" rx="10" fill="#D9E7EE" stroke="#0077D6" stroke-width="1.2"/><text x="340.0" y="96.0" text-anchor="middle" dominant-baseline="central" font-family="Arial, sans-serif" font-size="13" fill="#1A1916">Снимок</text><rect x="90" y="128" width="500" height="44" rx="10" fill="#D9E7EE" stroke="#0077D6" stroke-width="1.2"/><text x="340.0" y="150.0" text-anchor="middle" dominant-baseline="central" font-family="Arial, sans-serif" font-size="13" fill="#1A1916">Локальная копия</text><rect x="90" y="182" width="500" height="44" rx="10" fill="#D9E7EE" stroke="#0077D6" stroke-width="1.2"/><text x="340.0" y="204.0" text-anchor="middle" dominant-baseline="central" font-family="Arial, sans-serif" font-size="13" fill="#1A1916">Внешняя копия</text></svg>
+<figcaption>Уровни защиты данных</figcaption>
+</figure>
+
 ::gate Почему снимок виртуальной машины удобен, но не заменяет резервную копию?
 
 ## Снимок VirtualBox: мгновенная точка и её цена

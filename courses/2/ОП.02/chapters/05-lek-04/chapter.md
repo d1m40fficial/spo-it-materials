@@ -29,6 +29,13 @@ outcomes:
 | Дешифратор | переводит код операции в управляющие сигналы | ничего, комбинационная схема |
 | Кэш первого уровня | ускоряет доступ к командам и данным | копии строк памяти |
 
+<figure class="diagram">
+<svg viewBox="0 0 680 300" role="img" aria-label="Цикл команды">
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="#4A4740" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker></defs>
+<line x1="340" y1="68" x2="470" y2="120" stroke="#4A4740" stroke-width="1.4" marker-end="url(#arrow)"/><line x1="550" y1="170" x2="420" y2="222" stroke="#4A4740" stroke-width="1.4" marker-end="url(#arrow)"/><line x1="340" y1="222" x2="210" y2="170" stroke="#4A4740" stroke-width="1.4" marker-end="url(#arrow)"/><line x1="130" y1="120" x2="260" y2="68" stroke="#4A4740" stroke-width="1.4" marker-end="url(#arrow)"/><rect x="260" y="18" width="160" height="50" rx="10" fill="#9A7300" stroke="#9A7300" stroke-width="1.2"/><text x="340.0" y="43.0" text-anchor="middle" dominant-baseline="central" font-family="Arial, sans-serif" font-size="13" fill="#FFFFFF">Выборка</text><rect x="470" y="120" width="160" height="50" rx="10" fill="#EDE5D2" stroke="#9A7300" stroke-width="1.2"/><text x="550.0" y="145.0" text-anchor="middle" dominant-baseline="central" font-family="Arial, sans-serif" font-size="13" fill="#1A1916">Декодирование</text><rect x="260" y="222" width="160" height="50" rx="10" fill="#EDE5D2" stroke="#9A7300" stroke-width="1.2"/><text x="340.0" y="247.0" text-anchor="middle" dominant-baseline="central" font-family="Arial, sans-serif" font-size="13" fill="#1A1916">Исполнение</text><rect x="50" y="120" width="160" height="50" rx="10" fill="#EDE5D2" stroke="#9A7300" stroke-width="1.2"/><text x="130.0" y="145.0" text-anchor="middle" dominant-baseline="central" font-family="Arial, sans-serif" font-size="13" fill="#1A1916">Запись</text></svg>
+<figcaption>Цикл команды</figcaption>
+</figure>
+
 ::gate Из каких блоков собран цикл выполнения команды?
 
 ## Состав процессора

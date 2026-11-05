@@ -34,6 +34,9 @@ RAIL_EXCEL_SVG = ('<svg viewBox="0 0 24 24" width="18" height="18" fill="none" s
 RAIL_WARN_SVG = ('<svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" '
                  'stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'
                  '<path d="M12 5.5v9"/><path d="M12 18.5h.01"/></svg>')
+RAIL_TOP_SVG = ('<svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" '
+                'stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'
+                '<path d="M12 19V5"/><path d="M5 12l7-7 7 7"/></svg>')
 RAIL_THEME_SVG = ('<span class="theme-ico" aria-hidden="true">'
                   '<svg class="ico-moon" viewBox="0 0 24 24" width="18" height="18" fill="none" '
                   'stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">'
@@ -100,6 +103,17 @@ THEME_SCRIPT = r"""
 })();
 """
 
+TO_TOP_SCRIPT = r"""
+(function(){
+  document.querySelectorAll('[data-to-top]').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      window.scrollTo({top: 0, behavior: reduce ? 'auto' : 'smooth'});
+    });
+  });
+})();
+"""
+
 # Preset identities for the four built-in courses (matched by slug). course.json can override any of these.
 KNOWN = {
     "dsa": {"code": "DSA", "accent": "#D04A28", "tint": "#F4E1D8", "accentDark": "#F06A45", "tintDark": "#3A2219"},
@@ -136,6 +150,9 @@ def rail(back: str = "", pdf: bool = False, excel: str = "", warn: bool = False)
         bottom += ('<button type="button" class="rail-btn rail-warn" data-warn '
                    'data-tip="Предупреждение о прогрессе" aria-label="Предупреждение о прогрессе">'
                    + RAIL_WARN_SVG + '</button>')
+    bottom += ('<button type="button" class="rail-btn rail-top" data-to-top '
+               'data-tip="К началу страницы" aria-label="К началу страницы">'
+               + RAIL_TOP_SVG + '</button>')
     bottom += ('<button type="button" class="rail-btn" data-theme-toggle aria-pressed="false" '
                'data-tip="Смена темы" aria-label="Смена темы">' + RAIL_THEME_SVG + '</button>')
     return (f'<nav class="edge-rail" aria-label="Навигация по странице">{top}'
@@ -231,7 +248,7 @@ def page(title: str, body: str, style_vars: str = "", extra_css: str = "", scrip
 </head>
 <body>
 {body}
-<script>{THEME_SCRIPT}{script}</script>
+<script>{THEME_SCRIPT}{TO_TOP_SCRIPT}{script}</script>
 </body>
 </html>
 """

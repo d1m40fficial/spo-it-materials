@@ -66,6 +66,13 @@ done
 
 Критическая секция должна быть короткой. Пока поток держит блокировку, остальные ждут, поэтому длинные вычисления и операции ввода-вывода внутри секции снижают параллелизм. Правило простое: под блокировкой меняют данные, а тяжёлую работу выносят наружу.
 
+<figure class="diagram">
+<svg viewBox="0 0 680 300" role="img" aria-label="Четыре условия тупика">
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="#4A4740" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker></defs>
+<line x1="340" y1="68" x2="470" y2="120" stroke="#4A4740" stroke-width="1.4" marker-end="url(#arrow)"/><line x1="550" y1="170" x2="420" y2="222" stroke="#4A4740" stroke-width="1.4" marker-end="url(#arrow)"/><line x1="340" y1="222" x2="210" y2="170" stroke="#4A4740" stroke-width="1.4" marker-end="url(#arrow)"/><line x1="130" y1="120" x2="260" y2="68" stroke="#4A4740" stroke-width="1.4" marker-end="url(#arrow)"/><rect x="260" y="18" width="160" height="50" rx="10" fill="#0077D6" stroke="#0077D6" stroke-width="1.2"/><text x="340.0" y="43.0" text-anchor="middle" dominant-baseline="central" font-family="Arial, sans-serif" font-size="13" fill="#FFFFFF">Взаимное исключение</text><rect x="470" y="120" width="160" height="50" rx="10" fill="#D9E7EE" stroke="#0077D6" stroke-width="1.2"/><text x="550.0" y="145.0" text-anchor="middle" dominant-baseline="central" font-family="Arial, sans-serif" font-size="13" fill="#1A1916">Удержание</text><rect x="260" y="222" width="160" height="50" rx="10" fill="#D9E7EE" stroke="#0077D6" stroke-width="1.2"/><text x="340.0" y="247.0" text-anchor="middle" dominant-baseline="central" font-family="Arial, sans-serif" font-size="13" fill="#1A1916">Нет отбора</text><rect x="50" y="120" width="160" height="50" rx="10" fill="#D9E7EE" stroke="#0077D6" stroke-width="1.2"/><text x="130.0" y="145.0" text-anchor="middle" dominant-baseline="central" font-family="Arial, sans-serif" font-size="13" fill="#1A1916">Ожидание</text></svg>
+<figcaption>Четыре условия тупика</figcaption>
+</figure>
+
 ::gate Как заставить потоки входить в критическую секцию по очереди?
 
 ## Мьютекс

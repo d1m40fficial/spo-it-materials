@@ -44,6 +44,14 @@ outcomes:
 
 Эти два числа понадобятся дальше. Их стоит уметь получать самостоятельно, потому что на контрольной работе значения другие, а способ тот же.
 
+<figure class="diagram">
+<svg viewBox="0 0 680 240" role="img" aria-label="FCFS: компиляция и копирование занимают процессор, короткий запрос браузера ждёт 16 единиц">
+<text x="16" y="48" font-family="Arial, sans-serif" font-size="13" fill="#1A1916">Компиляция</text><rect x="150.0" y="26" width="230.6" height="34" rx="7" fill="#0077D6" stroke="#0077D6" stroke-width="1.2"/><text x="265.3" y="43" text-anchor="middle" dominant-baseline="central" font-family="Arial, sans-serif" font-size="12" fill="#FFFFFF">8</text><text x="16" y="100" font-family="Arial, sans-serif" font-size="13" fill="#1A1916">Копирование</text><rect x="380.6" y="78" width="230.6" height="34" rx="7" fill="#D9E7EE" stroke="#0077D6" stroke-width="1.2"/><text x="495.9" y="95" text-anchor="middle" dominant-baseline="central" font-family="Arial, sans-serif" font-size="12" fill="#1A1916">8</text><text x="16" y="152" font-family="Arial, sans-serif" font-size="13" fill="#1A1916">Браузер</text><rect x="611.2" y="130" width="28.8" height="34" rx="7" fill="#0077D6" stroke="#0077D6" stroke-width="1.2"/><line x1="150" y1="190" x2="640" y2="190" stroke="#CFC6B8" stroke-width="1.4"/><line x1="150.0" y1="186" x2="150.0" y2="196" stroke="#CFC6B8" stroke-width="1.4"/><text x="150.0" y="212" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#4A4740">0</text><line x1="380.6" y1="186" x2="380.6" y2="196" stroke="#CFC6B8" stroke-width="1.4"/><text x="380.6" y="212" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#4A4740">8</text><line x1="611.2" y1="186" x2="611.2" y2="196" stroke="#CFC6B8" stroke-width="1.4"/><text x="611.2" y="212" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#4A4740">16</text><line x1="640.0" y1="186" x2="640.0" y2="196" stroke="#CFC6B8" stroke-width="1.4"/><text x="640.0" y="212" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#4A4740">17</text><text x="150" y="232" font-family="Arial, sans-serif" font-size="12" fill="#4A4740">единицы времени</text></svg>
+<figcaption>FCFS: компиляция и копирование занимают процессор, короткий запрос браузера ждёт 16 единиц</figcaption>
+</figure>
+
+
+
 ::gate Почему порядок «первым пришёл, первым обслужен» даёт плохой отклик?
 
 ## FCFS и эффект обоза

@@ -72,6 +72,13 @@ VERSION_ID="22.04"
 
 > [!KEY] Операционная система это не набор приложений, а слой управления ресурсами. Приложения пользуются её услугами, но не распоряжаются железом напрямую.
 
+<figure class="diagram">
+<svg viewBox="0 0 680 241" role="img" aria-label="Уровни: программа, оболочка, ядро, железо">
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="#4A4740" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker></defs>
+<rect x="90" y="20" width="500" height="44" rx="10" fill="#0077D6" stroke="#0077D6" stroke-width="1.2"/><text x="340.0" y="42.0" text-anchor="middle" dominant-baseline="central" font-family="Arial, sans-serif" font-size="13" fill="#FFFFFF">Приложение</text><rect x="90" y="74" width="500" height="44" rx="10" fill="#D9E7EE" stroke="#0077D6" stroke-width="1.2"/><text x="340.0" y="96.0" text-anchor="middle" dominant-baseline="central" font-family="Arial, sans-serif" font-size="13" fill="#1A1916">Оболочка</text><rect x="90" y="128" width="500" height="44" rx="10" fill="#D9E7EE" stroke="#0077D6" stroke-width="1.2"/><text x="340.0" y="150.0" text-anchor="middle" dominant-baseline="central" font-family="Arial, sans-serif" font-size="13" fill="#1A1916">Ядро</text><rect x="90" y="182" width="500" height="44" rx="10" fill="#D9E7EE" stroke="#0077D6" stroke-width="1.2"/><text x="340.0" y="204.0" text-anchor="middle" dominant-baseline="central" font-family="Arial, sans-serif" font-size="13" fill="#1A1916">Оборудование</text></svg>
+<figcaption>Уровни: программа, оболочка, ядро, железо</figcaption>
+</figure>
+
 ::gate Почему программе нельзя доверить прямой доступ к памяти и диску?
 
 ## Разделение ресурсов: как из одного процессора получается много

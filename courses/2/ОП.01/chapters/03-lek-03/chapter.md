@@ -39,6 +39,13 @@ outcomes:
 
 Посмотреть поля процесса можно командой `cat /proc/$$/status`. В выводе будут строки `Name`, `State`, `Pid`, `PPid`, `Threads`, `VmSize`, `VmRSS` и счётчики переключений контекста. Это тот же PCB, показанный через файловую систему `proc`.
 
+<figure class="diagram">
+<svg viewBox="0 0 680 160" role="img" aria-label="Состояния процесса">
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="#4A4740" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker></defs>
+<rect x="40.0" y="40" width="107.2" height="80" rx="10" fill="#0077D6" stroke="#0077D6" stroke-width="1.2"/><text x="93.6" y="80.0" text-anchor="middle" dominant-baseline="central" font-family="Arial, sans-serif" font-size="13" fill="#FFFFFF">Новый</text><line x1="149.2" y1="80.0" x2="161.2" y2="80.0" stroke="#4A4740" stroke-width="1.4" marker-end="url(#arrow)"/><rect x="163.2" y="40" width="107.2" height="80" rx="10" fill="#D9E7EE" stroke="#0077D6" stroke-width="1.2"/><text x="216.79999999999998" y="80.0" text-anchor="middle" dominant-baseline="central" font-family="Arial, sans-serif" font-size="13" fill="#1A1916">Готов</text><line x1="272.4" y1="80.0" x2="284.4" y2="80.0" stroke="#4A4740" stroke-width="1.4" marker-end="url(#arrow)"/><rect x="286.4" y="40" width="107.2" height="80" rx="10" fill="#D9E7EE" stroke="#0077D6" stroke-width="1.2"/><text x="340.0" y="80.0" text-anchor="middle" dominant-baseline="central" font-family="Arial, sans-serif" font-size="13" fill="#1A1916">Выполняется</text><line x1="395.59999999999997" y1="80.0" x2="407.59999999999997" y2="80.0" stroke="#4A4740" stroke-width="1.4" marker-end="url(#arrow)"/><rect x="409.6" y="40" width="107.2" height="80" rx="10" fill="#D9E7EE" stroke="#0077D6" stroke-width="1.2"/><text x="463.20000000000005" y="80.0" text-anchor="middle" dominant-baseline="central" font-family="Arial, sans-serif" font-size="13" fill="#1A1916">Ожидает</text><line x1="518.8000000000001" y1="80.0" x2="530.8000000000001" y2="80.0" stroke="#4A4740" stroke-width="1.4" marker-end="url(#arrow)"/><rect x="532.8" y="40" width="107.2" height="80" rx="10" fill="#0077D6" stroke="#0077D6" stroke-width="1.2"/><text x="586.4" y="80.0" text-anchor="middle" dominant-baseline="central" font-family="Arial, sans-serif" font-size="13" fill="#FFFFFF">Завершён</text></svg>
+<figcaption>Состояния процесса</figcaption>
+</figure>
+
 ::gate Почему процесс не может выполняться всё время, пока открыто его окно?
 
 ## Состояния процесса

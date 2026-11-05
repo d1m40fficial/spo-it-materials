@@ -41,6 +41,14 @@ outcomes:
 
 Важно различать отказ диска и отказ массива. RAID 0 не переживает ни одного отказа. RAID 1 и RAID 5 переживают один. RAID 6 переживает два. RAID 10 переживает один диск в каждом зеркале, но при неудачном совпадении двух отказов в одном зеркале массив теряет данные. Формулировка «RAID 10 переживает два диска» верна только при удачном раскладе, поэтому в требованиях пишут точнее.
 
+<figure class="diagram">
+<svg viewBox="0 0 680 203" role="img" aria-label="Полезная ёмкость массивов, %">
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="#4A4740" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker></defs>
+<text x="40" y="37" font-family="Arial, sans-serif" font-size="12" fill="#1A1916">RAID 0</text><rect x="190" y="25" width="380.0" height="22" rx="5" fill="#9A7300" fill-opacity="0.32" stroke="#9A7300" stroke-width="1.2"/><text x="578.0" y="40" font-family="Arial, sans-serif" font-size="12" fill="#4A4740">100%</text><text x="40" y="79" font-family="Arial, sans-serif" font-size="12" fill="#1A1916">RAID 1</text><rect x="190" y="67" width="190.0" height="22" rx="5" fill="#9A7300" fill-opacity="0.32" stroke="#9A7300" stroke-width="1.2"/><text x="388.0" y="82" font-family="Arial, sans-serif" font-size="12" fill="#4A4740">50%</text><text x="40" y="121" font-family="Arial, sans-serif" font-size="12" fill="#1A1916">RAID 5</text><rect x="190" y="109" width="285.0" height="22" rx="5" fill="#9A7300" fill-opacity="0.32" stroke="#9A7300" stroke-width="1.2"/><text x="483.0" y="124" font-family="Arial, sans-serif" font-size="12" fill="#4A4740">75%</text><text x="40" y="163" font-family="Arial, sans-serif" font-size="12" fill="#1A1916">RAID 10</text><rect x="190" y="151" width="190.0" height="22" rx="5" fill="#9A7300" fill-opacity="0.32" stroke="#9A7300" stroke-width="1.2"/><text x="388.0" y="166" font-family="Arial, sans-serif" font-size="12" fill="#4A4740">50%</text></svg>
+<figcaption>Полезная ёмкость массивов, %</figcaption>
+</figure>
+
+
 ::gate Как чётность позволяет восстановить данные без второй полной копии?
 
 ## Чётность: данные, которые можно восстановить

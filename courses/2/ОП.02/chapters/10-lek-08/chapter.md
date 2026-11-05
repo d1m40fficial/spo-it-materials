@@ -47,6 +47,13 @@ outcomes:
 
 Банков несколько, и контроллер старается распределять запросы так, чтобы, пока один банк закрывает строку, другой уже открывал следующую. Такая параллельность частично скрывает задержки. Именно поэтому две планки в двухканальном режиме работают быстрее одной: у контроллера появляется больше независимых банков и каналов, между которыми можно переключаться.
 
+<figure class="diagram">
+<svg viewBox="0 0 680 160" role="img" aria-label="Доступ к оперативной памяти">
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="#4A4740" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker></defs>
+<rect x="40.0" y="40" width="138.0" height="80" rx="10" fill="#9A7300" stroke="#9A7300" stroke-width="1.2"/><text x="109.0" y="80.0" text-anchor="middle" dominant-baseline="central" font-family="Arial, sans-serif" font-size="13" fill="#FFFFFF">Контроллер</text><line x1="180.0" y1="80.0" x2="192.0" y2="80.0" stroke="#4A4740" stroke-width="1.4" marker-end="url(#arrow)"/><rect x="194.0" y="40" width="138.0" height="80" rx="10" fill="#EDE5D2" stroke="#9A7300" stroke-width="1.2"/><text x="263.0" y="80.0" text-anchor="middle" dominant-baseline="central" font-family="Arial, sans-serif" font-size="13" fill="#1A1916">Ранг</text><line x1="334.0" y1="80.0" x2="346.0" y2="80.0" stroke="#4A4740" stroke-width="1.4" marker-end="url(#arrow)"/><rect x="348.0" y="40" width="138.0" height="80" rx="10" fill="#EDE5D2" stroke="#9A7300" stroke-width="1.2"/><text x="417.0" y="80.0" text-anchor="middle" dominant-baseline="central" font-family="Arial, sans-serif" font-size="13" fill="#1A1916">Канал</text><line x1="488.0" y1="80.0" x2="500.0" y2="80.0" stroke="#4A4740" stroke-width="1.4" marker-end="url(#arrow)"/><rect x="502.0" y="40" width="138.0" height="80" rx="10" fill="#9A7300" stroke="#9A7300" stroke-width="1.2"/><text x="571.0" y="80.0" text-anchor="middle" dominant-baseline="central" font-family="Arial, sans-serif" font-size="13" fill="#FFFFFF">Процессор</text></svg>
+<figcaption>Доступ к оперативной памяти</figcaption>
+</figure>
+
 ::gate Почему у поколений DDR меняются напряжение, частота и ключ разъёма?
 
 ## Поколения DDR и их числа

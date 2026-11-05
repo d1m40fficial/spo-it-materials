@@ -55,6 +55,13 @@ outcomes:
 
 Поэтому современные устройства применяют **объединение прерываний** (interrupt coalescing): контроллер ждёт, пока накопится несколько событий, и поднимает одно прерывание. Драйвер разбирает пачку записей из очереди. Для очень быстрых устройств используют опрос в режиме высокой нагрузки: драйвер сам проверяет очередь, пока она не опустеет, и только потом возвращается к прерываниям. Так задержка остаётся низкой, а число дорогих переключений сокращается.
 
+<figure class="diagram">
+<svg viewBox="0 0 680 160" role="img" aria-label="Путь ввода-вывода">
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="#4A4740" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker></defs>
+<rect x="40.0" y="40" width="138.0" height="80" rx="10" fill="#0077D6" stroke="#0077D6" stroke-width="1.2"/><text x="109.0" y="80.0" text-anchor="middle" dominant-baseline="central" font-family="Arial, sans-serif" font-size="13" fill="#FFFFFF">Процесс</text><line x1="180.0" y1="80.0" x2="192.0" y2="80.0" stroke="#4A4740" stroke-width="1.4" marker-end="url(#arrow)"/><rect x="194.0" y="40" width="138.0" height="80" rx="10" fill="#D9E7EE" stroke="#0077D6" stroke-width="1.2"/><text x="263.0" y="80.0" text-anchor="middle" dominant-baseline="central" font-family="Arial, sans-serif" font-size="13" fill="#1A1916">Драйвер</text><line x1="334.0" y1="80.0" x2="346.0" y2="80.0" stroke="#4A4740" stroke-width="1.4" marker-end="url(#arrow)"/><rect x="348.0" y="40" width="138.0" height="80" rx="10" fill="#D9E7EE" stroke="#0077D6" stroke-width="1.2"/><text x="417.0" y="80.0" text-anchor="middle" dominant-baseline="central" font-family="Arial, sans-serif" font-size="13" fill="#1A1916">Контроллер</text><line x1="488.0" y1="80.0" x2="500.0" y2="80.0" stroke="#4A4740" stroke-width="1.4" marker-end="url(#arrow)"/><rect x="502.0" y="40" width="138.0" height="80" rx="10" fill="#0077D6" stroke="#0077D6" stroke-width="1.2"/><text x="571.0" y="80.0" text-anchor="middle" dominant-baseline="central" font-family="Arial, sans-serif" font-size="13" fill="#FFFFFF">Устройство</text></svg>
+<figcaption>Путь ввода-вывода</figcaption>
+</figure>
+
 ::gate Как данные проходят от контроллера до буфера процесса?
 
 ## Путь данных от устройства до буфера процесса

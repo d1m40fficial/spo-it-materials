@@ -62,6 +62,13 @@ outcomes:
 
 Отдельно фиксируют исходное состояние. Записывают, что работало до сбоя, что изменилось перед ним, какие программы устанавливались, какие обновления приходили, сколько лет деталям. Если сбой начался после замены памяти, первым подозреваемым становится память, а не блок питания. История изменений часто важнее самого симптома.
 
+<figure class="diagram">
+<svg viewBox="0 0 680 190" role="img" aria-label="Порядок диагностики">
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="#4A4740" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker></defs>
+<rect x="250" y="20" width="180" height="44" rx="10" fill="#9A7300" stroke="#9A7300" stroke-width="1.2"/><text x="340.0" y="42.0" text-anchor="middle" dominant-baseline="central" font-family="Arial, sans-serif" font-size="13" fill="#FFFFFF">Симптом</text><line x1="340" y1="64" x2="110.5" y2="112" stroke="#4A4740" stroke-width="1.4"/><rect x="40.0" y="112" width="141.0" height="44" rx="10" fill="#EDE5D2" stroke="#9A7300" stroke-width="1.2"/><text x="110.5" y="134.0" text-anchor="middle" dominant-baseline="central" font-family="Arial, sans-serif" font-size="13" fill="#1A1916">Питание</text><line x1="340" y1="64" x2="263.5" y2="112" stroke="#4A4740" stroke-width="1.4"/><rect x="193.0" y="112" width="141.0" height="44" rx="10" fill="#EDE5D2" stroke="#9A7300" stroke-width="1.2"/><text x="263.5" y="134.0" text-anchor="middle" dominant-baseline="central" font-family="Arial, sans-serif" font-size="13" fill="#1A1916">Память</text><line x1="340" y1="64" x2="416.5" y2="112" stroke="#4A4740" stroke-width="1.4"/><rect x="346.0" y="112" width="141.0" height="44" rx="10" fill="#EDE5D2" stroke="#9A7300" stroke-width="1.2"/><text x="416.5" y="134.0" text-anchor="middle" dominant-baseline="central" font-family="Arial, sans-serif" font-size="13" fill="#1A1916">Диск</text><line x1="340" y1="64" x2="569.5" y2="112" stroke="#4A4740" stroke-width="1.4"/><rect x="499.0" y="112" width="141.0" height="44" rx="10" fill="#EDE5D2" stroke="#9A7300" stroke-width="1.2"/><text x="569.5" y="134.0" text-anchor="middle" dominant-baseline="central" font-family="Arial, sans-serif" font-size="13" fill="#1A1916">ОС</text></svg>
+<figcaption>Порядок диагностики</figcaption>
+</figure>
+
 ::gate С чего начать, если компьютер не включается и не показывает изображение?
 
 ## Первые шаги при отсутствии запуска

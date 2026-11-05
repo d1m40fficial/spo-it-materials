@@ -90,6 +90,13 @@ target="$1"
 > [!PITFALL] Пробел вокруг знака равенства
 > Строка `name = "стенд"` запускает команду `name` с аргументами `=` и `стенд`, а не создаёт переменную. Оболочка сообщит `command not found`. Присваивание всегда пишется слитно: `name="стенд"`.
 
+<figure class="diagram">
+<svg viewBox="0 0 680 170" role="img" aria-label="Ход сценария администрирования">
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="#4A4740" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker></defs>
+<line x1="70" y1="85" x2="610" y2="85" stroke="#4A4740" stroke-width="1.5"/><circle cx="70.0" cy="85" r="6" fill="#0077D6" stroke="#F9F7F2" stroke-width="2"/><text x="70.0" y="55" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#1A1916">Переменные</text><circle cx="250.0" cy="85" r="6" fill="#0077D6" stroke="#F9F7F2" stroke-width="2"/><text x="250.0" y="112" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#1A1916">Условие</text><circle cx="430.0" cy="85" r="6" fill="#0077D6" stroke="#F9F7F2" stroke-width="2"/><text x="430.0" y="55" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#1A1916">Цикл</text><circle cx="610.0" cy="85" r="6" fill="#0077D6" stroke="#F9F7F2" stroke-width="2"/><text x="610.0" y="112" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#1A1916">Запуск</text></svg>
+<figcaption>Ход сценария администрирования</figcaption>
+</figure>
+
 ::gate Что произойдёт, если подставить переменную без кавычек и почему это опасно для путей с пробелами?
 
 ## Условия, циклы и функции

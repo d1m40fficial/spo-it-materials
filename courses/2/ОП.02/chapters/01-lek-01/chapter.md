@@ -29,6 +29,13 @@ outcomes:
 
 Такая картина полезна не только для копирования. Любая операция с устройством проходит те же этапы: печать документа, вывод кадра на монитор, чтение датчика, приём пакета из сети. Разница лишь в том, какие драйверы и какие шины участвуют.
 
+<figure class="diagram">
+<svg viewBox="0 0 680 241" role="img" aria-label="Уровни вычислительной системы">
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="#4A4740" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker></defs>
+<rect x="90" y="20" width="500" height="44" rx="10" fill="#9A7300" stroke="#9A7300" stroke-width="1.2"/><text x="340.0" y="42.0" text-anchor="middle" dominant-baseline="central" font-family="Arial, sans-serif" font-size="13" fill="#FFFFFF">Приложение</text><rect x="90" y="74" width="500" height="44" rx="10" fill="#EDE5D2" stroke="#9A7300" stroke-width="1.2"/><text x="340.0" y="96.0" text-anchor="middle" dominant-baseline="central" font-family="Arial, sans-serif" font-size="13" fill="#1A1916">ОС</text><rect x="90" y="128" width="500" height="44" rx="10" fill="#EDE5D2" stroke="#9A7300" stroke-width="1.2"/><text x="340.0" y="150.0" text-anchor="middle" dominant-baseline="central" font-family="Arial, sans-serif" font-size="13" fill="#1A1916">Шина</text><rect x="90" y="182" width="500" height="44" rx="10" fill="#EDE5D2" stroke="#9A7300" stroke-width="1.2"/><text x="340.0" y="204.0" text-anchor="middle" dominant-baseline="central" font-family="Arial, sans-serif" font-size="13" fill="#1A1916">Устройство</text></svg>
+<figcaption>Уровни вычислительной системы</figcaption>
+</figure>
+
 ::gate Почему программа не может обратиться к флешке напрямую?
 
 ## Уровни вычислительной системы
