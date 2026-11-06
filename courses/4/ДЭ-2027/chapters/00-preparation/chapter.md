@@ -552,7 +552,7 @@ CREATE TABLE notes (
 
 Нажмите `Run`. Слева появятся двенадцать таблиц, а в результате список имён из `sqlite_master`.
 
-<a href="reports/screens/prep/sqlite-schema.png" target="_blank" rel="noopener"><img src="reports/screens/prep/sqlite-schema.png" alt="Схема из двенадцати таблиц в sqliteonline.com и список созданных таблиц"></a>
+<a href="reports/screens/prep/sqlite-schema.png" target="_blank" rel="noopener"><img src="reports/screens/prep/sqlite-schema.png" alt="Список созданных таблиц в sqliteonline.com: все двенадцать, включая item"></a>
 <figcaption>Схема создана. Слева двенадцать таблиц, в результате проверочный список имён.</figcaption>
 
 Составной ключ записывается двумя строками `PK` или одной строкой `PRIMARY KEY (item_id, valid_from)` в конце таблицы. Внешний ключ всегда ссылается на первичный ключ другой таблицы.
@@ -763,14 +763,14 @@ WHERE o.doc_no = 'V01-01'
 GROUP BY o.doc_no;
 ```
 
-<a href="reports/screens/prep/sqlite-query.png" target="_blank" rel="noopener"><img src="reports/screens/prep/sqlite-query.png" alt="Запрос стоимости заказа в sqliteonline.com и результат 7680"></a>
+<a href="reports/screens/prep/sqlite-query.png" target="_blank" rel="noopener"><img src="reports/screens/prep/sqlite-query.png" alt="Начало запроса стоимости заказа и результат 7680"></a>
 <figcaption>Запрос с общим табличным выражением. В результате одна строка V01-01 со стоимостью 7680.</figcaption>
 
 Если соединить `price` и `specification_component` без подготовки, строки начнут размножаться: каждая строка состава получит несколько цен. Общее табличное выражение `price_on_date` оставляет одну действующую цену на ресурс.
 
 ### Шаг 3. Проверьте результат
 
-<a href="reports/screens/prep/sqlite-cost.png" target="_blank" rel="noopener"><img src="reports/screens/prep/sqlite-cost.png" alt="Результат расчёта стоимости: материалы 3456, операции 4224, итог 7680"></a>
+<a href="reports/screens/prep/sqlite-cost.png" target="_blank" rel="noopener"><img src="reports/screens/prep/sqlite-cost.png" alt="Итоговая стоимость заказа V01-01: 7680"></a>
 <figcaption>Итоговая строка: материалы 3456, операции 4224, общая стоимость 7680.</figcaption>
 
 Проверьте арифметику вручную:
