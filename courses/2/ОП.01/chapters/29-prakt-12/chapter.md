@@ -227,7 +227,7 @@ Get-Service -Name Spooler | Select-Object Name, Status, StartType
 
 ### Шаг 6. Проверьте учётные записи и права
 
-В Linux проверьте, что `student` имеет доступ к `sudo`, но не работает без пароля:
+В Linux проверьте, что `student` имеет доступ к `sudo`, но не работает без пароля. Пароль учётной записи `student` равен `1111`. Команды для проверки:
 
 ```bash
 id student
