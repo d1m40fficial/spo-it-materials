@@ -21,7 +21,7 @@ outcomes:
 ## Оборудование и программное обеспечение
 
 - Персональный компьютер с Windows 10 и XAMPP 8.5.12.
-- Панель XAMPP Control Panel с запущенными Apache и MySQL, phpMyAdmin по адресу `http://localhost/phpmyadmin`.
+- Панель XAMPP Control Panel с запущенными Apache и MySQL, phpMyAdmin по адресу `http://localhost:4433/phpmyadmin`.
 - Клиент `mysql` и конфигурация `.../xampp/mysql/bin/my.ini`.
 - .NET SDK 10 и Visual Studio 2022 Community с рабочей нагрузкой «Разработка классических приложений .NET».
 - Пакет `MySqlConnector` для подключения к MySQL из C#.

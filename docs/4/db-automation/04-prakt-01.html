@@ -850,7 +850,7 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <h2 id="оборудование-и-программное-обеспечение"><span class="num">02</span>Оборудование и программное обеспечение</h2>
 <ul>
 <li>Компьютер с Windows 10 или 11 и XAMPP 8.5.12: Apache, MySQL, phpMyAdmin.</li>
-<li>Браузер для адреса <code>http://localhost/phpmyadmin</code>.</li>
+<li>Браузер для адреса <code>http://localhost:4433/phpmyadmin</code>.</li>
 <li>.NET SDK 10 и Visual Studio 2022 Community с рабочей нагрузкой «Разработка классических приложений .NET».</li>
 <li>Свободные порты 80 и 3306.</li>
 <li>Текстовый редактор для скрипта и табличный редактор для протокола.</li>
@@ -864,11 +864,11 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <p><strong>Проверка</strong> состоит из двух запросов: <code>SELECT VERSION()</code> показывает версию сервера, <code>SELECT @@character_set_database</code> кодировку текущей базы. Если второй вернул <code>utf8mb4</code>, база создана правильно.</p>
 <h2 id="ход-работы"><span class="num">04</span>Ход работы</h2>
 <h3>Шаг 1. Запустите службы</h3>
-<p>Откройте <code>.../xampp/xampp-control.exe</code> и нажмите <code>Start</code> у Apache и у MySQL. В строке службы появится зелёная надпись <code>Running</code> и занятый порт: 80 у Apache, 3306 у MySQL.</p>
+<p>Откройте <code>.../xampp/xampp-control.exe</code> и нажмите <code>Start</code> у Apache и у MySQL. В строке службы появится зелёная надпись <code>Running</code> и занятый порт: 4433 у Apache, 3306 у MySQL.</p>
 <p>Если служба не поднимается, кнопка <code>Netstat</code> в Control Panel покажет процесс, занявший порт. Второй MySQL на машине запускать не нужно: два сервера на одном порту не уживаются.</p>
 <p>Сделайте первый скриншот: окно Control Panel, где обе службы запущены.</p>
 <h3>Шаг 2. Создайте базу dean</h3>
-<p>Откройте <code>http://localhost/phpmyadmin</code>, войдите под <code>root</code> без пароля, перейдите на вкладку <code>Базы данных</code>, введите имя <code>dean</code>, выберите сравнение <code>utf8mb4_unicode_ci</code> и нажмите <code>Создать</code>. Запрос даёт тот же результат.</p>
+<p>Откройте <code>http://localhost:4433/phpmyadmin</code>, войдите под <code>root</code> без пароля, перейдите на вкладку <code>Базы данных</code>, введите имя <code>dean</code>, выберите сравнение <code>utf8mb4_unicode_ci</code> и нажмите <code>Создать</code>. Запрос даёт тот же результат.</p>
 <div class="codehilite" data-lang="sql"><pre><span></span><code><span class="k">CREATE</span><span class="w"> </span><span class="k">DATABASE</span><span class="w"> </span><span class="n">dean</span><span class="w"> </span><span class="nb">CHARACTER</span><span class="w"> </span><span class="k">SET</span><span class="w"> </span><span class="n">utf8mb4</span><span class="w"> </span><span class="k">COLLATE</span><span class="w"> </span><span class="n">utf8mb4_unicode_ci</span><span class="p">;</span>
 </code></pre></div>
 

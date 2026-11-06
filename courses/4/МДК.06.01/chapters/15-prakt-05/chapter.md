@@ -20,7 +20,7 @@ outcomes:
 ## Оборудование и программное обеспечение
 
 - Персональный компьютер с Windows 10 и XAMPP 8.5.12.
-- Запущенные Apache и MySQL, phpMyAdmin по адресу `http://localhost/phpmyadmin`.
+- Запущенные Apache и MySQL, phpMyAdmin по адресу `http://localhost:4433/phpmyadmin`.
 - Python 3 из комплекта VS Code, стандартные модули `http.server`, `urllib`, `json`, `csv`.
 - VS Code, Postman для ручных запросов, браузер с draw.io для схемы.
 - Рабочая папка `sklad\integration` внутри папки практики, база `sklad` из предыдущей практики.

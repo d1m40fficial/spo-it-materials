@@ -22,7 +22,7 @@ outcomes:
 
 - Персональный компьютер с Windows 10, XAMPP 8.5.12 и запущенными Apache и MySQL.
 - База `dean` в кодировке `utf8mb4` с учебными данными.
-- phpMyAdmin по адресу `http://localhost/phpmyadmin`.
+- phpMyAdmin по адресу `http://localhost:4433/phpmyadmin`.
 - Клиенты `mysql` и `mysqldump`.
 - Пользователь `root` или `dean_app` с правом `SELECT` и привилегией `FILE`.
 - PowerShell для проверки байтов файла.

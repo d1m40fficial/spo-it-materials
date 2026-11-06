@@ -36,7 +36,7 @@ outcomes:
 | Рабочая нагрузка .NET desktop | Visual Studio Installer | Шаблоны Windows Forms и конструктор |
 | .NET SDK 10 | Проверка командой `dotnet --version` | Целевая платформа проекта |
 | XAMPP Control Panel | Пуск, затем XAMPP Control Panel | Запустить MySQL |
-| phpMyAdmin | `http://localhost/phpmyadmin` | Создать таблицу `users` и проверять записи |
+| phpMyAdmin | `http://localhost:4433/phpmyadmin` | Создать таблицу `users` и проверять записи |
 | База `dkip2027_course` | Левая панель phpMyAdmin | Общая база приложения и запроса стоимости |
 | Изображение `1.png` | `reports/assets/1.png` | Четыре фрагмента пазла |
 | Файл `reports/KIM_09.02.07-5-2027.pdf` | Папка `reports` дисциплины | Требования к приложению |

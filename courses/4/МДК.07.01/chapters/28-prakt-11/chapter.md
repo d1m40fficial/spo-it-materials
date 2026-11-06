@@ -21,7 +21,7 @@ outcomes:
 ## Оборудование и программное обеспечение
 
 - Персональный компьютер с Windows 10 и XAMPP 8.5.12.
-- Панель XAMPP Control Panel с запущенными Apache и MySQL, phpMyAdmin по адресу `http://localhost/phpmyadmin`.
+- Панель XAMPP Control Panel с запущенными Apache и MySQL, phpMyAdmin по адресу `http://localhost:4433/phpmyadmin`.
 - Клиент `mysql` и утилита `mysqldump`.
 - PowerShell и текстовый редактор для SQL-файлов.
 - Учебная база `dean` с таблицами `students`, `groups`, `enrollments`, `payments` и `schema_version`.

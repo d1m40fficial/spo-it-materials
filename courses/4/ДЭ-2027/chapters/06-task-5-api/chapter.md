@@ -40,7 +40,7 @@ outcomes:
 | Что открыть | Где найти | Зачем |
 |---|---|---|
 | XAMPP Control Panel | Пуск, затем XAMPP | Запустить MySQL, без него API не прочитает данные |
-| phpMyAdmin | `http://localhost/phpmyadmin` | Создать `notes`, вставить записи, проверить связь таблиц |
+| phpMyAdmin | `http://localhost:4433/phpmyadmin` | Создать `notes`, вставить записи, проверить связь таблиц |
 | Visual Studio 2022 | Пуск, затем Visual Studio 2022 | Создать проект API через мастер |
 | PowerShell | Пуск, затем Windows PowerShell | Команды `dotnet`, запуск сервера |
 | Postman | Пуск, затем Postman | Коллекция запросов и тесты |
@@ -56,7 +56,7 @@ outcomes:
 Проверьте стенд до начала работы.
 
 1. Откройте XAMPP Control Panel и нажмите `Start` у `MySQL`. Статус должен стать `Running`.
-2. Откройте `http://localhost/phpmyadmin`, войдите под `root` с пустым паролем.
+2. Откройте `http://localhost:4433/phpmyadmin`, войдите под `root` с пустым паролем.
 3. Слева выберите базу `dkip2027_course`. Если её нет, создайте с сравнением `utf8mb4_unicode_ci`.
 4. Откройте PowerShell и выполните `dotnet --version`. Команда должна вернуть номер 10.
 5. Запустите Postman и убедитесь, что окно открывается без обязательного входа в облачный профиль.

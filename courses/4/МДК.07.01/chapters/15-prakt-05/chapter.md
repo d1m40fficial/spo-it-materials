@@ -23,7 +23,7 @@ outcomes:
 - Персональный компьютер с Windows 10 и XAMPP 8.5.12.
 - Запущенные в XAMPP Control Panel модули Apache и MySQL, база `dean` с учебными данными.
 - Два окна командной строки для параллельных сессий `mysql`.
-- Клиент `mysql` и phpMyAdmin по адресу `http://localhost/phpmyadmin`.
+- Клиент `mysql` и phpMyAdmin по адресу `http://localhost:4433/phpmyadmin`.
 - Пользователь `root` без пароля для учебных опытов или `dean_app` с правом изменения таблиц.
 - Каталог `.../dean/transactions` для скриптов и скриншотов.
 

@@ -18,7 +18,7 @@ outcomes:
 ## Оборудование и программное обеспечение
 
 - Компьютер с Windows 10 или 11 и права на запись в папку `.../backup`.
-- XAMPP 8.5.12 с запущенными Apache и MySQL и открытый phpMyAdmin по адресу `http://localhost/phpmyadmin`.
+- XAMPP 8.5.12 с запущенными Apache и MySQL и открытый phpMyAdmin по адресу `http://localhost:4433/phpmyadmin`.
 - Учебная база `sklad` с таблицами `orders`, `order_lines`, `products`, `stock`, `warehouses`, `customers`, `shipments`.
 - Учётная запись MySQL с правами на чтение базы `sklad` и создание базы `sklad_restore`, логин и пароль выдаёт преподаватель.
 - PowerShell для запуска `mysqldump` и `mysqlcheck`. Если команды не найдены, откройте терминал в папке `.../xampp/mysql/bin`.

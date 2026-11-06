@@ -32,7 +32,7 @@ outcomes:
 |---|---|---|
 | XAMPP Control Panel | `Пуск`, затем `XAMPP Control Panel` | запуск Apache и MySQL |
 | Браузер | ярлык на рабочем столе | phpMyAdmin |
-| phpMyAdmin | `http://localhost/phpmyadmin` | создание базы, SQL, импорт и экспорт |
+| phpMyAdmin | `http://localhost:4433/phpmyadmin` | создание базы, SQL, импорт и экспорт |
 | `customers.csv` | `reports/variants/V01/customers.csv` | шесть заказчиков для импорта |
 | `json_to_csv.py` | `reports/scripts/json_to_csv.py` | преобразовать `Заказчики.json` в CSV |
 | `resources.csv` | там же | подсказка по ресурсам, нормам и ценам |
@@ -110,11 +110,13 @@ Excel сохраняет книгу в CSV не целиком, а только 
 <figcaption>XAMPP Control Panel: Apache и MySQL в состоянии Running, MySQL слушает порт 3306.</figcaption>
 </figure>
 
-Если MySQL не поднимается, нажмите `Netstat` и посмотрите, какая программа держит 3306. Если не поднимается Apache, проверьте порт 80.
+На учебных компьютерах Apache уже переведён на порт 4433, поэтому дальше открывайте phpMyAdmin по адресу с этим портом. На снимке показаны стандартные порты, ориентируйтесь на состояние `Running`.
+
+Если MySQL не поднимается, нажмите `Netstat` и посмотрите, какая программа держит 3306. Если не поднимается Apache, проверьте порт 4433: на учебных компьютерах он назначен для Apache.
 
 ### Шаг 2. Откройте phpMyAdmin и войдите
 
-Откройте браузер и перейдите по адресу `http://localhost/phpmyadmin`. Появится страница входа. В поле `Пользователь` введите `root`, поле `Пароль` оставьте пустым, нажмите `Войти`.
+Откройте браузер и перейдите по адресу `http://localhost:4433/phpmyadmin`. Появится страница входа. В поле `Пользователь` введите `root`, поле `Пароль` оставьте пустым, нажмите `Войти`.
 
 <figure class="diagram">
 <img src="reports/screens/mysql/t2-connection.png" alt="Строка подключения приложения к базе dkip2027_course">

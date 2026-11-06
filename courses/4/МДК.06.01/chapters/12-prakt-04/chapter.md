@@ -20,7 +20,7 @@ outcomes:
 ## Оборудование и программное обеспечение
 
 - Компьютер с Windows 10 и XAMPP 8.5.12, модули Apache и MySQL запущены.
-- phpMyAdmin по адресу `http://localhost/phpmyadmin` и клиент `mysql.exe` из папки `mysql/bin`.
+- phpMyAdmin по адресу `http://localhost:4433/phpmyadmin` и клиент `mysql.exe` из папки `mysql/bin`.
 - Python 3 и VS Code для скриптов, Excel для просмотра выгрузки; модули `csv`, `json`, `hashlib`, `re`.
 - Рабочая папка `sklad\migration` внутри папки проекта.
 

@@ -16,7 +16,7 @@
 | `manager` | `manager` | Менеджер по продажам |
 | `storekeeper` | `storekeeper` | Кладовщик |
 
-4. Для работы с базой откройте `http://localhost/phpmyadmin`, создайте базу `sklad_plus` и импортируйте `database/schema.sql`, затем `database/seed.sql`.
+4. Для работы с базой откройте `http://localhost:4433/phpmyadmin`, создайте базу `sklad_plus` и импортируйте `database/schema.sql`, затем `database/seed.sql`.
 
 ## Состав комплекта
 

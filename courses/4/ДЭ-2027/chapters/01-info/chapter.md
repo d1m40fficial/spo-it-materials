@@ -81,7 +81,7 @@ outcomes:
 | Браузер | Ярлык на рабочем столе | draw.io, phpMyAdmin, Swagger UI |
 | draw.io | `https://app.diagrams.net/` | ER-диаграмма |
 | XAMPP Control Panel | Пуск, затем XAMPP | Запуск Apache и MySQL |
-| phpMyAdmin | `http://localhost/phpmyadmin` | База, SQL, импорт и экспорт |
+| phpMyAdmin | `http://localhost:4433/phpmyadmin` | База, SQL, импорт и экспорт |
 | Visual Studio 2022 | Пуск, затем Visual Studio 2022 | Приложение и API |
 | .NET SDK 10 | Проверка командой `dotnet --version` | Сборка проекта |
 | Postman | Пуск, затем Postman | Коллекция запросов и тесты |
@@ -90,7 +90,7 @@ outcomes:
 Проверка стенда занимает несколько минут.
 
 1. Откройте XAMPP Control Panel и нажмите `Start` у `Apache` и `MySQL`. Оба статуса должны стать `Running`.
-2. Откройте браузер и перейдите по адресу `http://localhost/phpmyadmin`. Должна открыться страница входа. Пользователь `root`, пароль пустой, если его не меняли.
+2. Откройте браузер и перейдите по адресу `http://localhost:4433/phpmyadmin`. Должна открыться страница входа. Пользователь `root`, пароль пустой, если его не меняли.
 3. Откройте новую вкладку и проверьте `https://app.diagrams.net/`. Должен загрузиться редактор диаграмм.
 4. Откройте командную строку и выполните `dotnet --version`. Команда должна вернуть номер версии 10.
 5. Запустите Visual Studio 2022 и убедитесь, что доступен шаблон `Windows Forms App`.

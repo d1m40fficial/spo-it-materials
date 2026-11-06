@@ -140,10 +140,10 @@ if ($db->connect_errno) {
 echo 'OK';
 ```
 
-Откройте `http://localhost/sklad/check_db.php` в браузере. При работающей MySQL страница показывает `OK`. Затем проверьте ответ командой.
+Откройте `http://localhost:4433/sklad/check_db.php` в браузере. При работающей MySQL страница показывает `OK`. Затем проверьте ответ командой.
 
 ```powershell
-curl.exe -i -m 5 http://localhost/sklad/check_db.php
+curl.exe -i -m 5 http://localhost:4433/sklad/check_db.php
 ```
 
 Вывод команды выглядит так.
@@ -186,7 +186,7 @@ TcpTestSucceeded : True
 Остановите MySQL в XAMPP Control Panel кнопкой Stop. Подождите несколько секунд и повторите проверки.
 
 ```powershell
-curl.exe -i -m 5 http://localhost/sklad/check_db.php
+curl.exe -i -m 5 http://localhost:4433/sklad/check_db.php
 Test-NetConnection localhost -Port 3306
 Get-Process mysqld -ErrorAction SilentlyContinue
 ```
@@ -226,7 +226,7 @@ Get-Process mysqld -ErrorAction SilentlyContinue
 
 ```powershell
 Test-NetConnection localhost -Port 3306
-curl.exe -i -m 5 http://localhost/sklad/check_db.php
+curl.exe -i -m 5 http://localhost:4433/sklad/check_db.php
 ```
 
 Проверка считается законченной, когда порт открыт, страница возвращает 200 и вход в систему проходит под тестовой учётной записью. Одного запуска службы недостаточно: процесс может подняться и снова упасть.

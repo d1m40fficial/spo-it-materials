@@ -21,7 +21,7 @@ outcomes:
 ## Оборудование и программное обеспечение
 
 - Персональный компьютер с Windows 10 и XAMPP 8.5.12.
-- Панель XAMPP Control Panel с запущенными Apache и MySQL, phpMyAdmin по адресу `http://localhost/phpmyadmin`.
+- Панель XAMPP Control Panel с запущенными Apache и MySQL, phpMyAdmin по адресу `http://localhost:4433/phpmyadmin`.
 - Клиент `mysql`, утилита `mysqldump.exe`, конфигурация `.../xampp/mysql/bin/my.ini`.
 - PowerShell и текстовый редактор.
 - Учебная база `dean` с таблицами `students`, `enrollments`, `payments` и `audit_log`.
@@ -58,7 +58,7 @@ SQL-команды выполняются в phpMyAdmin или в клиенте
 
 В XAMPP пользователь `root` по умолчанию входит без пароля. Это удобно на учебной машине и опасно на любой другой: полный доступ получает любой процесс и любой человек за этим компьютером. Приложение должно ходить в базу под `dean_app`, а `root` нужен только администратору.
 
-Строка подключения с паролем в коде, в `appsettings.json` или в истории PowerShell это утечка при первом копировании проекта. Дамп тоже секрет: файл в `.../xampp/htdocs` открывается по адресу `http://localhost/dean.sql` без пароля.
+Строка подключения с паролем в коде, в `appsettings.json` или в истории PowerShell это утечка при первом копировании проекта. Дамп тоже секрет: файл в `.../xampp/htdocs` открывается по адресу `http://localhost:4433/dean.sql` без пароля.
 
 ## Ход работы
 
@@ -261,11 +261,11 @@ icacls .../dean/backup/dean.sql
 Select-String -Path .../dean/backup/dean.sql -Pattern 'INSERT INTO' | Select-Object -First 3
 ```
 
-Проверьте, что дамп содержит данные: строки `INSERT INTO` с почтой студентов это подтверждают. Затем проверьте доступ через веб-сервер: скопируйте файл в `.../xampp/htdocs` и откройте `http://localhost/dean.sql`. Если браузер показывает текст дампа, это критический риск. После проверки удалите копию из `htdocs`.
+Проверьте, что дамп содержит данные: строки `INSERT INTO` с почтой студентов это подтверждают. Затем проверьте доступ через веб-сервер: скопируйте файл в `.../xampp/htdocs` и откройте `http://localhost:4433/dean.sql`. Если браузер показывает текст дампа, это критический риск. После проверки удалите копию из `htdocs`.
 
 ```powershell
 Copy-Item .../dean/backup/dean.sql .../xampp/htdocs/dean.sql
-Start-Process "http://localhost/dean.sql"
+Start-Process "http://localhost:4433/dean.sql"
 Remove-Item .../xampp/htdocs\dean.sql
 ```
 
