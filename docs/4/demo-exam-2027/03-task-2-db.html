@@ -944,6 +944,7 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <p>Если Apache остановлен, phpMyAdmin не откроется, хотя база продолжит работать. Если MySQL остановлен, phpMyAdmin покажет ошибку подключения.</p>
 <p>Кодировка задаётся у базы, таблиц и соединения. <code>utf8mb4</code> хранит до четырёх байт на символ и вмещает кириллицу, редкие знаки и эмодзи. Старое имя <code>utf8</code> в MySQL ограничено тремя байтами. Сравнение <code>utf8mb4_unicode_ci</code> не различает регистр и правильно сортирует кириллицу. Главное, чтобы кодировка была одинаковой у базы, таблиц и клиента.</p>
 <p>Схема задания повторяет ER-диаграмму. В базовом наборе двенадцать таблиц, для задания 2 достаточно семи основных.</p>
+<p><strong>Контрагент</strong> это организация или предприниматель, с которым предприятие оформляет деловые отношения: заказчик, поставщик, изготовитель. В базе все роли сведены в одну таблицу <code>counterparty</code>, а конкретная роль хранится в поле <code>party_type</code>. Поэтому заказчик и изготовитель не дублируются, а заказ ссылается на один и тот же справочник двумя полями: <code>customer_id</code> и <code>executor_id</code>.</p>
 <table>
 <thead>
 <tr>
@@ -1088,17 +1089,18 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <h3>Шаг 2. Откройте phpMyAdmin и войдите</h3>
 <p>Откройте браузер и перейдите по адресу <code>http://localhost/phpmyadmin</code>. Появится страница входа. В поле <code>Пользователь</code> введите <code>root</code>, поле <code>Пароль</code> оставьте пустым, нажмите <code>Войти</code>.</p>
 <figure class="diagram">
-<img src="reports/screens/mysql/connection.png" alt="Вход в phpMyAdmin и параметры подключения">
-<figcaption>Вход в phpMyAdmin: сервер localhost, пользователь root, пароль пустой; внизу видна версия сервера и кодировка.</figcaption>
+<img src="reports/screens/mysql/t2-connection.png" alt="Строка подключения приложения к базе dkip2027_course">
+<figcaption>Те же параметры в проекте: сервер 127.0.0.1, база dkip2027_course, пользователь root, кодировка utf8mb4. Приложение подключается к той же базе, что открыта в phpMyAdmin.</figcaption>
 </figure>
 
 <p>После входа откроется главная страница: слева список баз, сверху вкладки <code>Обзор</code>, <code>Структура</code>, <code>SQL</code>, <code>Импорт</code>, <code>Экспорт</code>, справа основная область.</p>
+<p>Строка подключения на снимке показывает, что приложение и phpMyAdmin смотрят в одну базу. Если поменять имя базы или пользователя в одном месте, второй клиент перестанет видеть данные.</p>
 <p>Если пароль не пустой, попросите учебный пароль у преподавателя. Не меняйте пароль root в середине работы: это заблокирует доступ к базе.</p>
 <h3>Шаг 3. Создайте базу dkip2027_course</h3>
 <p>В левой панели нажмите <code>Создать БД</code> (в английской версии <code>New</code>). Откроется форма. В поле <code>Имя базы данных</code> введите <code>dkip2027_course</code>. В списке <code>Сравнение</code> выберите <code>utf8mb4_unicode_ci</code>. Нажмите <code>Создать</code>.</p>
 <figure class="diagram">
-<img src="reports/screens/mysql/db-create.png" alt="Создание базы dkip2027_course в phpMyAdmin">
-<figcaption>Создание базы: имя dkip2027_course и сравнение utf8mb4_unicode_ci.</figcaption>
+<img src="reports/screens/mysql/t2-create.png" alt="Создание базы dkip2027_course в phpMyAdmin: форма и новая строка в списке">
+<figcaption>Создание базы: имя dkip2027_course, в списке сравнений выберите utf8mb4_unicode_ci; ниже база уже появилась в списке.</figcaption>
 </figure>
 
 <p>Слева появится новая база, она сразу откроется. В основной области будет написано, что таблиц пока нет.</p>
@@ -1113,6 +1115,100 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <h3>Шаг 4. Выполните схему во вкладке SQL</h3>
 <p>Выберите базу <code>dkip2027_course</code> в левой панели. Откройте вкладку <code>SQL</code>. В большое текстовое поле вставьте скрипт ниже. Кнопка <code>Выполнить</code> находится справа внизу под полем.</p>
 <p>Скрипт создаёт семь основных таблиц в порядке от родителей к зависимым. Пять остальных таблиц модели (производственный заказ, пользователи и заметки) добавьте позже или создайте сразу по тому же образцу. Порядок важен: справочники раньше зависимых таблиц.</p>
+<p>Прежде чем запускать скрипт, разберём команду по частям. Тогда при ошибке будет понятно, какое слово и какое правило нарушены.</p>
+<p><strong>Как устроена команда CREATE TABLE</strong></p>
+<div class="codehilite" data-lang="sql"><pre><span></span><code><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="k">table_name</span><span class="w"> </span><span class="p">(</span>
+<span class="w">  </span><span class="k">column_name</span><span class="w"> </span><span class="n">data_type</span><span class="w"> </span><span class="k">constraint</span><span class="p">,</span>
+<span class="w">  </span><span class="k">column_name</span><span class="w"> </span><span class="n">data_type</span><span class="w"> </span><span class="k">constraint</span><span class="p">,</span>
+<span class="w">  </span><span class="k">PRIMARY</span><span class="w"> </span><span class="k">KEY</span><span class="w"> </span><span class="p">(</span><span class="k">column_name</span><span class="p">),</span>
+<span class="w">  </span><span class="k">CONSTRAINT</span><span class="w"> </span><span class="n">fk_name</span><span class="w"> </span><span class="k">FOREIGN</span><span class="w"> </span><span class="k">KEY</span><span class="w"> </span><span class="p">(</span><span class="k">column_name</span><span class="p">)</span>
+<span class="w">    </span><span class="k">REFERENCES</span><span class="w"> </span><span class="n">parent_table</span><span class="w"> </span><span class="p">(</span><span class="n">parent_column</span><span class="p">)</span>
+<span class="p">)</span><span class="w"> </span><span class="n">ENGINE</span><span class="o">=</span><span class="n">InnoDB</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="n">CHARSET</span><span class="o">=</span><span class="n">utf8mb4</span><span class="p">;</span>
+</code></pre></div>
+
+<p><code>table_name</code> это имя таблицы, <code>column_name</code> имя столбца, <code>data_type</code> тип, <code>constraint</code> ограничение. <code>CREATE TABLE</code> создаёт новую таблицу. В скобках перечисляются столбцы, затем ключи и проверки. Каждый столбец описывается тремя частями: имя, тип и ограничения. Запятая разделяет описания, после последнего описания запятая не ставится.</p>
+<p><code>ENGINE=InnoDB</code> выбирает движок таблицы. Только InnoDB поддерживает транзакции и внешние ключи. <code>DEFAULT CHARSET=utf8mb4</code> задаёт кодировку таблицы, чтобы кириллица хранилась одинаково с базой.</p>
+<p><code>IF NOT EXISTS</code> после <code>CREATE TABLE</code> необязателен. С ним повторный запуск не выдаёт ошибку, если таблица уже есть. В учебном скрипте его не ставят, чтобы сразу видеть случайный повтор.</p>
+<p><strong>Имя поля</strong></p>
+<p>Имя пишут латиницей, цифрами и знаком подчёркивания. Пробелы и дефисы не используйте: они требуют обратных кавычек и путают при переносе скрипта. Имя начинают с буквы. Слово <code>order</code> в MySQL зарезервировано, поэтому таблица заказа называется <code>customer_order</code>, а не <code>order</code>. Если имя всё же совпало с командой, его заключают в обратные кавычки: <code>order</code>.</p>
+<p>Имя должно отвечать на вопрос «что здесь лежит»: <code>doc_date</code>, <code>sale_price</code>, <code>output_qty</code>. Сокращения <code>d1</code>, <code>x</code>, <code>f</code> через месяц никто не расшифрует.</p>
+<p><strong>Тип поля</strong></p>
+<table>
+<colgroup><col style="width:16%"><col style="width:24%"><col style="width:24%"><col></colgroup>
+<thead><tr><th>Тип</th><th>Что хранит</th><th>Пример</th><th>Почему такой</th></tr></thead>
+<tbody>
+<tr><td><code>INT</code></td><td>целое число</td><td><code>id</code>, количество штук</td><td>занимает 4 байта, хватает для счётчиков</td></tr>
+<tr><td><code>VARCHAR</code></td><td>строку до n символов</td><td><code>name</code>, <code>code</code>, <code>phone</code></td><td>длина ограничена, но текст не обрезается молча</td></tr>
+<tr><td><code>DECIMAL</code></td><td>точное число с дробью</td><td><code>amount</code>, <code>qty</code></td><td>p цифр всего, s после запятой, сумма не расходится</td></tr>
+<tr><td><code>DATE</code></td><td>дату без времени</td><td><code>valid_from</code>, <code>doc_date</code></td><td>сравнение и сортировка идут как у даты</td></tr>
+<tr><td><code>TEXT</code></td><td>длинный текст</td><td>заметка, комментарий</td><td>не помещается в короткий <code>VARCHAR</code></td></tr>
+</tbody>
+</table>
+
+<p><code>INT AUTO_INCREMENT</code> это целое, которое сервер заполняет сам: первой строке даёт 1, следующей 2 и так далее. Такой столбец обычно делают первичным ключом. Если при импорте указать своё значение, счётчик подстроится под него.</p>
+<p><code>VARCHAR(64)</code> считает символы, а не байты. В <code>utf8mb4</code> один символ занимает до четырёх байт, поэтому 64 символа могут занять больше 64 байт. Для имени, кода и телефона этого достаточно, для адреса берут <code>VARCHAR(500)</code>.</p>
+<p><code>DECIMAL(14,2)</code> хранит 14 цифр, из них 2 после запятой. Деньги и цены считают только в <code>DECIMAL</code>. <code>FLOAT</code> и <code>DOUBLE</code> хранят двоичную дробь, поэтому 0,1 в них не равно 0,1, и сумма сотни строк может разойтись с ручным расчётом.</p>
+<p><code>DATE</code> принимает значение в формате <code>2027-09-01</code>. Строка <code>01.09.2027</code> для MySQL не дата, а текст, и сравнение с ней работает не так, как ожидается.</p>
+<p><strong>Ограничения</strong></p>
+<table>
+<colgroup><col style="width:22%"><col style="width:34%"><col></colgroup>
+<thead><tr><th>Ограничение</th><th>Что проверяет</th><th>Пример</th></tr></thead>
+<tbody>
+<tr><td><code>NOT NULL</code></td><td>значение обязательно</td><td><code>name VARCHAR(255) NOT NULL</code></td></tr>
+<tr><td><code>UNIQUE</code></td><td>значение не повторяется</td><td><code>code VARCHAR(64) UNIQUE</code></td></tr>
+<tr><td><code>DEFAULT</code></td><td>значение по умолчанию</td><td><code>created_at DATE DEFAULT (CURRENT_DATE)</code></td></tr>
+<tr><td><code>CHECK</code></td><td>значение попадает в диапазон или список</td><td><code>CHECK (amount &gt;= 0)</code></td></tr>
+<tr><td><code>PRIMARY KEY</code></td><td>строку можно отличить от других</td><td><code>PRIMARY KEY (id)</code></td></tr>
+<tr><td><code>FOREIGN KEY</code></td><td>ссылка ведёт на существующую строку</td><td><code>REFERENCES item(id)</code></td></tr>
+<tr><td><code>AUTO_INCREMENT</code></td><td>число выдаёт сервер</td><td><code>id INT AUTO_INCREMENT</code></td></tr>
+</tbody>
+</table>
+
+<p>Ограничение можно написать сразу после типа, как <code>NOT NULL</code> или <code>UNIQUE</code>, а можно вынести вниз и дать ему имя: <code>CONSTRAINT ck_item_kind CHECK (...)</code>. Имя нужно, чтобы в сообщении об ошибке было видно, какое правило сработало, и чтобы ограничение можно было удалить одной командой. В именах принято использовать префиксы <code>pk_</code>, <code>fk_</code>, <code>ck_</code>, <code>uq_</code>.</p>
+<p><code>CHECK</code> в MySQL 8 действительно проверяет значения. В старых версиях MySQL он разбирался, но не применялся, поэтому в учебной работе лучше убедиться, что сервер 8.0 или новее.</p>
+<p><strong>Первичный ключ</strong></p>
+<p>Первичный ключ делает строку узнаваемой. Он одновременно означает <code>NOT NULL</code>, <code>UNIQUE</code> и индекс для быстрого поиска. У таблицы может быть только один первичный ключ.</p>
+<p>Простой ключ это одно поле:</p>
+<div class="codehilite" data-lang="sql"><pre><span></span><code><span class="n">id</span><span class="w"> </span><span class="nb">INT</span><span class="w"> </span><span class="n">AUTO_INCREMENT</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span>
+<span class="k">PRIMARY</span><span class="w"> </span><span class="k">KEY</span><span class="w"> </span><span class="p">(</span><span class="n">id</span><span class="p">)</span>
+</code></pre></div>
+
+<p>Естественный ключ берут из документа, если он уникален и не меняется. У контрагента это код из файла:</p>
+<div class="codehilite" data-lang="sql"><pre><span></span><code><span class="n">id</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">32</span><span class="p">)</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span>
+<span class="k">PRIMARY</span><span class="w"> </span><span class="k">KEY</span><span class="w"> </span><span class="p">(</span><span class="n">id</span><span class="p">)</span>
+</code></pre></div>
+
+<p>Составной ключ состоит из двух и более полей. Он нужен, когда уникальна только пара:</p>
+<div class="codehilite" data-lang="sql"><pre><span></span><code><span class="k">PRIMARY</span><span class="w"> </span><span class="k">KEY</span><span class="w"> </span><span class="p">(</span><span class="n">item_id</span><span class="p">,</span><span class="w"> </span><span class="n">valid_from</span><span class="p">)</span>
+</code></pre></div>
+
+<p>У одного ресурса не может быть двух цен с одной даты, но может быть много цен с разными датами. Именно это позволяет считать старый заказ по старой цене.</p>
+<p><strong>Внешний ключ</strong></p>
+<p>Внешний ключ связывает строку с первичным ключом другой таблицы и не даёт вставить ссылку на несуществующую строку. Разберём объявление по словам:</p>
+<div class="codehilite" data-lang="sql"><pre><span></span><code><span class="k">CONSTRAINT</span><span class="w"> </span><span class="n">fk_price_item</span>
+<span class="w">  </span><span class="k">FOREIGN</span><span class="w"> </span><span class="k">KEY</span><span class="w"> </span><span class="p">(</span><span class="n">item_id</span><span class="p">)</span>
+<span class="w">  </span><span class="k">REFERENCES</span><span class="w"> </span><span class="n">item</span><span class="p">(</span><span class="n">id</span><span class="p">)</span>
+</code></pre></div>
+
+<p><code>CONSTRAINT fk_price_item</code> задаёт имя правила. <code>FOREIGN KEY (item_id)</code> называет поле текущей таблицы, которое хранит ссылку. <code>REFERENCES item(id)</code> говорит, что значение должно найтись в поле <code>id</code> таблицы <code>item</code>.</p>
+<p>Работают четыре требования. Тип ссылающегося поля совпадает с типом целевого. Целевое поле является первичным или уникальным ключом. Обе таблицы используют InnoDB. Родительская таблица уже создана. Если цена объявлена раньше ресурса, сервер ответит ошибкой 1215.</p>
+<p>По умолчанию внешний ключ запрещает удалять родительскую строку, пока на неё ссылаются: это <code>ON DELETE RESTRICT</code>. Для строк заказа часто добавляют <code>ON DELETE CASCADE</code>, тогда удаление заказа удаляет и его строки. <code>SET NULL</code> разрешает обнулить ссылку, но только если поле допускает <code>NULL</code>. Выбирайте правило осознанно: каскад удобен, но одно неверное удаление уносит связанные данные.</p>
+<p><strong>Связывающая таблица</strong></p>
+<p>Связь многие ко многим нельзя хранить двумя внешними ключами в одной из основных таблиц. Её раскладывают на связывающую таблицу. В модели это <code>specification_component</code>: одна спецификация содержит много ресурсов, один ресурс входит в много спецификаций.</p>
+<div class="codehilite" data-lang="sql"><pre><span></span><code><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">specification_component</span><span class="w"> </span><span class="p">(</span>
+<span class="w">  </span><span class="n">specification_id</span><span class="w"> </span><span class="nb">INT</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span>
+<span class="w">  </span><span class="n">item_id</span><span class="w"> </span><span class="nb">INT</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span>
+<span class="w">  </span><span class="n">qty</span><span class="w"> </span><span class="nb">DECIMAL</span><span class="p">(</span><span class="mi">14</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span>
+<span class="w">  </span><span class="n">time_norm</span><span class="w"> </span><span class="nb">DECIMAL</span><span class="p">(</span><span class="mi">14</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span>
+<span class="w">  </span><span class="k">PRIMARY</span><span class="w"> </span><span class="k">KEY</span><span class="w"> </span><span class="p">(</span><span class="n">specification_id</span><span class="p">,</span><span class="w"> </span><span class="n">item_id</span><span class="p">),</span>
+<span class="w">  </span><span class="k">CONSTRAINT</span><span class="w"> </span><span class="n">fk_comp_spec</span><span class="w"> </span><span class="k">FOREIGN</span><span class="w"> </span><span class="k">KEY</span><span class="w"> </span><span class="p">(</span><span class="n">specification_id</span><span class="p">)</span><span class="w"> </span><span class="k">REFERENCES</span><span class="w"> </span><span class="n">specification</span><span class="p">(</span><span class="n">id</span><span class="p">),</span>
+<span class="w">  </span><span class="k">CONSTRAINT</span><span class="w"> </span><span class="n">fk_comp_item</span><span class="w"> </span><span class="k">FOREIGN</span><span class="w"> </span><span class="k">KEY</span><span class="w"> </span><span class="p">(</span><span class="n">item_id</span><span class="p">)</span><span class="w"> </span><span class="k">REFERENCES</span><span class="w"> </span><span class="n">item</span><span class="p">(</span><span class="n">id</span><span class="p">)</span>
+<span class="p">)</span><span class="w"> </span><span class="n">ENGINE</span><span class="o">=</span><span class="n">InnoDB</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="n">CHARSET</span><span class="o">=</span><span class="n">utf8mb4</span><span class="p">;</span>
+</code></pre></div>
+
+<p>Пара <code>specification_id</code> и <code>item_id</code> объявлена первичным ключом. Поэтому один и тот же ресурс не попадёт в спецификацию дважды, а разные ресурсы спокойно сосуществуют. Оба поля являются внешними ключами: одно ведёт в спецификацию, второе в справочник ресурсов. Собственного <code>id</code> у такой таблицы может не быть: пара уже уникальна.</p>
+<p><strong>Скрипт по частям</strong></p>
+<p>Сначала справочники: контрагенты и ресурсы. Они ни от кого не зависят.</p>
 <div class="codehilite" data-lang="sql"><pre><span></span><code><span class="n">USE</span><span class="w"> </span><span class="n">dkip2027_course</span><span class="p">;</span>
 
 <span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">counterparty</span><span class="w"> </span><span class="p">(</span>
@@ -1134,8 +1230,107 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <span class="w">  </span><span class="k">PRIMARY</span><span class="w"> </span><span class="k">KEY</span><span class="w"> </span><span class="p">(</span><span class="n">id</span><span class="p">),</span>
 <span class="w">  </span><span class="k">CONSTRAINT</span><span class="w"> </span><span class="n">ck_item_kind</span><span class="w"> </span><span class="k">CHECK</span><span class="w"> </span><span class="p">(</span><span class="n">kind</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span><span class="s1">&#39;product&#39;</span><span class="p">,</span><span class="s1">&#39;material&#39;</span><span class="p">,</span><span class="s1">&#39;operation&#39;</span><span class="p">))</span>
 <span class="p">)</span><span class="w"> </span><span class="n">ENGINE</span><span class="o">=</span><span class="n">InnoDB</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="n">CHARSET</span><span class="o">=</span><span class="n">utf8mb4</span><span class="p">;</span>
+</code></pre></div>
 
-<span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">price</span><span class="w"> </span><span class="p">(</span>
+<p>У <code>counterparty</code> ключ текстовый, потому что код приходит из документа и может начинаться с нуля. Поле <code>party_type</code> хранит роль: заказчик, поставщик или изготовитель. Это и есть контрагент: одна организация, у которой в разных документах разные роли.</p>
+<table>
+<thead>
+<tr>
+<th>Поле <code>counterparty</code></th>
+<th>Тип</th>
+<th>Ограничение</th>
+<th>Зачем</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id</code></td>
+<td><code>VARCHAR(32)</code></td>
+<td><code>PRIMARY KEY</code></td>
+<td>код из документа, ведущие нули сохраняются</td>
+</tr>
+<tr>
+<td><code>name</code></td>
+<td><code>VARCHAR(255)</code></td>
+<td><code>NOT NULL</code></td>
+<td>наименование организации</td>
+</tr>
+<tr>
+<td><code>inn</code></td>
+<td><code>VARCHAR(20)</code></td>
+<td><code>NOT NULL</code></td>
+<td>ИНН текстом, может начинаться с нуля</td>
+</tr>
+<tr>
+<td><code>address</code></td>
+<td><code>VARCHAR(500)</code></td>
+<td><code>NOT NULL</code></td>
+<td>адрес с запятыми и корпусом</td>
+</tr>
+<tr>
+<td><code>phone</code></td>
+<td><code>VARCHAR(64)</code></td>
+<td><code>NOT NULL</code></td>
+<td>телефон с плюсом и пробелами</td>
+</tr>
+<tr>
+<td><code>party_type</code></td>
+<td><code>VARCHAR(24)</code></td>
+<td><code>NOT NULL</code></td>
+<td>роль контрагента</td>
+</tr>
+</tbody>
+</table>
+<p>У <code>item</code> ключ числовой и автоматический: внутренний номер не зависит от внешнего кода. Поле <code>code</code> объявлено <code>UNIQUE</code>, поэтому два ресурса с одним кодом не появятся. Проверка <code>kind</code> пропускает только три допустимых вида, и опечатка <code>prodcut</code> будет отклонена сервером.</p>
+<table>
+<thead>
+<tr>
+<th>Поле <code>item</code></th>
+<th>Тип</th>
+<th>Ограничение</th>
+<th>Зачем</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id</code></td>
+<td><code>INT</code></td>
+<td><code>AUTO_INCREMENT</code>, <code>PRIMARY KEY</code></td>
+<td>внутренний номер строки</td>
+</tr>
+<tr>
+<td><code>code</code></td>
+<td><code>VARCHAR(64)</code></td>
+<td><code>UNIQUE</code>, <code>NOT NULL</code></td>
+<td>код ресурса из документа, не повторяется</td>
+</tr>
+<tr>
+<td><code>name</code></td>
+<td><code>VARCHAR(255)</code></td>
+<td><code>NOT NULL</code></td>
+<td>название ресурса</td>
+</tr>
+<tr>
+<td><code>kind</code></td>
+<td><code>VARCHAR(16)</code></td>
+<td><code>NOT NULL</code>, <code>CHECK</code></td>
+<td><code>product</code>, <code>material</code> или <code>operation</code></td>
+</tr>
+<tr>
+<td><code>unit</code></td>
+<td><code>VARCHAR(16)</code></td>
+<td><code>NOT NULL</code></td>
+<td>единица измерения</td>
+</tr>
+</tbody>
+</table>
+<figure class="diagram">
+<img src="reports/screens/mysql/t2-schema-item.png" alt="Команда CREATE TABLE item целиком: ключ, уникальный код и проверка вида">
+<figcaption>Таблица item целиком: автоинкрементный ключ, уникальный код, обязательные поля, первичный ключ и проверка допустимых видов.</figcaption>
+</figure>
+
+<p>Затем цены и спецификация. Они ссылаются на уже созданные справочники.</p>
+<div class="codehilite" data-lang="sql"><pre><span></span><code><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">price</span><span class="w"> </span><span class="p">(</span>
 <span class="w">  </span><span class="n">item_id</span><span class="w"> </span><span class="nb">INT</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span>
 <span class="w">  </span><span class="n">valid_from</span><span class="w"> </span><span class="nb">DATE</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span>
 <span class="w">  </span><span class="n">amount</span><span class="w"> </span><span class="nb">DECIMAL</span><span class="p">(</span><span class="mi">14</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span>
@@ -1167,8 +1362,11 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <span class="w">  </span><span class="k">CONSTRAINT</span><span class="w"> </span><span class="n">ck_comp_qty</span><span class="w"> </span><span class="k">CHECK</span><span class="w"> </span><span class="p">(</span><span class="n">qty</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="p">),</span>
 <span class="w">  </span><span class="k">CONSTRAINT</span><span class="w"> </span><span class="n">ck_comp_time</span><span class="w"> </span><span class="k">CHECK</span><span class="w"> </span><span class="p">(</span><span class="n">time_norm</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span>
 <span class="p">)</span><span class="w"> </span><span class="n">ENGINE</span><span class="o">=</span><span class="n">InnoDB</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="n">CHARSET</span><span class="o">=</span><span class="n">utf8mb4</span><span class="p">;</span>
+</code></pre></div>
 
-<span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">customer_order</span><span class="w"> </span><span class="p">(</span>
+<p>У <code>price</code> составной ключ и один внешний ключ. У <code>specification</code> поле <code>product_id</code> объявлено <code>UNIQUE</code>: одно изделие имеет одну действующую спецификацию, это связь один к одному. <code>manufacturer_id</code> ведёт в <code>counterparty</code>, потому что изготовитель это тоже контрагент. У <code>specification_component</code> два внешних ключа и составной ключ, как разобрано выше.</p>
+<p>Последними идут заказ и его строки.</p>
+<div class="codehilite" data-lang="sql"><pre><span></span><code><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">customer_order</span><span class="w"> </span><span class="p">(</span>
 <span class="w">  </span><span class="n">id</span><span class="w"> </span><span class="nb">INT</span><span class="w"> </span><span class="n">AUTO_INCREMENT</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span>
 <span class="w">  </span><span class="n">doc_no</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">64</span><span class="p">)</span><span class="w"> </span><span class="k">UNIQUE</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span>
 <span class="w">  </span><span class="n">doc_date</span><span class="w"> </span><span class="nb">DATE</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span>
@@ -1196,7 +1394,8 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <span class="p">)</span><span class="w"> </span><span class="n">ENGINE</span><span class="o">=</span><span class="n">InnoDB</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="n">CHARSET</span><span class="o">=</span><span class="n">utf8mb4</span><span class="p">;</span>
 </code></pre></div>
 
-<p>После нажатия <code>Выполнить</code> phpMyAdmin покажет зелёные сообщения о каждом запросе. Если появилось красное сообщение, прочитайте номер ошибки. <code>1007</code> означает, что таблица уже существует. <code>1064</code> означает синтаксическую ошибку, чаще всего лишнюю запятую перед закрывающей скобкой. <code>1215</code> означает, что внешний ключ не может быть создан: проверьте типы полей и порядок таблиц.</p>
+<p>У заказа два внешних ключа в одну таблицу <code>counterparty</code>: заказчик и исполнитель. Это нормально, имена правил <code>fk_order_customer</code> и <code>fk_order_executor</code> показывают, какая ссылка за что отвечает. Номер документа объявлен <code>UNIQUE</code>, поэтому два заказа с одним номером не пройдут.</p>
+<p>После нажатия <code>Выполнить</code> phpMyAdmin покажет зелёные сообщения о каждом запросе. Если появилось красное сообщение, прочитайте номер ошибки. <code>1007</code> означает, что таблица уже существует. <code>1064</code> означает синтаксическую ошибку, чаще всего лишнюю запятую перед закрывающей скобкой. <code>1215</code> означает, что внешний ключ не может быть создан: проверьте типы полей, движок InnoDB и порядок таблиц. <code>1452</code> означает, что вставляемая строка ссылается на несуществующего родителя: сначала загрузите справочник.</p>
 <p>Скрипт не удаляет существующие таблицы. Если он остановился на середине, исправьте ошибку и выполните остаток. Повторный запуск с начала даст <code>table already exists</code>, и это нормально.</p>
 <h3>Шаг 5. Проверьте таблицы</h3>
 <p>Обновите левую панель. Внутри базы появится список таблиц. Их должно быть семь. Проверьте это запросом.</p>
@@ -1210,8 +1409,8 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 
 <p>В ответе семь строк, у всех движок <code>InnoDB</code> и сравнение <code>utf8mb4_unicode_ci</code>. Движок важен: только <code>InnoDB</code> даёт транзакции и внешние ключи.</p>
 <figure class="diagram">
-<img src="reports/screens/mysql/db-tables.png" alt="Список таблиц базы dkip2027_course">
-<figcaption>Список таблиц учебной базы: все объекты InnoDB, кодировка utf8mb4_unicode_ci. На снимке полная база, в этой работе созданы семь таблиц.</figcaption>
+<img src="reports/screens/mysql/t2-tables.png" alt="Список таблиц учебной базы, строка item выделена">
+<figcaption>Список таблиц: строка item выделена, у неё 9 строк, движок InnoDB и сравнение utf8mb4_unicode_ci. На снимке полная база, в этой работе созданы семь таблиц.</figcaption>
 </figure>
 
 <p>Если таблиц меньше, найдите в журнале первый красный запрос: скорее всего, он остановился на внешнем ключе.</p>
@@ -1242,8 +1441,8 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 </ul>
 <p>Нажмите <code>Выполнить</code> справа внизу. Появится зелёное сообщение об успешном импорте и число выполненных запросов.</p>
 <figure class="diagram">
-<img src="reports/screens/mysql/db-import.png" alt="Импорт customers.csv в таблицу counterparty">
-<figcaption>Импорт customers.csv: формат CSV, первая строка с именами столбцов, кодировка utf-8.</figcaption>
+<img src="reports/screens/mysql/t2-import.png" alt="Таблица counterparty после импорта customers.csv">
+<figcaption>Таблица counterparty после импорта: шесть заказчиков и две служебные записи DOC-CUSTOMER и DOC-MAKER, коды с ведущими нулями, адреса с запятыми не разорваны.</figcaption>
 </figure>
 
 <p>Проверьте результат двумя запросами. Первый считает строки, второй показывает коды и их длину.</p>
@@ -1256,8 +1455,8 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 
 <p>Должно быть шесть строк. В варианте V01 длина каждого кода равна девяти, в базовом наборе десяти. Главное, что длина одинакова у всех строк и ведущие нули на месте. Если длина равна одному, значит столбец объявлен целым или Excel превратил код в число.</p>
 <figure class="diagram">
-<img src="reports/screens/mysql/customers.png" alt="Таблица counterparty после импорта customers.csv">
-<figcaption>Таблица counterparty после импорта: шесть кодов с ведущими нулями, адреса с запятыми не разорваны.</figcaption>
+<img src="reports/screens/mysql/t2-customers.png" alt="Те же контрагенты в приложении">
+<figcaption>Те же строки в приложении: коды с ведущими нулями и роли заказчика, поставщика, изготовителя.</figcaption>
 </figure>
 
 <p>Если phpMyAdmin сообщает о повторяющемся ключе, таблица уже содержит данные. Очистите её командой <code>TRUNCATE TABLE counterparty;</code> и повторите импорт. Если весь CSV попал в один столбец, неверно выбран разделитель: вернитесь на вкладку <code>Импорт</code> и поставьте тот знак, который стоит в файле.</p>
@@ -1394,7 +1593,7 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <h3>Шаг 11. Сделайте выгрузку SQL</h3>
 <p>Выберите базу <code>dkip2027_course</code> в левой панели, но не отдельную таблицу. Откройте вкладку <code>Экспорт</code>. Выберите метод <code>Быстрый</code>, формат <code>SQL</code>. Убедитесь, что включены структура и данные: в быстром методе они включены по умолчанию. Нажмите <code>Выполнить</code>.</p>
 <figure class="diagram">
-<img src="reports/screens/mysql/db-export.png" alt="Экспорт базы dkip2027_course в SQL">
+<img src="reports/screens/mysql/t2-export.png" alt="Экспорт базы dkip2027_course в SQL: формат, шаблон и кнопка экспорта">
 <figcaption>Экспорт базы: быстрый метод, формат SQL, структура и данные всех таблиц.</figcaption>
 </figure>
 
@@ -1404,8 +1603,8 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <p>Создайте новую базу <code>dkip2027_restore</code> тем же способом, что и первую: <code>Создать БД</code>, имя, сравнение <code>utf8mb4_unicode_ci</code>, <code>Создать</code>. База должна быть пустой, без таблиц.</p>
 <p>Выберите <code>dkip2027_restore</code> в левой панели. Откройте вкладку <code>Импорт</code>. Нажмите <code>Выберите файл</code>, укажите <code>dkip2027-mysql.sql</code>, формат <code>SQL</code>, нажмите <code>Выполнить</code>. phpMyAdmin прочитает файл и выполнит команды по порядку.</p>
 <figure class="diagram">
-<img src="reports/screens/mysql/db-restore.png" alt="Восстановленная база dkip2027_restore">
-<figcaption>Восстановленная копия dkip2027_restore: таблицы и шесть заказчиков на месте.</figcaption>
+<img src="reports/screens/mysql/t2-restore.png" alt="Восстановленная база dkip2027_restore">
+<figcaption>Восстановленная копия dkip2027_restore: база открыта, представление order_cost считает стоимость, данные на месте.</figcaption>
 </figure>
 
 <p>Проверьте не только список таблиц, но и данные.</p>
