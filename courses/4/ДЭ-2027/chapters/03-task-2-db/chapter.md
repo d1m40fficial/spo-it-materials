@@ -440,6 +440,11 @@ ORDER BY table_name;
 
 Щёлкните `price` в левой панели и откройте вкладку `Структура`. У цен первичный ключ состоит из двух полей: `item_id` и `valid_from`. Ниже видно, что `item_id` ещё и внешний ключ на `item.id`.
 
+<figure class="diagram">
+<img src="reports/screens/mysql/t2-price-structure.png" alt="Структура price: составной ключ item_id и valid_from">
+<figcaption>Структура price: item_id и valid_from помечены ключом, amount хранится в DECIMAL(14,2). Внизу вкладки видны внешние ключи.</figcaption>
+</figure>
+
 ```sql
 SHOW CREATE TABLE price;
 SHOW CREATE TABLE customer_order;
@@ -597,6 +602,16 @@ id,order_id,product_id,source_code,qty,sale_price,discount
 В варианте V01 в заказе указано только количество, без цены продажи и скидки. Столбцы обязательные, поэтому поставьте `0.00`. Если в вашем заказе есть цена и скидка, перенесите их из документа.
 
 Импортируйте файлы по порядку: `spec.csv` в `specification`, `components.csv` в `specification_component`, `order.csv` в `customer_order`, `lines.csv` в `customer_order_line`. Строки заказа требуют и заказ, и изделие, поэтому `lines.csv` идёт последним.
+
+<figure class="diagram">
+<img src="reports/screens/mysql/t2-order.png" alt="Заказ V01-01 в phpMyAdmin: номер, дата, заказчик и исполнитель">
+<figcaption>Шапка заказа после импорта: V01-01, дата 15.03.2027, заказчик 001000001, исполнитель DOC-MAKER.</figcaption>
+</figure>
+
+<figure class="diagram">
+<img src="reports/screens/mysql/t2-spec.png" alt="Состав спецификации: материалы и операции с нормами и часами">
+<figcaption>Состав спецификации после импорта: три материала и две операции, у каждой строки своя норма и часы.</figcaption>
+</figure>
 
 ### Шаг 10. Проверьте данные и ограничения
 

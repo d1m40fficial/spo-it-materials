@@ -1229,7 +1229,7 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <span class="w">  </span><span class="n">kind</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">16</span><span class="p">)</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span>
 <span class="w">  </span><span class="n">unit</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">16</span><span class="p">)</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span>
 <span class="w">  </span><span class="k">PRIMARY</span><span class="w"> </span><span class="k">KEY</span><span class="w"> </span><span class="p">(</span><span class="n">id</span><span class="p">),</span>
-<span class="w">  </span><span class="k">CONSTRAINT</span><span class="w"> </span><span class="n">ck_item_kind</span><span class="w"> </span><span class="k">CHECK</span><span class="w"> </span><span class="p">(</span><span class="n">kind</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span><span class="s1">&#39;product&#39;</span><span class="p">,</span><span class="s1">&#39;material&#39;</span><span class="p">,</span><span class="s1">&#39;operation&#39;</span><span class="p">))</span>
+<span class="w">  </span><span class="k">CONSTRAINT</span><span class="w"> </span><span class="n">ck_item_kind</span><span class="w"> </span><span class="k">CHECK</span><span class="w"> </span><span class="p">(</span><span class="n">kind</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span><span class="s1">'product'</span><span class="p">,</span><span class="s1">'material'</span><span class="p">,</span><span class="s1">'operation'</span><span class="p">))</span>
 <span class="p">)</span><span class="w"> </span><span class="n">ENGINE</span><span class="o">=</span><span class="n">InnoDB</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="n">CHARSET</span><span class="o">=</span><span class="n">utf8mb4</span><span class="p">;</span>
 </code></pre></div>
 
@@ -1404,7 +1404,7 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 
 <span class="k">SELECT</span><span class="w"> </span><span class="k">table_name</span><span class="p">,</span><span class="w"> </span><span class="n">engine</span><span class="p">,</span><span class="w"> </span><span class="n">table_collation</span>
 <span class="k">FROM</span><span class="w"> </span><span class="n">information_schema</span><span class="p">.</span><span class="n">tables</span>
-<span class="k">WHERE</span><span class="w"> </span><span class="n">table_schema</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;dkip2027_course&#39;</span>
+<span class="k">WHERE</span><span class="w"> </span><span class="n">table_schema</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'dkip2027_course'</span>
 <span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="k">table_name</span><span class="p">;</span>
 </code></pre></div>
 
@@ -1417,6 +1417,11 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <p>Если таблиц меньше, найдите в журнале первый красный запрос: скорее всего, он остановился на внешнем ключе.</p>
 <h3>Шаг 6. Проверьте первичные и внешние ключи</h3>
 <p>Щёлкните <code>price</code> в левой панели и откройте вкладку <code>Структура</code>. У цен первичный ключ состоит из двух полей: <code>item_id</code> и <code>valid_from</code>. Ниже видно, что <code>item_id</code> ещё и внешний ключ на <code>item.id</code>.</p>
+<figure class="diagram">
+<img src="reports/screens/mysql/t2-price-structure.png" alt="Структура price: составной ключ item_id и valid_from">
+<figcaption>Структура price: item_id и valid_from помечены ключом, amount хранится в DECIMAL(14,2). Внизу вкладки видны внешние ключи.</figcaption>
+</figure>
+
 <div class="codehilite" data-lang="sql"><pre><span></span><code><span class="k">SHOW</span><span class="w"> </span><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">price</span><span class="p">;</span>
 <span class="k">SHOW</span><span class="w"> </span><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">customer_order</span><span class="p">;</span>
 <span class="k">SHOW</span><span class="w"> </span><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">specification_component</span><span class="p">;</span>
@@ -1425,7 +1430,7 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <p>В ответе должны быть строки <code>PRIMARY KEY</code>, <code>CONSTRAINT ... FOREIGN KEY ... REFERENCES</code>. Проверьте все связи сразу запросом к служебной базе <code>information_schema</code>.</p>
 <div class="codehilite" data-lang="sql"><pre><span></span><code><span class="k">SELECT</span><span class="w"> </span><span class="k">table_name</span><span class="p">,</span><span class="w"> </span><span class="k">constraint_name</span><span class="p">,</span><span class="w"> </span><span class="n">referenced_table_name</span>
 <span class="k">FROM</span><span class="w"> </span><span class="n">information_schema</span><span class="p">.</span><span class="n">KEY_COLUMN_USAGE</span>
-<span class="k">WHERE</span><span class="w"> </span><span class="n">table_schema</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;dkip2027_course&#39;</span>
+<span class="k">WHERE</span><span class="w"> </span><span class="n">table_schema</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'dkip2027_course'</span>
 <span class="w">  </span><span class="k">AND</span><span class="w"> </span><span class="n">referenced_table_name</span><span class="w"> </span><span class="k">IS</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span>
 <span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="k">table_name</span><span class="p">,</span><span class="w"> </span><span class="k">constraint_name</span><span class="p">;</span>
 </code></pre></div>
@@ -1463,7 +1468,7 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <p>Если phpMyAdmin сообщает о повторяющемся ключе, таблица уже содержит данные. Очистите её командой <code>TRUNCATE TABLE counterparty;</code> и повторите импорт. Если весь CSV попал в один столбец, неверно выбран разделитель: вернитесь на вкладку <code>Импорт</code> и поставьте тот знак, который стоит в файле.</p>
 <p>Если в варианте лежит только <code>Заказчики.json</code>, как в КИМ, сначала преобразуйте его в CSV. В папке материалов есть готовый скрипт <a href="reports/scripts/json_to_csv.py">json_to_csv.py</a>. Он использует только стандартную библиотеку Python, сохраняет код текстом и переименовывает ключ <code>addres</code> в <code>address</code>.</p>
 <p>Скачайте скрипт в папку варианта, откройте PowerShell в этой папке и выполните команду.</p>
-<div class="codehilite" data-lang="powershell"><pre><span></span><code><span class="n">python</span> <span class="n">json_to_csv</span><span class="p">.</span><span class="n">py</span> <span class="s2">&quot;Заказчики.json&quot;</span> <span class="n">customers</span><span class="p">.</span><span class="n">csv</span>
+<div class="codehilite" data-lang="powershell"><pre><span></span><code><span class="n">python</span> <span class="n">json_to_csv</span><span class="p">.</span><span class="n">py</span> <span class="s2">"Заказчики.json"</span> <span class="n">customers</span><span class="p">.</span><span class="n">csv</span>
 </code></pre></div>
 
 <p>В ответе появится <code>Готово: customers.csv, строк: 6</code>. Откройте файл в блокноте: первая строка должна быть <code>id,name,inn,address,phone,party_type</code>, коды должны начинаться с нулей. Дальше импортируйте <code>customers.csv</code> в таблицу <code>counterparty</code> тем же способом, что описан выше.</p>
@@ -1501,7 +1506,7 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <h3>Шаг 9. Импортируйте заказ, спецификацию и состав</h3>
 <p>В <code>customers.csv</code> есть только заказчики, а в заказе указан исполнитель. В варианте V01 это предприятие, ателье «Стежок». Добавьте его отдельной записью с техническим кодом.</p>
 <div class="codehilite" data-lang="sql"><pre><span></span><code><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">counterparty</span><span class="w"> </span><span class="p">(</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">inn</span><span class="p">,</span><span class="w"> </span><span class="n">address</span><span class="p">,</span><span class="w"> </span><span class="n">phone</span><span class="p">,</span><span class="w"> </span><span class="n">party_type</span><span class="p">)</span>
-<span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="s1">&#39;DOC-MAKER&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Ателье «Стежок»&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Производитель&#39;</span><span class="p">);</span>
+<span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="s1">'DOC-MAKER'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Ателье «Стежок»'</span><span class="p">,</span><span class="w"> </span><span class="s1">''</span><span class="p">,</span><span class="w"> </span><span class="s1">''</span><span class="p">,</span><span class="w"> </span><span class="s1">''</span><span class="p">,</span><span class="w"> </span><span class="s1">'Производитель'</span><span class="p">);</span>
 </code></pre></div>
 
 <p>Теперь создайте лист <code>order</code> с заголовками <code>id</code>, <code>doc_no</code>, <code>doc_date</code>, <code>customer_id</code>, <code>executor_id</code>.</p>
@@ -1532,6 +1537,16 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 
 <p>В варианте V01 в заказе указано только количество, без цены продажи и скидки. Столбцы обязательные, поэтому поставьте <code>0.00</code>. Если в вашем заказе есть цена и скидка, перенесите их из документа.</p>
 <p>Импортируйте файлы по порядку: <code>spec.csv</code> в <code>specification</code>, <code>components.csv</code> в <code>specification_component</code>, <code>order.csv</code> в <code>customer_order</code>, <code>lines.csv</code> в <code>customer_order_line</code>. Строки заказа требуют и заказ, и изделие, поэтому <code>lines.csv</code> идёт последним.</p>
+<figure class="diagram">
+<img src="reports/screens/mysql/t2-order.png" alt="Заказ V01-01 в phpMyAdmin: номер, дата, заказчик и исполнитель">
+<figcaption>Шапка заказа после импорта: V01-01, дата 15.03.2027, заказчик 001000001, исполнитель DOC-MAKER.</figcaption>
+</figure>
+
+<figure class="diagram">
+<img src="reports/screens/mysql/t2-spec.png" alt="Состав спецификации: материалы и операции с нормами и часами">
+<figcaption>Состав спецификации после импорта: три материала и две операции, у каждой строки своя норма и часы.</figcaption>
+</figure>
+
 <h3>Шаг 10. Проверьте данные и ограничения</h3>
 <p>Сначала посмотрите, что получилось. Запрос соединяет заказ, заказчика и строки.</p>
 <div class="codehilite" data-lang="sql"><pre><span></span><code><span class="k">SELECT</span><span class="w"> </span><span class="n">o</span><span class="p">.</span><span class="n">doc_no</span><span class="p">,</span><span class="w"> </span><span class="n">o</span><span class="p">.</span><span class="n">doc_date</span><span class="p">,</span><span class="w"> </span><span class="k">c</span><span class="p">.</span><span class="n">name</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">customer</span><span class="p">,</span><span class="w"> </span><span class="n">l</span><span class="p">.</span><span class="n">qty</span><span class="p">,</span><span class="w"> </span><span class="n">l</span><span class="p">.</span><span class="n">sale_price</span>
@@ -1542,7 +1557,7 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 
 <p>В ответе одна строка: заказ <code>V01-01</code>, заказчик Магазин «Стежок-1», количество 12. Если строк больше или меньше, проверьте CSV и код заказчика.</p>
 <p>Проверьте количество строк в каждой таблице.</p>
-<div class="codehilite" data-lang="sql"><pre><span></span><code><span class="k">SELECT</span><span class="w"> </span><span class="k">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">customers</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">counterparty</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">LIKE</span><span class="w"> </span><span class="s1">&#39;DOC-%&#39;</span><span class="p">;</span>
+<div class="codehilite" data-lang="sql"><pre><span></span><code><span class="k">SELECT</span><span class="w"> </span><span class="k">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">customers</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">counterparty</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">LIKE</span><span class="w"> </span><span class="s1">'DOC-%'</span><span class="p">;</span>
 <span class="k">SELECT</span><span class="w"> </span><span class="k">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">items</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">item</span><span class="p">;</span>
 <span class="k">SELECT</span><span class="w"> </span><span class="k">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">prices</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">price</span><span class="p">;</span>
 <span class="k">SELECT</span><span class="w"> </span><span class="k">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">components</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">specification_component</span><span class="p">;</span>
@@ -1555,7 +1570,7 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <div class="codehilite" data-lang="sql"><pre><span></span><code><span class="k">START</span><span class="w"> </span><span class="k">TRANSACTION</span><span class="p">;</span>
 
 <span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">customer_order</span><span class="w"> </span><span class="p">(</span><span class="n">doc_no</span><span class="p">,</span><span class="w"> </span><span class="n">doc_date</span><span class="p">,</span><span class="w"> </span><span class="n">customer_id</span><span class="p">,</span><span class="w"> </span><span class="n">executor_id</span><span class="p">)</span>
-<span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="s1">&#39;TEST-FK&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;2027-03-15&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;99999999&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;DOC-MAKER&#39;</span><span class="p">);</span>
+<span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="s1">'TEST-FK'</span><span class="p">,</span><span class="w"> </span><span class="s1">'2027-03-15'</span><span class="p">,</span><span class="w"> </span><span class="s1">'99999999'</span><span class="p">,</span><span class="w"> </span><span class="s1">'DOC-MAKER'</span><span class="p">);</span>
 
 <span class="k">ROLLBACK</span><span class="p">;</span>
 </code></pre></div>
@@ -1566,14 +1581,14 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 
 <span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">customer_order_line</span>
 <span class="p">(</span><span class="n">order_id</span><span class="p">,</span><span class="w"> </span><span class="n">product_id</span><span class="p">,</span><span class="w"> </span><span class="n">source_code</span><span class="p">,</span><span class="w"> </span><span class="n">qty</span><span class="p">,</span><span class="w"> </span><span class="n">sale_price</span><span class="p">,</span><span class="w"> </span><span class="n">discount</span><span class="p">)</span>
-<span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;TEST-QTY&#39;</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span>
+<span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="s1">'TEST-QTY'</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span>
 
 <span class="k">ROLLBACK</span><span class="p">;</span>
 
 <span class="k">START</span><span class="w"> </span><span class="k">TRANSACTION</span><span class="p">;</span>
 
 <span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">item</span><span class="w"> </span><span class="p">(</span><span class="n">code</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">kind</span><span class="p">,</span><span class="w"> </span><span class="n">unit</span><span class="p">)</span>
-<span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="s1">&#39;P-01&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Дубль&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;product&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;ед.&#39;</span><span class="p">);</span>
+<span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="s1">'P-01'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Дубль'</span><span class="p">,</span><span class="w"> </span><span class="s1">'product'</span><span class="p">,</span><span class="w"> </span><span class="s1">'ед.'</span><span class="p">);</span>
 
 <span class="k">ROLLBACK</span><span class="p">;</span>
 </code></pre></div>
@@ -1612,7 +1627,7 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <div class="codehilite" data-lang="sql"><pre><span></span><code><span class="k">SHOW</span><span class="w"> </span><span class="n">TABLES</span><span class="p">;</span>
 
 <span class="k">SELECT</span><span class="w"> </span><span class="k">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">all_customers</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">counterparty</span><span class="p">;</span>
-<span class="k">SELECT</span><span class="w"> </span><span class="k">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">json_customers</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">counterparty</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">LIKE</span><span class="w"> </span><span class="s1">&#39;DOC-%&#39;</span><span class="p">;</span>
+<span class="k">SELECT</span><span class="w"> </span><span class="k">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">json_customers</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">counterparty</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">LIKE</span><span class="w"> </span><span class="s1">'DOC-%'</span><span class="p">;</span>
 <span class="k">SELECT</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">counterparty</span><span class="w"> </span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">id</span><span class="p">;</span>
 </code></pre></div>
 
@@ -1697,12 +1712,12 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <p>Два запроса ниже показывают таблицы с кодировкой и все внешние ключи. Они отвечают на большинство вопросов проверяющего.</p>
 <div class="codehilite" data-lang="sql"><pre><span></span><code><span class="k">SELECT</span><span class="w"> </span><span class="k">table_name</span><span class="p">,</span><span class="w"> </span><span class="n">engine</span><span class="p">,</span><span class="w"> </span><span class="n">table_collation</span>
 <span class="k">FROM</span><span class="w"> </span><span class="n">information_schema</span><span class="p">.</span><span class="n">tables</span>
-<span class="k">WHERE</span><span class="w"> </span><span class="n">table_schema</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;dkip2027_course&#39;</span>
+<span class="k">WHERE</span><span class="w"> </span><span class="n">table_schema</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'dkip2027_course'</span>
 <span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="k">table_name</span><span class="p">;</span>
 
 <span class="k">SELECT</span><span class="w"> </span><span class="k">table_name</span><span class="p">,</span><span class="w"> </span><span class="k">constraint_name</span><span class="p">,</span><span class="w"> </span><span class="n">referenced_table_name</span>
 <span class="k">FROM</span><span class="w"> </span><span class="n">information_schema</span><span class="p">.</span><span class="n">KEY_COLUMN_USAGE</span>
-<span class="k">WHERE</span><span class="w"> </span><span class="n">table_schema</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;dkip2027_course&#39;</span>
+<span class="k">WHERE</span><span class="w"> </span><span class="n">table_schema</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'dkip2027_course'</span>
 <span class="w">  </span><span class="k">AND</span><span class="w"> </span><span class="n">referenced_table_name</span><span class="w"> </span><span class="k">IS</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span>
 <span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="k">table_name</span><span class="p">,</span><span class="w"> </span><span class="k">constraint_name</span><span class="p">;</span>
 </code></pre></div>
