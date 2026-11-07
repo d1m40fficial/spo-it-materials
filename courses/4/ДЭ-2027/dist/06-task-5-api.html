@@ -861,7 +861,7 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <li>Сбой базы даёт код 500 и JSON с полем <code>error</code>.</li>
 <li>Коллекция Postman содержит запросы и исполняемые проверки для 200, 400 и 500.</li>
 </ul>
-<p>Сдаются четыре вещи: проект API, SQL-скрипт таблицы <code>notes</code> с тестовыми записями, экспортированная коллекция Postman и короткий протокол проверки. Протокол это таблица, где напротив каждой проверки записан фактический код и фактическое тело ответа.</p>
+<p>На проверку идут четыре вещи: проект API, SQL-скрипт таблицы <code>notes</code> с тестовыми записями, экспортированная коллекция Postman и короткий протокол проверки. Протокол это таблица, где напротив каждой проверки записан фактический код и фактическое тело ответа.</p>
 <p>Отдельно обратите внимание на слово «контракт». Это список договорённостей: имена полей, их типы и смысл каждого кода. Если сервис вернул правильные данные, но назвал поле <code>titleUser</code> вместо <code>title_user</code>, клиент сломается.</p>
 <h2 id="что-понадобится"><span class="num">02</span>Что понадобится</h2>
 <p>Работа опирается на базу из предыдущих заданий и на документы варианта. Ниже список того, что открыть, где это лежит и зачем нужно.</p>
@@ -1009,15 +1009,15 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <span class="w">  </span><span class="n">login</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">64</span><span class="p">)</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="k">UNIQUE</span><span class="p">,</span>
 <span class="w">  </span><span class="n">password_hash</span><span class="w"> </span><span class="n">VARBINARY</span><span class="p">(</span><span class="mi">32</span><span class="p">)</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span>
 <span class="w">  </span><span class="n">salt</span><span class="w"> </span><span class="n">VARBINARY</span><span class="p">(</span><span class="mi">16</span><span class="p">)</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span>
-<span class="w">  </span><span class="k">role</span><span class="w"> </span><span class="n">ENUM</span><span class="p">(</span><span class="s1">&#39;admin&#39;</span><span class="p">,</span><span class="s1">&#39;user&#39;</span><span class="p">)</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="s1">&#39;user&#39;</span><span class="p">,</span>
+<span class="w">  </span><span class="k">role</span><span class="w"> </span><span class="n">ENUM</span><span class="p">(</span><span class="s1">'admin'</span><span class="p">,</span><span class="s1">'user'</span><span class="p">)</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="s1">'user'</span><span class="p">,</span>
 <span class="w">  </span><span class="n">failed_attempts</span><span class="w"> </span><span class="nb">INT</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
 <span class="w">  </span><span class="n">is_locked</span><span class="w"> </span><span class="nb">BOOLEAN</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="k">FALSE</span>
 <span class="p">)</span><span class="w"> </span><span class="n">ENGINE</span><span class="o">=</span><span class="n">InnoDB</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="n">CHARSET</span><span class="o">=</span><span class="n">utf8mb4</span><span class="w"> </span><span class="k">COLLATE</span><span class="o">=</span><span class="n">utf8mb4_unicode_ci</span><span class="p">;</span>
 
 <span class="k">INSERT</span><span class="w"> </span><span class="k">IGNORE</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">users</span><span class="w"> </span><span class="p">(</span><span class="n">login</span><span class="p">,</span><span class="w"> </span><span class="n">password_hash</span><span class="p">,</span><span class="w"> </span><span class="n">salt</span><span class="p">,</span><span class="w"> </span><span class="k">role</span><span class="p">)</span><span class="w"> </span><span class="k">VALUES</span>
-<span class="p">(</span><span class="s1">&#39;manager&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">UNHEX</span><span class="p">(</span><span class="s1">&#39;00&#39;</span><span class="p">),</span><span class="w"> </span><span class="n">UNHEX</span><span class="p">(</span><span class="s1">&#39;00&#39;</span><span class="p">),</span><span class="w"> </span><span class="s1">&#39;user&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="s1">&#39;technologist&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">UNHEX</span><span class="p">(</span><span class="s1">&#39;00&#39;</span><span class="p">),</span><span class="w"> </span><span class="n">UNHEX</span><span class="p">(</span><span class="s1">&#39;00&#39;</span><span class="p">),</span><span class="w"> </span><span class="s1">&#39;user&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="s1">&#39;master&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">UNHEX</span><span class="p">(</span><span class="s1">&#39;00&#39;</span><span class="p">),</span><span class="w"> </span><span class="n">UNHEX</span><span class="p">(</span><span class="s1">&#39;00&#39;</span><span class="p">),</span><span class="w"> </span><span class="s1">&#39;user&#39;</span><span class="p">);</span>
+<span class="p">(</span><span class="s1">'manager'</span><span class="p">,</span><span class="w"> </span><span class="n">UNHEX</span><span class="p">(</span><span class="s1">'00'</span><span class="p">),</span><span class="w"> </span><span class="n">UNHEX</span><span class="p">(</span><span class="s1">'00'</span><span class="p">),</span><span class="w"> </span><span class="s1">'user'</span><span class="p">),</span>
+<span class="p">(</span><span class="s1">'technologist'</span><span class="p">,</span><span class="w"> </span><span class="n">UNHEX</span><span class="p">(</span><span class="s1">'00'</span><span class="p">),</span><span class="w"> </span><span class="n">UNHEX</span><span class="p">(</span><span class="s1">'00'</span><span class="p">),</span><span class="w"> </span><span class="s1">'user'</span><span class="p">),</span>
+<span class="p">(</span><span class="s1">'master'</span><span class="p">,</span><span class="w"> </span><span class="n">UNHEX</span><span class="p">(</span><span class="s1">'00'</span><span class="p">),</span><span class="w"> </span><span class="n">UNHEX</span><span class="p">(</span><span class="s1">'00'</span><span class="p">),</span><span class="w"> </span><span class="s1">'user'</span><span class="p">);</span>
 </code></pre></div>
 
 <p>Хеш и соль здесь нулевые, потому что для задания 5 нужен только логин автора. Настоящие пароли сотрудников задаются в приложении из задания 4. Если вы ещё не делали приложение, эти записи всё равно подойдут: API не проверяет пароль.</p>
@@ -1044,23 +1044,23 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <p>Последняя строка задаёт внешний ключ. Она не даёт вставить заметку с номером пользователя, которого нет в <code>users</code>. Без этого ограничения <code>JOIN</code> молча потеряет строку, и заметка исчезнет из ответа без сообщения об ошибке.</p>
 <p>Проверьте связь: попробуйте вставить заметку с несуществующим автором.</p>
 <div class="codehilite" data-lang="sql"><pre><span></span><code><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">notes</span><span class="w"> </span><span class="p">(</span><span class="n">title</span><span class="p">,</span><span class="w"> </span><span class="n">content</span><span class="p">,</span><span class="w"> </span><span class="n">id_user</span><span class="p">,</span><span class="w"> </span><span class="n">created_at</span><span class="p">)</span>
-<span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="s1">&#39;Проверка ключа&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Такой автор не должен существовать&#39;</span><span class="p">,</span><span class="w"> </span><span class="mi">999</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;2027-03-16&#39;</span><span class="p">);</span>
+<span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="s1">'Проверка ключа'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Такой автор не должен существовать'</span><span class="p">,</span><span class="w"> </span><span class="mi">999</span><span class="p">,</span><span class="w"> </span><span class="s1">'2027-03-16'</span><span class="p">);</span>
 </code></pre></div>
 
 <p>MySQL должен отказать с сообщением о нарушении внешнего ключа. Запись не появилась, и это правильный результат.</p>
 <figure class="diagram">
-<img src="reports/screens/mysql/notes-table.png" alt="Таблица notes с тестовыми записями">
+<img src="reports/screens/task456/08-notes-table.png" alt="Таблица notes с тестовыми записями">
 <figcaption>Таблица notes: заголовок, текст, номер автора и дата. Полей title_user и formatted_date здесь нет.</figcaption>
 </figure>
 
 <h3>Шаг 3. Добавьте тестовые записи</h3>
 <p>Возьмите пять строк из <code>notes.csv</code>. Ниже они уже подставлены с номерами пользователей: <code>manager</code> это 1, <code>technologist</code> это 2, <code>master</code> это 3. Если ваши номера другие, замените третье значение в каждой строке перед датой.</p>
 <div class="codehilite" data-lang="sql"><pre><span></span><code><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">notes</span><span class="w"> </span><span class="p">(</span><span class="n">title</span><span class="p">,</span><span class="w"> </span><span class="n">content</span><span class="p">,</span><span class="w"> </span><span class="n">id_user</span><span class="p">,</span><span class="w"> </span><span class="n">created_at</span><span class="p">)</span><span class="w"> </span><span class="k">VALUES</span>
-<span class="p">(</span><span class="s1">&#39;Заказ принят&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Заказ V01-01: Фартук поварской, 12 ед.; срок 22.03.2027.&#39;</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;2027-03-16&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="s1">&#39;Спецификация согласована&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Ткань учитывается в метрах, тесьма отдельно; остатки раскроя уже включены в норму.&#39;</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;2027-03-16&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="s1">&#39;Материалы проверены&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Подготовить: Бязь, Тесьма, Нить.&#39;</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;2027-03-16&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="s1">&#39;Порядок производства&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Раскрой ткани, обработка края, пошив и упаковка.&#39;</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;2027-03-17&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="s1">&#39;Расчёт заказа&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Использовать цены от 01.03.2027. Итог округлить до копеек.&#39;</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;2027-03-18&#39;</span><span class="p">);</span>
+<span class="p">(</span><span class="s1">'Заказ принят'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Заказ V01-01: Фартук поварской, 12 ед.; срок 22.03.2027.'</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="s1">'2027-03-16'</span><span class="p">),</span>
+<span class="p">(</span><span class="s1">'Спецификация согласована'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Ткань учитывается в метрах, тесьма отдельно; остатки раскроя уже включены в норму.'</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="s1">'2027-03-16'</span><span class="p">),</span>
+<span class="p">(</span><span class="s1">'Материалы проверены'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Подготовить: Бязь, Тесьма, Нить.'</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="s1">'2027-03-16'</span><span class="p">),</span>
+<span class="p">(</span><span class="s1">'Порядок производства'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Раскрой ткани, обработка края, пошив и упаковка.'</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="s1">'2027-03-17'</span><span class="p">),</span>
+<span class="p">(</span><span class="s1">'Расчёт заказа'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Использовать цены от 01.03.2027. Итог округлить до копеек.'</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="s1">'2027-03-18'</span><span class="p">);</span>
 </code></pre></div>
 
 <p>Проверьте количество и значения:</p>
@@ -1078,13 +1078,13 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 
 <p>У каждой строки должны быть и заголовок, и логин. Сортировка по <code>id</code> делает ответ предсказуемым: без <code>ORDER BY</code> порядок строк не гарантирован, и тест, сравнивающий первый элемент, может пройти сегодня и упасть завтра.</p>
 <figure class="diagram">
-<img src="reports/screens/mysql/notes-code.png" alt="Результат запроса с соединением таблиц">
+<img src="reports/screens/task456/09-notes-join.png" alt="Результат запроса с соединением таблиц в phpMyAdmin">
 <figcaption>Соединение отдаёт заголовок, логин, текст и дату одной строкой. Именно эти значения превращаются в поля ответа.</figcaption>
 </figure>
 
 <h3>Шаг 5. Создайте проект API</h3>
 <p>Есть два равноправных пути. Выберите тот, который вам понятнее, результат одинаковый.</p>
-<p><strong>Через Visual Studio 2022.</strong> Запустите программу, на стартовом окне нажмите <code>Создать проект</code>. В поле поиска введите <code>ASP.NET Core Web API</code>, выберите шаблон C#, нажмите <code>Далее</code>. Задайте имя <code>Dkip.Api</code>, укажите папку работы, нажмите <code>Далее</code>. На следующем экране выберите платформу <code>.NET 10.0</code>, снимите галочку с <code>Использовать контроллеры</code>, если она есть, и нажмите <code>Создать</code>.</p>
+<p><strong>Через Visual Studio 2022.</strong> Запустите программу, на стартовом окне нажмите <code>Создать проект</code>. В поле поиска введите <code>ASP.NET Core Web API</code>, выберите шаблон C#, нажмите <code>Далее</code>. Задайте имя <code>Dkip.Api</code>, укажите папку работы, нажмите <code>Далее</code>. На следующем экране выберите платформу <code>.NET 9.0</code>, снимите галочку с <code>Использовать контроллеры</code>, если она есть, и нажмите <code>Создать</code>.</p>
 <p><strong>Через PowerShell.</strong> Откройте окно в папке работы и выполните две команды.</p>
 <div class="codehilite" data-lang="powershell"><pre><span></span><code><span class="n">dotnet</span> <span class="n">new</span> <span class="n">webapi</span> <span class="n">-n</span> <span class="n">Dkip</span><span class="p">.</span><span class="n">Api</span>
 <span class="nb">cd </span><span class="n">Dkip</span><span class="p">.</span><span class="n">Api</span>
@@ -1121,8 +1121,8 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <span class="c1">// Блок 1. Строка подключения. Значение берём из переменной окружения,</span>
 <span class="c1">// чтобы пароль не попадал в исходники.</span>
 <span class="kt">string</span><span class="w"> </span><span class="n">connectionString</span><span class="w"> </span><span class="o">=</span>
-<span class="w">    </span><span class="n">Environment</span><span class="p">.</span><span class="n">GetEnvironmentVariable</span><span class="p">(</span><span class="s">&quot;DKIP_CONNECTION&quot;</span><span class="p">)</span>
-<span class="w">    </span><span class="o">??</span><span class="w"> </span><span class="s">&quot;Server=127.0.0.1;Database=dkip2027_course;User ID=root;Password=;Character Set=utf8mb4&quot;</span><span class="p">;</span>
+<span class="w">    </span><span class="n">Environment</span><span class="p">.</span><span class="n">GetEnvironmentVariable</span><span class="p">(</span><span class="s">"DKIP_CONNECTION"</span><span class="p">)</span>
+<span class="w">    </span><span class="o">??</span><span class="w"> </span><span class="s">"Server=127.0.0.1;Database=dkip2027_course;User ID=root;Password=;Character Set=utf8mb4"</span><span class="p">;</span>
 
 <span class="c1">// Блок 2. Общий перехват исключений. Любой сбой превращается в 500 и короткий JSON.</span>
 <span class="n">app</span><span class="p">.</span><span class="n">Use</span><span class="p">(</span><span class="k">async</span><span class="w"> </span><span class="p">(</span><span class="n">context</span><span class="p">,</span><span class="w"> </span><span class="n">next</span><span class="p">)</span><span class="w"> </span><span class="o">=&gt;</span>
@@ -1133,11 +1133,11 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <span class="w">    </span><span class="p">}</span>
 <span class="w">    </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="n">Exception</span><span class="w"> </span><span class="n">ex</span><span class="p">)</span>
 <span class="w">    </span><span class="p">{</span>
-<span class="w">        </span><span class="n">app</span><span class="p">.</span><span class="n">Logger</span><span class="p">.</span><span class="n">LogError</span><span class="p">(</span><span class="n">ex</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Ошибка обработки API&quot;</span><span class="p">);</span>
+<span class="w">        </span><span class="n">app</span><span class="p">.</span><span class="n">Logger</span><span class="p">.</span><span class="n">LogError</span><span class="p">(</span><span class="n">ex</span><span class="p">,</span><span class="w"> </span><span class="s">"Ошибка обработки API"</span><span class="p">);</span>
 <span class="w">        </span><span class="n">context</span><span class="p">.</span><span class="n">Response</span><span class="p">.</span><span class="n">StatusCode</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">500</span><span class="p">;</span>
 <span class="w">        </span><span class="k">await</span><span class="w"> </span><span class="n">context</span><span class="p">.</span><span class="n">Response</span><span class="p">.</span><span class="n">WriteAsJsonAsync</span><span class="p">(</span><span class="k">new</span>
 <span class="w">        </span><span class="p">{</span>
-<span class="w">            </span><span class="n">error</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;Ошибка подключения к базе данных или обработки запроса&quot;</span>
+<span class="w">            </span><span class="n">error</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"Ошибка подключения к базе данных или обработки запроса"</span>
 <span class="w">        </span><span class="p">});</span>
 <span class="w">    </span><span class="p">}</span>
 <span class="p">});</span>
@@ -1150,34 +1150,34 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <span class="w">    </span><span class="k">using</span><span class="w"> </span><span class="nn">var</span><span class="w"> </span><span class="n">connection</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">MySqlConnection</span><span class="p">(</span><span class="n">connectionString</span><span class="p">);</span>
 <span class="w">    </span><span class="n">connection</span><span class="p">.</span><span class="n">Open</span><span class="p">();</span>
 
-<span class="w">    </span><span class="kt">string</span><span class="w"> </span><span class="n">sql</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;&quot;&quot;</span>
-<span class="w">        </span><span class="n">SELECT</span><span class="w"> </span><span class="n">n</span><span class="p">.</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="p">.</span><span class="n">title</span><span class="p">,</span><span class="w"> </span><span class="n">u</span><span class="p">.</span><span class="n">login</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="p">.</span><span class="n">content</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="p">.</span><span class="n">created_at</span>
-<span class="w">        </span><span class="n">FROM</span><span class="w"> </span><span class="n">notes</span><span class="w"> </span><span class="n">n</span>
-<span class="w">        </span><span class="n">JOIN</span><span class="w"> </span><span class="n">users</span><span class="w"> </span><span class="n">u</span><span class="w"> </span><span class="n">ON</span><span class="w"> </span><span class="n">u</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">n</span><span class="p">.</span><span class="n">id_user</span>
-<span class="w">        </span><span class="s">&quot;&quot;&quot;;</span>
+<span class="w">    </span><span class="kt">string</span><span class="w"> </span><span class="n">sql</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"""</span>
+<span class="s">        SELECT n.id, n.title, u.login, n.content, n.created_at</span>
+<span class="s">        FROM notes n</span>
+<span class="s">        JOIN users u ON u.id = n.id_user</span>
+<span class="s">        """</span><span class="p">;</span>
 
 <span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">userId</span><span class="w"> </span><span class="k">is</span><span class="w"> </span><span class="k">not</span><span class="w"> </span><span class="k">null</span><span class="p">)</span>
-<span class="w">        </span><span class="n">sql</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="s">&quot; WHERE n.id_user = @userId&quot;</span><span class="p">;</span>
+<span class="w">        </span><span class="n">sql</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="s">" WHERE n.id_user = @userId"</span><span class="p">;</span>
 
-<span class="w">    </span><span class="n">sql</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="s">&quot; ORDER BY n.id&quot;</span><span class="p">;</span>
+<span class="w">    </span><span class="n">sql</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="s">" ORDER BY n.id"</span><span class="p">;</span>
 
 <span class="w">    </span><span class="k">using</span><span class="w"> </span><span class="nn">var</span><span class="w"> </span><span class="n">command</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">MySqlCommand</span><span class="p">(</span><span class="n">sql</span><span class="p">,</span><span class="w"> </span><span class="n">connection</span><span class="p">);</span>
 <span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">userId</span><span class="w"> </span><span class="k">is</span><span class="w"> </span><span class="k">not</span><span class="w"> </span><span class="k">null</span><span class="p">)</span>
-<span class="w">        </span><span class="n">command</span><span class="p">.</span><span class="n">Parameters</span><span class="p">.</span><span class="n">AddWithValue</span><span class="p">(</span><span class="s">&quot;@userId&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">userId</span><span class="p">);</span>
+<span class="w">        </span><span class="n">command</span><span class="p">.</span><span class="n">Parameters</span><span class="p">.</span><span class="n">AddWithValue</span><span class="p">(</span><span class="s">"@userId"</span><span class="p">,</span><span class="w"> </span><span class="n">userId</span><span class="p">);</span>
 
 <span class="w">    </span><span class="k">using</span><span class="w"> </span><span class="nn">var</span><span class="w"> </span><span class="n">reader</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">command</span><span class="p">.</span><span class="n">ExecuteReader</span><span class="p">();</span>
 <span class="w">    </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">reader</span><span class="p">.</span><span class="n">Read</span><span class="p">())</span>
 <span class="w">    </span><span class="p">{</span>
-<span class="w">        </span><span class="kt">string</span><span class="w"> </span><span class="n">title</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">reader</span><span class="p">.</span><span class="n">GetString</span><span class="p">(</span><span class="s">&quot;title&quot;</span><span class="p">);</span>
-<span class="w">        </span><span class="kt">string</span><span class="w"> </span><span class="n">login</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">reader</span><span class="p">.</span><span class="n">GetString</span><span class="p">(</span><span class="s">&quot;login&quot;</span><span class="p">);</span>
+<span class="w">        </span><span class="kt">string</span><span class="w"> </span><span class="n">title</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">reader</span><span class="p">.</span><span class="n">GetString</span><span class="p">(</span><span class="s">"title"</span><span class="p">);</span>
+<span class="w">        </span><span class="kt">string</span><span class="w"> </span><span class="n">login</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">reader</span><span class="p">.</span><span class="n">GetString</span><span class="p">(</span><span class="s">"login"</span><span class="p">);</span>
 
 <span class="w">        </span><span class="n">result</span><span class="p">.</span><span class="n">Add</span><span class="p">(</span><span class="k">new</span>
 <span class="w">        </span><span class="p">{</span>
-<span class="w">            </span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">reader</span><span class="p">.</span><span class="n">GetInt32</span><span class="p">(</span><span class="s">&quot;id&quot;</span><span class="p">),</span>
-<span class="w">            </span><span class="n">title_user</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">title</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">&quot; - &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">login</span><span class="p">,</span>
-<span class="w">            </span><span class="n">content</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">reader</span><span class="p">.</span><span class="n">GetString</span><span class="p">(</span><span class="s">&quot;content&quot;</span><span class="p">),</span>
-<span class="w">            </span><span class="n">formatted_date</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">reader</span><span class="p">.</span><span class="n">GetDateTime</span><span class="p">(</span><span class="s">&quot;created_at&quot;</span><span class="p">)</span>
-<span class="w">                </span><span class="p">.</span><span class="n">ToString</span><span class="p">(</span><span class="s">&quot;dd.MM.yyyy&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">CultureInfo</span><span class="p">.</span><span class="n">InvariantCulture</span><span class="p">)</span>
+<span class="w">            </span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">reader</span><span class="p">.</span><span class="n">GetInt32</span><span class="p">(</span><span class="s">"id"</span><span class="p">),</span>
+<span class="w">            </span><span class="n">title_user</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">title</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">" - "</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">login</span><span class="p">,</span>
+<span class="w">            </span><span class="n">content</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">reader</span><span class="p">.</span><span class="n">GetString</span><span class="p">(</span><span class="s">"content"</span><span class="p">),</span>
+<span class="w">            </span><span class="n">formatted_date</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">reader</span><span class="p">.</span><span class="n">GetDateTime</span><span class="p">(</span><span class="s">"created_at"</span><span class="p">)</span>
+<span class="w">                </span><span class="p">.</span><span class="n">ToString</span><span class="p">(</span><span class="s">"dd.MM.yyyy"</span><span class="p">,</span><span class="w"> </span><span class="n">CultureInfo</span><span class="p">.</span><span class="n">InvariantCulture</span><span class="p">)</span>
 <span class="w">        </span><span class="p">});</span>
 <span class="w">    </span><span class="p">}</span>
 
@@ -1189,23 +1189,23 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <span class="p">{</span>
 <span class="w">    </span><span class="kt">int?</span><span class="w"> </span><span class="n">userId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">null</span><span class="p">;</span>
 
-<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">request</span><span class="p">.</span><span class="n">Query</span><span class="p">.</span><span class="n">Keys</span><span class="p">.</span><span class="n">Any</span><span class="p">(</span><span class="n">key</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">key</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="s">&quot;user_id&quot;</span><span class="p">))</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">request</span><span class="p">.</span><span class="n">Query</span><span class="p">.</span><span class="n">Keys</span><span class="p">.</span><span class="n">Any</span><span class="p">(</span><span class="n">key</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">key</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="s">"user_id"</span><span class="p">))</span>
 <span class="w">    </span><span class="p">{</span>
 <span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">Results</span><span class="p">.</span><span class="n">BadRequest</span><span class="p">(</span><span class="k">new</span>
 <span class="w">        </span><span class="p">{</span>
-<span class="w">            </span><span class="n">error</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;Неизвестный параметр. Допустим user_id.&quot;</span>
+<span class="w">            </span><span class="n">error</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"Неизвестный параметр. Допустим user_id."</span>
 <span class="w">        </span><span class="p">});</span>
 <span class="w">    </span><span class="p">}</span>
 
-<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">request</span><span class="p">.</span><span class="n">Query</span><span class="p">.</span><span class="n">ContainsKey</span><span class="p">(</span><span class="s">&quot;user_id&quot;</span><span class="p">))</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">request</span><span class="p">.</span><span class="n">Query</span><span class="p">.</span><span class="n">ContainsKey</span><span class="p">(</span><span class="s">"user_id"</span><span class="p">))</span>
 <span class="w">    </span><span class="p">{</span>
-<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">request</span><span class="p">.</span><span class="n">Query</span><span class="p">[</span><span class="s">&quot;user_id&quot;</span><span class="p">].</span><span class="n">Count</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">1</span>
-<span class="w">            </span><span class="o">||</span><span class="w"> </span><span class="o">!</span><span class="kt">int</span><span class="p">.</span><span class="n">TryParse</span><span class="p">(</span><span class="n">request</span><span class="p">.</span><span class="n">Query</span><span class="p">[</span><span class="s">&quot;user_id&quot;</span><span class="p">],</span><span class="w"> </span><span class="k">out</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">parsed</span><span class="p">)</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">request</span><span class="p">.</span><span class="n">Query</span><span class="p">[</span><span class="s">"user_id"</span><span class="p">].</span><span class="n">Count</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">1</span>
+<span class="w">            </span><span class="o">||</span><span class="w"> </span><span class="o">!</span><span class="kt">int</span><span class="p">.</span><span class="n">TryParse</span><span class="p">(</span><span class="n">request</span><span class="p">.</span><span class="n">Query</span><span class="p">[</span><span class="s">"user_id"</span><span class="p">],</span><span class="w"> </span><span class="k">out</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">parsed</span><span class="p">)</span>
 <span class="w">            </span><span class="o">||</span><span class="w"> </span><span class="n">parsed</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span>
 <span class="w">        </span><span class="p">{</span>
 <span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">Results</span><span class="p">.</span><span class="n">BadRequest</span><span class="p">(</span><span class="k">new</span>
 <span class="w">            </span><span class="p">{</span>
-<span class="w">                </span><span class="n">error</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;user_id должен быть положительным целым числом&quot;</span>
+<span class="w">                </span><span class="n">error</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"user_id должен быть положительным целым числом"</span>
 <span class="w">            </span><span class="p">});</span>
 <span class="w">        </span><span class="p">}</span>
 
@@ -1216,11 +1216,11 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <span class="p">}</span>
 
 <span class="c1">// Блок 5. Два адреса ведут к одному обработчику.</span>
-<span class="n">app</span><span class="p">.</span><span class="n">MapGet</span><span class="p">(</span><span class="s">&quot;/notes&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">HandleGetNotes</span><span class="p">);</span>
-<span class="n">app</span><span class="p">.</span><span class="n">MapGet</span><span class="p">(</span><span class="s">&quot;/api/notes&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">HandleGetNotes</span><span class="p">);</span>
+<span class="n">app</span><span class="p">.</span><span class="n">MapGet</span><span class="p">(</span><span class="s">"/notes"</span><span class="p">,</span><span class="w"> </span><span class="n">HandleGetNotes</span><span class="p">);</span>
+<span class="n">app</span><span class="p">.</span><span class="n">MapGet</span><span class="p">(</span><span class="s">"/api/notes"</span><span class="p">,</span><span class="w"> </span><span class="n">HandleGetNotes</span><span class="p">);</span>
 
 <span class="c1">// Короткий адрес для файла описания: удобно открывать и указывать в документации.</span>
-<span class="n">app</span><span class="p">.</span><span class="n">MapGet</span><span class="p">(</span><span class="s">&quot;/openapi.json&quot;</span><span class="p">,</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">Results</span><span class="p">.</span><span class="n">Redirect</span><span class="p">(</span><span class="s">&quot;/swagger/v1/swagger.json&quot;</span><span class="p">));</span>
+<span class="n">app</span><span class="p">.</span><span class="n">MapGet</span><span class="p">(</span><span class="s">"/openapi.json"</span><span class="p">,</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">Results</span><span class="p">.</span><span class="n">Redirect</span><span class="p">(</span><span class="s">"/swagger/v1/swagger.json"</span><span class="p">));</span>
 
 <span class="n">app</span><span class="p">.</span><span class="n">Run</span><span class="p">();</span>
 </code></pre></div>
@@ -1234,13 +1234,13 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <p><strong>Блок 5.</strong> <code>MapGet</code> связывает адрес с обработчиком. Два вызова дают два рабочих адреса с одинаковым поведением. Если в задании достаточно одного, второй можно убрать, но тогда его не должно быть и в документации.</p>
 <p><strong>Swagger.</strong> Четыре строки в начале файла включают описание API. <code>AddEndpointsApiExplorer</code> собирает сведения о маршрутах, <code>AddSwaggerGen</code> строит из них документ OpenAPI, <code>UseSwagger</code> отдаёт его по адресу <code>/swagger/v1/swagger.json</code>, а <code>UseSwaggerUI</code> открывает страницу <code>/swagger</code>. Эта страница понадобится в задании 6: на ней видно пути, параметры и коды, а кнопка <code>Try it out</code> отправляет настоящий запрос.</p>
 <figure class="diagram">
-<img src="reports/screens/mysql/api-code.png" alt="Файл Program.cs с обработчиком заметок">
-<figcaption>Маршрут, проверка параметров и чтение заметок собраны в одном файле. Комментарии делят код на пять смысловых блоков.</figcaption>
+<img src="reports/screens/task456/07-vs-api.png" alt="Файл Program.cs с обработчиком заметок">
+<figcaption>Маршрут, проверка параметров, строка подключения и SQL-запрос собраны в одном файле. Справа видно, что проект API входит в решение вместе с WinForms.</figcaption>
 </figure>
 
 <h3>Шаг 8. Запустите сервер</h3>
 <p>Откройте отдельное окно PowerShell в папке проекта. Задайте подключение и запустите сервис.</p>
-<div class="codehilite" data-lang="powershell"><pre><span></span><code><span class="nv">$env:DKIP_CONNECTION</span><span class="p">=</span><span class="s1">&#39;Server=127.0.0.1;Database=dkip2027_course;User ID=root;Password=;Character Set=utf8mb4&#39;</span>
+<div class="codehilite" data-lang="powershell"><pre><span></span><code><span class="nv">$env:DKIP_CONNECTION</span><span class="p">=</span><span class="s1">'Server=127.0.0.1;Database=dkip2027_course;User ID=root;Password=;Character Set=utf8mb4'</span>
 <span class="n">dotnet</span> <span class="n">run</span> <span class="p">-</span><span class="n">-urls</span> <span class="n">http</span><span class="p">://</span><span class="n">127</span><span class="p">.</span><span class="n">0</span><span class="p">.</span><span class="n">0</span><span class="p">.</span><span class="n">1</span><span class="p">:</span><span class="n">5271</span>
 </code></pre></div>
 
@@ -1248,18 +1248,18 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <p>Адрес <code>127.0.0.1</code> действует только на этом компьютере. Порт 5271 выбран, чтобы не мешать другим службам. Если порт занят, процесс завершится с сообщением, и адрес придётся сменить сразу в трёх местах: в команде запуска, в документе и в переменной коллекции Postman.</p>
 <p>Откройте вторую вкладку браузера и проверьте <code>http://127.0.0.1:5271/swagger</code>. Должна открыться страница с заголовком сервиса и списком путей. Если страница не открылась, проверьте, что пакет <code>Swashbuckle.AspNetCore</code> установлен и что в <code>Program.cs</code> остались строки <code>AddSwaggerGen</code>, <code>UseSwagger</code> и <code>UseSwaggerUI</code>.</p>
 <figure class="diagram">
-<img src="reports/screens/mysql/api-start.png" alt="Запуск API в окне PowerShell">
-<figcaption>Консоль показывает адрес, на котором сервис слушает запросы. Окно остаётся открытым на время проверок.</figcaption>
+<img src="reports/screens/task456/10-swagger.png" alt="Swagger UI запущенного API: пути /notes и /api/notes">
+<figcaption>Страница Swagger UI: сервис запущен, доступны GET /notes и GET /api/notes, параметр user_id необязательный.</figcaption>
 </figure>
 
 <h3>Шаг 9. Проверьте успешный ответ и пустой массив</h3>
 <p>Откройте в браузере <code>http://127.0.0.1:5271/notes</code>. Ответ должен начинаться с квадратной скобки и содержать пять объектов.</p>
 <div class="codehilite" data-lang="json"><pre><span></span><code><span class="p">[</span>
 <span class="w">  </span><span class="p">{</span>
-<span class="w">    </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
-<span class="w">    </span><span class="nt">&quot;title_user&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Заказ принят - manager&quot;</span><span class="p">,</span>
-<span class="w">    </span><span class="nt">&quot;content&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Заказ V01-01: Фартук поварской, 12 ед.; срок 22.03.2027.&quot;</span><span class="p">,</span>
-<span class="w">    </span><span class="nt">&quot;formatted_date&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;16.03.2027&quot;</span>
+<span class="w">    </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"title_user"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Заказ принят - manager"</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"content"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Заказ V01-01: Фартук поварской, 12 ед.; срок 22.03.2027."</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"formatted_date"</span><span class="p">:</span><span class="w"> </span><span class="s2">"16.03.2027"</span>
 <span class="w">  </span><span class="p">}</span>
 <span class="p">]</span>
 </code></pre></div>
@@ -1275,28 +1275,18 @@ http://127.0.0.1:5271/notes?limit=10
 </code></pre></div>
 
 <p>Во всех трёх случаях должен быть код 400 и объект с полем <code>error</code>. Тело выглядит примерно так:</p>
-<div class="codehilite" data-lang="json"><pre><span></span><code><span class="p">{</span><span class="nt">&quot;error&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;user_id должен быть положительным целым числом&quot;</span><span class="p">}</span>
+<div class="codehilite" data-lang="json"><pre><span></span><code><span class="p">{</span><span class="nt">"error"</span><span class="p">:</span><span class="w"> </span><span class="s2">"user_id должен быть положительным целым числом"</span><span class="p">}</span>
 </code></pre></div>
 
 <p>Проверьте ещё повтор параметра: <code>http://127.0.0.1:5271/notes?user_id=1&amp;user_id=2</code>. Повтор тоже даёт 400, потому что обработчик ожидает одно значение.</p>
-<figure class="diagram">
-<img src="reports/screens/mysql/api-400.png" alt="Ответ API с кодом 400 на неверный параметр">
-<figcaption>Неверный параметр даёт код 400 и короткое JSON сообщение. Массив заметок при этом не приходит.</figcaption>
-</figure>
-
 <h3>Шаг 11. Проверьте сбой 500</h3>
 <p>Рабочую базу не останавливайте. Откройте второе окно PowerShell и запустите второй экземпляр того же проекта с заведомо неверным подключением.</p>
-<div class="codehilite" data-lang="powershell"><pre><span></span><code><span class="nv">$env:DKIP_CONNECTION</span><span class="p">=</span><span class="s1">&#39;Server=127.0.0.1;Port=1;Database=dkip2027_course;User ID=demo;Connection Timeout=1&#39;</span>
+<div class="codehilite" data-lang="powershell"><pre><span></span><code><span class="nv">$env:DKIP_CONNECTION</span><span class="p">=</span><span class="s1">'Server=127.0.0.1;Port=1;Database=dkip2027_course;User ID=demo;Connection Timeout=1'</span>
 <span class="n">dotnet</span> <span class="n">run</span> <span class="p">-</span><span class="n">-urls</span> <span class="n">http</span><span class="p">://</span><span class="n">127</span><span class="p">.</span><span class="n">0</span><span class="p">.</span><span class="n">0</span><span class="p">.</span><span class="n">1</span><span class="p">:</span><span class="n">5281</span>
 </code></pre></div>
 
 <p>Порт базы 1 не существует, поэтому соединение не откроется. Запросите <code>http://127.0.0.1:5281/notes</code>. Ответ должен быть 500 и объект <code>{"error": "..."}</code> без строки подключения, имени пользователя и трассировки. Подробности исключения остаются в консоли второго экземпляра.</p>
 <p>Убедитесь, что первый экземпляр на порту 5271 по-прежнему отвечает 200. Так вы подтверждаете, что сбой локализован в тестовом процессе, а не сломал рабочий сервис. После проверки закройте только второе окно.</p>
-<figure class="diagram">
-<img src="reports/screens/mysql/api-500.png" alt="Ответ API с кодом 500 при недоступной базе">
-<figcaption>Отказ подключения даёт код 500 и короткое сообщение. Реквизиты базы в ответ не попадают.</figcaption>
-</figure>
-
 <h3>Шаг 12. Создайте коллекцию Postman</h3>
 <p>Откройте Postman. Нажмите <code>New</code>, затем <code>Collection</code>. Введите имя <code>Dkip API заметки</code> и нажмите <code>Create</code>.</p>
 <p>Откройте коллекцию и перейдите на вкладку <code>Variables</code>. Добавьте две переменные.</p>
@@ -1358,23 +1348,30 @@ http://127.0.0.1:5271/notes?limit=10
 <p>Нажмите <code>Send</code> в первом запросе. В нижней части окна появятся вкладки с результатом. <code>Body</code> показывает тело, <code>Headers</code> заголовки, <code>Test Results</code> результаты проверок. Пока проверок нет, эта вкладка пуста.</p>
 <h3>Шаг 13. Добавьте проверки во вкладку Tests</h3>
 <p>В новых версиях Postman вкладка называется <code>Scripts</code>, а нужный раздел внутри неё <code>Post-response</code>. В более старых версиях это отдельная вкладка <code>Tests</code>. Смысл один: код выполняется после получения ответа.</p>
+<p>Простейшая проверка выглядит так.</p>
+<div class="codehilite" data-lang="javascript"><pre><span></span><code><span class="nx">pm</span><span class="p">.</span><span class="nx">test</span><span class="p">(</span><span class="s2">"Статус 200"</span><span class="p">,</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">pm</span><span class="p">.</span><span class="nx">response</span><span class="p">.</span><span class="nx">to</span><span class="p">.</span><span class="nx">have</span><span class="p">.</span><span class="nx">status</span><span class="p">(</span><span class="mf">200</span><span class="p">);</span>
+<span class="p">});</span>
+</code></pre></div>
+
+<p><code>pm.test</code> принимает имя проверки и функцию. Внутри функция обращается к ответу и сравнивает код. Все остальные проверки строятся по этой же схеме.</p>
 <p>Откройте запрос <code>Список заметок</code>, перейдите в <code>Tests</code> и вставьте код.</p>
-<div class="codehilite" data-lang="javascript"><pre><span></span><code><span class="nx">pm</span><span class="p">.</span><span class="nx">test</span><span class="p">(</span><span class="s2">&quot;Статус 200&quot;</span><span class="p">,</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="nx">pm</span><span class="p">.</span><span class="nx">response</span><span class="p">.</span><span class="nx">to</span><span class="p">.</span><span class="nx">have</span><span class="p">.</span><span class="nx">status</span><span class="p">(</span><span class="mf">200</span><span class="p">));</span>
+<div class="codehilite" data-lang="javascript"><pre><span></span><code><span class="nx">pm</span><span class="p">.</span><span class="nx">test</span><span class="p">(</span><span class="s2">"Статус 200"</span><span class="p">,</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="nx">pm</span><span class="p">.</span><span class="nx">response</span><span class="p">.</span><span class="nx">to</span><span class="p">.</span><span class="nx">have</span><span class="p">.</span><span class="nx">status</span><span class="p">(</span><span class="mf">200</span><span class="p">));</span>
 
 <span class="kd">const</span><span class="w"> </span><span class="nx">body</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">pm</span><span class="p">.</span><span class="nx">response</span><span class="p">.</span><span class="nx">json</span><span class="p">();</span>
 
-<span class="nx">pm</span><span class="p">.</span><span class="nx">test</span><span class="p">(</span><span class="s2">&quot;Ответ это массив&quot;</span><span class="p">,</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="nx">pm</span><span class="p">.</span><span class="nx">expect</span><span class="p">(</span><span class="nx">body</span><span class="p">).</span><span class="nx">to</span><span class="p">.</span><span class="nx">be</span><span class="p">.</span><span class="nx">an</span><span class="p">(</span><span class="s2">&quot;array&quot;</span><span class="p">));</span>
+<span class="nx">pm</span><span class="p">.</span><span class="nx">test</span><span class="p">(</span><span class="s2">"Ответ это массив"</span><span class="p">,</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="nx">pm</span><span class="p">.</span><span class="nx">expect</span><span class="p">(</span><span class="nx">body</span><span class="p">).</span><span class="nx">to</span><span class="p">.</span><span class="nx">be</span><span class="p">.</span><span class="nx">an</span><span class="p">(</span><span class="s2">"array"</span><span class="p">));</span>
 
-<span class="nx">pm</span><span class="p">.</span><span class="nx">test</span><span class="p">(</span><span class="s2">&quot;Поля заметки&quot;</span><span class="p">,</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="nx">pm</span><span class="p">.</span><span class="nx">test</span><span class="p">(</span><span class="s2">"Поля заметки"</span><span class="p">,</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="nx">body</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="nx">note</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="nx">pm</span><span class="p">.</span><span class="nx">expect</span><span class="p">(</span><span class="nx">note</span><span class="p">).</span><span class="nx">to</span><span class="p">.</span><span class="nx">have</span><span class="p">.</span><span class="nx">all</span><span class="p">.</span><span class="nx">keys</span><span class="p">(</span><span class="s2">&quot;id&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;title_user&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;content&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;formatted_date&quot;</span><span class="p">);</span>
-<span class="w">        </span><span class="nx">pm</span><span class="p">.</span><span class="nx">expect</span><span class="p">(</span><span class="nx">note</span><span class="p">.</span><span class="nx">id</span><span class="p">).</span><span class="nx">to</span><span class="p">.</span><span class="nx">be</span><span class="p">.</span><span class="nx">a</span><span class="p">(</span><span class="s2">&quot;number&quot;</span><span class="p">);</span>
-<span class="w">        </span><span class="nx">pm</span><span class="p">.</span><span class="nx">expect</span><span class="p">(</span><span class="nx">note</span><span class="p">.</span><span class="nx">title_user</span><span class="p">).</span><span class="nx">to</span><span class="p">.</span><span class="nx">be</span><span class="p">.</span><span class="nx">a</span><span class="p">(</span><span class="s2">&quot;string&quot;</span><span class="p">);</span>
-<span class="w">        </span><span class="nx">pm</span><span class="p">.</span><span class="nx">expect</span><span class="p">(</span><span class="nx">note</span><span class="p">.</span><span class="nx">content</span><span class="p">).</span><span class="nx">to</span><span class="p">.</span><span class="nx">be</span><span class="p">.</span><span class="nx">a</span><span class="p">(</span><span class="s2">&quot;string&quot;</span><span class="p">);</span>
+<span class="w">        </span><span class="nx">pm</span><span class="p">.</span><span class="nx">expect</span><span class="p">(</span><span class="nx">note</span><span class="p">).</span><span class="nx">to</span><span class="p">.</span><span class="nx">have</span><span class="p">.</span><span class="nx">all</span><span class="p">.</span><span class="nx">keys</span><span class="p">(</span><span class="s2">"id"</span><span class="p">,</span><span class="w"> </span><span class="s2">"title_user"</span><span class="p">,</span><span class="w"> </span><span class="s2">"content"</span><span class="p">,</span><span class="w"> </span><span class="s2">"formatted_date"</span><span class="p">);</span>
+<span class="w">        </span><span class="nx">pm</span><span class="p">.</span><span class="nx">expect</span><span class="p">(</span><span class="nx">note</span><span class="p">.</span><span class="nx">id</span><span class="p">).</span><span class="nx">to</span><span class="p">.</span><span class="nx">be</span><span class="p">.</span><span class="nx">a</span><span class="p">(</span><span class="s2">"number"</span><span class="p">);</span>
+<span class="w">        </span><span class="nx">pm</span><span class="p">.</span><span class="nx">expect</span><span class="p">(</span><span class="nx">note</span><span class="p">.</span><span class="nx">title_user</span><span class="p">).</span><span class="nx">to</span><span class="p">.</span><span class="nx">be</span><span class="p">.</span><span class="nx">a</span><span class="p">(</span><span class="s2">"string"</span><span class="p">);</span>
+<span class="w">        </span><span class="nx">pm</span><span class="p">.</span><span class="nx">expect</span><span class="p">(</span><span class="nx">note</span><span class="p">.</span><span class="nx">content</span><span class="p">).</span><span class="nx">to</span><span class="p">.</span><span class="nx">be</span><span class="p">.</span><span class="nx">a</span><span class="p">(</span><span class="s2">"string"</span><span class="p">);</span>
 <span class="w">    </span><span class="p">});</span>
 <span class="p">});</span>
 
-<span class="nx">pm</span><span class="p">.</span><span class="nx">test</span><span class="p">(</span><span class="s2">&quot;Формат даты&quot;</span><span class="p">,</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="nx">pm</span><span class="p">.</span><span class="nx">test</span><span class="p">(</span><span class="s2">"Формат даты"</span><span class="p">,</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="nx">body</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="nx">note</span><span class="w"> </span><span class="p">=&gt;</span>
 <span class="w">        </span><span class="nx">pm</span><span class="p">.</span><span class="nx">expect</span><span class="p">(</span><span class="nx">note</span><span class="p">.</span><span class="nx">formatted_date</span><span class="p">).</span><span class="nx">to</span><span class="p">.</span><span class="nx">match</span><span class="p">(</span><span class="sr">/^\d{2}\.\d{2}\.\d{4}$/</span><span class="p">));</span>
 <span class="p">});</span>
@@ -1382,43 +1379,38 @@ http://127.0.0.1:5271/notes?limit=10
 
 <p>Разберём строки. <code>pm.test</code> объявляет проверку с понятным именем. <code>pm.response.to.have.status(200)</code> сравнивает код. <code>pm.response.json()</code> разбирает тело и заодно убеждается, что это валидный JSON: если сервер вернул HTML, тест упадёт уже здесь. <code>all.keys</code> требует ровно четыре поля и ловит лишние. Регулярное выражение проверяет две цифры, точку, две цифры, точку и четыре цифры.</p>
 <p>Для запроса <code>Пустой список</code> проверки короче.</p>
-<div class="codehilite" data-lang="javascript"><pre><span></span><code><span class="nx">pm</span><span class="p">.</span><span class="nx">test</span><span class="p">(</span><span class="s2">&quot;Статус 200&quot;</span><span class="p">,</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="nx">pm</span><span class="p">.</span><span class="nx">response</span><span class="p">.</span><span class="nx">to</span><span class="p">.</span><span class="nx">have</span><span class="p">.</span><span class="nx">status</span><span class="p">(</span><span class="mf">200</span><span class="p">));</span>
-<span class="nx">pm</span><span class="p">.</span><span class="nx">test</span><span class="p">(</span><span class="s2">&quot;Пустой массив&quot;</span><span class="p">,</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
+<div class="codehilite" data-lang="javascript"><pre><span></span><code><span class="nx">pm</span><span class="p">.</span><span class="nx">test</span><span class="p">(</span><span class="s2">"Статус 200"</span><span class="p">,</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="nx">pm</span><span class="p">.</span><span class="nx">response</span><span class="p">.</span><span class="nx">to</span><span class="p">.</span><span class="nx">have</span><span class="p">.</span><span class="nx">status</span><span class="p">(</span><span class="mf">200</span><span class="p">));</span>
+<span class="nx">pm</span><span class="p">.</span><span class="nx">test</span><span class="p">(</span><span class="s2">"Пустой массив"</span><span class="p">,</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="kd">const</span><span class="w"> </span><span class="nx">body</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">pm</span><span class="p">.</span><span class="nx">response</span><span class="p">.</span><span class="nx">json</span><span class="p">();</span>
-<span class="w">    </span><span class="nx">pm</span><span class="p">.</span><span class="nx">expect</span><span class="p">(</span><span class="nx">body</span><span class="p">).</span><span class="nx">to</span><span class="p">.</span><span class="nx">be</span><span class="p">.</span><span class="nx">an</span><span class="p">(</span><span class="s2">&quot;array&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="nx">pm</span><span class="p">.</span><span class="nx">expect</span><span class="p">(</span><span class="nx">body</span><span class="p">).</span><span class="nx">to</span><span class="p">.</span><span class="nx">be</span><span class="p">.</span><span class="nx">an</span><span class="p">(</span><span class="s2">"array"</span><span class="p">);</span>
 <span class="w">    </span><span class="nx">pm</span><span class="p">.</span><span class="nx">expect</span><span class="p">(</span><span class="nx">body</span><span class="p">).</span><span class="nx">to</span><span class="p">.</span><span class="nx">have</span><span class="p">.</span><span class="nx">lengthOf</span><span class="p">(</span><span class="mf">0</span><span class="p">);</span>
 <span class="p">});</span>
 </code></pre></div>
 
 <p>Для запроса <code>Неверный параметр</code>:</p>
-<div class="codehilite" data-lang="javascript"><pre><span></span><code><span class="nx">pm</span><span class="p">.</span><span class="nx">test</span><span class="p">(</span><span class="s2">&quot;Статус 400&quot;</span><span class="p">,</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="nx">pm</span><span class="p">.</span><span class="nx">response</span><span class="p">.</span><span class="nx">to</span><span class="p">.</span><span class="nx">have</span><span class="p">.</span><span class="nx">status</span><span class="p">(</span><span class="mf">400</span><span class="p">));</span>
-<span class="nx">pm</span><span class="p">.</span><span class="nx">test</span><span class="p">(</span><span class="s2">&quot;JSON с полем error&quot;</span><span class="p">,</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="nx">pm</span><span class="p">.</span><span class="nx">expect</span><span class="p">(</span><span class="nx">pm</span><span class="p">.</span><span class="nx">response</span><span class="p">.</span><span class="nx">json</span><span class="p">()).</span><span class="nx">to</span><span class="p">.</span><span class="nx">have</span><span class="p">.</span><span class="nx">property</span><span class="p">(</span><span class="s2">&quot;error&quot;</span><span class="p">);</span>
+<div class="codehilite" data-lang="javascript"><pre><span></span><code><span class="nx">pm</span><span class="p">.</span><span class="nx">test</span><span class="p">(</span><span class="s2">"Статус 400"</span><span class="p">,</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="nx">pm</span><span class="p">.</span><span class="nx">response</span><span class="p">.</span><span class="nx">to</span><span class="p">.</span><span class="nx">have</span><span class="p">.</span><span class="nx">status</span><span class="p">(</span><span class="mf">400</span><span class="p">));</span>
+<span class="nx">pm</span><span class="p">.</span><span class="nx">test</span><span class="p">(</span><span class="s2">"JSON с полем error"</span><span class="p">,</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">pm</span><span class="p">.</span><span class="nx">expect</span><span class="p">(</span><span class="nx">pm</span><span class="p">.</span><span class="nx">response</span><span class="p">.</span><span class="nx">json</span><span class="p">()).</span><span class="nx">to</span><span class="p">.</span><span class="nx">have</span><span class="p">.</span><span class="nx">property</span><span class="p">(</span><span class="s2">"error"</span><span class="p">);</span>
 <span class="p">});</span>
 </code></pre></div>
 
 <p>Для запроса <code>Сбой подключения</code>:</p>
-<div class="codehilite" data-lang="javascript"><pre><span></span><code><span class="nx">pm</span><span class="p">.</span><span class="nx">test</span><span class="p">(</span><span class="s2">&quot;Статус 500&quot;</span><span class="p">,</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="nx">pm</span><span class="p">.</span><span class="nx">response</span><span class="p">.</span><span class="nx">to</span><span class="p">.</span><span class="nx">have</span><span class="p">.</span><span class="nx">status</span><span class="p">(</span><span class="mf">500</span><span class="p">));</span>
-<span class="nx">pm</span><span class="p">.</span><span class="nx">test</span><span class="p">(</span><span class="s2">&quot;JSON с полем error&quot;</span><span class="p">,</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="nx">pm</span><span class="p">.</span><span class="nx">expect</span><span class="p">(</span><span class="nx">pm</span><span class="p">.</span><span class="nx">response</span><span class="p">.</span><span class="nx">json</span><span class="p">()).</span><span class="nx">to</span><span class="p">.</span><span class="nx">have</span><span class="p">.</span><span class="nx">property</span><span class="p">(</span><span class="s2">&quot;error&quot;</span><span class="p">);</span>
+<div class="codehilite" data-lang="javascript"><pre><span></span><code><span class="nx">pm</span><span class="p">.</span><span class="nx">test</span><span class="p">(</span><span class="s2">"Статус 500"</span><span class="p">,</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="nx">pm</span><span class="p">.</span><span class="nx">response</span><span class="p">.</span><span class="nx">to</span><span class="p">.</span><span class="nx">have</span><span class="p">.</span><span class="nx">status</span><span class="p">(</span><span class="mf">500</span><span class="p">));</span>
+<span class="nx">pm</span><span class="p">.</span><span class="nx">test</span><span class="p">(</span><span class="s2">"JSON с полем error"</span><span class="p">,</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">pm</span><span class="p">.</span><span class="nx">expect</span><span class="p">(</span><span class="nx">pm</span><span class="p">.</span><span class="nx">response</span><span class="p">.</span><span class="nx">json</span><span class="p">()).</span><span class="nx">to</span><span class="p">.</span><span class="nx">have</span><span class="p">.</span><span class="nx">property</span><span class="p">(</span><span class="s2">"error"</span><span class="p">);</span>
 <span class="p">});</span>
 </code></pre></div>
 
 <p>Нажмите <code>Send</code> в каждом запросе и откройте <code>Test Results</code>. Все проверки должны быть зелёными. Вкладка показывает пройденные и упавшие проверки.</p>
 <p>Проверьте, что тесты умеют падать. Временно уберите разделитель в коде API, замените <code>title + " - " + login</code> на <code>title + login</code>, перезапустите сервер и отправьте запрос снова. Тест полей упадёт. Верните разделитель и повторите запуск.</p>
 <figure class="diagram">
-<img src="reports/screens/mysql/postman-tests.png" alt="Результаты проверок в Postman">
-<figcaption>Вкладка Test Results: проверки статуса, состава полей и формата даты пройдены на реальном ответе.</figcaption>
+<img src="reports/screens/task456/11-postman-200.png" alt="Postman: ответ 200 на GET /notes">
+<figcaption>Postman: запрос GET /notes вернул 200 и JSON с полями id, title_user, content, formatted_date. Полный набор проверок хранится в коллекции.</figcaption>
 </figure>
 
 <h3>Шаг 14. Сохраните коллекцию и проверьте импорт</h3>
-<p>Нажмите на три точки рядом с именем коллекции и выберите <code>Export</code>. В окне выберите формат <code>Collection v2.1</code>, нажмите <code>Export</code> и сохраните файл <code>postman-notes.json</code> в папку работы. Этот файл и сдаётся.</p>
+<p>Нажмите на три точки рядом с именем коллекции и выберите <code>Export</code>. В окне выберите формат <code>Collection v2.1</code>, нажмите <code>Export</code> и сохраните файл <code>postman-notes.json</code> в папку работы. Этот файл и нужен для сдачи.</p>
 <p>Проверьте перенос. Откройте Postman на другом компьютере или в чистом профиле, нажмите <code>Import</code>, выберите <code>File</code> и укажите <code>postman-notes.json</code>. Коллекция появится со всеми запросами и скриптами. Откройте вкладку <code>Variables</code> и убедитесь, что <code>base_url</code> и <code>error_url</code> подхватились. Если переменные потерялись, запросы уйдут на пустой адрес и вернут ошибку соединения.</p>
-<figure class="diagram">
-<img src="reports/screens/mysql/postman-import.png" alt="Импорт коллекции Postman из файла">
-<figcaption>После импорта запросы и переменные доступны в новом профиле. Это и есть проверка, что коллекция переносится.</figcaption>
-</figure>
-
 <h2 id="команды-и-приёмы-которые-нужны-чаще-всего"><span class="num">05</span>Команды и приёмы, которые нужны чаще всего</h2>
 <table>
 <thead>
@@ -1432,7 +1424,7 @@ http://127.0.0.1:5271/notes?limit=10
 <tr>
 <td><code>dotnet new webapi -n Dkip.Api</code></td>
 <td>PowerShell</td>
-<td>Создаёт проект ASP.NET Core Web API на .NET 10</td>
+<td>Создаёт проект ASP.NET Core Web API на .NET 9</td>
 </tr>
 <tr>
 <td><code>dotnet add package MySqlConnector</code></td>
