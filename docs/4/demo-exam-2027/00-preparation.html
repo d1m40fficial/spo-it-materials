@@ -527,6 +527,12 @@ html.modal-open { overflow: hidden; }
 :root[data-theme=dark] .quiz-actions button[data-answer]:hover, :root[data-theme=dark] .quiz-actions button.quiz-answer:hover { background: #262626; background-color: #262626; color: #fff; border-color: #262626; }
 :root[data-theme=dark] .gate-q { background: #1E1E1E; color: #FF6B00; }
 
+/* the whole-variant archive is the main action in a download block */
+.files a.zip { background: #121212; color: #fff; border-color: #121212; font-weight: 700; box-shadow: 4px 4px 0 rgba(0,0,0,.18); }
+.files a.zip::before { color: #fff; }
+.files a.zip:hover { background: #1D1D1D; color: #fff; border-color: #1D1D1D; box-shadow: 5px 5px 0 rgba(0,0,0,.22); }
+.files a.zip:active { transform: translate(2px,2px); box-shadow: 1px 1px 0 rgba(0,0,0,.12); }
+
 /* ---------- practical work checklist ---------- */
 .work-checklist { width: 100%; border-collapse: collapse; margin: 14px 0 4px; }
 .work-checklist th, .work-checklist td { border: 1px solid var(--rule); padding: 9px 10px; vertical-align: top; }
@@ -844,7 +850,7 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <canvas class="shader-bg" width="820" height="300" aria-hidden="true" style="background:linear-gradient(135deg,#08090D,#C0392B 58%,#08090D)"></canvas>
 <div class="badges"><span class="pill dark">Подготовка</span><span class="pill">Подготовка к демо-экзамену</span></div>
 <div class="hero-panel"><h1>Предварительная подготовка</h1><p class="dek">Три тестовых варианта, разбор первых трёх заданий в draw.io и sqliteonline, а также вариант V02 на установленных XAMPP и phpMyAdmin.</p></div>
-<div class="glyph" aria-hidden="true">00</div></header><section class="outcomes"><b>Что вы разберёте в этом разделе</b><ul><li>Строить ER-диаграмму в draw.io и сохранять её в PDF</li><li>Создавать таблицы и импортировать JSON в sqliteonline.com</li><li>Считать стоимость заказа запросом с JOIN и агрегацией</li><li>Выполнять задания 1-3 в XAMPP и phpMyAdmin на варианте V02</li></ul></section><nav class="toc"><b>Содержание раздела</b><ol><li><a href="#зачем-этот-раздел">Зачем этот раздел</a></li><li><a href="#три-тестовых-варианта">Три тестовых варианта</a></li><li><a href="#задание-1-er-диаграмма-в-draw-io">Задание 1. ER-диаграмма в draw.io</a></li><li><a href="#задание-2-база-в-sqliteonline-com">Задание 2. База в sqliteonline.com</a></li><li><a href="#задание-3-стоимость-заказа">Задание 3. Стоимость заказа</a></li><li><a href="#проверка-варианта-v01">Проверка варианта V01</a></li><li><a href="#варианты-v02-и-v03">Варианты V02 и V03</a></li><li><a href="#чек-лист-подготовки">Чек-лист подготовки</a></li><li><a href="#вариант-v02-задания-1-3-на-установленных-приложениях">Вариант V02: задания 1-3 на установленных приложениях</a></li></ol></nav><article class="prose"><h2 id="зачем-этот-раздел"><span class="num">01</span>Зачем этот раздел</h2>
+<div class="glyph" aria-hidden="true">00</div></header><section class="outcomes"><b>Что вы разберёте в этом разделе</b><ul><li>Строить ER-диаграмму в draw.io и сохранять её в PDF</li><li>Создавать таблицы и импортировать JSON в sqliteonline.com</li><li>Считать стоимость заказа запросом с JOIN и агрегацией</li><li>Выполнять задания 1-3 в XAMPP и phpMyAdmin на варианте V02</li></ul></section><nav class="toc"><b>Содержание раздела</b><ol><li><a href="#зачем-этот-раздел">Зачем этот раздел</a></li><li><a href="#три-тестовых-варианта">Три тестовых варианта</a></li><li><a href="#исходные-данные-варианта">Исходные данные варианта</a></li><li><a href="#бриф-варианта-v01">Бриф варианта V01</a></li><li><a href="#задание-1-er-диаграмма-в-draw-io">Задание 1. ER-диаграмма в draw.io</a></li><li><a href="#задание-2-база-в-sqliteonline-com">Задание 2. База в sqliteonline.com</a></li><li><a href="#задание-3-стоимость-заказа">Задание 3. Стоимость заказа</a></li><li><a href="#проверка-варианта-v01">Проверка варианта V01</a></li><li><a href="#варианты-v02-и-v03">Варианты V02 и V03</a></li><li><a href="#чек-лист-подготовки">Чек-лист подготовки</a></li><li><a href="#вариант-v02-задания-1-3-на-установленных-приложениях">Вариант V02: задания 1-3 на установленных приложениях</a></li></ol></nav><article class="prose"><h2 id="зачем-этот-раздел"><span class="num">01</span>Зачем этот раздел</h2>
 <p>Первые три задания проверяют модель данных, базу и расчёт. Их можно пройти без установки сервера: диаграмма собирается в draw.io, база и запросы выполняются в sqliteonline.com. Оба инструмента работают в браузере, поэтому подготовка не зависит от прав администратора и настроек учебного компьютера.</p>
 <p>Если на компьютере установлены XAMPP, Visual Studio 2022 и Postman, те же задания выполняются в приложениях. В конце раздела добавлен вариант V02 «Пекарня Колос»: ER-диаграмма, база в XAMPP, импорт документов, выгрузка, восстановление и SQL-запрос стоимости с пошаговыми скриншотами.</p>
 <table>
@@ -905,14 +911,172 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 </tr>
 </tbody>
 </table>
-<p>Файлы варианта:</p>
+<h2 id="исходные-данные-варианта"><span class="num">03</span>Исходные данные варианта</h2>
+<p>На экзамене предприятие передаёт комплект из шести файлов: пять книг Excel и один JSON. Варианты этого раздела собраны в том же комплекте, поэтому читайте их в том же порядке, что и на экзамене.</p>
+<p>Имена файлов фиксированы, переименовывать их нельзя:</p>
+<div class="codehilite" data-lang="text"><pre><span></span><code>Заказ покупателя.xlsx
+Заказ на производство.xlsx
+Спецификация.xlsx
+Цены.xlsx
+Расчет стоимости.xlsx
+Заказчики.json
+</code></pre></div>
+
+<p>Архив варианта раскрывается в эти же шесть файлов без вложенной папки. После распаковки ничего переименовывать и перекладывать не нужно.</p>
+<table>
+<thead>
+<tr>
+<th>Файл</th>
+<th>Что внутри</th>
+<th>Таблицы модели</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Заказ покупателя.xlsx</code></td>
+<td>номер и даты заказа, изготовитель, заказчик, продукция и количество</td>
+<td><code>customer_order</code>, <code>customer_order_line</code></td>
+</tr>
+<tr>
+<td><code>Заказ на производство.xlsx</code></td>
+<td>производственный заказ, изделие к выпуску, плановый расход ресурсов</td>
+<td><code>production_order</code>, <code>production_product</code>, <code>production_resource</code></td>
+</tr>
+<tr>
+<td><code>Спецификация.xlsx</code></td>
+<td>материалы и операции изделия, норма на единицу, часы для операций</td>
+<td><code>specification</code>, <code>specification_component</code></td>
+</tr>
+<tr>
+<td><code>Цены.xlsx</code></td>
+<td>цена ресурса и дата, с которой она действует</td>
+<td><code>price</code></td>
+</tr>
+<tr>
+<td><code>Расчет стоимости.xlsx</code></td>
+<td>калькуляция заказа: строки ресурсов, итоги по материалам и операциям</td>
+<td>проверка запроса из задания 3</td>
+</tr>
+<tr>
+<td><code>Заказчики.json</code></td>
+<td>шесть контрагентов: код, название, ИНН, адрес, телефон, тип</td>
+<td><code>counterparty</code></td>
+</tr>
+</tbody>
+</table>
+<p>Как устроена книга Excel: первая строка помечает учебный вариант, ниже идёт шапка документа и его строки. Шапка даёт поля будущей таблицы, повторяющиеся строки дают строки дочерней таблицы. В <code>Заказ покупателя.xlsx</code> одна строка с продукцией, в <code>Заказ на производство.xlsx</code> к ней добавлен план расхода ресурсов.</p>
+<p><code>Спецификация.xlsx</code> задаёт норму на одну единицу продукции: у материала заполнена <code>Норма расхода</code>, у операции заполнены <code>Часы на единицу</code>. <code>Цены.xlsx</code> хранит цену вместе с датой начала действия: цена без даты не отвечает на вопрос, какая цена действовала на дату заказа. <code>Расчет стоимости.xlsx</code> это документ заказчика, по нему сверяют результат задания 3.</p>
+<p><code>Заказчики.json</code> это массив объектов. Код <code>id</code> записан строкой, поэтому ведущие нули сохраняются. Поле адреса в исходнике записано как <code>addres</code>, с одной буквой <code>s</code>: это часть исходных данных, и путь в <code>json_extract</code> повторяет написание источника.</p>
+<h3>Скачать материалы варианта</h3>
+<div class="files"><b class="label">V01 · Ателье «Стежок» · пять книг Excel и JSON</b>
+<a class="zip" href="reports/prep/V01.zip" download>Скачать весь вариант · ZIP</a>
+<a href="reports/prep/V01/Заказ покупателя.xlsx" download>Заказ покупателя · XLSX</a>
+<a href="reports/prep/V01/Заказ на производство.xlsx" download>Заказ на производство · XLSX</a>
+<a href="reports/prep/V01/Спецификация.xlsx" download>Спецификация · XLSX</a>
+<a href="reports/prep/V01/Цены.xlsx" download>Цены · XLSX</a>
+<a href="reports/prep/V01/Расчет стоимости.xlsx" download>Расчет стоимости · XLSX</a>
+<a href="reports/prep/V01/Заказчики.json" download>Заказчики · JSON</a>
+</div>
+
+<div class="files"><b class="label">V02 · Пекарня «Колос» · пять книг Excel и JSON</b>
+<a class="zip" href="reports/prep/V02.zip" download>Скачать весь вариант · ZIP</a>
+<a href="reports/prep/V02/Заказ покупателя.xlsx" download>Заказ покупателя · XLSX</a>
+<a href="reports/prep/V02/Заказ на производство.xlsx" download>Заказ на производство · XLSX</a>
+<a href="reports/prep/V02/Спецификация.xlsx" download>Спецификация · XLSX</a>
+<a href="reports/prep/V02/Цены.xlsx" download>Цены · XLSX</a>
+<a href="reports/prep/V02/Расчет стоимости.xlsx" download>Расчет стоимости · XLSX</a>
+<a href="reports/prep/V02/Заказчики.json" download>Заказчики · JSON</a>
+</div>
+
+<div class="files"><b class="label">V03 · Мастерская «Глина» · пять книг Excel и JSON</b>
+<a class="zip" href="reports/prep/V03.zip" download>Скачать весь вариант · ZIP</a>
+<a href="reports/prep/V03/Заказ покупателя.xlsx" download>Заказ покупателя · XLSX</a>
+<a href="reports/prep/V03/Заказ на производство.xlsx" download>Заказ на производство · XLSX</a>
+<a href="reports/prep/V03/Спецификация.xlsx" download>Спецификация · XLSX</a>
+<a href="reports/prep/V03/Цены.xlsx" download>Цены · XLSX</a>
+<a href="reports/prep/V03/Расчет стоимости.xlsx" download>Расчет стоимости · XLSX</a>
+<a href="reports/prep/V03/Заказчики.json" download>Заказчики · JSON</a>
+</div>
+
+<h2 id="бриф-варианта-v01"><span class="num">04</span>Бриф варианта V01</h2>
+<p>До разбора заданий прочитайте условия так, как их читают на рабочем месте: кто заказал, что выпускают, сколько и к какому сроку, какие документы это подтверждают.</p>
+<p>Ателье «Стежок» выпускает продукцию «Фартук поварской» по спецификациям. Магазин «Стежок-1» заказал 12 ед. к 22.03.2027. Менеджер оформляет заказ, технолог задаёт состав, мастер планирует выпуск. Требуется связать документы в одной информационной системе и рассчитать нормативную стоимость заказа.</p>
+<table>
+<thead>
+<tr>
+<th>Что известно</th>
+<th>Значение</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Предприятие</td>
+<td>Ателье «Стежок»</td>
+</tr>
+<tr>
+<td>Продукция</td>
+<td>Фартук поварской, единица измерения <code>ед.</code></td>
+</tr>
+<tr>
+<td>Заказ покупателя</td>
+<td><code>V01-01</code> от 15.03.2027, срок 22.03.2027</td>
+</tr>
+<tr>
+<td>Производственный заказ</td>
+<td><code>V01-P01</code>, запуск 16.03.2027</td>
+</tr>
+<tr>
+<td>Заказчик</td>
+<td>Магазин «Стежок-1», код <code>001000001</code></td>
+</tr>
+<tr>
+<td>Количество</td>
+<td>12 ед.</td>
+</tr>
+<tr>
+<td>Состав изделия</td>
+<td>три материала и две операции</td>
+</tr>
+<tr>
+<td>Цены</td>
+<td>действуют с 01.03.2027</td>
+</tr>
+</tbody>
+</table>
+<p>Производственный процесс: раскрой ткани, обработка края, пошив и упаковка. Мастер получает заказ, технолог проверяет нормы, менеджер считает стоимость.</p>
+<p>Правила расчёта заданы заказчиком и повторяются в каждом варианте:</p>
 <ul>
-<li><a href="reports/prep/V01_customers.json">V01: заказчики, JSON</a> и <a href="reports/prep/V01_resources.csv">ресурсы, CSV</a></li>
-<li><a href="reports/prep/V02_customers.json">V02: заказчики, JSON</a> и <a href="reports/prep/V02_resources.csv">ресурсы, CSV</a></li>
-<li><a href="reports/prep/V03_customers.json">V03: заказчики, JSON</a> и <a href="reports/prep/V03_resources.csv">ресурсы, CSV</a></li>
+<li>ткань учитывается в метрах, тесьма отдельно, остатки раскроя уже включены в норму;</li>
+<li>нормы заданы на одну единицу готовой продукции;</li>
+<li>материалы считаются как количество выпуска × норма × цена;</li>
+<li>операции считаются как количество выпуска × часы × тариф за час;</li>
+<li>НДС, наценка, доставка и дополнительные накладные расходы не учитываются;</li>
+<li>промежуточные суммы не округляются, итог округляется до копеек.</li>
 </ul>
-<p>В JSON лежат заказчики с полями <code>id</code>, <code>name</code>, <code>inn</code>, <code>addres</code>, <code>phone</code>, <code>type</code>. В CSV лежат ресурсы с полями <code>name</code>, <code>kind</code>, <code>unit</code>, <code>norm</code>, <code>time</code>, <code>price</code>. Для материалов <code>norm</code> это расход на единицу, для операций <code>time</code> это часы на единицу.</p>
-<h2 id="задание-1-er-диаграмма-в-draw-io"><span class="num">03</span>Задание 1. ER-диаграмма в draw.io</h2>
+<table>
+<thead>
+<tr>
+<th>Что нужно получить</th>
+<th>Артефакт</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Модель данных по документам, третья нормальная форма</td>
+<td><code>V01_ER.pdf</code> и исходник <code>V01_ER.drawio</code></td>
+</tr>
+<tr>
+<td>База со схемой, заказчиками из JSON и данными из Excel</td>
+<td><code>V01_schema.sql</code> и <code>V01_import.sql</code></td>
+</tr>
+<tr>
+<td>Запрос нормативной стоимости заказа</td>
+<td><code>V01_cost.sql</code> с результатом <code>7680.00</code></td>
+</tr>
+</tbody>
+</table>
+<p>Шесть файлов выше это единственный источник данных. Названия полей, коды и даты берутся из них без правок: если в JSON написано <code>addres</code>, в запросе тоже будет <code>addres</code>.</p>
+<h2 id="задание-1-er-диаграмма-в-draw-io"><span class="num">05</span>Задание 1. ER-диаграмма в draw.io</h2>
 <h3>Что требуется</h3>
 <p>Нарисовать ER-диаграмму предприятия по документам варианта и сохранить её в PDF. На диаграмме должны быть таблицы, поля, первичные и внешние ключи, связи и кратность. Модель приводится к третьей нормальной форме.</p>
 <p>Сдаются два файла: PDF с диаграммой и исходник <code>.drawio</code>. PDF проверяют на экране и на печати, исходник нужен, чтобы показать, что схема собрана в редакторе, а не нарисована картинкой.</p>
@@ -929,19 +1093,24 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 </thead>
 <tbody>
 <tr>
-<td><code>V01_customers.json</code></td>
+<td><code>Заказчики.json</code></td>
 <td>заказчики: код, название, ИНН, адрес, телефон, тип</td>
 <td>таблица <code>counterparty</code></td>
 </tr>
 <tr>
-<td><code>V01_resources.csv</code></td>
-<td>ресурсы: название, вид, единица, норма, время, цена</td>
+<td><code>Спецификация.xlsx</code> и <code>Цены.xlsx</code></td>
+<td>ресурсы, нормы, часы операций и цены</td>
 <td>таблицы <code>item</code>, <code>price</code>, <code>specification_component</code></td>
 </tr>
 <tr>
-<td>описание варианта</td>
-<td>предприятие, продукция, количество, правила расчёта</td>
-<td><code>specification</code>, <code>customer_order</code>, <code>production_order</code></td>
+<td><code>Заказ покупателя.xlsx</code> и <code>Заказ на производство.xlsx</code></td>
+<td>заказ, заказчик, количество и план выпуска</td>
+<td><code>customer_order</code>, <code>production_order</code></td>
+</tr>
+<tr>
+<td><code>Расчет стоимости.xlsx</code></td>
+<td>калькуляция заказчика с итогом</td>
+<td>контрольная сумма для задания 3</td>
 </tr>
 </tbody>
 </table>
@@ -1700,7 +1869,7 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <figcaption>Экспорт PDF. Не выбирайте «Только выделение», иначе на листе останется одна таблица.</figcaption>
 
 <p>Перед сдачей проверьте: двенадцать таблиц, у каждой первичный ключ, четырнадцать подписанных связей, нет вычисляемых полей. Если таблиц девять, скорее всего шапка заказа слита со строками. Если пятнадцать, появилась лишняя таблица под каждую строку документа.</p>
-<h2 id="задание-2-база-в-sqliteonline-com"><span class="num">04</span>Задание 2. База в sqliteonline.com</h2>
+<h2 id="задание-2-база-в-sqliteonline-com"><span class="num">06</span>Задание 2. База в sqliteonline.com</h2>
 <h3>Шаг 1. Откройте sqliteonline.com</h3>
 <p>Откройте <code>sqliteonline.com</code> и выберите SQLite. Слева появится список таблиц демонстрационной базы, сверху кнопки <code>Import</code> и <code>Export</code>, в центре редактор SQL, снизу результат.</p>
 <p><a href="reports/screens/prep/sqlite-start.png" target="_blank" rel="noopener"><img src="reports/screens/prep/sqlite-start.png" alt="sqliteonline.com: список таблиц, редактор SQL и кнопка Run"></a></p>
@@ -1798,7 +1967,7 @@ customer_order_line(id, order_id, product_id, qty, sale_price)
 <span class="k">SELECT</span><span class="w"> </span><span class="n">doc_no</span><span class="p">,</span><span class="w"> </span><span class="n">doc_date</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">customer_order</span><span class="p">;</span>
 
 <span class="c1">-- фильтр по дате</span>
-<span class="k">SELECT</span><span class="w"> </span><span class="n">doc_no</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">customer_order</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">doc_date</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="s1">'2027-03-01'</span><span class="p">;</span>
+<span class="k">SELECT</span><span class="w"> </span><span class="n">doc_no</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">customer_order</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">doc_date</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="s1">&#39;2027-03-01&#39;</span><span class="p">;</span>
 
 <span class="c1">-- соединение заказа и строк</span>
 <span class="k">SELECT</span><span class="w"> </span><span class="n">o</span><span class="p">.</span><span class="n">doc_no</span><span class="p">,</span><span class="w"> </span><span class="n">l</span><span class="p">.</span><span class="n">qty</span>
@@ -1818,14 +1987,14 @@ customer_order_line(id, order_id, product_id, qty, sale_price)
 <span class="w">    </span><span class="n">inn</span><span class="w"> </span><span class="nb">TEXT</span><span class="p">,</span>
 <span class="w">    </span><span class="n">address</span><span class="w"> </span><span class="nb">TEXT</span><span class="p">,</span>
 <span class="w">    </span><span class="n">phone</span><span class="w"> </span><span class="nb">TEXT</span><span class="p">,</span>
-<span class="w">    </span><span class="n">party_type</span><span class="w"> </span><span class="nb">TEXT</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="k">CHECK</span><span class="w"> </span><span class="p">(</span><span class="n">party_type</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span><span class="s1">'Покупатель'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Изготовитель'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Поставщик'</span><span class="p">))</span>
+<span class="w">    </span><span class="n">party_type</span><span class="w"> </span><span class="nb">TEXT</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="k">CHECK</span><span class="w"> </span><span class="p">(</span><span class="n">party_type</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span><span class="s1">&#39;Покупатель&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Изготовитель&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Поставщик&#39;</span><span class="p">))</span>
 <span class="p">);</span>
 
 <span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">item</span><span class="w"> </span><span class="p">(</span>
 <span class="w">    </span><span class="n">id</span><span class="w"> </span><span class="nb">INTEGER</span><span class="w"> </span><span class="k">PRIMARY</span><span class="w"> </span><span class="k">KEY</span><span class="p">,</span>
 <span class="w">    </span><span class="n">code</span><span class="w"> </span><span class="nb">TEXT</span><span class="p">,</span>
 <span class="w">    </span><span class="n">name</span><span class="w"> </span><span class="nb">TEXT</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span>
-<span class="w">    </span><span class="n">kind</span><span class="w"> </span><span class="nb">TEXT</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="k">CHECK</span><span class="w"> </span><span class="p">(</span><span class="n">kind</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span><span class="s1">'product'</span><span class="p">,</span><span class="w"> </span><span class="s1">'material'</span><span class="p">,</span><span class="w"> </span><span class="s1">'operation'</span><span class="p">)),</span>
+<span class="w">    </span><span class="n">kind</span><span class="w"> </span><span class="nb">TEXT</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="k">CHECK</span><span class="w"> </span><span class="p">(</span><span class="n">kind</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span><span class="s1">&#39;product&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;material&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;operation&#39;</span><span class="p">)),</span>
 <span class="w">    </span><span class="n">unit</span><span class="w"> </span><span class="nb">TEXT</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span>
 <span class="p">);</span>
 
@@ -1919,21 +2088,21 @@ customer_order_line(id, order_id, product_id, qty, sale_price)
 <p>JSON не нужно разбирать вручную. Загрузите его во временную таблицу и разверните функцией <code>json_each</code>.</p>
 <div class="codehilite" data-lang="sql"><pre><span></span><code><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">json_import</span><span class="w"> </span><span class="p">(</span><span class="n">payload</span><span class="w"> </span><span class="nb">TEXT</span><span class="p">);</span>
 
-<span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">json_import</span><span class="p">(</span><span class="n">payload</span><span class="p">)</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="s1">'[{"id":"001000001","name":"Магазин «Стежок-1»","inn":"","addres":"Учебный город, улица Производственная, 1, офис 1","phone":"+79990010001","type":"Покупатель"}]'</span><span class="p">);</span>
+<span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">json_import</span><span class="p">(</span><span class="n">payload</span><span class="p">)</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="s1">&#39;[{&quot;id&quot;:&quot;001000001&quot;,&quot;name&quot;:&quot;Магазин «Стежок-1»&quot;,&quot;inn&quot;:&quot;&quot;,&quot;addres&quot;:&quot;Учебный город, улица Производственная, 1, офис 1&quot;,&quot;phone&quot;:&quot;+79990010001&quot;,&quot;type&quot;:&quot;Покупатель&quot;}]&#39;</span><span class="p">);</span>
 
 <span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">counterparty</span><span class="w"> </span><span class="p">(</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">inn</span><span class="p">,</span><span class="w"> </span><span class="n">address</span><span class="p">,</span><span class="w"> </span><span class="n">phone</span><span class="p">,</span><span class="w"> </span><span class="n">party_type</span><span class="p">)</span>
-<span class="k">SELECT</span><span class="w"> </span><span class="n">json_extract</span><span class="p">(</span><span class="n">value</span><span class="p">,</span><span class="w"> </span><span class="s1">'$.id'</span><span class="p">),</span>
-<span class="w">       </span><span class="n">json_extract</span><span class="p">(</span><span class="n">value</span><span class="p">,</span><span class="w"> </span><span class="s1">'$.name'</span><span class="p">),</span>
-<span class="w">       </span><span class="n">json_extract</span><span class="p">(</span><span class="n">value</span><span class="p">,</span><span class="w"> </span><span class="s1">'$.inn'</span><span class="p">),</span>
-<span class="w">       </span><span class="n">json_extract</span><span class="p">(</span><span class="n">value</span><span class="p">,</span><span class="w"> </span><span class="s1">'$.addres'</span><span class="p">),</span>
-<span class="w">       </span><span class="n">json_extract</span><span class="p">(</span><span class="n">value</span><span class="p">,</span><span class="w"> </span><span class="s1">'$.phone'</span><span class="p">),</span>
-<span class="w">       </span><span class="n">json_extract</span><span class="p">(</span><span class="n">value</span><span class="p">,</span><span class="w"> </span><span class="s1">'$.type'</span><span class="p">)</span>
+<span class="k">SELECT</span><span class="w"> </span><span class="n">json_extract</span><span class="p">(</span><span class="n">value</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;$.id&#39;</span><span class="p">),</span>
+<span class="w">       </span><span class="n">json_extract</span><span class="p">(</span><span class="n">value</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;$.name&#39;</span><span class="p">),</span>
+<span class="w">       </span><span class="n">json_extract</span><span class="p">(</span><span class="n">value</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;$.inn&#39;</span><span class="p">),</span>
+<span class="w">       </span><span class="n">json_extract</span><span class="p">(</span><span class="n">value</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;$.addres&#39;</span><span class="p">),</span>
+<span class="w">       </span><span class="n">json_extract</span><span class="p">(</span><span class="n">value</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;$.phone&#39;</span><span class="p">),</span>
+<span class="w">       </span><span class="n">json_extract</span><span class="p">(</span><span class="n">value</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;$.type&#39;</span><span class="p">)</span>
 <span class="k">FROM</span><span class="w"> </span><span class="n">json_import</span><span class="p">,</span><span class="w"> </span><span class="n">json_each</span><span class="p">(</span><span class="n">json_import</span><span class="p">.</span><span class="n">payload</span><span class="p">);</span>
 
 <span class="k">SELECT</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">phone</span><span class="p">,</span><span class="w"> </span><span class="n">party_type</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">counterparty</span><span class="w"> </span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">id</span><span class="p">;</span>
 </code></pre></div>
 
-<p>В рабочем скрипте вставьте весь массив заказчиков из <code>V01_customers.json</code>, а не одну строку. Ключ <code>addres</code> в исходном JSON записан с одной буквой <code>s</code>, поэтому путь в <code>json_extract</code> повторяет написание источника. Если исправить путь на <code>address</code>, значение станет пустым.</p>
+<p>В рабочем скрипте вставьте весь массив заказчиков из <code>Заказчики.json</code>, а не одну строку. Ключ <code>addres</code> в исходном JSON записан с одной буквой <code>s</code>, поэтому путь в <code>json_extract</code> повторяет написание источника. Если исправить путь на <code>address</code>, значение станет пустым.</p>
 <p><a href="reports/screens/prep/sqlite-import.png" target="_blank" rel="noopener"><img src="reports/screens/prep/sqlite-import.png" alt="Импорт JSON в sqliteonline.com: разбор через json_each и шесть строк заказчиков"></a></p>
 <figcaption>Импорт JSON. Шесть заказчиков, ведущие нули в кодах сохранены, тип записан в поле party_type.</figcaption>
 
@@ -1950,7 +2119,7 @@ customer_order_line(id, order_id, product_id, qty, sale_price)
 <p>Первая проверка возвращает <code>6</code> для шести заказчиков, вторая показывает коды и названия, третья возвращает пустой результат: внешние ключи не нарушены.</p>
 <p>Проверьте ограничение намеренно:</p>
 <div class="codehilite" data-lang="sql"><pre><span></span><code><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">counterparty</span><span class="w"> </span><span class="p">(</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">party_type</span><span class="p">)</span>
-<span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="s1">'X-1'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Тест'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Клиент'</span><span class="p">);</span>
+<span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="s1">&#39;X-1&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Тест&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Клиент&#39;</span><span class="p">);</span>
 </code></pre></div>
 
 <p>Запрос должен завершиться ошибкой <code>CHECK constraint failed</code>, потому что тип <code>Клиент</code> не входит в список допустимых. Если ошибки нет, <code>PRAGMA foreign_keys = ON</code> не выполнился или таблица создана по старому скрипту.</p>
@@ -1962,7 +2131,7 @@ customer_order_line(id, order_id, product_id, qty, sale_price)
 <li><a href="reports/prep/sql/V01_cost.sql">Расчёт стоимости V01, SQL</a></li>
 </ul>
 <p>В sqliteonline.com скрипт можно хранить в истории запросов, но на защите нужен файл. История браузера не считается артефактом.</p>
-<h2 id="задание-3-стоимость-заказа"><span class="num">05</span>Задание 3. Стоимость заказа</h2>
+<h2 id="задание-3-стоимость-заказа"><span class="num">07</span>Задание 3. Стоимость заказа</h2>
 <h3>Как собрать запрос стоимости</h3>
 <p>Запрос стоимости отвечает на вопрос «сколько стоит заказ по нормам и ценам». Он не берёт продажную цену из строки заказа: та включает наценку и скидку, а нормативная стоимость считается по спецификации.</p>
 <p>Понадобятся пять таблиц:</p>
@@ -1979,7 +2148,7 @@ price(item_id, valid_from, amount)
 </code></pre></div>
 
 <p><strong><code>WHERE</code>.</strong> Отберите строки до группировки. Например, только заказы за март.</p>
-<div class="codehilite" data-lang="sql"><pre><span></span><code><span class="k">SELECT</span><span class="w"> </span><span class="n">doc_no</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">customer_order</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">doc_date</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="s1">'2027-03-01'</span><span class="p">;</span>
+<div class="codehilite" data-lang="sql"><pre><span></span><code><span class="k">SELECT</span><span class="w"> </span><span class="n">doc_no</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">customer_order</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">doc_date</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="s1">&#39;2027-03-01&#39;</span><span class="p">;</span>
 </code></pre></div>
 
 <p><strong><code>JOIN ... ON</code>.</strong> Соедините строки заказа с шапкой по ключу <code>order_id</code>.</p>
@@ -2009,7 +2178,7 @@ price(item_id, valid_from, amount)
 <span class="w">        </span><span class="k">SELECT</span><span class="w"> </span><span class="k">MAX</span><span class="p">(</span><span class="n">p2</span><span class="p">.</span><span class="n">valid_from</span><span class="p">)</span>
 <span class="w">        </span><span class="k">FROM</span><span class="w"> </span><span class="n">price</span><span class="w"> </span><span class="n">p2</span>
 <span class="w">        </span><span class="k">WHERE</span><span class="w"> </span><span class="n">p2</span><span class="p">.</span><span class="n">item_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">p</span><span class="p">.</span><span class="n">item_id</span>
-<span class="w">          </span><span class="k">AND</span><span class="w"> </span><span class="n">p2</span><span class="p">.</span><span class="n">valid_from</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="s1">'2027-03-15'</span>
+<span class="w">          </span><span class="k">AND</span><span class="w"> </span><span class="n">p2</span><span class="p">.</span><span class="n">valid_from</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="s1">&#39;2027-03-15&#39;</span>
 <span class="w">    </span><span class="p">)</span>
 <span class="p">)</span>
 <span class="k">SELECT</span><span class="w"> </span><span class="n">item_id</span><span class="p">,</span><span class="w"> </span><span class="n">amount</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">price_on_date</span><span class="p">;</span>
@@ -2024,15 +2193,15 @@ price(item_id, valid_from, amount)
 <h3>Шаг 1. Заполните справочники и заказ</h3>
 <p>Скрипт <code>V01_cost.sql</code> добавляет изготовителя, изделие, ресурсы, цены, спецификацию, заказ и производственный заказ. Ключевые строки:</p>
 <div class="codehilite" data-lang="sql"><pre><span></span><code><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">item</span><span class="w"> </span><span class="p">(</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">code</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">kind</span><span class="p">,</span><span class="w"> </span><span class="n">unit</span><span class="p">)</span><span class="w"> </span><span class="k">VALUES</span>
-<span class="w">    </span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="s1">'P-01'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Фартук поварской'</span><span class="p">,</span><span class="w"> </span><span class="s1">'product'</span><span class="p">,</span><span class="w"> </span><span class="s1">'шт'</span><span class="p">),</span>
-<span class="w">    </span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="s1">'M-01'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Бязь'</span><span class="p">,</span><span class="w"> </span><span class="s1">'material'</span><span class="p">,</span><span class="w"> </span><span class="s1">'м'</span><span class="p">),</span>
-<span class="w">    </span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="s1">'M-02'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Тесьма'</span><span class="p">,</span><span class="w"> </span><span class="s1">'material'</span><span class="p">,</span><span class="w"> </span><span class="s1">'м'</span><span class="p">),</span>
-<span class="w">    </span><span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="s1">'M-03'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Нить'</span><span class="p">,</span><span class="w"> </span><span class="s1">'material'</span><span class="p">,</span><span class="w"> </span><span class="s1">'м'</span><span class="p">),</span>
-<span class="w">    </span><span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="s1">'O-01'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Раскрой'</span><span class="p">,</span><span class="w"> </span><span class="s1">'operation'</span><span class="p">,</span><span class="w"> </span><span class="s1">'ч'</span><span class="p">),</span>
-<span class="w">    </span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="w"> </span><span class="s1">'O-02'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Пошив'</span><span class="p">,</span><span class="w"> </span><span class="s1">'operation'</span><span class="p">,</span><span class="w"> </span><span class="s1">'ч'</span><span class="p">);</span>
+<span class="w">    </span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;P-01&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Фартук поварской&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;product&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;шт&#39;</span><span class="p">),</span>
+<span class="w">    </span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;M-01&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Бязь&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;material&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;м&#39;</span><span class="p">),</span>
+<span class="w">    </span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;M-02&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Тесьма&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;material&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;м&#39;</span><span class="p">),</span>
+<span class="w">    </span><span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;M-03&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Нить&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;material&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;м&#39;</span><span class="p">),</span>
+<span class="w">    </span><span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;O-01&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Раскрой&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;operation&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;ч&#39;</span><span class="p">),</span>
+<span class="w">    </span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;O-02&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Пошив&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;operation&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;ч&#39;</span><span class="p">);</span>
 
 <span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">specification</span><span class="w"> </span><span class="p">(</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">product_id</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">output_qty</span><span class="p">,</span><span class="w"> </span><span class="n">manufacturer_id</span><span class="p">)</span>
-<span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="s1">'Фартук поварской'</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="s1">'M-001'</span><span class="p">);</span>
+<span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Фартук поварской&#39;</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;M-001&#39;</span><span class="p">);</span>
 
 <span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">specification_component</span><span class="w"> </span><span class="p">(</span><span class="n">specification_id</span><span class="p">,</span><span class="w"> </span><span class="n">item_id</span><span class="p">,</span><span class="w"> </span><span class="n">qty</span><span class="p">,</span><span class="w"> </span><span class="n">time_norm</span><span class="p">)</span><span class="w"> </span><span class="k">VALUES</span>
 <span class="w">    </span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">.</span><span class="mi">8</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">),</span>
@@ -2042,7 +2211,7 @@ price(item_id, valid_from, amount)
 <span class="w">    </span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">6</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">.</span><span class="mi">35</span><span class="p">);</span>
 
 <span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">customer_order</span><span class="w"> </span><span class="p">(</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">doc_no</span><span class="p">,</span><span class="w"> </span><span class="n">doc_date</span><span class="p">,</span><span class="w"> </span><span class="n">customer_id</span><span class="p">,</span><span class="w"> </span><span class="n">executor_id</span><span class="p">)</span>
-<span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="s1">'V01-01'</span><span class="p">,</span><span class="w"> </span><span class="s1">'2027-03-15'</span><span class="p">,</span><span class="w"> </span><span class="s1">'001000001'</span><span class="p">,</span><span class="w"> </span><span class="s1">'M-001'</span><span class="p">);</span>
+<span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;V01-01&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;2027-03-15&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;001000001&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;M-001&#39;</span><span class="p">);</span>
 
 <span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">customer_order_line</span><span class="w"> </span><span class="p">(</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">order_id</span><span class="p">,</span><span class="w"> </span><span class="n">product_id</span><span class="p">,</span><span class="w"> </span><span class="n">qty</span><span class="p">,</span><span class="w"> </span><span class="n">sale_price</span><span class="p">,</span><span class="w"> </span><span class="n">discount</span><span class="p">)</span>
 <span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">12</span><span class="p">,</span><span class="w"> </span><span class="mi">700</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span>
@@ -2062,7 +2231,7 @@ price(item_id, valid_from, amount)
 <span class="w">        </span><span class="k">SELECT</span><span class="w"> </span><span class="k">MAX</span><span class="p">(</span><span class="n">p2</span><span class="p">.</span><span class="n">valid_from</span><span class="p">)</span>
 <span class="w">        </span><span class="k">FROM</span><span class="w"> </span><span class="n">price</span><span class="w"> </span><span class="n">p2</span>
 <span class="w">        </span><span class="k">WHERE</span><span class="w"> </span><span class="n">p2</span><span class="p">.</span><span class="n">item_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">p</span><span class="p">.</span><span class="n">item_id</span>
-<span class="w">          </span><span class="k">AND</span><span class="w"> </span><span class="n">p2</span><span class="p">.</span><span class="n">valid_from</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="s1">'2027-03-15'</span>
+<span class="w">          </span><span class="k">AND</span><span class="w"> </span><span class="n">p2</span><span class="p">.</span><span class="n">valid_from</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="s1">&#39;2027-03-15&#39;</span>
 <span class="w">    </span><span class="p">)</span>
 <span class="p">)</span>
 <span class="k">SELECT</span><span class="w"> </span><span class="n">o</span><span class="p">.</span><span class="n">doc_no</span><span class="p">,</span>
@@ -2072,7 +2241,7 @@ price(item_id, valid_from, amount)
 <span class="k">JOIN</span><span class="w"> </span><span class="n">specification</span><span class="w"> </span><span class="n">s</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="n">product_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">l</span><span class="p">.</span><span class="n">product_id</span>
 <span class="k">JOIN</span><span class="w"> </span><span class="n">specification_component</span><span class="w"> </span><span class="k">c</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="k">c</span><span class="p">.</span><span class="n">specification_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="n">id</span>
 <span class="k">JOIN</span><span class="w"> </span><span class="n">price_on_date</span><span class="w"> </span><span class="n">pd</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">pd</span><span class="p">.</span><span class="n">item_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">c</span><span class="p">.</span><span class="n">item_id</span>
-<span class="k">WHERE</span><span class="w"> </span><span class="n">o</span><span class="p">.</span><span class="n">doc_no</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'V01-01'</span>
+<span class="k">WHERE</span><span class="w"> </span><span class="n">o</span><span class="p">.</span><span class="n">doc_no</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;V01-01&#39;</span>
 <span class="k">GROUP</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">o</span><span class="p">.</span><span class="n">doc_no</span><span class="p">;</span>
 </code></pre></div>
 
@@ -2094,7 +2263,7 @@ price(item_id, valid_from, amount)
 <p>Если получилось 15360, строки удвоились из-за соединения. Если получилось 3456 или 4224, в сумму попала только одна часть. Если получилось 7680 без копеек, проверьте, что <code>ROUND</code> стоит после <code>SUM</code>, а не внутри каждого слагаемого.</p>
 <h3>Шаг 4. Проверьте на другом количестве</h3>
 <p>Измените количество в заказе на <code>10</code> и выполните запрос снова. Ожидаемый итог <code>6400</code>. Затем верните <code>12</code>. Такая проверка показывает, что формула зависит от количества, а не от случайного совпадения.</p>
-<h2 id="проверка-варианта-v01"><span class="num">06</span>Проверка варианта V01</h2>
+<h2 id="проверка-варианта-v01"><span class="num">08</span>Проверка варианта V01</h2>
 <table>
 <thead>
 <tr>
@@ -2125,8 +2294,76 @@ price(item_id, valid_from, amount)
 </tr>
 </tbody>
 </table>
-<h2 id="варианты-v02-и-v03"><span class="num">07</span>Варианты V02 и V03</h2>
-<p>Повторите три задания на другом наборе. Структура модели не меняется, поэтому диаграмму можно взять за основу и заменить только названия и числа.</p>
+<h2 id="варианты-v02-и-v03"><span class="num">09</span>Варианты V02 и V03</h2>
+<p>Повторите три задания на другом наборе. Структура модели не меняется, поэтому диаграмму можно взять за основу и заменить только названия и числа. Сначала прочитайте бриф и файлы, потом переходите к работе.</p>
+<h3>Бриф V02</h3>
+<p>Пекарня «Колос» выпускает продукцию «Хлеб ржаной 500 г» по спецификациям. Магазин «Колос-1» заказал 40 ед. к 22.03.2027. Менеджер оформляет заказ, технолог задаёт состав, мастер планирует выпуск.</p>
+<table>
+<thead>
+<tr>
+<th>Что известно</th>
+<th>Значение</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Заказ покупателя</td>
+<td><code>V02-01</code>, срок 22.03.2027</td>
+</tr>
+<tr>
+<td>Производственный заказ</td>
+<td><code>V02-P01</code></td>
+</tr>
+<tr>
+<td>Заказчик</td>
+<td>Магазин «Колос-1», код <code>002000001</code></td>
+</tr>
+<tr>
+<td>Количество</td>
+<td>40 ед.</td>
+</tr>
+<tr>
+<td>Процесс</td>
+<td>замес, формование, выпечка, упаковка</td>
+</tr>
+</tbody>
+</table>
+<p>Нормы относятся к одной буханке. Время печи уже распределено на изделие, повторно делить его на партию не нужно. Коды заказчиков начинаются с <code>002</code>, поэтому их нельзя хранить целыми числами.</p>
+<h3>Бриф V03</h3>
+<p>Мастерская «Глина» выпускает продукцию «Кружка 300 мл» по спецификациям. Магазин «Глина-1» заказал 18 ед. к 22.03.2027. Менеджер оформляет заказ, технолог задаёт состав, мастер планирует выпуск.</p>
+<table>
+<thead>
+<tr>
+<th>Что известно</th>
+<th>Значение</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Заказ покупателя</td>
+<td><code>V03-01</code>, срок 22.03.2027</td>
+</tr>
+<tr>
+<td>Производственный заказ</td>
+<td><code>V03-P01</code></td>
+</tr>
+<tr>
+<td>Заказчик</td>
+<td>Магазин «Глина-1», код <code>003000001</code></td>
+</tr>
+<tr>
+<td>Количество</td>
+<td>18 ед.</td>
+</tr>
+<tr>
+<td>Процесс</td>
+<td>формовка, сушка, глазурование, обжиг</td>
+</tr>
+</tbody>
+</table>
+<p>Глина и глазурь учитываются в килограммах. Технологическая выдержка без работы не входит в оплачиваемое время. Коды заказчиков начинаются с <code>003</code>.</p>
+<h3>Сверьте результат</h3>
+<p>После расчёта сравните итоги с контрольными значениями. Материалы и операции считаются по тем же правилам, что в брифе V01.</p>
 <table>
 <thead>
 <tr>
@@ -2189,7 +2426,7 @@ price(item_id, valid_from, amount)
 
 </details>
 
-<h2 id="чек-лист-подготовки"><span class="num">08</span>Чек-лист подготовки</h2>
+<h2 id="чек-лист-подготовки"><span class="num">10</span>Чек-лист подготовки</h2>
 <ul>
 <li>Диаграмма содержит двенадцать таблиц, а не только шапки документов.</li>
 <li>У каждой таблицы есть первичный ключ, у связующих таблиц ключ составной.</li>
@@ -2203,7 +2440,7 @@ price(item_id, valid_from, amount)
 <li>Исходник <code>.drawio</code>, PDF и SQL-скрипты сохранены в папке занятия.</li>
 </ul>
 <p>Дальше переходите к методичкам заданий 4, 5 и 6: приложение, API и документация собираются на той же модели данных.</p>
-<h2 id="вариант-v02-задания-1-3-на-установленных-приложениях"><span class="num">09</span>Вариант V02: задания 1-3 на установленных приложениях</h2>
+<h2 id="вариант-v02-задания-1-3-на-установленных-приложениях"><span class="num">11</span>Вариант V02: задания 1-3 на установленных приложениях</h2>
 <p>На компьютерах появились XAMPP, Visual Studio 2022 и Postman. Ниже разобран второй вариант, пекарня «Колос», на тех же инструментах: XAMPP и phpMyAdmin для базы, SQL для расчёта. Приложение и Postman понадобятся в заданиях 4-6, но подготовка базы для них уже начинается здесь.</p>
 <p>В варианте другие данные, структура документов та же. Шесть заказчиков, изделие «Хлеб ржаной 500 г», три материала, две операции, цены с 01.03.2027, заказ V02-01 на 40 единиц и производственный заказ V02-P01. Коды заказчиков начинаются с <code>002</code>, поэтому их нельзя хранить целыми числами.</p>
 <h3>Задание 1. ER-модель пекарни</h3>
@@ -2322,7 +2559,7 @@ price(item_id, valid_from, amount)
 <p><strong>Шаг 5. Проверьте таблицы.</strong> Обновите левую панель. В базе должно быть десять таблиц, все <code>InnoDB</code>, сравнение <code>utf8mb4_unicode_ci</code>. Проверить это можно запросом:</p>
 <div class="codehilite" data-lang="sql"><pre><span></span><code><span class="k">SELECT</span><span class="w"> </span><span class="k">table_name</span><span class="p">,</span><span class="w"> </span><span class="n">engine</span><span class="p">,</span><span class="w"> </span><span class="n">table_collation</span>
 <span class="k">FROM</span><span class="w"> </span><span class="n">information_schema</span><span class="p">.</span><span class="n">tables</span>
-<span class="k">WHERE</span><span class="w"> </span><span class="n">table_schema</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'dkip2027_v02'</span>
+<span class="k">WHERE</span><span class="w"> </span><span class="n">table_schema</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;dkip2027_v02&#39;</span>
 <span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="k">table_name</span><span class="p">;</span>
 </code></pre></div>
 
@@ -2352,7 +2589,7 @@ price(item_id, valid_from, amount)
 <p><strong>Шаг 8. Проверьте ключи.</strong> Откройте <code>price</code>, вкладку <code>Structure</code>. Оба поля <code>item_id</code> и <code>valid_from</code> помечены ключом, ниже объявлен внешний ключ на <code>item.id</code>. Для <code>specification_component</code> проверьте составной ключ и два внешних ключа. Запрос к <code>information_schema</code> покажет все связи:</p>
 <div class="codehilite" data-lang="sql"><pre><span></span><code><span class="k">SELECT</span><span class="w"> </span><span class="k">table_name</span><span class="p">,</span><span class="w"> </span><span class="k">constraint_name</span><span class="p">,</span><span class="w"> </span><span class="n">referenced_table_name</span>
 <span class="k">FROM</span><span class="w"> </span><span class="n">information_schema</span><span class="p">.</span><span class="n">KEY_COLUMN_USAGE</span>
-<span class="k">WHERE</span><span class="w"> </span><span class="n">table_schema</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'dkip2027_v02'</span>
+<span class="k">WHERE</span><span class="w"> </span><span class="n">table_schema</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;dkip2027_v02&#39;</span>
 <span class="w">  </span><span class="k">AND</span><span class="w"> </span><span class="n">referenced_table_name</span><span class="w"> </span><span class="k">IS</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span>
 <span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="k">table_name</span><span class="p">,</span><span class="w"> </span><span class="k">constraint_name</span><span class="p">;</span>
 </code></pre></div>
@@ -2380,7 +2617,7 @@ price(item_id, valid_from, amount)
 <span class="w">  </span><span class="k">SELECT</span><span class="w"> </span><span class="n">co</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">order_id</span><span class="p">,</span><span class="w"> </span><span class="n">co</span><span class="p">.</span><span class="n">doc_date</span><span class="p">,</span><span class="w"> </span><span class="n">col</span><span class="p">.</span><span class="n">product_id</span><span class="p">,</span><span class="w"> </span><span class="n">col</span><span class="p">.</span><span class="n">qty</span>
 <span class="w">  </span><span class="k">FROM</span><span class="w"> </span><span class="n">customer_order</span><span class="w"> </span><span class="n">co</span>
 <span class="w">  </span><span class="k">JOIN</span><span class="w"> </span><span class="n">customer_order_line</span><span class="w"> </span><span class="n">col</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">col</span><span class="p">.</span><span class="n">order_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">co</span><span class="p">.</span><span class="n">id</span>
-<span class="w">  </span><span class="k">WHERE</span><span class="w"> </span><span class="n">co</span><span class="p">.</span><span class="n">doc_no</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'V02-01'</span>
+<span class="w">  </span><span class="k">WHERE</span><span class="w"> </span><span class="n">co</span><span class="p">.</span><span class="n">doc_no</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;V02-01&#39;</span>
 <span class="p">),</span>
 <span class="n">p</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span>
 <span class="w">  </span><span class="k">SELECT</span><span class="w"> </span><span class="n">pr</span><span class="p">.</span><span class="n">item_id</span><span class="p">,</span><span class="w"> </span><span class="n">pr</span><span class="p">.</span><span class="n">amount</span>
@@ -2394,12 +2631,12 @@ price(item_id, valid_from, amount)
 <span class="p">),</span>
 <span class="n">calc</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span>
 <span class="w">  </span><span class="k">SELECT</span>
-<span class="w">    </span><span class="k">CASE</span><span class="w"> </span><span class="n">i</span><span class="p">.</span><span class="n">kind</span><span class="w"> </span><span class="k">WHEN</span><span class="w"> </span><span class="s1">'material'</span><span class="w"> </span><span class="k">THEN</span><span class="w"> </span><span class="s1">'Материал'</span><span class="w"> </span><span class="k">ELSE</span><span class="w"> </span><span class="s1">'Операция'</span><span class="w"> </span><span class="k">END</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">section</span><span class="p">,</span>
+<span class="w">    </span><span class="k">CASE</span><span class="w"> </span><span class="n">i</span><span class="p">.</span><span class="n">kind</span><span class="w"> </span><span class="k">WHEN</span><span class="w"> </span><span class="s1">&#39;material&#39;</span><span class="w"> </span><span class="k">THEN</span><span class="w"> </span><span class="s1">&#39;Материал&#39;</span><span class="w"> </span><span class="k">ELSE</span><span class="w"> </span><span class="s1">&#39;Операция&#39;</span><span class="w"> </span><span class="k">END</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">section</span><span class="p">,</span>
 <span class="w">    </span><span class="n">i</span><span class="p">.</span><span class="n">name</span><span class="p">,</span>
 <span class="w">    </span><span class="n">o</span><span class="p">.</span><span class="n">qty</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">product_qty</span><span class="p">,</span>
-<span class="w">    </span><span class="k">CASE</span><span class="w"> </span><span class="n">i</span><span class="p">.</span><span class="n">kind</span><span class="w"> </span><span class="k">WHEN</span><span class="w"> </span><span class="s1">'material'</span><span class="w"> </span><span class="k">THEN</span><span class="w"> </span><span class="n">sc</span><span class="p">.</span><span class="n">qty</span><span class="w"> </span><span class="k">ELSE</span><span class="w"> </span><span class="n">sc</span><span class="p">.</span><span class="n">time_norm</span><span class="w"> </span><span class="k">END</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">norm</span><span class="p">,</span>
+<span class="w">    </span><span class="k">CASE</span><span class="w"> </span><span class="n">i</span><span class="p">.</span><span class="n">kind</span><span class="w"> </span><span class="k">WHEN</span><span class="w"> </span><span class="s1">&#39;material&#39;</span><span class="w"> </span><span class="k">THEN</span><span class="w"> </span><span class="n">sc</span><span class="p">.</span><span class="n">qty</span><span class="w"> </span><span class="k">ELSE</span><span class="w"> </span><span class="n">sc</span><span class="p">.</span><span class="n">time_norm</span><span class="w"> </span><span class="k">END</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">norm</span><span class="p">,</span>
 <span class="w">    </span><span class="n">p</span><span class="p">.</span><span class="n">amount</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">price</span><span class="p">,</span>
-<span class="w">    </span><span class="n">o</span><span class="p">.</span><span class="n">qty</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">CASE</span><span class="w"> </span><span class="n">i</span><span class="p">.</span><span class="n">kind</span><span class="w"> </span><span class="k">WHEN</span><span class="w"> </span><span class="s1">'material'</span><span class="w"> </span><span class="k">THEN</span><span class="w"> </span><span class="n">sc</span><span class="p">.</span><span class="n">qty</span><span class="w"> </span><span class="k">ELSE</span><span class="w"> </span><span class="n">sc</span><span class="p">.</span><span class="n">time_norm</span><span class="w"> </span><span class="k">END</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">p</span><span class="p">.</span><span class="n">amount</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">amount</span>
+<span class="w">    </span><span class="n">o</span><span class="p">.</span><span class="n">qty</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">CASE</span><span class="w"> </span><span class="n">i</span><span class="p">.</span><span class="n">kind</span><span class="w"> </span><span class="k">WHEN</span><span class="w"> </span><span class="s1">&#39;material&#39;</span><span class="w"> </span><span class="k">THEN</span><span class="w"> </span><span class="n">sc</span><span class="p">.</span><span class="n">qty</span><span class="w"> </span><span class="k">ELSE</span><span class="w"> </span><span class="n">sc</span><span class="p">.</span><span class="n">time_norm</span><span class="w"> </span><span class="k">END</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">p</span><span class="p">.</span><span class="n">amount</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">amount</span>
 <span class="w">  </span><span class="k">FROM</span><span class="w"> </span><span class="n">o</span>
 <span class="w">  </span><span class="k">JOIN</span><span class="w"> </span><span class="n">specification</span><span class="w"> </span><span class="n">s</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="n">product_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">o</span><span class="p">.</span><span class="n">product_id</span>
 <span class="w">  </span><span class="k">JOIN</span><span class="w"> </span><span class="n">specification_component</span><span class="w"> </span><span class="n">sc</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">sc</span><span class="p">.</span><span class="n">specification_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="n">id</span>
@@ -2409,10 +2646,10 @@ price(item_id, valid_from, amount)
 <span class="k">SELECT</span><span class="w"> </span><span class="n">section</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">product_qty</span><span class="p">,</span><span class="w"> </span><span class="n">norm</span><span class="p">,</span><span class="w"> </span><span class="n">price</span><span class="p">,</span><span class="w"> </span><span class="n">ROUND</span><span class="p">(</span><span class="n">amount</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">amount</span>
 <span class="k">FROM</span><span class="w"> </span><span class="p">(</span>
 <span class="w">  </span><span class="k">SELECT</span><span class="w"> </span><span class="n">section</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">product_qty</span><span class="p">,</span><span class="w"> </span><span class="n">norm</span><span class="p">,</span><span class="w"> </span><span class="n">price</span><span class="p">,</span><span class="w"> </span><span class="n">amount</span><span class="p">,</span>
-<span class="w">         </span><span class="k">CASE</span><span class="w"> </span><span class="n">section</span><span class="w"> </span><span class="k">WHEN</span><span class="w"> </span><span class="s1">'Материал'</span><span class="w"> </span><span class="k">THEN</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="k">ELSE</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="k">END</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">sort</span>
+<span class="w">         </span><span class="k">CASE</span><span class="w"> </span><span class="n">section</span><span class="w"> </span><span class="k">WHEN</span><span class="w"> </span><span class="s1">&#39;Материал&#39;</span><span class="w"> </span><span class="k">THEN</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="k">ELSE</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="k">END</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">sort</span>
 <span class="w">  </span><span class="k">FROM</span><span class="w"> </span><span class="n">calc</span>
 <span class="w">  </span><span class="k">UNION</span><span class="w"> </span><span class="k">ALL</span>
-<span class="w">  </span><span class="k">SELECT</span><span class="w"> </span><span class="s1">'Итого'</span><span class="p">,</span><span class="w"> </span><span class="s1">''</span><span class="p">,</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span><span class="w"> </span><span class="n">ROUND</span><span class="p">(</span><span class="k">SUM</span><span class="p">(</span><span class="n">amount</span><span class="p">),</span><span class="w"> </span><span class="mi">2</span><span class="p">),</span><span class="w"> </span><span class="mi">3</span>
+<span class="w">  </span><span class="k">SELECT</span><span class="w"> </span><span class="s1">&#39;Итого&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span><span class="w"> </span><span class="n">ROUND</span><span class="p">(</span><span class="k">SUM</span><span class="p">(</span><span class="n">amount</span><span class="p">),</span><span class="w"> </span><span class="mi">2</span><span class="p">),</span><span class="w"> </span><span class="mi">3</span>
 <span class="w">  </span><span class="k">FROM</span><span class="w"> </span><span class="n">calc</span>
 <span class="p">)</span><span class="w"> </span><span class="n">t</span>
 <span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">sort</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="p">;</span>

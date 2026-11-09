@@ -527,6 +527,12 @@ html.modal-open { overflow: hidden; }
 :root[data-theme=dark] .quiz-actions button[data-answer]:hover, :root[data-theme=dark] .quiz-actions button.quiz-answer:hover { background: #262626; background-color: #262626; color: #fff; border-color: #262626; }
 :root[data-theme=dark] .gate-q { background: #1E1E1E; color: #FF6B00; }
 
+/* the whole-variant archive is the main action in a download block */
+.files a.zip { background: #121212; color: #fff; border-color: #121212; font-weight: 700; box-shadow: 4px 4px 0 rgba(0,0,0,.18); }
+.files a.zip::before { color: #fff; }
+.files a.zip:hover { background: #1D1D1D; color: #fff; border-color: #1D1D1D; box-shadow: 5px 5px 0 rgba(0,0,0,.22); }
+.files a.zip:active { transform: translate(2px,2px); box-shadow: 1px 1px 0 rgba(0,0,0,.12); }
+
 /* ---------- practical work checklist ---------- */
 .work-checklist { width: 100%; border-collapse: collapse; margin: 14px 0 4px; }
 .work-checklist th, .work-checklist td { border: 1px solid var(--rule); padding: 9px 10px; vertical-align: top; }
@@ -1088,12 +1094,12 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <p>Стили нужны не для красоты. По ним Word строит оглавление и навигацию, а эксперт видит структуру документа. Не заменяйте стиль вручную подобранным размером шрифта: внешне похоже, но структура потеряна.</p>
 <h3>Шаг 3. Запустите API и проверьте адрес</h3>
 <p>Откройте PowerShell в папке проекта API. Задайте подключение и запустите сервис.</p>
-<div class="codehilite" data-lang="powershell"><pre><span></span><code><span class="nv">$env:DKIP_CONNECTION</span><span class="p">=</span><span class="s1">'Server=127.0.0.1;Database=dkip2027_course;User ID=root;Password=;Character Set=utf8mb4'</span>
+<div class="codehilite" data-lang="powershell"><pre><span></span><code><span class="nv">$env:DKIP_CONNECTION</span><span class="p">=</span><span class="s1">&#39;Server=127.0.0.1;Database=dkip2027_course;User ID=root;Password=;Character Set=utf8mb4&#39;</span>
 <span class="n">dotnet</span> <span class="n">run</span> <span class="p">-</span><span class="n">-urls</span> <span class="n">http</span><span class="p">://</span><span class="n">127</span><span class="p">.</span><span class="n">0</span><span class="p">.</span><span class="n">0</span><span class="p">.</span><span class="n">1</span><span class="p">:</span><span class="n">5271</span>
 </code></pre></div>
 
 <p>Дождитесь строки <code>Now listening on: http://127.0.0.1:5271</code>. Окно не закрывайте. Во втором окне проверьте адрес:</p>
-<div class="codehilite" data-lang="powershell"><pre><span></span><code><span class="n">curl</span><span class="p">.</span><span class="n">exe</span> <span class="n">-s</span> <span class="n">-i</span> <span class="s2">"http://127.0.0.1:5271/notes"</span>
+<div class="codehilite" data-lang="powershell"><pre><span></span><code><span class="n">curl</span><span class="p">.</span><span class="n">exe</span> <span class="n">-s</span> <span class="n">-i</span> <span class="s2">&quot;http://127.0.0.1:5271/notes&quot;</span>
 </code></pre></div>
 
 <p>В ответе должны быть строка состояния <code>HTTP/1.1 200 OK</code>, заголовок <code>Content-Type: application/json</code> и массив заметок. Если пришёл код 500, смотрите консоль сервера: чаще всего неверно имя базы или не запущен MySQL.</p>
@@ -1101,16 +1107,16 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <h3>Шаг 4. Соберите реальные ответы</h3>
 <p>Выполните четыре запроса и сохраните тела в папку <code>examples</code>. Первый возвращает все заметки, второй только записи автора, третий пустой результат, четвёртый ошибку параметра.</p>
 <div class="codehilite" data-lang="powershell"><pre><span></span><code><span class="nb">New-Item</span> <span class="n">-ItemType</span> <span class="n">Directory</span> <span class="n">-Force</span> <span class="p">.\</span><span class="n">examples</span> <span class="p">|</span> <span class="nb">Out-Null</span>
-<span class="nv">$base</span> <span class="p">=</span> <span class="s2">"http://127.0.0.1:5271"</span>
-<span class="n">curl</span><span class="p">.</span><span class="n">exe</span> <span class="n">-s</span> <span class="s2">"$base/notes"</span> <span class="n">-o</span> <span class="p">.\</span><span class="n">examples</span><span class="p">\</span><span class="n">notes</span><span class="p">-</span><span class="n">200</span><span class="p">.</span><span class="n">json</span>
-<span class="n">curl</span><span class="p">.</span><span class="n">exe</span> <span class="n">-s</span> <span class="s2">"$base/notes?user_id=2"</span> <span class="n">-o</span> <span class="p">.\</span><span class="n">examples</span><span class="p">\</span><span class="n">notes-filter</span><span class="p">.</span><span class="n">json</span>
-<span class="n">curl</span><span class="p">.</span><span class="n">exe</span> <span class="n">-s</span> <span class="s2">"$base/notes?user_id=2147483647"</span> <span class="n">-o</span> <span class="p">.\</span><span class="n">examples</span><span class="p">\</span><span class="n">notes-empty</span><span class="p">.</span><span class="n">json</span>
-<span class="n">curl</span><span class="p">.</span><span class="n">exe</span> <span class="n">-s</span> <span class="n">-i</span> <span class="s2">"$base/notes?user_id=abc"</span> <span class="n">-o</span> <span class="p">.\</span><span class="n">examples</span><span class="p">\</span><span class="n">notes</span><span class="p">-</span><span class="n">400</span><span class="p">.</span><span class="n">txt</span>
+<span class="nv">$base</span> <span class="p">=</span> <span class="s2">&quot;http://127.0.0.1:5271&quot;</span>
+<span class="n">curl</span><span class="p">.</span><span class="n">exe</span> <span class="n">-s</span> <span class="s2">&quot;$base/notes&quot;</span> <span class="n">-o</span> <span class="p">.\</span><span class="n">examples</span><span class="p">\</span><span class="n">notes</span><span class="p">-</span><span class="n">200</span><span class="p">.</span><span class="n">json</span>
+<span class="n">curl</span><span class="p">.</span><span class="n">exe</span> <span class="n">-s</span> <span class="s2">&quot;$base/notes?user_id=2&quot;</span> <span class="n">-o</span> <span class="p">.\</span><span class="n">examples</span><span class="p">\</span><span class="n">notes-filter</span><span class="p">.</span><span class="n">json</span>
+<span class="n">curl</span><span class="p">.</span><span class="n">exe</span> <span class="n">-s</span> <span class="s2">&quot;$base/notes?user_id=2147483647&quot;</span> <span class="n">-o</span> <span class="p">.\</span><span class="n">examples</span><span class="p">\</span><span class="n">notes-empty</span><span class="p">.</span><span class="n">json</span>
+<span class="n">curl</span><span class="p">.</span><span class="n">exe</span> <span class="n">-s</span> <span class="n">-i</span> <span class="s2">&quot;$base/notes?user_id=abc&quot;</span> <span class="n">-o</span> <span class="p">.\</span><span class="n">examples</span><span class="p">\</span><span class="n">notes</span><span class="p">-</span><span class="n">400</span><span class="p">.</span><span class="n">txt</span>
 </code></pre></div>
 
 <p>Проверьте каждый файл в редакторе, а не только код ответа. В первом должно быть столько объектов, сколько строк в таблице <code>notes</code>. Во втором только записи выбранного автора. В третьем ровно <code>[]</code>. В четвёртом код 400 и объект с полем <code>error</code>.</p>
 <p>Ошибку 500 сохраните отдельно, чтобы не останавливать рабочий сервис. Во втором окне PowerShell задайте неверный порт базы и другой порт API.</p>
-<div class="codehilite" data-lang="powershell"><pre><span></span><code><span class="nv">$env:DKIP_CONNECTION</span><span class="p">=</span><span class="s1">'Server=127.0.0.1;Port=1;Database=dkip2027_course;User ID=demo;Connection Timeout=1'</span>
+<div class="codehilite" data-lang="powershell"><pre><span></span><code><span class="nv">$env:DKIP_CONNECTION</span><span class="p">=</span><span class="s1">&#39;Server=127.0.0.1;Port=1;Database=dkip2027_course;User ID=demo;Connection Timeout=1&#39;</span>
 <span class="n">dotnet</span> <span class="n">run</span> <span class="p">-</span><span class="n">-urls</span> <span class="n">http</span><span class="p">://</span><span class="n">127</span><span class="p">.</span><span class="n">0</span><span class="p">.</span><span class="n">0</span><span class="p">.</span><span class="n">1</span><span class="p">:</span><span class="n">5281</span>
 </code></pre></div>
 
@@ -1173,10 +1179,10 @@ title_user и formatted_date вычисляются при выдаче.
 <p>Выделите вставленный JSON и задайте шрифт <code>Consolas</code>, размер 9 или 10. Такой шрифт делает отступы и кавычки читаемыми. Не вставляйте JSON картинкой: его нельзя скопировать, и проверить текст не получится. Не используйте <code>Вставка</code>, затем <code>Объект</code>: для текста это лишний шаг.</p>
 <div class="codehilite" data-lang="json"><pre><span></span><code><span class="p">[</span>
 <span class="w">  </span><span class="p">{</span>
-<span class="w">    </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
-<span class="w">    </span><span class="nt">"title_user"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Заказ принят - manager"</span><span class="p">,</span>
-<span class="w">    </span><span class="nt">"content"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Заказ V01-01: Фартук поварской, 12 ед.; срок 22.03.2027."</span><span class="p">,</span>
-<span class="w">    </span><span class="nt">"formatted_date"</span><span class="p">:</span><span class="w"> </span><span class="s2">"16.03.2027"</span>
+<span class="w">    </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;title_user&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Заказ принят - manager&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;content&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Заказ V01-01: Фартук поварской, 12 ед.; срок 22.03.2027.&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;formatted_date&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;16.03.2027&quot;</span>
 <span class="w">  </span><span class="p">}</span>
 <span class="p">]</span>
 </code></pre></div>
@@ -1209,7 +1215,7 @@ title_user и formatted_date вычисляются при выдаче.
 </table>
 <p>Пустой массив относится к коду 200, а не к 404. Запрос корректен, ресурс существует, подходящих записей нет. Если записать пустой результат под 404, документ будет утверждать, что сервис теряет адрес при отсутствии данных.</p>
 <p>Для 400 и 500 приведите тело целиком и условие воспроизведения.</p>
-<div class="codehilite" data-lang="json"><pre><span></span><code><span class="p">{</span><span class="nt">"error"</span><span class="p">:</span><span class="w"> </span><span class="s2">"user_id должен быть положительным целым числом"</span><span class="p">}</span>
+<div class="codehilite" data-lang="json"><pre><span></span><code><span class="p">{</span><span class="nt">&quot;error&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;user_id должен быть положительным целым числом&quot;</span><span class="p">}</span>
 </code></pre></div>
 
 <p>Без условия воспроизведения читатель не сможет повторить ошибку и решит, что пример выдуман. Проверьте, что в документе нет пароля, строки подключения и полного текста исключения. Документация уходит в отчёт, и сведения о подключении туда попадать не должны.</p>
