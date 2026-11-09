@@ -1,4 +1,3 @@
-import csv
 import html
 import json
 import re
@@ -33,31 +32,13 @@ def num(value) -> str:
     return str(value).replace(".", ",")
 
 
-def write_csv(path: Path, header: list, rows: list) -> None:
-    path.parent.mkdir(parents=True, exist_ok=True)
-    with path.open("w", encoding="utf-8", newline="") as f:
-        writer = csv.writer(f)
-        writer.writerow(header)
-        writer.writerows(rows)
-
-
 for v in variants:
     folder = REPORTS / "variants" / v["id"]
-    write_csv(
-        folder / "customers.csv",
-        ["id", "name", "inn", "address", "phone", "party_type"],
-        [[c["id"], c["name"], c["inn"], c.get("addres", ""), c["phone"], c["type"]] for c in v["customers"]],
-    )
-    write_csv(
-        folder / "notes.csv",
-        ["title", "login", "content", "created_date"],
-        [[n["title"], n["login"], n["content"], n["created_date"]] for n in v["notes"]],
-    )
-    write_csv(
-        folder / "resources.csv",
-        ["name", "kind", "unit", "norm", "time", "price"],
-        [[r["name"], r["kind"], r["unit"], num(r["norm"]), num(r["time"]), num(r["price"])] for r in v["resources"]],
-    )
+    folder.mkdir(parents=True, exist_ok=True)
+    for csv_name in ("customers.csv", "notes.csv", "resources.csv"):
+        csv_path = folder / csv_name
+        if csv_path.exists():
+            csv_path.unlink()
 
 index_rows = []
 blocks = []
@@ -98,9 +79,7 @@ for v in variants:
         "Заказчики.json",
         "Заметки.json",
         "Задание.md",
-        "customers.csv",
-        "notes.csv",
-        "resources.csv",
+        f"{vid}_исходные_данные.zip",
     ]
     exam_files = [
         "Заказ покупателя.xlsx",
@@ -135,12 +114,18 @@ for v in variants:
         f'<table><thead><tr><th>Заголовок</th><th>Логин</th><th>Содержание</th>'
         f'<th>Дата</th></tr></thead><tbody>{notes}</tbody></table>\n'
         f'<h4>Шесть заданий</h4>\n<ol class="task-list">{tasks}</ol>\n'
+<<<<<<< HEAD
         f'<h4>Файлы варианта</h4>\n'
         f'<div class="files"><b class="label">Весь комплект · пять книг Excel и JSON</b>\n'
         f'<a class="zip" href="reports/variants/{vid}.zip" download>Скачать весь вариант · ZIP</a>\n'
         f'</div>\n'
         f'<div class="files"><b class="label">Документы предприятия</b>\n{links}</div>\n'
         f'<div class="files"><b class="label">Дополнительные файлы</b>\n{extra_links}</div>\n'
+=======
+        f'<h4>Исходные данные</h4>\n'
+        f'<p><a href="reports/variants/{vid}/{vid}_исходные_данные.zip">Скачать архив варианта · ZIP</a></p>\n'
+        f'<h4>Файлы варианта</h4>\n<p class="files">{links}</p>\n'
+>>>>>>> f1e4390 (Переработка подготовки к ДЭ: V01, XAMPP и исходные данные)
         f'</div>\n</details>'
     )
 
@@ -170,9 +155,15 @@ outcomes:
 6. Выполните задания 5 и 6: API, коллекция Postman и документация.
 7. Сверьте комплект с чек-листом в конце страницы.
 
+<<<<<<< HEAD
 В каждом варианте пять книг Excel и один JSON повторяют комплект документов предприятия: заказ покупателя, заказ на производство, спецификацию, цены, расчёт стоимости и заказчиков. Начните с них: по этим файлам строятся диаграмма, база и расчёт.
 
 Дополнительные файлы помогают набрать данные быстрее. `Задание.md` повторяет условия текстом, `Заметки.json` нужен для задания 5, `customers.csv` повторяет таблицу контрагентов, `notes.csv` содержит заметки, а `resources.csv` помогает заполнить ресурсы, цены и нормы. Код в CSV хранится строкой, поэтому ведущие нули не теряются.
+=======
+В карточке варианта скачайте архив `V01_исходные_данные.zip`. Внутри шесть файлов: `Заказ покупателя.xlsx`, `Заказ на производство.xlsx`, `Спецификация.xlsx`, `Цены.xlsx`, `Расчет стоимости.xlsx` и `Заказчики.json`. Для задания 5 отдельно приложен `Заметки.json`. Все таблицы переносятся из Excel и JSON.
+
+Книги Excel оформлены как документы с заголовком, реквизитами и табличной частью в сетке. В `Заказ покупателя.xlsx` видно шапку заказа и строку продукции, в `Спецификация.xlsx` шапку изделия и состав с нормами, в `Ценах.xlsx` цену и дату её действия, в `Расчет стоимости.xlsx` таблицу для ручной проверки.
+>>>>>>> f1e4390 (Переработка подготовки к ДЭ: V01, XAMPP и исходные данные)
 
 > [!KEY]
 > Не начинайте с приложения. Приложение читает базу, база строится по диаграмме. Если начать с форм, придётся переделывать модель после того, как код уже написан.

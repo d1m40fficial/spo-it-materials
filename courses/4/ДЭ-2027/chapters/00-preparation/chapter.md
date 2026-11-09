@@ -1,27 +1,24 @@
 ---
 title: Предварительная подготовка
-dek: Три тестовых варианта, разбор первых трёх заданий в draw.io и sqliteonline, а также вариант V02 на установленных XAMPP и phpMyAdmin.
+dek: "Разбор первых трёх заданий V01 в draw.io и XAMPP: диаграмма, база в phpMyAdmin и SQL-запрос стоимости."
 chapter: "Подготовка"
 level: СПО
 glyph: "00"
 outcomes:
   - Строить ER-диаграмму в draw.io и сохранять её в PDF
-  - Создавать таблицы и импортировать JSON в sqliteonline.com
+  - Создавать базу и таблицы в phpMyAdmin, импортировать данные
   - Считать стоимость заказа запросом с JOIN и агрегацией
-  - Выполнять задания 1-3 в XAMPP и phpMyAdmin на варианте V02
 ---
 
 ## Зачем этот раздел
 
-Первые три задания проверяют модель данных, базу и расчёт. Их можно пройти без установки сервера: диаграмма собирается в draw.io, база и запросы выполняются в sqliteonline.com. Оба инструмента работают в браузере, поэтому подготовка не зависит от прав администратора и настроек учебного компьютера.
-
-Если на компьютере установлены XAMPP, Visual Studio 2022 и Postman, те же задания выполняются в приложениях. В конце раздела добавлен вариант V02 «Пекарня Колос»: ER-диаграмма, база в XAMPP, импорт документов, выгрузка, восстановление и SQL-запрос стоимости с пошаговыми скриншотами.
+Первые три задания проверяют модель данных, базу и расчёт. В этом разделе они разобраны на варианте V01 «Ателье Стежок» в приложениях, которые уже установлены: draw.io для диаграммы, XAMPP и phpMyAdmin для базы. Дополнительно в конце раздела разобран вариант V02 на тех же инструментах.
 
 | Задание | Инструмент | Что сдать |
 |---|---|---|
 | 1. ER-диаграмма | draw.io | PDF с диаграммой и исходник `.drawio` |
-| 2. База и импорт JSON | sqliteonline.com | SQL-скрипт схемы и заполненная база |
-| 3. SQL-запрос стоимости | sqliteonline.com | SQL-запрос и таблица результата |
+| 2. База и импорт | XAMPP, phpMyAdmin | SQL-скрипт схемы, выгрузка базы |
+| 3. SQL-запрос стоимости | phpMyAdmin | SQL-запрос и таблица результата |
 
 Разбор идёт на варианте V01 «Швейное производство». Варианты V02 и V03 даны для самостоятельной работы: структура заданий та же, меняются предприятие, продукция и числа. Снимки экрана кликабельны: по щелчку они открываются в полном размере.
 
@@ -35,103 +32,11 @@ outcomes:
 
 ## Исходные данные варианта
 
-На экзамене предприятие передаёт комплект из шести файлов: пять книг Excel и один JSON. Варианты этого раздела собраны в том же комплекте, поэтому читайте их в том же порядке, что и на экзамене.
+- [V01: архив исходных данных](reports/variants/V01/V01_исходные_данные.zip)
+- [V02: архив исходных данных](reports/variants/V02/V02_исходные_данные.zip)
+- [V03: архив исходных данных](reports/variants/V03/V03_исходные_данные.zip)
 
-Имена файлов фиксированы, переименовывать их нельзя:
-
-```text
-Заказ покупателя.xlsx
-Заказ на производство.xlsx
-Спецификация.xlsx
-Цены.xlsx
-Расчет стоимости.xlsx
-Заказчики.json
-```
-
-Архив варианта раскрывается в эти же шесть файлов без вложенной папки. После распаковки ничего переименовывать и перекладывать не нужно.
-
-| Файл | Что внутри | Таблицы модели |
-|---|---|---|
-| `Заказ покупателя.xlsx` | номер и даты заказа, изготовитель, заказчик, продукция и количество | `customer_order`, `customer_order_line` |
-| `Заказ на производство.xlsx` | производственный заказ, изделие к выпуску, плановый расход ресурсов | `production_order`, `production_product`, `production_resource` |
-| `Спецификация.xlsx` | материалы и операции изделия, норма на единицу, часы для операций | `specification`, `specification_component` |
-| `Цены.xlsx` | цена ресурса и дата, с которой она действует | `price` |
-| `Расчет стоимости.xlsx` | калькуляция заказа: строки ресурсов, итоги по материалам и операциям | проверка запроса из задания 3 |
-| `Заказчики.json` | шесть контрагентов: код, название, ИНН, адрес, телефон, тип | `counterparty` |
-
-Как устроена книга Excel: первая строка помечает учебный вариант, ниже идёт шапка документа и его строки. Шапка даёт поля будущей таблицы, повторяющиеся строки дают строки дочерней таблицы. В `Заказ покупателя.xlsx` одна строка с продукцией, в `Заказ на производство.xlsx` к ней добавлен план расхода ресурсов.
-
-`Спецификация.xlsx` задаёт норму на одну единицу продукции: у материала заполнена `Норма расхода`, у операции заполнены `Часы на единицу`. `Цены.xlsx` хранит цену вместе с датой начала действия: цена без даты не отвечает на вопрос, какая цена действовала на дату заказа. `Расчет стоимости.xlsx` это документ заказчика, по нему сверяют результат задания 3.
-
-`Заказчики.json` это массив объектов. Код `id` записан строкой, поэтому ведущие нули сохраняются. Поле адреса в исходнике записано как `addres`, с одной буквой `s`: это часть исходных данных, и путь в `json_extract` повторяет написание источника.
-
-### Скачать материалы варианта
-
-<div class="files"><b class="label">V01 · Ателье «Стежок» · пять книг Excel и JSON</b>
-<a class="zip" href="reports/prep/V01.zip" download>Скачать весь вариант · ZIP</a>
-<a href="reports/prep/V01/Заказ покупателя.xlsx" download>Заказ покупателя · XLSX</a>
-<a href="reports/prep/V01/Заказ на производство.xlsx" download>Заказ на производство · XLSX</a>
-<a href="reports/prep/V01/Спецификация.xlsx" download>Спецификация · XLSX</a>
-<a href="reports/prep/V01/Цены.xlsx" download>Цены · XLSX</a>
-<a href="reports/prep/V01/Расчет стоимости.xlsx" download>Расчет стоимости · XLSX</a>
-<a href="reports/prep/V01/Заказчики.json" download>Заказчики · JSON</a>
-</div>
-
-<div class="files"><b class="label">V02 · Пекарня «Колос» · пять книг Excel и JSON</b>
-<a class="zip" href="reports/prep/V02.zip" download>Скачать весь вариант · ZIP</a>
-<a href="reports/prep/V02/Заказ покупателя.xlsx" download>Заказ покупателя · XLSX</a>
-<a href="reports/prep/V02/Заказ на производство.xlsx" download>Заказ на производство · XLSX</a>
-<a href="reports/prep/V02/Спецификация.xlsx" download>Спецификация · XLSX</a>
-<a href="reports/prep/V02/Цены.xlsx" download>Цены · XLSX</a>
-<a href="reports/prep/V02/Расчет стоимости.xlsx" download>Расчет стоимости · XLSX</a>
-<a href="reports/prep/V02/Заказчики.json" download>Заказчики · JSON</a>
-</div>
-
-<div class="files"><b class="label">V03 · Мастерская «Глина» · пять книг Excel и JSON</b>
-<a class="zip" href="reports/prep/V03.zip" download>Скачать весь вариант · ZIP</a>
-<a href="reports/prep/V03/Заказ покупателя.xlsx" download>Заказ покупателя · XLSX</a>
-<a href="reports/prep/V03/Заказ на производство.xlsx" download>Заказ на производство · XLSX</a>
-<a href="reports/prep/V03/Спецификация.xlsx" download>Спецификация · XLSX</a>
-<a href="reports/prep/V03/Цены.xlsx" download>Цены · XLSX</a>
-<a href="reports/prep/V03/Расчет стоимости.xlsx" download>Расчет стоимости · XLSX</a>
-<a href="reports/prep/V03/Заказчики.json" download>Заказчики · JSON</a>
-</div>
-
-## Бриф варианта V01
-
-До разбора заданий прочитайте условия так, как их читают на рабочем месте: кто заказал, что выпускают, сколько и к какому сроку, какие документы это подтверждают.
-
-Ателье «Стежок» выпускает продукцию «Фартук поварской» по спецификациям. Магазин «Стежок-1» заказал 12 ед. к 22.03.2027. Менеджер оформляет заказ, технолог задаёт состав, мастер планирует выпуск. Требуется связать документы в одной информационной системе и рассчитать нормативную стоимость заказа.
-
-| Что известно | Значение |
-|---|---|
-| Предприятие | Ателье «Стежок» |
-| Продукция | Фартук поварской, единица измерения `ед.` |
-| Заказ покупателя | `V01-01` от 15.03.2027, срок 22.03.2027 |
-| Производственный заказ | `V01-P01`, запуск 16.03.2027 |
-| Заказчик | Магазин «Стежок-1», код `001000001` |
-| Количество | 12 ед. |
-| Состав изделия | три материала и две операции |
-| Цены | действуют с 01.03.2027 |
-
-Производственный процесс: раскрой ткани, обработка края, пошив и упаковка. Мастер получает заказ, технолог проверяет нормы, менеджер считает стоимость.
-
-Правила расчёта заданы заказчиком и повторяются в каждом варианте:
-
-- ткань учитывается в метрах, тесьма отдельно, остатки раскроя уже включены в норму;
-- нормы заданы на одну единицу готовой продукции;
-- материалы считаются как количество выпуска × норма × цена;
-- операции считаются как количество выпуска × часы × тариф за час;
-- НДС, наценка, доставка и дополнительные накладные расходы не учитываются;
-- промежуточные суммы не округляются, итог округляется до копеек.
-
-| Что нужно получить | Артефакт |
-|---|---|
-| Модель данных по документам, третья нормальная форма | `V01_ER.pdf` и исходник `V01_ER.drawio` |
-| База со схемой, заказчиками из JSON и данными из Excel | `V01_schema.sql` и `V01_import.sql` |
-| Запрос нормативной стоимости заказа | `V01_cost.sql` с результатом `7680.00` |
-
-Шесть файлов выше это единственный источник данных. Названия полей, коды и даты берутся из них без правок: если в JSON написано `addres`, в запросе тоже будет `addres`.
+В архиве шесть файлов: `Заказ покупателя.xlsx`, `Заказ на производство.xlsx`, `Спецификация.xlsx`, `Цены.xlsx`, `Расчет стоимости.xlsx` и `Заказчики.json`. В JSON лежат заказчики с полями `id`, `name`, `inn`, `addres`, `phone`, `type`. В книгах Excel лежат ресурсы, нормы, цены и строки документов.
 
 ## Задание 1. ER-диаграмма в draw.io
 
@@ -150,9 +55,8 @@ outcomes:
 | Файл | Что внутри | Что из него берут |
 |---|---|---|
 | `Заказчики.json` | заказчики: код, название, ИНН, адрес, телефон, тип | таблица `counterparty` |
-| `Спецификация.xlsx` и `Цены.xlsx` | ресурсы, нормы, часы операций и цены | таблицы `item`, `price`, `specification_component` |
-| `Заказ покупателя.xlsx` и `Заказ на производство.xlsx` | заказ, заказчик, количество и план выпуска | `customer_order`, `production_order` |
-| `Расчет стоимости.xlsx` | калькуляция заказчика с итогом | контрольная сумма для задания 3 |
+| `Спецификация.xlsx` и `Цены.xlsx` | ресурсы, нормы, часы и цены | таблицы `item`, `price`, `specification_component` |
+| `Заказ покупателя.xlsx` и `Заказ на производство.xlsx` | шапки и строки документов | `customer_order`, `customer_order_line`, `production_order` |
 
 Задайте себе восемь вопросов и запишите ответы в черновик:
 
@@ -228,7 +132,7 @@ outcomes:
 
 ### Шаг 3. Таблица `item`: один справочник ресурсов
 
-В CSV есть материалы и операции. У них разные единицы, но общая структура: код, название, вид, единица. Если сделать отдельные таблицы `material` и `operation`, появятся две почти одинаковые сущности и два внешних ключа в составе. Проще один справочник с полем `kind`.
+В книгах Excel есть материалы и операции. У них разные единицы, но общая структура: код, название, вид, единица. Если сделать отдельные таблицы `material` и `operation`, появятся две почти одинаковые сущности и два внешних ключа в составе. Проще один справочник с полем `kind`.
 
 | Поле | Тип | Ключ | Зачем |
 |---|---|---|---|
@@ -238,8 +142,6 @@ outcomes:
 | `kind` | TEXT |  | `product`, `material` или `operation` |
 | `unit` | TEXT |  | метр, штука, час |
 
-<a href="reports/screens/prep/drawio-table-02.png" target="_blank" rel="noopener"><img src="reports/screens/prep/drawio-table-02.png" alt="Таблица item с видом ресурса и единицей измерения"></a>
-<figcaption>Справочник `item`. Поле `kind` отличает продукцию, материал и операцию, не создавая три таблицы.</figcaption>
 
 Ход мысли: «Что общего у ткани и раскроя? Оба расходуются в спецификации. Чем отличаются? Единицей и способом расчёта. Значит, общее выносим в справочник, различие в поле вида».
 
@@ -253,8 +155,6 @@ outcomes:
 | `valid_from` | TEXT | PK | дата начала действия цены |
 | `amount` | REAL |  | цена за единицу |
 
-<a href="reports/screens/prep/drawio-table-03.png" target="_blank" rel="noopener"><img src="reports/screens/prep/drawio-table-03.png" alt="Таблица price с составным ключом из ресурса и даты"></a>
-<figcaption>`price` хранит историю цен. Один ресурс может иметь несколько строк с разными датами.</figcaption>
 
 Составной ключ читается так: одна и та же цена не может быть записана дважды на одну дату, но на разные даты может.
 
@@ -270,8 +170,6 @@ outcomes:
 | `output_qty` | REAL |  | сколько единиц выпускается по нормам |
 | `manufacturer_id` | TEXT | FK | кто изготавливает |
 
-<a href="reports/screens/prep/drawio-table-04.png" target="_blank" rel="noopener"><img src="reports/screens/prep/drawio-table-04.png" alt="Таблица specification с ссылкой на изделие и изготовителя"></a>
-<figcaption>`specification` это шапка: изделие, выпуск и изготовитель. Строки состава появятся отдельно.</figcaption>
 
 Почему `product_id` отдельно, а не название изделия? Название уже есть в `item`. Повторять его в спецификации значит хранить две версии одного факта.
 
@@ -286,8 +184,6 @@ outcomes:
 | `qty` | REAL |  | норма расхода на единицу |
 | `time_norm` | REAL |  | часы для операции, `1` для материала |
 
-<a href="reports/screens/prep/drawio-table-05.png" target="_blank" rel="noopener"><img src="reports/screens/prep/drawio-table-05.png" alt="Таблица specification_component со ссылками на спецификацию и ресурс"></a>
-<figcaption>`specification_component` связывает спецификацию и ресурс. Здесь хранятся норма и время.</figcaption>
 
 Проверка: одну и ту же ткань нельзя добавить в спецификацию дважды с разными нормами без объяснения. Составной ключ это запрещает.
 
@@ -303,8 +199,6 @@ outcomes:
 | `customer_id` | TEXT | FK | кто заказал |
 | `executor_id` | TEXT | FK | кто выполняет |
 
-<a href="reports/screens/prep/drawio-table-06.png" target="_blank" rel="noopener"><img src="reports/screens/prep/drawio-table-06.png" alt="Шапка customer_order с заказчиком и исполнителем"></a>
-<figcaption>`customer_order` хранит шапку. Два внешних ключа ведут в `counterparty`.</figcaption>
 
 Номер документа и внутренний `id` это разные вещи. Номер может измениться при переносе, а `id` остаётся ключом.
 
@@ -321,8 +215,6 @@ outcomes:
 | `sale_price` | REAL |  | продажная цена |
 | `discount` | REAL |  | скидка |
 
-<a href="reports/screens/prep/drawio-table-07.png" target="_blank" rel="noopener"><img src="reports/screens/prep/drawio-table-07.png" alt="Строки customer_order_line со ссылками на заказ и изделие"></a>
-<figcaption>`customer_order_line` хранит по одной строке на изделие. Шапка и строки связаны `1:N`.</figcaption>
 
 Ход мысли: «Что повторяется в каждой строке? Номер заказа и дата. Значит, они остаются в шапке. Что своё у строки? Изделие, количество, цена. Значит, это поля строки».
 
@@ -338,8 +230,6 @@ outcomes:
 | `launch_date` | TEXT |  | дата запуска |
 | `department` | TEXT |  | цех или участок |
 
-<a href="reports/screens/prep/drawio-table-08.png" target="_blank" rel="noopener"><img src="reports/screens/prep/drawio-table-08.png" alt="Шапка production_order с датой запуска и подразделением"></a>
-<figcaption>`production_order` описывает запуск выпуска. Это отдельная шапка, не часть заказа покупателя.</figcaption>
 
 ### Шаг 10. Таблица `production_product`: что выпускаем
 
@@ -351,8 +241,6 @@ outcomes:
 | `product_id` | INTEGER | PK, FK | ссылка на изделие |
 | `qty` | INTEGER |  | сколько выпустить |
 
-<a href="reports/screens/prep/drawio-table-09.png" target="_blank" rel="noopener"><img src="reports/screens/prep/drawio-table-09.png" alt="Таблица production_product с составным ключом"></a>
-<figcaption>`production_product` связывает производственный заказ и изделие, хранит количество.</figcaption>
 
 ### Шаг 11. Таблица `production_resource`: плановый расход
 
@@ -365,8 +253,6 @@ outcomes:
 | `qty` | REAL |  | плановое количество |
 | `time_norm` | REAL |  | плановые часы |
 
-<a href="reports/screens/prep/drawio-table-10.png" target="_blank" rel="noopener"><img src="reports/screens/prep/drawio-table-10.png" alt="Таблица production_resource с плановым расходом ресурсов"></a>
-<figcaption>`production_resource` хранит план расхода. Ключ составной: заказ плюс ресурс.</figcaption>
 
 ### Шаг 12. Таблица `users`: кто входит в приложение
 
@@ -381,8 +267,6 @@ outcomes:
 | `failed_attempts` | INTEGER |  | счётчик ошибок |
 | `is_locked` | INTEGER |  | признак блокировки |
 
-<a href="reports/screens/prep/drawio-table-11.png" target="_blank" rel="noopener"><img src="reports/screens/prep/drawio-table-11.png" alt="Таблица users с логином, ролью и блокировкой"></a>
-<figcaption>`users` хранит учётные записи приложения. Пароль хранится хешем, а не открытым текстом.</figcaption>
 
 ### Шаг 13. Таблица `notes`: заметки сотрудников
 
@@ -396,8 +280,6 @@ outcomes:
 | `id_user` | INTEGER | FK | автор |
 | `created_at` | TEXT |  | дата создания |
 
-<a href="reports/screens/prep/drawio-table-12.png" target="_blank" rel="noopener"><img src="reports/screens/prep/drawio-table-12.png" alt="Таблица notes со ссылкой на пользователя"></a>
-<figcaption>`notes` связана с `users` как один ко многим: у пользователя много заметок.</figcaption>
 
 После двенадцатой таблицы на холсте двенадцать сущностей. Если появилась тринадцатая, проверьте, не является ли она строкой уже существующего документа.
 
@@ -445,7 +327,7 @@ outcomes:
 ### Шаг 16. Сохраните исходник и выгрузите PDF
 
 1. Откройте `Файл`, затем `Сохранить как` и выберите `Это устройство`.
-2. На рабочем столе создайте личную папку по образцу `/Студент/Название предмета/ФИО студента/номер практической работы`.
+2. На рабочем столе создайте личную папку по образцу `/Учебная папка/Название предмета/ФИО/номер практической работы`.
 3. Назовите файл `V01_ER.drawio` и сохраните.
 4. Откройте `Файл`, затем `Экспорт как`, затем `PDF`.
 5. Оставьте экспорт всей диаграммы, а не выделения. Проверьте, что все двенадцать таблиц попали на лист.
@@ -460,261 +342,189 @@ outcomes:
 Перед сдачей проверьте: двенадцать таблиц, у каждой первичный ключ, четырнадцать подписанных связей, нет вычисляемых полей. Если таблиц девять, скорее всего шапка заказа слита со строками. Если пятнадцать, появилась лишняя таблица под каждую строку документа.
 
 
-## Задание 2. База в sqliteonline.com
+## Задание 2. База в XAMPP и phpMyAdmin
 
-### Шаг 1. Откройте sqliteonline.com
+Это основной маршрут для установленных приложений. Полный разбор каждой команды и ограничений находится в методичке [Задание 2. База данных и импорт](03-task-2-db.html). Здесь короткий маршрут V01, чтобы пройти первые три задания подряд.
 
-Откройте `sqliteonline.com` и выберите SQLite. Слева появится список таблиц демонстрационной базы, сверху кнопки `Import` и `Export`, в центре редактор SQL, снизу результат.
+### Шаг 1. Запустите Apache и MySQL
 
-<a href="reports/screens/prep/sqlite-start.png" target="_blank" rel="noopener"><img src="reports/screens/prep/sqlite-start.png" alt="sqliteonline.com: список таблиц, редактор SQL и кнопка Run"></a>
-<figcaption>sqliteonline.com. Слева база, в центре редактор, сверху запуск и импорт, снизу таблица результата.</figcaption>
+Откройте XAMPP Control Panel и нажмите `Start` у Apache и MySQL. На учебных компьютерах Apache слушает порт `4433`, MySQL слушает `3306`. Обе строки должны стать зелёными.
 
-Демонстрационная таблица `demo` не мешает: свои таблицы создаются рядом. Перед работой закройте зелёное уведомление, чтобы оно не закрывало результат.
+<figure class="diagram">
+<img src="reports/screens/mysql/db-start.png" alt="XAMPP Control Panel с запущенными Apache и MySQL">
+<figcaption>XAMPP: Apache и MySQL в состоянии Running. Без MySQL phpMyAdmin не подключится к базе.</figcaption>
+</figure>
 
-### Что такое база данных простыми словами
+### Шаг 2. Откройте phpMyAdmin и создайте базу
 
-**База данных** это набор таблиц, которые хранят факты о системе. **Таблица** описывает один тип факта: контрагента, заказ, цену. **Строка** это один факт, например один заказ. **Столбец** это свойство факта, например дата заказа.
+Перейдите по адресу `http://localhost:4433/phpmyadmin`. Пользователь `root`, пароль пустой. В левой панели нажмите `Создать БД`, введите имя `dkip2027_course`, выберите сравнение `utf8mb4_unicode_ci` и нажмите `Создать`.
 
-**Первичный ключ** отличает строки внутри таблицы. **Внешний ключ** ссылается на первичный ключ другой таблицы. **Ограничение** (`CHECK`, `NOT NULL`, `UNIQUE`) запрещает записывать данные, которые нарушают правило. **Скрипт** это текст команд, который можно выполнить целиком и повторить на другом компьютере.
+<figure class="diagram">
+<img src="reports/screens/mysql/t2-create.png" alt="Создание базы dkip2027_course в phpMyAdmin">
+<figcaption>Создание базы: имя, кодировка utf8mb4 и сравнение utf8mb4_unicode_ci.</figcaption>
+</figure>
 
-В sqliteonline.com база живёт в памяти браузера, пока открыта страница. Чтобы результат не потерялся, скрипт сохраняют в файл `.sql`, а таблицу результата выгружают через `Export`.
+### Шаг 3. Создайте первую таблицу через интерфейс
 
-### Шаг 2. Создайте рабочую базу
+Выберите базу `dkip2027_course`, откройте вкладку `Структура` и нажмите `Создать таблицу`. В поле имени введите `counterparty`. Ниже заполните шесть строк:
 
-1. Откройте `sqliteonline.com`.
-2. В левой панели нажмите `Private DB +` или откройте `SQLite`, затем `Create SQLite DB`. Назовите базу `v01_sklad`.
-3. Если создать отдельную базу нельзя, работайте в `Demo.Memory`: таблицы появятся рядом с `demo`, результат всё равно можно выгрузить.
-4. Верхние кнопки `Import` и `Export` служат для загрузки файлов и сохранения результата. `Import` принимает SQL, CSV и JSON, `Export` выгружает таблицу или базу.
+| Имя | Тип | Длина | Null | Индекс |
+|---|---|---|---|---|
+| `id` | `VARCHAR` | 32 | нет | `PRIMARY` |
+| `name` | `VARCHAR` | 255 | нет | |
+| `inn` | `VARCHAR` | 20 | нет | |
+| `address` | `VARCHAR` | 500 | нет | |
+| `phone` | `VARCHAR` | 64 | нет | |
+| `party_type` | `VARCHAR` | 24 | нет | |
 
-<a href="reports/screens/prep/sqlite-export.png" target="_blank" rel="noopener"><img src="reports/screens/prep/sqlite-export.png" alt="Диалог Export в sqliteonline.com с выбором формата выгрузки"></a>
-<figcaption>Кнопка `Export` открывает выбор формата. Перед выгрузкой выберите таблицу или результат запроса, который нужно сохранить.</figcaption>
+Внизу выберите движок `InnoDB` и нажмите `Сохранить`. В списке таблиц появится `counterparty`. Откройте её вкладку `Структура`: видны поля, типы и ключ `PRIMARY`.
 
-Не закрывайте вкладку до сохранения скрипта: память браузера очищается вместе с сессией.
+<figure class="diagram">
+<img src="reports/screens/mysql/t2-create-table-ui.png" alt="Создание таблицы counterparty через форму phpMyAdmin">
+<figcaption>Создание таблицы через интерфейс: имя, число столбцов, типы и кнопка «Сохранить». Кнопка «Предпросмотр SQL» показывает будущий запрос.</figcaption>
+</figure>
 
-### Как читать SQL
+Проверьте себя: код `001000001` должен храниться текстом, иначе ведущие нули исчезнут. Поэтому `id` имеет тип `VARCHAR`, а не `INT`.
 
-SQL читается сверху вниз, но выполняется не в том порядке, в котором записан. Сначала база находит таблицы в `FROM`, соединяет их в `JOIN`, отбирает строки в `WHERE`, собирает группы в `GROUP BY`, считает агрегаты в `SELECT` и только потом сортирует результат.
+### Шаг 4. Создайте вторую таблицу запросом
 
-| Команда | Что делает | Пример |
-|---|---|---|
-| `SELECT` | выбирает столбцы результата | `SELECT doc_no, doc_date FROM customer_order;` |
-| `FROM` | указывает таблицу | `FROM customer_order` |
-| `WHERE` | отбирает строки до группировки | `WHERE doc_date >= '2027-03-01'` |
-| `ORDER BY` | сортирует результат | `ORDER BY doc_no` |
-| `JOIN ... ON` | соединяет строки по ключу | `JOIN customer_order_line l ON l.order_id = o.id` |
-| `GROUP BY` | собирает строки в группы | `GROUP BY o.doc_no` |
-| `SUM` | складывает значения группы | `SUM(l.qty)` |
-| `ROUND` | округляет число | `ROUND(total, 2)` |
-| `WITH` | называет промежуточный запрос | `WITH price_on_date AS (...)` |
+Теперь создайте `item` не через форму, а запросом. Откройте вкладку `SQL` и введите команду.
 
-Схема для примеров:
-
-```text
-counterparty(id, name, party_type)
-item(id, name, kind, unit)
-price(item_id, valid_from, amount)
-specification(id, product_id, output_qty)
-specification_component(specification_id, item_id, qty, time_norm)
-customer_order(id, doc_no, doc_date, customer_id, executor_id)
-customer_order_line(id, order_id, product_id, qty, sale_price)
-```
-
-Простые запросы:
+<figure class="diagram">
+<img src="reports/screens/mysql/t2-create-item-sql.png" alt="Создание таблицы item запросом в phpMyAdmin">
+<figcaption>Создание таблицы запросом: вкладка SQL, команда `CREATE TABLE item` и кнопка «Вперёд».</figcaption>
+</figure>
 
 ```sql
--- все строки таблицы
-SELECT * FROM counterparty;
-
--- только нужные столбцы
-SELECT doc_no, doc_date FROM customer_order;
-
--- фильтр по дате
-SELECT doc_no FROM customer_order WHERE doc_date >= '2027-03-01';
-
--- соединение заказа и строк
-SELECT o.doc_no, l.qty
-FROM customer_order o
-JOIN customer_order_line l ON l.order_id = o.id;
-```
-
-`o` и `l` это псевдонимы таблиц. Они сокращают запись и позволяют обращаться к полям двух таблиц без путаницы: `o.doc_no`, `l.qty`. Если убрать псевдонимы, придётся писать полные имена таблиц в каждом столбце.
-
-`SELECT *` удобен для первого знакомства, но в отчёт его не ставят: он выводит лишние столбцы и ломается при изменении схемы. Перечисляйте поля явно.
-
-### Шаг 3. Создайте таблицы
-
-Вставьте в редактор скрипт создания схемы. В нём двенадцать таблиц, первичные и внешние ключи, проверки `CHECK` и составные ключи.
-
-```sql
-PRAGMA foreign_keys = ON;
-
-CREATE TABLE counterparty (
-    id TEXT PRIMARY KEY,
-    name TEXT NOT NULL,
-    inn TEXT,
-    address TEXT,
-    phone TEXT,
-    party_type TEXT NOT NULL CHECK (party_type IN ('Покупатель', 'Изготовитель', 'Поставщик'))
-);
-
 CREATE TABLE item (
-    id INTEGER PRIMARY KEY,
-    code TEXT,
-    name TEXT NOT NULL,
-    kind TEXT NOT NULL CHECK (kind IN ('product', 'material', 'operation')),
-    unit TEXT NOT NULL
-);
+  id INT AUTO_INCREMENT NOT NULL,
+  code VARCHAR(64) UNIQUE NOT NULL,
+  name VARCHAR(255) NOT NULL,
+  kind VARCHAR(16) NOT NULL,
+  unit VARCHAR(16) NOT NULL,
+  PRIMARY KEY (id),
+  CONSTRAINT ck_item_kind CHECK (kind IN ('product','material','operation'))
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+```
 
+Разберите команду по частям.
+
+- `CREATE TABLE item` создаёт таблицу с именем `item`.
+- В скобках перечислены столбцы. У каждого три части: имя, тип и ограничения.
+- `PRIMARY KEY (id)` делает `id` первичным ключом.
+- `CONSTRAINT ck_item_kind CHECK (...)` задаёт проверку: в поле `kind` можно записать только `product`, `material` или `operation`.
+- `ENGINE=InnoDB` включает поддержку внешних ключей, `DEFAULT CHARSET=utf8mb4` задаёт кодировку.
+
+Запятая разделяет столбцы и правила. После последнего правила запятая не ставится. Если забыть запятую, MySQL покажет ошибку 1064 с номером строки.
+
+Остальные таблицы создайте по диаграмме. Для каждой ответьте: какие поля, какой первичный ключ, на что ссылаются внешние ключи. Например, у `price` ключ составной:
+
+```sql
 CREATE TABLE price (
-    item_id INTEGER NOT NULL REFERENCES item(id),
-    valid_from TEXT NOT NULL,
-    amount REAL NOT NULL CHECK (amount >= 0),
-    PRIMARY KEY (item_id, valid_from)
-);
-
-CREATE TABLE specification (
-    id INTEGER PRIMARY KEY,
-    product_id INTEGER NOT NULL UNIQUE REFERENCES item(id),
-    name TEXT NOT NULL,
-    output_qty REAL NOT NULL CHECK (output_qty > 0),
-    manufacturer_id TEXT NOT NULL REFERENCES counterparty(id)
-);
-
-CREATE TABLE specification_component (
-    specification_id INTEGER NOT NULL REFERENCES specification(id),
-    item_id INTEGER NOT NULL REFERENCES item(id),
-    qty REAL NOT NULL CHECK (qty >= 0),
-    time_norm REAL NOT NULL CHECK (time_norm >= 0),
-    PRIMARY KEY (specification_id, item_id)
-);
-
-CREATE TABLE customer_order (
-    id INTEGER PRIMARY KEY,
-    doc_no TEXT NOT NULL UNIQUE,
-    doc_date TEXT NOT NULL,
-    customer_id TEXT NOT NULL REFERENCES counterparty(id),
-    executor_id TEXT NOT NULL REFERENCES counterparty(id)
-);
-
-CREATE TABLE customer_order_line (
-    id INTEGER PRIMARY KEY,
-    order_id INTEGER NOT NULL REFERENCES customer_order(id),
-    product_id INTEGER NOT NULL REFERENCES item(id),
-    qty INTEGER NOT NULL CHECK (qty > 0),
-    sale_price REAL NOT NULL CHECK (sale_price >= 0),
-    discount REAL NOT NULL DEFAULT 0 CHECK (discount >= 0)
-);
-
-CREATE TABLE production_order (
-    id INTEGER PRIMARY KEY,
-    doc_no TEXT NOT NULL UNIQUE,
-    doc_date TEXT NOT NULL,
-    launch_date TEXT NOT NULL,
-    department TEXT NOT NULL
-);
-
-CREATE TABLE production_product (
-    production_id INTEGER NOT NULL REFERENCES production_order(id),
-    product_id INTEGER NOT NULL REFERENCES item(id),
-    qty INTEGER NOT NULL CHECK (qty > 0),
-    PRIMARY KEY (production_id, product_id)
-);
-
-CREATE TABLE production_resource (
-    production_id INTEGER NOT NULL REFERENCES production_order(id),
-    item_id INTEGER NOT NULL REFERENCES item(id),
-    qty REAL NOT NULL CHECK (qty >= 0),
-    time_norm REAL NOT NULL CHECK (time_norm >= 0),
-    PRIMARY KEY (production_id, item_id)
-);
-
-CREATE TABLE users (
-    id INTEGER PRIMARY KEY,
-    login TEXT NOT NULL UNIQUE,
-    password_hash TEXT NOT NULL,
-    role TEXT NOT NULL,
-    failed_attempts INTEGER NOT NULL DEFAULT 0,
-    is_locked INTEGER NOT NULL DEFAULT 0
-);
-
-CREATE TABLE notes (
-    id INTEGER PRIMARY KEY,
-    title TEXT NOT NULL,
-    content TEXT,
-    id_user INTEGER NOT NULL REFERENCES users(id),
-    created_at TEXT NOT NULL
-);
+  item_id INT NOT NULL,
+  valid_from DATE NOT NULL,
+  amount DECIMAL(14,2) NOT NULL,
+  PRIMARY KEY (item_id, valid_from),
+  CONSTRAINT fk_price_item FOREIGN KEY (item_id) REFERENCES item(id),
+  CONSTRAINT ck_price_amount CHECK (amount >= 0)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 ```
 
-Нажмите `Run`. Слева появятся двенадцать таблиц, а в результате список имён из `sqlite_master`.
+### Шаг 5. Постройте связи через интерфейс и SQL
 
-<a href="reports/screens/prep/sqlite-schema.png" target="_blank" rel="noopener"><img src="reports/screens/prep/sqlite-schema.png" alt="Список созданных таблиц в sqliteonline.com: все двенадцать, включая item"></a>
-<figcaption>Схема создана. Слева двенадцать таблиц, в результате проверочный список имён.</figcaption>
+Связи можно добавить мышью. Откройте таблицу `customer_order`, вкладку `Структура`, затем `Связи`. Выберите столбец `customer_id`, базу `dkip2027_course`, таблицу `counterparty` и столбец `id`. Нажмите `Сохранить`. Повторите для `executor_id` и остальных внешних ключей.
 
-Составной ключ записывается двумя строками `PK` или одной строкой `PRIMARY KEY (item_id, valid_from)` в конце таблицы. Внешний ключ всегда ссылается на первичный ключ другой таблицы.
+<figure class="diagram">
+<img src="reports/screens/mysql/t2-relations-ui.png" alt="Вкладка Связи в phpMyAdmin: внешние ключи заказа">
+<figcaption>Связи через интерфейс: у заказа два внешних ключа в counterparty. Правила ON DELETE и ON UPDATE видны рядом.</figcaption>
+</figure>
 
-### Шаг 4. Импортируйте JSON
-
-JSON не нужно разбирать вручную. Загрузите его во временную таблицу и разверните функцией `json_each`.
+То же запросом:
 
 ```sql
-CREATE TABLE json_import (payload TEXT);
+ALTER TABLE customer_order
+  ADD CONSTRAINT fk_order_customer
+  FOREIGN KEY (customer_id) REFERENCES counterparty(id),
+  ADD CONSTRAINT fk_order_executor
+  FOREIGN KEY (executor_id) REFERENCES counterparty(id);
+```
 
-INSERT INTO json_import(payload) VALUES ('[{"id":"001000001","name":"Магазин «Стежок-1»","inn":"","addres":"Учебный город, улица Производственная, 1, офис 1","phone":"+79990010001","type":"Покупатель"}]');
+`ALTER TABLE` меняет уже созданную таблицу. `ADD CONSTRAINT` добавляет правило с именем. Имя помогает понять, какое ограничение нарушено.
 
+### Шаг 6. Вставьте данные через интерфейс
+
+Откройте таблицу `counterparty`, вкладку `Вставка`. Появится форма: слева имена столбцов, справа поля значений. Заполните `id`, `name`, `inn`, `address`, `phone`, `party_type` и нажмите `Вперёд`.
+
+<figure class="diagram">
+<img src="reports/screens/mysql/t2-insert-ui.png" alt="Вкладка Вставка в phpMyAdmin: поля таблицы counterparty">
+<figcaption>Вставка через интерфейс: каждому столбцу соответствует поле. Пустой ИНН оставьте пустым, код вводите с ведущими нулями.</figcaption>
+</figure>
+
+Повторите для шести заказчиков из `Заказчики.json` и добавьте изготовителя `M-001`.
+
+### Шаг 7. Вставьте данные запросом
+
+Запрос `INSERT` состоит из трёх частей: таблица, список столбцов и список значений.
+
+```sql
 INSERT INTO counterparty (id, name, inn, address, phone, party_type)
-SELECT json_extract(value, '$.id'),
-       json_extract(value, '$.name'),
-       json_extract(value, '$.inn'),
-       json_extract(value, '$.addres'),
-       json_extract(value, '$.phone'),
-       json_extract(value, '$.type')
-FROM json_import, json_each(json_import.payload);
-
-SELECT id, name, phone, party_type FROM counterparty ORDER BY id;
+VALUES ('001000001', 'Магазин «Стежок-1»', '', 'Учебный город, улица Производственная, 1, офис 1', '+79990010001', 'Покупатель');
 ```
 
-В рабочем скрипте вставьте весь массив заказчиков из `Заказчики.json`, а не одну строку. Ключ `addres` в исходном JSON записан с одной буквой `s`, поэтому путь в `json_extract` повторяет написание источника. Если исправить путь на `address`, значение станет пустым.
-
-<a href="reports/screens/prep/sqlite-import.png" target="_blank" rel="noopener"><img src="reports/screens/prep/sqlite-import.png" alt="Импорт JSON в sqliteonline.com: разбор через json_each и шесть строк заказчиков"></a>
-<figcaption>Импорт JSON. Шесть заказчиков, ведущие нули в кодах сохранены, тип записан в поле party_type.</figcaption>
-
-Поле `id` объявлено как `TEXT`, поэтому код `001000001` не превращается в число и не теряет ведущие нули. Это одна из типичных ошибок импорта.
-
-### Шаг 5. Проверьте данные и ограничения
-
-Выполните три проверки:
+- `INSERT INTO counterparty` выбирает таблицу.
+- В скобках перечислены столбцы в том порядке, в котором пойдут значения.
+- `VALUES` начинает список значений. Текст и даты пишут в кавычках, числа без кавычек.
+- Между значениями запятые, после последнего значения запятой нет.
+- Несколько строк можно вставить одним запросом: после каждой строки значений ставится запятая, кроме последней.
 
 ```sql
-SELECT COUNT(*) AS customers FROM counterparty;
-
-SELECT id, name FROM counterparty ORDER BY id LIMIT 3;
-
-PRAGMA foreign_key_check;
+INSERT INTO counterparty (id, name, inn, address, phone, party_type) VALUES
+('001000001', 'Магазин «Стежок-1»', '', 'Учебный город, улица Производственная, 1, офис 1', '+79990010001', 'Покупатель'),
+('001000002', 'Торговый дом «Стежок-2»', '', 'Учебный город, улица Производственная, 1, офис 2', '+79990010002', 'Покупатель');
 ```
 
-Первая проверка возвращает `6` для шести заказчиков, вторая показывает коды и названия, третья возвращает пустой результат: внешние ключи не нарушены.
+<figure class="diagram">
+<img src="reports/screens/mysql/t2-customers.png" alt="Таблица counterparty после вставки: заказчики и изготовитель">
+<figcaption>Результат вставки: коды `001000001`…`001000006` сохранили ведущие нули, изготовитель хранится отдельной строкой.</figcaption>
+</figure>
 
-Проверьте ограничение намеренно:
+### Шаг 8. Загрузите заказ, спецификацию и цены
+
+Данные из Excel вставляются тем же способом. Сначала создайте изделие и ресурсы в `item`, затем цены, спецификацию, состав, заказ и строку заказа. Порядок важен: строка заказа ссылается на заказ и изделие, цена ссылается на ресурс.
+
+Пример для цен:
 
 ```sql
-INSERT INTO counterparty (id, name, party_type)
-VALUES ('X-1', 'Тест', 'Клиент');
+INSERT INTO price (item_id, valid_from, amount) VALUES
+(2, '2027-03-01', 280.00),
+(3, '2027-03-01', 25.00),
+(4, '2027-03-01', 0.40),
+(5, '2027-03-01', 600.00),
+(6, '2027-03-01', 800.00);
 ```
 
-Запрос должен завершиться ошибкой `CHECK constraint failed`, потому что тип `Клиент` не входит в список допустимых. Если ошибки нет, `PRAGMA foreign_keys = ON` не выполнился или таблица создана по старому скрипту.
+<figure class="diagram">
+<img src="reports/screens/mysql/t2-order.png" alt="Заказ V01-01 в phpMyAdmin">
+<figcaption>Шапка заказа V01-01: дата 15.03.2027, заказчик 001000001, исполнитель M-001.</figcaption>
+</figure>
 
-### Шаг 6. Сохраните скрипты
+<figure class="diagram">
+<img src="reports/screens/mysql/t2-spec.png" alt="Состав спецификации V01: материалы и операции">
+<figcaption>Состав спецификации: пять строк, у материалов норма расхода, у операций время.</figcaption>
+</figure>
 
-Скачайте готовые файлы и сохраните их в папку занятия:
+### Шаг 9. Сделайте выгрузку и восстановите её
 
-- [Схема V01, SQL](reports/prep/sql/V01_schema.sql)
-- [Импорт JSON V01, SQL](reports/prep/sql/V01_import.sql)
-- [Расчёт стоимости V01, SQL](reports/prep/sql/V01_cost.sql)
+Откройте вкладку `Экспорт`, выберите формат SQL, метод `Быстрый`, нажмите `Экспорт` и сохраните файл `dkip2027-mysql.sql`. Затем создайте пустую базу `dkip2027_restore`, откройте в ней вкладку `Импорт` и загрузите тот же файл. Если таблицы и данные появились, выгрузка рабочая.
 
-В sqliteonline.com скрипт можно хранить в истории запросов, но на защите нужен файл. История браузера не считается артефактом.
+<figure class="diagram">
+<img src="reports/screens/mysql/t2-export.png" alt="Экспорт базы dkip2027_course в SQL-файл">
+<figcaption>Экспорт SQL: выбран формат SQL и метод Быстрый. Файл можно приложить к работе.</figcaption>
+</figure>
 
 ## Задание 3. Стоимость заказа
+
+Запрос выполняется в phpMyAdmin: выберите базу `dkip2027_course`, откройте вкладку `SQL`, вставьте запрос и нажмите `Выполнить`. Пошаговые скриншоты phpMyAdmin и разбор каждого соединения находятся в карточке [Задание 3. SQL-запрос стоимости](04-task-3-sql.html).
 
 ### Как собрать запрос стоимости
 
@@ -787,6 +597,8 @@ SELECT item_id, amount FROM price_on_date;
 
 Почему нельзя соединить `price` и `specification_component` напрямую? У одного ресурса несколько цен, у одной спецификации несколько строк. Прямое соединение размножит строки: каждая строка состава получит каждую цену. Сначала оставьте одну действующую цену на ресурс, потом соединяйте.
 
+
+
 Формула читается так:
 
 ```text
@@ -795,37 +607,19 @@ SELECT item_id, amount FROM price_on_date;
 
 Для материала `time_norm` равно `1`, для операции это часы. Поэтому одна формула считает и материалы, и операции.
 
-### Шаг 1. Заполните справочники и заказ
+### Шаг 1. Проверьте данные в базе
 
-Скрипт `V01_cost.sql` добавляет изготовителя, изделие, ресурсы, цены, спецификацию, заказ и производственный заказ. Ключевые строки:
+Заказ, спецификация, состав и цены уже загружены в задании 2. Откройте phpMyAdmin, выберите `dkip2027_course` и выполните проверку:
 
 ```sql
-INSERT INTO item (id, code, name, kind, unit) VALUES
-    (1, 'P-01', 'Фартук поварской', 'product', 'шт'),
-    (2, 'M-01', 'Бязь', 'material', 'м'),
-    (3, 'M-02', 'Тесьма', 'material', 'м'),
-    (4, 'M-03', 'Нить', 'material', 'м'),
-    (5, 'O-01', 'Раскрой', 'operation', 'ч'),
-    (6, 'O-02', 'Пошив', 'operation', 'ч');
-
-INSERT INTO specification (id, product_id, name, output_qty, manufacturer_id)
-VALUES (1, 1, 'Фартук поварской', 1, 'M-001');
-
-INSERT INTO specification_component (specification_id, item_id, qty, time_norm) VALUES
-    (1, 2, 0.8, 1),
-    (1, 3, 2, 1),
-    (1, 4, 35, 1),
-    (1, 5, 1, 0.12),
-    (1, 6, 1, 0.35);
-
-INSERT INTO customer_order (id, doc_no, doc_date, customer_id, executor_id)
-VALUES (1, 'V01-01', '2027-03-15', '001000001', 'M-001');
-
-INSERT INTO customer_order_line (id, order_id, product_id, qty, sale_price, discount)
-VALUES (1, 1, 1, 12, 700, 0);
+SELECT o.doc_no, o.doc_date, l.qty, i.name
+FROM customer_order o
+JOIN customer_order_line l ON l.order_id = o.id
+JOIN item i ON i.id = l.product_id
+WHERE o.doc_no = 'V01-01';
 ```
 
-Для материалов `qty` в составе это норма на единицу, а `time_norm` равно `1`. Для операций `qty` равно `1`, а `time_norm` хранит часы на единицу. Такая запись позволяет считать материалы и операции одной формулой.
+В результате одна строка: заказ `V01-01`, дата `2027-03-15`, изделие «Фартук поварской», количество 12. Если строка пустая, вернитесь к заданию 2: без заказа и строки расчёт не построить.
 
 ### Шаг 2. Соберите запрос
 
@@ -859,15 +653,19 @@ WHERE o.doc_no = 'V01-01'
 GROUP BY o.doc_no;
 ```
 
-<a href="reports/screens/prep/sqlite-query.png" target="_blank" rel="noopener"><img src="reports/screens/prep/sqlite-query.png" alt="Начало запроса стоимости заказа и результат 7680"></a>
-<figcaption>Запрос с общим табличным выражением. В результате одна строка V01-01 со стоимостью 7680.</figcaption>
+<figure class="diagram">
+<img src="reports/screens/mysql/t3-cte.png" alt="Результат запроса стоимости заказа V01: 7680.00">
+<figcaption>Запрос с общим табличным выражением: одна строка V01-01 со стоимостью 7680.00.</figcaption>
+</figure>
 
 Если соединить `price` и `specification_component` без подготовки, строки начнут размножаться: каждая строка состава получит несколько цен. Общее табличное выражение `price_on_date` оставляет одну действующую цену на ресурс.
 
 ### Шаг 3. Проверьте результат
 
-<a href="reports/screens/prep/sqlite-cost.png" target="_blank" rel="noopener"><img src="reports/screens/prep/sqlite-cost.png" alt="Итоговая стоимость заказа V01-01: 7680"></a>
-<figcaption>Итоговая строка: материалы 3456, операции 4224, общая стоимость 7680.</figcaption>
+<figure class="diagram">
+<img src="reports/screens/mysql/t3-total.png" alt="Итоговая стоимость заказа V01-01: 7680.00">
+<figcaption>Итоговая строка: номер заказа и стоимость 7680.00.</figcaption>
+</figure>
 
 Проверьте арифметику вручную:
 
@@ -891,7 +689,7 @@ GROUP BY o.doc_no;
 | `V01_ER.drawio` | двенадцать таблиц, ключи, четырнадцать связей |
 | `V01_ER.pdf` | читаемая диаграмма на одном листе |
 | `V01_schema.sql` | двенадцать таблиц, `PRIMARY KEY`, `FOREIGN KEY`, `CHECK` |
-| `V01_import.sql` | разбор JSON через `json_each`, шесть заказчиков |
+| `V01_import.sql` | загрузка заказчиков, заказа, спецификации и цен |
 | `V01_cost.sql` | запрос стоимости и результат `7680.00` |
 
 ## Варианты V02 и V03
@@ -977,226 +775,9 @@ GROUP BY o.doc_no;
 - У каждой связи подписана кратность, связей многие ко многим без промежуточной таблицы нет.
 - В таблицах нет вычисляемых полей: стоимости, суммы строки и количества изделий.
 - Схема базы создаётся одним скриптом, ограничения `CHECK` и `FOREIGN KEY` включены.
-- JSON импортируется через `json_each`, ведущие нули в кодах сохранены.
+- Заказчики и документы импортированы, ведущие нули в кодах сохранены.
 - Запрос стоимости использует действующую цену и не удваивает строки.
 - Итог `7680.00` подтверждён ручным расчётом.
 - Исходник `.drawio`, PDF и SQL-скрипты сохранены в папке занятия.
 
 Дальше переходите к методичкам заданий 4, 5 и 6: приложение, API и документация собираются на той же модели данных.
-
-## Вариант V02: задания 1-3 на установленных приложениях
-
-На компьютерах появились XAMPP, Visual Studio 2022 и Postman. Ниже разобран второй вариант, пекарня «Колос», на тех же инструментах: XAMPP и phpMyAdmin для базы, SQL для расчёта. Приложение и Postman понадобятся в заданиях 4-6, но подготовка базы для них уже начинается здесь.
-
-В варианте другие данные, структура документов та же. Шесть заказчиков, изделие «Хлеб ржаной 500 г», три материала, две операции, цены с 01.03.2027, заказ V02-01 на 40 единиц и производственный заказ V02-P01. Коды заказчиков начинаются с `002`, поэтому их нельзя хранить целыми числами.
-
-### Задание 1. ER-модель пекарни
-
-Сначала выпишите документы и повторяющиеся строки. Заказ покупателя содержит шапку и строку с изделием. Спецификация содержит шапку и строки материалов и операций. Цены это история по ресурсу и дате. Производственный заказ содержит изделие к выпуску и плановый расход ресурсов.
-
-Получается десять таблиц:
-
-| Таблица | Первичный ключ | Внешние ключи | Что хранит |
-|---|---|---|---|
-| `counterparty` | `id` | нет | заказчиков и изготовителя |
-| `item` | `id` | нет | изделие, материалы и операции |
-| `price` | `item_id`, `valid_from` | `item_id` | историю цен ресурса |
-| `specification` | `id` | `product_id`, `manufacturer_id` | шапку спецификации |
-| `specification_component` | `specification_id`, `item_id` | `specification_id`, `item_id` | нормы материалов и часы операций |
-| `customer_order` | `id` | `customer_id`, `executor_id` | шапку заказа |
-| `customer_order_line` | `id` | `order_id`, `product_id` | строку заказа |
-| `production_order` | `id` | `order_id` | шапку производственного заказа |
-| `production_product` | `production_id`, `product_id` | `production_id`, `product_id` | изделие к выпуску |
-| `production_resource` | `production_id`, `item_id` | `production_id`, `item_id` | плановый расход ресурсов |
-
-Третья нормальная форма проверяется по трём вопросам. В ячейке нет списка значений. Неключевое поле зависит от всего составного ключа, а не от его части. Неключевое поле не зависит от другого неключевого поля.
-
-Нормы материалов и часы операций хранятся в `specification_component`, а не в `item`: один и тот же ресурс входит в разные изделия с разной нормой. Цена хранится в `price` с датой начала действия, а не в `item`: у ресурса может быть несколько цен за разные периоды. Стоимость заказа и сумма строки не хранятся: они считаются запросом. Код изготовителя `V02-MAKER` добавлен отдельно, потому что в Excel есть название пекарни, но нет её кода.
-
-<figure class="diagram">
-<img src="reports/v02/er-v02.png" alt="ER-диаграмма V02: десять таблиц пекарни и их связи">
-<figcaption>ER-диаграмма V02: десять таблиц, составные ключи и связи 1:N. Изготовитель хранится в counterparty с кодом V02-MAKER.</figcaption>
-</figure>
-
-Скачать схему в PDF: [er-v02.pdf](reports/v02/er-v02.pdf). В PDF та же диаграмма на листе A3, удобно приложить к отчёту.
-
-### Задание 2. База данных и загрузка документов
-
-**Шаг 1. Запустите XAMPP.** Откройте XAMPP Control Panel и нажмите `Start` у Apache и MySQL. На учебных компьютерах Apache слушает порт `4433`, MySQL слушает `3306`. Если Apache не запускается, проверьте, какая программа заняла `4433`, командой `netstat -ano | findstr :4433`.
-
-<figure class="diagram">
-<img src="reports/screens/v02/00-xampp.png" alt="XAMPP Control Panel: Apache на порту 4433, MySQL на порту 3306">
-<figcaption>XAMPP Control Panel: Apache и MySQL запущены, Apache занимает 4433, MySQL занимает 3306.</figcaption>
-</figure>
-
-**Шаг 2. Откройте phpMyAdmin.** Перейдите по адресу `http://localhost:4433/phpmyadmin`. В учебной сборке пользователь `root`, пароль пустой. Слева виден список баз, сверху вкладки `Structure`, `SQL`, `Export`, `Import`.
-
-**Шаг 3. Создайте базу.** Нажмите `New` или откройте вкладку `Databases`. В поле имени введите `dkip2027_v02`, выберите сравнение `utf8mb4_unicode_ci` и нажмите `Create`. Кодировка важна: в именах есть кириллица и кавычки «».
-
-<figure class="diagram">
-<img src="reports/screens/v02/01-databases.png" alt="Создание базы dkip2027_v02 в phpMyAdmin">
-<figcaption>Создание базы: имя dkip2027_v02, сравнение utf8mb4_unicode_ci. Ниже база уже появилась в списке.</figcaption>
-</figure>
-
-**Шаг 4. Выполните схему.** Откройте базу, вкладку `SQL`, вставьте скрипт [schema.sql](reports/v02/schema.sql) и нажмите `Go`. Скрипт создаёт десять таблиц в порядке от справочников к зависимым.
-
-<figure class="diagram">
-<img src="reports/screens/v02/06-schema-sql.png" alt="Скрипт схемы V02 во вкладке SQL">
-<figcaption>Скрипт схемы во вкладке SQL: база, кодировка и создание первой таблицы counterparty.</figcaption>
-</figure>
-
-Разбор ключевых решений схемы:
-
-- `counterparty.id` это `VARCHAR(32)`, потому что код `002000001` должен сохранить ведущие нули. Для изготовителя используется `V02-MAKER`.
-- `item.kind` принимает только `product`, `material` или `operation`. Проверка `CHECK` не даст записать опечатку.
-- `price` имеет составной ключ `(item_id, valid_from)`: у одного ресурса одна цена на дату, но история цен сохраняется.
-- `specification.product_id` объявлен `UNIQUE`: у изделия одна действующая спецификация, это связь один к одному.
-- `specification_component` имеет составной ключ `(specification_id, item_id)`: один ресурс входит в спецификацию один раз. Для материалов заполняется `qty`, для операций `time_norm`, а `qty` остаётся равным единице.
-- `customer_order` содержит два внешних ключа в `counterparty`: заказчик и исполнитель. Это разные роли одной таблицы.
-- `production_resource` хранит плановый расход, а не норматив на единицу. Плановые значения уже умножены на 40.
-
-**Шаг 5. Проверьте таблицы.** Обновите левую панель. В базе должно быть десять таблиц, все `InnoDB`, сравнение `utf8mb4_unicode_ci`. Проверить это можно запросом:
-
-```sql
-SELECT table_name, engine, table_collation
-FROM information_schema.tables
-WHERE table_schema = 'dkip2027_v02'
-ORDER BY table_name;
-```
-
-<figure class="diagram">
-<img src="reports/screens/v02/02-tables.png" alt="Список десяти таблиц базы dkip2027_v02">
-<figcaption>Список таблиц: десять объектов InnoDB, у каждой видно число строк. Служебных таблиц в базе нет.</figcaption>
-</figure>
-
-**Шаг 6. Загрузите заказчиков из JSON.** В файле `Заказчики.json` шесть записей. Поле `addres` переименовывается в `address`, `type` в `party_type`. Пустой ИНН допустим, поэтому `inn` имеет `DEFAULT ''`. Коды загружаются текстом, ведущие нули сохраняются.
-
-На стенде удобно выполнить [data.sql](reports/v02/data.sql): он содержит те же шесть записей и служебную запись изготовителя. При импорте через phpMyAdmin выберите таблицу `counterparty`, вкладку `Import`, формат CSV или SQL и проверьте кодировку `utf-8`. Не выбирайте базу целиком: CSV вставляется в таблицу, а не в базу.
-
-<figure class="diagram">
-<img src="reports/screens/v02/04-counterparty.png" alt="Таблица counterparty: шесть заказчиков и изготовитель, коды с ведущими нулями">
-<figcaption>Таблица counterparty: шесть заказчиков с кодами 002000001…002000006 и изготовитель V02-MAKER. Ведущие нули и кириллица сохранены.</figcaption>
-</figure>
-
-**Шаг 7. Загрузите заказ, спецификацию и цены.** Из Excel переносятся шапка заказа, строка заказа, шапка спецификации, пять строк состава и пять цен. Даты записываются в формате `2027-03-15`. Количество 40 хранится в строке заказа, нормы 0,32 и 0,08 в составе, часы 0,04 и 0,02 в поле `time_norm`.
-
-<figure class="diagram">
-<img src="reports/screens/v02/10-order.png" alt="Заказ V02-01: дата, срок, заказчик и изготовитель">
-<figcaption>Шапка заказа V02-01: дата 15.03.2027, срок 22.03.2027, заказчик 002000001, изготовитель V02-MAKER.</figcaption>
-</figure>
-
-<figure class="diagram">
-<img src="reports/screens/v02/11-spec-component.png" alt="Состав спецификации: материалы и операции с нормами и часами">
-<figcaption>Состав спецификации: у материалов заполнено qty, у операций time_norm. Нормы даны на одну буханку.</figcaption>
-</figure>
-
-**Шаг 8. Проверьте ключи.** Откройте `price`, вкладку `Structure`. Оба поля `item_id` и `valid_from` помечены ключом, ниже объявлен внешний ключ на `item.id`. Для `specification_component` проверьте составной ключ и два внешних ключа. Запрос к `information_schema` покажет все связи:
-
-```sql
-SELECT table_name, constraint_name, referenced_table_name
-FROM information_schema.KEY_COLUMN_USAGE
-WHERE table_schema = 'dkip2027_v02'
-  AND referenced_table_name IS NOT NULL
-ORDER BY table_name, constraint_name;
-```
-
-<figure class="diagram">
-<img src="reports/screens/v02/03-price-structure.png" alt="Структура price: составной первичный ключ item_id и valid_from">
-<figcaption>Структура price: item_id и valid_from образуют составной первичный ключ, amount хранится в DECIMAL(14,2).</figcaption>
-</figure>
-
-**Шаг 9. Сделайте выгрузку и восстановите её.** Откройте вкладку `Export`, выберите быстрый метод и формат SQL, нажмите `Export`. Получится файл [v02-export.sql](reports/v02/v02-export.sql). Создайте пустую базу `dkip2027_v02_restore`, откройте её вкладку `Import`, загрузите файл и выполните. Проверьте число таблиц и строк, а не только сообщение об успехе.
-
-<figure class="diagram">
-<img src="reports/screens/v02/08-export.png" alt="Экспорт базы dkip2027_v02 в SQL">
-<figcaption>Экспорт базы: быстрый метод, формат SQL, структура и данные всех десяти таблиц.</figcaption>
-</figure>
-
-<figure class="diagram">
-<img src="reports/screens/v02/09-restore.png" alt="Восстановленная база dkip2027_v02_restore: десять таблиц">
-<figcaption>Восстановленная база dkip2027_v02_restore: те же десять таблиц и то же число строк, что в исходной базе.</figcaption>
-</figure>
-
-### Задание 3. Нормативная стоимость заказа
-
-Стоимость считается по правилам варианта. Материалы: количество выпуска × норма расхода × цена. Операции: количество выпуска × часы × тариф за час. Цена берётся действующая на дату заказа, то есть последняя с `valid_from` не позже 15.03.2027. Промежуточные суммы не округляются, итог округляется до копеек.
-
-Запрос [cost-query.sql](reports/v02/cost-query.sql) состоит из трёх частей. `o` выбирает строку заказа V02-01. `p` находит последнюю цену каждого ресурса на дату заказа. `calc` соединяет заказ, спецификацию, состав, ресурс и цену и считает сумму строки. Внешний `SELECT` добавляет строку `Итого`.
-
-```sql
-WITH o AS (
-  SELECT co.id AS order_id, co.doc_date, col.product_id, col.qty
-  FROM customer_order co
-  JOIN customer_order_line col ON col.order_id = co.id
-  WHERE co.doc_no = 'V02-01'
-),
-p AS (
-  SELECT pr.item_id, pr.amount
-  FROM price pr
-  JOIN (
-    SELECT item_id, MAX(valid_from) AS vf
-    FROM price
-    WHERE valid_from <= (SELECT doc_date FROM o)
-    GROUP BY item_id
-  ) last ON last.item_id = pr.item_id AND last.vf = pr.valid_from
-),
-calc AS (
-  SELECT
-    CASE i.kind WHEN 'material' THEN 'Материал' ELSE 'Операция' END AS section,
-    i.name,
-    o.qty AS product_qty,
-    CASE i.kind WHEN 'material' THEN sc.qty ELSE sc.time_norm END AS norm,
-    p.amount AS price,
-    o.qty * CASE i.kind WHEN 'material' THEN sc.qty ELSE sc.time_norm END * p.amount AS amount
-  FROM o
-  JOIN specification s ON s.product_id = o.product_id
-  JOIN specification_component sc ON sc.specification_id = s.id
-  JOIN item i ON i.id = sc.item_id
-  JOIN p ON p.item_id = i.id
-)
-SELECT section, name, product_qty, norm, price, ROUND(amount, 2) AS amount
-FROM (
-  SELECT section, name, product_qty, norm, price, amount,
-         CASE section WHEN 'Материал' THEN 1 ELSE 2 END AS sort
-  FROM calc
-  UNION ALL
-  SELECT 'Итого', '', NULL, NULL, NULL, ROUND(SUM(amount), 2), 3
-  FROM calc
-) t
-ORDER BY sort, name;
-```
-
-<figure class="diagram">
-<img src="reports/screens/v02/07-cost-result.png" alt="Результат запроса стоимости V02-01: материалы, операции и итог 2672.00">
-<figcaption>Результат запроса: три материала, две операции и итог 2672.00. Строки не удвоены, цена взята одна.</figcaption>
-</figure>
-
-Проверка вручную:
-
-| Строка | Расчёт | Сумма |
-|---|---|---|
-| Мука ржаная | 40 × 0,32 × 65 | 832,00 |
-| Закваска | 40 × 0,08 × 100 | 320,00 |
-| Пакет | 40 × 1 × 4 | 160,00 |
-| Замес и формование | 40 × 0,04 × 500 | 800,00 |
-| Выпечка | 40 × 0,02 × 700 | 560,00 |
-| Материалы | 832 + 320 + 160 | 1312,00 |
-| Операции | 800 + 560 | 1360,00 |
-| Итого | 1312 + 1360 | 2672,00 |
-
-Если итог отличается, проверьте три места. Норма материалов должна быть 0,32 и 0,08, а не 12,8 и 3,2: плановый расход на 40 единиц хранится в `production_resource`, а в составе остаётся норма на одну буханку. Для операций используется `time_norm`, а `qty` равно единице. Цена должна быть одна, иначе соединение с `price` размножит строки.
-
-### Что сдать по варианту V02
-
-- ER-диаграмму в PDF и исходник схемы.
-- `schema.sql`, `data.sql`, `v02-export.sql` и запрос `cost-query.sql`.
-- Скриншоты списка таблиц, состава, заказчиков и результата запроса.
-- Короткий протокол: действие, команда, ожидаемый и фактический результат.
-
-<div class="files"><b class="label">Файлы варианта V02</b>
-<a href="reports/v02/er-v02.pdf">ER-диаграмма · PDF</a>
-<a href="reports/v02/schema.sql">Схема базы · SQL</a>
-<a href="reports/v02/data.sql">Данные варианта · SQL</a>
-<a href="reports/v02/cost-query.sql">Запрос стоимости · SQL</a>
-<a href="reports/v02/v02-export.sql">Выгрузка базы · SQL</a>
-</div>
