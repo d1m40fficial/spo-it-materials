@@ -527,6 +527,12 @@ html.modal-open { overflow: hidden; }
 :root[data-theme=dark] .quiz-actions button[data-answer]:hover, :root[data-theme=dark] .quiz-actions button.quiz-answer:hover { background: #262626; background-color: #262626; color: #fff; border-color: #262626; }
 :root[data-theme=dark] .gate-q { background: #1E1E1E; color: #FF6B00; }
 
+/* the whole-variant archive is the main action in a download block */
+.files a.zip { background: #121212; color: #fff; border-color: #121212; font-weight: 700; box-shadow: 4px 4px 0 rgba(0,0,0,.18); }
+.files a.zip::before { color: #fff; }
+.files a.zip:hover { background: #1D1D1D; color: #fff; border-color: #1D1D1D; box-shadow: 5px 5px 0 rgba(0,0,0,.22); }
+.files a.zip:active { transform: translate(2px,2px); box-shadow: 1px 1px 0 rgba(0,0,0,.12); }
+
 /* ---------- practical work checklist ---------- */
 .work-checklist { width: 100%; border-collapse: collapse; margin: 14px 0 4px; }
 .work-checklist th, .work-checklist td { border: 1px solid var(--rule); padding: 9px 10px; vertical-align: top; }
@@ -564,6 +570,24 @@ html.modal-open { overflow: hidden; }
 .variant-body .task-list { margin: 8px 0 0; padding-left: 20px; }
 .variant-body .task-list li { margin: 0 0 8px; }
 @media (max-width: 620px) { .variant-body { overflow-x: auto; } .variant-body table { min-width: 520px; } }
+
+/* ---------- schema slider: all CREATE TABLE examples ---------- */
+.schema-slider { margin: 18px 0 24px; border: 1px solid #d8d5cc; border-radius: 14px; background: #fff; color: #1a1916; overflow: hidden; }
+.schema-slider-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 14px; background: #f5f2ea; border-bottom: 1px solid #d8d5cc; }
+.schema-slider-bar strong { font: 700 14px/1.2 var(--font-display); color: #1a1916; }
+.schema-slider-actions { display: flex; align-items: center; gap: 8px; }
+.schema-slider-counter { min-width: 62px; text-align: center; font: 600 13px/1 var(--font-mono); color: #59544a; }
+.schema-btn { width: 34px; height: 34px; border: 1px solid #c9c4b8; border-radius: 8px; background: #fff; color: #1a1916; font: 700 18px/1 var(--font-mono); cursor: pointer; }
+.schema-btn:hover { background: #ece7dc; }
+.schema-track { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: thin; }
+.schema-slide { flex: 0 0 100%; min-width: 100%; box-sizing: border-box; padding: 16px 18px 18px; scroll-snap-align: start; }
+.schema-slide h4 { margin: 0 0 10px; font: 700 16px/1.3 var(--font-display); color: #1a1916; }
+.schema-slide h4 code, .schema-slide p code { color: #1a1916; background: #f1ede4; padding: 1px 4px; border-radius: 4px; }
+.schema-slide p { margin: 0 0 10px; font-size: 14px; line-height: 1.55; color: #3a372f; }
+.schema-slide pre { margin: 0; padding: 14px 16px; overflow-x: auto; border: 1px solid #ddd8cc; border-radius: 10px; background: #fbfaf6; color: #1a1916; font: 12.5px/1.5 var(--font-mono); }
+.schema-slide code { color: inherit; background: none; padding: 0; }
+.schema-slider:focus-within { outline: 2px solid #b9a97f; outline-offset: 2px; }
+@media (max-width: 620px) { .schema-slide { padding: 12px; } .schema-slider-bar { padding: 8px 10px; } }
 
 /* ---------- print / PDF export ---------- */
 @page { margin: 16mm; }
@@ -856,38 +880,38 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <p>Проверим это на учебной таблице остатков:</p>
 <div class="codehilite" data-lang="text"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">sqlite3</span>
 
-<span class="n">connection</span> <span class="o">=</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s2">&quot;:memory:&quot;</span><span class="p">)</span>
+<span class="n">connection</span> <span class="o">=</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s2">":memory:"</span><span class="p">)</span>
 <span class="n">connection</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
-    <span class="s2">&quot;CREATE TABLE stock (id INTEGER PRIMARY KEY, item TEXT, site TEXT, qty INTEGER)&quot;</span>
+    <span class="s2">"CREATE TABLE stock (id INTEGER PRIMARY KEY, item TEXT, site TEXT, qty INTEGER)"</span>
 <span class="p">)</span>
 <span class="n">connection</span><span class="o">.</span><span class="n">executemany</span><span class="p">(</span>
-    <span class="s2">&quot;INSERT INTO stock VALUES (?, ?, ?, ?)&quot;</span><span class="p">,</span>
+    <span class="s2">"INSERT INTO stock VALUES (?, ?, ?, ?)"</span><span class="p">,</span>
     <span class="p">[</span>
-        <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;Кабель UTP&quot;</span><span class="p">,</span> <span class="s2">&quot;Москва&quot;</span><span class="p">,</span> <span class="mi">120</span><span class="p">),</span>
-        <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="s2">&quot;Коробка 400&quot;</span><span class="p">,</span> <span class="s2">&quot;Тверь&quot;</span><span class="p">,</span> <span class="mi">80</span><span class="p">),</span>
-        <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="s2">&quot;Стрейч-плёнка&quot;</span><span class="p">,</span> <span class="s2">&quot;Тула&quot;</span><span class="p">,</span> <span class="mi">240</span><span class="p">),</span>
-        <span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="s2">&quot;Паллета&quot;</span><span class="p">,</span> <span class="s2">&quot;Калуга&quot;</span><span class="p">,</span> <span class="mi">60</span><span class="p">),</span>
+        <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s2">"Кабель UTP"</span><span class="p">,</span> <span class="s2">"Москва"</span><span class="p">,</span> <span class="mi">120</span><span class="p">),</span>
+        <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="s2">"Коробка 400"</span><span class="p">,</span> <span class="s2">"Тверь"</span><span class="p">,</span> <span class="mi">80</span><span class="p">),</span>
+        <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="s2">"Стрейч-плёнка"</span><span class="p">,</span> <span class="s2">"Тула"</span><span class="p">,</span> <span class="mi">240</span><span class="p">),</span>
+        <span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="s2">"Паллета"</span><span class="p">,</span> <span class="s2">"Калуга"</span><span class="p">,</span> <span class="mi">60</span><span class="p">),</span>
     <span class="p">],</span>
 <span class="p">)</span>
 
-<span class="n">user_input</span> <span class="o">=</span> <span class="s2">&quot;&#39; OR 1=1 --&quot;</span>
-<span class="n">query</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;SELECT id, item, site FROM stock WHERE item = &#39;</span><span class="si">{</span><span class="n">user_input</span><span class="si">}</span><span class="s2">&#39;&quot;</span>
+<span class="n">user_input</span> <span class="o">=</span> <span class="s2">"' OR 1=1 --"</span>
+<span class="n">query</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"SELECT id, item, site FROM stock WHERE item = '</span><span class="si">{</span><span class="n">user_input</span><span class="si">}</span><span class="s2">'"</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;запрос:&quot;</span><span class="p">,</span> <span class="n">query</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;склейка:&quot;</span><span class="p">,</span> <span class="n">connection</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">query</span><span class="p">)</span><span class="o">.</span><span class="n">fetchall</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"запрос:"</span><span class="p">,</span> <span class="n">query</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"склейка:"</span><span class="p">,</span> <span class="n">connection</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">query</span><span class="p">)</span><span class="o">.</span><span class="n">fetchall</span><span class="p">())</span>
 
 <span class="n">safe</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
-    <span class="s2">&quot;SELECT id, item, site FROM stock WHERE item = ?&quot;</span><span class="p">,</span> <span class="p">(</span><span class="n">user_input</span><span class="p">,)</span>
+    <span class="s2">"SELECT id, item, site FROM stock WHERE item = ?"</span><span class="p">,</span> <span class="p">(</span><span class="n">user_input</span><span class="p">,)</span>
 <span class="p">)</span><span class="o">.</span><span class="n">fetchall</span><span class="p">()</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;параметр:&quot;</span><span class="p">,</span> <span class="n">safe</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"параметр:"</span><span class="p">,</span> <span class="n">safe</span><span class="p">)</span>
 
-<span class="n">count</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;SELECT COUNT(*) FROM stock&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">fetchone</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;всего строк в таблице:&quot;</span><span class="p">,</span> <span class="n">count</span><span class="p">)</span>
+<span class="n">count</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">"SELECT COUNT(*) FROM stock"</span><span class="p">)</span><span class="o">.</span><span class="n">fetchone</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"всего строк в таблице:"</span><span class="p">,</span> <span class="n">count</span><span class="p">)</span>
 </code></pre></div>
 
 <p>Вывод:</p>
-<div class="codehilite" data-lang="text"><pre><span></span><code>запрос: SELECT id, item, site FROM stock WHERE item = &#39;&#39; OR 1=1 --&#39;
-склейка: [(1, &#39;Кабель UTP&#39;, &#39;Москва&#39;), (2, &#39;Коробка 400&#39;, &#39;Тверь&#39;), (3, &#39;Стрейч-плёнка&#39;, &#39;Тула&#39;), (4, &#39;Паллета&#39;, &#39;Калуга&#39;)]
+<div class="codehilite" data-lang="text"><pre><span></span><code>запрос: SELECT id, item, site FROM stock WHERE item = '' OR 1=1 --'
+склейка: [(1, 'Кабель UTP', 'Москва'), (2, 'Коробка 400', 'Тверь'), (3, 'Стрейч-плёнка', 'Тула'), (4, 'Паллета', 'Калуга')]
 параметр: []
 всего строк в таблице: 4
 </code></pre></div>
@@ -898,15 +922,15 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <p>Проверка ввода остаётся полезной, но как второй слой. Она отсекает заведомо неверные значения, ограничивает длину и формат, помогает вернуть понятную ошибку. Заменить параметры проверкой она не может: любая проверка опирается на список запрещённых символов, а список всегда неполон.</p>
 <p>Ущерб от неудачной инъекции ограничивают права учётной записи базы. Если приложение подключается пользователем с правом читать только свои таблицы, <code>UNION</code> не откроет таблицу пользователей. Если у него права администратора, одна ошибка в запросе открывает всю базу. Поэтому минимальные права это не формальность, а последний рубеж.</p>
 <p>В C# опасный вариант выглядит так же, как в Python, только с интерполяцией строки:</p>
-<div class="codehilite" data-lang="text"><pre><span></span><code><span class="kt">var</span><span class="w"> </span><span class="n">search</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Console</span><span class="p">.</span><span class="n">ReadLine</span><span class="p">()</span><span class="w"> </span><span class="o">??</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="p">;</span>
-<span class="kt">var</span><span class="w"> </span><span class="n">sql</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">$&quot;SELECT id, item, site FROM stock WHERE item = &#39;{search}&#39;&quot;</span><span class="p">;</span>
+<div class="codehilite" data-lang="text"><pre><span></span><code><span class="kt">var</span><span class="w"> </span><span class="n">search</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Console</span><span class="p">.</span><span class="n">ReadLine</span><span class="p">()</span><span class="w"> </span><span class="o">??</span><span class="w"> </span><span class="s">""</span><span class="p">;</span>
+<span class="kt">var</span><span class="w"> </span><span class="n">sql</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">$"SELECT id, item, site FROM stock WHERE item = '{search}'"</span><span class="p">;</span>
 <span class="k">using</span><span class="w"> </span><span class="nn">var</span><span class="w"> </span><span class="n">bad</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">SqliteCommand</span><span class="p">(</span><span class="n">sql</span><span class="p">,</span><span class="w"> </span><span class="n">connection</span><span class="p">);</span>
 </code></pre></div>
 
 <p>Исправленный вариант использует параметр:</p>
-<div class="codehilite" data-lang="text"><pre><span></span><code><span class="kt">var</span><span class="w"> </span><span class="n">sql</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;SELECT id, item, site FROM stock WHERE item = $search&quot;</span><span class="p">;</span>
+<div class="codehilite" data-lang="text"><pre><span></span><code><span class="kt">var</span><span class="w"> </span><span class="n">sql</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"SELECT id, item, site FROM stock WHERE item = $search"</span><span class="p">;</span>
 <span class="k">using</span><span class="w"> </span><span class="nn">var</span><span class="w"> </span><span class="n">command</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">SqliteCommand</span><span class="p">(</span><span class="n">sql</span><span class="p">,</span><span class="w"> </span><span class="n">connection</span><span class="p">);</span>
-<span class="n">command</span><span class="p">.</span><span class="n">Parameters</span><span class="p">.</span><span class="n">AddWithValue</span><span class="p">(</span><span class="s">&quot;$search&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">search</span><span class="p">);</span>
+<span class="n">command</span><span class="p">.</span><span class="n">Parameters</span><span class="p">.</span><span class="n">AddWithValue</span><span class="p">(</span><span class="s">"$search"</span><span class="p">,</span><span class="w"> </span><span class="n">search</span><span class="p">);</span>
 </code></pre></div>
 
 <p>Правило простое: <strong>любое значение, пришедшее от клиента, передаётся параметром, а не вставляется в текст запроса.</strong> Это касается не только поиска, но и фильтров, сортировки, имени таблицы и номера страницы.</p>
@@ -959,11 +983,11 @@ Jwt__Key=...
 <p>В Python тот же принцип:</p>
 <div class="codehilite" data-lang="text"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
 
-<span class="n">dsn</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;SKLAD_DSN&quot;</span><span class="p">)</span>
+<span class="n">dsn</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"SKLAD_DSN"</span><span class="p">)</span>
 <span class="k">if</span> <span class="ow">not</span> <span class="n">dsn</span><span class="p">:</span>
-    <span class="k">raise</span> <span class="ne">SystemExit</span><span class="p">(</span><span class="s2">&quot;Не задана переменная SKLAD_DSN&quot;</span><span class="p">)</span>
+    <span class="k">raise</span> <span class="ne">SystemExit</span><span class="p">(</span><span class="s2">"Не задана переменная SKLAD_DSN"</span><span class="p">)</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;строка подключения получена, длина:&quot;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">dsn</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"строка подключения получена, длина:"</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">dsn</span><span class="p">))</span>
 </code></pre></div>
 
 <p>Приложение не печатает саму строку, а сообщает только, что настройка есть. Если переменная не задана, оно останавливается с понятным сообщением, а не подставляет пароль по умолчанию.</p>
@@ -1227,6 +1251,40 @@ Jwt__Key=...
       var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
       window.scrollTo({top: 0, behavior: reduce ? 'auto' : 'smooth'});
     });
+  });
+})();
+
+(function(){
+  document.querySelectorAll('[data-slider]').forEach(function(slider){
+    var track = slider.querySelector('[data-slider-track]');
+    var slides = track ? Array.prototype.slice.call(track.children) : [];
+    var counter = slider.querySelector('[data-slider-counter]');
+    var prev = slider.querySelector('[data-slider-prev]');
+    var next = slider.querySelector('[data-slider-next]');
+    if(!track || slides.length < 2) return;
+    function current(){
+      var best = 0, dist = Infinity;
+      slides.forEach(function(slide, i){
+        var d = Math.abs(slide.offsetLeft - track.scrollLeft);
+        if(d < dist){ dist = d; best = i; }
+      });
+      return best;
+    }
+    function update(){
+      if(counter) counter.textContent = (current() + 1) + ' / ' + slides.length;
+    }
+    function go(delta){
+      var i = Math.max(0, Math.min(slides.length - 1, current() + delta));
+      var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      track.scrollTo({left: slides[i].offsetLeft, behavior: reduce ? 'auto' : 'smooth'});
+    }
+    if(prev) prev.addEventListener('click', function(){ go(-1); });
+    if(next) next.addEventListener('click', function(){ go(1); });
+    track.addEventListener('scroll', function(){
+      clearTimeout(track._sliderTimer);
+      track._sliderTimer = setTimeout(update, 80);
+    }, {passive: true});
+    update();
   });
 })();
 (function(){

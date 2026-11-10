@@ -527,6 +527,12 @@ html.modal-open { overflow: hidden; }
 :root[data-theme=dark] .quiz-actions button[data-answer]:hover, :root[data-theme=dark] .quiz-actions button.quiz-answer:hover { background: #262626; background-color: #262626; color: #fff; border-color: #262626; }
 :root[data-theme=dark] .gate-q { background: #1E1E1E; color: #FF6B00; }
 
+/* the whole-variant archive is the main action in a download block */
+.files a.zip { background: #121212; color: #fff; border-color: #121212; font-weight: 700; box-shadow: 4px 4px 0 rgba(0,0,0,.18); }
+.files a.zip::before { color: #fff; }
+.files a.zip:hover { background: #1D1D1D; color: #fff; border-color: #1D1D1D; box-shadow: 5px 5px 0 rgba(0,0,0,.22); }
+.files a.zip:active { transform: translate(2px,2px); box-shadow: 1px 1px 0 rgba(0,0,0,.12); }
+
 /* ---------- practical work checklist ---------- */
 .work-checklist { width: 100%; border-collapse: collapse; margin: 14px 0 4px; }
 .work-checklist th, .work-checklist td { border: 1px solid var(--rule); padding: 9px 10px; vertical-align: top; }
@@ -564,6 +570,24 @@ html.modal-open { overflow: hidden; }
 .variant-body .task-list { margin: 8px 0 0; padding-left: 20px; }
 .variant-body .task-list li { margin: 0 0 8px; }
 @media (max-width: 620px) { .variant-body { overflow-x: auto; } .variant-body table { min-width: 520px; } }
+
+/* ---------- schema slider: all CREATE TABLE examples ---------- */
+.schema-slider { margin: 18px 0 24px; border: 1px solid #d8d5cc; border-radius: 14px; background: #fff; color: #1a1916; overflow: hidden; }
+.schema-slider-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 14px; background: #f5f2ea; border-bottom: 1px solid #d8d5cc; }
+.schema-slider-bar strong { font: 700 14px/1.2 var(--font-display); color: #1a1916; }
+.schema-slider-actions { display: flex; align-items: center; gap: 8px; }
+.schema-slider-counter { min-width: 62px; text-align: center; font: 600 13px/1 var(--font-mono); color: #59544a; }
+.schema-btn { width: 34px; height: 34px; border: 1px solid #c9c4b8; border-radius: 8px; background: #fff; color: #1a1916; font: 700 18px/1 var(--font-mono); cursor: pointer; }
+.schema-btn:hover { background: #ece7dc; }
+.schema-track { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: thin; }
+.schema-slide { flex: 0 0 100%; min-width: 100%; box-sizing: border-box; padding: 16px 18px 18px; scroll-snap-align: start; }
+.schema-slide h4 { margin: 0 0 10px; font: 700 16px/1.3 var(--font-display); color: #1a1916; }
+.schema-slide h4 code, .schema-slide p code { color: #1a1916; background: #f1ede4; padding: 1px 4px; border-radius: 4px; }
+.schema-slide p { margin: 0 0 10px; font-size: 14px; line-height: 1.55; color: #3a372f; }
+.schema-slide pre { margin: 0; padding: 14px 16px; overflow-x: auto; border: 1px solid #ddd8cc; border-radius: 10px; background: #fbfaf6; color: #1a1916; font: 12.5px/1.5 var(--font-mono); }
+.schema-slide code { color: inherit; background: none; padding: 0; }
+.schema-slider:focus-within { outline: 2px solid #b9a97f; outline-offset: 2px; }
+@media (max-width: 620px) { .schema-slide { padding: 12px; } .schema-slider-bar { padding: 8px 10px; } }
 
 /* ---------- print / PDF export ---------- */
 @page { margin: 16mm; }
@@ -933,7 +957,7 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <span class="w">  </span><span class="n">order_number</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">32</span><span class="p">)</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span>
 <span class="w">  </span><span class="n">city</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">60</span><span class="p">)</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span>
 <span class="w">  </span><span class="n">weight_kg</span><span class="w"> </span><span class="nb">DECIMAL</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span>
-<span class="w">  </span><span class="n">status</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="s1">&#39;new&#39;</span><span class="p">,</span>
+<span class="w">  </span><span class="n">status</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="s1">'new'</span><span class="p">,</span>
 <span class="w">  </span><span class="n">track_id</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">40</span><span class="p">)</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span>
 <span class="w">  </span><span class="n">created_at</span><span class="w"> </span><span class="n">DATETIME</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span>
 <span class="w">  </span><span class="k">UNIQUE</span><span class="w"> </span><span class="k">KEY</span><span class="w"> </span><span class="n">uq_shipment_number</span><span class="w"> </span><span class="p">(</span><span class="n">shipment_number</span><span class="p">)</span>
@@ -959,25 +983,25 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 
 <span class="k">class</span><span class="w"> </span><span class="nc">Handler</span><span class="p">(</span><span class="n">BaseHTTPRequestHandler</span><span class="p">):</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">do_POST</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="s2">&quot;fail.flag&quot;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="s2">"fail.flag"</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">send_response</span><span class="p">(</span><span class="mi">503</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">end_headers</span><span class="p">()</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">wfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;{&quot;error&quot;:&quot;service unavailable&quot;}&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">wfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">'{"error":"service unavailable"}'</span><span class="p">)</span>
             <span class="k">return</span>
-        <span class="n">length</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;Content-Length&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
-        <span class="n">body</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rfile</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">length</span><span class="p">)</span> <span class="ow">or</span> <span class="sa">b</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">body</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;shipment_number&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">body</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;city&quot;</span><span class="p">):</span>
+        <span class="n">length</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"Content-Length"</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+        <span class="n">body</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rfile</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">length</span><span class="p">)</span> <span class="ow">or</span> <span class="sa">b</span><span class="s2">"</span><span class="si">{}</span><span class="s2">"</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">body</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"shipment_number"</span><span class="p">)</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">body</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"city"</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">send_response</span><span class="p">(</span><span class="mi">422</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">end_headers</span><span class="p">()</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">wfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;{&quot;error&quot;:&quot;shipment_number and city required&quot;}&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">wfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">'{"error":"shipment_number and city required"}'</span><span class="p">)</span>
             <span class="k">return</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">send_response</span><span class="p">(</span><span class="mi">201</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">send_header</span><span class="p">(</span><span class="s2">&quot;Content-Type&quot;</span><span class="p">,</span> <span class="s2">&quot;application/json&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">send_header</span><span class="p">(</span><span class="s2">"Content-Type"</span><span class="p">,</span> <span class="s2">"application/json"</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">end_headers</span><span class="p">()</span>
-        <span class="n">track</span> <span class="o">=</span> <span class="s2">&quot;TRK-&quot;</span> <span class="o">+</span> <span class="n">body</span><span class="p">[</span><span class="s2">&quot;shipment_number&quot;</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">wfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">({</span><span class="s2">&quot;track_id&quot;</span><span class="p">:</span> <span class="n">track</span><span class="p">})</span><span class="o">.</span><span class="n">encode</span><span class="p">())</span>
+        <span class="n">track</span> <span class="o">=</span> <span class="s2">"TRK-"</span> <span class="o">+</span> <span class="n">body</span><span class="p">[</span><span class="s2">"shipment_number"</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">wfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">({</span><span class="s2">"track_id"</span><span class="p">:</span> <span class="n">track</span><span class="p">})</span><span class="o">.</span><span class="n">encode</span><span class="p">())</span>
 
-<span class="n">HTTPServer</span><span class="p">((</span><span class="s2">&quot;127.0.0.1&quot;</span><span class="p">,</span> <span class="mi">8081</span><span class="p">),</span> <span class="n">Handler</span><span class="p">)</span><span class="o">.</span><span class="n">serve_forever</span><span class="p">()</span>
+<span class="n">HTTPServer</span><span class="p">((</span><span class="s2">"127.0.0.1"</span><span class="p">,</span> <span class="mi">8081</span><span class="p">),</span> <span class="n">Handler</span><span class="p">)</span><span class="o">.</span><span class="n">serve_forever</span><span class="p">()</span>
 </code></pre></div>
 
 <p>Запустите сервис в отдельном окне терминала и проверьте его в Postman запросом <code>POST http://127.0.0.1:8081/api/shipments</code> с телом JSON. Ответ <code>201</code> означает, что стенд готов.</p>
@@ -985,36 +1009,36 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <p>Создайте <code>send_shipment.py</code>. Скрипт отправляет отгрузку, повторяет только временные ошибки и пишет каждую попытку в <code>exchange_log.csv</code>.</p>
 <div class="codehilite" data-lang="python"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">csv</span><span class="o">,</span><span class="w"> </span><span class="nn">json</span><span class="o">,</span><span class="w"> </span><span class="nn">os</span><span class="o">,</span><span class="w"> </span><span class="nn">time</span><span class="o">,</span><span class="w"> </span><span class="nn">urllib.request</span><span class="o">,</span><span class="w"> </span><span class="nn">urllib.error</span>
 
-<span class="n">URL</span> <span class="o">=</span> <span class="s2">&quot;http://127.0.0.1:8081/api/shipments&quot;</span>
+<span class="n">URL</span> <span class="o">=</span> <span class="s2">"http://127.0.0.1:8081/api/shipments"</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">send</span><span class="p">(</span><span class="n">payload</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">5</span><span class="p">):</span>
     <span class="n">req</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">Request</span><span class="p">(</span>
-        <span class="n">URL</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">payload</span><span class="p">,</span> <span class="n">ensure_ascii</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">),</span>
-        <span class="n">method</span><span class="o">=</span><span class="s2">&quot;POST&quot;</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;Content-Type&quot;</span><span class="p">:</span> <span class="s2">&quot;application/json&quot;</span><span class="p">,</span>
-                                <span class="s2">&quot;Idempotency-Key&quot;</span><span class="p">:</span> <span class="n">payload</span><span class="p">[</span><span class="s2">&quot;shipment_number&quot;</span><span class="p">]})</span>
+        <span class="n">URL</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">payload</span><span class="p">,</span> <span class="n">ensure_ascii</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">"utf-8"</span><span class="p">),</span>
+        <span class="n">method</span><span class="o">=</span><span class="s2">"POST"</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="s2">"Content-Type"</span><span class="p">:</span> <span class="s2">"application/json"</span><span class="p">,</span>
+                                <span class="s2">"Idempotency-Key"</span><span class="p">:</span> <span class="n">payload</span><span class="p">[</span><span class="s2">"shipment_number"</span><span class="p">]})</span>
     <span class="n">started</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="k">with</span> <span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span><span class="n">req</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="n">timeout</span><span class="p">)</span> <span class="k">as</span> <span class="n">r</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">r</span><span class="o">.</span><span class="n">status</span><span class="p">,</span> <span class="n">r</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">),</span> <span class="nb">int</span><span class="p">((</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">started</span><span class="p">)</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">r</span><span class="o">.</span><span class="n">status</span><span class="p">,</span> <span class="n">r</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">"utf-8"</span><span class="p">),</span> <span class="nb">int</span><span class="p">((</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">started</span><span class="p">)</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">)</span>
     <span class="k">except</span> <span class="n">urllib</span><span class="o">.</span><span class="n">error</span><span class="o">.</span><span class="n">HTTPError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">e</span><span class="o">.</span><span class="n">code</span><span class="p">,</span> <span class="n">e</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">),</span> <span class="nb">int</span><span class="p">((</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">started</span><span class="p">)</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">e</span><span class="o">.</span><span class="n">code</span><span class="p">,</span> <span class="n">e</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">"utf-8"</span><span class="p">),</span> <span class="nb">int</span><span class="p">((</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">started</span><span class="p">)</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">)</span>
     <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
         <span class="k">return</span> <span class="mi">0</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">),</span> <span class="nb">int</span><span class="p">((</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">started</span><span class="p">)</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">)</span>
 
-<span class="n">payload</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;shipment_number&quot;</span><span class="p">:</span> <span class="s2">&quot;SH-2026-0451&quot;</span><span class="p">,</span> <span class="s2">&quot;order_number&quot;</span><span class="p">:</span> <span class="s2">&quot;SO-2026-10417&quot;</span><span class="p">,</span>
-           <span class="s2">&quot;city&quot;</span><span class="p">:</span> <span class="s2">&quot;Тверь&quot;</span><span class="p">,</span> <span class="s2">&quot;weight_kg&quot;</span><span class="p">:</span> <span class="mf">120.5</span><span class="p">}</span>
+<span class="n">payload</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"shipment_number"</span><span class="p">:</span> <span class="s2">"SH-2026-0451"</span><span class="p">,</span> <span class="s2">"order_number"</span><span class="p">:</span> <span class="s2">"SO-2026-10417"</span><span class="p">,</span>
+           <span class="s2">"city"</span><span class="p">:</span> <span class="s2">"Тверь"</span><span class="p">,</span> <span class="s2">"weight_kg"</span><span class="p">:</span> <span class="mf">120.5</span><span class="p">}</span>
 <span class="k">for</span> <span class="n">attempt</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">):</span>
     <span class="n">code</span><span class="p">,</span> <span class="n">body</span><span class="p">,</span> <span class="n">ms</span> <span class="o">=</span> <span class="n">send</span><span class="p">(</span><span class="n">payload</span><span class="p">)</span>
-    <span class="n">result</span> <span class="o">=</span> <span class="s2">&quot;sent&quot;</span> <span class="k">if</span> <span class="n">code</span> <span class="o">==</span> <span class="mi">201</span> <span class="k">else</span> <span class="p">(</span><span class="s2">&quot;pending&quot;</span> <span class="k">if</span> <span class="n">code</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">code</span> <span class="o">&gt;=</span> <span class="mi">500</span> <span class="k">else</span> <span class="s2">&quot;rejected&quot;</span><span class="p">)</span>
-    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;exchange_log.csv&quot;</span><span class="p">,</span> <span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">,</span> <span class="n">newline</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-        <span class="n">writer</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">writer</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s2">&quot;;&quot;</span><span class="p">)</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="s2">"sent"</span> <span class="k">if</span> <span class="n">code</span> <span class="o">==</span> <span class="mi">201</span> <span class="k">else</span> <span class="p">(</span><span class="s2">"pending"</span> <span class="k">if</span> <span class="n">code</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">code</span> <span class="o">&gt;=</span> <span class="mi">500</span> <span class="k">else</span> <span class="s2">"rejected"</span><span class="p">)</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">"exchange_log.csv"</span><span class="p">,</span> <span class="s2">"a"</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">,</span> <span class="n">newline</span><span class="o">=</span><span class="s2">""</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">writer</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">writer</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s2">";"</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">f</span><span class="o">.</span><span class="n">tell</span><span class="p">()</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">writer</span><span class="o">.</span><span class="n">writerow</span><span class="p">([</span><span class="s2">&quot;created_at&quot;</span><span class="p">,</span> <span class="s2">&quot;shipment_number&quot;</span><span class="p">,</span> <span class="s2">&quot;attempt&quot;</span><span class="p">,</span> <span class="s2">&quot;http_code&quot;</span><span class="p">,</span>
-                             <span class="s2">&quot;duration_ms&quot;</span><span class="p">,</span> <span class="s2">&quot;result&quot;</span><span class="p">,</span> <span class="s2">&quot;message&quot;</span><span class="p">])</span>
+            <span class="n">writer</span><span class="o">.</span><span class="n">writerow</span><span class="p">([</span><span class="s2">"created_at"</span><span class="p">,</span> <span class="s2">"shipment_number"</span><span class="p">,</span> <span class="s2">"attempt"</span><span class="p">,</span> <span class="s2">"http_code"</span><span class="p">,</span>
+                             <span class="s2">"duration_ms"</span><span class="p">,</span> <span class="s2">"result"</span><span class="p">,</span> <span class="s2">"message"</span><span class="p">])</span>
         <span class="n">writer</span><span class="o">.</span><span class="n">writerow</span><span class="p">(</span>
-            <span class="p">[</span><span class="n">time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2"> %H:%M:%S&quot;</span><span class="p">),</span> <span class="n">payload</span><span class="p">[</span><span class="s2">&quot;shipment_number&quot;</span><span class="p">],</span> <span class="n">attempt</span><span class="p">,</span> <span class="n">code</span><span class="p">,</span> <span class="n">ms</span><span class="p">,</span> <span class="n">result</span><span class="p">,</span> <span class="n">body</span><span class="p">])</span>
+            <span class="p">[</span><span class="n">time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">"%Y-%m-</span><span class="si">%d</span><span class="s2"> %H:%M:%S"</span><span class="p">),</span> <span class="n">payload</span><span class="p">[</span><span class="s2">"shipment_number"</span><span class="p">],</span> <span class="n">attempt</span><span class="p">,</span> <span class="n">code</span><span class="p">,</span> <span class="n">ms</span><span class="p">,</span> <span class="n">result</span><span class="p">,</span> <span class="n">body</span><span class="p">])</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">attempt</span><span class="p">,</span> <span class="n">code</span><span class="p">,</span> <span class="n">ms</span><span class="p">,</span> <span class="n">body</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">result</span> <span class="o">!=</span> <span class="s2">&quot;pending&quot;</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">result</span> <span class="o">!=</span> <span class="s2">"pending"</span><span class="p">:</span>
         <span class="k">break</span>
     <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">2</span> <span class="o">**</span> <span class="p">(</span><span class="n">attempt</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span>
 </code></pre></div>
@@ -1022,15 +1046,15 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <p>Повтор срабатывает только при коде <code>0</code> и ошибках <code>5xx</code>. Ответ <code>422</code> означает ошибку данных, его не повторяют. Пауза удваивается: одна секунда, две, четыре.</p>
 <h3>Шаг 6. Проведите успешный тест</h3>
 <p>При выключенном <code>fail.flag</code> запустите скрипт. Ожидается код <code>201</code>, номер трека <code>TRK-SH-2026-0451</code> и одна строка в журнале со статусом <code>sent</code>. Занесите результат в протокол.</p>
-<div class="codehilite" data-lang="sql"><pre><span></span><code><span class="k">UPDATE</span><span class="w"> </span><span class="n">shipments</span><span class="w"> </span><span class="k">SET</span><span class="w"> </span><span class="n">status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;sent&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">track_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;TRK-SH-2026-0451&#39;</span>
-<span class="k">WHERE</span><span class="w"> </span><span class="n">shipment_number</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;SH-2026-0451&#39;</span><span class="p">;</span>
+<div class="codehilite" data-lang="sql"><pre><span></span><code><span class="k">UPDATE</span><span class="w"> </span><span class="n">shipments</span><span class="w"> </span><span class="k">SET</span><span class="w"> </span><span class="n">status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'sent'</span><span class="p">,</span><span class="w"> </span><span class="n">track_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'TRK-SH-2026-0451'</span>
+<span class="k">WHERE</span><span class="w"> </span><span class="n">shipment_number</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'SH-2026-0451'</span><span class="p">;</span>
 </code></pre></div>
 
 <p>Проверьте, что в <code>shipments</code> отгрузка имеет статус <code>sent</code> и заполнен <code>track_id</code>.</p>
 <p>Статус <code>sent</code> ставится только после ответа <code>201</code>. Если записать его до отправки, при отказе сервиса отгрузка будет выглядеть переданной, хотя трека нет. Порядок такой: сначала успешный ответ, потом смена статуса и запись трека.</p>
 <h3>Шаг 7. Проверьте отказ сервиса</h3>
 <p>Создайте файл <code>fail.flag</code> в папке, откуда запущен сервис, и запустите скрипт снова. Сервис отвечает <code>503</code>, скрипт делает три попытки и пишет в журнал статус <code>pending</code>. В журнале три строки с кодами <code>503</code> и растущими паузами. В таблице отгрузок поставьте ожидающий статус.</p>
-<div class="codehilite" data-lang="sql"><pre><span></span><code><span class="k">UPDATE</span><span class="w"> </span><span class="n">shipments</span><span class="w"> </span><span class="k">SET</span><span class="w"> </span><span class="n">status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;pending&#39;</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">shipment_number</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;SH-2026-0451&#39;</span><span class="p">;</span>
+<div class="codehilite" data-lang="sql"><pre><span></span><code><span class="k">UPDATE</span><span class="w"> </span><span class="n">shipments</span><span class="w"> </span><span class="k">SET</span><span class="w"> </span><span class="n">status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'pending'</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">shipment_number</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'SH-2026-0451'</span><span class="p">;</span>
 </code></pre></div>
 
 <p>Удалите <code>fail.flag</code>, повторите запуск и снова выполните <code>UPDATE</code> из шага 6. Отгрузка переходит в <code>sent</code>. Это и есть восстановление после временного отказа: данные не потеряны, повтор безопасен благодаря ключу.</p>
@@ -1041,7 +1065,7 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <h3>Шаг 9. Проверьте повтор и замерьте время</h3>
 <p>Отправьте <code>SH-2026-0451</code> ещё раз с тем же ключом. Сервис вернёт тот же номер трека, а в журнале появится вторая успешная попытка. Проверьте, что в таблице отгрузок осталась одна строка.</p>
 <div class="codehilite" data-lang="sql"><pre><span></span><code><span class="k">SELECT</span><span class="w"> </span><span class="n">shipment_number</span><span class="p">,</span><span class="w"> </span><span class="k">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">copies</span>
-<span class="k">FROM</span><span class="w"> </span><span class="n">shipments</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">shipment_number</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;SH-2026-0451&#39;</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">shipments</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">shipment_number</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'SH-2026-0451'</span>
 <span class="k">GROUP</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">shipment_number</span><span class="p">;</span>
 </code></pre></div>
 
@@ -1051,7 +1075,7 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <span class="w">       </span><span class="n">ROUND</span><span class="p">(</span><span class="k">AVG</span><span class="p">(</span><span class="n">duration_ms</span><span class="p">))</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">avg_ms</span><span class="p">,</span>
 <span class="w">       </span><span class="k">MAX</span><span class="p">(</span><span class="n">duration_ms</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">max_ms</span>
 <span class="k">FROM</span><span class="w"> </span><span class="n">exchange_log</span>
-<span class="k">WHERE</span><span class="w"> </span><span class="n">shipment_number</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;SH-2026-0452&#39;</span><span class="p">;</span>
+<span class="k">WHERE</span><span class="w"> </span><span class="n">shipment_number</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'SH-2026-0452'</span><span class="p">;</span>
 </code></pre></div>
 
 <p>Результат такой запрос даёт одной строкой: <code>attempts</code> это число попыток, <code>avg_ms</code> среднее время в миллисекундах, <code>max_ms</code> худшее время. Например, три попытки со значениями 28, 39 и 56 дают <code>attempts = 3</code>, <code>avg_ms = 41</code>, <code>max_ms = 56</code>.</p>
@@ -1281,6 +1305,40 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
       var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
       window.scrollTo({top: 0, behavior: reduce ? 'auto' : 'smooth'});
     });
+  });
+})();
+
+(function(){
+  document.querySelectorAll('[data-slider]').forEach(function(slider){
+    var track = slider.querySelector('[data-slider-track]');
+    var slides = track ? Array.prototype.slice.call(track.children) : [];
+    var counter = slider.querySelector('[data-slider-counter]');
+    var prev = slider.querySelector('[data-slider-prev]');
+    var next = slider.querySelector('[data-slider-next]');
+    if(!track || slides.length < 2) return;
+    function current(){
+      var best = 0, dist = Infinity;
+      slides.forEach(function(slide, i){
+        var d = Math.abs(slide.offsetLeft - track.scrollLeft);
+        if(d < dist){ dist = d; best = i; }
+      });
+      return best;
+    }
+    function update(){
+      if(counter) counter.textContent = (current() + 1) + ' / ' + slides.length;
+    }
+    function go(delta){
+      var i = Math.max(0, Math.min(slides.length - 1, current() + delta));
+      var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      track.scrollTo({left: slides[i].offsetLeft, behavior: reduce ? 'auto' : 'smooth'});
+    }
+    if(prev) prev.addEventListener('click', function(){ go(-1); });
+    if(next) next.addEventListener('click', function(){ go(1); });
+    track.addEventListener('scroll', function(){
+      clearTimeout(track._sliderTimer);
+      track._sliderTimer = setTimeout(update, 80);
+    }, {passive: true});
+    update();
   });
 })();
 (function(){

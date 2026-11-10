@@ -571,6 +571,24 @@ html.modal-open { overflow: hidden; }
 .variant-body .task-list li { margin: 0 0 8px; }
 @media (max-width: 620px) { .variant-body { overflow-x: auto; } .variant-body table { min-width: 520px; } }
 
+/* ---------- schema slider: all CREATE TABLE examples ---------- */
+.schema-slider { margin: 18px 0 24px; border: 1px solid #d8d5cc; border-radius: 14px; background: #fff; color: #1a1916; overflow: hidden; }
+.schema-slider-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 14px; background: #f5f2ea; border-bottom: 1px solid #d8d5cc; }
+.schema-slider-bar strong { font: 700 14px/1.2 var(--font-display); color: #1a1916; }
+.schema-slider-actions { display: flex; align-items: center; gap: 8px; }
+.schema-slider-counter { min-width: 62px; text-align: center; font: 600 13px/1 var(--font-mono); color: #59544a; }
+.schema-btn { width: 34px; height: 34px; border: 1px solid #c9c4b8; border-radius: 8px; background: #fff; color: #1a1916; font: 700 18px/1 var(--font-mono); cursor: pointer; }
+.schema-btn:hover { background: #ece7dc; }
+.schema-track { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: thin; }
+.schema-slide { flex: 0 0 100%; min-width: 100%; box-sizing: border-box; padding: 16px 18px 18px; scroll-snap-align: start; }
+.schema-slide h4 { margin: 0 0 10px; font: 700 16px/1.3 var(--font-display); color: #1a1916; }
+.schema-slide h4 code, .schema-slide p code { color: #1a1916; background: #f1ede4; padding: 1px 4px; border-radius: 4px; }
+.schema-slide p { margin: 0 0 10px; font-size: 14px; line-height: 1.55; color: #3a372f; }
+.schema-slide pre { margin: 0; padding: 14px 16px; overflow-x: auto; border: 1px solid #ddd8cc; border-radius: 10px; background: #fbfaf6; color: #1a1916; font: 12.5px/1.5 var(--font-mono); }
+.schema-slide code { color: inherit; background: none; padding: 0; }
+.schema-slider:focus-within { outline: 2px solid #b9a97f; outline-offset: 2px; }
+@media (max-width: 620px) { .schema-slide { padding: 12px; } .schema-slider-bar { padding: 8px 10px; } }
+
 /* ---------- print / PDF export ---------- */
 @page { margin: 16mm; }
 @media print {
@@ -849,15 +867,17 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <div class="read-progress" role="progressbar" aria-label="Прогресс чтения" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span></span></div><main class="page"><nav class="crumbs"><a href="index.html">Подготовка к демо-экзамену</a><span>/</span><span>Задание 2. База данных и импорт</span></nav><nav class="edge-rail" aria-label="Навигация по странице"><a class="rail-btn" href="index.html" data-tip="Вернуться обратно" aria-label="Вернуться обратно"><svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg></a><span class="rail-grow" aria-hidden="true"></span><button type="button" class="rail-btn" data-pdf data-tip="Экспорт в PDF" aria-label="Экспорт в PDF, откроется окно печати"><svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><path d="M4 20h16"/></svg></button><button type="button" class="rail-btn rail-top" data-to-top data-tip="К началу страницы" aria-label="К началу страницы"><svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5"/><path d="M5 12l7-7 7 7"/></svg></button><button type="button" class="rail-btn" data-theme-toggle aria-pressed="false" data-tip="Смена темы" aria-label="Смена темы"><span class="theme-ico" aria-hidden="true"><svg class="ico-moon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg><svg class="ico-sun" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></span></button></nav><header class="hero hero-lesson" data-shader data-accent="#C0392B" data-seed="0.763">
 <canvas class="shader-bg" width="820" height="300" aria-hidden="true" style="background:linear-gradient(135deg,#08090D,#C0392B 58%,#08090D)"></canvas>
 <div class="badges"><span class="pill dark">Задание 2</span><span class="pill">Подготовка к демо-экзамену</span></div>
-<div class="hero-panel"><h1>Задание 2. База данных и импорт</h1><p class="dek">Создаём базу в XAMPP, таблицы через интерфейс phpMyAdmin и запросом, строим связи, загружаем заказчиков из JSON и документы из Excel.</p></div>
-<div class="glyph" aria-hidden="true">03</div></header><section class="outcomes"><b>Что вы разберёте в этом разделе</b><ul><li>Создавать базу и таблицы через интерфейс phpMyAdmin</li><li>Объяснять структуру CREATE TABLE, первичные и внешние ключи</li><li>Строить связи через интерфейс и SQL</li><li>Загружать заказчиков из JSON и документы из Excel</li></ul></section><nav class="toc"><b>Содержание раздела</b><ol><li><a href="#что-требуется">Что требуется</a></li><li><a href="#что-понадобится">Что понадобится</a></li><li><a href="#как-устроено-задание">Как устроено задание</a></li><li><a href="#пошаговая-инструкция">Пошаговая инструкция</a></li><li><a href="#команды-и-приёмы-которые-нужны-чаще-всего">Команды и приёмы, которые нужны чаще всего</a></li><li><a href="#частые-ошибки">Частые ошибки</a></li><li><a href="#чек-лист-перед-сдачей">Чек-лист перед сдачей</a></li></ol></nav><article class="prose"><h2 id="что-требуется"><span class="num">01</span>Что требуется</h2>
+<div class="hero-panel"><h1>Задание 2. База данных и импорт</h1><p class="dek">Создаём базу в XAMPP, таблицы и связи запросами, загружаем заказчиков из JSON и документы из Excel.</p></div>
+<div class="glyph" aria-hidden="true">03</div></header><section class="outcomes"><b>Что вы разберёте в этом разделе</b><ul><li>Создавать базу и таблицы запросами CREATE TABLE</li><li>Объяснять структуру CREATE TABLE, типы и ограничения</li><li>Строить связи через ALTER TABLE и проверять внешние ключи</li><li>Загружать заказчиков из JSON и документы из Excel</li></ul></section><nav class="toc"><b>Содержание раздела</b><ol><li><a href="#что-требуется">Что требуется</a></li><li><a href="#что-понадобится">Что понадобится</a></li><li><a href="#как-устроено-задание">Как устроено задание</a></li><li><a href="#пошаговая-инструкция">Пошаговая инструкция</a></li><li><a href="#команды-и-приёмы-которые-нужны-чаще-всего">Команды и приёмы, которые нужны чаще всего</a></li><li><a href="#частые-ошибки">Частые ошибки</a></li><li><a href="#чек-лист-перед-сдачей">Чек-лист перед сдачей</a></li></ol></nav><article class="prose"><h2 id="что-требуется"><span class="num">01</span>Что требуется</h2>
 <p>Создать работающую базу данных предприятия по своей ER-диаграмме и загрузить в неё данные из документов варианта. База называется <code>dkip2027_course</code> и создаётся в кодировке <code>utf8mb4</code>. В ней должны быть таблицы, первичные и внешние ключи, обязательные поля и проверки значений.</p>
 <p>В базу загружаются:</p>
 <ul>
 <li>шесть заказчиков из <code>Заказчики.json</code>;</li>
+<li>ИП Томилин из заказа покупателя, потому что в JSON его нет;</li>
+<li>изготовитель ООО ТД «Вершина» отдельной строкой;</li>
 <li>заказ покупателя, спецификация, состав спецификации и цены из книг Excel;</li>
-<li>изготовитель, если его нет среди заказчиков;</li>
-<li>при необходимости производственный заказ, пользователи и заметки, если они есть в вашей модели.</li>
+<li>производственный заказ, продукция к выпуску и плановый расход ресурсов;</li>
+<li>при необходимости пользователи и заметки, если они есть в вашей модели.</li>
 </ul>
 <p>После загрузки нужно проверить, что коды заказчиков сохранили ведущие нули, что внешние ключи не пропускают несуществующие ссылки и что количество строк совпадает с документами. Затем база выгружается в SQL-файл и восстанавливается в пустую базу.</p>
 <p>Сдаются SQL-скрипт схемы, файл выгрузки <code>dkip2027-mysql.sql</code> и протокол проверок со скриншотами: действие, команда, ожидаемый и фактический результат.</p>
@@ -910,12 +930,12 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <tr>
 <td>Цены.xlsx</td>
 <td>там же</td>
-<td>цены и дата начала действия</td>
+<td>цены ресурсов</td>
 </tr>
 <tr>
 <td>Заказ на производство.xlsx</td>
 <td>там же</td>
-<td>производственный заказ, если он есть в модели</td>
+<td>производственный заказ и плановый расход</td>
 </tr>
 <tr>
 <td>Расчет стоимости.xlsx</td>
@@ -1080,7 +1100,7 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 </tbody>
 </table>
 <p>Тип выбирают по смыслу. Деньги хранят в <code>DECIMAL(14,2)</code>, количество и нормы времени в <code>DECIMAL(14,3)</code>. <code>FLOAT</code> и <code>DOUBLE</code> хранят двоичную дробь, поэтому 0,1 в них не равно 0,1, и сумма из сотни строк может разойтись с ручным расчётом.</p>
-<p>Коды заказчиков, ИНН и телефоны хранят текстом. В JSON код выглядит как <code>001000001</code>. Если объявить столбец целым, ведущие нули исчезнут: <code>001000001</code> станет <code>1000001</code>. Если объявить <code>VARCHAR(32)</code>, код сохранится символ в символ. Текстовыми также делают ИНН и телефон: ИНН может начинаться с нуля, телефон содержит плюс, а арифметика над ними не нужна.</p>
+<p>Коды заказчиков, ИНН и телефоны хранят текстом. В JSON код выглядит как <code>000000001</code>. Если объявить столбец целым, ведущие нули исчезнут: <code>000000001</code> станет <code>1</code>. Если объявить <code>VARCHAR(32)</code>, код сохранится символ в символ. Текстовыми также делают ИНН и телефон: ИНН может начинаться с нуля, телефон содержит плюс, а арифметика над ними не нужна.</p>
 <p>JSON это текстовый формат: объект в фигурных скобках, массив в квадратных, поля разделены запятыми. Для переноса в базу важен не сам формат, а соответствие имён: <code>addres</code> из источника становится <code>address</code> в таблице, <code>type</code> становится <code>party_type</code>. Значения дат и чисел перед вставкой приводят к типам столбцов.</p>
 <p>Excel хранит данные по ячейкам. При переносе в базу важны заголовки табличной части, а не оформление листа. Заголовок книги, объединённые ячейки и пустые строки пропускаются: в <code>INSERT</code> попадают только столбцы и строки таблицы.</p>
 <h3>Как читать файлы Excel</h3>
@@ -1096,11 +1116,57 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 </figure>
 
 <figure class="diagram">
-<img src="reports/screens/prep/V01_prices_xlsx.png" alt="Цены V01: ресурс, цена, единица и дата начала действия">
-<figcaption>Цены: у каждого ресурса указана цена, единица и дата, с которой она действует.</figcaption>
+<img src="reports/screens/prep/V01_prices_xlsx.png" alt="Цены V01: ресурс и цена">
+<figcaption>Цены: у каждого ресурса указана цена. Дата начала действия задана условием варианта.</figcaption>
 </figure>
 
 <h2 id="пошаговая-инструкция"><span class="num">04</span>Пошаговая инструкция</h2>
+<p>Перед первым запросом откройте общую шпаргалку. В ней три команды, которые понадобятся дальше.</p>
+<details class="hint">
+<summary>Шпаргалка: CREATE TABLE, ALTER TABLE и INSERT</summary>
+
+**Создание таблицы**
+
+
+<div class="codehilite" data-lang="sql"><pre><span></span><code><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="err">имя</span><span class="n">_таблицы</span><span class="w"> </span><span class="p">(</span>
+<span class="w">  </span><span class="err">имя</span><span class="n">_поля</span><span class="w"> </span><span class="err">ТИП</span><span class="w"> </span><span class="err">ОГРАНИЧЕНИЕ</span><span class="p">,</span>
+<span class="w">  </span><span class="err">имя</span><span class="n">_поля</span><span class="w"> </span><span class="err">ТИП</span><span class="w"> </span><span class="err">ОГРАНИЧЕНИЕ</span><span class="p">,</span>
+<span class="w">  </span><span class="k">PRIMARY</span><span class="w"> </span><span class="k">KEY</span><span class="w"> </span><span class="p">(</span><span class="err">имя</span><span class="n">_поля</span><span class="p">),</span>
+<span class="w">  </span><span class="k">CONSTRAINT</span><span class="w"> </span><span class="err">имя</span><span class="n">_правила</span><span class="w"> </span><span class="k">FOREIGN</span><span class="w"> </span><span class="k">KEY</span><span class="w"> </span><span class="p">(</span><span class="err">имя</span><span class="n">_поля</span><span class="p">)</span>
+<span class="w">    </span><span class="k">REFERENCES</span><span class="w"> </span><span class="err">родительская</span><span class="n">_таблица</span><span class="w"> </span><span class="p">(</span><span class="err">имя</span><span class="n">_поля</span><span class="p">)</span>
+<span class="p">)</span><span class="w"> </span><span class="n">ENGINE</span><span class="o">=</span><span class="n">InnoDB</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="n">CHARSET</span><span class="o">=</span><span class="n">utf8mb4</span><span class="p">;</span>
+</code></pre></div>
+
+
+
+`CREATE TABLE` создаёт таблицу. В скобках перечисляются поля, затем ключи и проверки. Каждое поле описывается тремя частями: имя, тип и ограничение. Запятая разделяет описания, после последнего запятая не ставится.
+
+**Добавление связи**
+
+
+<div class="codehilite" data-lang="sql"><pre><span></span><code><span class="k">ALTER</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="err">дочерняя</span><span class="n">_таблица</span>
+<span class="w">  </span><span class="k">ADD</span><span class="w"> </span><span class="k">CONSTRAINT</span><span class="w"> </span><span class="err">имя</span><span class="n">_связи</span>
+<span class="w">  </span><span class="k">FOREIGN</span><span class="w"> </span><span class="k">KEY</span><span class="w"> </span><span class="p">(</span><span class="err">поле</span><span class="n">_дочерней</span><span class="p">)</span>
+<span class="w">  </span><span class="k">REFERENCES</span><span class="w"> </span><span class="err">родительская</span><span class="n">_таблица</span><span class="w"> </span><span class="p">(</span><span class="err">поле</span><span class="n">_родительской</span><span class="p">);</span>
+</code></pre></div>
+
+
+
+`ALTER TABLE` меняет уже созданную таблицу. `ADD CONSTRAINT` добавляет правило с именем. `FOREIGN KEY` называет поле текущей таблицы. `REFERENCES` указывает родительскую таблицу и её ключ.
+
+**Вставка строк**
+
+
+<div class="codehilite" data-lang="sql"><pre><span></span><code><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="err">имя</span><span class="n">_таблицы</span><span class="w"> </span><span class="p">(</span><span class="err">поле</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="err">поле</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="err">поле</span><span class="mi">3</span><span class="p">)</span>
+<span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="err">значение</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="err">значение</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="err">значение</span><span class="mi">3</span><span class="p">);</span>
+</code></pre></div>
+
+
+
+`INSERT INTO` выбирает таблицу. В скобках перечислены поля в том порядке, в котором пойдут значения. `VALUES` начинает список значений. Текст и даты пишут в кавычках, числа без кавычек. Несколько строк разделяют запятыми, после последней строки запятая не ставится.
+
+</details>
+
 <h3>Шаг 1. Запустите Apache и MySQL</h3>
 <p>Откройте <code>Пуск</code>, найдите <code>XAMPP Control Panel</code> и запустите его. В окне список служб, нам нужны <code>Apache</code> и <code>MySQL</code>. Нажмите кнопку <code>Start</code> в строке <code>Apache</code>. Через несколько секунд строка станет зелёной, в колонке <code>Status</code> появится <code>Running</code>. Затем нажмите <code>Start</code> в строке <code>MySQL</code>. Она тоже должна стать зелёной.</p>
 <figure class="diagram">
@@ -1125,88 +1191,34 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <span class="w">  </span><span class="k">COLLATE</span><span class="w"> </span><span class="n">utf8mb4_unicode_ci</span><span class="p">;</span>
 </code></pre></div>
 
-<h3>Шаг 4. Создайте первую таблицу через интерфейс</h3>
-<p>Выберите базу <code>dkip2027_course</code>. На вкладке <code>Структура</code> нажмите <code>Создать таблицу</code>. Откроется форма: имя таблицы, число столбцов и строки для полей. Заполните имя <code>counterparty</code> и нажмите <code>Вперёд</code>.</p>
-<figure class="diagram">
-<img src="reports/screens/mysql/t2-create-table-ui.png" alt="Форма создания таблицы в phpMyAdmin: имя таблицы и строки полей">
-<figcaption>Создание таблицы через интерфейс: имя таблицы, число столбцов и строки для полей. Внизу кнопки «Предпросмотр SQL» и «Сохранить».</figcaption>
-</figure>
-
-<p>Заполните шесть строк:</p>
-<table>
-<thead>
-<tr>
-<th>Имя</th>
-<th>Тип</th>
-<th>Длина/Значения</th>
-<th>Null</th>
-<th>Индекс</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>id</code></td>
-<td><code>VARCHAR</code></td>
-<td>32</td>
-<td>нет</td>
-<td><code>PRIMARY</code></td>
-</tr>
-<tr>
-<td><code>name</code></td>
-<td><code>VARCHAR</code></td>
-<td>255</td>
-<td>нет</td>
-<td></td>
-</tr>
-<tr>
-<td><code>inn</code></td>
-<td><code>VARCHAR</code></td>
-<td>20</td>
-<td>нет</td>
-<td></td>
-</tr>
-<tr>
-<td><code>address</code></td>
-<td><code>VARCHAR</code></td>
-<td>500</td>
-<td>нет</td>
-<td></td>
-</tr>
-<tr>
-<td><code>phone</code></td>
-<td><code>VARCHAR</code></td>
-<td>64</td>
-<td>нет</td>
-<td></td>
-</tr>
-<tr>
-<td><code>party_type</code></td>
-<td><code>VARCHAR</code></td>
-<td>24</td>
-<td>нет</td>
-<td></td>
-</tr>
-</tbody>
-</table>
-<p>Внизу выберите движок <code>InnoDB</code> и нажмите <code>Сохранить</code>. В списке таблиц появится <code>counterparty</code>. Откройте вкладку <code>Структура</code>: видны поля, типы и ключ <code>PRIMARY</code>.</p>
-<p>Кнопка <code>Предпросмотр SQL</code> показывает, какой запрос построит форма. Это удобный способ проверить себя: если предпросмотр понятен, запрос можно потом написать руками.</p>
-<h3>Шаг 5. Разберите структуру CREATE TABLE</h3>
-<p>Та же таблица запросом выглядит так.</p>
+<h3>Шаг 4. Разберите структуру CREATE TABLE</h3>
+<p>Все таблицы создаются запросами. Разберём команду по частям на таблице <code>counterparty</code>.</p>
 <div class="codehilite" data-lang="sql"><pre><span></span><code><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">counterparty</span><span class="w"> </span><span class="p">(</span>
 <span class="w">  </span><span class="n">id</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">32</span><span class="p">)</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span>
 <span class="w">  </span><span class="n">name</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">255</span><span class="p">)</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span>
-<span class="w">  </span><span class="n">inn</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span>
+<span class="w">  </span><span class="n">inn</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="s1">''</span><span class="p">,</span>
 <span class="w">  </span><span class="n">address</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">500</span><span class="p">)</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span>
 <span class="w">  </span><span class="n">phone</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">64</span><span class="p">)</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span>
 <span class="w">  </span><span class="n">party_type</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">24</span><span class="p">)</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span>
-<span class="w">  </span><span class="k">PRIMARY</span><span class="w"> </span><span class="k">KEY</span><span class="w"> </span><span class="p">(</span><span class="n">id</span><span class="p">)</span>
+<span class="w">  </span><span class="k">PRIMARY</span><span class="w"> </span><span class="k">KEY</span><span class="w"> </span><span class="p">(</span><span class="n">id</span><span class="p">),</span>
+<span class="w">  </span><span class="k">CONSTRAINT</span><span class="w"> </span><span class="n">ck_party_type</span>
+<span class="w">    </span><span class="k">CHECK</span><span class="w"> </span><span class="p">(</span><span class="n">party_type</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span><span class="s1">'Покупатель'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Поставщик'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Изготовитель'</span><span class="p">))</span>
 <span class="p">)</span><span class="w"> </span><span class="n">ENGINE</span><span class="o">=</span><span class="n">InnoDB</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="n">CHARSET</span><span class="o">=</span><span class="n">utf8mb4</span><span class="p">;</span>
 </code></pre></div>
 
-<p><code>CREATE TABLE</code> создаёт таблицу. В скобках перечисляются столбцы, затем ключи и проверки. Каждый столбец описывается тремя частями: имя, тип и ограничения. Запятая разделяет описания, после последнего описания запятая не ставится.</p>
-<p><code>ENGINE=InnoDB</code> выбирает движок. Только InnoDB поддерживает транзакции и внешние ключи. <code>DEFAULT CHARSET=utf8mb4</code> задаёт кодировку таблицы.</p>
-<p>Имя поля пишут латиницей, цифрами и знаком подчёркивания. Пробелы и дефисы не используйте. Слово <code>order</code> в MySQL зарезервировано, поэтому таблица заказа называется <code>customer_order</code>. Имя должно отвечать на вопрос «что здесь лежит»: <code>doc_date</code>, <code>sale_price</code>, <code>output_qty</code>.</p>
-<p>Типы:</p>
+<p>Читайте запрос сверху вниз:</p>
+<ol>
+<li><code>CREATE TABLE counterparty</code> означает «создай таблицу с именем counterparty». Имя пишут латиницей, цифрами и знаком подчёркивания. Пробелы и дефисы не используйте. Слово <code>order</code> в MySQL зарезервировано, поэтому таблица заказа называется <code>customer_order</code>.</li>
+<li>Открывающая скобка <code>(</code> начинает список полей. Закрывающая <code>)</code> завершает его. Между ними перечислены поля, ключи и проверки.</li>
+<li><code>id VARCHAR(32) NOT NULL</code> это поле <code>id</code>. <code>VARCHAR(32)</code> хранит строку до 32 символов. <code>NOT NULL</code> запрещает пустое значение. Код заказчика хранят текстом, иначе ведущие нули исчезнут.</li>
+<li><code>inn VARCHAR(20) NOT NULL DEFAULT ''</code> означает, что ИНН обязателен, но если его не передали, подставится пустая строка.</li>
+<li><code>PRIMARY KEY (id)</code> объявляет поле <code>id</code> первичным ключом. Первичный ключ уникален, не может быть пустым и ускоряет поиск.</li>
+<li><code>CONSTRAINT ck_party_type</code> даёт проверке имя. Имя нужно, чтобы в сообщении об ошибке было видно, какое правило сработало.</li>
+<li><code>CHECK (party_type IN (...))</code> пропускает только три допустимых значения. Это защита от опечаток вроде «Покупател».</li>
+<li><code>ENGINE=InnoDB</code> выбирает движок. Только InnoDB поддерживает транзакции и внешние ключи.</li>
+<li><code>DEFAULT CHARSET=utf8mb4</code> задаёт кодировку таблицы.</li>
+</ol>
+<p>Типы, которые нужны в этом задании:</p>
 <table>
 <thead>
 <tr>
@@ -1243,7 +1255,7 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 </tr>
 </tbody>
 </table>
-<p><code>INT AUTO_INCREMENT</code> это целое, которое сервер заполняет сам. <code>VARCHAR(64)</code> считает символы. <code>DECIMAL(14,2)</code> хранит 14 цифр, из них 2 после запятой. Деньги считают только в <code>DECIMAL</code>. <code>DATE</code> принимает значение в формате <code>2027-09-01</code>.</p>
+<p><code>INT AUTO_INCREMENT</code> это целое, которое сервер заполняет сам. <code>VARCHAR(64)</code> считает символы. <code>DECIMAL(14,2)</code> хранит 14 цифр, из них 2 после запятой. Деньги считают только в <code>DECIMAL</code>. <code>DATE</code> принимает значение в формате <code>2026-04-22</code>.</p>
 <p>Ограничения:</p>
 <table>
 <thead>
@@ -1297,44 +1309,249 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <p><code>CONSTRAINT fk_price_item</code> задаёт имя правила. <code>FOREIGN KEY (item_id)</code> называет поле текущей таблицы. <code>REFERENCES item(id)</code> говорит, что значение должно найтись в поле <code>id</code> таблицы <code>item</code>.</p>
 <p>Работают четыре требования. Тип ссылающегося поля совпадает с типом целевого. Целевое поле является первичным или уникальным ключом. Обе таблицы используют InnoDB. Родительская таблица уже создана. Если цена объявлена раньше ресурса, сервер ответит ошибкой 1215.</p>
 <p>Связь многие ко многим раскладывают на связывающую таблицу. В модели это <code>specification_component</code>: одна спецификация содержит много ресурсов, один ресурс входит в много спецификаций. Пара <code>specification_id</code> и <code>item_id</code> объявлена первичным ключом, поэтому один ресурс не попадёт в спецификацию дважды.</p>
-<h3>Шаг 6. Создайте остальные таблицы</h3>
-<p>Остальные таблицы создайте по диаграмме, не копируя чужой скрипт. Для каждой ответьте на четыре вопроса: как называется таблица, какие поля хранит, что является первичным ключом, на что ссылаются внешние ключи.</p>
-<p>Порядок важен: сначала справочники <code>counterparty</code> и <code>item</code>, затем <code>price</code>, <code>specification</code>, <code>specification_component</code>, потом <code>customer_order</code> и <code>customer_order_line</code>. Таблица не может ссылаться на ещё не созданную родительскую.</p>
-<p>Пример второй таблицы, справочника ресурсов:</p>
-<div class="codehilite" data-lang="sql"><pre><span></span><code><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">item</span><span class="w"> </span><span class="p">(</span>
-<span class="w">  </span><span class="n">id</span><span class="w"> </span><span class="nb">INT</span><span class="w"> </span><span class="n">AUTO_INCREMENT</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span>
-<span class="w">  </span><span class="n">code</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">64</span><span class="p">)</span><span class="w"> </span><span class="k">UNIQUE</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span>
-<span class="w">  </span><span class="n">name</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">255</span><span class="p">)</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span>
-<span class="w">  </span><span class="n">kind</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">16</span><span class="p">)</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span>
-<span class="w">  </span><span class="n">unit</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">16</span><span class="p">)</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span>
-<span class="w">  </span><span class="k">PRIMARY</span><span class="w"> </span><span class="k">KEY</span><span class="w"> </span><span class="p">(</span><span class="n">id</span><span class="p">),</span>
-<span class="w">  </span><span class="k">CONSTRAINT</span><span class="w"> </span><span class="n">ck_item_kind</span><span class="w"> </span><span class="k">CHECK</span><span class="w"> </span><span class="p">(</span><span class="n">kind</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span><span class="s1">'product'</span><span class="p">,</span><span class="s1">'material'</span><span class="p">,</span><span class="s1">'operation'</span><span class="p">))</span>
-<span class="p">)</span><span class="w"> </span><span class="n">ENGINE</span><span class="o">=</span><span class="n">InnoDB</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="n">CHARSET</span><span class="o">=</span><span class="n">utf8mb4</span><span class="p">;</span>
-</code></pre></div>
-
-<p>У <code>item</code> ключ числовой и автоматический. Поле <code>code</code> объявлено <code>UNIQUE</code>, поэтому два ресурса с одним кодом не появятся. Проверка <code>kind</code> пропускает только три допустимых вида.</p>
-<p>Пример таблицы цены с составным ключом и внешним ключом:</p>
-<div class="codehilite" data-lang="sql"><pre><span></span><code><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">price</span><span class="w"> </span><span class="p">(</span>
-<span class="w">  </span><span class="n">item_id</span><span class="w"> </span><span class="nb">INT</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span>
-<span class="w">  </span><span class="n">valid_from</span><span class="w"> </span><span class="nb">DATE</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span>
-<span class="w">  </span><span class="n">amount</span><span class="w"> </span><span class="nb">DECIMAL</span><span class="p">(</span><span class="mi">14</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span>
-<span class="w">  </span><span class="k">PRIMARY</span><span class="w"> </span><span class="k">KEY</span><span class="w"> </span><span class="p">(</span><span class="n">item_id</span><span class="p">,</span><span class="w"> </span><span class="n">valid_from</span><span class="p">),</span>
-<span class="w">  </span><span class="k">CONSTRAINT</span><span class="w"> </span><span class="n">fk_price_item</span><span class="w"> </span><span class="k">FOREIGN</span><span class="w"> </span><span class="k">KEY</span><span class="w"> </span><span class="p">(</span><span class="n">item_id</span><span class="p">)</span><span class="w"> </span><span class="k">REFERENCES</span><span class="w"> </span><span class="n">item</span><span class="p">(</span><span class="n">id</span><span class="p">),</span>
-<span class="w">  </span><span class="k">CONSTRAINT</span><span class="w"> </span><span class="n">ck_price_amount</span><span class="w"> </span><span class="k">CHECK</span><span class="w"> </span><span class="p">(</span><span class="n">amount</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span>
-<span class="p">)</span><span class="w"> </span><span class="n">ENGINE</span><span class="o">=</span><span class="n">InnoDB</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="n">CHARSET</span><span class="o">=</span><span class="n">utf8mb4</span><span class="p">;</span>
-</code></pre></div>
-
-<p>У цены один ресурс может иметь много дат, но на одну дату цена одна. Составной ключ это и обеспечивает.</p>
-<p>Создайте остальные таблицы тем же способом: <code>specification</code>, <code>specification_component</code>, <code>customer_order</code>, <code>customer_order_line</code>, <code>production_order</code>, <code>production_product</code>, <code>production_resource</code>. Если таблица ссылается на <code>counterparty</code> или <code>item</code>, сначала должна существовать родительская.</p>
-<h3>Шаг 7. Постройте связи через интерфейс и SQL</h3>
-<p>Связи можно добавить мышью. Откройте таблицу <code>customer_order</code>, вкладку <code>Структура</code>, затем <code>Связи</code>. В разделе <code>Ограничения внешнего ключа</code> выберите столбец <code>customer_id</code>, базу <code>dkip2027_course</code>, таблицу <code>counterparty</code> и столбец <code>id</code>. Нажмите <code>Сохранить</code>.</p>
 <figure class="diagram">
-<img src="reports/screens/mysql/t2-relations-ui.png" alt="Вкладка Связи в phpMyAdmin: внешние ключи заказа на заказчика и исполнителя">
-<figcaption>Связи через интерфейс: у заказа два внешних ключа в counterparty, для заказчика и исполнителя. Правила ON DELETE и ON UPDATE видны рядом.</figcaption>
+<img src="reports/screens/mysql/t2-create-counterparty-sql.png" alt="Создание таблицы counterparty запросом в phpMyAdmin">
+<figcaption>Создание таблицы запросом: вкладка SQL, команда `CREATE TABLE counterparty` и кнопка «Вперёд».</figcaption>
 </figure>
 
-<p>Повторите для <code>executor_id</code>, для <code>customer_order_line.order_id</code> и <code>product_id</code>, для <code>price.item_id</code>, для <code>specification.product_id</code>, <code>manufacturer_id</code> и для строк состава.</p>
-<p>То же самое запросом:</p>
+<h3>Шаг 5. Создайте все таблицы</h3>
+<p>Создайте таблицы в порядке зависимостей: сначала <code>counterparty</code> и <code>item</code>, затем <code>price</code>, <code>specification</code>, <code>specification_component</code>, потом <code>customer_order</code> и <code>customer_order_line</code>, затем <code>production_order</code>, <code>production_product</code>, <code>production_resource</code>, <code>users</code>, <code>notes</code>. Таблица не может ссылаться на ещё не созданную родительскую.</p>
+<p>Ниже слайдер. В нём двенадцать готовых определений. Листайте стрелками и сверяйте поля, типы и ключи со своей диаграммой.</p>
+<div class="schema-slider" data-slider>
+<div class="schema-slider-bar">
+<strong>Все двенадцать таблиц: листайте стрелками</strong>
+<div class="schema-slider-actions">
+<button type="button" class="schema-btn" data-slider-prev aria-label="Предыдущая таблица">←</button>
+<span class="schema-slider-counter" data-slider-counter>1 / 12</span>
+<button type="button" class="schema-btn" data-slider-next aria-label="Следующая таблица">→</button>
+</div>
+</div>
+<div class="schema-track" data-slider-track>
+<article class="schema-slide" aria-label="counterparty">
+<h4>1. <code>counterparty</code></h4>
+<p>Контрагенты: покупатели, поставщики и изготовители. Код хранится текстом, поэтому ведущие нули не теряются.</p>
+<pre><code>CREATE TABLE counterparty (
+  id VARCHAR(32) NOT NULL,
+  name VARCHAR(255) NOT NULL,
+  inn VARCHAR(20) NOT NULL DEFAULT &#x27;&#x27;,
+  address VARCHAR(500) NOT NULL,
+  phone VARCHAR(64) NOT NULL,
+  party_type VARCHAR(24) NOT NULL,
+  PRIMARY KEY (id),
+  CONSTRAINT ck_party_type
+    CHECK (party_type IN (&#x27;Покупатель&#x27;, &#x27;Поставщик&#x27;, &#x27;Изготовитель&#x27;))
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;</code></pre>
+</article>
+<article class="schema-slide" aria-label="item">
+<h4>2. <code>item</code></h4>
+<p>Справочник продукции, материалов и операций. Поле kind показывает, что это за ресурс.</p>
+<pre><code>CREATE TABLE item (
+  id INT NOT NULL,
+  code VARCHAR(64) DEFAULT NULL,
+  name VARCHAR(255) NOT NULL,
+  kind VARCHAR(16) NOT NULL,
+  unit VARCHAR(16) NOT NULL,
+  PRIMARY KEY (id),
+  UNIQUE KEY uq_item_code (code),
+  CONSTRAINT ck_item_kind
+    CHECK (kind IN (&#x27;product&#x27;, &#x27;material&#x27;, &#x27;operation&#x27;))
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;</code></pre>
+</article>
+<article class="schema-slide" aria-label="price">
+<h4>3. <code>price</code></h4>
+<p>История цен. Ключ из ресурса и даты не даёт двум ценам действовать с одной даты.</p>
+<pre><code>CREATE TABLE price (
+  item_id INT NOT NULL,
+  valid_from DATE NOT NULL,
+  amount DECIMAL(14,2) NOT NULL,
+  PRIMARY KEY (item_id, valid_from),
+  CONSTRAINT fk_price_item
+    FOREIGN KEY (item_id) REFERENCES item (id),
+  CONSTRAINT ck_price_amount CHECK (amount &gt;= 0)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;</code></pre>
+</article>
+<article class="schema-slide" aria-label="specification">
+<h4>4. <code>specification</code></h4>
+<p>Шапка спецификации изделия. Поле output_qty показывает, на какое количество изделий даны нормы.</p>
+<pre><code>CREATE TABLE specification (
+  id INT NOT NULL,
+  product_id INT NOT NULL,
+  name VARCHAR(255) NOT NULL,
+  output_qty DECIMAL(14,3) NOT NULL,
+  manufacturer_id VARCHAR(32) NOT NULL,
+  PRIMARY KEY (id),
+  UNIQUE KEY uq_spec_product (product_id),
+  KEY ix_spec_maker (manufacturer_id),
+  CONSTRAINT fk_spec_product
+    FOREIGN KEY (product_id) REFERENCES item (id),
+  CONSTRAINT fk_spec_maker
+    FOREIGN KEY (manufacturer_id) REFERENCES counterparty (id),
+  CONSTRAINT ck_spec_output CHECK (output_qty &gt; 0)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;</code></pre>
+</article>
+<article class="schema-slide" aria-label="specification_component">
+<h4>5. <code>specification_component</code></h4>
+<p>Нормы материалов и время операций. Для материала заполнено qty, для операции time_norm.</p>
+<pre><code>CREATE TABLE specification_component (
+  specification_id INT NOT NULL,
+  item_id INT NOT NULL,
+  qty DECIMAL(14,3) NOT NULL,
+  time_norm DECIMAL(14,3) NOT NULL,
+  PRIMARY KEY (specification_id, item_id),
+  KEY ix_comp_item (item_id),
+  CONSTRAINT fk_comp_spec
+    FOREIGN KEY (specification_id) REFERENCES specification (id),
+  CONSTRAINT fk_comp_item
+    FOREIGN KEY (item_id) REFERENCES item (id),
+  CONSTRAINT ck_comp_qty CHECK (qty &gt;= 0),
+  CONSTRAINT ck_comp_time CHECK (time_norm &gt;= 0)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;</code></pre>
+</article>
+<article class="schema-slide" aria-label="customer_order">
+<h4>6. <code>customer_order</code></h4>
+<p>Шапка заказа покупателя: номер, дата, заказчик и исполнитель.</p>
+<pre><code>CREATE TABLE customer_order (
+  id INT NOT NULL,
+  doc_no VARCHAR(64) NOT NULL,
+  doc_date DATE NOT NULL,
+  customer_id VARCHAR(32) NOT NULL,
+  executor_id VARCHAR(32) NOT NULL,
+  PRIMARY KEY (id),
+  UNIQUE KEY uq_order_doc (doc_no),
+  KEY ix_order_customer (customer_id),
+  KEY ix_order_executor (executor_id),
+  CONSTRAINT fk_order_customer
+    FOREIGN KEY (customer_id) REFERENCES counterparty (id),
+  CONSTRAINT fk_order_executor
+    FOREIGN KEY (executor_id) REFERENCES counterparty (id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;</code></pre>
+</article>
+<article class="schema-slide" aria-label="customer_order_line">
+<h4>7. <code>customer_order_line</code></h4>
+<p>Строки заказа: изделие, количество, продажная цена и скидка.</p>
+<pre><code>CREATE TABLE customer_order_line (
+  id INT NOT NULL,
+  order_id INT NOT NULL,
+  product_id INT NOT NULL,
+  qty INT NOT NULL,
+  sale_price DECIMAL(14,2) NOT NULL,
+  discount DECIMAL(14,2) NOT NULL DEFAULT 0.00,
+  PRIMARY KEY (id),
+  KEY ix_line_order (order_id),
+  KEY ix_line_product (product_id),
+  CONSTRAINT fk_line_order
+    FOREIGN KEY (order_id) REFERENCES customer_order (id),
+  CONSTRAINT fk_line_product
+    FOREIGN KEY (product_id) REFERENCES item (id),
+  CONSTRAINT ck_line_qty CHECK (qty &gt; 0),
+  CONSTRAINT ck_line_price CHECK (sale_price &gt;= 0),
+  CONSTRAINT ck_line_discount CHECK (discount &gt;= 0)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;</code></pre>
+</article>
+<article class="schema-slide" aria-label="production_order">
+<h4>8. <code>production_order</code></h4>
+<p>Шапка производственного заказа: номер, дата документа, дата запуска и подразделение.</p>
+<pre><code>CREATE TABLE production_order (
+  id INT NOT NULL,
+  doc_no VARCHAR(64) NOT NULL,
+  doc_date DATE NOT NULL,
+  launch_date DATE NOT NULL,
+  department VARCHAR(128) NOT NULL,
+  PRIMARY KEY (id),
+  UNIQUE KEY uq_prod_doc (doc_no)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;</code></pre>
+</article>
+<article class="schema-slide" aria-label="production_product">
+<h4>9. <code>production_product</code></h4>
+<p>Продукция к выпуску по производственному заказу.</p>
+<pre><code>CREATE TABLE production_product (
+  production_id INT NOT NULL,
+  product_id INT NOT NULL,
+  qty INT NOT NULL,
+  PRIMARY KEY (production_id, product_id),
+  KEY ix_prod_product (product_id),
+  CONSTRAINT fk_pp_order
+    FOREIGN KEY (production_id) REFERENCES production_order (id),
+  CONSTRAINT fk_pp_item
+    FOREIGN KEY (product_id) REFERENCES item (id),
+  CONSTRAINT ck_pp_qty CHECK (qty &gt; 0)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;</code></pre>
+</article>
+<article class="schema-slide" aria-label="production_resource">
+<h4>10. <code>production_resource</code></h4>
+<p>Плановый расход материалов и времени по производственному заказу.</p>
+<pre><code>CREATE TABLE production_resource (
+  production_id INT NOT NULL,
+  item_id INT NOT NULL,
+  qty DECIMAL(14,3) NOT NULL,
+  time_norm DECIMAL(14,3) NOT NULL,
+  PRIMARY KEY (production_id, item_id),
+  KEY ix_prod_resource (item_id),
+  CONSTRAINT fk_pr_order
+    FOREIGN KEY (production_id) REFERENCES production_order (id),
+  CONSTRAINT fk_pr_item
+    FOREIGN KEY (item_id) REFERENCES item (id),
+  CONSTRAINT ck_pr_qty CHECK (qty &gt;= 0),
+  CONSTRAINT ck_pr_time CHECK (time_norm &gt;= 0)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;</code></pre>
+</article>
+<article class="schema-slide" aria-label="users">
+<h4>11. <code>users</code></h4>
+<p>Учётные записи приложения. Пароль хранится не открытым текстом, а хешем с солью.</p>
+<pre><code>CREATE TABLE users (
+  id INT NOT NULL AUTO_INCREMENT,
+  login VARCHAR(64) NOT NULL,
+  password_hash VARCHAR(64) NOT NULL,
+  salt VARCHAR(32) NOT NULL,
+  role ENUM(&#x27;admin&#x27;, &#x27;user&#x27;) NOT NULL DEFAULT &#x27;user&#x27;,
+  failed_attempts INT NOT NULL DEFAULT 0,
+  is_locked TINYINT(1) NOT NULL DEFAULT 0,
+  PRIMARY KEY (id),
+  UNIQUE KEY uq_users_login (login)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;</code></pre>
+</article>
+<article class="schema-slide" aria-label="notes">
+<h4>12. <code>notes</code></h4>
+<p>Заметки сотрудников. Внешний ключ связывает заметку с автором.</p>
+<pre><code>CREATE TABLE notes (
+  id INT NOT NULL AUTO_INCREMENT,
+  title VARCHAR(255) NOT NULL,
+  content TEXT NOT NULL,
+  id_user INT NOT NULL,
+  created_at DATE NOT NULL,
+  PRIMARY KEY (id),
+  KEY ix_notes_user (id_user),
+  CONSTRAINT fk_notes_user
+    FOREIGN KEY (id_user) REFERENCES users (id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;</code></pre>
+</article>
+</div>
+</div>
+
+<p>После выполнения запросов откройте вкладку <code>Структура</code> базы. В списке должно быть двенадцать таблиц.</p>
+<figure class="diagram">
+<img src="reports/screens/mysql/t2-tables.png" alt="Список таблиц базы dkip2027_course после выполнения CREATE TABLE">
+<figcaption>Результат: в базе двенадцать таблиц. Проверьте список перед добавлением связей и данных.</figcaption>
+</figure>
+
+<h3>Шаг 6. Постройте связи запросами</h3>
+<p>Связи добавляются командой <code>ALTER TABLE</code>. Перед первым запросом откройте шпаргалку.</p>
+<details class="hint">
+<summary>Шпаргалка: ALTER TABLE и внешний ключ</summary>
+
+
+<div class="codehilite" data-lang="sql"><pre><span></span><code><span class="k">ALTER</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="err">дочерняя</span><span class="n">_таблица</span>
+<span class="w">  </span><span class="k">ADD</span><span class="w"> </span><span class="k">CONSTRAINT</span><span class="w"> </span><span class="err">имя</span><span class="n">_связи</span>
+<span class="w">  </span><span class="k">FOREIGN</span><span class="w"> </span><span class="k">KEY</span><span class="w"> </span><span class="p">(</span><span class="err">поле</span><span class="n">_дочерней</span><span class="p">)</span>
+<span class="w">  </span><span class="k">REFERENCES</span><span class="w"> </span><span class="err">родительская</span><span class="n">_таблица</span><span class="w"> </span><span class="p">(</span><span class="err">поле</span><span class="n">_родительской</span><span class="p">);</span>
+</code></pre></div>
+
+
+
+`ALTER TABLE` меняет уже созданную таблицу. `ADD CONSTRAINT` добавляет правило с именем. `FOREIGN KEY` называет поле текущей таблицы. `REFERENCES` указывает родительскую таблицу и её ключ.
+
+</details>
+
 <div class="codehilite" data-lang="sql"><pre><span></span><code><span class="k">ALTER</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">customer_order</span>
 <span class="w">  </span><span class="k">ADD</span><span class="w"> </span><span class="k">CONSTRAINT</span><span class="w"> </span><span class="n">fk_order_customer</span>
 <span class="w">  </span><span class="k">FOREIGN</span><span class="w"> </span><span class="k">KEY</span><span class="w"> </span><span class="p">(</span><span class="n">customer_id</span><span class="p">)</span><span class="w"> </span><span class="k">REFERENCES</span><span class="w"> </span><span class="n">counterparty</span><span class="p">(</span><span class="n">id</span><span class="p">),</span>
@@ -1342,8 +1559,138 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <span class="w">  </span><span class="k">FOREIGN</span><span class="w"> </span><span class="k">KEY</span><span class="w"> </span><span class="p">(</span><span class="n">executor_id</span><span class="p">)</span><span class="w"> </span><span class="k">REFERENCES</span><span class="w"> </span><span class="n">counterparty</span><span class="p">(</span><span class="n">id</span><span class="p">);</span>
 </code></pre></div>
 
-<p><code>ALTER TABLE</code> меняет уже созданную таблицу. <code>ADD CONSTRAINT</code> добавляет правило с именем. Имя нужно, чтобы в сообщении об ошибке было видно, какое ограничение сработало.</p>
-<p>Проверьте связи запросом:</p>
+<figure class="diagram">
+<img src="reports/screens/mysql/t2-alter-sql.png" alt="Добавление внешних ключей запросом ALTER TABLE в phpMyAdmin">
+<figcaption>Связи запросом: два внешних ключа заказа добавляются одной командой `ALTER TABLE`.</figcaption>
+</figure>
+
+<p>Ниже все четырнадцать связей модели. Если таблицы уже созданы с <code>FOREIGN KEY</code> внутри <code>CREATE TABLE</code>, повторно эти команды не выполняйте: слайдер показывает полный набор связей и порядок, в котором их удобно добавлять. Если таблицы созданы без внешних ключей, выполняйте команды по одной.</p>
+<div class="schema-slider" data-slider>
+<div class="schema-slider-bar">
+<strong>Все 14 связей: листайте стрелками</strong>
+<div class="schema-slider-actions">
+<button type="button" class="schema-btn" data-slider-prev aria-label="Предыдущая связь">←</button>
+<span class="schema-slider-counter" data-slider-counter>1 / 14</span>
+<button type="button" class="schema-btn" data-slider-next aria-label="Следующая связь">→</button>
+</div>
+</div>
+<div class="schema-track" data-slider-track>
+<article class="schema-slide" aria-label="price → item">
+<h4>1. price → item</h4>
+<p>Каждая цена ссылается на ресурс. Один ресурс может иметь несколько цен с разными датами.</p>
+<pre><code>ALTER TABLE price
+  ADD CONSTRAINT fk_price_item
+  FOREIGN KEY (item_id)
+  REFERENCES item (id);</code></pre>
+</article>
+<article class="schema-slide" aria-label="specification → item">
+<h4>2. specification → item</h4>
+<p>Спецификация описывает изделие. Ссылка ведёт на строку продукции в справочнике item.</p>
+<pre><code>ALTER TABLE specification
+  ADD CONSTRAINT fk_spec_product
+  FOREIGN KEY (product_id)
+  REFERENCES item (id);</code></pre>
+</article>
+<article class="schema-slide" aria-label="specification → counterparty">
+<h4>3. specification → counterparty</h4>
+<p>Изготовитель спецификации это контрагент с типом «Изготовитель».</p>
+<pre><code>ALTER TABLE specification
+  ADD CONSTRAINT fk_spec_maker
+  FOREIGN KEY (manufacturer_id)
+  REFERENCES counterparty (id);</code></pre>
+</article>
+<article class="schema-slide" aria-label="specification_component → specification">
+<h4>4. specification_component → specification</h4>
+<p>Строка состава принадлежит одной спецификации.</p>
+<pre><code>ALTER TABLE specification_component
+  ADD CONSTRAINT fk_comp_spec
+  FOREIGN KEY (specification_id)
+  REFERENCES specification (id);</code></pre>
+</article>
+<article class="schema-slide" aria-label="specification_component → item">
+<h4>5. specification_component → item</h4>
+<p>Строка состава ссылается на материал или операцию.</p>
+<pre><code>ALTER TABLE specification_component
+  ADD CONSTRAINT fk_comp_item
+  FOREIGN KEY (item_id)
+  REFERENCES item (id);</code></pre>
+</article>
+<article class="schema-slide" aria-label="customer_order → counterparty">
+<h4>6. customer_order → counterparty</h4>
+<p>Заказчик заказа это контрагент с типом «Покупатель».</p>
+<pre><code>ALTER TABLE customer_order
+  ADD CONSTRAINT fk_order_customer
+  FOREIGN KEY (customer_id)
+  REFERENCES counterparty (id);</code></pre>
+</article>
+<article class="schema-slide" aria-label="customer_order → counterparty">
+<h4>7. customer_order → counterparty</h4>
+<p>Исполнитель заказа это контрагент с типом «Изготовитель».</p>
+<pre><code>ALTER TABLE customer_order
+  ADD CONSTRAINT fk_order_executor
+  FOREIGN KEY (executor_id)
+  REFERENCES counterparty (id);</code></pre>
+</article>
+<article class="schema-slide" aria-label="customer_order_line → customer_order">
+<h4>8. customer_order_line → customer_order</h4>
+<p>Строка заказа принадлежит шапке заказа.</p>
+<pre><code>ALTER TABLE customer_order_line
+  ADD CONSTRAINT fk_line_order
+  FOREIGN KEY (order_id)
+  REFERENCES customer_order (id);</code></pre>
+</article>
+<article class="schema-slide" aria-label="customer_order_line → item">
+<h4>9. customer_order_line → item</h4>
+<p>Строка заказа ссылается на изделие из справочника.</p>
+<pre><code>ALTER TABLE customer_order_line
+  ADD CONSTRAINT fk_line_product
+  FOREIGN KEY (product_id)
+  REFERENCES item (id);</code></pre>
+</article>
+<article class="schema-slide" aria-label="production_product → production_order">
+<h4>10. production_product → production_order</h4>
+<p>Продукция к выпуску принадлежит производственному заказу.</p>
+<pre><code>ALTER TABLE production_product
+  ADD CONSTRAINT fk_pp_order
+  FOREIGN KEY (production_id)
+  REFERENCES production_order (id);</code></pre>
+</article>
+<article class="schema-slide" aria-label="production_product → item">
+<h4>11. production_product → item</h4>
+<p>Продукция к выпуску ссылается на изделие.</p>
+<pre><code>ALTER TABLE production_product
+  ADD CONSTRAINT fk_pp_item
+  FOREIGN KEY (product_id)
+  REFERENCES item (id);</code></pre>
+</article>
+<article class="schema-slide" aria-label="production_resource → production_order">
+<h4>12. production_resource → production_order</h4>
+<p>Плановый расход принадлежит производственному заказу.</p>
+<pre><code>ALTER TABLE production_resource
+  ADD CONSTRAINT fk_pr_order
+  FOREIGN KEY (production_id)
+  REFERENCES production_order (id);</code></pre>
+</article>
+<article class="schema-slide" aria-label="production_resource → item">
+<h4>13. production_resource → item</h4>
+<p>Плановый расход ссылается на материал или операцию.</p>
+<pre><code>ALTER TABLE production_resource
+  ADD CONSTRAINT fk_pr_item
+  FOREIGN KEY (item_id)
+  REFERENCES item (id);</code></pre>
+</article>
+<article class="schema-slide" aria-label="notes → users">
+<h4>14. notes → users</h4>
+<p>Заметка ссылается на автора в таблице пользователей.</p>
+<pre><code>ALTER TABLE notes
+  ADD CONSTRAINT fk_notes_user
+  FOREIGN KEY (id_user)
+  REFERENCES users (id);</code></pre>
+</article>
+</div>
+</div>
+
+<p>После добавления связей проверьте их запросом:</p>
 <div class="codehilite" data-lang="sql"><pre><span></span><code><span class="k">SELECT</span><span class="w"> </span><span class="k">table_name</span><span class="p">,</span><span class="w"> </span><span class="k">constraint_name</span><span class="p">,</span><span class="w"> </span><span class="n">referenced_table_name</span>
 <span class="k">FROM</span><span class="w"> </span><span class="n">information_schema</span><span class="p">.</span><span class="n">KEY_COLUMN_USAGE</span>
 <span class="k">WHERE</span><span class="w"> </span><span class="n">table_schema</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'dkip2027_course'</span>
@@ -1351,81 +1698,300 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="k">table_name</span><span class="p">,</span><span class="w"> </span><span class="k">constraint_name</span><span class="p">;</span>
 </code></pre></div>
 
-<h3>Шаг 8. Загрузите заказчиков из JSON</h3>
-<p>Откройте <code>Заказчики.json</code> в блокноте или VS Code. Внутри массив из шести объектов. Поля <code>id</code>, <code>name</code>, <code>inn</code>, <code>addres</code>, <code>phone</code>, <code>type</code>.</p>
-<p>В phpMyAdmin выберите таблицу <code>counterparty</code>, вкладку <code>Вставка</code>. Заполните форму первой записью и нажмите <code>Вперёд</code>. Повторите шесть раз. Быстрее вставить все строки одним запросом:</p>
-<div class="codehilite" data-lang="sql"><pre><span></span><code><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">counterparty</span><span class="w"> </span><span class="p">(</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">inn</span><span class="p">,</span><span class="w"> </span><span class="n">address</span><span class="p">,</span><span class="w"> </span><span class="n">phone</span><span class="p">,</span><span class="w"> </span><span class="n">party_type</span><span class="p">)</span><span class="w"> </span><span class="k">VALUES</span>
-<span class="p">(</span><span class="s1">'001000001'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Магазин «Стежок-1»'</span><span class="p">,</span><span class="w"> </span><span class="s1">''</span><span class="p">,</span><span class="w"> </span><span class="s1">'Учебный город, улица Производственная, 1, офис 1'</span><span class="p">,</span><span class="w"> </span><span class="s1">'+79990010001'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Покупатель'</span><span class="p">),</span>
-<span class="p">(</span><span class="s1">'001000002'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Торговый дом «Стежок-2»'</span><span class="p">,</span><span class="w"> </span><span class="s1">''</span><span class="p">,</span><span class="w"> </span><span class="s1">'Учебный город, улица Производственная, 1, офис 2'</span><span class="p">,</span><span class="w"> </span><span class="s1">'+79990010002'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Покупатель'</span><span class="p">),</span>
-<span class="p">(</span><span class="s1">'001000003'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Студия «Стежок-3»'</span><span class="p">,</span><span class="w"> </span><span class="s1">''</span><span class="p">,</span><span class="w"> </span><span class="s1">'Учебный город, улица Производственная, 1, офис 3'</span><span class="p">,</span><span class="w"> </span><span class="s1">'+79990010003'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Покупатель'</span><span class="p">),</span>
-<span class="p">(</span><span class="s1">'001000004'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Магазин подарков «Стежок-4»'</span><span class="p">,</span><span class="w"> </span><span class="s1">''</span><span class="p">,</span><span class="w"> </span><span class="s1">'Учебный город, улица Производственная, 1, офис 4'</span><span class="p">,</span><span class="w"> </span><span class="s1">'+79990010004'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Покупатель'</span><span class="p">),</span>
-<span class="p">(</span><span class="s1">'001000005'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Мастерская «Стежок-5»'</span><span class="p">,</span><span class="w"> </span><span class="s1">''</span><span class="p">,</span><span class="w"> </span><span class="s1">'Учебный город, улица Производственная, 1, офис 5'</span><span class="p">,</span><span class="w"> </span><span class="s1">'+79990010005'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Покупатель'</span><span class="p">),</span>
-<span class="p">(</span><span class="s1">'001000006'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Оптовый склад «Стежок-6»'</span><span class="p">,</span><span class="w"> </span><span class="s1">''</span><span class="p">,</span><span class="w"> </span><span class="s1">'Учебный город, улица Производственная, 1, офис 6'</span><span class="p">,</span><span class="w"> </span><span class="s1">'+79990010006'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Покупатель'</span><span class="p">);</span>
+<h3>Откуда берутся значения для INSERT</h3>
+<p>Перед вставкой сопоставьте поля файлов и таблиц. Значения не придумываются: каждое берётся из конкретного столбца исходного документа.</p>
+<table>
+<thead>
+<tr>
+<th>Файл</th>
+<th>Что берём</th>
+<th>Таблица</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Заказчики.json</code></td>
+<td><code>id</code>, <code>name</code>, <code>inn</code>, <code>addres</code>, <code>phone</code>, <code>type</code></td>
+<td><code>counterparty</code></td>
+</tr>
+<tr>
+<td><code>Заказ покупателя.xlsx</code></td>
+<td>номер, дата, срок, код заказчика, изделие, количество, цена, скидка</td>
+<td><code>customer_order</code>, <code>customer_order_line</code></td>
+</tr>
+<tr>
+<td><code>Спецификация.xlsx</code></td>
+<td>материал, операция, единица, норма, часы</td>
+<td><code>item</code>, <code>specification</code>, <code>specification_component</code></td>
+</tr>
+<tr>
+<td><code>Цены.xlsx</code></td>
+<td>ресурс, цена</td>
+<td><code>price</code></td>
+</tr>
+<tr>
+<td><code>Заказ на производство.xlsx</code></td>
+<td>заказ, дата запуска, изделие, плановый расход</td>
+<td><code>production_order</code>, <code>production_product</code>, <code>production_resource</code></td>
+</tr>
+</tbody>
+</table>
+<p>Подробно по полям V01:</p>
+<table>
+<thead>
+<tr>
+<th>Поле таблицы</th>
+<th>Откуда значение</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>counterparty.id</code>, <code>name</code>, <code>inn</code>, <code>address</code>, <code>phone</code>, <code>party_type</code></td>
+<td><code>Заказчики.json</code>: ключи <code>id</code>, <code>name</code>, <code>inn</code>, <code>addres</code>, <code>phone</code>, <code>type</code></td>
+</tr>
+<tr>
+<td><code>counterparty.id</code> = <code>000000004</code>, <code>name</code> = ИП Томилин</td>
+<td><code>Заказ покупателя.xlsx</code>: блок «Заказчик»</td>
+</tr>
+<tr>
+<td><code>counterparty.id</code> = <code>M-001</code>, <code>name</code> = ООО ТД «Вершина»</td>
+<td><code>Заказ покупателя.xlsx</code>: блок «Исполнитель»</td>
+</tr>
+<tr>
+<td><code>customer_order.doc_no</code>, <code>doc_date</code></td>
+<td><code>Заказ покупателя.xlsx</code>: номер заказа и дата</td>
+</tr>
+<tr>
+<td><code>customer_order.customer_id</code>, <code>executor_id</code></td>
+<td>код <code>000000004</code> для ИП Томилина и <code>M-001</code> для ООО ТД «Вершина»; эти коды присваиваются при добавлении контрагентов</td>
+</tr>
+<tr>
+<td><code>customer_order_line.qty</code>, <code>sale_price</code>, <code>discount</code>, <code>product_id</code></td>
+<td><code>Заказ покупателя.xlsx</code>: количество, цена, скидка, изделие; <code>product_id</code> это код изделия в <code>item</code></td>
+</tr>
+<tr>
+<td><code>item.code</code>, <code>name</code>, <code>kind</code>, <code>unit</code></td>
+<td><code>Заказ покупателя.xlsx</code>, <code>Спецификация.xlsx</code> и <code>Цены.xlsx</code>: код, название, вид, единица</td>
+</tr>
+<tr>
+<td><code>price.amount</code>, <code>valid_from</code></td>
+<td><code>Цены.xlsx</code>: цена; дата <code>2026-04-01</code> задана условием варианта</td>
+</tr>
+<tr>
+<td><code>specification.output_qty</code>, <code>manufacturer_id</code></td>
+<td><code>Спецификация.xlsx</code>: нормы на одну единицу; изготовитель из шапки</td>
+</tr>
+<tr>
+<td><code>specification_component.qty</code></td>
+<td><code>Спецификация.xlsx</code>: норма расхода материала</td>
+</tr>
+<tr>
+<td><code>specification_component.time_norm</code></td>
+<td><code>Спецификация.xlsx</code>: часы операции</td>
+</tr>
+<tr>
+<td><code>production_order.doc_no</code>, <code>launch_date</code>, <code>department</code></td>
+<td><code>Заказ на производство.xlsx</code>: номер, дата запуска, подразделение; <code>doc_date</code> равна дате заказа <code>2026-04-22</code></td>
+</tr>
+<tr>
+<td><code>production_product.qty</code></td>
+<td><code>Заказ на производство.xlsx</code>: продукция к выпуску</td>
+</tr>
+<tr>
+<td><code>production_resource.qty</code>, <code>time_norm</code></td>
+<td><code>Заказ на производство.xlsx</code>: потребность в материалах и операциях</td>
+</tr>
+</tbody>
+</table>
+<p>В документах номера записаны как «№ 1». В базе к ним добавляется префикс варианта: заказ покупателя становится <code>V01-01</code>, производственный заказ <code>V01-P-01</code>. Так номера разных вариантов не совпадут.</p>
+<figure class="diagram">
+<img src="reports/screens/mysql/json-source.png" alt="Файл Заказчики.json: коды, названия и адреса">
+<figcaption>Источник заказчиков: JSON с полями `id`, `name`, `inn`, `addres`, `phone`, `type`. Код хранится строкой.</figcaption>
+</figure>
+
+<figure class="diagram">
+<img src="reports/screens/mysql/t2-customers.png" alt="Таблица counterparty после вставки заказчиков">
+<figcaption>Результат: те же коды и названия в таблице `counterparty`. Поле `addres` стало `address`, `type` стало `party_type`.</figcaption>
+</figure>
+
+<figure class="diagram">
+<img src="reports/screens/prep/V01_order_xlsx.png" alt="Заказ покупателя: шапка и строка продукции">
+<figcaption>Источник заказа: номер, дата, срок, код заказчика, изделие, количество, цена и скидка.</figcaption>
+</figure>
+
+<figure class="diagram">
+<img src="reports/screens/mysql/t2-order.png" alt="Таблица customer_order после вставки заказа">
+<figcaption>Результат: шапка заказа V01-01 в `customer_order`. Номер, дата, заказчик и исполнитель перенесены из Excel.</figcaption>
+</figure>
+
+<figure class="diagram">
+<img src="reports/screens/mysql/t2-lines-table.png" alt="Строка заказа в таблице customer_order_line">
+<figcaption>Результат: строка заказа в `customer_order_line`. Изделие, количество, цена и скидка берутся из таблицы продукции заказа.</figcaption>
+</figure>
+
+<figure class="diagram">
+<img src="reports/screens/prep/V01_spec_xlsx.png" alt="Спецификация: материалы, операции и нормы">
+<figcaption>Источник состава: строки материалов и операций с нормами и часами.</figcaption>
+</figure>
+
+<figure class="diagram">
+<img src="reports/screens/mysql/t2-spec.png" alt="Таблица specification_component после вставки состава">
+<figcaption>Результат: строки состава в `specification_component`. Норма материала и часы операции взяты из спецификации.</figcaption>
+</figure>
+
+<figure class="diagram">
+<img src="reports/screens/prep/V01_prices_xlsx.png" alt="Цены: ресурс и цена">
+<figcaption>Источник цен: ресурс и цена. Дата начала действия задана условием варианта.</figcaption>
+</figure>
+
+<figure class="diagram">
+<img src="reports/screens/mysql/t2-price-table.png" alt="Таблица price после вставки цен">
+<figcaption>Результат: цены в таблице `price`. Дата записана в формате `2026-04-01`.</figcaption>
+</figure>
+
+<h3>Шаг 7. Загрузите заказчиков из JSON</h3>
+<p>Перед вставкой откройте шпаргалку.</p>
+<details class="hint">
+<summary>Шпаргалка: INSERT</summary>
+
+
+<div class="codehilite" data-lang="sql"><pre><span></span><code><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="err">имя</span><span class="n">_таблицы</span><span class="w"> </span><span class="p">(</span><span class="err">поле</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="err">поле</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="err">поле</span><span class="mi">3</span><span class="p">)</span>
+<span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="err">значение</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="err">значение</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="err">значение</span><span class="mi">3</span><span class="p">);</span>
 </code></pre></div>
 
-<p>Добавьте изготовителя отдельной строкой: в заказе есть исполнитель, а среди шести заказчиков его нет.</p>
-<div class="codehilite" data-lang="sql"><pre><span></span><code><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">counterparty</span><span class="w"> </span><span class="p">(</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">inn</span><span class="p">,</span><span class="w"> </span><span class="n">address</span><span class="p">,</span><span class="w"> </span><span class="n">phone</span><span class="p">,</span><span class="w"> </span><span class="n">party_type</span><span class="p">)</span>
-<span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="s1">'M-001'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Ателье «Стежок»'</span><span class="p">,</span><span class="w"> </span><span class="s1">''</span><span class="p">,</span><span class="w"> </span><span class="s1">'Учебный город, улица Производственная, 1'</span><span class="p">,</span><span class="w"> </span><span class="s1">'+79990010000'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Изготовитель'</span><span class="p">);</span>
+
+
+`INSERT INTO` выбирает таблицу. В скобках перечислены поля в том порядке, в котором пойдут значения. `VALUES` начинает список значений. Текст и даты пишут в кавычках, числа без кавычек. Несколько строк разделяют запятыми, после последней строки запятая не ставится.
+
+</details>
+
+<p>Откройте <code>Заказчики.json</code> в блокноте или VS Code. Внутри массив из шести объектов. Поля <code>id</code>, <code>name</code>, <code>inn</code>, <code>addres</code>, <code>phone</code>, <code>type</code>.</p>
+<p>Вставьте все строки одним запросом:</p>
+<div class="codehilite" data-lang="sql"><pre><span></span><code><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">counterparty</span><span class="w"> </span><span class="p">(</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">inn</span><span class="p">,</span><span class="w"> </span><span class="n">address</span><span class="p">,</span><span class="w"> </span><span class="n">phone</span><span class="p">,</span><span class="w"> </span><span class="n">party_type</span><span class="p">)</span><span class="w"> </span><span class="k">VALUES</span>
+<span class="p">(</span><span class="s1">'000000001'</span><span class="p">,</span><span class="w"> </span><span class="s1">'ООО "Поставка"'</span><span class="p">,</span><span class="w"> </span><span class="s1">''</span><span class="p">,</span><span class="w"> </span><span class="s1">'г. Пятигорск'</span><span class="p">,</span><span class="w"> </span><span class="s1">'+79198634592'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Поставщик'</span><span class="p">),</span>
+<span class="p">(</span><span class="s1">'000000002'</span><span class="p">,</span><span class="w"> </span><span class="s1">'ООО "Кинотеатр Квант"'</span><span class="p">,</span><span class="w"> </span><span class="s1">'26320045123'</span><span class="p">,</span><span class="w"> </span><span class="s1">'г. Железноводск, ул. Мира, 123'</span><span class="p">,</span><span class="w"> </span><span class="s1">'+79884581555'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Покупатель'</span><span class="p">),</span>
+<span class="p">(</span><span class="s1">'000000008'</span><span class="p">,</span><span class="w"> </span><span class="s1">'ООО "Новый JDTO"'</span><span class="p">,</span><span class="w"> </span><span class="s1">'26320045111'</span><span class="p">,</span><span class="w"> </span><span class="s1">'г. Железноводск'</span><span class="p">,</span><span class="w"> </span><span class="s1">'+79884581555'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Покупатель'</span><span class="p">),</span>
+<span class="p">(</span><span class="s1">'000000003'</span><span class="p">,</span><span class="w"> </span><span class="s1">'ООО "Ромашка"'</span><span class="p">,</span><span class="w"> </span><span class="s1">'4140784214'</span><span class="p">,</span><span class="w"> </span><span class="s1">'г. Омск, ул. Строителей, 294'</span><span class="p">,</span><span class="w"> </span><span class="s1">'+79882584546'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Поставщик'</span><span class="p">),</span>
+<span class="p">(</span><span class="s1">'000000009'</span><span class="p">,</span><span class="w"> </span><span class="s1">'ООО "Ипподром"'</span><span class="p">,</span><span class="w"> </span><span class="s1">'5874045632'</span><span class="p">,</span><span class="w"> </span><span class="s1">'г. Уфа, ул. Набережная, 37'</span><span class="p">,</span><span class="w"> </span><span class="s1">'+79627486389'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Поставщик'</span><span class="p">),</span>
+<span class="p">(</span><span class="s1">'000000010'</span><span class="p">,</span><span class="w"> </span><span class="s1">'ООО "Ассоль"'</span><span class="p">,</span><span class="w"> </span><span class="s1">'2629011278'</span><span class="p">,</span><span class="w"> </span><span class="s1">'г. Калуга, ул. Пушкина, 94'</span><span class="p">,</span><span class="w"> </span><span class="s1">'+79184572398'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Покупатель'</span><span class="p">);</span>
+</code></pre></div>
+
+<p>В заказе указан ИП Томилин, а среди шести записей JSON его нет. Добавьте его отдельной строкой. Изготовитель тоже добавляется отдельно: в заказе он указан в блоке «Исполнитель».</p>
+<div class="codehilite" data-lang="sql"><pre><span></span><code><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">counterparty</span><span class="w"> </span><span class="p">(</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">inn</span><span class="p">,</span><span class="w"> </span><span class="n">address</span><span class="p">,</span><span class="w"> </span><span class="n">phone</span><span class="p">,</span><span class="w"> </span><span class="n">party_type</span><span class="p">)</span><span class="w"> </span><span class="k">VALUES</span>
+<span class="p">(</span><span class="s1">'000000004'</span><span class="p">,</span><span class="w"> </span><span class="s1">'ИП Томилин Александр Сергеевич'</span><span class="p">,</span><span class="w"> </span><span class="s1">''</span><span class="p">,</span><span class="w"> </span><span class="s1">'г. Пятигорск'</span><span class="p">,</span><span class="w"> </span><span class="s1">''</span><span class="p">,</span><span class="w"> </span><span class="s1">'Покупатель'</span><span class="p">),</span>
+<span class="p">(</span><span class="s1">'M-001'</span><span class="p">,</span><span class="w"> </span><span class="s1">'ООО ТД "Вершина"'</span><span class="p">,</span><span class="w"> </span><span class="s1">''</span><span class="p">,</span><span class="w"> </span><span class="s1">'г. Пятигорск'</span><span class="p">,</span><span class="w"> </span><span class="s1">''</span><span class="p">,</span><span class="w"> </span><span class="s1">'Изготовитель'</span><span class="p">);</span>
 </code></pre></div>
 
 <figure class="diagram">
-<img src="reports/screens/mysql/t2-customers.png" alt="Таблица counterparty после загрузки: шесть заказчиков и изготовитель">
-<figcaption>Заказчики загружены: коды `001000001`…`001000006` сохранили ведущие нули, изготовитель хранится отдельной строкой.</figcaption>
+<img src="reports/screens/mysql/t2-insert-sql.png" alt="Вставка заказчиков запросом INSERT в phpMyAdmin">
+<figcaption>Вставка запросом: список полей и значения в том же порядке. Текстовые значения в кавычках.</figcaption>
 </figure>
 
-<h3>Шаг 9. Загрузите заказ, спецификацию и цены из Excel</h3>
-<p>Откройте <code>Заказ покупателя.xlsx</code>. В шапке номер <code>V01-01</code>, дата <code>15.03.2027</code>, срок <code>22.03.2027</code>, заказчик <code>001000001</code>. В таблице одна строка: изделие, единица, количество 12.</p>
-<p>Сначала создайте изделие и ресурсы в <code>item</code>. Коды и названия возьмите из <code>Спецификация.xlsx</code> и <code>Цены.xlsx</code>.</p>
+<figure class="diagram">
+<img src="reports/screens/mysql/t2-customers.png" alt="Таблица counterparty после загрузки: восемь контрагентов">
+<figcaption>Контрагенты загружены: шесть записей JSON, ИП Томилин и изготовитель. Коды сохранили ведущие нули.</figcaption>
+</figure>
+
+<h3>Шаг 8. Загрузите заказ, спецификацию и цены из Excel</h3>
+<p>Откройте <code>Заказ покупателя.xlsx</code>. В шапке номер <code>V01-01</code>, дата <code>22.04.2026</code>, срок <code>29.04.2026</code>, заказчик ИП Томилин. В таблице одна строка: изделие «Стол кухонный «Самобранка»», количество 2, цена 14 120,00, скидка 1 412,00.</p>
+<p>Сначала создайте изделие и ресурсы в <code>item</code>. Коды и названия возьмите из <code>Спецификация.xlsx</code>, <code>Цены.xlsx</code> и заказа.</p>
 <div class="codehilite" data-lang="sql"><pre><span></span><code><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">item</span><span class="w"> </span><span class="p">(</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">code</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">kind</span><span class="p">,</span><span class="w"> </span><span class="n">unit</span><span class="p">)</span><span class="w"> </span><span class="k">VALUES</span>
-<span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="s1">'P-01'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Фартук поварской'</span><span class="p">,</span><span class="w"> </span><span class="s1">'product'</span><span class="p">,</span><span class="w"> </span><span class="s1">'шт'</span><span class="p">),</span>
-<span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="s1">'M-01'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Бязь'</span><span class="p">,</span><span class="w"> </span><span class="s1">'material'</span><span class="p">,</span><span class="w"> </span><span class="s1">'м'</span><span class="p">),</span>
-<span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="s1">'M-02'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Тесьма'</span><span class="p">,</span><span class="w"> </span><span class="s1">'material'</span><span class="p">,</span><span class="w"> </span><span class="s1">'м'</span><span class="p">),</span>
-<span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="s1">'M-03'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Нить'</span><span class="p">,</span><span class="w"> </span><span class="s1">'material'</span><span class="p">,</span><span class="w"> </span><span class="s1">'м'</span><span class="p">),</span>
-<span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="s1">'O-01'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Раскрой'</span><span class="p">,</span><span class="w"> </span><span class="s1">'operation'</span><span class="p">,</span><span class="w"> </span><span class="s1">'ч'</span><span class="p">),</span>
-<span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="w"> </span><span class="s1">'O-02'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Пошив'</span><span class="p">,</span><span class="w"> </span><span class="s1">'operation'</span><span class="p">,</span><span class="w"> </span><span class="s1">'ч'</span><span class="p">);</span>
+<span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="s1">'ФР-00000034'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Стол кухонный "Самобранка"'</span><span class="p">,</span><span class="w"> </span><span class="s1">'product'</span><span class="p">,</span><span class="w"> </span><span class="s1">'шт'</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="s1">'ФР-00000009'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Столешница круглая'</span><span class="p">,</span><span class="w"> </span><span class="s1">'material'</span><span class="p">,</span><span class="w"> </span><span class="s1">'шт'</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="s1">'ФР-00000013'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Мебельная деталь 500х800'</span><span class="p">,</span><span class="w"> </span><span class="s1">'material'</span><span class="p">,</span><span class="w"> </span><span class="s1">'шт'</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="s1">'ФР-00000016'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Мебельная деталь 600х800'</span><span class="p">,</span><span class="w"> </span><span class="s1">'material'</span><span class="p">,</span><span class="w"> </span><span class="s1">'шт'</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="s1">'ФР-00000027'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Евровинт 6,5х5'</span><span class="p">,</span><span class="w"> </span><span class="s1">'material'</span><span class="p">,</span><span class="w"> </span><span class="s1">'тыс. шт'</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="w"> </span><span class="s1">'ФР-00000026'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Опора'</span><span class="p">,</span><span class="w"> </span><span class="s1">'material'</span><span class="p">,</span><span class="w"> </span><span class="s1">'шт'</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">7</span><span class="p">,</span><span class="w"> </span><span class="s1">'ФР-00000053'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Сборка модулей'</span><span class="p">,</span><span class="w"> </span><span class="s1">'operation'</span><span class="p">,</span><span class="w"> </span><span class="s1">'ч'</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="w"> </span><span class="s1">'ФР-00000052'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Распил ДСП, МДФ и листового материала'</span><span class="p">,</span><span class="w"> </span><span class="s1">'operation'</span><span class="p">,</span><span class="w"> </span><span class="s1">'ч'</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">9</span><span class="p">,</span><span class="w"> </span><span class="s1">'ФР-00000494'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Упаковка'</span><span class="p">,</span><span class="w"> </span><span class="s1">'operation'</span><span class="p">,</span><span class="w"> </span><span class="s1">'ч'</span><span class="p">);</span>
 </code></pre></div>
 
-<p>Цены из <code>Цены.xlsx</code>:</p>
+<p>Цены из <code>Цены.xlsx</code>. Дата начала действия одна для всех ресурсов: <code>2026-04-01</code>.</p>
 <div class="codehilite" data-lang="sql"><pre><span></span><code><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">price</span><span class="w"> </span><span class="p">(</span><span class="n">item_id</span><span class="p">,</span><span class="w"> </span><span class="n">valid_from</span><span class="p">,</span><span class="w"> </span><span class="n">amount</span><span class="p">)</span><span class="w"> </span><span class="k">VALUES</span>
-<span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="s1">'2027-03-01'</span><span class="p">,</span><span class="w"> </span><span class="mi">280</span><span class="p">.</span><span class="mi">00</span><span class="p">),</span>
-<span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="s1">'2027-03-01'</span><span class="p">,</span><span class="w"> </span><span class="mi">25</span><span class="p">.</span><span class="mi">00</span><span class="p">),</span>
-<span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="s1">'2027-03-01'</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">.</span><span class="mi">40</span><span class="p">),</span>
-<span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="s1">'2027-03-01'</span><span class="p">,</span><span class="w"> </span><span class="mi">600</span><span class="p">.</span><span class="mi">00</span><span class="p">),</span>
-<span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="w"> </span><span class="s1">'2027-03-01'</span><span class="p">,</span><span class="w"> </span><span class="mi">800</span><span class="p">.</span><span class="mi">00</span><span class="p">);</span>
+<span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="s1">'2026-04-01'</span><span class="p">,</span><span class="w"> </span><span class="mi">3250</span><span class="p">.</span><span class="mi">00</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="s1">'2026-04-01'</span><span class="p">,</span><span class="w"> </span><span class="mi">95</span><span class="p">.</span><span class="mi">00</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="s1">'2026-04-01'</span><span class="p">,</span><span class="w"> </span><span class="mi">140</span><span class="p">.</span><span class="mi">00</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="s1">'2026-04-01'</span><span class="p">,</span><span class="w"> </span><span class="mi">595</span><span class="p">.</span><span class="mi">00</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="w"> </span><span class="s1">'2026-04-01'</span><span class="p">,</span><span class="w"> </span><span class="mi">245</span><span class="p">.</span><span class="mi">00</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">7</span><span class="p">,</span><span class="w"> </span><span class="s1">'2026-04-01'</span><span class="p">,</span><span class="w"> </span><span class="mi">1400</span><span class="p">.</span><span class="mi">00</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="w"> </span><span class="s1">'2026-04-01'</span><span class="p">,</span><span class="w"> </span><span class="mi">450</span><span class="p">.</span><span class="mi">00</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">9</span><span class="p">,</span><span class="w"> </span><span class="s1">'2026-04-01'</span><span class="p">,</span><span class="w"> </span><span class="mi">950</span><span class="p">.</span><span class="mi">00</span><span class="p">);</span>
 </code></pre></div>
 
 <p>Спецификация и состав:</p>
 <div class="codehilite" data-lang="sql"><pre><span></span><code><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">specification</span><span class="w"> </span><span class="p">(</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">product_id</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">output_qty</span><span class="p">,</span><span class="w"> </span><span class="n">manufacturer_id</span><span class="p">)</span>
-<span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="s1">'Фартук поварской'</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="s1">'M-001'</span><span class="p">);</span>
+<span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="s1">'Стол кухонный "Самобранка"'</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">.</span><span class="mi">000</span><span class="p">,</span><span class="w"> </span><span class="s1">'M-001'</span><span class="p">);</span>
 
 <span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">specification_component</span><span class="w"> </span><span class="p">(</span><span class="n">specification_id</span><span class="p">,</span><span class="w"> </span><span class="n">item_id</span><span class="p">,</span><span class="w"> </span><span class="n">qty</span><span class="p">,</span><span class="w"> </span><span class="n">time_norm</span><span class="p">)</span><span class="w"> </span><span class="k">VALUES</span>
-<span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">.</span><span class="mi">8</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">),</span>
-<span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">),</span>
-<span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="mi">35</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">),</span>
-<span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">.</span><span class="mi">12</span><span class="p">),</span>
-<span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">6</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">.</span><span class="mi">35</span><span class="p">);</span>
+<span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">.</span><span class="mi">000</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">.</span><span class="mi">000</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">.</span><span class="mi">000</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">.</span><span class="mi">000</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">.</span><span class="mi">000</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">.</span><span class="mi">000</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">.</span><span class="mi">012</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">.</span><span class="mi">000</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">6</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">.</span><span class="mi">000</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">.</span><span class="mi">000</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">7</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">.</span><span class="mi">000</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">.</span><span class="mi">750</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">8</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">.</span><span class="mi">000</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">.</span><span class="mi">500</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">9</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">.</span><span class="mi">000</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">.</span><span class="mi">500</span><span class="p">);</span>
 </code></pre></div>
 
-<p>Для материалов <code>qty</code> это норма на единицу, <code>time_norm</code> равно 1. Для операций <code>qty</code> равно 1, <code>time_norm</code> хранит часы. Такая запись позволяет считать материалы и операции одной формулой.</p>
+<p>Для материалов <code>qty</code> это норма на единицу, <code>time_norm</code> равно нулю. Для операций <code>qty</code> равно нулю, <code>time_norm</code> хранит часы. Такая запись позволяет выбрать нужное поле через <code>CASE</code> в задании 3.</p>
 <p>Заказ и строка заказа:</p>
 <div class="codehilite" data-lang="sql"><pre><span></span><code><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">customer_order</span><span class="w"> </span><span class="p">(</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">doc_no</span><span class="p">,</span><span class="w"> </span><span class="n">doc_date</span><span class="p">,</span><span class="w"> </span><span class="n">customer_id</span><span class="p">,</span><span class="w"> </span><span class="n">executor_id</span><span class="p">)</span>
-<span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="s1">'V01-01'</span><span class="p">,</span><span class="w"> </span><span class="s1">'2027-03-15'</span><span class="p">,</span><span class="w"> </span><span class="s1">'001000001'</span><span class="p">,</span><span class="w"> </span><span class="s1">'M-001'</span><span class="p">);</span>
+<span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="s1">'V01-01'</span><span class="p">,</span><span class="w"> </span><span class="s1">'2026-04-22'</span><span class="p">,</span><span class="w"> </span><span class="s1">'000000004'</span><span class="p">,</span><span class="w"> </span><span class="s1">'M-001'</span><span class="p">);</span>
 
-<span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">customer_order_line</span><span class="w"> </span><span class="p">(</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">order_id</span><span class="p">,</span><span class="w"> </span><span class="n">product_id</span><span class="p">,</span><span class="w"> </span><span class="n">source_code</span><span class="p">,</span><span class="w"> </span><span class="n">qty</span><span class="p">,</span><span class="w"> </span><span class="n">sale_price</span><span class="p">,</span><span class="w"> </span><span class="n">discount</span><span class="p">)</span>
-<span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="s1">'P-01'</span><span class="p">,</span><span class="w"> </span><span class="mi">12</span><span class="p">,</span><span class="w"> </span><span class="mi">700</span><span class="p">.</span><span class="mi">00</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span>
+<span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">customer_order_line</span><span class="w"> </span><span class="p">(</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">order_id</span><span class="p">,</span><span class="w"> </span><span class="n">product_id</span><span class="p">,</span><span class="w"> </span><span class="n">qty</span><span class="p">,</span><span class="w"> </span><span class="n">sale_price</span><span class="p">,</span><span class="w"> </span><span class="n">discount</span><span class="p">)</span>
+<span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">14120</span><span class="p">.</span><span class="mi">00</span><span class="p">,</span><span class="w"> </span><span class="mi">1412</span><span class="p">.</span><span class="mi">00</span><span class="p">);</span>
+</code></pre></div>
+
+<p>Производственный заказ:</p>
+<div class="codehilite" data-lang="sql"><pre><span></span><code><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">production_order</span><span class="w"> </span><span class="p">(</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">doc_no</span><span class="p">,</span><span class="w"> </span><span class="n">doc_date</span><span class="p">,</span><span class="w"> </span><span class="n">launch_date</span><span class="p">,</span><span class="w"> </span><span class="n">department</span><span class="p">)</span>
+<span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="s1">'V01-P-01'</span><span class="p">,</span><span class="w"> </span><span class="s1">'2026-04-22'</span><span class="p">,</span><span class="w"> </span><span class="s1">'2026-04-23'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Основное подразделение'</span><span class="p">);</span>
+
+<span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">production_product</span><span class="w"> </span><span class="p">(</span><span class="n">production_id</span><span class="p">,</span><span class="w"> </span><span class="n">product_id</span><span class="p">,</span><span class="w"> </span><span class="n">qty</span><span class="p">)</span>
+<span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">);</span>
+
+<span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">production_resource</span><span class="w"> </span><span class="p">(</span><span class="n">production_id</span><span class="p">,</span><span class="w"> </span><span class="n">item_id</span><span class="p">,</span><span class="w"> </span><span class="n">qty</span><span class="p">,</span><span class="w"> </span><span class="n">time_norm</span><span class="p">)</span><span class="w"> </span><span class="k">VALUES</span>
+<span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">.</span><span class="mi">000</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">.</span><span class="mi">000</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">.</span><span class="mi">000</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">.</span><span class="mi">000</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="mi">8</span><span class="p">.</span><span class="mi">000</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">.</span><span class="mi">000</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">.</span><span class="mi">024</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">.</span><span class="mi">000</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">6</span><span class="p">,</span><span class="w"> </span><span class="mi">8</span><span class="p">.</span><span class="mi">000</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">.</span><span class="mi">000</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">7</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">.</span><span class="mi">000</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">.</span><span class="mi">000</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">8</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">.</span><span class="mi">000</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">.</span><span class="mi">000</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">9</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">.</span><span class="mi">000</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">.</span><span class="mi">000</span><span class="p">);</span>
 </code></pre></div>
 
 <figure class="diagram">
 <img src="reports/screens/mysql/t2-order.png" alt="Заказ V01-01 в phpMyAdmin: номер, дата, заказчик и исполнитель">
-<figcaption>Шапка заказа V01-01: дата 15.03.2027, заказчик 001000001, исполнитель M-001.</figcaption>
+<figcaption>Шапка заказа V01-01: дата 22.04.2026, заказчик 000000004, исполнитель M-001.</figcaption>
 </figure>
 
 <figure class="diagram">
 <img src="reports/screens/mysql/t2-spec.png" alt="Состав спецификации V01: материалы и операции с нормами">
-<figcaption>Состав спецификации: пять строк, у материалов норма расхода, у операций время.</figcaption>
+<figcaption>Состав спецификации: восемь строк, у материалов норма расхода, у операций время.</figcaption>
 </figure>
 
-<h3>Шаг 10. Проверьте данные и ограничения</h3>
+<figure class="diagram">
+<img src="reports/screens/prep/V01_production_xlsx.png" alt="Заказ на производство V01: продукция, материалы и операции">
+<figcaption>Источник производственного заказа: изделие, потребность в материалах и технологические операции.</figcaption>
+</figure>
+
+<figure class="diagram">
+<img src="reports/screens/mysql/t2-production.png" alt="Шапка производственного заказа в таблице production_order">
+<figcaption>Результат: производственный заказ V01-P-01. Дата запуска и подразделение перенесены из Excel.</figcaption>
+</figure>
+
+<figure class="diagram">
+<img src="reports/screens/mysql/t2-production-product.png" alt="Продукция к выпуску в таблице production_product">
+<figcaption>Результат: в производственном заказе две единицы изделия. Количество взято из строки «Продукция, работа».</figcaption>
+</figure>
+
+<figure class="diagram">
+<img src="reports/screens/mysql/t2-production-resource.png" alt="Плановый расход ресурсов в таблице production_resource">
+<figcaption>Результат: восемь строк планового расхода. Материалы и операции хранятся в одной таблице, как и в спецификации.</figcaption>
+</figure>
+
+<h3>Шаг 9. Проверьте данные и ограничения</h3>
 <p>Выполните проверки:</p>
 <div class="codehilite" data-lang="sql"><pre><span></span><code><span class="k">SELECT</span><span class="w"> </span><span class="k">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">customers</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">counterparty</span><span class="p">;</span>
 
@@ -1434,16 +2000,20 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <span class="k">SELECT</span><span class="w"> </span><span class="k">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">items</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">item</span><span class="p">;</span>
 
 <span class="k">SELECT</span><span class="w"> </span><span class="k">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">components</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">specification_component</span><span class="p">;</span>
+
+<span class="k">SELECT</span><span class="w"> </span><span class="k">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">orders</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">customer_order</span><span class="p">;</span>
+
+<span class="k">SELECT</span><span class="w"> </span><span class="k">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">production_rows</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">production_resource</span><span class="p">;</span>
 </code></pre></div>
 
-<p>Ожидается шесть заказчиков плюс изготовитель, шесть ресурсов и пять строк состава.</p>
+<p>Ожидается восемь контрагентов, девять ресурсов, восемь строк состава, один заказ и восемь строк производственного расхода.</p>
 <p>Проверьте внешние ключи. Попробуйте вставить заказ с несуществующим заказчиком:</p>
-<div class="codehilite" data-lang="sql"><pre><span></span><code><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">customer_order</span><span class="w"> </span><span class="p">(</span><span class="n">doc_no</span><span class="p">,</span><span class="w"> </span><span class="n">doc_date</span><span class="p">,</span><span class="w"> </span><span class="n">customer_id</span><span class="p">,</span><span class="w"> </span><span class="n">executor_id</span><span class="p">)</span>
-<span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="s1">'TEST-1'</span><span class="p">,</span><span class="w"> </span><span class="s1">'2027-03-20'</span><span class="p">,</span><span class="w"> </span><span class="s1">'NO-SUCH'</span><span class="p">,</span><span class="w"> </span><span class="s1">'M-001'</span><span class="p">);</span>
+<div class="codehilite" data-lang="sql"><pre><span></span><code><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">customer_order</span><span class="w"> </span><span class="p">(</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">doc_no</span><span class="p">,</span><span class="w"> </span><span class="n">doc_date</span><span class="p">,</span><span class="w"> </span><span class="n">customer_id</span><span class="p">,</span><span class="w"> </span><span class="n">executor_id</span><span class="p">)</span>
+<span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="mi">99</span><span class="p">,</span><span class="w"> </span><span class="s1">'TEST-1'</span><span class="p">,</span><span class="w"> </span><span class="s1">'2026-04-25'</span><span class="p">,</span><span class="w"> </span><span class="s1">'NO-SUCH'</span><span class="p">,</span><span class="w"> </span><span class="s1">'M-001'</span><span class="p">);</span>
 </code></pre></div>
 
 <p>Сервер должен отклонить запрос с ошибкой 1452. Это доказательство, что внешний ключ работает. После проверки ничего удалять не нужно: строка не вставилась.</p>
-<h3>Шаг 11. Сделайте выгрузку SQL</h3>
+<h3>Шаг 10. Сделайте выгрузку SQL</h3>
 <p>Откройте базу <code>dkip2027_course</code>, вкладку <code>Экспорт</code>. Выберите метод <code>Быстрый</code>, формат <code>SQL</code>, нажмите <code>Экспорт</code>. Браузер скачает файл. Переименуйте его в <code>dkip2027-mysql.sql</code> и положите в папку <code>task2</code>.</p>
 <figure class="diagram">
 <img src="reports/screens/mysql/t2-export.png" alt="Экспорт базы dkip2027_course в SQL-файл">
@@ -1451,7 +2021,7 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 </figure>
 
 <p>Откройте файл в блокноте и проверьте две вещи: в нём есть команды <code>CREATE TABLE</code> и команды <code>INSERT INTO</code>. Если есть только структура, данные не выгрузились. Если есть только вставки, не выгрузилась структура.</p>
-<h3>Шаг 12. Восстановите базу в пустую копию</h3>
+<h3>Шаг 11. Восстановите базу в пустую копию</h3>
 <p>Создайте базу <code>dkip2027_restore</code>. Откройте её, вкладку <code>Импорт</code>, выберите файл <code>dkip2027-mysql.sql</code>, формат <code>SQL</code>, кодировку <code>utf-8</code> и нажмите <code>Импорт</code>. После завершения проверьте список таблиц и число строк. Если данные на месте, выгрузка рабочая.</p>
 <figure class="diagram">
 <img src="reports/screens/mysql/t2-restore.png" alt="Восстановление базы из SQL-файла в пустую копию">
@@ -1474,24 +2044,29 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <td>новая база</td>
 </tr>
 <tr>
-<td><code>Создать таблицу</code></td>
-<td>phpMyAdmin, вкладка <code>Структура</code></td>
-<td>таблица через форму</td>
+<td><code>CREATE TABLE</code></td>
+<td>phpMyAdmin, SQL</td>
+<td>создать таблицу запросом</td>
 </tr>
 <tr>
-<td><code>Предпросмотр SQL</code></td>
-<td>phpMyAdmin, форма таблицы</td>
-<td>увидеть запрос до сохранения</td>
+<td><code>PRIMARY KEY</code></td>
+<td>внутри <code>CREATE TABLE</code></td>
+<td>уникальность строк</td>
 </tr>
 <tr>
-<td><code>Связи</code></td>
-<td>phpMyAdmin, вкладка таблицы</td>
-<td>внешние ключи мышью</td>
+<td><code>FOREIGN KEY</code> / <code>ALTER TABLE</code></td>
+<td>phpMyAdmin, SQL</td>
+<td>связь таблиц</td>
 </tr>
 <tr>
-<td><code>SQL</code></td>
-<td>phpMyAdmin, вкладка базы</td>
-<td>запросы и <code>ALTER TABLE</code></td>
+<td><code>INSERT INTO</code></td>
+<td>phpMyAdmin, SQL</td>
+<td>загрузка строк из JSON и Excel</td>
+</tr>
+<tr>
+<td><code>SELECT</code></td>
+<td>phpMyAdmin, SQL</td>
+<td>проверка данных и ключей</td>
 </tr>
 <tr>
 <td><code>SHOW CREATE TABLE</code></td>
@@ -1507,11 +2082,6 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <td><code>SELECT ... FROM information_schema</code></td>
 <td>phpMyAdmin, SQL</td>
 <td>проверка ключей</td>
-</tr>
-<tr>
-<td><code>INSERT INTO</code></td>
-<td>phpMyAdmin, SQL</td>
-<td>загрузка строк из JSON и Excel</td>
 </tr>
 <tr>
 <td><code>Экспорт</code></td>
@@ -1532,7 +2102,7 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <p><strong>Типы ссылающегося и целевого поля разные.</strong> Например, <code>INT</code> ссылается на <code>VARCHAR</code>. Исправление: привести типы к одному виду.</p>
 <p><strong>Данные вставлены до создания связей.</strong> Строка ссылается на несуществующего родителя. Исправление: сначала загрузить справочники.</p>
 <p><strong>JSON перенесён с другим именем поля.</strong> <code>addres</code> не становится <code>address</code> автоматически. Исправление: сопоставить имена в <code>INSERT</code>.</p>
-<p><strong>Дата записана как <code>15.03.2027</code>.</strong> MySQL ждёт <code>2027-03-15</code>. Исправление: привести дату к формату <code>ГГГГ-ММ-ДД</code>.</p>
+<p><strong>Дата записана как <code>22.04.2026</code>.</strong> MySQL ждёт <code>2026-04-22</code>. Исправление: привести дату к формату <code>ГГГГ-ММ-ДД</code>.</p>
 <p><strong>Выгрузка без данных.</strong> В файле только <code>CREATE TABLE</code>. Исправление: повторить экспорт и включить данные.</p>
 <h2 id="чек-лист-перед-сдачей"><span class="num">07</span>Чек-лист перед сдачей</h2>
 <ul>
@@ -1541,8 +2111,9 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <li>У каждой таблицы есть первичный ключ.</li>
 <li>Внешние ключи созданы и проверены запросом.</li>
 <li>Коды заказчиков хранятся текстом и не потеряли ведущие нули.</li>
-<li>Заказчики загружены из JSON, изготовитель добавлен отдельно.</li>
+<li>Заказчики загружены из JSON, ИП Томилин и изготовитель добавлены отдельно.</li>
 <li>Заказ, спецификация, состав и цены загружены из Excel.</li>
+<li>Производственный заказ и плановый расход загружены из Excel.</li>
 <li>Даты записаны в формате <code>ГГГГ-ММ-ДД</code>.</li>
 <li>Проверка с несуществующим заказчиком даёт ошибку 1452.</li>
 <li>Выгрузка <code>dkip2027-mysql.sql</code> содержит структуру и данные.</li>
@@ -1605,6 +2176,40 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
       var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
       window.scrollTo({top: 0, behavior: reduce ? 'auto' : 'smooth'});
     });
+  });
+})();
+
+(function(){
+  document.querySelectorAll('[data-slider]').forEach(function(slider){
+    var track = slider.querySelector('[data-slider-track]');
+    var slides = track ? Array.prototype.slice.call(track.children) : [];
+    var counter = slider.querySelector('[data-slider-counter]');
+    var prev = slider.querySelector('[data-slider-prev]');
+    var next = slider.querySelector('[data-slider-next]');
+    if(!track || slides.length < 2) return;
+    function current(){
+      var best = 0, dist = Infinity;
+      slides.forEach(function(slide, i){
+        var d = Math.abs(slide.offsetLeft - track.scrollLeft);
+        if(d < dist){ dist = d; best = i; }
+      });
+      return best;
+    }
+    function update(){
+      if(counter) counter.textContent = (current() + 1) + ' / ' + slides.length;
+    }
+    function go(delta){
+      var i = Math.max(0, Math.min(slides.length - 1, current() + delta));
+      var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      track.scrollTo({left: slides[i].offsetLeft, behavior: reduce ? 'auto' : 'smooth'});
+    }
+    if(prev) prev.addEventListener('click', function(){ go(-1); });
+    if(next) next.addEventListener('click', function(){ go(1); });
+    track.addEventListener('scroll', function(){
+      clearTimeout(track._sliderTimer);
+      track._sliderTimer = setTimeout(update, 80);
+    }, {passive: true});
+    update();
   });
 })();
 (function(){

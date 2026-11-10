@@ -98,6 +98,36 @@ def label_value(ws, row: int, pairs: list[tuple[str, object]], last_col: int) ->
     ws.row_dimensions[row].height = 36
 
 
+def merged_label(ws, row: int, c1: int, c2: int, text: str,
+                 bold: bool = False, align: str = "left") -> None:
+    font = VALUE_FONT if bold else LABEL_FONT
+    if c2 > c1:
+        ws.merge_cells(start_row=row, start_column=c1, end_row=row, end_column=c2)
+    cell = ws.cell(row=row, column=c1, value=text)
+    cell.font = font
+    cell.alignment = Alignment(horizontal=align, vertical="center", wrap_text=True)
+    for c in range(c1, c2 + 1):
+        ws.cell(row=row, column=c).border = BORDER
+        ws.cell(row=row, column=c).font = font
+    ws.row_dimensions[row].height = 30
+
+
+def data_rows(ws, start_row: int, rows: list[list[object]],
+              formats: list[str | None], widths: list[float]) -> None:
+    for i, width in enumerate(widths, 1):
+        ws.column_dimensions[get_column_letter(i)].width = width
+    for r, values in enumerate(rows, start_row):
+        for i, value in enumerate(values, 1):
+            cell = ws.cell(row=r, column=i, value=value)
+            cell.font = BODY_FONT
+            cell.border = BORDER
+            cell.alignment = Alignment(vertical="top", wrap_text=i == 1)
+            fmt = formats[i - 1]
+            if fmt:
+                cell.number_format = fmt
+        ws.row_dimensions[r].height = 15
+
+
 def table(ws, start_row: int, headers: list[str], rows: list[list[object]],
           formats: list[str | None], widths: list[float]) -> int:
     for i, header in enumerate(headers, 1):
@@ -149,149 +179,145 @@ def save(wb: Workbook, path: Path) -> None:
 
 
 def build_order(v: dict, path: Path) -> None:
-    wb, ws = base_sheet("Заказ покупателя", variant_subtitle(v), 4)
+    wb, ws = base_sheet("Заказ покупателя", variant_subtitle(v), 8)
     customer = v["customers"][0]
-    label_value(ws, 4, [
-        ("Номер заказа", v["id"] + "-01"),
-        ("Дата", ORDER_DATE),
-    ], 4)
-    ws.cell(row=4, column=4).number_format = "DD.MM.YYYY"
-    label_value(ws, 5, [
-        ("Срок", DUE_DATE),
-        ("Код заказчика", customer["id"]),
-    ], 4)
-    ws.cell(row=5, column=2).number_format = "DD.MM.YYYY"
-    label_value(ws, 7, [
-        ("Изготовитель", v["brand"]),
-        ("Заказчик", customer["name"]),
-    ], 4)
-    section(ws, 9, 4, "Продукция")
-    table(ws, 10, ["Продукция", "Единица", "Количество", "Примечание"],
-          [[v["product"], "ед.", v["qty"], "Нормативная стоимость рассчитывается в задании 3"]],
-          [None, None, "0.###", None], [30, 14, 18, 32])
+    merged_label(ws, 4, 1, 2, "Номер заказа")
+    merged_label(ws, 4, 3, 3, v["id"] + "-01", bold=True)
+    merged_label(ws, 4, 4, 5, "Дата")
+    merged_label(ws, 4, 6, 8, ORDER_DATE, bold=True)
+    merged_label(ws, 5, 1, 2, "Срок")
+    merged_label(ws, 5, 3, 3, DUE_DATE, bold=True)
+    merged_label(ws, 5, 4, 5, "Код заказчика")
+    merged_label(ws, 5, 6, 8, customer["id"], bold=True)
+    merged_label(ws, 7, 1, 2, "Изготовитель")
+    merged_label(ws, 7, 3, 5, v["brand"], bold=True)
+    merged_label(ws, 7, 6, 6, "Заказчик")
+    merged_label(ws, 7, 7, 8, customer["name"], bold=True)
+    ws.cell(row=4, column=6).number_format = "DD.MM.YYYY"
+    ws.cell(row=5, column=3).number_format = "DD.MM.YYYY"
+
+    section(ws, 9, 8, "Продукция")
+    table(ws, 10, ["№", "Товары (работы, услуги)", "Код", "Кол-во", "Ед.", "Цена", "Скидка", "Сумма"],
+          [[1, v["product"], "P-01", v["qty"], "ед.", 700.00, 0.00, v["qty"] * 700.00]],
+          [None, None, None, "0.###", None, "#,##0.00", "#,##0.00", "#,##0.00"],
+          [4, 30, 14, 14, 9, 14, 12, 14])
+    ws.cell(row=12, column=7, value="Итого:").font = VALUE_FONT
+    ws.cell(row=12, column=7).alignment = Alignment(horizontal="right")
+    ws.cell(row=12, column=8, value=v["qty"] * 700.00).number_format = "#,##0.00"
+    ws.cell(row=12, column=8).font = VALUE_FONT
+    ws.cell(row=12, column=8).border = BORDER
     ws.freeze_panes = "A4"
     save(wb, path)
 
 
 def build_production(v: dict, path: Path) -> None:
-    wb, ws = base_sheet("Заказ на производство", variant_subtitle(v), 4)
-    label_value(ws, 4, [
-        ("Производственный заказ", v["id"] + "-P01"),
-        ("Заказ покупателя", v["id"] + "-01"),
-    ], 4)
-    label_value(ws, 5, [
-        ("Дата запуска", LAUNCH_DATE),
-        ("Подразделение", "Основное производство"),
-    ], 4)
-    ws.cell(row=5, column=2).number_format = "DD.MM.YYYY"
-    section(ws, 7, 4, "Продукция к выпуску")
-    table(ws, 8, ["Продукция", "Единица", "Количество", "Спецификация"],
-          [[v["product"], "ед.", v["qty"], "Нормы на одну единицу"]],
-          [None, None, "0.###", None], [36, 12, 14, 30])
-    section(ws, 11, 4, "Потребность в ресурсах")
+    wb, ws = base_sheet("Заказ на производство", variant_subtitle(v), 6)
+    merged_label(ws, 4, 1, 2, "Производственный заказ")
+    merged_label(ws, 4, 3, 3, v["id"] + "-P01", bold=True)
+    merged_label(ws, 4, 4, 5, "Заказ покупателя")
+    merged_label(ws, 4, 6, 6, v["id"] + "-01", bold=True)
+    merged_label(ws, 5, 1, 2, "Дата запуска")
+    merged_label(ws, 5, 3, 3, LAUNCH_DATE, bold=True)
+    merged_label(ws, 5, 4, 4, "Подразделение")
+    merged_label(ws, 5, 5, 6, "Основное производство", bold=True)
+    ws.cell(row=5, column=3).number_format = "DD.MM.YYYY"
+
+    row = 7
+    section(ws, row, 6, "Продукция к выпуску")
+    row += 1
+    table(ws, row, ["№", "Наименование", "Код", "Кол-во", "Ед."],
+          [[1, v["product"], "P-01", v["qty"], "ед."]],
+          [None, None, None, "0.###", None], [4, 32, 14, 10, 9])
+    row += 3
+
+    section(ws, row, 6, "Потребность в материалах")
+    row += 1
+    materials = [r for r in v["resources"] if r["kind"] == "material"]
     rows = []
-    for r in v["resources"]:
-        plan = v["qty"] * (r["norm"] if r["kind"] == "material" else r["time"])
-        rows.append([r["name"], "материал" if r["kind"] == "material" else "операция", plan, r["unit"]])
-    table(ws, 12, ["Ресурс", "Вид", "Плановый расход", "Единица"],
-          rows, [None, None, "0.###", None], [36, 16, 18, 30])
+    for i, r in enumerate(materials, 1):
+        rows.append([i, r["name"], f"M-{i:02d}", v["qty"] * r["norm"], r["unit"]])
+    table(ws, row, ["№", "Наименование", "Код", "Кол-во", "Ед."],
+          rows, [None, None, None, "0.###", None], [4, 32, 14, 10, 9])
+    row += len(rows) + 2
+
+    section(ws, row, 6, "Технологические операции")
+    row += 1
+    operations = [r for r in v["resources"] if r["kind"] == "operation"]
+    rows = []
+    for i, r in enumerate(operations, 1):
+        rows.append([i, r["name"], f"O-{i:02d}", v["qty"] * r["time"], r["unit"]])
+    table(ws, row, ["№", "Наименование", "Код", "Кол-во", "Ед."],
+          rows, [None, None, None, "0.###", None], [4, 32, 14, 10, 9])
     ws.freeze_panes = "A4"
     save(wb, path)
 
 
 def build_spec(v: dict, path: Path) -> None:
-    wb, ws = base_sheet("Спецификация", variant_subtitle(v), 5)
-    label_value(ws, 4, [
-        ("Продукция", v["product"]),
-        ("Нормы", "На одну единицу"),
-    ], 5)
-    section(ws, 6, 5, "Состав изделия")
-    rows = []
-    for r in v["resources"]:
-        rows.append([
-            r["name"],
-            "материал" if r["kind"] == "material" else "операция",
-            r["unit"],
-            r["norm"],
-            r["time"] if r["kind"] == "operation" else None,
-        ])
-    table(ws, 7, ["Ресурс", "Вид", "Единица", "Норма расхода", "Часы на единицу"],
-          rows, [None, None, None, "0.###", "0.###"], [34, 14, 12, 16, 18])
-    ws.freeze_panes = "A8"
+    wb, ws = base_sheet(f'Спецификация "{v["product"]}"', variant_subtitle(v), 4)
+    ws.column_dimensions["D"].width = 12
+    merged_label(ws, 4, 1, 2, "Изделие")
+    merged_label(ws, 4, 3, 4, v["product"], bold=True)
+    merged_label(ws, 6, 1, 2, "Изготовитель")
+    merged_label(ws, 6, 3, 4, v["brand"], bold=True)
+    section(ws, 8, 4, "Состав")
+    materials = [r for r in v["resources"] if r["kind"] == "material"]
+    rows = [[r["name"], r["unit"], r["norm"]] for r in materials]
+    table(ws, 9, ["Ресурс", "Ед. изм.", "Норма расхода"],
+          rows, [None, None, "0.###"], [28, 10, 14])
+    row = 9 + len(rows) + 2
+    section(ws, row, 4, "Технологические операции")
+    row += 1
+    operations = [r for r in v["resources"] if r["kind"] == "operation"]
+    rows = [[r["name"], r["unit"], r["time"]] for r in operations]
+    table(ws, row, ["Операция", "Ед. изм.", "Норма времени"],
+          rows, [None, None, "0.###"], [28, 10, 14])
+    ws.freeze_panes = "A4"
     save(wb, path)
 
 
 def build_prices(v: dict, path: Path) -> None:
-    wb, ws = base_sheet("Цены", variant_subtitle(v), 4)
-    section(ws, 4, 4, "Действующие цены")
-    rows = [[r["name"], r["price"], r["unit"], PRICE_DATE] for r in v["resources"]]
-    table(ws, 5, ["Ресурс", "Цена, руб./ед.", "Единица", "Действует с"],
-          rows, [None, "#,##0.00", None, "DD.MM.YYYY"], [34, 16, 12, 16])
-    ws.freeze_panes = "A6"
+    wb = Workbook()
+    ws = wb.active
+    ws.title = "Документ"
+    ws.sheet_view.showGridLines = False
+    rows = [[r["name"], r["unit"], r["price"], PRICE_DATE] for r in v["resources"]]
+    table(ws, 1, ["Номенклатура", "Ед.", "Цена", "Действует с"],
+          rows, [None, None, "#,##0.00", "DD.MM.YYYY"], [30, 10, 14, 14])
+    ws.freeze_panes = "A2"
     save(wb, path)
 
 
 def build_calc(v: dict, path: Path) -> None:
-    wb, ws = base_sheet("Расчет стоимости заказа", variant_subtitle(v), 8)
-    for col, width in zip("ABCDEFGH", [28, 15, 18, 12, 11, 12, 13, 17]):
+    wb = Workbook()
+    ws = wb.active
+    ws.title = "Документ"
+    ws.sheet_view.showGridLines = False
+    for col, width in zip("ABCD", [54, 16, 14, 12]):
         ws.column_dimensions[col].width = width
 
-    label_value(ws, 4, [("Заказ", v["id"] + "-01")], 8)
-    ws.cell(row=4, column=3, value="Продукция").font = LABEL_FONT
-    ws.cell(row=4, column=3).fill = LABEL_FILL
-    ws.cell(row=4, column=3).border = BORDER
-    ws.cell(row=4, column=3).alignment = Alignment(vertical="center", wrap_text=True)
-    ws.merge_cells(start_row=4, start_column=4, end_row=4, end_column=8)
-    product = ws.cell(row=4, column=4, value=v["product"])
-    product.font = BODY_FONT
-    product.alignment = Alignment(vertical="center", wrap_text=True)
+    table(ws, 1, ["Номенклатура", "Количество", "Норма/часы", "Сумма"],
+          [[v["product"], v["qty"], None, None]],
+          [None, "0.###", "0.###", "#,##0.00"], [54, 16, 14, 12])
 
-    label_value(ws, 5, [("Количество изделий", v["qty"])], 8)
-    ws.cell(row=5, column=3, value="Дата заказа").font = LABEL_FONT
-    ws.cell(row=5, column=3).fill = LABEL_FILL
-    ws.cell(row=5, column=3).border = BORDER
-    ws.cell(row=5, column=3).alignment = Alignment(vertical="center", wrap_text=True)
-    date_cell = ws.cell(row=5, column=4, value=ORDER_DATE)
-    date_cell.font = BODY_FONT
-    date_cell.border = BORDER
-    date_cell.number_format = "DD.MM.YYYY"
-    date_cell.alignment = Alignment(vertical="center")
+    row = 3
+    section(ws, row, 4, "Материальные затраты")
+    row += 1
+    materials = [r for r in v["resources"] if r["kind"] == "material"]
+    rows = [[r["name"], v["qty"] * r["norm"], r["norm"], None] for r in materials]
+    data_rows(ws, row, rows, [None, "0.###", "0.###", "#,##0.00"], [54, 16, 14, 12])
+    row += len(rows) + 1
 
-    section(ws, 7, 8, "Данные для расчета")
-    rows = []
-    for r in v["resources"]:
-        rows.append([
-            r["name"],
-            "материал" if r["kind"] == "material" else "операция",
-            r["unit"],
-            r["norm"],
-            r["time"] if r["kind"] == "operation" else None,
-            r["price"],
-            v["qty"],
-            None,
-        ])
-    table(ws, 8, ["Ресурс", "Вид", "Ед.", "Норма", "Часы", "Цена", "Количество", "Стоимость строки"],
-          rows, [None, None, None, "0.###", "0.###", "#,##0.00", "0.###", "#,##0.00"],
-          [28, 15, 18, 12, 11, 12, 13, 17])
-    last = 8 + len(rows)
-    ws.cell(row=last + 1, column=7, value="Итого:").font = LABEL_FONT
-    ws.cell(row=last + 1, column=7).alignment = Alignment(horizontal="right")
-    ws.cell(row=last + 1, column=8).number_format = "#,##0.00"
-    ws.cell(row=last + 1, column=8).fill = INPUT_FILL
-    ws.cell(row=last + 1, column=8).border = BORDER
-    for c in range(1, 9):
-        ws.cell(row=last + 1, column=c).border = BORDER
-    for r in range(9, last + 2):
-        ws.cell(row=r, column=8).fill = INPUT_FILL
-    note = ws.cell(row=last + 3, column=1,
-                   value="Стоимость строки = количество изделий × норма × цена. "
-                         "Для операции вместо нормы используется время в часах. "
-                         "Итог округлить до копеек.")
-    note.font = Font(name="Arial", size=9, italic=True, color="595959")
-    note.alignment = Alignment(wrap_text=True, vertical="top")
-    ws.merge_cells(start_row=last + 3, start_column=1, end_row=last + 3, end_column=8)
-    ws.row_dimensions[last + 3].height = 32
-    ws.freeze_panes = "A9"
+    section(ws, row, 4, "Технологические операции")
+    row += 1
+    operations = [r for r in v["resources"] if r["kind"] == "operation"]
+    rows = [[r["name"], v["qty"] * r["time"], r["time"], None] for r in operations]
+    data_rows(ws, row, rows, [None, "0.###", "0.###", "#,##0.00"], [54, 16, 14, 12])
+    row += len(rows) + 1
+
+    ws.cell(row=row, column=1, value="Итого").font = VALUE_FONT
+    ws.cell(row=row, column=4).number_format = "#,##0.00"
+    for c in range(1, 5):
+        ws.cell(row=row, column=c).border = BORDER
     save(wb, path)
 
 
@@ -315,6 +341,9 @@ def build_archive(folder: Path, variant_id: str) -> None:
 def main() -> None:
     data = json.loads(VARIANTS.read_text(encoding="utf-8"))
     for v in data:
+        # V01 is supplied by the teacher as a ready set; do not overwrite it.
+        if v["id"] == "V01":
+            continue
         folder = OUT / v["id"]
         folder.mkdir(parents=True, exist_ok=True)
         build_order(v, folder / "Заказ покупателя.xlsx")
@@ -327,7 +356,7 @@ def main() -> None:
             if csv_path.exists():
                 csv_path.unlink()
         build_archive(folder, v["id"])
-    print(f"formatted {len(data)} variants")
+    print(f"formatted {len(data) - 1} variants, V01 kept as supplied")
 
 
 if __name__ == "__main__":

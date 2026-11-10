@@ -527,6 +527,12 @@ html.modal-open { overflow: hidden; }
 :root[data-theme=dark] .quiz-actions button[data-answer]:hover, :root[data-theme=dark] .quiz-actions button.quiz-answer:hover { background: #262626; background-color: #262626; color: #fff; border-color: #262626; }
 :root[data-theme=dark] .gate-q { background: #1E1E1E; color: #FF6B00; }
 
+/* the whole-variant archive is the main action in a download block */
+.files a.zip { background: #121212; color: #fff; border-color: #121212; font-weight: 700; box-shadow: 4px 4px 0 rgba(0,0,0,.18); }
+.files a.zip::before { color: #fff; }
+.files a.zip:hover { background: #1D1D1D; color: #fff; border-color: #1D1D1D; box-shadow: 5px 5px 0 rgba(0,0,0,.22); }
+.files a.zip:active { transform: translate(2px,2px); box-shadow: 1px 1px 0 rgba(0,0,0,.12); }
+
 /* ---------- practical work checklist ---------- */
 .work-checklist { width: 100%; border-collapse: collapse; margin: 14px 0 4px; }
 .work-checklist th, .work-checklist td { border: 1px solid var(--rule); padding: 9px 10px; vertical-align: top; }
@@ -564,6 +570,24 @@ html.modal-open { overflow: hidden; }
 .variant-body .task-list { margin: 8px 0 0; padding-left: 20px; }
 .variant-body .task-list li { margin: 0 0 8px; }
 @media (max-width: 620px) { .variant-body { overflow-x: auto; } .variant-body table { min-width: 520px; } }
+
+/* ---------- schema slider: all CREATE TABLE examples ---------- */
+.schema-slider { margin: 18px 0 24px; border: 1px solid #d8d5cc; border-radius: 14px; background: #fff; color: #1a1916; overflow: hidden; }
+.schema-slider-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 14px; background: #f5f2ea; border-bottom: 1px solid #d8d5cc; }
+.schema-slider-bar strong { font: 700 14px/1.2 var(--font-display); color: #1a1916; }
+.schema-slider-actions { display: flex; align-items: center; gap: 8px; }
+.schema-slider-counter { min-width: 62px; text-align: center; font: 600 13px/1 var(--font-mono); color: #59544a; }
+.schema-btn { width: 34px; height: 34px; border: 1px solid #c9c4b8; border-radius: 8px; background: #fff; color: #1a1916; font: 700 18px/1 var(--font-mono); cursor: pointer; }
+.schema-btn:hover { background: #ece7dc; }
+.schema-track { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: thin; }
+.schema-slide { flex: 0 0 100%; min-width: 100%; box-sizing: border-box; padding: 16px 18px 18px; scroll-snap-align: start; }
+.schema-slide h4 { margin: 0 0 10px; font: 700 16px/1.3 var(--font-display); color: #1a1916; }
+.schema-slide h4 code, .schema-slide p code { color: #1a1916; background: #f1ede4; padding: 1px 4px; border-radius: 4px; }
+.schema-slide p { margin: 0 0 10px; font-size: 14px; line-height: 1.55; color: #3a372f; }
+.schema-slide pre { margin: 0; padding: 14px 16px; overflow-x: auto; border: 1px solid #ddd8cc; border-radius: 10px; background: #fbfaf6; color: #1a1916; font: 12.5px/1.5 var(--font-mono); }
+.schema-slide code { color: inherit; background: none; padding: 0; }
+.schema-slider:focus-within { outline: 2px solid #b9a97f; outline-offset: 2px; }
+@media (max-width: 620px) { .schema-slide { padding: 12px; } .schema-slider-bar { padding: 8px 10px; } }
 
 /* ---------- print / PDF export ---------- */
 @page { margin: 16mm; }
@@ -876,24 +900,24 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <span class="kn">from</span><span class="w"> </span><span class="nn">flask</span><span class="w"> </span><span class="kn">import</span> <span class="n">Flask</span><span class="p">,</span> <span class="n">request</span>
 
 <span class="n">app</span> <span class="o">=</span> <span class="n">Flask</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
-<span class="n">app</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;SECRET_KEY&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;sklad-secret-2026&quot;</span>
-<span class="n">DB_PASSWORD</span> <span class="o">=</span> <span class="s2">&quot;sklad_2026&quot;</span>
+<span class="n">app</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">"SECRET_KEY"</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"sklad-secret-2026"</span>
+<span class="n">DB_PASSWORD</span> <span class="o">=</span> <span class="s2">"sklad_2026"</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">find_products</span><span class="p">(</span><span class="n">term</span><span class="p">):</span>
-    <span class="n">con</span> <span class="o">=</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s2">&quot;sklad.db&quot;</span><span class="p">)</span>
-    <span class="n">query</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;SELECT sku, name FROM products WHERE name LIKE &#39;%</span><span class="si">{</span><span class="n">term</span><span class="si">}</span><span class="s2">%&#39;&quot;</span>
+    <span class="n">con</span> <span class="o">=</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s2">"sklad.db"</span><span class="p">)</span>
+    <span class="n">query</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"SELECT sku, name FROM products WHERE name LIKE '%</span><span class="si">{</span><span class="n">term</span><span class="si">}</span><span class="s2">%'"</span>
     <span class="k">return</span> <span class="n">con</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">query</span><span class="p">)</span><span class="o">.</span><span class="n">fetchall</span><span class="p">()</span>
 
 
-<span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/api/products&quot;</span><span class="p">)</span>
+<span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"/api/products"</span><span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">products</span><span class="p">():</span>
-    <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;items&quot;</span><span class="p">:</span> <span class="n">find_products</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;q&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">))}</span>
+    <span class="k">return</span> <span class="p">{</span><span class="s2">"items"</span><span class="p">:</span> <span class="n">find_products</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"q"</span><span class="p">,</span> <span class="s2">""</span><span class="p">))}</span>
 </code></pre></div>
 
 <p>Начните с поиска по текущему дереву. Команда <code>git grep</code> ищет строку во всех отслеживаемых файлах и показывает имя файла, номер строки и текст. Пример поиска по слову <code>password</code>:</p>
-<div class="codehilite" data-lang="text"><pre><span></span><code>app.py:6:app.config[&quot;SECRET_KEY&quot;] = &quot;sklad-secret-2026&quot;
-app.py:7:DB_PASSWORD = &quot;sklad_2026&quot;
+<div class="codehilite" data-lang="text"><pre><span></span><code>app.py:6:app.config["SECRET_KEY"] = "sklad-secret-2026"
+app.py:7:DB_PASSWORD = "sklad_2026"
 </code></pre></div>
 
 <p>Повторите поиск для слов <code>secret</code>, <code>token</code>, <code>key</code>, <code>passwd</code> и <code>connection</code>. Затем проверьте историю: команда <code>git log -p -S "DB_PASSWORD"</code> показывает коммиты, в которых число вхождений строки изменилось. Так находится секрет, удалённый из текущего файла, но оставшийся в истории.</p>
@@ -904,9 +928,9 @@ app.py:7:DB_PASSWORD = &quot;sklad_2026&quot;
 <p>Создайте модуль <code>.../sklad-plus/config.py</code>, который читает значения из окружения. Для обязательного секрета используйте обращение по ключу, а не <code>get</code> с пустым значением по умолчанию: приложение должно упасть при запуске, а не работать с дырявой настройкой.</p>
 <div class="codehilite" data-lang="python"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
 
-<span class="n">DB_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;SKLAD_DB&quot;</span><span class="p">,</span> <span class="s2">&quot;sklad.db&quot;</span><span class="p">)</span>
-<span class="n">SECRET_KEY</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;SKLAD_SECRET&quot;</span><span class="p">]</span>
-<span class="n">LOG_LEVEL</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;SKLAD_LOG_LEVEL&quot;</span><span class="p">,</span> <span class="s2">&quot;INFO&quot;</span><span class="p">)</span>
+<span class="n">DB_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"SKLAD_DB"</span><span class="p">,</span> <span class="s2">"sklad.db"</span><span class="p">)</span>
+<span class="n">SECRET_KEY</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">"SKLAD_SECRET"</span><span class="p">]</span>
+<span class="n">LOG_LEVEL</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"SKLAD_LOG_LEVEL"</span><span class="p">,</span> <span class="s2">"INFO"</span><span class="p">)</span>
 </code></pre></div>
 
 <p>Рядом положите <code>.../sklad-plus/.env.example</code> с именами переменных и учебными значениями. Настоящий <code>.env</code> создаётся на машине и не коммитится.</p>
@@ -933,30 +957,30 @@ logs/
 <p>Вернитесь к функции поиска. Склейка строки превращает ввод в часть SQL-команды. Ниже проверка на учебной базе из трёх товаров: обычный запрос, опасный ввод и тот же ввод через параметр.</p>
 <div class="codehilite" data-lang="python"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">sqlite3</span>
 
-<span class="n">con</span> <span class="o">=</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s2">&quot;:memory:&quot;</span><span class="p">)</span>
-<span class="n">con</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;CREATE TABLE products (sku TEXT, name TEXT, stock INTEGER)&quot;</span><span class="p">)</span>
+<span class="n">con</span> <span class="o">=</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s2">":memory:"</span><span class="p">)</span>
+<span class="n">con</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">"CREATE TABLE products (sku TEXT, name TEXT, stock INTEGER)"</span><span class="p">)</span>
 <span class="n">rows</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="p">(</span><span class="s2">&quot;SKU-1001&quot;</span><span class="p">,</span> <span class="s2">&quot;Кабель UTP cat.5e&quot;</span><span class="p">,</span> <span class="mi">42</span><span class="p">),</span>
-    <span class="p">(</span><span class="s2">&quot;SKU-1002&quot;</span><span class="p">,</span> <span class="s2">&quot;Патч-корд cat.5e&quot;</span><span class="p">,</span> <span class="mi">860</span><span class="p">),</span>
-    <span class="p">(</span><span class="s2">&quot;SKU-1003&quot;</span><span class="p">,</span> <span class="s2">&quot;Коммутатор 24 порта&quot;</span><span class="p">,</span> <span class="mi">14</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"SKU-1001"</span><span class="p">,</span> <span class="s2">"Кабель UTP cat.5e"</span><span class="p">,</span> <span class="mi">42</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"SKU-1002"</span><span class="p">,</span> <span class="s2">"Патч-корд cat.5e"</span><span class="p">,</span> <span class="mi">860</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"SKU-1003"</span><span class="p">,</span> <span class="s2">"Коммутатор 24 порта"</span><span class="p">,</span> <span class="mi">14</span><span class="p">),</span>
 <span class="p">]</span>
-<span class="n">con</span><span class="o">.</span><span class="n">executemany</span><span class="p">(</span><span class="s2">&quot;INSERT INTO products VALUES (?, ?, ?)&quot;</span><span class="p">,</span> <span class="n">rows</span><span class="p">)</span>
+<span class="n">con</span><span class="o">.</span><span class="n">executemany</span><span class="p">(</span><span class="s2">"INSERT INTO products VALUES (?, ?, ?)"</span><span class="p">,</span> <span class="n">rows</span><span class="p">)</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">search_unsafe</span><span class="p">(</span><span class="n">term</span><span class="p">):</span>
-    <span class="n">query</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;SELECT sku, name FROM products WHERE name LIKE &#39;%</span><span class="si">{</span><span class="n">term</span><span class="si">}</span><span class="s2">%&#39;&quot;</span>
+    <span class="n">query</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"SELECT sku, name FROM products WHERE name LIKE '%</span><span class="si">{</span><span class="n">term</span><span class="si">}</span><span class="s2">%'"</span>
     <span class="k">return</span> <span class="n">con</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">query</span><span class="p">)</span><span class="o">.</span><span class="n">fetchall</span><span class="p">()</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">search_safe</span><span class="p">(</span><span class="n">term</span><span class="p">):</span>
-    <span class="n">query</span> <span class="o">=</span> <span class="s2">&quot;SELECT sku, name FROM products WHERE name LIKE ?&quot;</span>
-    <span class="k">return</span> <span class="n">con</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="p">(</span><span class="sa">f</span><span class="s2">&quot;%</span><span class="si">{</span><span class="n">term</span><span class="si">}</span><span class="s2">%&quot;</span><span class="p">,))</span><span class="o">.</span><span class="n">fetchall</span><span class="p">()</span>
+    <span class="n">query</span> <span class="o">=</span> <span class="s2">"SELECT sku, name FROM products WHERE name LIKE ?"</span>
+    <span class="k">return</span> <span class="n">con</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="p">(</span><span class="sa">f</span><span class="s2">"%</span><span class="si">{</span><span class="n">term</span><span class="si">}</span><span class="s2">%"</span><span class="p">,))</span><span class="o">.</span><span class="n">fetchall</span><span class="p">()</span>
 
 
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;обычный запрос, строк:&quot;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">search_unsafe</span><span class="p">(</span><span class="s2">&quot;Кабель&quot;</span><span class="p">)))</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;опасный ввод, строк:&quot;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">search_unsafe</span><span class="p">(</span><span class="s2">&quot;&#39; OR &#39;1&#39;=&#39;1&quot;</span><span class="p">)))</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;параметры, строк:&quot;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">search_safe</span><span class="p">(</span><span class="s2">&quot;&#39; OR &#39;1&#39;=&#39;1&quot;</span><span class="p">)))</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;параметры, обычный ввод:&quot;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">search_safe</span><span class="p">(</span><span class="s2">&quot;Кабель&quot;</span><span class="p">)))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"обычный запрос, строк:"</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">search_unsafe</span><span class="p">(</span><span class="s2">"Кабель"</span><span class="p">)))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"опасный ввод, строк:"</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">search_unsafe</span><span class="p">(</span><span class="s2">"' OR '1'='1"</span><span class="p">)))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"параметры, строк:"</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">search_safe</span><span class="p">(</span><span class="s2">"' OR '1'='1"</span><span class="p">)))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"параметры, обычный ввод:"</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">search_safe</span><span class="p">(</span><span class="s2">"Кабель"</span><span class="p">)))</span>
 </code></pre></div>
 
 <p>Вывод показывает разницу: опасный ввод через склейку вернул все три строки, а через параметр не вернул ни одной.</p>
@@ -1025,27 +1049,27 @@ logs/
 <span class="kn">from</span><span class="w"> </span><span class="nn">logging.handlers</span><span class="w"> </span><span class="kn">import</span> <span class="n">RotatingFileHandler</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
 
-<span class="n">log_dir</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">&quot;logs&quot;</span><span class="p">)</span>
+<span class="n">log_dir</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">"logs"</span><span class="p">)</span>
 <span class="n">log_dir</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
-<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;sklad.audit&quot;</span><span class="p">)</span>
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">"sklad.audit"</span><span class="p">)</span>
 <span class="n">logger</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">)</span>
 <span class="n">logger</span><span class="o">.</span><span class="n">propagate</span> <span class="o">=</span> <span class="kc">False</span>
 
 <span class="n">handler</span> <span class="o">=</span> <span class="n">RotatingFileHandler</span><span class="p">(</span>
-    <span class="n">log_dir</span> <span class="o">/</span> <span class="s2">&quot;sklad.log&quot;</span><span class="p">,</span> <span class="n">maxBytes</span><span class="o">=</span><span class="mi">1_000_000</span><span class="p">,</span> <span class="n">backupCount</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span>
+    <span class="n">log_dir</span> <span class="o">/</span> <span class="s2">"sklad.log"</span><span class="p">,</span> <span class="n">maxBytes</span><span class="o">=</span><span class="mi">1_000_000</span><span class="p">,</span> <span class="n">backupCount</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span>
 <span class="p">)</span>
 <span class="n">handler</span><span class="o">.</span><span class="n">setFormatter</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">Formatter</span><span class="p">(</span>
-    <span class="s2">&quot;</span><span class="si">%(asctime)s</span><span class="s2"> </span><span class="si">%(levelname)s</span><span class="s2"> </span><span class="si">%(message)s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">datefmt</span><span class="o">=</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2"> %H:%M:%S&quot;</span>
+    <span class="s2">"</span><span class="si">%(asctime)s</span><span class="s2"> </span><span class="si">%(levelname)s</span><span class="s2"> </span><span class="si">%(message)s</span><span class="s2">"</span><span class="p">,</span> <span class="n">datefmt</span><span class="o">=</span><span class="s2">"%Y-%m-</span><span class="si">%d</span><span class="s2"> %H:%M:%S"</span>
 <span class="p">))</span>
 <span class="n">logger</span><span class="o">.</span><span class="n">addHandler</span><span class="p">(</span><span class="n">handler</span><span class="p">)</span>
 
-<span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;request_id=8f21 user=kladovshchik_1 action=login result=ok&quot;</span><span class="p">)</span>
-<span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;request_id=8f22 user=kladovshchik_1 action=login result=denied reason=bad_password&quot;</span><span class="p">)</span>
-<span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;request_id=8f23 user=manager_1 action=report_export rows=312&quot;</span><span class="p">)</span>
-<span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;request_id=8f23 user=manager_1 action=report_export error=PermissionError&quot;</span><span class="p">)</span>
+<span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">"request_id=8f21 user=kladovshchik_1 action=login result=ok"</span><span class="p">)</span>
+<span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">"request_id=8f22 user=kladovshchik_1 action=login result=denied reason=bad_password"</span><span class="p">)</span>
+<span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">"request_id=8f23 user=manager_1 action=report_export rows=312"</span><span class="p">)</span>
+<span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">"request_id=8f23 user=manager_1 action=report_export error=PermissionError"</span><span class="p">)</span>
 
-<span class="nb">print</span><span class="p">((</span><span class="n">log_dir</span> <span class="o">/</span> <span class="s2">&quot;sklad.log&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">read_text</span><span class="p">(</span><span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">((</span><span class="n">log_dir</span> <span class="o">/</span> <span class="s2">"sklad.log"</span><span class="p">)</span><span class="o">.</span><span class="n">read_text</span><span class="p">(</span><span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">))</span>
 </code></pre></div>
 
 <p>Запуск создаёт файл и выводит его содержимое:</p>
@@ -1222,6 +1246,40 @@ logs/
       var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
       window.scrollTo({top: 0, behavior: reduce ? 'auto' : 'smooth'});
     });
+  });
+})();
+
+(function(){
+  document.querySelectorAll('[data-slider]').forEach(function(slider){
+    var track = slider.querySelector('[data-slider-track]');
+    var slides = track ? Array.prototype.slice.call(track.children) : [];
+    var counter = slider.querySelector('[data-slider-counter]');
+    var prev = slider.querySelector('[data-slider-prev]');
+    var next = slider.querySelector('[data-slider-next]');
+    if(!track || slides.length < 2) return;
+    function current(){
+      var best = 0, dist = Infinity;
+      slides.forEach(function(slide, i){
+        var d = Math.abs(slide.offsetLeft - track.scrollLeft);
+        if(d < dist){ dist = d; best = i; }
+      });
+      return best;
+    }
+    function update(){
+      if(counter) counter.textContent = (current() + 1) + ' / ' + slides.length;
+    }
+    function go(delta){
+      var i = Math.max(0, Math.min(slides.length - 1, current() + delta));
+      var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      track.scrollTo({left: slides[i].offsetLeft, behavior: reduce ? 'auto' : 'smooth'});
+    }
+    if(prev) prev.addEventListener('click', function(){ go(-1); });
+    if(next) next.addEventListener('click', function(){ go(1); });
+    track.addEventListener('scroll', function(){
+      clearTimeout(track._sliderTimer);
+      track._sliderTimer = setTimeout(update, 80);
+    }, {passive: true});
+    update();
   });
 })();
 (function(){

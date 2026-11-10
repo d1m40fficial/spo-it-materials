@@ -527,6 +527,12 @@ html.modal-open { overflow: hidden; }
 :root[data-theme=dark] .quiz-actions button[data-answer]:hover, :root[data-theme=dark] .quiz-actions button.quiz-answer:hover { background: #262626; background-color: #262626; color: #fff; border-color: #262626; }
 :root[data-theme=dark] .gate-q { background: #1E1E1E; color: #FF6B00; }
 
+/* the whole-variant archive is the main action in a download block */
+.files a.zip { background: #121212; color: #fff; border-color: #121212; font-weight: 700; box-shadow: 4px 4px 0 rgba(0,0,0,.18); }
+.files a.zip::before { color: #fff; }
+.files a.zip:hover { background: #1D1D1D; color: #fff; border-color: #1D1D1D; box-shadow: 5px 5px 0 rgba(0,0,0,.22); }
+.files a.zip:active { transform: translate(2px,2px); box-shadow: 1px 1px 0 rgba(0,0,0,.12); }
+
 /* ---------- practical work checklist ---------- */
 .work-checklist { width: 100%; border-collapse: collapse; margin: 14px 0 4px; }
 .work-checklist th, .work-checklist td { border: 1px solid var(--rule); padding: 9px 10px; vertical-align: top; }
@@ -564,6 +570,24 @@ html.modal-open { overflow: hidden; }
 .variant-body .task-list { margin: 8px 0 0; padding-left: 20px; }
 .variant-body .task-list li { margin: 0 0 8px; }
 @media (max-width: 620px) { .variant-body { overflow-x: auto; } .variant-body table { min-width: 520px; } }
+
+/* ---------- schema slider: all CREATE TABLE examples ---------- */
+.schema-slider { margin: 18px 0 24px; border: 1px solid #d8d5cc; border-radius: 14px; background: #fff; color: #1a1916; overflow: hidden; }
+.schema-slider-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 14px; background: #f5f2ea; border-bottom: 1px solid #d8d5cc; }
+.schema-slider-bar strong { font: 700 14px/1.2 var(--font-display); color: #1a1916; }
+.schema-slider-actions { display: flex; align-items: center; gap: 8px; }
+.schema-slider-counter { min-width: 62px; text-align: center; font: 600 13px/1 var(--font-mono); color: #59544a; }
+.schema-btn { width: 34px; height: 34px; border: 1px solid #c9c4b8; border-radius: 8px; background: #fff; color: #1a1916; font: 700 18px/1 var(--font-mono); cursor: pointer; }
+.schema-btn:hover { background: #ece7dc; }
+.schema-track { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: thin; }
+.schema-slide { flex: 0 0 100%; min-width: 100%; box-sizing: border-box; padding: 16px 18px 18px; scroll-snap-align: start; }
+.schema-slide h4 { margin: 0 0 10px; font: 700 16px/1.3 var(--font-display); color: #1a1916; }
+.schema-slide h4 code, .schema-slide p code { color: #1a1916; background: #f1ede4; padding: 1px 4px; border-radius: 4px; }
+.schema-slide p { margin: 0 0 10px; font-size: 14px; line-height: 1.55; color: #3a372f; }
+.schema-slide pre { margin: 0; padding: 14px 16px; overflow-x: auto; border: 1px solid #ddd8cc; border-radius: 10px; background: #fbfaf6; color: #1a1916; font: 12.5px/1.5 var(--font-mono); }
+.schema-slide code { color: inherit; background: none; padding: 0; }
+.schema-slider:focus-within { outline: 2px solid #b9a97f; outline-offset: 2px; }
+@media (max-width: 620px) { .schema-slide { padding: 12px; } .schema-slider-bar { padding: 8px 10px; } }
 
 /* ---------- print / PDF export ---------- */
 @page { margin: 16mm; }
@@ -925,17 +949,17 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <p>Половина столбцов зависит не от ключа целиком, а от его половин. Это и есть нарушение 2НФ.</p>
 <p>Заполним таблицу четырьмя строками.</p>
 <div class="codehilite" data-lang="text"><pre><span></span><code><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">postavka_stroka</span><span class="w"> </span><span class="k">VALUES</span>
-<span class="w">  </span><span class="p">(</span><span class="mi">501</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;2026-08-12&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;ООО Трейд-Книга&#39;</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Чистый код&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Роберт Мартин&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Питер&#39;</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">1200</span><span class="p">),</span>
-<span class="w">  </span><span class="p">(</span><span class="mi">501</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;2026-08-12&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;ООО Трейд-Книга&#39;</span><span class="p">,</span><span class="w"> </span><span class="mi">7</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Алгоритмы&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Адитья Бхаргава&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Питер&#39;</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="mi">1000</span><span class="p">),</span>
-<span class="w">  </span><span class="p">(</span><span class="mi">502</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;2026-08-19&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;ООО Трейд-Книга&#39;</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Чистый код&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Роберт Мартин&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Питер&#39;</span><span class="p">,</span><span class="w"> </span><span class="mi">8</span><span class="p">,</span><span class="w"> </span><span class="mi">1250</span><span class="p">),</span>
-<span class="w">  </span><span class="p">(</span><span class="mi">503</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;2026-08-25&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Лори&#39;</span><span class="p">,</span><span class="w"> </span><span class="mi">9</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;SQL для простых смертных&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Мартин Грабер&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Лори&#39;</span><span class="p">,</span><span class="w"> </span><span class="mi">12</span><span class="p">,</span><span class="w"> </span><span class="mi">1400</span><span class="p">);</span>
+<span class="w">  </span><span class="p">(</span><span class="mi">501</span><span class="p">,</span><span class="w"> </span><span class="s1">'2026-08-12'</span><span class="p">,</span><span class="w"> </span><span class="s1">'ООО Трейд-Книга'</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="s1">'Чистый код'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Роберт Мартин'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Питер'</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">1200</span><span class="p">),</span>
+<span class="w">  </span><span class="p">(</span><span class="mi">501</span><span class="p">,</span><span class="w"> </span><span class="s1">'2026-08-12'</span><span class="p">,</span><span class="w"> </span><span class="s1">'ООО Трейд-Книга'</span><span class="p">,</span><span class="w"> </span><span class="mi">7</span><span class="p">,</span><span class="w"> </span><span class="s1">'Алгоритмы'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Адитья Бхаргава'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Питер'</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="mi">1000</span><span class="p">),</span>
+<span class="w">  </span><span class="p">(</span><span class="mi">502</span><span class="p">,</span><span class="w"> </span><span class="s1">'2026-08-19'</span><span class="p">,</span><span class="w"> </span><span class="s1">'ООО Трейд-Книга'</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="s1">'Чистый код'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Роберт Мартин'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Питер'</span><span class="p">,</span><span class="w"> </span><span class="mi">8</span><span class="p">,</span><span class="w"> </span><span class="mi">1250</span><span class="p">),</span>
+<span class="w">  </span><span class="p">(</span><span class="mi">503</span><span class="p">,</span><span class="w"> </span><span class="s1">'2026-08-25'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Лори'</span><span class="p">,</span><span class="w"> </span><span class="mi">9</span><span class="p">,</span><span class="w"> </span><span class="s1">'SQL для простых смертных'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Мартин Грабер'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Лори'</span><span class="p">,</span><span class="w"> </span><span class="mi">12</span><span class="p">,</span><span class="w"> </span><span class="mi">1400</span><span class="p">);</span>
 </code></pre></div>
 
 <p>Название «Чистый код» повторяется в двух строках, дата <code>2026-08-12</code> тоже. Пока данные не меняются, повторы безвредны. Вред начинается при первом же исправлении.</p>
 <h2 id="чем-опасна-частичная-зависимость"><span class="num">04</span>Чем опасна частичная зависимость</h2>
 <p><strong>Аномалия обновления.</strong> Переименовали книгу и исправили название только в одной строке:</p>
 <div class="codehilite" data-lang="text"><pre><span></span><code><span class="k">UPDATE</span><span class="w"> </span><span class="n">postavka_stroka</span>
-<span class="k">SET</span><span class="w"> </span><span class="n">nazvanie</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;Чистый код. Второе издание&#39;</span>
+<span class="k">SET</span><span class="w"> </span><span class="n">nazvanie</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'Чистый код. Второе издание'</span>
 <span class="k">WHERE</span><span class="w"> </span><span class="n">postavka_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">501</span><span class="w"> </span><span class="k">AND</span><span class="w"> </span><span class="n">kniga_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">5</span><span class="p">;</span>
 
 <span class="k">SELECT</span><span class="w"> </span><span class="n">kniga_id</span><span class="p">,</span><span class="w"> </span><span class="n">nazvanie</span>
@@ -950,7 +974,7 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <p>Одна книга, два названия. Отчёт по книгам раздвоится, а поиск по старому названию найдёт только часть поставок. Ошибка не в запросе: запрос честно изменил одну строку. Ошибка в схеме, где название хранится в каждой строке.</p>
 <p>Та же беда с датой поставки. Исправление даты в одной строке даёт два значения для одной поставки:</p>
 <div class="codehilite" data-lang="text"><pre><span></span><code><span class="k">UPDATE</span><span class="w"> </span><span class="n">postavka_stroka</span>
-<span class="k">SET</span><span class="w"> </span><span class="n">data_postavki</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;2026-08-13&#39;</span>
+<span class="k">SET</span><span class="w"> </span><span class="n">data_postavki</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'2026-08-13'</span>
 <span class="k">WHERE</span><span class="w"> </span><span class="n">postavka_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">502</span><span class="w"> </span><span class="k">AND</span><span class="w"> </span><span class="n">kniga_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">5</span><span class="p">;</span>
 
 <span class="k">SELECT</span><span class="w"> </span><span class="n">postavka_id</span><span class="p">,</span><span class="w"> </span><span class="n">data_postavki</span>
@@ -973,7 +997,7 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <div class="codehilite" data-lang="text"><pre><span></span><code><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">postavka_stroka</span>
 <span class="w">  </span><span class="p">(</span><span class="n">postavka_id</span><span class="p">,</span><span class="w"> </span><span class="n">data_postavki</span><span class="p">,</span><span class="w"> </span><span class="n">postavshchik</span><span class="p">,</span><span class="w"> </span><span class="n">kniga_id</span><span class="p">,</span><span class="w"> </span><span class="n">nazvanie</span><span class="p">,</span><span class="w"> </span><span class="n">avtor</span><span class="p">,</span><span class="w"> </span><span class="n">izdatelstvo</span><span class="p">,</span><span class="w"> </span><span class="n">kolichestvo</span><span class="p">,</span><span class="w"> </span><span class="n">cena_zakupki</span><span class="p">)</span>
 <span class="k">VALUES</span>
-<span class="w">  </span><span class="p">(</span><span class="k">NULL</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;2026-09-01&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;ООО Трейд-Книга&#39;</span><span class="p">,</span><span class="w"> </span><span class="mi">11</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Базы данных&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Крис Фиайли&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Питер&#39;</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">900</span><span class="p">);</span>
+<span class="w">  </span><span class="p">(</span><span class="k">NULL</span><span class="p">,</span><span class="w"> </span><span class="s1">'2026-09-01'</span><span class="p">,</span><span class="w"> </span><span class="s1">'ООО Трейд-Книга'</span><span class="p">,</span><span class="w"> </span><span class="mi">11</span><span class="p">,</span><span class="w"> </span><span class="s1">'Базы данных'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Крис Фиайли'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Питер'</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">900</span><span class="p">);</span>
 </code></pre></div>
 
 <div class="codehilite" data-lang="text"><pre><span></span><code>NOT NULL constraint failed: postavka_stroka.postavka_id
@@ -982,7 +1006,7 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <p>Книга ещё не пришла, но каталог должен знать о ней: менеджер хочет поставить её в план закупок. Приходится ждать поставку или придумывать фиктивную строку. То же с новым поставщиком: пока он не привёз ни одной книги, его нельзя записать.</p>
 <p><strong>Аномалия удаления.</strong> Удалили последнюю поставку книги, и книга исчезла из базы целиком:</p>
 <div class="codehilite" data-lang="text"><pre><span></span><code><span class="k">DELETE</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">postavka_stroka</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">kniga_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">9</span><span class="p">;</span>
-<span class="k">SELECT</span><span class="w"> </span><span class="k">count</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">postavka_stroka</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">nazvanie</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;SQL для простых смертных&#39;</span><span class="p">;</span>
+<span class="k">SELECT</span><span class="w"> </span><span class="k">count</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">postavka_stroka</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">nazvanie</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'SQL для простых смертных'</span><span class="p">;</span>
 </code></pre></div>
 
 <div class="codehilite" data-lang="text"><pre><span></span><code>0
@@ -1026,14 +1050,14 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 
 <p>Перенесём данные.</p>
 <div class="codehilite" data-lang="text"><pre><span></span><code><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">kniga</span><span class="w"> </span><span class="k">VALUES</span>
-<span class="w">  </span><span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Чистый код&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Роберт Мартин&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Питер&#39;</span><span class="p">),</span>
-<span class="w">  </span><span class="p">(</span><span class="mi">7</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Алгоритмы&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Адитья Бхаргава&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Питер&#39;</span><span class="p">),</span>
-<span class="w">  </span><span class="p">(</span><span class="mi">9</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;SQL для простых смертных&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Мартин Грабер&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Лори&#39;</span><span class="p">);</span>
+<span class="w">  </span><span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="s1">'Чистый код'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Роберт Мартин'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Питер'</span><span class="p">),</span>
+<span class="w">  </span><span class="p">(</span><span class="mi">7</span><span class="p">,</span><span class="w"> </span><span class="s1">'Алгоритмы'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Адитья Бхаргава'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Питер'</span><span class="p">),</span>
+<span class="w">  </span><span class="p">(</span><span class="mi">9</span><span class="p">,</span><span class="w"> </span><span class="s1">'SQL для простых смертных'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Мартин Грабер'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Лори'</span><span class="p">);</span>
 
 <span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">postavka</span><span class="w"> </span><span class="k">VALUES</span>
-<span class="w">  </span><span class="p">(</span><span class="mi">501</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;2026-08-12&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;ООО Трейд-Книга&#39;</span><span class="p">),</span>
-<span class="w">  </span><span class="p">(</span><span class="mi">502</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;2026-08-19&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;ООО Трейд-Книга&#39;</span><span class="p">),</span>
-<span class="w">  </span><span class="p">(</span><span class="mi">503</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;2026-08-25&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Лори&#39;</span><span class="p">);</span>
+<span class="w">  </span><span class="p">(</span><span class="mi">501</span><span class="p">,</span><span class="w"> </span><span class="s1">'2026-08-12'</span><span class="p">,</span><span class="w"> </span><span class="s1">'ООО Трейд-Книга'</span><span class="p">),</span>
+<span class="w">  </span><span class="p">(</span><span class="mi">502</span><span class="p">,</span><span class="w"> </span><span class="s1">'2026-08-19'</span><span class="p">,</span><span class="w"> </span><span class="s1">'ООО Трейд-Книга'</span><span class="p">),</span>
+<span class="w">  </span><span class="p">(</span><span class="mi">503</span><span class="p">,</span><span class="w"> </span><span class="s1">'2026-08-25'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Лори'</span><span class="p">);</span>
 
 <span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">postavka_stroka</span><span class="w"> </span><span class="k">VALUES</span>
 <span class="w">  </span><span class="p">(</span><span class="mi">501</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">1200</span><span class="p">),</span>
@@ -1066,7 +1090,7 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 </code></pre></div>
 
 <p>Все четыре строки на месте. Теперь название книги хранится один раз, и исправление затрагивает одну строку:</p>
-<div class="codehilite" data-lang="text"><pre><span></span><code><span class="k">UPDATE</span><span class="w"> </span><span class="n">kniga</span><span class="w"> </span><span class="k">SET</span><span class="w"> </span><span class="n">nazvanie</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;Чистый код. Второе издание&#39;</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">kniga_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">5</span><span class="p">;</span>
+<div class="codehilite" data-lang="text"><pre><span></span><code><span class="k">UPDATE</span><span class="w"> </span><span class="n">kniga</span><span class="w"> </span><span class="k">SET</span><span class="w"> </span><span class="n">nazvanie</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'Чистый код. Второе издание'</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">kniga_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">5</span><span class="p">;</span>
 <span class="k">SELECT</span><span class="w"> </span><span class="n">kniga_id</span><span class="p">,</span><span class="w"> </span><span class="n">nazvanie</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">kniga</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">kniga_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">5</span><span class="p">;</span>
 </code></pre></div>
 
@@ -1074,7 +1098,7 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 </code></pre></div>
 
 <p>Новая книга заводится без поставки, потому что справочник книг больше не зависит от движения товара:</p>
-<div class="codehilite" data-lang="text"><pre><span></span><code><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">kniga</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="mi">11</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Базы данных&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Крис Фиайли&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Питер&#39;</span><span class="p">);</span>
+<div class="codehilite" data-lang="text"><pre><span></span><code><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">kniga</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="mi">11</span><span class="p">,</span><span class="w"> </span><span class="s1">'Базы данных'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Крис Фиайли'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Питер'</span><span class="p">);</span>
 <span class="k">SELECT</span><span class="w"> </span><span class="k">count</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">kniga</span><span class="p">;</span>
 </code></pre></div>
 
@@ -1213,6 +1237,40 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
       var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
       window.scrollTo({top: 0, behavior: reduce ? 'auto' : 'smooth'});
     });
+  });
+})();
+
+(function(){
+  document.querySelectorAll('[data-slider]').forEach(function(slider){
+    var track = slider.querySelector('[data-slider-track]');
+    var slides = track ? Array.prototype.slice.call(track.children) : [];
+    var counter = slider.querySelector('[data-slider-counter]');
+    var prev = slider.querySelector('[data-slider-prev]');
+    var next = slider.querySelector('[data-slider-next]');
+    if(!track || slides.length < 2) return;
+    function current(){
+      var best = 0, dist = Infinity;
+      slides.forEach(function(slide, i){
+        var d = Math.abs(slide.offsetLeft - track.scrollLeft);
+        if(d < dist){ dist = d; best = i; }
+      });
+      return best;
+    }
+    function update(){
+      if(counter) counter.textContent = (current() + 1) + ' / ' + slides.length;
+    }
+    function go(delta){
+      var i = Math.max(0, Math.min(slides.length - 1, current() + delta));
+      var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      track.scrollTo({left: slides[i].offsetLeft, behavior: reduce ? 'auto' : 'smooth'});
+    }
+    if(prev) prev.addEventListener('click', function(){ go(-1); });
+    if(next) next.addEventListener('click', function(){ go(1); });
+    track.addEventListener('scroll', function(){
+      clearTimeout(track._sliderTimer);
+      track._sliderTimer = setTimeout(update, 80);
+    }, {passive: true});
+    update();
   });
 })();
 (function(){

@@ -527,6 +527,12 @@ html.modal-open { overflow: hidden; }
 :root[data-theme=dark] .quiz-actions button[data-answer]:hover, :root[data-theme=dark] .quiz-actions button.quiz-answer:hover { background: #262626; background-color: #262626; color: #fff; border-color: #262626; }
 :root[data-theme=dark] .gate-q { background: #1E1E1E; color: #FF6B00; }
 
+/* the whole-variant archive is the main action in a download block */
+.files a.zip { background: #121212; color: #fff; border-color: #121212; font-weight: 700; box-shadow: 4px 4px 0 rgba(0,0,0,.18); }
+.files a.zip::before { color: #fff; }
+.files a.zip:hover { background: #1D1D1D; color: #fff; border-color: #1D1D1D; box-shadow: 5px 5px 0 rgba(0,0,0,.22); }
+.files a.zip:active { transform: translate(2px,2px); box-shadow: 1px 1px 0 rgba(0,0,0,.12); }
+
 /* ---------- practical work checklist ---------- */
 .work-checklist { width: 100%; border-collapse: collapse; margin: 14px 0 4px; }
 .work-checklist th, .work-checklist td { border: 1px solid var(--rule); padding: 9px 10px; vertical-align: top; }
@@ -564,6 +570,24 @@ html.modal-open { overflow: hidden; }
 .variant-body .task-list { margin: 8px 0 0; padding-left: 20px; }
 .variant-body .task-list li { margin: 0 0 8px; }
 @media (max-width: 620px) { .variant-body { overflow-x: auto; } .variant-body table { min-width: 520px; } }
+
+/* ---------- schema slider: all CREATE TABLE examples ---------- */
+.schema-slider { margin: 18px 0 24px; border: 1px solid #d8d5cc; border-radius: 14px; background: #fff; color: #1a1916; overflow: hidden; }
+.schema-slider-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 14px; background: #f5f2ea; border-bottom: 1px solid #d8d5cc; }
+.schema-slider-bar strong { font: 700 14px/1.2 var(--font-display); color: #1a1916; }
+.schema-slider-actions { display: flex; align-items: center; gap: 8px; }
+.schema-slider-counter { min-width: 62px; text-align: center; font: 600 13px/1 var(--font-mono); color: #59544a; }
+.schema-btn { width: 34px; height: 34px; border: 1px solid #c9c4b8; border-radius: 8px; background: #fff; color: #1a1916; font: 700 18px/1 var(--font-mono); cursor: pointer; }
+.schema-btn:hover { background: #ece7dc; }
+.schema-track { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: thin; }
+.schema-slide { flex: 0 0 100%; min-width: 100%; box-sizing: border-box; padding: 16px 18px 18px; scroll-snap-align: start; }
+.schema-slide h4 { margin: 0 0 10px; font: 700 16px/1.3 var(--font-display); color: #1a1916; }
+.schema-slide h4 code, .schema-slide p code { color: #1a1916; background: #f1ede4; padding: 1px 4px; border-radius: 4px; }
+.schema-slide p { margin: 0 0 10px; font-size: 14px; line-height: 1.55; color: #3a372f; }
+.schema-slide pre { margin: 0; padding: 14px 16px; overflow-x: auto; border: 1px solid #ddd8cc; border-radius: 10px; background: #fbfaf6; color: #1a1916; font: 12.5px/1.5 var(--font-mono); }
+.schema-slide code { color: inherit; background: none; padding: 0; }
+.schema-slider:focus-within { outline: 2px solid #b9a97f; outline-offset: 2px; }
+@media (max-width: 620px) { .schema-slide { padding: 12px; } .schema-slider-bar { padding: 8px 10px; } }
 
 /* ---------- print / PDF export ---------- */
 @page { margin: 16mm; }
@@ -928,8 +952,8 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <p><strong>Разделитель.</strong> В русской локали Excel ставит точку с запятой, а <code>LOAD DATA</code> по умолчанию ждёт запятую. Симптом характерный: вся строка попадает в первый столбец, остальные пустые.</p>
 <p><strong>Заголовок.</strong> Первая строка с именами столбцов не является данными, её пропускают через <code>IGNORE 1 LINES</code>. Если этого не сделать, в таблицу попадёт студент по имени «ФИО».</p>
 <p><strong>Права и каталог.</strong> Для чтения файла серверу нужен каталог, разрешённый параметром <code>secure_file_priv</code>.</p>
-<div class="codehilite" data-lang="text"><pre><span></span><code><span class="k">SHOW</span><span class="w"> </span><span class="n">VARIABLES</span><span class="w"> </span><span class="k">LIKE</span><span class="w"> </span><span class="s1">&#39;secure_file_priv&#39;</span><span class="p">;</span>
-<span class="k">SHOW</span><span class="w"> </span><span class="n">VARIABLES</span><span class="w"> </span><span class="k">LIKE</span><span class="w"> </span><span class="s1">&#39;local_infile&#39;</span><span class="p">;</span>
+<div class="codehilite" data-lang="text"><pre><span></span><code><span class="k">SHOW</span><span class="w"> </span><span class="n">VARIABLES</span><span class="w"> </span><span class="k">LIKE</span><span class="w"> </span><span class="s1">'secure_file_priv'</span><span class="p">;</span>
+<span class="k">SHOW</span><span class="w"> </span><span class="n">VARIABLES</span><span class="w"> </span><span class="k">LIKE</span><span class="w"> </span><span class="s1">'local_infile'</span><span class="p">;</span>
 </code></pre></div>
 
 <p>Если <code>secure_file_priv</code> пуст, ограничений нет. Если указан путь, сервер читает только из него. <code>LOAD DATA LOCAL INFILE</code> читает файл на стороне клиента, поэтому ограничение обходится, но клиент должен разрешить такую загрузку: в MariaDB из XAMPP параметр обычно включён, в MySQL 8 его включают явно.</p>
@@ -951,14 +975,14 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 </code></pre></div>
 
 <p>Загрузка задаёт кодировку, разделитель, кавычки и конец строки. Для файла из Windows конец строки это <code>\r\n</code>, иначе последнее поле каждой строки получит лишний символ возврата каретки.</p>
-<div class="codehilite" data-lang="text"><pre><span></span><code><span class="k">LOAD</span><span class="w"> </span><span class="k">DATA</span><span class="w"> </span><span class="k">LOCAL</span><span class="w"> </span><span class="n">INFILE</span><span class="w"> </span><span class="s1">&#39;.../xampp/htdocs/import/students.csv&#39;</span>
+<div class="codehilite" data-lang="text"><pre><span></span><code><span class="k">LOAD</span><span class="w"> </span><span class="k">DATA</span><span class="w"> </span><span class="k">LOCAL</span><span class="w"> </span><span class="n">INFILE</span><span class="w"> </span><span class="s1">'.../xampp/htdocs/import/students.csv'</span>
 <span class="k">INTO</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">students_stage</span>
 <span class="nb">CHARACTER</span><span class="w"> </span><span class="k">SET</span><span class="w"> </span><span class="n">utf8mb4</span>
-<span class="n">FIELDS</span><span class="w"> </span><span class="n">TERMINATED</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="s1">&#39;,&#39;</span><span class="w"> </span><span class="n">OPTIONALLY</span><span class="w"> </span><span class="n">ENCLOSED</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="s1">&#39;&quot;&#39;</span>
-<span class="n">LINES</span><span class="w"> </span><span class="n">TERMINATED</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="s1">&#39;\r\n&#39;</span>
+<span class="n">FIELDS</span><span class="w"> </span><span class="n">TERMINATED</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="s1">','</span><span class="w"> </span><span class="n">OPTIONALLY</span><span class="w"> </span><span class="n">ENCLOSED</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="s1">'"'</span>
+<span class="n">LINES</span><span class="w"> </span><span class="n">TERMINATED</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="s1">'\r\n'</span>
 <span class="k">IGNORE</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="n">LINES</span>
 <span class="p">(</span><span class="n">full_name</span><span class="p">,</span><span class="w"> </span><span class="n">group_name</span><span class="p">,</span><span class="w"> </span><span class="n">email</span><span class="p">)</span>
-<span class="k">SET</span><span class="w"> </span><span class="n">source_file</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;students.csv&#39;</span><span class="p">;</span>
+<span class="k">SET</span><span class="w"> </span><span class="n">source_file</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'students.csv'</span><span class="p">;</span>
 </code></pre></div>
 
 <p>После загрузки обязательно смотрят предупреждения. Именно там появляются строки, которые сервер принял не полностью.</p>
@@ -992,8 +1016,8 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 
 <p>Дальше ищут строки, которые нельзя перенести: пустые имена, почту без символа <code>@</code>, неизвестную группу.</p>
 <div class="codehilite" data-lang="text"><pre><span></span><code><span class="k">SELECT</span>
-<span class="w">  </span><span class="k">SUM</span><span class="p">(</span><span class="n">full_name</span><span class="w"> </span><span class="k">IS</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="n">full_name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">no_name</span><span class="p">,</span>
-<span class="w">  </span><span class="k">SUM</span><span class="p">(</span><span class="n">email</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="n">REGEXP</span><span class="w"> </span><span class="s1">&#39;^[^@]+@[^@]+\\.[a-z]{2,}$&#39;</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">bad_email</span><span class="p">,</span>
+<span class="w">  </span><span class="k">SUM</span><span class="p">(</span><span class="n">full_name</span><span class="w"> </span><span class="k">IS</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="n">full_name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">''</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">no_name</span><span class="p">,</span>
+<span class="w">  </span><span class="k">SUM</span><span class="p">(</span><span class="n">email</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="n">REGEXP</span><span class="w"> </span><span class="s1">'^[^@]+@[^@]+\\.[a-z]{2,}$'</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">bad_email</span><span class="p">,</span>
 <span class="w">  </span><span class="k">SUM</span><span class="p">(</span><span class="n">group_name</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span><span class="k">SELECT</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">groups</span><span class="p">))</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">unknown_group</span>
 <span class="k">FROM</span><span class="w"> </span><span class="n">students_stage</span><span class="p">;</span>
 </code></pre></div>
@@ -1006,7 +1030,7 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <span class="k">SELECT</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="n">full_name</span><span class="p">,</span><span class="w"> </span><span class="k">g</span><span class="p">.</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="n">email</span>
 <span class="k">FROM</span><span class="w"> </span><span class="n">students_stage</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">s</span>
 <span class="k">JOIN</span><span class="w"> </span><span class="n">groups</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="k">g</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="k">g</span><span class="p">.</span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="n">group_name</span>
-<span class="k">WHERE</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="n">email</span><span class="w"> </span><span class="o">&lt;&gt;</span><span class="w"> </span><span class="s1">&#39;&#39;</span>
+<span class="k">WHERE</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="n">email</span><span class="w"> </span><span class="o">&lt;&gt;</span><span class="w"> </span><span class="s1">''</span>
 <span class="k">ON</span><span class="w"> </span><span class="n">DUPLICATE</span><span class="w"> </span><span class="k">KEY</span><span class="w"> </span><span class="k">UPDATE</span><span class="w"> </span><span class="n">full_name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">VALUES</span><span class="p">(</span><span class="n">full_name</span><span class="p">);</span>
 
 <span class="k">COMMIT</span><span class="p">;</span>
@@ -1024,7 +1048,7 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <p><code>not_transferred</code> это и есть цена импорта: строки, которые остались в промежуточной таблице. Их число плюс число принятых должно дать исходное. Если сумма не сходится, часть строк потерялась по дороге, и загрузку повторяют на копии.</p>
 <h2 id="json-в-mysql"><span class="num">08</span>JSON в MySQL</h2>
 <p>JSON удобен, когда источник отдаёт вложенный документ. В MySQL и MariaDB есть тип <code>JSON</code>, а функции разбора позволяют достать поля.</p>
-<div class="codehilite" data-lang="text"><pre><span></span><code><span class="p">{</span><span class="nt">&quot;full_name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Иванов Иван&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;group&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;ИС-21&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;email&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;ivanov@example.ru&quot;</span><span class="p">}</span>
+<div class="codehilite" data-lang="text"><pre><span></span><code><span class="p">{</span><span class="nt">"full_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Иванов Иван"</span><span class="p">,</span><span class="w"> </span><span class="nt">"group"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ИС-21"</span><span class="p">,</span><span class="w"> </span><span class="nt">"email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ivanov@example.ru"</span><span class="p">}</span>
 </code></pre></div>
 
 <p>Загрузка JSON идёт построчно: один документ на строку. Такой файл принимает <code>LOAD DATA</code> в таблицу с одним столбцом типа <code>JSON</code>.</p>
@@ -1033,17 +1057,17 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <span class="w">  </span><span class="n">doc</span><span class="w"> </span><span class="n">JSON</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span>
 <span class="p">)</span><span class="w"> </span><span class="n">ENGINE</span><span class="o">=</span><span class="n">InnoDB</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="n">CHARSET</span><span class="o">=</span><span class="n">utf8mb4</span><span class="p">;</span>
 
-<span class="k">LOAD</span><span class="w"> </span><span class="k">DATA</span><span class="w"> </span><span class="k">LOCAL</span><span class="w"> </span><span class="n">INFILE</span><span class="w"> </span><span class="s1">&#39;.../xampp/htdocs/import/students.jsonl&#39;</span>
+<span class="k">LOAD</span><span class="w"> </span><span class="k">DATA</span><span class="w"> </span><span class="k">LOCAL</span><span class="w"> </span><span class="n">INFILE</span><span class="w"> </span><span class="s1">'.../xampp/htdocs/import/students.jsonl'</span>
 <span class="k">INTO</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">students_json_stage</span>
 <span class="nb">CHARACTER</span><span class="w"> </span><span class="k">SET</span><span class="w"> </span><span class="n">utf8mb4</span>
-<span class="n">LINES</span><span class="w"> </span><span class="n">TERMINATED</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="s1">&#39;\r\n&#39;</span>
+<span class="n">LINES</span><span class="w"> </span><span class="n">TERMINATED</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="s1">'\r\n'</span>
 <span class="p">(</span><span class="n">doc</span><span class="p">);</span>
 </code></pre></div>
 
 <p>Разбор достаёт поля оператором <code>-&gt;&gt;</code>, который возвращает текст без кавычек JSON.</p>
-<div class="codehilite" data-lang="text"><pre><span></span><code><span class="k">SELECT</span><span class="w"> </span><span class="n">doc</span><span class="o">-&gt;&gt;</span><span class="s1">&#39;$.full_name&#39;</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">full_name</span><span class="p">,</span>
-<span class="w">       </span><span class="n">doc</span><span class="o">-&gt;&gt;</span><span class="s1">&#39;$.group&#39;</span><span class="w">     </span><span class="k">AS</span><span class="w"> </span><span class="n">group_name</span><span class="p">,</span>
-<span class="w">       </span><span class="n">doc</span><span class="o">-&gt;&gt;</span><span class="s1">&#39;$.email&#39;</span><span class="w">     </span><span class="k">AS</span><span class="w"> </span><span class="n">email</span>
+<div class="codehilite" data-lang="text"><pre><span></span><code><span class="k">SELECT</span><span class="w"> </span><span class="n">doc</span><span class="o">-&gt;&gt;</span><span class="s1">'$.full_name'</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">full_name</span><span class="p">,</span>
+<span class="w">       </span><span class="n">doc</span><span class="o">-&gt;&gt;</span><span class="s1">'$.group'</span><span class="w">     </span><span class="k">AS</span><span class="w"> </span><span class="n">group_name</span><span class="p">,</span>
+<span class="w">       </span><span class="n">doc</span><span class="o">-&gt;&gt;</span><span class="s1">'$.email'</span><span class="w">     </span><span class="k">AS</span><span class="w"> </span><span class="n">email</span>
 <span class="k">FROM</span><span class="w"> </span><span class="n">students_json_stage</span>
 <span class="k">WHERE</span><span class="w"> </span><span class="n">JSON_VALID</span><span class="p">(</span><span class="n">doc</span><span class="p">);</span>
 </code></pre></div>
@@ -1054,10 +1078,10 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <p>Экспорт это тот же обмен, только в обратную сторону, и здесь важны те же три вещи. Для CSV подходит <code>SELECT ... INTO OUTFILE</code>.</p>
 <div class="codehilite" data-lang="text"><pre><span></span><code><span class="k">SELECT</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">full_name</span><span class="p">,</span><span class="w"> </span><span class="n">email</span>
 <span class="k">FROM</span><span class="w"> </span><span class="n">students</span>
-<span class="k">INTO</span><span class="w"> </span><span class="n">OUTFILE</span><span class="w"> </span><span class="s1">&#39;.../xampp/mysql/export/students.csv&#39;</span>
+<span class="k">INTO</span><span class="w"> </span><span class="n">OUTFILE</span><span class="w"> </span><span class="s1">'.../xampp/mysql/export/students.csv'</span>
 <span class="nb">CHARACTER</span><span class="w"> </span><span class="k">SET</span><span class="w"> </span><span class="n">utf8mb4</span>
-<span class="n">FIELDS</span><span class="w"> </span><span class="n">TERMINATED</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="s1">&#39;,&#39;</span><span class="w"> </span><span class="n">OPTIONALLY</span><span class="w"> </span><span class="n">ENCLOSED</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="s1">&#39;&quot;&#39;</span>
-<span class="n">LINES</span><span class="w"> </span><span class="n">TERMINATED</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="s1">&#39;\r\n&#39;</span><span class="p">;</span>
+<span class="n">FIELDS</span><span class="w"> </span><span class="n">TERMINATED</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="s1">','</span><span class="w"> </span><span class="n">OPTIONALLY</span><span class="w"> </span><span class="n">ENCLOSED</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="s1">'"'</span>
+<span class="n">LINES</span><span class="w"> </span><span class="n">TERMINATED</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="s1">'\r\n'</span><span class="p">;</span>
 </code></pre></div>
 
 <p>Команда требует привилегии <code>FILE</code> и каталога из <code>secure_file_priv</code>. Если каталог не разрешён, файл не появится, и ошибка будет не про права, а про доступ к пути.</p>
@@ -1071,7 +1095,7 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <p>Кодировка должна совпадать на четырёх уровнях: база, таблица, столбец и соединение. Если соединение объявлено как <code>latin1</code>, сервер перекодирует текст при вставке, и кириллица искажается даже при правильной таблице.</p>
 <div class="codehilite" data-lang="text"><pre><span></span><code><span class="k">CREATE</span><span class="w"> </span><span class="k">DATABASE</span><span class="w"> </span><span class="n">dean</span><span class="w"> </span><span class="nb">CHARACTER</span><span class="w"> </span><span class="k">SET</span><span class="w"> </span><span class="n">utf8mb4</span><span class="w"> </span><span class="k">COLLATE</span><span class="w"> </span><span class="n">utf8mb4_unicode_ci</span><span class="p">;</span>
 <span class="k">SET</span><span class="w"> </span><span class="k">NAMES</span><span class="w"> </span><span class="n">utf8mb4</span><span class="p">;</span>
-<span class="k">SHOW</span><span class="w"> </span><span class="n">VARIABLES</span><span class="w"> </span><span class="k">LIKE</span><span class="w"> </span><span class="s1">&#39;character_set%&#39;</span><span class="p">;</span>
+<span class="k">SHOW</span><span class="w"> </span><span class="n">VARIABLES</span><span class="w"> </span><span class="k">LIKE</span><span class="w"> </span><span class="s1">'character_set%'</span><span class="p">;</span>
 </code></pre></div>
 
 <p>В phpMyAdmin кодировку соединения задаёт параметр <code>$cfg['DefaultCharset']</code> в <code>config.inc.php</code>. В .NET её задаёт <code>CharSet=utf8mb4</code> в строке подключения. В CSV её задаёт сам файл, и это единственное место, где ошибку нельзя исправить настройкой сервера.</p>
@@ -1188,6 +1212,40 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
       var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
       window.scrollTo({top: 0, behavior: reduce ? 'auto' : 'smooth'});
     });
+  });
+})();
+
+(function(){
+  document.querySelectorAll('[data-slider]').forEach(function(slider){
+    var track = slider.querySelector('[data-slider-track]');
+    var slides = track ? Array.prototype.slice.call(track.children) : [];
+    var counter = slider.querySelector('[data-slider-counter]');
+    var prev = slider.querySelector('[data-slider-prev]');
+    var next = slider.querySelector('[data-slider-next]');
+    if(!track || slides.length < 2) return;
+    function current(){
+      var best = 0, dist = Infinity;
+      slides.forEach(function(slide, i){
+        var d = Math.abs(slide.offsetLeft - track.scrollLeft);
+        if(d < dist){ dist = d; best = i; }
+      });
+      return best;
+    }
+    function update(){
+      if(counter) counter.textContent = (current() + 1) + ' / ' + slides.length;
+    }
+    function go(delta){
+      var i = Math.max(0, Math.min(slides.length - 1, current() + delta));
+      var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      track.scrollTo({left: slides[i].offsetLeft, behavior: reduce ? 'auto' : 'smooth'});
+    }
+    if(prev) prev.addEventListener('click', function(){ go(-1); });
+    if(next) next.addEventListener('click', function(){ go(1); });
+    track.addEventListener('scroll', function(){
+      clearTimeout(track._sliderTimer);
+      track._sliderTimer = setTimeout(update, 80);
+    }, {passive: true});
+    update();
   });
 })();
 (function(){

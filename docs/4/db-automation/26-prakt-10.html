@@ -527,6 +527,12 @@ html.modal-open { overflow: hidden; }
 :root[data-theme=dark] .quiz-actions button[data-answer]:hover, :root[data-theme=dark] .quiz-actions button.quiz-answer:hover { background: #262626; background-color: #262626; color: #fff; border-color: #262626; }
 :root[data-theme=dark] .gate-q { background: #1E1E1E; color: #FF6B00; }
 
+/* the whole-variant archive is the main action in a download block */
+.files a.zip { background: #121212; color: #fff; border-color: #121212; font-weight: 700; box-shadow: 4px 4px 0 rgba(0,0,0,.18); }
+.files a.zip::before { color: #fff; }
+.files a.zip:hover { background: #1D1D1D; color: #fff; border-color: #1D1D1D; box-shadow: 5px 5px 0 rgba(0,0,0,.22); }
+.files a.zip:active { transform: translate(2px,2px); box-shadow: 1px 1px 0 rgba(0,0,0,.12); }
+
 /* ---------- practical work checklist ---------- */
 .work-checklist { width: 100%; border-collapse: collapse; margin: 14px 0 4px; }
 .work-checklist th, .work-checklist td { border: 1px solid var(--rule); padding: 9px 10px; vertical-align: top; }
@@ -564,6 +570,24 @@ html.modal-open { overflow: hidden; }
 .variant-body .task-list { margin: 8px 0 0; padding-left: 20px; }
 .variant-body .task-list li { margin: 0 0 8px; }
 @media (max-width: 620px) { .variant-body { overflow-x: auto; } .variant-body table { min-width: 520px; } }
+
+/* ---------- schema slider: all CREATE TABLE examples ---------- */
+.schema-slider { margin: 18px 0 24px; border: 1px solid #d8d5cc; border-radius: 14px; background: #fff; color: #1a1916; overflow: hidden; }
+.schema-slider-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 14px; background: #f5f2ea; border-bottom: 1px solid #d8d5cc; }
+.schema-slider-bar strong { font: 700 14px/1.2 var(--font-display); color: #1a1916; }
+.schema-slider-actions { display: flex; align-items: center; gap: 8px; }
+.schema-slider-counter { min-width: 62px; text-align: center; font: 600 13px/1 var(--font-mono); color: #59544a; }
+.schema-btn { width: 34px; height: 34px; border: 1px solid #c9c4b8; border-radius: 8px; background: #fff; color: #1a1916; font: 700 18px/1 var(--font-mono); cursor: pointer; }
+.schema-btn:hover { background: #ece7dc; }
+.schema-track { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: thin; }
+.schema-slide { flex: 0 0 100%; min-width: 100%; box-sizing: border-box; padding: 16px 18px 18px; scroll-snap-align: start; }
+.schema-slide h4 { margin: 0 0 10px; font: 700 16px/1.3 var(--font-display); color: #1a1916; }
+.schema-slide h4 code, .schema-slide p code { color: #1a1916; background: #f1ede4; padding: 1px 4px; border-radius: 4px; }
+.schema-slide p { margin: 0 0 10px; font-size: 14px; line-height: 1.55; color: #3a372f; }
+.schema-slide pre { margin: 0; padding: 14px 16px; overflow-x: auto; border: 1px solid #ddd8cc; border-radius: 10px; background: #fbfaf6; color: #1a1916; font: 12.5px/1.5 var(--font-mono); }
+.schema-slide code { color: inherit; background: none; padding: 0; }
+.schema-slider:focus-within { outline: 2px solid #b9a97f; outline-offset: 2px; }
+@media (max-width: 620px) { .schema-slide { padding: 12px; } .schema-slider-bar { padding: 8px 10px; } }
 
 /* ---------- print / PDF export ---------- */
 @page { margin: 16mm; }
@@ -904,11 +928,11 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <p>Первой строкой каждого вывода печатайте фамилию и группу: в MySQL это <code>SELECT 'Иванов И.И., ИС-41' AS student;</code>, в PowerShell <code>Write-Host "Иванов И.И., ИС-41"</code>.</p>
 <h3>Шаг 1. Включите general log</h3>
 <p>Переключите вывод журнала в таблицу и включите запись. Настройки через <code>SET GLOBAL</code> действуют до перезапуска сервера.</p>
-<div class="codehilite" data-lang="sql"><pre><span></span><code><span class="k">SET</span><span class="w"> </span><span class="k">GLOBAL</span><span class="w"> </span><span class="n">log_output</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;TABLE&#39;</span><span class="p">;</span>
-<span class="k">SET</span><span class="w"> </span><span class="k">GLOBAL</span><span class="w"> </span><span class="n">general_log</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;ON&#39;</span><span class="p">;</span>
+<div class="codehilite" data-lang="sql"><pre><span></span><code><span class="k">SET</span><span class="w"> </span><span class="k">GLOBAL</span><span class="w"> </span><span class="n">log_output</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'TABLE'</span><span class="p">;</span>
+<span class="k">SET</span><span class="w"> </span><span class="k">GLOBAL</span><span class="w"> </span><span class="n">general_log</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'ON'</span><span class="p">;</span>
 
-<span class="k">SHOW</span><span class="w"> </span><span class="n">VARIABLES</span><span class="w"> </span><span class="k">LIKE</span><span class="w"> </span><span class="s1">&#39;general_log%&#39;</span><span class="p">;</span>
-<span class="k">SHOW</span><span class="w"> </span><span class="n">VARIABLES</span><span class="w"> </span><span class="k">LIKE</span><span class="w"> </span><span class="s1">&#39;log_output&#39;</span><span class="p">;</span>
+<span class="k">SHOW</span><span class="w"> </span><span class="n">VARIABLES</span><span class="w"> </span><span class="k">LIKE</span><span class="w"> </span><span class="s1">'general_log%'</span><span class="p">;</span>
+<span class="k">SHOW</span><span class="w"> </span><span class="n">VARIABLES</span><span class="w"> </span><span class="k">LIKE</span><span class="w"> </span><span class="s1">'log_output'</span><span class="p">;</span>
 </code></pre></div>
 
 <p>Чтобы настройка пережила перезапуск, добавьте строки в секцию <code>[mysqld]</code> файла <code>.../xampp/mysql/bin/my.ini</code> и перезапустите MySQL из панели XAMPP.</p>
@@ -934,9 +958,9 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 
 <p>Приложите скриншот общего журнала: в кадре видны время, пользователь с хостом и текст хотя бы одного оператора <code>Query</code>. Сравните запись <code>user_host</code> с той учётной записью, под которой вы работали, и запишите в отчёт, какие сведения даёт общий журнал и каких ему не хватает.</p>
 <p>Очистить журнал можно только при выключенной записи.</p>
-<div class="codehilite" data-lang="sql"><pre><span></span><code><span class="k">SET</span><span class="w"> </span><span class="k">GLOBAL</span><span class="w"> </span><span class="n">general_log</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;OFF&#39;</span><span class="p">;</span>
+<div class="codehilite" data-lang="sql"><pre><span></span><code><span class="k">SET</span><span class="w"> </span><span class="k">GLOBAL</span><span class="w"> </span><span class="n">general_log</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'OFF'</span><span class="p">;</span>
 <span class="k">TRUNCATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">mysql</span><span class="p">.</span><span class="n">general_log</span><span class="p">;</span>
-<span class="k">SET</span><span class="w"> </span><span class="k">GLOBAL</span><span class="w"> </span><span class="n">general_log</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;ON&#39;</span><span class="p">;</span>
+<span class="k">SET</span><span class="w"> </span><span class="k">GLOBAL</span><span class="w"> </span><span class="n">general_log</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'ON'</span><span class="p">;</span>
 </code></pre></div>
 
 <h3>Шаг 3. Создайте триггеры аудита</h3>
@@ -950,29 +974,29 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <span class="k">CREATE</span><span class="w"> </span><span class="k">TRIGGER</span><span class="w"> </span><span class="n">students_ai</span><span class="w"> </span><span class="k">AFTER</span><span class="w"> </span><span class="k">INSERT</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">students</span>
 <span class="k">FOR</span><span class="w"> </span><span class="k">EACH</span><span class="w"> </span><span class="k">ROW</span>
 <span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">audit_log</span><span class="p">(</span><span class="n">db_user</span><span class="p">,</span><span class="w"> </span><span class="n">action</span><span class="p">,</span><span class="w"> </span><span class="k">table_name</span><span class="p">,</span><span class="w"> </span><span class="n">row_id</span><span class="p">,</span><span class="w"> </span><span class="n">details</span><span class="p">)</span>
-<span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="k">USER</span><span class="p">(),</span><span class="w"> </span><span class="s1">&#39;INSERT&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;students&#39;</span><span class="p">,</span><span class="w"> </span><span class="k">CAST</span><span class="p">(</span><span class="k">NEW</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="nb">CHAR</span><span class="p">),</span>
-<span class="w">        </span><span class="n">JSON_OBJECT</span><span class="p">(</span><span class="s1">&#39;new&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">JSON_OBJECT</span><span class="p">(</span><span class="s1">&#39;full_name&#39;</span><span class="p">,</span><span class="w"> </span><span class="k">NEW</span><span class="p">.</span><span class="n">full_name</span><span class="p">,</span>
-<span class="w">                                       </span><span class="s1">&#39;email&#39;</span><span class="p">,</span><span class="w"> </span><span class="k">NEW</span><span class="p">.</span><span class="n">email</span><span class="p">,</span>
-<span class="w">                                       </span><span class="s1">&#39;group_id&#39;</span><span class="p">,</span><span class="w"> </span><span class="k">NEW</span><span class="p">.</span><span class="n">group_id</span><span class="p">)));</span>
+<span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="k">USER</span><span class="p">(),</span><span class="w"> </span><span class="s1">'INSERT'</span><span class="p">,</span><span class="w"> </span><span class="s1">'students'</span><span class="p">,</span><span class="w"> </span><span class="k">CAST</span><span class="p">(</span><span class="k">NEW</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="nb">CHAR</span><span class="p">),</span>
+<span class="w">        </span><span class="n">JSON_OBJECT</span><span class="p">(</span><span class="s1">'new'</span><span class="p">,</span><span class="w"> </span><span class="n">JSON_OBJECT</span><span class="p">(</span><span class="s1">'full_name'</span><span class="p">,</span><span class="w"> </span><span class="k">NEW</span><span class="p">.</span><span class="n">full_name</span><span class="p">,</span>
+<span class="w">                                       </span><span class="s1">'email'</span><span class="p">,</span><span class="w"> </span><span class="k">NEW</span><span class="p">.</span><span class="n">email</span><span class="p">,</span>
+<span class="w">                                       </span><span class="s1">'group_id'</span><span class="p">,</span><span class="w"> </span><span class="k">NEW</span><span class="p">.</span><span class="n">group_id</span><span class="p">)));</span>
 
 <span class="k">CREATE</span><span class="w"> </span><span class="k">TRIGGER</span><span class="w"> </span><span class="n">students_au</span><span class="w"> </span><span class="k">AFTER</span><span class="w"> </span><span class="k">UPDATE</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">students</span>
 <span class="k">FOR</span><span class="w"> </span><span class="k">EACH</span><span class="w"> </span><span class="k">ROW</span>
 <span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">audit_log</span><span class="p">(</span><span class="n">db_user</span><span class="p">,</span><span class="w"> </span><span class="n">action</span><span class="p">,</span><span class="w"> </span><span class="k">table_name</span><span class="p">,</span><span class="w"> </span><span class="n">row_id</span><span class="p">,</span><span class="w"> </span><span class="n">details</span><span class="p">)</span>
-<span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="k">USER</span><span class="p">(),</span><span class="w"> </span><span class="s1">&#39;UPDATE&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;students&#39;</span><span class="p">,</span><span class="w"> </span><span class="k">CAST</span><span class="p">(</span><span class="k">NEW</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="nb">CHAR</span><span class="p">),</span>
-<span class="w">        </span><span class="n">JSON_OBJECT</span><span class="p">(</span><span class="s1">&#39;old&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">JSON_OBJECT</span><span class="p">(</span><span class="s1">&#39;full_name&#39;</span><span class="p">,</span><span class="w"> </span><span class="k">OLD</span><span class="p">.</span><span class="n">full_name</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;email&#39;</span><span class="p">,</span><span class="w"> </span><span class="k">OLD</span><span class="p">.</span><span class="n">email</span><span class="p">),</span>
-<span class="w">                    </span><span class="s1">&#39;new&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">JSON_OBJECT</span><span class="p">(</span><span class="s1">&#39;full_name&#39;</span><span class="p">,</span><span class="w"> </span><span class="k">NEW</span><span class="p">.</span><span class="n">full_name</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;email&#39;</span><span class="p">,</span><span class="w"> </span><span class="k">NEW</span><span class="p">.</span><span class="n">email</span><span class="p">)));</span>
+<span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="k">USER</span><span class="p">(),</span><span class="w"> </span><span class="s1">'UPDATE'</span><span class="p">,</span><span class="w"> </span><span class="s1">'students'</span><span class="p">,</span><span class="w"> </span><span class="k">CAST</span><span class="p">(</span><span class="k">NEW</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="nb">CHAR</span><span class="p">),</span>
+<span class="w">        </span><span class="n">JSON_OBJECT</span><span class="p">(</span><span class="s1">'old'</span><span class="p">,</span><span class="w"> </span><span class="n">JSON_OBJECT</span><span class="p">(</span><span class="s1">'full_name'</span><span class="p">,</span><span class="w"> </span><span class="k">OLD</span><span class="p">.</span><span class="n">full_name</span><span class="p">,</span><span class="w"> </span><span class="s1">'email'</span><span class="p">,</span><span class="w"> </span><span class="k">OLD</span><span class="p">.</span><span class="n">email</span><span class="p">),</span>
+<span class="w">                    </span><span class="s1">'new'</span><span class="p">,</span><span class="w"> </span><span class="n">JSON_OBJECT</span><span class="p">(</span><span class="s1">'full_name'</span><span class="p">,</span><span class="w"> </span><span class="k">NEW</span><span class="p">.</span><span class="n">full_name</span><span class="p">,</span><span class="w"> </span><span class="s1">'email'</span><span class="p">,</span><span class="w"> </span><span class="k">NEW</span><span class="p">.</span><span class="n">email</span><span class="p">)));</span>
 
 <span class="k">CREATE</span><span class="w"> </span><span class="k">TRIGGER</span><span class="w"> </span><span class="n">students_ad</span><span class="w"> </span><span class="k">AFTER</span><span class="w"> </span><span class="k">DELETE</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">students</span>
 <span class="k">FOR</span><span class="w"> </span><span class="k">EACH</span><span class="w"> </span><span class="k">ROW</span>
 <span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">audit_log</span><span class="p">(</span><span class="n">db_user</span><span class="p">,</span><span class="w"> </span><span class="n">action</span><span class="p">,</span><span class="w"> </span><span class="k">table_name</span><span class="p">,</span><span class="w"> </span><span class="n">row_id</span><span class="p">,</span><span class="w"> </span><span class="n">details</span><span class="p">)</span>
-<span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="k">USER</span><span class="p">(),</span><span class="w"> </span><span class="s1">&#39;DELETE&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;students&#39;</span><span class="p">,</span><span class="w"> </span><span class="k">CAST</span><span class="p">(</span><span class="k">OLD</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="nb">CHAR</span><span class="p">),</span>
-<span class="w">        </span><span class="n">JSON_OBJECT</span><span class="p">(</span><span class="s1">&#39;old&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">JSON_OBJECT</span><span class="p">(</span><span class="s1">&#39;full_name&#39;</span><span class="p">,</span><span class="w"> </span><span class="k">OLD</span><span class="p">.</span><span class="n">full_name</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;email&#39;</span><span class="p">,</span><span class="w"> </span><span class="k">OLD</span><span class="p">.</span><span class="n">email</span><span class="p">)));</span>
+<span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="k">USER</span><span class="p">(),</span><span class="w"> </span><span class="s1">'DELETE'</span><span class="p">,</span><span class="w"> </span><span class="s1">'students'</span><span class="p">,</span><span class="w"> </span><span class="k">CAST</span><span class="p">(</span><span class="k">OLD</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="nb">CHAR</span><span class="p">),</span>
+<span class="w">        </span><span class="n">JSON_OBJECT</span><span class="p">(</span><span class="s1">'old'</span><span class="p">,</span><span class="w"> </span><span class="n">JSON_OBJECT</span><span class="p">(</span><span class="s1">'full_name'</span><span class="p">,</span><span class="w"> </span><span class="k">OLD</span><span class="p">.</span><span class="n">full_name</span><span class="p">,</span><span class="w"> </span><span class="s1">'email'</span><span class="p">,</span><span class="w"> </span><span class="k">OLD</span><span class="p">.</span><span class="n">email</span><span class="p">)));</span>
 </code></pre></div>
 
 <p>Проверьте, что триггеры созданы и что владелец у них администратор.</p>
 <div class="codehilite" data-lang="sql"><pre><span></span><code><span class="k">SELECT</span><span class="w"> </span><span class="k">trigger_name</span><span class="p">,</span><span class="w"> </span><span class="n">event_manipulation</span><span class="p">,</span><span class="w"> </span><span class="n">action_timing</span><span class="p">,</span><span class="w"> </span><span class="k">definer</span>
 <span class="k">FROM</span><span class="w"> </span><span class="n">information_schema</span><span class="p">.</span><span class="n">TRIGGERS</span>
-<span class="k">WHERE</span><span class="w"> </span><span class="n">event_object_schema</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;dean&#39;</span><span class="w"> </span><span class="k">AND</span><span class="w"> </span><span class="n">event_object_table</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;students&#39;</span><span class="p">;</span>
+<span class="k">WHERE</span><span class="w"> </span><span class="n">event_object_schema</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'dean'</span><span class="w"> </span><span class="k">AND</span><span class="w"> </span><span class="n">event_object_table</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'students'</span><span class="p">;</span>
 </code></pre></div>
 
 <h3>Шаг 4. Выполните тестовые изменения</h3>
@@ -981,18 +1005,18 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 </code></pre></div>
 
 <div class="codehilite" data-lang="sql"><pre><span></span><code><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">students</span><span class="p">(</span><span class="n">full_name</span><span class="p">,</span><span class="w"> </span><span class="n">group_id</span><span class="p">,</span><span class="w"> </span><span class="n">email</span><span class="p">)</span>
-<span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="s1">&#39;Тестов Тест Тестович&#39;</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;test.audit@example.ru&#39;</span><span class="p">);</span>
+<span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="s1">'Тестов Тест Тестович'</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="s1">'test.audit@example.ru'</span><span class="p">);</span>
 
-<span class="k">UPDATE</span><span class="w"> </span><span class="n">students</span><span class="w"> </span><span class="k">SET</span><span class="w"> </span><span class="n">email</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;test.audit2@example.ru&#39;</span>
-<span class="k">WHERE</span><span class="w"> </span><span class="n">email</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;test.audit@example.ru&#39;</span><span class="p">;</span>
+<span class="k">UPDATE</span><span class="w"> </span><span class="n">students</span><span class="w"> </span><span class="k">SET</span><span class="w"> </span><span class="n">email</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'test.audit2@example.ru'</span>
+<span class="k">WHERE</span><span class="w"> </span><span class="n">email</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'test.audit@example.ru'</span><span class="p">;</span>
 
-<span class="k">DELETE</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">students</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">email</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;test.audit2@example.ru&#39;</span><span class="p">;</span>
+<span class="k">DELETE</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">students</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">email</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'test.audit2@example.ru'</span><span class="p">;</span>
 </code></pre></div>
 
 <p>Прочитайте журнал отдельной сессией <code>root</code>: приложению чтение журнала не нужно.</p>
 <div class="codehilite" data-lang="sql"><pre><span></span><code><span class="k">SELECT</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="k">at</span><span class="p">,</span><span class="w"> </span><span class="n">db_user</span><span class="p">,</span><span class="w"> </span><span class="n">action</span><span class="p">,</span><span class="w"> </span><span class="k">table_name</span><span class="p">,</span><span class="w"> </span><span class="n">row_id</span><span class="p">,</span>
-<span class="w">       </span><span class="n">JSON_UNQUOTE</span><span class="p">(</span><span class="n">JSON_EXTRACT</span><span class="p">(</span><span class="n">details</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;$.old.email&#39;</span><span class="p">))</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">old_email</span><span class="p">,</span>
-<span class="w">       </span><span class="n">JSON_UNQUOTE</span><span class="p">(</span><span class="n">JSON_EXTRACT</span><span class="p">(</span><span class="n">details</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;$.new.email&#39;</span><span class="p">))</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">new_email</span>
+<span class="w">       </span><span class="n">JSON_UNQUOTE</span><span class="p">(</span><span class="n">JSON_EXTRACT</span><span class="p">(</span><span class="n">details</span><span class="p">,</span><span class="w"> </span><span class="s1">'$.old.email'</span><span class="p">))</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">old_email</span><span class="p">,</span>
+<span class="w">       </span><span class="n">JSON_UNQUOTE</span><span class="p">(</span><span class="n">JSON_EXTRACT</span><span class="p">(</span><span class="n">details</span><span class="p">,</span><span class="w"> </span><span class="s1">'$.new.email'</span><span class="p">))</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">new_email</span>
 <span class="k">FROM</span><span class="w"> </span><span class="n">audit_log</span>
 <span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="k">DESC</span>
 <span class="k">LIMIT</span><span class="w"> </span><span class="mi">10</span><span class="p">;</span>
@@ -1001,29 +1025,29 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <p>Приложите скриншот событий: в кадре видны три действия <code>INSERT</code>, <code>UPDATE</code>, <code>DELETE</code>, пользователь <code>dean_app</code> и значения <code>old</code> и <code>new</code> хотя бы для одного изменения.</p>
 <h3>Шаг 5. Защитите журнал от изменения</h3>
 <p>Сначала посмотрите, как выданы права. Если у приложения есть права на всю базу <code>dean.*</code>, отзыв на отдельную таблицу ничего не изменит: привилегии складываются. Тогда отзовите широкое право и выдайте права по таблицам.</p>
-<div class="codehilite" data-lang="sql"><pre><span></span><code><span class="k">SHOW</span><span class="w"> </span><span class="n">GRANTS</span><span class="w"> </span><span class="k">FOR</span><span class="w"> </span><span class="s1">&#39;dean_app&#39;</span><span class="o">@</span><span class="s1">&#39;localhost&#39;</span><span class="p">;</span>
+<div class="codehilite" data-lang="sql"><pre><span></span><code><span class="k">SHOW</span><span class="w"> </span><span class="n">GRANTS</span><span class="w"> </span><span class="k">FOR</span><span class="w"> </span><span class="s1">'dean_app'</span><span class="o">@</span><span class="s1">'localhost'</span><span class="p">;</span>
 </code></pre></div>
 
-<div class="codehilite" data-lang="sql"><pre><span></span><code><span class="k">REVOKE</span><span class="w"> </span><span class="k">ALL</span><span class="w"> </span><span class="k">PRIVILEGES</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">dean</span><span class="p">.</span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="s1">&#39;dean_app&#39;</span><span class="o">@</span><span class="s1">&#39;localhost&#39;</span><span class="p">;</span>
+<div class="codehilite" data-lang="sql"><pre><span></span><code><span class="k">REVOKE</span><span class="w"> </span><span class="k">ALL</span><span class="w"> </span><span class="k">PRIVILEGES</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">dean</span><span class="p">.</span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="s1">'dean_app'</span><span class="o">@</span><span class="s1">'localhost'</span><span class="p">;</span>
 
-<span class="k">GRANT</span><span class="w"> </span><span class="k">SELECT</span><span class="p">,</span><span class="w"> </span><span class="k">INSERT</span><span class="p">,</span><span class="w"> </span><span class="k">UPDATE</span><span class="p">,</span><span class="w"> </span><span class="k">DELETE</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">dean</span><span class="p">.</span><span class="n">students</span><span class="w"> </span><span class="k">TO</span><span class="w"> </span><span class="s1">&#39;dean_app&#39;</span><span class="o">@</span><span class="s1">&#39;localhost&#39;</span><span class="p">;</span>
-<span class="k">GRANT</span><span class="w"> </span><span class="k">SELECT</span><span class="p">,</span><span class="w"> </span><span class="k">INSERT</span><span class="p">,</span><span class="w"> </span><span class="k">UPDATE</span><span class="p">,</span><span class="w"> </span><span class="k">DELETE</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">dean</span><span class="p">.</span><span class="n">enrollments</span><span class="w"> </span><span class="k">TO</span><span class="w"> </span><span class="s1">&#39;dean_app&#39;</span><span class="o">@</span><span class="s1">&#39;localhost&#39;</span><span class="p">;</span>
-<span class="k">GRANT</span><span class="w"> </span><span class="k">SELECT</span><span class="p">,</span><span class="w"> </span><span class="k">INSERT</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">dean</span><span class="p">.</span><span class="n">payments</span><span class="w"> </span><span class="k">TO</span><span class="w"> </span><span class="s1">&#39;dean_app&#39;</span><span class="o">@</span><span class="s1">&#39;localhost&#39;</span><span class="p">;</span>
-<span class="k">GRANT</span><span class="w"> </span><span class="k">SELECT</span><span class="p">,</span><span class="w"> </span><span class="k">INSERT</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">dean</span><span class="p">.</span><span class="n">maintenance_runs</span><span class="w"> </span><span class="k">TO</span><span class="w"> </span><span class="s1">&#39;dean_app&#39;</span><span class="o">@</span><span class="s1">&#39;localhost&#39;</span><span class="p">;</span>
-<span class="k">GRANT</span><span class="w"> </span><span class="k">SELECT</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">dean</span><span class="p">.</span><span class="n">groups</span><span class="w"> </span><span class="k">TO</span><span class="w"> </span><span class="s1">&#39;dean_app&#39;</span><span class="o">@</span><span class="s1">&#39;localhost&#39;</span><span class="p">;</span>
-<span class="k">GRANT</span><span class="w"> </span><span class="k">SELECT</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">dean</span><span class="p">.</span><span class="n">courses</span><span class="w"> </span><span class="k">TO</span><span class="w"> </span><span class="s1">&#39;dean_app&#39;</span><span class="o">@</span><span class="s1">&#39;localhost&#39;</span><span class="p">;</span>
+<span class="k">GRANT</span><span class="w"> </span><span class="k">SELECT</span><span class="p">,</span><span class="w"> </span><span class="k">INSERT</span><span class="p">,</span><span class="w"> </span><span class="k">UPDATE</span><span class="p">,</span><span class="w"> </span><span class="k">DELETE</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">dean</span><span class="p">.</span><span class="n">students</span><span class="w"> </span><span class="k">TO</span><span class="w"> </span><span class="s1">'dean_app'</span><span class="o">@</span><span class="s1">'localhost'</span><span class="p">;</span>
+<span class="k">GRANT</span><span class="w"> </span><span class="k">SELECT</span><span class="p">,</span><span class="w"> </span><span class="k">INSERT</span><span class="p">,</span><span class="w"> </span><span class="k">UPDATE</span><span class="p">,</span><span class="w"> </span><span class="k">DELETE</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">dean</span><span class="p">.</span><span class="n">enrollments</span><span class="w"> </span><span class="k">TO</span><span class="w"> </span><span class="s1">'dean_app'</span><span class="o">@</span><span class="s1">'localhost'</span><span class="p">;</span>
+<span class="k">GRANT</span><span class="w"> </span><span class="k">SELECT</span><span class="p">,</span><span class="w"> </span><span class="k">INSERT</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">dean</span><span class="p">.</span><span class="n">payments</span><span class="w"> </span><span class="k">TO</span><span class="w"> </span><span class="s1">'dean_app'</span><span class="o">@</span><span class="s1">'localhost'</span><span class="p">;</span>
+<span class="k">GRANT</span><span class="w"> </span><span class="k">SELECT</span><span class="p">,</span><span class="w"> </span><span class="k">INSERT</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">dean</span><span class="p">.</span><span class="n">maintenance_runs</span><span class="w"> </span><span class="k">TO</span><span class="w"> </span><span class="s1">'dean_app'</span><span class="o">@</span><span class="s1">'localhost'</span><span class="p">;</span>
+<span class="k">GRANT</span><span class="w"> </span><span class="k">SELECT</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">dean</span><span class="p">.</span><span class="n">groups</span><span class="w"> </span><span class="k">TO</span><span class="w"> </span><span class="s1">'dean_app'</span><span class="o">@</span><span class="s1">'localhost'</span><span class="p">;</span>
+<span class="k">GRANT</span><span class="w"> </span><span class="k">SELECT</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">dean</span><span class="p">.</span><span class="n">courses</span><span class="w"> </span><span class="k">TO</span><span class="w"> </span><span class="s1">'dean_app'</span><span class="o">@</span><span class="s1">'localhost'</span><span class="p">;</span>
 
 <span class="k">GRANT</span><span class="w"> </span><span class="k">SELECT</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">dean</span><span class="p">.</span><span class="n">audit_log</span><span class="w"> </span><span class="k">TO</span><span class="w"> </span><span class="n">auditor</span><span class="p">;</span>
 </code></pre></div>
 
 <p>Запись в журнал продолжит работать, потому что триггер выполняется с правами владельца и приложению прямой <code>INSERT</code> в <code>audit_log</code> не нужен. Проверьте запрет от имени приложения: ошибка прав и есть доказательство того, что мера работает.</p>
-<div class="codehilite" data-lang="powershell"><pre><span></span><code><span class="p">&amp;</span> <span class="n">mysql</span> <span class="n">-u</span> <span class="n">dean_app</span> <span class="n">-p</span> <span class="n">dean</span> <span class="n">-e</span> <span class="s2">&quot;UPDATE audit_log SET action = &#39;x&#39; WHERE id = 1;&quot;</span>
+<div class="codehilite" data-lang="powershell"><pre><span></span><code><span class="p">&amp;</span> <span class="n">mysql</span> <span class="n">-u</span> <span class="n">dean_app</span> <span class="n">-p</span> <span class="n">dean</span> <span class="n">-e</span> <span class="s2">"UPDATE audit_log SET action = 'x' WHERE id = 1;"</span>
 </code></pre></div>
 
 <p>Ожидаемый ответ: <code>ERROR 1142 (42000): UPDATE command denied to user 'dean_app'@'localhost' for table 'audit_log'</code>. Затем повторите <code>INSERT</code> в <code>students</code> от <code>dean_app</code> и убедитесь, что изменение прошло, а событие появилось.</p>
 <h3>Шаг 6. Проверьте привилегии через SHOW GRANTS</h3>
 <p>Соберите права приложения, роли и список учётных записей. Суперпользователь, <code>GRANT OPTION</code> и права на все базы у прикладной роли это избыточные привилегии.</p>
-<div class="codehilite" data-lang="sql"><pre><span></span><code><span class="k">SHOW</span><span class="w"> </span><span class="n">GRANTS</span><span class="w"> </span><span class="k">FOR</span><span class="w"> </span><span class="s1">&#39;dean_app&#39;</span><span class="o">@</span><span class="s1">&#39;localhost&#39;</span><span class="p">;</span>
+<div class="codehilite" data-lang="sql"><pre><span></span><code><span class="k">SHOW</span><span class="w"> </span><span class="n">GRANTS</span><span class="w"> </span><span class="k">FOR</span><span class="w"> </span><span class="s1">'dean_app'</span><span class="o">@</span><span class="s1">'localhost'</span><span class="p">;</span>
 <span class="k">SHOW</span><span class="w"> </span><span class="n">GRANTS</span><span class="w"> </span><span class="k">FOR</span><span class="w"> </span><span class="n">auditor</span><span class="p">;</span>
 <span class="k">SELECT</span><span class="w"> </span><span class="k">user</span><span class="p">,</span><span class="w"> </span><span class="k">host</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">mysql</span><span class="p">.</span><span class="k">user</span><span class="w"> </span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="k">user</span><span class="p">,</span><span class="w"> </span><span class="k">host</span><span class="p">;</span>
 </code></pre></div>
@@ -1079,7 +1103,7 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 </table>
 <h3>Шаг 7. Проверьте вход root без пароля</h3>
 <p>Попробуйте подключиться без пароля. Успешный вход означает, что любая программа на машине получает полный доступ к серверу.</p>
-<div class="codehilite" data-lang="powershell"><pre><span></span><code><span class="p">&amp;</span> <span class="n">mysql</span> <span class="n">-u</span> <span class="n">root</span> <span class="n">-e</span> <span class="s2">&quot;SELECT CURRENT_USER() AS who, VERSION() AS version;&quot;</span>
+<div class="codehilite" data-lang="powershell"><pre><span></span><code><span class="p">&amp;</span> <span class="n">mysql</span> <span class="n">-u</span> <span class="n">root</span> <span class="n">-e</span> <span class="s2">"SELECT CURRENT_USER() AS who, VERSION() AS version;"</span>
 </code></pre></div>
 
 <p>Если соединение установилось, зафиксируйте риск и предложите меру: задать пароль командой <code>ALTER USER 'root'@'localhost' IDENTIFIED BY '...';</code> и прописать его в <code>.../xampp/phpMyAdmin/config.inc.php</code>, иначе phpMyAdmin перестанет подключаться. Пароль администратора не храните в отчёте.</p>
@@ -1092,12 +1116,12 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 
 <span class="nb">Get-ChildItem</span> <span class="p">.../</span><span class="n">dean</span><span class="p">/</span><span class="n">backup</span><span class="p">/</span><span class="n">dean</span><span class="p">.</span><span class="n">sql</span> <span class="p">|</span> <span class="nb">Select-Object</span> <span class="n">Name</span><span class="p">,</span> <span class="n">Length</span><span class="p">,</span> <span class="n">LastWriteTime</span>
 <span class="n">icacls</span> <span class="p">.../</span><span class="n">dean</span><span class="p">/</span><span class="n">backup</span><span class="p">/</span><span class="n">dean</span><span class="p">.</span><span class="n">sql</span>
-<span class="nb">Select-String</span> <span class="n">-Path</span> <span class="p">.../</span><span class="n">dean</span><span class="p">/</span><span class="n">backup</span><span class="p">/</span><span class="n">dean</span><span class="p">.</span><span class="n">sql</span> <span class="n">-Pattern</span> <span class="s1">&#39;INSERT INTO&#39;</span> <span class="p">|</span> <span class="nb">Select-Object</span> <span class="n">-First</span> <span class="n">3</span>
+<span class="nb">Select-String</span> <span class="n">-Path</span> <span class="p">.../</span><span class="n">dean</span><span class="p">/</span><span class="n">backup</span><span class="p">/</span><span class="n">dean</span><span class="p">.</span><span class="n">sql</span> <span class="n">-Pattern</span> <span class="s1">'INSERT INTO'</span> <span class="p">|</span> <span class="nb">Select-Object</span> <span class="n">-First</span> <span class="n">3</span>
 </code></pre></div>
 
 <p>Проверьте, что дамп содержит данные: строки <code>INSERT INTO</code> с почтой студентов это подтверждают. Затем проверьте доступ через веб-сервер: скопируйте файл в <code>.../xampp/htdocs</code> и откройте <code>http://localhost:4433/dean.sql</code>. Если браузер показывает текст дампа, это критический риск. После проверки удалите копию из <code>htdocs</code>.</p>
 <div class="codehilite" data-lang="powershell"><pre><span></span><code><span class="nb">Copy-Item</span> <span class="p">.../</span><span class="n">dean</span><span class="p">/</span><span class="n">backup</span><span class="p">/</span><span class="n">dean</span><span class="p">.</span><span class="n">sql</span> <span class="p">.../</span><span class="n">xampp</span><span class="p">/</span><span class="n">htdocs</span><span class="p">/</span><span class="n">dean</span><span class="p">.</span><span class="n">sql</span>
-<span class="nb">Start-Process</span> <span class="s2">&quot;http://localhost:4433/dean.sql&quot;</span>
+<span class="nb">Start-Process</span> <span class="s2">"http://localhost:4433/dean.sql"</span>
 <span class="nb">Remove-Item</span> <span class="p">.../</span><span class="n">xampp</span><span class="p">/</span><span class="n">htdocs</span><span class="p">\</span><span class="n">dean</span><span class="p">.</span><span class="n">sql</span>
 </code></pre></div>
 
@@ -1174,13 +1198,13 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 </tbody>
 </table>
 <p>Поиск секретов выполните по проекту.</p>
-<div class="codehilite" data-lang="powershell"><pre><span></span><code><span class="nb">Select-String</span> <span class="n">-Path</span> <span class="p">.../</span><span class="n">dean</span><span class="p">/</span><span class="n">src</span><span class="p">/*/*.</span><span class="n">cs</span><span class="p">,</span> <span class="p">.../</span><span class="n">dean</span><span class="p">/</span><span class="n">src</span><span class="p">/*/*.</span><span class="n">json</span> <span class="n">-Pattern</span> <span class="s1">&#39;Password|Pwd|secret|token&#39;</span>
+<div class="codehilite" data-lang="powershell"><pre><span></span><code><span class="nb">Select-String</span> <span class="n">-Path</span> <span class="p">.../</span><span class="n">dean</span><span class="p">/</span><span class="n">src</span><span class="p">/*/*.</span><span class="n">cs</span><span class="p">,</span> <span class="p">.../</span><span class="n">dean</span><span class="p">/</span><span class="n">src</span><span class="p">/*/*.</span><span class="n">json</span> <span class="n">-Pattern</span> <span class="s1">'Password|Pwd|secret|token'</span>
 </code></pre></div>
 
 <p>Каждую находку внесите в список рисков. Если пароль лежит в <code>appsettings.json</code> открытым текстом, мера это переменная окружения или файл вне репозитория, а не переименование поля.</p>
 <h3>Шаг 10. Выключите общий журнал и оформите отчёт</h3>
 <p>После разбора выключите запись и сохраните выгрузку событий отдельным файлом.</p>
-<div class="codehilite" data-lang="sql"><pre><span></span><code><span class="k">SET</span><span class="w"> </span><span class="k">GLOBAL</span><span class="w"> </span><span class="n">general_log</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;OFF&#39;</span><span class="p">;</span>
+<div class="codehilite" data-lang="sql"><pre><span></span><code><span class="k">SET</span><span class="w"> </span><span class="k">GLOBAL</span><span class="w"> </span><span class="n">general_log</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'OFF'</span><span class="p">;</span>
 
 <span class="k">SELECT</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="k">at</span><span class="p">,</span><span class="w"> </span><span class="n">db_user</span><span class="p">,</span><span class="w"> </span><span class="n">action</span><span class="p">,</span><span class="w"> </span><span class="k">table_name</span><span class="p">,</span><span class="w"> </span><span class="n">row_id</span><span class="p">,</span><span class="w"> </span><span class="n">details</span>
 <span class="k">FROM</span><span class="w"> </span><span class="n">audit_log</span>
@@ -1306,6 +1330,40 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
       var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
       window.scrollTo({top: 0, behavior: reduce ? 'auto' : 'smooth'});
     });
+  });
+})();
+
+(function(){
+  document.querySelectorAll('[data-slider]').forEach(function(slider){
+    var track = slider.querySelector('[data-slider-track]');
+    var slides = track ? Array.prototype.slice.call(track.children) : [];
+    var counter = slider.querySelector('[data-slider-counter]');
+    var prev = slider.querySelector('[data-slider-prev]');
+    var next = slider.querySelector('[data-slider-next]');
+    if(!track || slides.length < 2) return;
+    function current(){
+      var best = 0, dist = Infinity;
+      slides.forEach(function(slide, i){
+        var d = Math.abs(slide.offsetLeft - track.scrollLeft);
+        if(d < dist){ dist = d; best = i; }
+      });
+      return best;
+    }
+    function update(){
+      if(counter) counter.textContent = (current() + 1) + ' / ' + slides.length;
+    }
+    function go(delta){
+      var i = Math.max(0, Math.min(slides.length - 1, current() + delta));
+      var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      track.scrollTo({left: slides[i].offsetLeft, behavior: reduce ? 'auto' : 'smooth'});
+    }
+    if(prev) prev.addEventListener('click', function(){ go(-1); });
+    if(next) next.addEventListener('click', function(){ go(1); });
+    track.addEventListener('scroll', function(){
+      clearTimeout(track._sliderTimer);
+      track._sliderTimer = setTimeout(update, 80);
+    }, {passive: true});
+    update();
   });
 })();
 (function(){

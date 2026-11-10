@@ -527,6 +527,12 @@ html.modal-open { overflow: hidden; }
 :root[data-theme=dark] .quiz-actions button[data-answer]:hover, :root[data-theme=dark] .quiz-actions button.quiz-answer:hover { background: #262626; background-color: #262626; color: #fff; border-color: #262626; }
 :root[data-theme=dark] .gate-q { background: #1E1E1E; color: #FF6B00; }
 
+/* the whole-variant archive is the main action in a download block */
+.files a.zip { background: #121212; color: #fff; border-color: #121212; font-weight: 700; box-shadow: 4px 4px 0 rgba(0,0,0,.18); }
+.files a.zip::before { color: #fff; }
+.files a.zip:hover { background: #1D1D1D; color: #fff; border-color: #1D1D1D; box-shadow: 5px 5px 0 rgba(0,0,0,.22); }
+.files a.zip:active { transform: translate(2px,2px); box-shadow: 1px 1px 0 rgba(0,0,0,.12); }
+
 /* ---------- practical work checklist ---------- */
 .work-checklist { width: 100%; border-collapse: collapse; margin: 14px 0 4px; }
 .work-checklist th, .work-checklist td { border: 1px solid var(--rule); padding: 9px 10px; vertical-align: top; }
@@ -564,6 +570,24 @@ html.modal-open { overflow: hidden; }
 .variant-body .task-list { margin: 8px 0 0; padding-left: 20px; }
 .variant-body .task-list li { margin: 0 0 8px; }
 @media (max-width: 620px) { .variant-body { overflow-x: auto; } .variant-body table { min-width: 520px; } }
+
+/* ---------- schema slider: all CREATE TABLE examples ---------- */
+.schema-slider { margin: 18px 0 24px; border: 1px solid #d8d5cc; border-radius: 14px; background: #fff; color: #1a1916; overflow: hidden; }
+.schema-slider-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 14px; background: #f5f2ea; border-bottom: 1px solid #d8d5cc; }
+.schema-slider-bar strong { font: 700 14px/1.2 var(--font-display); color: #1a1916; }
+.schema-slider-actions { display: flex; align-items: center; gap: 8px; }
+.schema-slider-counter { min-width: 62px; text-align: center; font: 600 13px/1 var(--font-mono); color: #59544a; }
+.schema-btn { width: 34px; height: 34px; border: 1px solid #c9c4b8; border-radius: 8px; background: #fff; color: #1a1916; font: 700 18px/1 var(--font-mono); cursor: pointer; }
+.schema-btn:hover { background: #ece7dc; }
+.schema-track { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: thin; }
+.schema-slide { flex: 0 0 100%; min-width: 100%; box-sizing: border-box; padding: 16px 18px 18px; scroll-snap-align: start; }
+.schema-slide h4 { margin: 0 0 10px; font: 700 16px/1.3 var(--font-display); color: #1a1916; }
+.schema-slide h4 code, .schema-slide p code { color: #1a1916; background: #f1ede4; padding: 1px 4px; border-radius: 4px; }
+.schema-slide p { margin: 0 0 10px; font-size: 14px; line-height: 1.55; color: #3a372f; }
+.schema-slide pre { margin: 0; padding: 14px 16px; overflow-x: auto; border: 1px solid #ddd8cc; border-radius: 10px; background: #fbfaf6; color: #1a1916; font: 12.5px/1.5 var(--font-mono); }
+.schema-slide code { color: inherit; background: none; padding: 0; }
+.schema-slider:focus-within { outline: 2px solid #b9a97f; outline-offset: 2px; }
+@media (max-width: 620px) { .schema-slide { padding: 12px; } .schema-slider-bar { padding: 8px 10px; } }
 
 /* ---------- print / PDF export ---------- */
 @page { margin: 16mm; }
@@ -853,15 +877,15 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <div class="codehilite" data-lang="text"><pre><span></span><code>id,name,city,email,registered
 101,ООО «Читатель»,Москва,,2026-09-02
 102,Петров Пётр,Тула,petrov@mail.ru,2026-09-03
-103,&quot;ООО «Книга, свет»&quot;,Калуга,info@kniga.ru,2026-09-04
+103,"ООО «Книга, свет»",Калуга,info@kniga.ru,2026-09-04
 </code></pre></div>
 
 <p>Значение с запятой внутри взято в двойные кавычки. Если внутри значения есть кавычка, её удваивают. Строка может занимать несколько физических строк, если значение содержит перевод строки. Это описано в стандарте RFC 4180, но не все программы следуют ему одинаково.</p>
 <p>JSON хранит данные как дерево. Массив объектов соответствует набору строк, ключи соответствуют столбцам.</p>
 <div class="codehilite" data-lang="json"><pre><span></span><code><span class="p">[</span>
-<span class="w">  </span><span class="p">{</span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">101</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;ООО «Читатель»&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;city&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Москва&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;email&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">},</span>
-<span class="w">  </span><span class="p">{</span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">102</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Петров Пётр&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;city&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Тула&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;email&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;petrov@mail.ru&quot;</span><span class="p">},</span>
-<span class="w">  </span><span class="p">{</span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">103</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;ООО «Книга, свет»&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;city&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Калуга&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;email&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;info@kniga.ru&quot;</span><span class="p">}</span>
+<span class="w">  </span><span class="p">{</span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">101</span><span class="p">,</span><span class="w"> </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ООО «Читатель»"</span><span class="p">,</span><span class="w"> </span><span class="nt">"city"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Москва"</span><span class="p">,</span><span class="w"> </span><span class="nt">"email"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">},</span>
+<span class="w">  </span><span class="p">{</span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">102</span><span class="p">,</span><span class="w"> </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Петров Пётр"</span><span class="p">,</span><span class="w"> </span><span class="nt">"city"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Тула"</span><span class="p">,</span><span class="w"> </span><span class="nt">"email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"petrov@mail.ru"</span><span class="p">},</span>
+<span class="w">  </span><span class="p">{</span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">103</span><span class="p">,</span><span class="w"> </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ООО «Книга, свет»"</span><span class="p">,</span><span class="w"> </span><span class="nt">"city"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Калуга"</span><span class="p">,</span><span class="w"> </span><span class="nt">"email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"info@kniga.ru"</span><span class="p">}</span>
 <span class="p">]</span>
 </code></pre></div>
 
@@ -983,8 +1007,8 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 </ol>
 <p>В SQLite текст хранится в том виде, в котором его передали. База не перекодирует строки автоматически. Если в таблицу попал мусор, он там и останется, пока его не исправят отдельным <code>UPDATE</code> или повторным импортом.</p>
 <p>Перекодировать файл можно в текстовом редакторе или небольшим скриптом. В Python достаточно прочитать файл в исходной кодировке и записать в UTF-8.</p>
-<div class="codehilite" data-lang="text"><pre><span></span><code><span class="n">text</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;customers.csv&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;cp1251&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
-<span class="nb">open</span><span class="p">(</span><span class="s2">&quot;customers_utf8.csv&quot;</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">,</span> <span class="n">newline</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+<div class="codehilite" data-lang="text"><pre><span></span><code><span class="n">text</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s2">"customers.csv"</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"cp1251"</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+<span class="nb">open</span><span class="p">(</span><span class="s2">"customers_utf8.csv"</span><span class="p">,</span> <span class="s2">"w"</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">,</span> <span class="n">newline</span><span class="o">=</span><span class="s2">""</span><span class="p">)</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
 </code></pre></div>
 
 <p>Параметр <code>newline=""</code> не даёт Python удвоить переводы строк в CSV. После преобразования файл открывают заново и проверяют, что заголовок читается, а первая строка не начинается с BOM. Если BOM уже попал в заголовок, его удаляют вручную или при импорте указывают, что файл в UTF-8 с BOM.</p>
@@ -1041,23 +1065,23 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <span class="w">  </span><span class="n">registered</span><span class="w"> </span><span class="nb">TEXT</span>
 <span class="p">);</span>
 <span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">customers_import</span><span class="w"> </span><span class="k">VALUES</span>
-<span class="p">(</span><span class="s1">&#39;101&#39;</span><span class="p">,</span><span class="s1">&#39;ООО «Читатель»&#39;</span><span class="p">,</span><span class="s1">&#39;Москва&#39;</span><span class="p">,</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="s1">&#39;2026-09-02&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="s1">&#39;102&#39;</span><span class="p">,</span><span class="s1">&#39;Петров Пётр&#39;</span><span class="p">,</span><span class="s1">&#39;Тула&#39;</span><span class="p">,</span><span class="s1">&#39;petrov@mail.ru&#39;</span><span class="p">,</span><span class="s1">&#39;02.09.2026&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="s1">&#39;103&#39;</span><span class="p">,</span><span class="s1">&#39;ООО «Книга, свет»&#39;</span><span class="p">,</span><span class="s1">&#39;Калуга&#39;</span><span class="p">,</span><span class="s1">&#39;info@kniga.ru&#39;</span><span class="p">,</span><span class="s1">&#39;2026-09-03&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="s1">&#39;104&#39;</span><span class="p">,</span><span class="s1">&#39;Сидорова Ольга&#39;</span><span class="p">,</span><span class="s1">&#39;Тверь&#39;</span><span class="p">,</span><span class="s1">&#39;sidorova@mail.ru&#39;</span><span class="p">,</span><span class="s1">&#39;2026-09-04 &#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="s1">&#39;101&#39;</span><span class="p">,</span><span class="s1">&#39;ООО «Читатель»&#39;</span><span class="p">,</span><span class="s1">&#39;Москва&#39;</span><span class="p">,</span><span class="s1">&#39;sales@chitay.ru&#39;</span><span class="p">,</span><span class="s1">&#39;2026-09-02&#39;</span><span class="p">);</span>
+<span class="p">(</span><span class="s1">'101'</span><span class="p">,</span><span class="s1">'ООО «Читатель»'</span><span class="p">,</span><span class="s1">'Москва'</span><span class="p">,</span><span class="s1">''</span><span class="p">,</span><span class="s1">'2026-09-02'</span><span class="p">),</span>
+<span class="p">(</span><span class="s1">'102'</span><span class="p">,</span><span class="s1">'Петров Пётр'</span><span class="p">,</span><span class="s1">'Тула'</span><span class="p">,</span><span class="s1">'petrov@mail.ru'</span><span class="p">,</span><span class="s1">'02.09.2026'</span><span class="p">),</span>
+<span class="p">(</span><span class="s1">'103'</span><span class="p">,</span><span class="s1">'ООО «Книга, свет»'</span><span class="p">,</span><span class="s1">'Калуга'</span><span class="p">,</span><span class="s1">'info@kniga.ru'</span><span class="p">,</span><span class="s1">'2026-09-03'</span><span class="p">),</span>
+<span class="p">(</span><span class="s1">'104'</span><span class="p">,</span><span class="s1">'Сидорова Ольга'</span><span class="p">,</span><span class="s1">'Тверь'</span><span class="p">,</span><span class="s1">'sidorova@mail.ru'</span><span class="p">,</span><span class="s1">'2026-09-04 '</span><span class="p">),</span>
+<span class="p">(</span><span class="s1">'101'</span><span class="p">,</span><span class="s1">'ООО «Читатель»'</span><span class="p">,</span><span class="s1">'Москва'</span><span class="p">,</span><span class="s1">'sales@chitay.ru'</span><span class="p">,</span><span class="s1">'2026-09-02'</span><span class="p">);</span>
 </code></pre></div>
 
 <p>После загрузки проверяют даты. В базе удобен формат <code>ГГГГ-ММ-ДД</code>, потому что он сравнивается как строка и не зависит от локали. Проверка через <code>GLOB</code> находит строки, которые не соответствуют шаблону.</p>
 <div class="codehilite" data-lang="text"><pre><span></span><code><span class="k">SELECT</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">registered</span>
 <span class="k">FROM</span><span class="w"> </span><span class="n">customers_import</span>
-<span class="k">WHERE</span><span class="w"> </span><span class="n">registered</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="n">GLOB</span><span class="w"> </span><span class="s1">&#39;????-??-??&#39;</span><span class="p">;</span>
+<span class="k">WHERE</span><span class="w"> </span><span class="n">registered</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="n">GLOB</span><span class="w"> </span><span class="s1">'????-??-??'</span><span class="p">;</span>
 </code></pre></div>
 
 <p>Для учебного файла результат: строки <code>102</code> с датой <code>02.09.2026</code> и <code>104</code> с датой <code>2026-09-04</code> (пробел в конце). Обе выглядят почти правильными, но база не сможет сравнить их с датой в формате ISO.</p>
 <p>Числа с десятичной запятой тоже требуют преобразования. В CSV из русской локали цена может быть записана как <code>620,50</code>. Функция <code>CAST('620,50' AS REAL)</code> вернёт <code>620.0</code>, потому что запятая не является десятичным разделителем для SQLite. Нужно сначала заменить запятую на точку, затем преобразовать.</p>
 <p>Логические значения приходят в разных видах. В JSON это <code>true</code> и <code>false</code>, в CSV часто <code>да</code> и <code>нет</code>, <code>1</code> и <code>0</code>, <code>Y</code> и <code>N</code>. В SQLite нет отдельного логического типа, поэтому выбирают представление <code>0</code> и <code>1</code> с ограничением <code>CHECK (flag IN (0, 1))</code>. Преобразование <code>да</code> в <code>1</code> и <code>нет</code> в <code>0</code> делают явно, иначе база сохранит текст и запрос <code>WHERE flag = 1</code> не найдёт строки.</p>
-<div class="codehilite" data-lang="text"><pre><span></span><code><span class="k">SELECT</span><span class="w"> </span><span class="k">CAST</span><span class="p">(</span><span class="s1">&#39;42,5&#39;</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="nb">REAL</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">bad</span><span class="p">,</span><span class="w"> </span><span class="k">CAST</span><span class="p">(</span><span class="k">REPLACE</span><span class="p">(</span><span class="s1">&#39;42,5&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;,&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;.&#39;</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="nb">REAL</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">good</span><span class="p">;</span>
+<div class="codehilite" data-lang="text"><pre><span></span><code><span class="k">SELECT</span><span class="w"> </span><span class="k">CAST</span><span class="p">(</span><span class="s1">'42,5'</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="nb">REAL</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">bad</span><span class="p">,</span><span class="w"> </span><span class="k">CAST</span><span class="p">(</span><span class="k">REPLACE</span><span class="p">(</span><span class="s1">'42,5'</span><span class="p">,</span><span class="w"> </span><span class="s1">','</span><span class="p">,</span><span class="w"> </span><span class="s1">'.'</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="nb">REAL</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">good</span><span class="p">;</span>
 </code></pre></div>
 
 <table>
@@ -1077,13 +1101,13 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <p>Ещё опаснее <code>CAST('abc' AS INTEGER)</code>. Он возвращает <code>0</code>, а не ошибку. Строка с испорченным идентификатором молча станет нулём и может совпасть с другой записью. Поэтому перед преобразованием проверяют, что значение действительно число.</p>
 <div class="codehilite" data-lang="text"><pre><span></span><code><span class="k">SELECT</span><span class="w"> </span><span class="n">id</span>
 <span class="k">FROM</span><span class="w"> </span><span class="n">customers_import</span>
-<span class="k">WHERE</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="n">GLOB</span><span class="w"> </span><span class="s1">&#39;[0-9]*&#39;</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="k">TRIM</span><span class="p">(</span><span class="n">id</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="p">;</span>
+<span class="k">WHERE</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="n">GLOB</span><span class="w"> </span><span class="s1">'[0-9]*'</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="k">TRIM</span><span class="p">(</span><span class="n">id</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">''</span><span class="p">;</span>
 </code></pre></div>
 
 <p>Пустые значения проверяют отдельно.</p>
 <div class="codehilite" data-lang="text"><pre><span></span><code><span class="k">SELECT</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">name</span>
 <span class="k">FROM</span><span class="w"> </span><span class="n">customers_import</span>
-<span class="k">WHERE</span><span class="w"> </span><span class="k">TRIM</span><span class="p">(</span><span class="k">COALESCE</span><span class="p">(</span><span class="n">email</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="p">))</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="p">;</span>
+<span class="k">WHERE</span><span class="w"> </span><span class="k">TRIM</span><span class="p">(</span><span class="k">COALESCE</span><span class="p">(</span><span class="n">email</span><span class="p">,</span><span class="w"> </span><span class="s1">''</span><span class="p">))</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">''</span><span class="p">;</span>
 </code></pre></div>
 
 <p><code>COALESCE</code> нужен, потому что <code>TRIM(NULL)</code> возвращает <code>NULL</code>, а сравнение с пустой строкой не сработает. После проверки решают, заменить пустую строку на <code>NULL</code> или оставить. Для необязательного email логичнее <code>NULL</code>: он означает «не указан», а пустая строка выглядит как указанное, но пустое значение.</p>
@@ -1098,12 +1122,12 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 </ol>
 <p>JSON в sqliteonline можно разобрать функциями JSON. Если файл уже вставлен в текстовый столбец, <code>json_each</code> разворачивает массив в строки.</p>
 <div class="codehilite" data-lang="text"><pre><span></span><code><span class="k">WITH</span><span class="w"> </span><span class="k">data</span><span class="p">(</span><span class="n">doc</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span>
-<span class="w">  </span><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="s1">&#39;[{&quot;id&quot;:101,&quot;name&quot;:&quot;ООО Читатель&quot;,&quot;city&quot;:&quot;Москва&quot;,&quot;email&quot;:null},</span>
-<span class="s1">            {&quot;id&quot;:102,&quot;name&quot;:&quot;Петров Пётр&quot;,&quot;city&quot;:&quot;Тула&quot;,&quot;email&quot;:&quot;petrov@mail.ru&quot;}]&#39;</span><span class="p">)</span>
+<span class="w">  </span><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="s1">'[{"id":101,"name":"ООО Читатель","city":"Москва","email":null},</span>
+<span class="s1">            {"id":102,"name":"Петров Пётр","city":"Тула","email":"petrov@mail.ru"}]'</span><span class="p">)</span>
 <span class="p">)</span>
-<span class="k">SELECT</span><span class="w"> </span><span class="n">json_extract</span><span class="p">(</span><span class="n">j</span><span class="p">.</span><span class="n">value</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;$.id&#39;</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">id</span><span class="p">,</span>
-<span class="w">       </span><span class="n">json_extract</span><span class="p">(</span><span class="n">j</span><span class="p">.</span><span class="n">value</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;$.name&#39;</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">name</span><span class="p">,</span>
-<span class="w">       </span><span class="n">json_extract</span><span class="p">(</span><span class="n">j</span><span class="p">.</span><span class="n">value</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;$.email&#39;</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">email</span>
+<span class="k">SELECT</span><span class="w"> </span><span class="n">json_extract</span><span class="p">(</span><span class="n">j</span><span class="p">.</span><span class="n">value</span><span class="p">,</span><span class="w"> </span><span class="s1">'$.id'</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">id</span><span class="p">,</span>
+<span class="w">       </span><span class="n">json_extract</span><span class="p">(</span><span class="n">j</span><span class="p">.</span><span class="n">value</span><span class="p">,</span><span class="w"> </span><span class="s1">'$.name'</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">name</span><span class="p">,</span>
+<span class="w">       </span><span class="n">json_extract</span><span class="p">(</span><span class="n">j</span><span class="p">.</span><span class="n">value</span><span class="p">,</span><span class="w"> </span><span class="s1">'$.email'</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">email</span>
 <span class="k">FROM</span><span class="w"> </span><span class="k">data</span><span class="p">,</span><span class="w"> </span><span class="n">json_each</span><span class="p">(</span><span class="k">data</span><span class="p">.</span><span class="n">doc</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">j</span><span class="p">;</span>
 </code></pre></div>
 
@@ -1130,8 +1154,8 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 </table>
 <p><code>json_each</code> возвращает по одной строке на элемент массива. <code>json_extract</code> вынимает значение по пути. Если email отсутствует или равен <code>null</code>, результат будет <code>NULL</code>, а не пустая строка.</p>
 <p>Тип значения сохраняется. Если в JSON записать <code>"id": "103"</code>, <code>json_extract</code> вернёт текст, а не число. При вставке в целевую таблицу с <code>INTEGER</code> SQLite преобразует текст, но лучше проверить заранее.</p>
-<div class="codehilite" data-lang="text"><pre><span></span><code><span class="k">SELECT</span><span class="w"> </span><span class="n">json_extract</span><span class="p">(</span><span class="s1">&#39;{&quot;id&quot;: 101}&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;$.id&#39;</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="nb">number</span><span class="p">,</span>
-<span class="w">       </span><span class="n">json_extract</span><span class="p">(</span><span class="s1">&#39;{&quot;id&quot;: &quot;101&quot;}&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;$.id&#39;</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="nb">text</span><span class="p">;</span>
+<div class="codehilite" data-lang="text"><pre><span></span><code><span class="k">SELECT</span><span class="w"> </span><span class="n">json_extract</span><span class="p">(</span><span class="s1">'{"id": 101}'</span><span class="p">,</span><span class="w"> </span><span class="s1">'$.id'</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="nb">number</span><span class="p">,</span>
+<span class="w">       </span><span class="n">json_extract</span><span class="p">(</span><span class="s1">'{"id": "101"}'</span><span class="p">,</span><span class="w"> </span><span class="s1">'$.id'</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="nb">text</span><span class="p">;</span>
 </code></pre></div>
 
 <div class="codehilite" data-lang="text"><pre><span></span><code>number = 101 (integer)
@@ -1139,8 +1163,8 @@ text = 101 (text)
 </code></pre></div>
 
 <p>Проверить корректность JSON целиком можно функцией <code>json_valid</code>. Она возвращает <code>1</code> для правильного документа и <code>0</code> для повреждённого.</p>
-<div class="codehilite" data-lang="text"><pre><span></span><code><span class="k">SELECT</span><span class="w"> </span><span class="n">json_valid</span><span class="p">(</span><span class="s1">&#39;[{&quot;id&quot;: 1}]&#39;</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">ok</span><span class="p">,</span>
-<span class="w">       </span><span class="n">json_valid</span><span class="p">(</span><span class="s1">&#39;[{&quot;id&quot;: 1},]&#39;</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">broken</span><span class="p">;</span>
+<div class="codehilite" data-lang="text"><pre><span></span><code><span class="k">SELECT</span><span class="w"> </span><span class="n">json_valid</span><span class="p">(</span><span class="s1">'[{"id": 1}]'</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">ok</span><span class="p">,</span>
+<span class="w">       </span><span class="n">json_valid</span><span class="p">(</span><span class="s1">'[{"id": 1},]'</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">broken</span><span class="p">;</span>
 </code></pre></div>
 
 <p>Импорт лучше выполнять в одной транзакции. Если на середине обнаружилась ошибка, <code>ROLLBACK</code> вернёт базу к состоянию до загрузки. Для большого файла транзакцию делят на пакеты, чтобы не держать блокировку слишком долго.</p>
@@ -1151,26 +1175,26 @@ text = 101 (text)
 <h2 id="заказ-в-json-разложение-на-две-таблицы"><span class="num">09</span>Заказ в JSON: разложение на две таблицы</h2>
 <p>Вложенный JSON нельзя записать в одну таблицу без потери структуры. Покажем на заказе с позициями.</p>
 <div class="codehilite" data-lang="text"><pre><span></span><code><span class="p">{</span>
-<span class="w">  </span><span class="nt">&quot;order_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">501</span><span class="p">,</span>
-<span class="w">  </span><span class="nt">&quot;customer_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
-<span class="w">  </span><span class="nt">&quot;order_date&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2026-10-01&quot;</span><span class="p">,</span>
-<span class="w">  </span><span class="nt">&quot;items&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
-<span class="w">    </span><span class="p">{</span><span class="nt">&quot;book_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;quantity&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;price&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1400</span><span class="p">},</span>
-<span class="w">    </span><span class="p">{</span><span class="nt">&quot;book_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">22</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;quantity&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;price&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1190</span><span class="p">}</span>
+<span class="w">  </span><span class="nt">"order_id"</span><span class="p">:</span><span class="w"> </span><span class="mi">501</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"customer_id"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"order_date"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2026-10-01"</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"items"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span><span class="nt">"book_id"</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="nt">"quantity"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="nt">"price"</span><span class="p">:</span><span class="w"> </span><span class="mi">1400</span><span class="p">},</span>
+<span class="w">    </span><span class="p">{</span><span class="nt">"book_id"</span><span class="p">:</span><span class="w"> </span><span class="mi">22</span><span class="p">,</span><span class="w"> </span><span class="nt">"quantity"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="nt">"price"</span><span class="p">:</span><span class="w"> </span><span class="mi">1190</span><span class="p">}</span>
 <span class="w">  </span><span class="p">]</span>
 <span class="p">}</span>
 </code></pre></div>
 
 <p>Заказ и его позиции это две таблицы. Сначала извлекают шапку заказа, затем разворачивают массив <code>items</code>.</p>
 <div class="codehilite" data-lang="text"><pre><span></span><code><span class="k">WITH</span><span class="w"> </span><span class="n">doc</span><span class="p">(</span><span class="n">d</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span>
-<span class="w">  </span><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="s1">&#39;{&quot;order_id&quot;:501,&quot;customer_id&quot;:1,&quot;order_date&quot;:&quot;2026-10-01&quot;,</span>
-<span class="s1">           &quot;items&quot;:[{&quot;book_id&quot;:10,&quot;quantity&quot;:2,&quot;price&quot;:1400},</span>
-<span class="s1">                    {&quot;book_id&quot;:22,&quot;quantity&quot;:1,&quot;price&quot;:1190}]}&#39;</span><span class="p">)</span>
+<span class="w">  </span><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="s1">'{"order_id":501,"customer_id":1,"order_date":"2026-10-01",</span>
+<span class="s1">           "items":[{"book_id":10,"quantity":2,"price":1400},</span>
+<span class="s1">                    {"book_id":22,"quantity":1,"price":1190}]}'</span><span class="p">)</span>
 <span class="p">)</span>
-<span class="k">SELECT</span><span class="w"> </span><span class="n">json_extract</span><span class="p">(</span><span class="n">j</span><span class="p">.</span><span class="n">value</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;$.book_id&#39;</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">book_id</span><span class="p">,</span>
-<span class="w">       </span><span class="n">json_extract</span><span class="p">(</span><span class="n">j</span><span class="p">.</span><span class="n">value</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;$.quantity&#39;</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">quantity</span><span class="p">,</span>
-<span class="w">       </span><span class="n">json_extract</span><span class="p">(</span><span class="n">j</span><span class="p">.</span><span class="n">value</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;$.price&#39;</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">price</span>
-<span class="k">FROM</span><span class="w"> </span><span class="n">doc</span><span class="p">,</span><span class="w"> </span><span class="n">json_each</span><span class="p">(</span><span class="n">doc</span><span class="p">.</span><span class="n">d</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;$.items&#39;</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">j</span><span class="p">;</span>
+<span class="k">SELECT</span><span class="w"> </span><span class="n">json_extract</span><span class="p">(</span><span class="n">j</span><span class="p">.</span><span class="n">value</span><span class="p">,</span><span class="w"> </span><span class="s1">'$.book_id'</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">book_id</span><span class="p">,</span>
+<span class="w">       </span><span class="n">json_extract</span><span class="p">(</span><span class="n">j</span><span class="p">.</span><span class="n">value</span><span class="p">,</span><span class="w"> </span><span class="s1">'$.quantity'</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">quantity</span><span class="p">,</span>
+<span class="w">       </span><span class="n">json_extract</span><span class="p">(</span><span class="n">j</span><span class="p">.</span><span class="n">value</span><span class="p">,</span><span class="w"> </span><span class="s1">'$.price'</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">price</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">doc</span><span class="p">,</span><span class="w"> </span><span class="n">json_each</span><span class="p">(</span><span class="n">doc</span><span class="p">.</span><span class="n">d</span><span class="p">,</span><span class="w"> </span><span class="s1">'$.items'</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">j</span><span class="p">;</span>
 </code></pre></div>
 
 <table>
@@ -1414,6 +1438,40 @@ text = 101 (text)
       var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
       window.scrollTo({top: 0, behavior: reduce ? 'auto' : 'smooth'});
     });
+  });
+})();
+
+(function(){
+  document.querySelectorAll('[data-slider]').forEach(function(slider){
+    var track = slider.querySelector('[data-slider-track]');
+    var slides = track ? Array.prototype.slice.call(track.children) : [];
+    var counter = slider.querySelector('[data-slider-counter]');
+    var prev = slider.querySelector('[data-slider-prev]');
+    var next = slider.querySelector('[data-slider-next]');
+    if(!track || slides.length < 2) return;
+    function current(){
+      var best = 0, dist = Infinity;
+      slides.forEach(function(slide, i){
+        var d = Math.abs(slide.offsetLeft - track.scrollLeft);
+        if(d < dist){ dist = d; best = i; }
+      });
+      return best;
+    }
+    function update(){
+      if(counter) counter.textContent = (current() + 1) + ' / ' + slides.length;
+    }
+    function go(delta){
+      var i = Math.max(0, Math.min(slides.length - 1, current() + delta));
+      var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      track.scrollTo({left: slides[i].offsetLeft, behavior: reduce ? 'auto' : 'smooth'});
+    }
+    if(prev) prev.addEventListener('click', function(){ go(-1); });
+    if(next) next.addEventListener('click', function(){ go(1); });
+    track.addEventListener('scroll', function(){
+      clearTimeout(track._sliderTimer);
+      track._sliderTimer = setTimeout(update, 80);
+    }, {passive: true});
+    update();
   });
 })();
 (function(){

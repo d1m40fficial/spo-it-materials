@@ -527,6 +527,12 @@ html.modal-open { overflow: hidden; }
 :root[data-theme=dark] .quiz-actions button[data-answer]:hover, :root[data-theme=dark] .quiz-actions button.quiz-answer:hover { background: #262626; background-color: #262626; color: #fff; border-color: #262626; }
 :root[data-theme=dark] .gate-q { background: #1E1E1E; color: #FF6B00; }
 
+/* the whole-variant archive is the main action in a download block */
+.files a.zip { background: #121212; color: #fff; border-color: #121212; font-weight: 700; box-shadow: 4px 4px 0 rgba(0,0,0,.18); }
+.files a.zip::before { color: #fff; }
+.files a.zip:hover { background: #1D1D1D; color: #fff; border-color: #1D1D1D; box-shadow: 5px 5px 0 rgba(0,0,0,.22); }
+.files a.zip:active { transform: translate(2px,2px); box-shadow: 1px 1px 0 rgba(0,0,0,.12); }
+
 /* ---------- practical work checklist ---------- */
 .work-checklist { width: 100%; border-collapse: collapse; margin: 14px 0 4px; }
 .work-checklist th, .work-checklist td { border: 1px solid var(--rule); padding: 9px 10px; vertical-align: top; }
@@ -564,6 +570,24 @@ html.modal-open { overflow: hidden; }
 .variant-body .task-list { margin: 8px 0 0; padding-left: 20px; }
 .variant-body .task-list li { margin: 0 0 8px; }
 @media (max-width: 620px) { .variant-body { overflow-x: auto; } .variant-body table { min-width: 520px; } }
+
+/* ---------- schema slider: all CREATE TABLE examples ---------- */
+.schema-slider { margin: 18px 0 24px; border: 1px solid #d8d5cc; border-radius: 14px; background: #fff; color: #1a1916; overflow: hidden; }
+.schema-slider-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 14px; background: #f5f2ea; border-bottom: 1px solid #d8d5cc; }
+.schema-slider-bar strong { font: 700 14px/1.2 var(--font-display); color: #1a1916; }
+.schema-slider-actions { display: flex; align-items: center; gap: 8px; }
+.schema-slider-counter { min-width: 62px; text-align: center; font: 600 13px/1 var(--font-mono); color: #59544a; }
+.schema-btn { width: 34px; height: 34px; border: 1px solid #c9c4b8; border-radius: 8px; background: #fff; color: #1a1916; font: 700 18px/1 var(--font-mono); cursor: pointer; }
+.schema-btn:hover { background: #ece7dc; }
+.schema-track { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: thin; }
+.schema-slide { flex: 0 0 100%; min-width: 100%; box-sizing: border-box; padding: 16px 18px 18px; scroll-snap-align: start; }
+.schema-slide h4 { margin: 0 0 10px; font: 700 16px/1.3 var(--font-display); color: #1a1916; }
+.schema-slide h4 code, .schema-slide p code { color: #1a1916; background: #f1ede4; padding: 1px 4px; border-radius: 4px; }
+.schema-slide p { margin: 0 0 10px; font-size: 14px; line-height: 1.55; color: #3a372f; }
+.schema-slide pre { margin: 0; padding: 14px 16px; overflow-x: auto; border: 1px solid #ddd8cc; border-radius: 10px; background: #fbfaf6; color: #1a1916; font: 12.5px/1.5 var(--font-mono); }
+.schema-slide code { color: inherit; background: none; padding: 0; }
+.schema-slider:focus-within { outline: 2px solid #b9a97f; outline-offset: 2px; }
+@media (max-width: 620px) { .schema-slide { padding: 12px; } .schema-slider-bar { padding: 8px 10px; } }
 
 /* ---------- print / PDF export ---------- */
 @page { margin: 16mm; }
@@ -852,7 +876,7 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <p>Устав не гарантирует успех. Он делает проект видимым: показывает, что мы обещаем, чего не обещаем и на каком допущении держится обещание.</p>
 <h2 id="сборочный-стол-устава"><span class="num">02</span>Сборочный стол устава</h2>
 <p>Стенд ниже показывает устав как сборочный стол. Слева четыре лотка с входами, в середине документ с семью разделами, справа печать спонсора. Смотрите на лотки, на строки документа и на табло внизу: табло называет текущий шаг, от «вход: бизнес-обоснование» до «подпись спонсора». Печать проявляется только на последнем шаге.</p>
-<figure class="figure" data-fig="fig-03-charter" data-one="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"><iframe title="Figure 1: fig-03-charter" scrolling="no"></iframe><figcaption>Соберите устав: без любого входа документ не закрывается.</figcaption></figure>
+<figure class="figure" data-fig="fig-03-charter" data-one="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"><iframe title="Figure 1: fig-03-charter" scrolling="no"></iframe><figcaption>Соберите устав: без любого входа документ не закрывается.</figcaption></figure>
 
 <p>В лотках лежат четыре входа: бизнес-обоснование, содержание, ограничения и допущения. Бизнес-обоснование отвечает, сколько стоит проблема сегодня и что изменится после. Содержание перечисляет, что войдёт в работу. Ограничения называют то, что мы не выбираем: бюджет, срок, состав команды, требования закона. Допущения фиксируют, что мы считаем верным, но ещё не проверили.</p>
 <p>В документе семь разделов, и заполняются они по шагам: цель и выгода, границы, результаты и вехи, бюджет и ресурсы, роли и полномочия, риски и допущения, подпись спонсора. Перед разделами стоит отдельный шаг чтения лотков, поэтому шагов восемь и первый из них это бизнес-обоснование. Последний шаг не пишет текст, а ставит печать: подпись одна, и без неё документ остаётся черновиком.</p>
@@ -1092,6 +1116,40 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
       var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
       window.scrollTo({top: 0, behavior: reduce ? 'auto' : 'smooth'});
     });
+  });
+})();
+
+(function(){
+  document.querySelectorAll('[data-slider]').forEach(function(slider){
+    var track = slider.querySelector('[data-slider-track]');
+    var slides = track ? Array.prototype.slice.call(track.children) : [];
+    var counter = slider.querySelector('[data-slider-counter]');
+    var prev = slider.querySelector('[data-slider-prev]');
+    var next = slider.querySelector('[data-slider-next]');
+    if(!track || slides.length < 2) return;
+    function current(){
+      var best = 0, dist = Infinity;
+      slides.forEach(function(slide, i){
+        var d = Math.abs(slide.offsetLeft - track.scrollLeft);
+        if(d < dist){ dist = d; best = i; }
+      });
+      return best;
+    }
+    function update(){
+      if(counter) counter.textContent = (current() + 1) + ' / ' + slides.length;
+    }
+    function go(delta){
+      var i = Math.max(0, Math.min(slides.length - 1, current() + delta));
+      var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      track.scrollTo({left: slides[i].offsetLeft, behavior: reduce ? 'auto' : 'smooth'});
+    }
+    if(prev) prev.addEventListener('click', function(){ go(-1); });
+    if(next) next.addEventListener('click', function(){ go(1); });
+    track.addEventListener('scroll', function(){
+      clearTimeout(track._sliderTimer);
+      track._sliderTimer = setTimeout(update, 80);
+    }, {passive: true});
+    update();
   });
 })();
 (function(){

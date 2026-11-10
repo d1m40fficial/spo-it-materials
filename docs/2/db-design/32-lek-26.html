@@ -527,6 +527,12 @@ html.modal-open { overflow: hidden; }
 :root[data-theme=dark] .quiz-actions button[data-answer]:hover, :root[data-theme=dark] .quiz-actions button.quiz-answer:hover { background: #262626; background-color: #262626; color: #fff; border-color: #262626; }
 :root[data-theme=dark] .gate-q { background: #1E1E1E; color: #FF6B00; }
 
+/* the whole-variant archive is the main action in a download block */
+.files a.zip { background: #121212; color: #fff; border-color: #121212; font-weight: 700; box-shadow: 4px 4px 0 rgba(0,0,0,.18); }
+.files a.zip::before { color: #fff; }
+.files a.zip:hover { background: #1D1D1D; color: #fff; border-color: #1D1D1D; box-shadow: 5px 5px 0 rgba(0,0,0,.22); }
+.files a.zip:active { transform: translate(2px,2px); box-shadow: 1px 1px 0 rgba(0,0,0,.12); }
+
 /* ---------- practical work checklist ---------- */
 .work-checklist { width: 100%; border-collapse: collapse; margin: 14px 0 4px; }
 .work-checklist th, .work-checklist td { border: 1px solid var(--rule); padding: 9px 10px; vertical-align: top; }
@@ -564,6 +570,24 @@ html.modal-open { overflow: hidden; }
 .variant-body .task-list { margin: 8px 0 0; padding-left: 20px; }
 .variant-body .task-list li { margin: 0 0 8px; }
 @media (max-width: 620px) { .variant-body { overflow-x: auto; } .variant-body table { min-width: 520px; } }
+
+/* ---------- schema slider: all CREATE TABLE examples ---------- */
+.schema-slider { margin: 18px 0 24px; border: 1px solid #d8d5cc; border-radius: 14px; background: #fff; color: #1a1916; overflow: hidden; }
+.schema-slider-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 14px; background: #f5f2ea; border-bottom: 1px solid #d8d5cc; }
+.schema-slider-bar strong { font: 700 14px/1.2 var(--font-display); color: #1a1916; }
+.schema-slider-actions { display: flex; align-items: center; gap: 8px; }
+.schema-slider-counter { min-width: 62px; text-align: center; font: 600 13px/1 var(--font-mono); color: #59544a; }
+.schema-btn { width: 34px; height: 34px; border: 1px solid #c9c4b8; border-radius: 8px; background: #fff; color: #1a1916; font: 700 18px/1 var(--font-mono); cursor: pointer; }
+.schema-btn:hover { background: #ece7dc; }
+.schema-track { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: thin; }
+.schema-slide { flex: 0 0 100%; min-width: 100%; box-sizing: border-box; padding: 16px 18px 18px; scroll-snap-align: start; }
+.schema-slide h4 { margin: 0 0 10px; font: 700 16px/1.3 var(--font-display); color: #1a1916; }
+.schema-slide h4 code, .schema-slide p code { color: #1a1916; background: #f1ede4; padding: 1px 4px; border-radius: 4px; }
+.schema-slide p { margin: 0 0 10px; font-size: 14px; line-height: 1.55; color: #3a372f; }
+.schema-slide pre { margin: 0; padding: 14px 16px; overflow-x: auto; border: 1px solid #ddd8cc; border-radius: 10px; background: #fbfaf6; color: #1a1916; font: 12.5px/1.5 var(--font-mono); }
+.schema-slide code { color: inherit; background: none; padding: 0; }
+.schema-slider:focus-within { outline: 2px solid #b9a97f; outline-offset: 2px; }
+@media (max-width: 620px) { .schema-slide { padding: 12px; } .schema-slider-bar { padding: 8px 10px; } }
 
 /* ---------- print / PDF export ---------- */
 @page { margin: 16mm; }
@@ -904,38 +928,38 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <p>Права выдают командой <code>GRANT</code> и отзывают командой <code>REVOKE</code>. Синтаксис слегка различается между СУБД, но смысл один: перечислить права, указать объект, назвать получателя. Ниже вариант для MySQL 8, потому что эта СУБД чаще встречается в учебных и рабочих контурах вместе с phpMyAdmin.</p>
 <div class="codehilite" data-lang="text"><pre><span></span><code><span class="k">CREATE</span><span class="w"> </span><span class="k">DATABASE</span><span class="w"> </span><span class="k">IF</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">EXISTS</span><span class="w"> </span><span class="n">shop</span><span class="p">;</span>
 
-<span class="k">CREATE</span><span class="w"> </span><span class="k">USER</span><span class="w"> </span><span class="s1">&#39;seller&#39;</span><span class="o">@</span><span class="s1">&#39;localhost&#39;</span><span class="w"> </span><span class="n">IDENTIFIED</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="s1">&#39;Prodavec-2026&#39;</span><span class="p">;</span>
-<span class="k">CREATE</span><span class="w"> </span><span class="k">ROLE</span><span class="w"> </span><span class="s1">&#39;role_seller&#39;</span><span class="p">;</span>
+<span class="k">CREATE</span><span class="w"> </span><span class="k">USER</span><span class="w"> </span><span class="s1">'seller'</span><span class="o">@</span><span class="s1">'localhost'</span><span class="w"> </span><span class="n">IDENTIFIED</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="s1">'Prodavec-2026'</span><span class="p">;</span>
+<span class="k">CREATE</span><span class="w"> </span><span class="k">ROLE</span><span class="w"> </span><span class="s1">'role_seller'</span><span class="p">;</span>
 
-<span class="k">GRANT</span><span class="w"> </span><span class="k">SELECT</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">shop</span><span class="p">.</span><span class="n">book</span><span class="w"> </span><span class="k">TO</span><span class="w"> </span><span class="s1">&#39;role_seller&#39;</span><span class="p">;</span>
-<span class="k">GRANT</span><span class="w"> </span><span class="k">SELECT</span><span class="p">,</span><span class="w"> </span><span class="k">INSERT</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">shop</span><span class="p">.</span><span class="n">orders</span><span class="w"> </span><span class="k">TO</span><span class="w"> </span><span class="s1">&#39;role_seller&#39;</span><span class="p">;</span>
-<span class="k">GRANT</span><span class="w"> </span><span class="k">SELECT</span><span class="p">,</span><span class="w"> </span><span class="k">INSERT</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">shop</span><span class="p">.</span><span class="n">order_line</span><span class="w"> </span><span class="k">TO</span><span class="w"> </span><span class="s1">&#39;role_seller&#39;</span><span class="p">;</span>
+<span class="k">GRANT</span><span class="w"> </span><span class="k">SELECT</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">shop</span><span class="p">.</span><span class="n">book</span><span class="w"> </span><span class="k">TO</span><span class="w"> </span><span class="s1">'role_seller'</span><span class="p">;</span>
+<span class="k">GRANT</span><span class="w"> </span><span class="k">SELECT</span><span class="p">,</span><span class="w"> </span><span class="k">INSERT</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">shop</span><span class="p">.</span><span class="n">orders</span><span class="w"> </span><span class="k">TO</span><span class="w"> </span><span class="s1">'role_seller'</span><span class="p">;</span>
+<span class="k">GRANT</span><span class="w"> </span><span class="k">SELECT</span><span class="p">,</span><span class="w"> </span><span class="k">INSERT</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">shop</span><span class="p">.</span><span class="n">order_line</span><span class="w"> </span><span class="k">TO</span><span class="w"> </span><span class="s1">'role_seller'</span><span class="p">;</span>
 
-<span class="k">GRANT</span><span class="w"> </span><span class="s1">&#39;role_seller&#39;</span><span class="w"> </span><span class="k">TO</span><span class="w"> </span><span class="s1">&#39;seller&#39;</span><span class="o">@</span><span class="s1">&#39;localhost&#39;</span><span class="p">;</span>
-<span class="k">SET</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="k">ROLE</span><span class="w"> </span><span class="s1">&#39;role_seller&#39;</span><span class="w"> </span><span class="k">TO</span><span class="w"> </span><span class="s1">&#39;seller&#39;</span><span class="o">@</span><span class="s1">&#39;localhost&#39;</span><span class="p">;</span>
+<span class="k">GRANT</span><span class="w"> </span><span class="s1">'role_seller'</span><span class="w"> </span><span class="k">TO</span><span class="w"> </span><span class="s1">'seller'</span><span class="o">@</span><span class="s1">'localhost'</span><span class="p">;</span>
+<span class="k">SET</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="k">ROLE</span><span class="w"> </span><span class="s1">'role_seller'</span><span class="w"> </span><span class="k">TO</span><span class="w"> </span><span class="s1">'seller'</span><span class="o">@</span><span class="s1">'localhost'</span><span class="p">;</span>
 </code></pre></div>
 
 <p>Разберём по шагам. <code>CREATE USER</code> заводит учётную запись и пароль. <code>CREATE ROLE</code> создаёт роль. Три команды <code>GRANT</code> выдают роли чтение справочника книг и чтение с добавлением для заказов и строк заказа. Предпоследняя команда связывает роль с пользователем, последняя делает роль активной по умолчанию, иначе после входа права роли не действуют, пока их не включат вручную.</p>
 <p>Пароль в скрипте это учебная условность. В рабочем проекте пароль не хранят в тексте скрипта: его передают отдельно и меняют после первого входа. Скрипт с паролем, попавший в репозиторий, считается раскрытым.</p>
 <p>Проверить выданное можно командой <code>SHOW GRANTS</code>. Она показывает не то, что вы хотели выдать, а то, что СУБД запомнила.</p>
-<div class="codehilite" data-lang="text"><pre><span></span><code><span class="k">SHOW</span><span class="w"> </span><span class="n">GRANTS</span><span class="w"> </span><span class="k">FOR</span><span class="w"> </span><span class="s1">&#39;seller&#39;</span><span class="o">@</span><span class="s1">&#39;localhost&#39;</span><span class="p">;</span>
+<div class="codehilite" data-lang="text"><pre><span></span><code><span class="k">SHOW</span><span class="w"> </span><span class="n">GRANTS</span><span class="w"> </span><span class="k">FOR</span><span class="w"> </span><span class="s1">'seller'</span><span class="o">@</span><span class="s1">'localhost'</span><span class="p">;</span>
 </code></pre></div>
 
 <p>Ответ читается построчно. Строка вида <code>GRANT SELECT, INSERT ON shop.orders TO role_seller</code> означает, что право пришло через роль. Строка <code>GRANT USAGE ON *.*</code> означает лишь право подключиться и больше ничего.</p>
 <p>Отзыв делается командой <code>REVOKE</code>. Она зеркальна выдаче: те же права, тот же объект, тот же получатель.</p>
-<div class="codehilite" data-lang="text"><pre><span></span><code><span class="k">REVOKE</span><span class="w"> </span><span class="k">INSERT</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">shop</span><span class="p">.</span><span class="n">orders</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="s1">&#39;role_seller&#39;</span><span class="p">;</span>
-<span class="k">REVOKE</span><span class="w"> </span><span class="s1">&#39;role_seller&#39;</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="s1">&#39;seller&#39;</span><span class="o">@</span><span class="s1">&#39;localhost&#39;</span><span class="p">;</span>
+<div class="codehilite" data-lang="text"><pre><span></span><code><span class="k">REVOKE</span><span class="w"> </span><span class="k">INSERT</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">shop</span><span class="p">.</span><span class="n">orders</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="s1">'role_seller'</span><span class="p">;</span>
+<span class="k">REVOKE</span><span class="w"> </span><span class="s1">'role_seller'</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="s1">'seller'</span><span class="o">@</span><span class="s1">'localhost'</span><span class="p">;</span>
 </code></pre></div>
 
 <p>Первая команда забирает у роли право добавлять заказы, и оно исчезает у всех, кому эта роль выдана. Вторая забирает роль у конкретного продавца. Если нужно лишить права одного человека, отзывайте роль у пользователя, а не право у роли, иначе пострадают все.</p>
 <p>Права можно сузить до столбца. Продавцу не нужно менять сумму заказа, ему нужно менять статус. Тогда выдают чтение нужных столбцов и обновление одного столбца.</p>
-<div class="codehilite" data-lang="text"><pre><span></span><code><span class="k">GRANT</span><span class="w"> </span><span class="k">SELECT</span><span class="w"> </span><span class="p">(</span><span class="n">order_id</span><span class="p">,</span><span class="w"> </span><span class="n">order_date</span><span class="p">,</span><span class="w"> </span><span class="n">status</span><span class="p">)</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">shop</span><span class="p">.</span><span class="n">orders</span><span class="w"> </span><span class="k">TO</span><span class="w"> </span><span class="s1">&#39;role_seller&#39;</span><span class="p">;</span>
-<span class="k">GRANT</span><span class="w"> </span><span class="k">UPDATE</span><span class="w"> </span><span class="p">(</span><span class="n">status</span><span class="p">)</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">shop</span><span class="p">.</span><span class="n">orders</span><span class="w"> </span><span class="k">TO</span><span class="w"> </span><span class="s1">&#39;role_seller&#39;</span><span class="p">;</span>
+<div class="codehilite" data-lang="text"><pre><span></span><code><span class="k">GRANT</span><span class="w"> </span><span class="k">SELECT</span><span class="w"> </span><span class="p">(</span><span class="n">order_id</span><span class="p">,</span><span class="w"> </span><span class="n">order_date</span><span class="p">,</span><span class="w"> </span><span class="n">status</span><span class="p">)</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">shop</span><span class="p">.</span><span class="n">orders</span><span class="w"> </span><span class="k">TO</span><span class="w"> </span><span class="s1">'role_seller'</span><span class="p">;</span>
+<span class="k">GRANT</span><span class="w"> </span><span class="k">UPDATE</span><span class="w"> </span><span class="p">(</span><span class="n">status</span><span class="p">)</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">shop</span><span class="p">.</span><span class="n">orders</span><span class="w"> </span><span class="k">TO</span><span class="w"> </span><span class="s1">'role_seller'</span><span class="p">;</span>
 </code></pre></div>
 
 <p>Теперь запрос <code>UPDATE shop.orders SET status = 'оплачен' WHERE order_id = 41</code> пройдёт, а попытка изменить <code>order_date</code> получит отказ. Это и есть минимальные права в действии: не «таблица целиком», а ровно те поля, без которых работа не выполняется.</p>
 <p>Есть опасная добавка <code>WITH GRANT OPTION</code>. Она позволяет получателю выдавать право дальше, другим пользователям. Получатель может передать право тому, кому вы бы не доверили, и вы об этом не узнаете. В учебной базе эта добавка не нужна никогда, в рабочей её выдают единицам.</p>
-<div class="codehilite" data-lang="text"><pre><span></span><code><span class="k">GRANT</span><span class="w"> </span><span class="k">SELECT</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">shop</span><span class="p">.</span><span class="n">book</span><span class="w"> </span><span class="k">TO</span><span class="w"> </span><span class="s1">&#39;role_manager&#39;</span><span class="w"> </span><span class="k">WITH</span><span class="w"> </span><span class="k">GRANT</span><span class="w"> </span><span class="k">OPTION</span><span class="p">;</span>
+<div class="codehilite" data-lang="text"><pre><span></span><code><span class="k">GRANT</span><span class="w"> </span><span class="k">SELECT</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">shop</span><span class="p">.</span><span class="n">book</span><span class="w"> </span><span class="k">TO</span><span class="w"> </span><span class="s1">'role_manager'</span><span class="w"> </span><span class="k">WITH</span><span class="w"> </span><span class="k">GRANT</span><span class="w"> </span><span class="k">OPTION</span><span class="p">;</span>
 </code></pre></div>
 
 <p>Отдельная ловушка это <code>GRANT ALL PRIVILEGES ON shop.* TO ...</code>. Она выглядит как «дать доступ к базе», а на деле даёт удаление таблиц, изменение структуры и чтение всего, включая таблицу сотрудников. Строка <code>ALL</code> экономит время при настройке и создаёт инцидент через полгода.</p>
@@ -1094,7 +1118,7 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <span class="k">CREATE</span><span class="w"> </span><span class="k">TRIGGER</span><span class="w"> </span><span class="n">orders_no_delete</span>
 <span class="k">BEFORE</span><span class="w"> </span><span class="k">DELETE</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">orders</span>
 <span class="k">BEGIN</span>
-<span class="w">  </span><span class="k">SELECT</span><span class="w"> </span><span class="n">RAISE</span><span class="p">(</span><span class="k">ABORT</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;удаление заказов запрещено&#39;</span><span class="p">);</span>
+<span class="w">  </span><span class="k">SELECT</span><span class="w"> </span><span class="n">RAISE</span><span class="p">(</span><span class="k">ABORT</span><span class="p">,</span><span class="w"> </span><span class="s1">'удаление заказов запрещено'</span><span class="p">);</span>
 <span class="k">END</span><span class="p">;</span>
 </code></pre></div>
 
@@ -1236,6 +1260,40 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
       var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
       window.scrollTo({top: 0, behavior: reduce ? 'auto' : 'smooth'});
     });
+  });
+})();
+
+(function(){
+  document.querySelectorAll('[data-slider]').forEach(function(slider){
+    var track = slider.querySelector('[data-slider-track]');
+    var slides = track ? Array.prototype.slice.call(track.children) : [];
+    var counter = slider.querySelector('[data-slider-counter]');
+    var prev = slider.querySelector('[data-slider-prev]');
+    var next = slider.querySelector('[data-slider-next]');
+    if(!track || slides.length < 2) return;
+    function current(){
+      var best = 0, dist = Infinity;
+      slides.forEach(function(slide, i){
+        var d = Math.abs(slide.offsetLeft - track.scrollLeft);
+        if(d < dist){ dist = d; best = i; }
+      });
+      return best;
+    }
+    function update(){
+      if(counter) counter.textContent = (current() + 1) + ' / ' + slides.length;
+    }
+    function go(delta){
+      var i = Math.max(0, Math.min(slides.length - 1, current() + delta));
+      var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      track.scrollTo({left: slides[i].offsetLeft, behavior: reduce ? 'auto' : 'smooth'});
+    }
+    if(prev) prev.addEventListener('click', function(){ go(-1); });
+    if(next) next.addEventListener('click', function(){ go(1); });
+    track.addEventListener('scroll', function(){
+      clearTimeout(track._sliderTimer);
+      track._sliderTimer = setTimeout(update, 80);
+    }, {passive: true});
+    update();
   });
 })();
 (function(){

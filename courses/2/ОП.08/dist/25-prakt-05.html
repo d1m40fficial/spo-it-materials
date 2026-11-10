@@ -527,6 +527,12 @@ html.modal-open { overflow: hidden; }
 :root[data-theme=dark] .quiz-actions button[data-answer]:hover, :root[data-theme=dark] .quiz-actions button.quiz-answer:hover { background: #262626; background-color: #262626; color: #fff; border-color: #262626; }
 :root[data-theme=dark] .gate-q { background: #1E1E1E; color: #FF6B00; }
 
+/* the whole-variant archive is the main action in a download block */
+.files a.zip { background: #121212; color: #fff; border-color: #121212; font-weight: 700; box-shadow: 4px 4px 0 rgba(0,0,0,.18); }
+.files a.zip::before { color: #fff; }
+.files a.zip:hover { background: #1D1D1D; color: #fff; border-color: #1D1D1D; box-shadow: 5px 5px 0 rgba(0,0,0,.22); }
+.files a.zip:active { transform: translate(2px,2px); box-shadow: 1px 1px 0 rgba(0,0,0,.12); }
+
 /* ---------- practical work checklist ---------- */
 .work-checklist { width: 100%; border-collapse: collapse; margin: 14px 0 4px; }
 .work-checklist th, .work-checklist td { border: 1px solid var(--rule); padding: 9px 10px; vertical-align: top; }
@@ -564,6 +570,24 @@ html.modal-open { overflow: hidden; }
 .variant-body .task-list { margin: 8px 0 0; padding-left: 20px; }
 .variant-body .task-list li { margin: 0 0 8px; }
 @media (max-width: 620px) { .variant-body { overflow-x: auto; } .variant-body table { min-width: 520px; } }
+
+/* ---------- schema slider: all CREATE TABLE examples ---------- */
+.schema-slider { margin: 18px 0 24px; border: 1px solid #d8d5cc; border-radius: 14px; background: #fff; color: #1a1916; overflow: hidden; }
+.schema-slider-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 14px; background: #f5f2ea; border-bottom: 1px solid #d8d5cc; }
+.schema-slider-bar strong { font: 700 14px/1.2 var(--font-display); color: #1a1916; }
+.schema-slider-actions { display: flex; align-items: center; gap: 8px; }
+.schema-slider-counter { min-width: 62px; text-align: center; font: 600 13px/1 var(--font-mono); color: #59544a; }
+.schema-btn { width: 34px; height: 34px; border: 1px solid #c9c4b8; border-radius: 8px; background: #fff; color: #1a1916; font: 700 18px/1 var(--font-mono); cursor: pointer; }
+.schema-btn:hover { background: #ece7dc; }
+.schema-track { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: thin; }
+.schema-slide { flex: 0 0 100%; min-width: 100%; box-sizing: border-box; padding: 16px 18px 18px; scroll-snap-align: start; }
+.schema-slide h4 { margin: 0 0 10px; font: 700 16px/1.3 var(--font-display); color: #1a1916; }
+.schema-slide h4 code, .schema-slide p code { color: #1a1916; background: #f1ede4; padding: 1px 4px; border-radius: 4px; }
+.schema-slide p { margin: 0 0 10px; font-size: 14px; line-height: 1.55; color: #3a372f; }
+.schema-slide pre { margin: 0; padding: 14px 16px; overflow-x: auto; border: 1px solid #ddd8cc; border-radius: 10px; background: #fbfaf6; color: #1a1916; font: 12.5px/1.5 var(--font-mono); }
+.schema-slide code { color: inherit; background: none; padding: 0; }
+.schema-slider:focus-within { outline: 2px solid #b9a97f; outline-offset: 2px; }
+@media (max-width: 620px) { .schema-slide { padding: 12px; } .schema-slider-bar { padding: 8px 10px; } }
 
 /* ---------- print / PDF export ---------- */
 @page { margin: 16mm; }
@@ -907,7 +931,7 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <span class="w">  </span><span class="n">customer_id</span><span class="w"> </span><span class="nb">INTEGER</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="k">REFERENCES</span><span class="w"> </span><span class="n">customers</span><span class="p">(</span><span class="n">id</span><span class="p">),</span>
 <span class="w">  </span><span class="n">store_id</span><span class="w"> </span><span class="nb">INTEGER</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="k">REFERENCES</span><span class="w"> </span><span class="n">stores</span><span class="p">(</span><span class="n">id</span><span class="p">),</span>
 <span class="w">  </span><span class="n">order_date</span><span class="w"> </span><span class="nb">TEXT</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span>
-<span class="w">  </span><span class="n">status</span><span class="w"> </span><span class="nb">TEXT</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="k">CHECK</span><span class="w"> </span><span class="p">(</span><span class="n">status</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span><span class="s1">&#39;новый&#39;</span><span class="p">,</span><span class="s1">&#39;оплачен&#39;</span><span class="p">,</span><span class="s1">&#39;собран&#39;</span><span class="p">,</span><span class="s1">&#39;выдан&#39;</span><span class="p">,</span><span class="s1">&#39;отменён&#39;</span><span class="p">))</span>
+<span class="w">  </span><span class="n">status</span><span class="w"> </span><span class="nb">TEXT</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="k">CHECK</span><span class="w"> </span><span class="p">(</span><span class="n">status</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span><span class="s1">'новый'</span><span class="p">,</span><span class="s1">'оплачен'</span><span class="p">,</span><span class="s1">'собран'</span><span class="p">,</span><span class="s1">'выдан'</span><span class="p">,</span><span class="s1">'отменён'</span><span class="p">))</span>
 <span class="p">);</span>
 <span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">order_items</span><span class="w"> </span><span class="p">(</span>
 <span class="w">  </span><span class="n">order_id</span><span class="w"> </span><span class="nb">INTEGER</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="k">REFERENCES</span><span class="w"> </span><span class="n">orders</span><span class="p">(</span><span class="n">id</span><span class="p">),</span>
@@ -918,86 +942,86 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <span class="p">);</span>
 
 <span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">stores</span><span class="w"> </span><span class="k">VALUES</span>
-<span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;Страница на Арбате&#39;</span><span class="p">,</span><span class="s1">&#39;Москва&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="s1">&#39;Страница в Твери&#39;</span><span class="p">,</span><span class="s1">&#39;Тверь&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="s1">&#39;Страница в Туле&#39;</span><span class="p">,</span><span class="s1">&#39;Тула&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="s1">&#39;Страница в Калуге&#39;</span><span class="p">,</span><span class="s1">&#39;Калуга&#39;</span><span class="p">);</span>
+<span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="s1">'Страница на Арбате'</span><span class="p">,</span><span class="s1">'Москва'</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="s1">'Страница в Твери'</span><span class="p">,</span><span class="s1">'Тверь'</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="s1">'Страница в Туле'</span><span class="p">,</span><span class="s1">'Тула'</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="s1">'Страница в Калуге'</span><span class="p">,</span><span class="s1">'Калуга'</span><span class="p">);</span>
 
 <span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">customers</span><span class="w"> </span><span class="k">VALUES</span>
-<span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;ООО «Читай-город»&#39;</span><span class="p">,</span><span class="s1">&#39;Москва&#39;</span><span class="p">,</span><span class="s1">&#39;sales@chitay.ru&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="s1">&#39;Иванова Мария&#39;</span><span class="p">,</span><span class="s1">&#39;Тверь&#39;</span><span class="p">,</span><span class="s1">&#39;ivanova@mail.ru&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="s1">&#39;Петров Алексей&#39;</span><span class="p">,</span><span class="s1">&#39;Тула&#39;</span><span class="p">,</span><span class="k">NULL</span><span class="p">),</span>
-<span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="s1">&#39;Школа № 14&#39;</span><span class="p">,</span><span class="s1">&#39;Калуга&#39;</span><span class="p">,</span><span class="s1">&#39;school14@mail.ru&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="s1">&#39;ООО «Учебник плюс»&#39;</span><span class="p">,</span><span class="s1">&#39;Москва&#39;</span><span class="p">,</span><span class="s1">&#39;info@uchebnik.ru&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="s1">&#39;Сидорова Ольга&#39;</span><span class="p">,</span><span class="s1">&#39;Тверь&#39;</span><span class="p">,</span><span class="s1">&#39;sidorova@mail.ru&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="mi">7</span><span class="p">,</span><span class="s1">&#39;Библиотека имени Пушкина&#39;</span><span class="p">,</span><span class="s1">&#39;Тула&#39;</span><span class="p">,</span><span class="s1">&#39;lib@pushkin.ru&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="s1">&#39;Козлов Артём&#39;</span><span class="p">,</span><span class="s1">&#39;Москва&#39;</span><span class="p">,</span><span class="s1">&#39;kozlov@mail.ru&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="mi">9</span><span class="p">,</span><span class="s1">&#39;ООО «Офис-книга»&#39;</span><span class="p">,</span><span class="s1">&#39;Калуга&#39;</span><span class="p">,</span><span class="s1">&#39;office@kniga.ru&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="s1">&#39;Фёдорова Анна&#39;</span><span class="p">,</span><span class="s1">&#39;Москва&#39;</span><span class="p">,</span><span class="k">NULL</span><span class="p">),</span>
-<span class="p">(</span><span class="mi">11</span><span class="p">,</span><span class="s1">&#39;Никитин Павел&#39;</span><span class="p">,</span><span class="s1">&#39;Калуга&#39;</span><span class="p">,</span><span class="s1">&#39;nikitin@mail.ru&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="mi">12</span><span class="p">,</span><span class="s1">&#39;ООО «Книжный клуб»&#39;</span><span class="p">,</span><span class="s1">&#39;Тверь&#39;</span><span class="p">,</span><span class="s1">&#39;club@kniga.ru&#39;</span><span class="p">);</span>
+<span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="s1">'ООО «Читай-город»'</span><span class="p">,</span><span class="s1">'Москва'</span><span class="p">,</span><span class="s1">'sales@chitay.ru'</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="s1">'Иванова Мария'</span><span class="p">,</span><span class="s1">'Тверь'</span><span class="p">,</span><span class="s1">'ivanova@mail.ru'</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="s1">'Петров Алексей'</span><span class="p">,</span><span class="s1">'Тула'</span><span class="p">,</span><span class="k">NULL</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="s1">'Школа № 14'</span><span class="p">,</span><span class="s1">'Калуга'</span><span class="p">,</span><span class="s1">'school14@mail.ru'</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="s1">'ООО «Учебник плюс»'</span><span class="p">,</span><span class="s1">'Москва'</span><span class="p">,</span><span class="s1">'info@uchebnik.ru'</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="s1">'Сидорова Ольга'</span><span class="p">,</span><span class="s1">'Тверь'</span><span class="p">,</span><span class="s1">'sidorova@mail.ru'</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">7</span><span class="p">,</span><span class="s1">'Библиотека имени Пушкина'</span><span class="p">,</span><span class="s1">'Тула'</span><span class="p">,</span><span class="s1">'lib@pushkin.ru'</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="s1">'Козлов Артём'</span><span class="p">,</span><span class="s1">'Москва'</span><span class="p">,</span><span class="s1">'kozlov@mail.ru'</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">9</span><span class="p">,</span><span class="s1">'ООО «Офис-книга»'</span><span class="p">,</span><span class="s1">'Калуга'</span><span class="p">,</span><span class="s1">'office@kniga.ru'</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="s1">'Фёдорова Анна'</span><span class="p">,</span><span class="s1">'Москва'</span><span class="p">,</span><span class="k">NULL</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">11</span><span class="p">,</span><span class="s1">'Никитин Павел'</span><span class="p">,</span><span class="s1">'Калуга'</span><span class="p">,</span><span class="s1">'nikitin@mail.ru'</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">12</span><span class="p">,</span><span class="s1">'ООО «Книжный клуб»'</span><span class="p">,</span><span class="s1">'Тверь'</span><span class="p">,</span><span class="s1">'club@kniga.ru'</span><span class="p">);</span>
 
 <span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">categories</span><span class="w"> </span><span class="k">VALUES</span>
-<span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;Художественная литература&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="s1">&#39;Детская литература&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="s1">&#39;Научно-популярная&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="s1">&#39;Учебная литература&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="s1">&#39;Бизнес&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="s1">&#39;Психология&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="mi">7</span><span class="p">,</span><span class="s1">&#39;История&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="s1">&#39;Кулинария&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="mi">9</span><span class="p">,</span><span class="s1">&#39;Путешествия&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="s1">&#39;Компьютеры&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="mi">11</span><span class="p">,</span><span class="s1">&#39;Искусство&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="mi">12</span><span class="p">,</span><span class="s1">&#39;Поэзия&#39;</span><span class="p">);</span>
+<span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="s1">'Художественная литература'</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="s1">'Детская литература'</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="s1">'Научно-популярная'</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="s1">'Учебная литература'</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="s1">'Бизнес'</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="s1">'Психология'</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">7</span><span class="p">,</span><span class="s1">'История'</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="s1">'Кулинария'</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">9</span><span class="p">,</span><span class="s1">'Путешествия'</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="s1">'Компьютеры'</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">11</span><span class="p">,</span><span class="s1">'Искусство'</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">12</span><span class="p">,</span><span class="s1">'Поэзия'</span><span class="p">);</span>
 
 <span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">books</span><span class="w"> </span><span class="k">VALUES</span>
-<span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;Тихий берег&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">620</span><span class="p">),</span>
-<span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="s1">&#39;Дорога домой&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">540</span><span class="p">),</span>
-<span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="s1">&#39;Небо над городом&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">710</span><span class="p">),</span>
-<span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="s1">&#39;Сказки старого леса&#39;</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">450</span><span class="p">),</span>
-<span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="s1">&#39;Приключения робота&#39;</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">520</span><span class="p">),</span>
-<span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="s1">&#39;Как устроен космос&#39;</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">890</span><span class="p">),</span>
-<span class="p">(</span><span class="mi">7</span><span class="p">,</span><span class="s1">&#39;Краткая история языка&#39;</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">760</span><span class="p">),</span>
-<span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="s1">&#39;Математика для всех&#39;</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">980</span><span class="p">),</span>
-<span class="p">(</span><span class="mi">9</span><span class="p">,</span><span class="s1">&#39;Основы алгоритмов&#39;</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">1250</span><span class="p">),</span>
-<span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="s1">&#39;Базы данных с нуля&#39;</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">1400</span><span class="p">),</span>
-<span class="p">(</span><span class="mi">11</span><span class="p">,</span><span class="s1">&#39;Продажи без давления&#39;</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">820</span><span class="p">),</span>
-<span class="p">(</span><span class="mi">12</span><span class="p">,</span><span class="s1">&#39;Управление проектами&#39;</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">1100</span><span class="p">),</span>
-<span class="p">(</span><span class="mi">13</span><span class="p">,</span><span class="s1">&#39;Психология привычки&#39;</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">690</span><span class="p">),</span>
-<span class="p">(</span><span class="mi">14</span><span class="p">,</span><span class="s1">&#39;Внимание и память&#39;</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">740</span><span class="p">),</span>
-<span class="p">(</span><span class="mi">15</span><span class="p">,</span><span class="s1">&#39;История России в датах&#39;</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">1300</span><span class="p">),</span>
-<span class="p">(</span><span class="mi">16</span><span class="p">,</span><span class="s1">&#39;Города и эпохи&#39;</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">960</span><span class="p">),</span>
-<span class="p">(</span><span class="mi">17</span><span class="p">,</span><span class="s1">&#39;Кухня средиземноморья&#39;</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="mi">1150</span><span class="p">),</span>
-<span class="p">(</span><span class="mi">18</span><span class="p">,</span><span class="s1">&#39;Хлеб и тесто&#39;</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="mi">870</span><span class="p">),</span>
-<span class="p">(</span><span class="mi">19</span><span class="p">,</span><span class="s1">&#39;Маршруты выходного дня&#39;</span><span class="p">,</span><span class="mi">9</span><span class="p">,</span><span class="mi">640</span><span class="p">),</span>
-<span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="s1">&#39;Путешествие по Байкалу&#39;</span><span class="p">,</span><span class="mi">9</span><span class="p">,</span><span class="mi">780</span><span class="p">),</span>
-<span class="p">(</span><span class="mi">21</span><span class="p">,</span><span class="s1">&#39;Python для начинающих&#39;</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">1350</span><span class="p">),</span>
-<span class="p">(</span><span class="mi">22</span><span class="p">,</span><span class="s1">&#39;SQL за 30 дней&#39;</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">1190</span><span class="p">),</span>
-<span class="p">(</span><span class="mi">23</span><span class="p">,</span><span class="s1">&#39;Искусство видеть&#39;</span><span class="p">,</span><span class="mi">11</span><span class="p">,</span><span class="mi">1500</span><span class="p">),</span>
-<span class="p">(</span><span class="mi">24</span><span class="p">,</span><span class="s1">&#39;Стихи о море&#39;</span><span class="p">,</span><span class="mi">12</span><span class="p">,</span><span class="mi">480</span><span class="p">);</span>
+<span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="s1">'Тихий берег'</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">620</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="s1">'Дорога домой'</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">540</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="s1">'Небо над городом'</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">710</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="s1">'Сказки старого леса'</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">450</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="s1">'Приключения робота'</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">520</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="s1">'Как устроен космос'</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">890</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">7</span><span class="p">,</span><span class="s1">'Краткая история языка'</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">760</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="s1">'Математика для всех'</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">980</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">9</span><span class="p">,</span><span class="s1">'Основы алгоритмов'</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">1250</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="s1">'Базы данных с нуля'</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">1400</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">11</span><span class="p">,</span><span class="s1">'Продажи без давления'</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">820</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">12</span><span class="p">,</span><span class="s1">'Управление проектами'</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">1100</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">13</span><span class="p">,</span><span class="s1">'Психология привычки'</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">690</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">14</span><span class="p">,</span><span class="s1">'Внимание и память'</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">740</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">15</span><span class="p">,</span><span class="s1">'История России в датах'</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">1300</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">16</span><span class="p">,</span><span class="s1">'Города и эпохи'</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">960</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">17</span><span class="p">,</span><span class="s1">'Кухня средиземноморья'</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="mi">1150</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">18</span><span class="p">,</span><span class="s1">'Хлеб и тесто'</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="mi">870</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">19</span><span class="p">,</span><span class="s1">'Маршруты выходного дня'</span><span class="p">,</span><span class="mi">9</span><span class="p">,</span><span class="mi">640</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="s1">'Путешествие по Байкалу'</span><span class="p">,</span><span class="mi">9</span><span class="p">,</span><span class="mi">780</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">21</span><span class="p">,</span><span class="s1">'Python для начинающих'</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">1350</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">22</span><span class="p">,</span><span class="s1">'SQL за 30 дней'</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">1190</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">23</span><span class="p">,</span><span class="s1">'Искусство видеть'</span><span class="p">,</span><span class="mi">11</span><span class="p">,</span><span class="mi">1500</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">24</span><span class="p">,</span><span class="s1">'Стихи о море'</span><span class="p">,</span><span class="mi">12</span><span class="p">,</span><span class="mi">480</span><span class="p">);</span>
 
 <span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">orders</span><span class="w"> </span><span class="k">VALUES</span>
-<span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;2026-09-02&#39;</span><span class="p">,</span><span class="s1">&#39;оплачен&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;2026-09-03&#39;</span><span class="p">,</span><span class="s1">&#39;выдан&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="s1">&#39;2026-09-04&#39;</span><span class="p">,</span><span class="s1">&#39;выдан&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;2026-09-05&#39;</span><span class="p">,</span><span class="s1">&#39;отменён&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="s1">&#39;2026-09-06&#39;</span><span class="p">,</span><span class="s1">&#39;оплачен&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="s1">&#39;2026-09-07&#39;</span><span class="p">,</span><span class="s1">&#39;новый&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="mi">7</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="s1">&#39;2026-09-08&#39;</span><span class="p">,</span><span class="s1">&#39;выдан&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;2026-09-10&#39;</span><span class="p">,</span><span class="s1">&#39;собран&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="mi">9</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="s1">&#39;2026-09-11&#39;</span><span class="p">,</span><span class="s1">&#39;выдан&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">9</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="s1">&#39;2026-09-12&#39;</span><span class="p">,</span><span class="s1">&#39;оплачен&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="mi">11</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="s1">&#39;2026-09-13&#39;</span><span class="p">,</span><span class="s1">&#39;новый&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="mi">12</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="s1">&#39;2026-09-15&#39;</span><span class="p">,</span><span class="s1">&#39;выдан&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="mi">13</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="s1">&#39;2026-09-16&#39;</span><span class="p">,</span><span class="s1">&#39;выдан&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="mi">14</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="s1">&#39;2026-09-17&#39;</span><span class="p">,</span><span class="s1">&#39;собран&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="mi">15</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;2026-09-18&#39;</span><span class="p">,</span><span class="s1">&#39;оплачен&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="mi">16</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="s1">&#39;2026-09-19&#39;</span><span class="p">,</span><span class="s1">&#39;новый&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="mi">17</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="s1">&#39;2026-09-20&#39;</span><span class="p">,</span><span class="s1">&#39;выдан&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="mi">18</span><span class="p">,</span><span class="mi">9</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="s1">&#39;2026-09-21&#39;</span><span class="p">,</span><span class="s1">&#39;отменён&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="mi">19</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;2026-09-23&#39;</span><span class="p">,</span><span class="s1">&#39;выдан&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;2026-09-24&#39;</span><span class="p">,</span><span class="s1">&#39;оплачен&#39;</span><span class="p">);</span>
+<span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="s1">'2026-09-02'</span><span class="p">,</span><span class="s1">'оплачен'</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="s1">'2026-09-03'</span><span class="p">,</span><span class="s1">'выдан'</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="s1">'2026-09-04'</span><span class="p">,</span><span class="s1">'выдан'</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="s1">'2026-09-05'</span><span class="p">,</span><span class="s1">'отменён'</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="s1">'2026-09-06'</span><span class="p">,</span><span class="s1">'оплачен'</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="s1">'2026-09-07'</span><span class="p">,</span><span class="s1">'новый'</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">7</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="s1">'2026-09-08'</span><span class="p">,</span><span class="s1">'выдан'</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="s1">'2026-09-10'</span><span class="p">,</span><span class="s1">'собран'</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">9</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="s1">'2026-09-11'</span><span class="p">,</span><span class="s1">'выдан'</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">9</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="s1">'2026-09-12'</span><span class="p">,</span><span class="s1">'оплачен'</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">11</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="s1">'2026-09-13'</span><span class="p">,</span><span class="s1">'новый'</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">12</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="s1">'2026-09-15'</span><span class="p">,</span><span class="s1">'выдан'</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">13</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="s1">'2026-09-16'</span><span class="p">,</span><span class="s1">'выдан'</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">14</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="s1">'2026-09-17'</span><span class="p">,</span><span class="s1">'собран'</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">15</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="s1">'2026-09-18'</span><span class="p">,</span><span class="s1">'оплачен'</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">16</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="s1">'2026-09-19'</span><span class="p">,</span><span class="s1">'новый'</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">17</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="s1">'2026-09-20'</span><span class="p">,</span><span class="s1">'выдан'</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">18</span><span class="p">,</span><span class="mi">9</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="s1">'2026-09-21'</span><span class="p">,</span><span class="s1">'отменён'</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">19</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="s1">'2026-09-23'</span><span class="p">,</span><span class="s1">'выдан'</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="s1">'2026-09-24'</span><span class="p">,</span><span class="s1">'оплачен'</span><span class="p">);</span>
 
 <span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">order_items</span><span class="w"> </span><span class="k">VALUES</span>
 <span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">620</span><span class="p">),(</span><span class="mi">1</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1400</span><span class="p">),(</span><span class="mi">1</span><span class="p">,</span><span class="mi">13</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">690</span><span class="p">),</span>
@@ -1023,12 +1047,12 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 </code></pre></div>
 
 <p>Проверьте, что таблицы созданы и заполнены.</p>
-<div class="codehilite" data-lang="sql"><pre><span></span><code><span class="k">SELECT</span><span class="w"> </span><span class="s1">&#39;stores&#39;</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="k">table_name</span><span class="p">,</span><span class="w"> </span><span class="k">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="k">rows</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">stores</span>
-<span class="k">UNION</span><span class="w"> </span><span class="k">ALL</span><span class="w"> </span><span class="k">SELECT</span><span class="w"> </span><span class="s1">&#39;customers&#39;</span><span class="p">,</span><span class="w"> </span><span class="k">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">customers</span>
-<span class="k">UNION</span><span class="w"> </span><span class="k">ALL</span><span class="w"> </span><span class="k">SELECT</span><span class="w"> </span><span class="s1">&#39;categories&#39;</span><span class="p">,</span><span class="w"> </span><span class="k">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">categories</span>
-<span class="k">UNION</span><span class="w"> </span><span class="k">ALL</span><span class="w"> </span><span class="k">SELECT</span><span class="w"> </span><span class="s1">&#39;books&#39;</span><span class="p">,</span><span class="w"> </span><span class="k">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">books</span>
-<span class="k">UNION</span><span class="w"> </span><span class="k">ALL</span><span class="w"> </span><span class="k">SELECT</span><span class="w"> </span><span class="s1">&#39;orders&#39;</span><span class="p">,</span><span class="w"> </span><span class="k">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">orders</span>
-<span class="k">UNION</span><span class="w"> </span><span class="k">ALL</span><span class="w"> </span><span class="k">SELECT</span><span class="w"> </span><span class="s1">&#39;order_items&#39;</span><span class="p">,</span><span class="w"> </span><span class="k">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">order_items</span><span class="p">;</span>
+<div class="codehilite" data-lang="sql"><pre><span></span><code><span class="k">SELECT</span><span class="w"> </span><span class="s1">'stores'</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="k">table_name</span><span class="p">,</span><span class="w"> </span><span class="k">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="k">rows</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">stores</span>
+<span class="k">UNION</span><span class="w"> </span><span class="k">ALL</span><span class="w"> </span><span class="k">SELECT</span><span class="w"> </span><span class="s1">'customers'</span><span class="p">,</span><span class="w"> </span><span class="k">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">customers</span>
+<span class="k">UNION</span><span class="w"> </span><span class="k">ALL</span><span class="w"> </span><span class="k">SELECT</span><span class="w"> </span><span class="s1">'categories'</span><span class="p">,</span><span class="w"> </span><span class="k">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">categories</span>
+<span class="k">UNION</span><span class="w"> </span><span class="k">ALL</span><span class="w"> </span><span class="k">SELECT</span><span class="w"> </span><span class="s1">'books'</span><span class="p">,</span><span class="w"> </span><span class="k">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">books</span>
+<span class="k">UNION</span><span class="w"> </span><span class="k">ALL</span><span class="w"> </span><span class="k">SELECT</span><span class="w"> </span><span class="s1">'orders'</span><span class="p">,</span><span class="w"> </span><span class="k">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">orders</span>
+<span class="k">UNION</span><span class="w"> </span><span class="k">ALL</span><span class="w"> </span><span class="k">SELECT</span><span class="w"> </span><span class="s1">'order_items'</span><span class="p">,</span><span class="w"> </span><span class="k">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">order_items</span><span class="p">;</span>
 </code></pre></div>
 
 <p>Ожидаемые количества: 4 площадки, 12 покупателей, 12 категорий, 24 книги, 20 заказов и 43 позиции. Если число отличается, найдите ошибку в скрипте до начала работы. Оператор <code>UNION ALL</code> в проверочном запросе соединяет строки нескольких <code>SELECT</code> и не удаляет повторы; он нужен только для того, чтобы вывести все счётчики одной таблицей.</p>
@@ -1361,6 +1385,40 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
       var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
       window.scrollTo({top: 0, behavior: reduce ? 'auto' : 'smooth'});
     });
+  });
+})();
+
+(function(){
+  document.querySelectorAll('[data-slider]').forEach(function(slider){
+    var track = slider.querySelector('[data-slider-track]');
+    var slides = track ? Array.prototype.slice.call(track.children) : [];
+    var counter = slider.querySelector('[data-slider-counter]');
+    var prev = slider.querySelector('[data-slider-prev]');
+    var next = slider.querySelector('[data-slider-next]');
+    if(!track || slides.length < 2) return;
+    function current(){
+      var best = 0, dist = Infinity;
+      slides.forEach(function(slide, i){
+        var d = Math.abs(slide.offsetLeft - track.scrollLeft);
+        if(d < dist){ dist = d; best = i; }
+      });
+      return best;
+    }
+    function update(){
+      if(counter) counter.textContent = (current() + 1) + ' / ' + slides.length;
+    }
+    function go(delta){
+      var i = Math.max(0, Math.min(slides.length - 1, current() + delta));
+      var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      track.scrollTo({left: slides[i].offsetLeft, behavior: reduce ? 'auto' : 'smooth'});
+    }
+    if(prev) prev.addEventListener('click', function(){ go(-1); });
+    if(next) next.addEventListener('click', function(){ go(1); });
+    track.addEventListener('scroll', function(){
+      clearTimeout(track._sliderTimer);
+      track._sliderTimer = setTimeout(update, 80);
+    }, {passive: true});
+    update();
   });
 })();
 (function(){

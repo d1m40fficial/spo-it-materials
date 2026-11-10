@@ -527,6 +527,12 @@ html.modal-open { overflow: hidden; }
 :root[data-theme=dark] .quiz-actions button[data-answer]:hover, :root[data-theme=dark] .quiz-actions button.quiz-answer:hover { background: #262626; background-color: #262626; color: #fff; border-color: #262626; }
 :root[data-theme=dark] .gate-q { background: #1E1E1E; color: #FF6B00; }
 
+/* the whole-variant archive is the main action in a download block */
+.files a.zip { background: #121212; color: #fff; border-color: #121212; font-weight: 700; box-shadow: 4px 4px 0 rgba(0,0,0,.18); }
+.files a.zip::before { color: #fff; }
+.files a.zip:hover { background: #1D1D1D; color: #fff; border-color: #1D1D1D; box-shadow: 5px 5px 0 rgba(0,0,0,.22); }
+.files a.zip:active { transform: translate(2px,2px); box-shadow: 1px 1px 0 rgba(0,0,0,.12); }
+
 /* ---------- practical work checklist ---------- */
 .work-checklist { width: 100%; border-collapse: collapse; margin: 14px 0 4px; }
 .work-checklist th, .work-checklist td { border: 1px solid var(--rule); padding: 9px 10px; vertical-align: top; }
@@ -564,6 +570,24 @@ html.modal-open { overflow: hidden; }
 .variant-body .task-list { margin: 8px 0 0; padding-left: 20px; }
 .variant-body .task-list li { margin: 0 0 8px; }
 @media (max-width: 620px) { .variant-body { overflow-x: auto; } .variant-body table { min-width: 520px; } }
+
+/* ---------- schema slider: all CREATE TABLE examples ---------- */
+.schema-slider { margin: 18px 0 24px; border: 1px solid #d8d5cc; border-radius: 14px; background: #fff; color: #1a1916; overflow: hidden; }
+.schema-slider-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 14px; background: #f5f2ea; border-bottom: 1px solid #d8d5cc; }
+.schema-slider-bar strong { font: 700 14px/1.2 var(--font-display); color: #1a1916; }
+.schema-slider-actions { display: flex; align-items: center; gap: 8px; }
+.schema-slider-counter { min-width: 62px; text-align: center; font: 600 13px/1 var(--font-mono); color: #59544a; }
+.schema-btn { width: 34px; height: 34px; border: 1px solid #c9c4b8; border-radius: 8px; background: #fff; color: #1a1916; font: 700 18px/1 var(--font-mono); cursor: pointer; }
+.schema-btn:hover { background: #ece7dc; }
+.schema-track { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: thin; }
+.schema-slide { flex: 0 0 100%; min-width: 100%; box-sizing: border-box; padding: 16px 18px 18px; scroll-snap-align: start; }
+.schema-slide h4 { margin: 0 0 10px; font: 700 16px/1.3 var(--font-display); color: #1a1916; }
+.schema-slide h4 code, .schema-slide p code { color: #1a1916; background: #f1ede4; padding: 1px 4px; border-radius: 4px; }
+.schema-slide p { margin: 0 0 10px; font-size: 14px; line-height: 1.55; color: #3a372f; }
+.schema-slide pre { margin: 0; padding: 14px 16px; overflow-x: auto; border: 1px solid #ddd8cc; border-radius: 10px; background: #fbfaf6; color: #1a1916; font: 12.5px/1.5 var(--font-mono); }
+.schema-slide code { color: inherit; background: none; padding: 0; }
+.schema-slider:focus-within { outline: 2px solid #b9a97f; outline-offset: 2px; }
+@media (max-width: 620px) { .schema-slide { padding: 12px; } .schema-slider-bar { padding: 8px 10px; } }
 
 /* ---------- print / PDF export ---------- */
 @page { margin: 16mm; }
@@ -870,50 +894,50 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <p>Создайте папку <code>.../sklad/logs</code> и файл <code>make_logs.py</code>. Скрипт запишет пять файлов: журнал доступа, журнал ошибок Apache, журнал приложения, журнал ошибок MySQL и показания мониторинга диска. Содержимое взято из стенда «Склад+» за 27 октября.</p>
 <div class="codehilite" data-lang="python"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
 
-<span class="n">base</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;.../sklad/logs&quot;</span><span class="p">)</span>
+<span class="n">base</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="sa">r</span><span class="s2">".../sklad/logs"</span><span class="p">)</span>
 <span class="n">base</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 <span class="n">files</span> <span class="o">=</span> <span class="p">{</span>
-<span class="s2">&quot;access.log&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;&quot;</span>
-<span class="s2">10.10.24.15 - ivanova [27/Oct/2026:09:08:12 +0300] &quot;GET /sklad/orders HTTP/1.1&quot; 200 18432 req=77aa10</span>
-<span class="s2">10.10.24.15 - ivanova [27/Oct/2026:09:08:40 +0300] &quot;POST /sklad/orders/save HTTP/1.1&quot; 200 412 req=77aa10</span>
-<span class="s2">10.10.24.18 - petrov [27/Oct/2026:09:09:05 +0300] &quot;GET /sklad/stock HTTP/1.1&quot; 200 9210 req=6c11d0</span>
-<span class="s2">10.10.24.15 - ivanova [27/Oct/2026:09:11:58 +0300] &quot;POST /sklad/orders/save HTTP/1.1&quot; 500 0 req=8f3c1a</span>
-<span class="s2">10.10.24.15 - ivanova [27/Oct/2026:09:12:03 +0300] &quot;POST /sklad/orders/save HTTP/1.1&quot; 500 0 req=91b7d2</span>
-<span class="s2">10.10.24.18 - petrov [27/Oct/2026:09:12:31 +0300] &quot;POST /sklad/orders/save HTTP/1.1&quot; 500 0 req=a04e11</span>
-<span class="s2">10.10.24.21 - sidorova [27/Oct/2026:09:13:02 +0300] &quot;POST /sklad/orders/save HTTP/1.1&quot; 500 0 req=b7710c</span>
-<span class="s2">10.10.24.15 - ivanova [27/Oct/2026:09:15:44 +0300] &quot;POST /sklad/orders/save HTTP/1.1&quot; 500 0 req=c2d9f5</span>
-<span class="s2">10.10.24.21 - sidorova [27/Oct/2026:09:22:10 +0300] &quot;POST /sklad/orders/save HTTP/1.1&quot; 500 0 req=d18a3b</span>
-<span class="s2">10.10.24.18 - petrov [27/Oct/2026:09:31:27 +0300] &quot;POST /sklad/orders/save HTTP/1.1&quot; 500 0 req=e5f0c8</span>
-<span class="s2">10.10.24.15 - ivanova [27/Oct/2026:09:40:52 +0300] &quot;POST /sklad/orders/save HTTP/1.1&quot; 500 0 req=f6b2a1</span>
-<span class="s2">10.10.24.15 - ivanova [27/Oct/2026:09:41:10 +0300] &quot;POST /sklad/orders/save HTTP/1.1&quot; 200 412 req=0a7c34</span>
-<span class="s2">10.10.24.15 - ivanova [27/Oct/2026:09:41:22 +0300] &quot;GET /sklad/orders HTTP/1.1&quot; 200 18501 req=0a7c34</span>
-<span class="s2">&quot;&quot;&quot;</span><span class="p">,</span>
-<span class="s2">&quot;error.log&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;&quot;</span>
-<span class="s2">[Tue Oct 27 09:11:58.412] [php:error] [pid 4120] [client 10.10.24.15:51422] PHP Fatal error: Uncaught PDOException: SQLSTATE[HY000]: General error: 3 Error writing file &#39;./sklad/#sql_1a2_0&#39; (Errcode: 28 &quot;No space left on device&quot;) in .../sklad/www/orders/save.php:91</span>
-<span class="s2">[Tue Oct 27 09:12:03.508] [php:error] [pid 4124] [client 10.10.24.15:51430] PHP Fatal error: Uncaught PDOException: SQLSTATE[HY000]: General error: 3 Error writing file &#39;./sklad/#sql_1a2_1&#39; (Errcode: 28 &quot;No space left on device&quot;) in .../sklad/www/orders/save.php:91</span>
-<span class="s2">[Tue Oct 27 09:41:09.004] [core:notice] [pid 4102] AH00094: Command line: &#39;.../xampp/apache/bin/httpd.exe -d .../xampp/apache&#39;</span>
-<span class="s2">&quot;&quot;&quot;</span><span class="p">,</span>
-<span class="s2">&quot;sklad.log&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">"access.log"</span><span class="p">:</span> <span class="s2">"""</span>
+<span class="s2">10.10.24.15 - ivanova [27/Oct/2026:09:08:12 +0300] "GET /sklad/orders HTTP/1.1" 200 18432 req=77aa10</span>
+<span class="s2">10.10.24.15 - ivanova [27/Oct/2026:09:08:40 +0300] "POST /sklad/orders/save HTTP/1.1" 200 412 req=77aa10</span>
+<span class="s2">10.10.24.18 - petrov [27/Oct/2026:09:09:05 +0300] "GET /sklad/stock HTTP/1.1" 200 9210 req=6c11d0</span>
+<span class="s2">10.10.24.15 - ivanova [27/Oct/2026:09:11:58 +0300] "POST /sklad/orders/save HTTP/1.1" 500 0 req=8f3c1a</span>
+<span class="s2">10.10.24.15 - ivanova [27/Oct/2026:09:12:03 +0300] "POST /sklad/orders/save HTTP/1.1" 500 0 req=91b7d2</span>
+<span class="s2">10.10.24.18 - petrov [27/Oct/2026:09:12:31 +0300] "POST /sklad/orders/save HTTP/1.1" 500 0 req=a04e11</span>
+<span class="s2">10.10.24.21 - sidorova [27/Oct/2026:09:13:02 +0300] "POST /sklad/orders/save HTTP/1.1" 500 0 req=b7710c</span>
+<span class="s2">10.10.24.15 - ivanova [27/Oct/2026:09:15:44 +0300] "POST /sklad/orders/save HTTP/1.1" 500 0 req=c2d9f5</span>
+<span class="s2">10.10.24.21 - sidorova [27/Oct/2026:09:22:10 +0300] "POST /sklad/orders/save HTTP/1.1" 500 0 req=d18a3b</span>
+<span class="s2">10.10.24.18 - petrov [27/Oct/2026:09:31:27 +0300] "POST /sklad/orders/save HTTP/1.1" 500 0 req=e5f0c8</span>
+<span class="s2">10.10.24.15 - ivanova [27/Oct/2026:09:40:52 +0300] "POST /sklad/orders/save HTTP/1.1" 500 0 req=f6b2a1</span>
+<span class="s2">10.10.24.15 - ivanova [27/Oct/2026:09:41:10 +0300] "POST /sklad/orders/save HTTP/1.1" 200 412 req=0a7c34</span>
+<span class="s2">10.10.24.15 - ivanova [27/Oct/2026:09:41:22 +0300] "GET /sklad/orders HTTP/1.1" 200 18501 req=0a7c34</span>
+<span class="s2">"""</span><span class="p">,</span>
+<span class="s2">"error.log"</span><span class="p">:</span> <span class="s2">"""</span>
+<span class="s2">[Tue Oct 27 09:11:58.412] [php:error] [pid 4120] [client 10.10.24.15:51422] PHP Fatal error: Uncaught PDOException: SQLSTATE[HY000]: General error: 3 Error writing file './sklad/#sql_1a2_0' (Errcode: 28 "No space left on device") in .../sklad/www/orders/save.php:91</span>
+<span class="s2">[Tue Oct 27 09:12:03.508] [php:error] [pid 4124] [client 10.10.24.15:51430] PHP Fatal error: Uncaught PDOException: SQLSTATE[HY000]: General error: 3 Error writing file './sklad/#sql_1a2_1' (Errcode: 28 "No space left on device") in .../sklad/www/orders/save.php:91</span>
+<span class="s2">[Tue Oct 27 09:41:09.004] [core:notice] [pid 4102] AH00094: Command line: '.../xampp/apache/bin/httpd.exe -d .../xampp/apache'</span>
+<span class="s2">"""</span><span class="p">,</span>
+<span class="s2">"sklad.log"</span><span class="p">:</span> <span class="s2">"""</span>
 <span class="s2">2026-10-27T09:08:40.115+03:00 INFO order.save user=ivanova order=SO-10481 request=77aa10 duration=318ms</span>
-<span class="s2">2026-10-27T09:11:58.409+03:00 ERROR order.save user=ivanova order=SO-10482 request=8f3c1a duration=2407ms errno=28 msg=&quot;No space left on device&quot;</span>
-<span class="s2">2026-10-27T09:12:03.505+03:00 ERROR order.save user=ivanova order=SO-10482 request=91b7d2 duration=2210ms errno=28 msg=&quot;No space left on device&quot;</span>
-<span class="s2">2026-10-27T09:12:31.117+03:00 ERROR order.save user=petrov order=SO-10483 request=a04e11 duration=1980ms errno=28 msg=&quot;No space left on device&quot;</span>
-<span class="s2">2026-10-27T09:13:02.640+03:00 ERROR order.save user=sidorova order=SO-10484 request=b7710c duration=2611ms errno=28 msg=&quot;No space left on device&quot;</span>
-<span class="s2">2026-10-27T09:15:44.882+03:00 ERROR order.save user=ivanova order=SO-10485 request=c2d9f5 duration=2503ms errno=28 msg=&quot;No space left on device&quot;</span>
-<span class="s2">2026-10-27T09:22:10.093+03:00 ERROR order.save user=sidorova order=SO-10486 request=d18a3b duration=2344ms errno=28 msg=&quot;No space left on device&quot;</span>
-<span class="s2">2026-10-27T09:31:27.771+03:00 ERROR order.save user=petrov order=SO-10487 request=e5f0c8 duration=2190ms errno=28 msg=&quot;No space left on device&quot;</span>
-<span class="s2">2026-10-27T09:40:52.228+03:00 ERROR order.save user=ivanova order=SO-10482 request=f6b2a1 duration=2388ms errno=28 msg=&quot;No space left on device&quot;</span>
+<span class="s2">2026-10-27T09:11:58.409+03:00 ERROR order.save user=ivanova order=SO-10482 request=8f3c1a duration=2407ms errno=28 msg="No space left on device"</span>
+<span class="s2">2026-10-27T09:12:03.505+03:00 ERROR order.save user=ivanova order=SO-10482 request=91b7d2 duration=2210ms errno=28 msg="No space left on device"</span>
+<span class="s2">2026-10-27T09:12:31.117+03:00 ERROR order.save user=petrov order=SO-10483 request=a04e11 duration=1980ms errno=28 msg="No space left on device"</span>
+<span class="s2">2026-10-27T09:13:02.640+03:00 ERROR order.save user=sidorova order=SO-10484 request=b7710c duration=2611ms errno=28 msg="No space left on device"</span>
+<span class="s2">2026-10-27T09:15:44.882+03:00 ERROR order.save user=ivanova order=SO-10485 request=c2d9f5 duration=2503ms errno=28 msg="No space left on device"</span>
+<span class="s2">2026-10-27T09:22:10.093+03:00 ERROR order.save user=sidorova order=SO-10486 request=d18a3b duration=2344ms errno=28 msg="No space left on device"</span>
+<span class="s2">2026-10-27T09:31:27.771+03:00 ERROR order.save user=petrov order=SO-10487 request=e5f0c8 duration=2190ms errno=28 msg="No space left on device"</span>
+<span class="s2">2026-10-27T09:40:52.228+03:00 ERROR order.save user=ivanova order=SO-10482 request=f6b2a1 duration=2388ms errno=28 msg="No space left on device"</span>
 <span class="s2">2026-10-27T09:41:10.336+03:00 INFO order.save user=ivanova order=SO-10482 request=0a7c34 duration=402ms</span>
-<span class="s2">&quot;&quot;&quot;</span><span class="p">,</span>
-<span class="s2">&quot;mysql_error.log&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">"""</span><span class="p">,</span>
+<span class="s2">"mysql_error.log"</span><span class="p">:</span> <span class="s2">"""</span>
 <span class="s2">2026-10-27T09:11:57.884512+03:00 0 [ERROR] InnoDB: Operating system error number 28 in a file operation.</span>
-<span class="s2">2026-10-27T09:11:57.884590+03:00 0 [ERROR] InnoDB: Error number 28 means &#39;No space left on device&#39;.</span>
+<span class="s2">2026-10-27T09:11:57.884590+03:00 0 [ERROR] InnoDB: Error number 28 means 'No space left on device'.</span>
 <span class="s2">2026-10-27T09:11:57.884702+03:00 0 [ERROR] InnoDB: Some operating system error numbers are described at https://dev.mysql.com/doc/refman/8.0/en/operating-system-error-numbers.html</span>
-<span class="s2">2026-10-27T09:11:57.885011+03:00 8 [ERROR] InnoDB: Cannot write 16384 bytes to file &#39;./sklad/#sql_1a2_0&#39;, errno 28</span>
+<span class="s2">2026-10-27T09:11:57.885011+03:00 8 [ERROR] InnoDB: Cannot write 16384 bytes to file './sklad/#sql_1a2_0', errno 28</span>
 <span class="s2">2026-10-27T09:41:09.220114+03:00 0 [Note] InnoDB: Buffer pool(s) load completed at 261027 9:41:09</span>
-<span class="s2">&quot;&quot;&quot;</span><span class="p">,</span>
-<span class="s2">&quot;monitoring.txt&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">"""</span><span class="p">,</span>
+<span class="s2">"monitoring.txt"</span><span class="p">:</span> <span class="s2">"""</span>
 <span class="s2">27.10.2026 09:10:02 C: всего 60,00 ГБ, свободно 0,31 ГБ</span>
 <span class="s2">27.10.2026 09:11:57 C: всего 60,00 ГБ, свободно 0,02 ГБ</span>
 <span class="s2">27.10.2026 09:12:05 C: всего 60,00 ГБ, свободно 0,00 ГБ</span>
@@ -922,12 +946,12 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <span class="s2">error.log 6,80 ГБ</span>
 <span class="s2">sklad.log 1,20 ГБ</span>
 <span class="s2">mysql_error.log 0,90 ГБ</span>
-<span class="s2">&quot;&quot;&quot;</span><span class="p">,</span>
+<span class="s2">"""</span><span class="p">,</span>
 <span class="p">}</span>
 
 <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">text</span> <span class="ow">in</span> <span class="n">files</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-    <span class="p">(</span><span class="n">base</span> <span class="o">/</span> <span class="n">name</span><span class="p">)</span><span class="o">.</span><span class="n">write_text</span><span class="p">(</span><span class="n">text</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;создано файлов:&quot;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">files</span><span class="p">))</span>
+    <span class="p">(</span><span class="n">base</span> <span class="o">/</span> <span class="n">name</span><span class="p">)</span><span class="o">.</span><span class="n">write_text</span><span class="p">(</span><span class="n">text</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="o">+</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"создано файлов:"</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">files</span><span class="p">))</span>
 </code></pre></div>
 
 <p>Запустите скрипт и проверьте, что в папке пять файлов. Файлы небольшие, это выдержки из полного журнала. Полные размеры и свободное место приведены в <code>monitoring.txt</code> и считаются данными стенда.</p>
@@ -970,24 +994,24 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <p>Если бы MySQL писал время в UTC с буквой <code>Z</code>, запись <code>06:11:57Z</code> соответствовала бы <code>09:11:57</code> московского времени. Сравнивать такие строки как текст нельзя: причина оказалась бы на три часа раньше следствия.</p>
 <h3>Шаг 3. Найдите ответы 500 в журнале доступа</h3>
 <p>Отфильтруйте записи с кодом 500 и постройте счёт по минутам. Сначала посмотрите строки глазами.</p>
-<div class="codehilite" data-lang="powershell"><pre><span></span><code><span class="nb">Select-String</span> <span class="n">-Path</span> <span class="p">.../</span><span class="n">sklad</span><span class="p">/</span><span class="n">logs</span><span class="p">\</span><span class="n">access</span><span class="p">.</span><span class="n">log</span> <span class="n">-Pattern</span> <span class="s1">&#39; 500 &#39;</span>
+<div class="codehilite" data-lang="powershell"><pre><span></span><code><span class="nb">Select-String</span> <span class="n">-Path</span> <span class="p">.../</span><span class="n">sklad</span><span class="p">/</span><span class="n">logs</span><span class="p">\</span><span class="n">access</span><span class="p">.</span><span class="n">log</span> <span class="n">-Pattern</span> <span class="s1">' 500 '</span>
 </code></pre></div>
 
 <p>Команда ищет текст в файле и печатает имя файла, номер строки и саму строку. Вывод выглядит примерно так.</p>
-<div class="codehilite" data-lang="text"><pre><span></span><code>access.log:4:10.10.24.15 - ivanova [27/Oct/2026:09:11:58 +0300] &quot;POST /sklad/orders/save HTTP/1.1&quot; 500 0 req=8f3c1a
+<div class="codehilite" data-lang="text"><pre><span></span><code>access.log:4:10.10.24.15 - ivanova [27/Oct/2026:09:11:58 +0300] "POST /sklad/orders/save HTTP/1.1" 500 0 req=8f3c1a
 </code></pre></div>
 
 <p>Номер строки нужен, чтобы сослаться на запись в выписке. Пробелы в шаблоне <code>' 500 '</code> отсекают совпадения с числом 500 внутри размера ответа.</p>
 <p>Затем посчитайте коды и минуты скриптом.</p>
 <div class="codehilite" data-lang="python"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">re</span><span class="o">,</span><span class="w"> </span><span class="nn">collections</span>
 <span class="n">rows</span> <span class="o">=</span> <span class="p">[]</span>
-<span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="nb">open</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;.../sklad/logs\access.log&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">):</span>
-    <span class="n">m</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\[([^\]]+)\] </span><span class="se">\&quot;</span><span class="s2">(\S+) (\S+)[^</span><span class="se">\&quot;</span><span class="s2">]*</span><span class="se">\&quot;</span><span class="s2"> (\d</span><span class="si">{3}</span><span class="s2">)&quot;</span><span class="p">,</span> <span class="n">line</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="nb">open</span><span class="p">(</span><span class="sa">r</span><span class="s2">".../sklad/logs\access.log"</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">):</span>
+    <span class="n">m</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">"\[([^\]]+)\] </span><span class="se">\"</span><span class="s2">(\S+) (\S+)[^</span><span class="se">\"</span><span class="s2">]*</span><span class="se">\"</span><span class="s2"> (\d</span><span class="si">{3}</span><span class="s2">)"</span><span class="p">,</span> <span class="n">line</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">m</span><span class="p">:</span>
         <span class="n">rows</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">3</span><span class="p">),</span> <span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">4</span><span class="p">)))</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;всего запросов:&quot;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">rows</span><span class="p">))</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;коды:&quot;</span><span class="p">,</span> <span class="nb">dict</span><span class="p">(</span><span class="n">collections</span><span class="o">.</span><span class="n">Counter</span><span class="p">(</span><span class="n">r</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">rows</span><span class="p">)))</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;минуты с ошибкой:&quot;</span><span class="p">,</span> <span class="nb">dict</span><span class="p">(</span><span class="n">collections</span><span class="o">.</span><span class="n">Counter</span><span class="p">(</span><span class="n">r</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">12</span><span class="p">:</span><span class="mi">17</span><span class="p">]</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">rows</span> <span class="k">if</span> <span class="n">r</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;500&quot;</span><span class="p">)))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"всего запросов:"</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">rows</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"коды:"</span><span class="p">,</span> <span class="nb">dict</span><span class="p">(</span><span class="n">collections</span><span class="o">.</span><span class="n">Counter</span><span class="p">(</span><span class="n">r</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">rows</span><span class="p">)))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"минуты с ошибкой:"</span><span class="p">,</span> <span class="nb">dict</span><span class="p">(</span><span class="n">collections</span><span class="o">.</span><span class="n">Counter</span><span class="p">(</span><span class="n">r</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">12</span><span class="p">:</span><span class="mi">17</span><span class="p">]</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">rows</span> <span class="k">if</span> <span class="n">r</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"500"</span><span class="p">)))</span>
 </code></pre></div>
 
 <p>Заполните таблицу по результату.</p>
@@ -1073,7 +1097,7 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <p>В строке есть <code>SQLSTATE[HY000]</code> и <code>Errcode: 28</code>. Первое означает общую ошибку СУБД, второе указывает на нехватку места. Уже здесь появляется версия про диск, но подтверждать её нужно по журналу СУБД и мониторингу.</p>
 <h3>Шаг 5. Разберите журнал приложения</h3>
 <p>Журнал приложения связывает пользователя, заказ и запрос. Отфильтруйте записи уровня ERROR и посмотрите, сколько уникальных заказов пострадало.</p>
-<div class="codehilite" data-lang="powershell"><pre><span></span><code><span class="nb">Select-String</span> <span class="n">-Path</span> <span class="p">.../</span><span class="n">sklad</span><span class="p">/</span><span class="n">logs</span><span class="p">\</span><span class="n">sklad</span><span class="p">.</span><span class="n">log</span> <span class="n">-Pattern</span> <span class="s1">&#39;ERROR&#39;</span>
+<div class="codehilite" data-lang="powershell"><pre><span></span><code><span class="nb">Select-String</span> <span class="n">-Path</span> <span class="p">.../</span><span class="n">sklad</span><span class="p">/</span><span class="n">logs</span><span class="p">\</span><span class="n">sklad</span><span class="p">.</span><span class="n">log</span> <span class="n">-Pattern</span> <span class="s1">'ERROR'</span>
 </code></pre></div>
 
 <table>
@@ -1255,7 +1279,7 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <h3>Шаг 8. Подтвердите причину и оформите выписку</h3>
 <p>Посчитайте, сколько гигабайт занимали журналы и на сколько выросло свободное место после их перемещения. Запишите расчёт и объясните, что он доказывает.</p>
 <p>Проверьте настройку ротации в <code>httpd.conf</code>. Найдите строки <code>CustomLog</code> и <code>ErrorLog</code>.</p>
-<div class="codehilite" data-lang="powershell"><pre><span></span><code><span class="nb">Select-String</span> <span class="n">-Path</span> <span class="p">.../</span><span class="n">xampp</span><span class="p">/</span><span class="n">apache</span><span class="p">/</span><span class="n">conf</span><span class="p">\</span><span class="n">httpd</span><span class="p">.</span><span class="n">conf</span> <span class="n">-Pattern</span> <span class="s1">&#39;CustomLog|ErrorLog&#39;</span>
+<div class="codehilite" data-lang="powershell"><pre><span></span><code><span class="nb">Select-String</span> <span class="n">-Path</span> <span class="p">.../</span><span class="n">xampp</span><span class="p">/</span><span class="n">apache</span><span class="p">/</span><span class="n">conf</span><span class="p">\</span><span class="n">httpd</span><span class="p">.</span><span class="n">conf</span> <span class="n">-Pattern</span> <span class="s1">'CustomLog|ErrorLog'</span>
 </code></pre></div>
 
 <table>
@@ -1414,6 +1438,40 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
       var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
       window.scrollTo({top: 0, behavior: reduce ? 'auto' : 'smooth'});
     });
+  });
+})();
+
+(function(){
+  document.querySelectorAll('[data-slider]').forEach(function(slider){
+    var track = slider.querySelector('[data-slider-track]');
+    var slides = track ? Array.prototype.slice.call(track.children) : [];
+    var counter = slider.querySelector('[data-slider-counter]');
+    var prev = slider.querySelector('[data-slider-prev]');
+    var next = slider.querySelector('[data-slider-next]');
+    if(!track || slides.length < 2) return;
+    function current(){
+      var best = 0, dist = Infinity;
+      slides.forEach(function(slide, i){
+        var d = Math.abs(slide.offsetLeft - track.scrollLeft);
+        if(d < dist){ dist = d; best = i; }
+      });
+      return best;
+    }
+    function update(){
+      if(counter) counter.textContent = (current() + 1) + ' / ' + slides.length;
+    }
+    function go(delta){
+      var i = Math.max(0, Math.min(slides.length - 1, current() + delta));
+      var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      track.scrollTo({left: slides[i].offsetLeft, behavior: reduce ? 'auto' : 'smooth'});
+    }
+    if(prev) prev.addEventListener('click', function(){ go(-1); });
+    if(next) next.addEventListener('click', function(){ go(1); });
+    track.addEventListener('scroll', function(){
+      clearTimeout(track._sliderTimer);
+      track._sliderTimer = setTimeout(update, 80);
+    }, {passive: true});
+    update();
   });
 })();
 (function(){

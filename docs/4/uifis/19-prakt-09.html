@@ -527,6 +527,12 @@ html.modal-open { overflow: hidden; }
 :root[data-theme=dark] .quiz-actions button[data-answer]:hover, :root[data-theme=dark] .quiz-actions button.quiz-answer:hover { background: #262626; background-color: #262626; color: #fff; border-color: #262626; }
 :root[data-theme=dark] .gate-q { background: #1E1E1E; color: #FF6B00; }
 
+/* the whole-variant archive is the main action in a download block */
+.files a.zip { background: #121212; color: #fff; border-color: #121212; font-weight: 700; box-shadow: 4px 4px 0 rgba(0,0,0,.18); }
+.files a.zip::before { color: #fff; }
+.files a.zip:hover { background: #1D1D1D; color: #fff; border-color: #1D1D1D; box-shadow: 5px 5px 0 rgba(0,0,0,.22); }
+.files a.zip:active { transform: translate(2px,2px); box-shadow: 1px 1px 0 rgba(0,0,0,.12); }
+
 /* ---------- practical work checklist ---------- */
 .work-checklist { width: 100%; border-collapse: collapse; margin: 14px 0 4px; }
 .work-checklist th, .work-checklist td { border: 1px solid var(--rule); padding: 9px 10px; vertical-align: top; }
@@ -564,6 +570,24 @@ html.modal-open { overflow: hidden; }
 .variant-body .task-list { margin: 8px 0 0; padding-left: 20px; }
 .variant-body .task-list li { margin: 0 0 8px; }
 @media (max-width: 620px) { .variant-body { overflow-x: auto; } .variant-body table { min-width: 520px; } }
+
+/* ---------- schema slider: all CREATE TABLE examples ---------- */
+.schema-slider { margin: 18px 0 24px; border: 1px solid #d8d5cc; border-radius: 14px; background: #fff; color: #1a1916; overflow: hidden; }
+.schema-slider-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 14px; background: #f5f2ea; border-bottom: 1px solid #d8d5cc; }
+.schema-slider-bar strong { font: 700 14px/1.2 var(--font-display); color: #1a1916; }
+.schema-slider-actions { display: flex; align-items: center; gap: 8px; }
+.schema-slider-counter { min-width: 62px; text-align: center; font: 600 13px/1 var(--font-mono); color: #59544a; }
+.schema-btn { width: 34px; height: 34px; border: 1px solid #c9c4b8; border-radius: 8px; background: #fff; color: #1a1916; font: 700 18px/1 var(--font-mono); cursor: pointer; }
+.schema-btn:hover { background: #ece7dc; }
+.schema-track { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: thin; }
+.schema-slide { flex: 0 0 100%; min-width: 100%; box-sizing: border-box; padding: 16px 18px 18px; scroll-snap-align: start; }
+.schema-slide h4 { margin: 0 0 10px; font: 700 16px/1.3 var(--font-display); color: #1a1916; }
+.schema-slide h4 code, .schema-slide p code { color: #1a1916; background: #f1ede4; padding: 1px 4px; border-radius: 4px; }
+.schema-slide p { margin: 0 0 10px; font-size: 14px; line-height: 1.55; color: #3a372f; }
+.schema-slide pre { margin: 0; padding: 14px 16px; overflow-x: auto; border: 1px solid #ddd8cc; border-radius: 10px; background: #fbfaf6; color: #1a1916; font: 12.5px/1.5 var(--font-mono); }
+.schema-slide code { color: inherit; background: none; padding: 0; }
+.schema-slider:focus-within { outline: 2px solid #b9a97f; outline-offset: 2px; }
+@media (max-width: 620px) { .schema-slide { padding: 12px; } .schema-slider-bar { padding: 8px 10px; } }
 
 /* ---------- print / PDF export ---------- */
 @page { margin: 16mm; }
@@ -947,9 +971,9 @@ ls<span class="w"> </span>-ld<span class="w"> </span>/srv/uifis-web
 <p>JSON здоровья должен содержать поля <code>service</code>, <code>status</code>, <code>host</code>, <code>uptime_s</code> и <code>time_utc</code>. JSON каталога должен содержать <code>service</code>, <code>count</code> и <code>items</code>. Эти поля нужны, чтобы проверка была однозначной: глазом видно, что служба не просто вернула пустую страницу.</p>
 <h3>Шаг 3. Напишите код службы</h3>
 <p>Создайте файл <code>/srv/uifis-web/app.py</code>:</p>
-<div class="codehilite" data-lang="bash"><pre><span></span><code>sudo<span class="w"> </span>tee<span class="w"> </span>/srv/uifis-web/app.py<span class="w"> </span>&gt;/dev/null<span class="w"> </span><span class="s">&lt;&lt;&#39;PY&#39;</span>
+<div class="codehilite" data-lang="bash"><pre><span></span><code>sudo<span class="w"> </span>tee<span class="w"> </span>/srv/uifis-web/app.py<span class="w"> </span>&gt;/dev/null<span class="w"> </span><span class="s">&lt;&lt;'PY'</span>
 <span class="s">#!/usr/bin/env python3</span>
-<span class="s">&quot;&quot;&quot;UIFIS training service catalog.&quot;&quot;&quot;</span>
+<span class="s">"""UIFIS training service catalog."""</span>
 
 <span class="s">import html</span>
 <span class="s">import json</span>
@@ -960,116 +984,116 @@ ls<span class="w"> </span>-ld<span class="w"> </span>/srv/uifis-web
 <span class="s">from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer</span>
 <span class="s">from urllib.parse import urlparse</span>
 
-<span class="s">SERVICE = &quot;uifis-web&quot;</span>
-<span class="s">HOST = os.environ.get(&quot;UIFIS_HOST&quot;, &quot;0.0.0.0&quot;)</span>
-<span class="s">PORT = int(os.environ.get(&quot;UIFIS_PORT&quot;, &quot;8080&quot;))</span>
+<span class="s">SERVICE = "uifis-web"</span>
+<span class="s">HOST = os.environ.get("UIFIS_HOST", "0.0.0.0")</span>
+<span class="s">PORT = int(os.environ.get("UIFIS_PORT", "8080"))</span>
 <span class="s">STARTED = time.monotonic()</span>
 
 <span class="s">SERVICES = [</span>
 <span class="s">    {</span>
-<span class="s">        &quot;name&quot;: &quot;dns&quot;,</span>
-<span class="s">        &quot;port&quot;: 53,</span>
-<span class="s">        &quot;protocol&quot;: &quot;udp/tcp&quot;,</span>
-<span class="s">        &quot;state&quot;: &quot;ok&quot;,</span>
-<span class="s">        &quot;detail&quot;: &quot;portal.uifis.test -&gt; 10.0.0.15&quot;,</span>
+<span class="s">        "name": "dns",</span>
+<span class="s">        "port": 53,</span>
+<span class="s">        "protocol": "udp/tcp",</span>
+<span class="s">        "state": "ok",</span>
+<span class="s">        "detail": "portal.uifis.test -&gt; 10.0.0.15",</span>
 <span class="s">    },</span>
 <span class="s">    {</span>
-<span class="s">        &quot;name&quot;: &quot;dhcp&quot;,</span>
-<span class="s">        &quot;port&quot;: &quot;67/68&quot;,</span>
-<span class="s">        &quot;protocol&quot;: &quot;udp&quot;,</span>
-<span class="s">        &quot;state&quot;: &quot;ok&quot;,</span>
-<span class="s">        &quot;detail&quot;: &quot;10.0.0.104 / 24 h&quot;,</span>
+<span class="s">        "name": "dhcp",</span>
+<span class="s">        "port": "67/68",</span>
+<span class="s">        "protocol": "udp",</span>
+<span class="s">        "state": "ok",</span>
+<span class="s">        "detail": "10.0.0.104 / 24 h",</span>
 <span class="s">    },</span>
 <span class="s">    {</span>
-<span class="s">        &quot;name&quot;: &quot;http&quot;,</span>
-<span class="s">        &quot;port&quot;: &quot;80/443&quot;,</span>
-<span class="s">        &quot;protocol&quot;: &quot;tcp&quot;,</span>
-<span class="s">        &quot;state&quot;: &quot;ok&quot;,</span>
-<span class="s">        &quot;detail&quot;: &quot;GET /health.json -&gt; 200&quot;,</span>
+<span class="s">        "name": "http",</span>
+<span class="s">        "port": "80/443",</span>
+<span class="s">        "protocol": "tcp",</span>
+<span class="s">        "state": "ok",</span>
+<span class="s">        "detail": "GET /health.json -&gt; 200",</span>
 <span class="s">    },</span>
 <span class="s">    {</span>
-<span class="s">        &quot;name&quot;: &quot;ntp&quot;,</span>
-<span class="s">        &quot;port&quot;: 123,</span>
-<span class="s">        &quot;protocol&quot;: &quot;udp&quot;,</span>
-<span class="s">        &quot;state&quot;: &quot;ok&quot;,</span>
-<span class="s">        &quot;detail&quot;: &quot;+0.004 s&quot;,</span>
+<span class="s">        "name": "ntp",</span>
+<span class="s">        "port": 123,</span>
+<span class="s">        "protocol": "udp",</span>
+<span class="s">        "state": "ok",</span>
+<span class="s">        "detail": "+0.004 s",</span>
 <span class="s">    },</span>
 <span class="s">]</span>
 
 
 <span class="s">class Handler(BaseHTTPRequestHandler):</span>
-<span class="s">    server_version = &quot;UIFIS/1.0&quot;</span>
+<span class="s">    server_version = "UIFIS/1.0"</span>
 
-<span class="s">    def _send(self, status, body, content_type=&quot;application/json; charset=utf-8&quot;, head_only=False):</span>
-<span class="s">        data = body if isinstance(body, bytes) else body.encode(&quot;utf-8&quot;)</span>
+<span class="s">    def _send(self, status, body, content_type="application/json; charset=utf-8", head_only=False):</span>
+<span class="s">        data = body if isinstance(body, bytes) else body.encode("utf-8")</span>
 <span class="s">        self.send_response(status)</span>
-<span class="s">        self.send_header(&quot;Content-Type&quot;, content_type)</span>
-<span class="s">        self.send_header(&quot;Content-Length&quot;, str(len(data)))</span>
-<span class="s">        self.send_header(&quot;Cache-Control&quot;, &quot;no-store&quot;)</span>
-<span class="s">        self.send_header(&quot;X-Content-Type-Options&quot;, &quot;nosniff&quot;)</span>
+<span class="s">        self.send_header("Content-Type", content_type)</span>
+<span class="s">        self.send_header("Content-Length", str(len(data)))</span>
+<span class="s">        self.send_header("Cache-Control", "no-store")</span>
+<span class="s">        self.send_header("X-Content-Type-Options", "nosniff")</span>
 <span class="s">        self.end_headers()</span>
 <span class="s">        if not head_only:</span>
 <span class="s">            self.wfile.write(data)</span>
 
 <span class="s">    def _health(self):</span>
 <span class="s">        return {</span>
-<span class="s">            &quot;service&quot;: SERVICE,</span>
-<span class="s">            &quot;status&quot;: &quot;ok&quot;,</span>
-<span class="s">            &quot;host&quot;: socket.gethostname(),</span>
-<span class="s">            &quot;uptime_s&quot;: round(time.monotonic() - STARTED, 1),</span>
-<span class="s">            &quot;time_utc&quot;: datetime.now(timezone.utc).isoformat(timespec=&quot;seconds&quot;),</span>
+<span class="s">            "service": SERVICE,</span>
+<span class="s">            "status": "ok",</span>
+<span class="s">            "host": socket.gethostname(),</span>
+<span class="s">            "uptime_s": round(time.monotonic() - STARTED, 1),</span>
+<span class="s">            "time_utc": datetime.now(timezone.utc).isoformat(timespec="seconds"),</span>
 <span class="s">        }</span>
 
 <span class="s">    def _index(self):</span>
-<span class="s">        rows = &quot;&quot;.join(</span>
-<span class="s">            f&quot;&lt;tr&gt;&lt;td&gt;{html.escape(str(item[&#39;name&#39;]))}&lt;/td&gt;&quot;</span>
-<span class="s">            f&quot;&lt;td&gt;{html.escape(str(item[&#39;port&#39;]))}&lt;/td&gt;&quot;</span>
-<span class="s">            f&quot;&lt;td&gt;{html.escape(str(item[&#39;detail&#39;]))}&lt;/td&gt;&lt;/tr&gt;&quot;</span>
+<span class="s">        rows = "".join(</span>
+<span class="s">            f"&lt;tr&gt;&lt;td&gt;{html.escape(str(item['name']))}&lt;/td&gt;"</span>
+<span class="s">            f"&lt;td&gt;{html.escape(str(item['port']))}&lt;/td&gt;"</span>
+<span class="s">            f"&lt;td&gt;{html.escape(str(item['detail']))}&lt;/td&gt;&lt;/tr&gt;"</span>
 <span class="s">            for item in SERVICES</span>
 <span class="s">        )</span>
-<span class="s">        return f&quot;&quot;&quot;&lt;!doctype html&gt;</span>
-<span class="s">&lt;html lang=&quot;ru&quot;&gt;</span>
-<span class="s">&lt;head&gt;&lt;meta charset=&quot;utf-8&quot;&gt;&lt;title&gt;UIFIS service catalog&lt;/title&gt;&lt;/head&gt;</span>
+<span class="s">        return f"""&lt;!doctype html&gt;</span>
+<span class="s">&lt;html lang="ru"&gt;</span>
+<span class="s">&lt;head&gt;&lt;meta charset="utf-8"&gt;&lt;title&gt;UIFIS service catalog&lt;/title&gt;&lt;/head&gt;</span>
 <span class="s">&lt;body&gt;</span>
 <span class="s">  &lt;h1&gt;Учебный каталог сетевых служб&lt;/h1&gt;</span>
 <span class="s">  &lt;p&gt;Служба {html.escape(SERVICE)} на узле {html.escape(socket.gethostname())}.&lt;/p&gt;</span>
-<span class="s">  &lt;table border=&quot;1&quot; cellpadding=&quot;6&quot;&gt;</span>
+<span class="s">  &lt;table border="1" cellpadding="6"&gt;</span>
 <span class="s">    &lt;tr&gt;&lt;th&gt;Служба&lt;/th&gt;&lt;th&gt;Порт&lt;/th&gt;&lt;th&gt;Ответ&lt;/th&gt;&lt;/tr&gt;</span>
 <span class="s">    {rows}</span>
 <span class="s">  &lt;/table&gt;</span>
-<span class="s">  &lt;p&gt;Проверка: &lt;a href=&quot;/health.json&quot;&gt;/health.json&lt;/a&gt; и</span>
-<span class="s">     &lt;a href=&quot;/api/services&quot;&gt;/api/services&lt;/a&gt;.&lt;/p&gt;</span>
+<span class="s">  &lt;p&gt;Проверка: &lt;a href="/health.json"&gt;/health.json&lt;/a&gt; и</span>
+<span class="s">     &lt;a href="/api/services"&gt;/api/services&lt;/a&gt;.&lt;/p&gt;</span>
 <span class="s">&lt;/body&gt;</span>
-<span class="s">&lt;/html&gt;&quot;&quot;&quot;</span>
+<span class="s">&lt;/html&gt;"""</span>
 
 <span class="s">    def do_GET(self):</span>
 <span class="s">        path = urlparse(self.path).path</span>
-<span class="s">        if path == &quot;/&quot;:</span>
-<span class="s">            self._send(200, self._index(), &quot;text/html; charset=utf-8&quot;)</span>
-<span class="s">        elif path == &quot;/health.json&quot;:</span>
+<span class="s">        if path == "/":</span>
+<span class="s">            self._send(200, self._index(), "text/html; charset=utf-8")</span>
+<span class="s">        elif path == "/health.json":</span>
 <span class="s">            self._send(200, json.dumps(self._health(), ensure_ascii=False))</span>
-<span class="s">        elif path == &quot;/api/services&quot;:</span>
-<span class="s">            payload = {&quot;service&quot;: SERVICE, &quot;count&quot;: len(SERVICES), &quot;items&quot;: SERVICES}</span>
+<span class="s">        elif path == "/api/services":</span>
+<span class="s">            payload = {"service": SERVICE, "count": len(SERVICES), "items": SERVICES}</span>
 <span class="s">            self._send(200, json.dumps(payload, ensure_ascii=False))</span>
 <span class="s">        else:</span>
-<span class="s">            payload = {&quot;error&quot;: &quot;not_found&quot;, &quot;path&quot;: path}</span>
+<span class="s">            payload = {"error": "not_found", "path": path}</span>
 <span class="s">            self._send(404, json.dumps(payload, ensure_ascii=False))</span>
 
 <span class="s">    def do_HEAD(self):</span>
 <span class="s">        path = urlparse(self.path).path</span>
-<span class="s">        if path in (&quot;/&quot;, &quot;/health.json&quot;, &quot;/api/services&quot;):</span>
-<span class="s">            self._send(200, b&quot;&quot;, &quot;text/plain; charset=utf-8&quot;, head_only=True)</span>
+<span class="s">        if path in ("/", "/health.json", "/api/services"):</span>
+<span class="s">            self._send(200, b"", "text/plain; charset=utf-8", head_only=True)</span>
 <span class="s">        else:</span>
-<span class="s">            self._send(404, b&quot;&quot;, &quot;text/plain; charset=utf-8&quot;, head_only=True)</span>
+<span class="s">            self._send(404, b"", "text/plain; charset=utf-8", head_only=True)</span>
 
 <span class="s">    def log_message(self, fmt, *args):</span>
-<span class="s">        print(f&quot;{self.address_string()} {fmt % args}&quot;, flush=True)</span>
+<span class="s">        print(f"{self.address_string()} {fmt % args}", flush=True)</span>
 
 
 <span class="s">def main():</span>
 <span class="s">    server = ThreadingHTTPServer((HOST, PORT), Handler)</span>
 <span class="s">    server.daemon_threads = True</span>
-<span class="s">    print(f&quot;{SERVICE} listening on {HOST}:{PORT}&quot;, flush=True)</span>
+<span class="s">    print(f"{SERVICE} listening on {HOST}:{PORT}", flush=True)</span>
 <span class="s">    try:</span>
 <span class="s">        server.serve_forever()</span>
 <span class="s">    except KeyboardInterrupt:</span>
@@ -1078,7 +1102,7 @@ ls<span class="w"> </span>-ld<span class="w"> </span>/srv/uifis-web
 <span class="s">        server.server_close()</span>
 
 
-<span class="s">if __name__ == &quot;__main__&quot;:</span>
+<span class="s">if __name__ == "__main__":</span>
 <span class="s">    main()</span>
 <span class="s">PY</span>
 </code></pre></div>
@@ -1439,7 +1463,7 @@ sudo<span class="w"> </span>systemctl<span class="w"> </span>restart<span class=
 <li>Чем <code>0.0.0.0:8080</code> отличается от <code>127.0.0.1:8080</code>?</li>
 <li>Почему <code>systemctl status</code> не заменяет проверку <code>/health.json</code>?</li>
 </ol>
-</div></article><nav class="pager"><a class="" href="18-lek-10.html"><span>← Предыдущее занятие</span>Лекция 10. Сетевые службы информационной системы</a><span class="pager-off next" aria-disabled="true"><span>Следующее занятие →</span>Пока недоступно</span></nav></main>
+</div></article><nav class="pager"><a class="" href="18-lek-10.html"><span>← Предыдущее занятие</span>Лекция 10. Сетевые службы информационной системы</a><a class="next" style="text-align:right;margin-left:auto" href="20-lek-11.html"><span>Следующее занятие →</span>Лекция 11. Клиент-серверное взаимодействие и веб-архитектура</a></nav></main>
 <script>
 (function(){
   var root = document.documentElement;
@@ -1496,6 +1520,40 @@ sudo<span class="w"> </span>systemctl<span class="w"> </span>restart<span class=
       var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
       window.scrollTo({top: 0, behavior: reduce ? 'auto' : 'smooth'});
     });
+  });
+})();
+
+(function(){
+  document.querySelectorAll('[data-slider]').forEach(function(slider){
+    var track = slider.querySelector('[data-slider-track]');
+    var slides = track ? Array.prototype.slice.call(track.children) : [];
+    var counter = slider.querySelector('[data-slider-counter]');
+    var prev = slider.querySelector('[data-slider-prev]');
+    var next = slider.querySelector('[data-slider-next]');
+    if(!track || slides.length < 2) return;
+    function current(){
+      var best = 0, dist = Infinity;
+      slides.forEach(function(slide, i){
+        var d = Math.abs(slide.offsetLeft - track.scrollLeft);
+        if(d < dist){ dist = d; best = i; }
+      });
+      return best;
+    }
+    function update(){
+      if(counter) counter.textContent = (current() + 1) + ' / ' + slides.length;
+    }
+    function go(delta){
+      var i = Math.max(0, Math.min(slides.length - 1, current() + delta));
+      var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      track.scrollTo({left: slides[i].offsetLeft, behavior: reduce ? 'auto' : 'smooth'});
+    }
+    if(prev) prev.addEventListener('click', function(){ go(-1); });
+    if(next) next.addEventListener('click', function(){ go(1); });
+    track.addEventListener('scroll', function(){
+      clearTimeout(track._sliderTimer);
+      track._sliderTimer = setTimeout(update, 80);
+    }, {passive: true});
+    update();
   });
 })();
 (function(){

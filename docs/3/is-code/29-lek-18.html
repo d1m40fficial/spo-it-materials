@@ -527,6 +527,12 @@ html.modal-open { overflow: hidden; }
 :root[data-theme=dark] .quiz-actions button[data-answer]:hover, :root[data-theme=dark] .quiz-actions button.quiz-answer:hover { background: #262626; background-color: #262626; color: #fff; border-color: #262626; }
 :root[data-theme=dark] .gate-q { background: #1E1E1E; color: #FF6B00; }
 
+/* the whole-variant archive is the main action in a download block */
+.files a.zip { background: #121212; color: #fff; border-color: #121212; font-weight: 700; box-shadow: 4px 4px 0 rgba(0,0,0,.18); }
+.files a.zip::before { color: #fff; }
+.files a.zip:hover { background: #1D1D1D; color: #fff; border-color: #1D1D1D; box-shadow: 5px 5px 0 rgba(0,0,0,.22); }
+.files a.zip:active { transform: translate(2px,2px); box-shadow: 1px 1px 0 rgba(0,0,0,.12); }
+
 /* ---------- practical work checklist ---------- */
 .work-checklist { width: 100%; border-collapse: collapse; margin: 14px 0 4px; }
 .work-checklist th, .work-checklist td { border: 1px solid var(--rule); padding: 9px 10px; vertical-align: top; }
@@ -564,6 +570,24 @@ html.modal-open { overflow: hidden; }
 .variant-body .task-list { margin: 8px 0 0; padding-left: 20px; }
 .variant-body .task-list li { margin: 0 0 8px; }
 @media (max-width: 620px) { .variant-body { overflow-x: auto; } .variant-body table { min-width: 520px; } }
+
+/* ---------- schema slider: all CREATE TABLE examples ---------- */
+.schema-slider { margin: 18px 0 24px; border: 1px solid #d8d5cc; border-radius: 14px; background: #fff; color: #1a1916; overflow: hidden; }
+.schema-slider-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 14px; background: #f5f2ea; border-bottom: 1px solid #d8d5cc; }
+.schema-slider-bar strong { font: 700 14px/1.2 var(--font-display); color: #1a1916; }
+.schema-slider-actions { display: flex; align-items: center; gap: 8px; }
+.schema-slider-counter { min-width: 62px; text-align: center; font: 600 13px/1 var(--font-mono); color: #59544a; }
+.schema-btn { width: 34px; height: 34px; border: 1px solid #c9c4b8; border-radius: 8px; background: #fff; color: #1a1916; font: 700 18px/1 var(--font-mono); cursor: pointer; }
+.schema-btn:hover { background: #ece7dc; }
+.schema-track { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: thin; }
+.schema-slide { flex: 0 0 100%; min-width: 100%; box-sizing: border-box; padding: 16px 18px 18px; scroll-snap-align: start; }
+.schema-slide h4 { margin: 0 0 10px; font: 700 16px/1.3 var(--font-display); color: #1a1916; }
+.schema-slide h4 code, .schema-slide p code { color: #1a1916; background: #f1ede4; padding: 1px 4px; border-radius: 4px; }
+.schema-slide p { margin: 0 0 10px; font-size: 14px; line-height: 1.55; color: #3a372f; }
+.schema-slide pre { margin: 0; padding: 14px 16px; overflow-x: auto; border: 1px solid #ddd8cc; border-radius: 10px; background: #fbfaf6; color: #1a1916; font: 12.5px/1.5 var(--font-mono); }
+.schema-slide code { color: inherit; background: none; padding: 0; }
+.schema-slider:focus-within { outline: 2px solid #b9a97f; outline-offset: 2px; }
+@media (max-width: 620px) { .schema-slide { padding: 12px; } .schema-slider-bar { padding: 8px 10px; } }
 
 /* ---------- print / PDF export ---------- */
 @page { margin: 16mm; }
@@ -855,7 +879,7 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 HTTP/1.1 200 OK
 Content-Type: application/json; charset=utf-8
 
-{&quot;id&quot;:3,&quot;item&quot;:&quot;Стрейч-плёнка 500 мм&quot;,&quot;category&quot;:&quot;Упаковка&quot;,&quot;site&quot;:&quot;Тула&quot;,&quot;cell&quot;:&quot;C-01-07&quot;,&quot;quantity&quot;:240}
+{"id":3,"item":"Стрейч-плёнка 500 мм","category":"Упаковка","site":"Тула","cell":"C-01-07","quantity":240}
 </code></pre></div>
 
 <p><strong>Приложение ASP.NET Core это конвейер, собранный при старте: каждый запрос проходит одни и те же ступени в одном и том же порядке.</strong> Код контроллера выполняется в середине этой цепочки. Всё, что стоит до него, готовит сведения о запросе и пользователе. Всё, что стоит после, превращает возвращённое значение в HTTP-ответ.</p>
@@ -874,7 +898,7 @@ Content-Type: application/json; charset=utf-8
 
 <span class="kt">var</span><span class="w"> </span><span class="n">app</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">builder</span><span class="p">.</span><span class="n">Build</span><span class="p">();</span>
 
-<span class="n">app</span><span class="p">.</span><span class="n">UseExceptionHandler</span><span class="p">(</span><span class="s">&quot;/error&quot;</span><span class="p">);</span>
+<span class="n">app</span><span class="p">.</span><span class="n">UseExceptionHandler</span><span class="p">(</span><span class="s">"/error"</span><span class="p">);</span>
 <span class="n">app</span><span class="p">.</span><span class="n">UseHttpsRedirection</span><span class="p">();</span>
 <span class="n">app</span><span class="p">.</span><span class="n">UseRouting</span><span class="p">();</span>
 <span class="n">app</span><span class="p">.</span><span class="n">UseAuthentication</span><span class="p">();</span>
@@ -949,12 +973,12 @@ Content-Type: application/json; charset=utf-8
 <div class="codehilite" data-lang="text"><pre><span></span><code><span class="n">app</span><span class="p">.</span><span class="n">Use</span><span class="p">(</span><span class="k">async</span><span class="w"> </span><span class="p">(</span><span class="n">context</span><span class="p">,</span><span class="w"> </span><span class="n">next</span><span class="p">)</span><span class="w"> </span><span class="o">=&gt;</span>
 <span class="p">{</span>
 <span class="w">    </span><span class="kt">var</span><span class="w"> </span><span class="n">started</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">DateTime</span><span class="p">.</span><span class="n">UtcNow</span><span class="p">;</span>
-<span class="w">    </span><span class="n">context</span><span class="p">.</span><span class="n">Response</span><span class="p">.</span><span class="n">Headers</span><span class="p">[</span><span class="s">&quot;X-Request-Id&quot;</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Guid</span><span class="p">.</span><span class="n">NewGuid</span><span class="p">().</span><span class="n">ToString</span><span class="p">(</span><span class="s">&quot;N&quot;</span><span class="p">)[.</span><span class="mf">.8</span><span class="p">];</span>
+<span class="w">    </span><span class="n">context</span><span class="p">.</span><span class="n">Response</span><span class="p">.</span><span class="n">Headers</span><span class="p">[</span><span class="s">"X-Request-Id"</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Guid</span><span class="p">.</span><span class="n">NewGuid</span><span class="p">().</span><span class="n">ToString</span><span class="p">(</span><span class="s">"N"</span><span class="p">)[.</span><span class="mf">.8</span><span class="p">];</span>
 
 <span class="w">    </span><span class="k">await</span><span class="w"> </span><span class="nf">next</span><span class="p">();</span>
 
 <span class="w">    </span><span class="kt">var</span><span class="w"> </span><span class="n">elapsed</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">DateTime</span><span class="p">.</span><span class="n">UtcNow</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">started</span><span class="p">;</span>
-<span class="w">    </span><span class="n">app</span><span class="p">.</span><span class="n">Logger</span><span class="p">.</span><span class="n">LogInformation</span><span class="p">(</span><span class="s">&quot;{Path} {Status} {Elapsed} ms&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="n">app</span><span class="p">.</span><span class="n">Logger</span><span class="p">.</span><span class="n">LogInformation</span><span class="p">(</span><span class="s">"{Path} {Status} {Elapsed} ms"</span><span class="p">,</span>
 <span class="w">        </span><span class="n">context</span><span class="p">.</span><span class="n">Request</span><span class="p">.</span><span class="n">Path</span><span class="p">,</span><span class="w"> </span><span class="n">context</span><span class="p">.</span><span class="n">Response</span><span class="p">.</span><span class="n">StatusCode</span><span class="p">,</span><span class="w"> </span><span class="n">elapsed</span><span class="p">.</span><span class="n">TotalMilliseconds</span><span class="p">);</span>
 <span class="p">});</span>
 </code></pre></div>
@@ -970,7 +994,7 @@ Content-Type: application/json; charset=utf-8
 <span class="k">namespace</span><span class="w"> </span><span class="nn">SkladPlus.Api.Controllers</span><span class="p">;</span>
 
 <span class="na">[ApiController]</span>
-<span class="na">[Route(&quot;api/stock&quot;)]</span>
+<span class="na">[Route("api/stock")]</span>
 <span class="k">public</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">StockController</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">ControllerBase</span>
 <span class="p">{</span>
 <span class="w">    </span><span class="k">private</span><span class="w"> </span><span class="k">readonly</span><span class="w"> </span><span class="n">IStockRepository</span><span class="w"> </span><span class="n">_repository</span><span class="p">;</span>
@@ -980,7 +1004,7 @@ Content-Type: application/json; charset=utf-8
 <span class="w">        </span><span class="n">_repository</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">repository</span><span class="p">;</span>
 <span class="w">    </span><span class="p">}</span>
 
-<span class="w">    </span><span class="na">[HttpGet(&quot;{id:int}&quot;)]</span>
+<span class="w">    </span><span class="na">[HttpGet("{id:int}")]</span>
 <span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="n">ActionResult</span><span class="o">&lt;</span><span class="n">StockItem</span><span class="o">&gt;</span><span class="w"> </span><span class="n">GetById</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">id</span><span class="p">)</span>
 <span class="w">    </span><span class="p">{</span>
 <span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">item</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">_repository</span><span class="p">.</span><span class="n">Find</span><span class="p">(</span><span class="n">id</span><span class="p">);</span>
@@ -1032,7 +1056,7 @@ Content-Type: application/json; charset=utf-8
 <p>В учебном сервисе репозиторий зарегистрирован как scoped. На каждый запрос контейнер создаёт свой экземпляр, передаёт его контроллеру и освобождает после ответа. Если тот же репозиторий открывает соединение с базой, соединение закрывается вместе с областью запроса.</p>
 <p>Опасная комбинация называется захватом зависимости. Singleton создаётся один раз и живёт всё время работы приложения. Если ему нужен scoped сервис, контейнер вынужден создать этот сервис в корневой области и держать его до остановки. В режиме разработки проверка областей включена, и приложение сообщает об ошибке:</p>
 <div class="codehilite" data-lang="text"><pre><span></span><code>InvalidOperationException
-Cannot consume scoped service &#39;IStockRepository&#39; from singleton &#39;StockCache&#39;.
+Cannot consume scoped service 'IStockRepository' from singleton 'StockCache'.
 </code></pre></div>
 
 <p>Сообщение говорит буквально: singleton <code>StockCache</code> пытается использовать scoped <code>IStockRepository</code>. Если такую проверку отключить, ошибка не исчезнет, а спрячется. Контекст базы, созданный один раз, начнёт обслуживать параллельные запросы, и появится другая ошибка: <code>A second operation was started on this context instance before a previous operation completed</code>.</p>
@@ -1047,7 +1071,7 @@ Cannot consume scoped service &#39;IStockRepository&#39; from singleton &#39;Sto
 
 
 <span class="k">class</span><span class="w"> </span><span class="nc">Singleton</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Один экземпляр на всё время работы приложения.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Один экземпляр на всё время работы приложения."""</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">factory</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_factory</span> <span class="o">=</span> <span class="n">factory</span>
@@ -1060,7 +1084,7 @@ Cannot consume scoped service &#39;IStockRepository&#39; from singleton &#39;Sto
 
 
 <span class="k">class</span><span class="w"> </span><span class="nc">Scoped</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Новый экземпляр на каждый запрос.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Новый экземпляр на каждый запрос."""</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">factory</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_factory</span> <span class="o">=</span> <span class="n">factory</span>
@@ -1070,10 +1094,10 @@ Cannot consume scoped service &#39;IStockRepository&#39; from singleton &#39;Sto
 
 
 <span class="n">single</span> <span class="o">=</span> <span class="n">Singleton</span><span class="p">(</span><span class="n">StockRepository</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;singleton:&quot;</span><span class="p">,</span> <span class="p">[</span><span class="n">single</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span><span class="o">.</span><span class="n">next_call</span><span class="p">()</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">)])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"singleton:"</span><span class="p">,</span> <span class="p">[</span><span class="n">single</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span><span class="o">.</span><span class="n">next_call</span><span class="p">()</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">)])</span>
 
 <span class="n">scoped</span> <span class="o">=</span> <span class="n">Scoped</span><span class="p">(</span><span class="n">StockRepository</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;scoped:&quot;</span><span class="p">,</span> <span class="p">[</span><span class="n">scoped</span><span class="o">.</span><span class="n">begin_request</span><span class="p">()</span><span class="o">.</span><span class="n">next_call</span><span class="p">()</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">)])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"scoped:"</span><span class="p">,</span> <span class="p">[</span><span class="n">scoped</span><span class="o">.</span><span class="n">begin_request</span><span class="p">()</span><span class="o">.</span><span class="n">next_call</span><span class="p">()</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">)])</span>
 </code></pre></div>
 
 <p>Вывод:</p>
@@ -1090,31 +1114,31 @@ scoped: [1, 1, 1]
 <p>Параметры приложения не должны быть зашиты в код. Адрес базы, размер страницы, площадка по умолчанию и ключи меняются от стенда к стенду, а код остаётся одним и тем же. В ASP.NET Core настройки собираются из нескольких источников и накладываются друг на друга.</p>
 <p>Базовый файл <code>appsettings.json</code> лежит рядом с проектом:</p>
 <div class="codehilite" data-lang="text"><pre><span></span><code><span class="p">{</span>
-<span class="w">  </span><span class="nt">&quot;ConnectionStrings&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="nt">&quot;Sklad&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Data Source=sklad.db&quot;</span>
+<span class="w">  </span><span class="nt">"ConnectionStrings"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">"Sklad"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Data Source=sklad.db"</span>
 <span class="w">  </span><span class="p">},</span>
-<span class="w">  </span><span class="nt">&quot;Stock&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="nt">&quot;PageSize&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">50</span><span class="p">,</span>
-<span class="w">    </span><span class="nt">&quot;DefaultSite&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Москва&quot;</span>
+<span class="w">  </span><span class="nt">"Stock"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">"PageSize"</span><span class="p">:</span><span class="w"> </span><span class="mi">50</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"DefaultSite"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Москва"</span>
 <span class="w">  </span><span class="p">}</span>
 <span class="p">}</span>
 </code></pre></div>
 
 <p>Источники применяются в порядке от общего к частному: сначала <code>appsettings.json</code>, затем <code>appsettings.{Среда}.json</code>, затем секреты разработчика, затем переменные окружения, затем аргументы командной строки. Каждый следующий источник перекрывает предыдущий. Поэтому один и тот же код на учебной машине читает локальный файл, а на сервере берёт адрес из переменной окружения.</p>
 <p>Строку подключения читают отдельным методом:</p>
-<div class="codehilite" data-lang="text"><pre><span></span><code><span class="kt">var</span><span class="w"> </span><span class="n">connectionString</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">builder</span><span class="p">.</span><span class="n">Configuration</span><span class="p">.</span><span class="n">GetConnectionString</span><span class="p">(</span><span class="s">&quot;Sklad&quot;</span><span class="p">);</span>
-<span class="kt">var</span><span class="w"> </span><span class="n">pageSize</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">builder</span><span class="p">.</span><span class="n">Configuration</span><span class="p">.</span><span class="n">GetValue</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">(</span><span class="s">&quot;Stock:PageSize&quot;</span><span class="p">);</span>
+<div class="codehilite" data-lang="text"><pre><span></span><code><span class="kt">var</span><span class="w"> </span><span class="n">connectionString</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">builder</span><span class="p">.</span><span class="n">Configuration</span><span class="p">.</span><span class="n">GetConnectionString</span><span class="p">(</span><span class="s">"Sklad"</span><span class="p">);</span>
+<span class="kt">var</span><span class="w"> </span><span class="n">pageSize</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">builder</span><span class="p">.</span><span class="n">Configuration</span><span class="p">.</span><span class="n">GetValue</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">(</span><span class="s">"Stock:PageSize"</span><span class="p">);</span>
 </code></pre></div>
 
 <p>Двоеточие в ключе означает вложенность: <code>Stock:PageSize</code> это поле <code>PageSize</code> внутри раздела <code>Stock</code>. Для группы настроек удобнее отдельный класс и шаблон параметров:</p>
 <div class="codehilite" data-lang="text"><pre><span></span><code><span class="k">public</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">StockOptions</span>
 <span class="p">{</span>
 <span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">PageSize</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">20</span><span class="p">;</span>
-<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="n">DefaultSite</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;Москва&quot;</span><span class="p">;</span>
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="n">DefaultSite</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"Москва"</span><span class="p">;</span>
 <span class="p">}</span>
 </code></pre></div>
 
-<div class="codehilite" data-lang="text"><pre><span></span><code><span class="n">builder</span><span class="p">.</span><span class="n">Services</span><span class="p">.</span><span class="n">Configure</span><span class="o">&lt;</span><span class="n">StockOptions</span><span class="o">&gt;</span><span class="p">(</span><span class="n">builder</span><span class="p">.</span><span class="n">Configuration</span><span class="p">.</span><span class="n">GetSection</span><span class="p">(</span><span class="s">&quot;Stock&quot;</span><span class="p">));</span>
+<div class="codehilite" data-lang="text"><pre><span></span><code><span class="n">builder</span><span class="p">.</span><span class="n">Services</span><span class="p">.</span><span class="n">Configure</span><span class="o">&lt;</span><span class="n">StockOptions</span><span class="o">&gt;</span><span class="p">(</span><span class="n">builder</span><span class="p">.</span><span class="n">Configuration</span><span class="p">.</span><span class="n">GetSection</span><span class="p">(</span><span class="s">"Stock"</span><span class="p">));</span>
 </code></pre></div>
 
 <p>Контроллер получает настройки через <code>IOptions&lt;StockOptions&gt;</code> и обращается к свойству <code>Value</code>. Значения по умолчанию в классе важны: если раздела в файле нет, приложение не упадёт, а возьмёт разумную основу.</p>
@@ -1159,7 +1183,7 @@ scoped: [1, 1, 1]
 <span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nf">Ok</span><span class="p">(</span><span class="n">items</span><span class="p">);</span>
 <span class="p">}</span>
 
-<span class="na">[HttpGet(&quot;{id:int}&quot;)]</span>
+<span class="na">[HttpGet("{id:int}")]</span>
 <span class="k">public</span><span class="w"> </span><span class="n">ActionResult</span><span class="o">&lt;</span><span class="n">StockItem</span><span class="o">&gt;</span><span class="w"> </span><span class="n">GetById</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">id</span><span class="p">)</span>
 <span class="p">{</span>
 <span class="w">    </span><span class="kt">var</span><span class="w"> </span><span class="n">item</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">_repository</span><span class="p">.</span><span class="n">Find</span><span class="p">(</span><span class="n">id</span><span class="p">);</span>
@@ -1167,8 +1191,8 @@ scoped: [1, 1, 1]
 <span class="w">    </span><span class="p">{</span>
 <span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="nf">NotFound</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="n">ProblemDetails</span>
 <span class="w">        </span><span class="p">{</span>
-<span class="w">            </span><span class="n">Title</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;Позиция не найдена&quot;</span><span class="p">,</span>
-<span class="w">            </span><span class="n">Detail</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">$&quot;Позиция с кодом {id} отсутствует&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="n">Title</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"Позиция не найдена"</span><span class="p">,</span>
+<span class="w">            </span><span class="n">Detail</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">$"Позиция с кодом {id} отсутствует"</span><span class="p">,</span>
 <span class="w">            </span><span class="n">Status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">StatusCodes</span><span class="p">.</span><span class="n">Status404NotFound</span>
 <span class="w">        </span><span class="p">});</span>
 <span class="w">    </span><span class="p">}</span>
@@ -1232,14 +1256,14 @@ Location: http://localhost:5248/api/stock/6
 </tbody>
 </table>
 <p>Если тело запроса не соответствует модели, <code>[ApiController]</code> сам возвращает 400 и перечисляет поля с ошибками. Проверка отрицательного количества в учебном сервисе дала такой ответ:</p>
-<div class="codehilite" data-lang="text"><pre><span></span><code><span class="p">{</span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="s2">&quot;https://tools.ietf.org/html/rfc9110#section-15.5.1&quot;</span><span class="p">,</span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="s2">&quot;One or more validation errors occurred.&quot;</span><span class="p">,</span><span class="nt">&quot;status&quot;</span><span class="p">:</span><span class="mi">400</span><span class="p">,</span><span class="nt">&quot;errors&quot;</span><span class="p">:{</span><span class="nt">&quot;Quantity&quot;</span><span class="p">:[</span><span class="s2">&quot;Количество не может быть отрицательным&quot;</span><span class="p">]},</span><span class="nt">&quot;traceId&quot;</span><span class="p">:</span><span class="s2">&quot;00-709008c4ecfadf95ac10f08759cfb53f-000ed456f817ac62-00&quot;</span><span class="p">}}</span>
+<div class="codehilite" data-lang="text"><pre><span></span><code><span class="p">{</span><span class="nt">"type"</span><span class="p">:</span><span class="s2">"https://tools.ietf.org/html/rfc9110#section-15.5.1"</span><span class="p">,</span><span class="nt">"title"</span><span class="p">:</span><span class="s2">"One or more validation errors occurred."</span><span class="p">,</span><span class="nt">"status"</span><span class="p">:</span><span class="mi">400</span><span class="p">,</span><span class="nt">"errors"</span><span class="p">:{</span><span class="nt">"Quantity"</span><span class="p">:[</span><span class="s2">"Количество не может быть отрицательным"</span><span class="p">]},</span><span class="nt">"traceId"</span><span class="p">:</span><span class="s2">"00-709008c4ecfadf95ac10f08759cfb53f-000ed456f817ac62-00"</span><span class="p">}}</span>
 </code></pre></div>
 
 <p>Клиент получает не просто «ошибка», а имя поля и причину. По этому ответу можно исправить форму, не читая серверный журнал.</p>
 <p>Отдавать клиенту сущность хранилища целиком удобно только в учебном примере. В рабочем коде между хранилищем и ответом ставят отдельную модель, в которой нет служебных полей:</p>
 <div class="codehilite" data-lang="text"><pre><span></span><code><span class="k">public</span><span class="w"> </span><span class="k">record</span><span class="w"> </span><span class="nf">StockItemResponse</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">Id</span><span class="p">,</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="n">Item</span><span class="p">,</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="n">Site</span><span class="p">,</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="n">Cell</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">Quantity</span><span class="p">);</span>
 
-<span class="na">[HttpGet(&quot;{id:int}&quot;)]</span>
+<span class="na">[HttpGet("{id:int}")]</span>
 <span class="k">public</span><span class="w"> </span><span class="n">ActionResult</span><span class="o">&lt;</span><span class="n">StockItemResponse</span><span class="o">&gt;</span><span class="w"> </span><span class="n">GetById</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">id</span><span class="p">)</span>
 <span class="p">{</span>
 <span class="w">    </span><span class="kt">var</span><span class="w"> </span><span class="n">item</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">_repository</span><span class="p">.</span><span class="n">Find</span><span class="p">(</span><span class="n">id</span><span class="p">);</span>
@@ -1345,6 +1369,40 @@ Location: http://localhost:5248/api/stock/6
       var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
       window.scrollTo({top: 0, behavior: reduce ? 'auto' : 'smooth'});
     });
+  });
+})();
+
+(function(){
+  document.querySelectorAll('[data-slider]').forEach(function(slider){
+    var track = slider.querySelector('[data-slider-track]');
+    var slides = track ? Array.prototype.slice.call(track.children) : [];
+    var counter = slider.querySelector('[data-slider-counter]');
+    var prev = slider.querySelector('[data-slider-prev]');
+    var next = slider.querySelector('[data-slider-next]');
+    if(!track || slides.length < 2) return;
+    function current(){
+      var best = 0, dist = Infinity;
+      slides.forEach(function(slide, i){
+        var d = Math.abs(slide.offsetLeft - track.scrollLeft);
+        if(d < dist){ dist = d; best = i; }
+      });
+      return best;
+    }
+    function update(){
+      if(counter) counter.textContent = (current() + 1) + ' / ' + slides.length;
+    }
+    function go(delta){
+      var i = Math.max(0, Math.min(slides.length - 1, current() + delta));
+      var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      track.scrollTo({left: slides[i].offsetLeft, behavior: reduce ? 'auto' : 'smooth'});
+    }
+    if(prev) prev.addEventListener('click', function(){ go(-1); });
+    if(next) next.addEventListener('click', function(){ go(1); });
+    track.addEventListener('scroll', function(){
+      clearTimeout(track._sliderTimer);
+      track._sliderTimer = setTimeout(update, 80);
+    }, {passive: true});
+    update();
   });
 })();
 (function(){

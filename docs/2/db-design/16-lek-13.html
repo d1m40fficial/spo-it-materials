@@ -527,6 +527,12 @@ html.modal-open { overflow: hidden; }
 :root[data-theme=dark] .quiz-actions button[data-answer]:hover, :root[data-theme=dark] .quiz-actions button.quiz-answer:hover { background: #262626; background-color: #262626; color: #fff; border-color: #262626; }
 :root[data-theme=dark] .gate-q { background: #1E1E1E; color: #FF6B00; }
 
+/* the whole-variant archive is the main action in a download block */
+.files a.zip { background: #121212; color: #fff; border-color: #121212; font-weight: 700; box-shadow: 4px 4px 0 rgba(0,0,0,.18); }
+.files a.zip::before { color: #fff; }
+.files a.zip:hover { background: #1D1D1D; color: #fff; border-color: #1D1D1D; box-shadow: 5px 5px 0 rgba(0,0,0,.22); }
+.files a.zip:active { transform: translate(2px,2px); box-shadow: 1px 1px 0 rgba(0,0,0,.12); }
+
 /* ---------- practical work checklist ---------- */
 .work-checklist { width: 100%; border-collapse: collapse; margin: 14px 0 4px; }
 .work-checklist th, .work-checklist td { border: 1px solid var(--rule); padding: 9px 10px; vertical-align: top; }
@@ -564,6 +570,24 @@ html.modal-open { overflow: hidden; }
 .variant-body .task-list { margin: 8px 0 0; padding-left: 20px; }
 .variant-body .task-list li { margin: 0 0 8px; }
 @media (max-width: 620px) { .variant-body { overflow-x: auto; } .variant-body table { min-width: 520px; } }
+
+/* ---------- schema slider: all CREATE TABLE examples ---------- */
+.schema-slider { margin: 18px 0 24px; border: 1px solid #d8d5cc; border-radius: 14px; background: #fff; color: #1a1916; overflow: hidden; }
+.schema-slider-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 14px; background: #f5f2ea; border-bottom: 1px solid #d8d5cc; }
+.schema-slider-bar strong { font: 700 14px/1.2 var(--font-display); color: #1a1916; }
+.schema-slider-actions { display: flex; align-items: center; gap: 8px; }
+.schema-slider-counter { min-width: 62px; text-align: center; font: 600 13px/1 var(--font-mono); color: #59544a; }
+.schema-btn { width: 34px; height: 34px; border: 1px solid #c9c4b8; border-radius: 8px; background: #fff; color: #1a1916; font: 700 18px/1 var(--font-mono); cursor: pointer; }
+.schema-btn:hover { background: #ece7dc; }
+.schema-track { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: thin; }
+.schema-slide { flex: 0 0 100%; min-width: 100%; box-sizing: border-box; padding: 16px 18px 18px; scroll-snap-align: start; }
+.schema-slide h4 { margin: 0 0 10px; font: 700 16px/1.3 var(--font-display); color: #1a1916; }
+.schema-slide h4 code, .schema-slide p code { color: #1a1916; background: #f1ede4; padding: 1px 4px; border-radius: 4px; }
+.schema-slide p { margin: 0 0 10px; font-size: 14px; line-height: 1.55; color: #3a372f; }
+.schema-slide pre { margin: 0; padding: 14px 16px; overflow-x: auto; border: 1px solid #ddd8cc; border-radius: 10px; background: #fbfaf6; color: #1a1916; font: 12.5px/1.5 var(--font-mono); }
+.schema-slide code { color: inherit; background: none; padding: 0; }
+.schema-slider:focus-within { outline: 2px solid #b9a97f; outline-offset: 2px; }
+@media (max-width: 620px) { .schema-slide { padding: 12px; } .schema-slider-bar { padding: 8px 10px; } }
 
 /* ---------- print / PDF export ---------- */
 @page { margin: 16mm; }
@@ -894,7 +918,7 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <span class="w">  </span><span class="k">c</span><span class="w"> </span><span class="nb">REAL</span><span class="p">,</span>
 <span class="w">  </span><span class="n">d</span><span class="w"> </span><span class="nb">NUMERIC</span>
 <span class="p">);</span>
-<span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="err">проба</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="s1">&#39;10&#39;</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;3.5&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;007&#39;</span><span class="p">);</span>
+<span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="err">проба</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="s1">'10'</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="s1">'3.5'</span><span class="p">,</span><span class="w"> </span><span class="s1">'007'</span><span class="p">);</span>
 <span class="k">SELECT</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">typeof</span><span class="p">(</span><span class="n">a</span><span class="p">),</span><span class="w"> </span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="n">typeof</span><span class="p">(</span><span class="n">b</span><span class="p">),</span><span class="w"> </span><span class="k">c</span><span class="p">,</span><span class="w"> </span><span class="n">typeof</span><span class="p">(</span><span class="k">c</span><span class="p">),</span><span class="w"> </span><span class="n">d</span><span class="p">,</span><span class="w"> </span><span class="n">typeof</span><span class="p">(</span><span class="n">d</span><span class="p">)</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="err">проба</span><span class="p">;</span>
 </code></pre></div>
 
@@ -934,7 +958,7 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <p>Результат: <code>0.30000000000000004 | 0</code>. Сумма не равна ожидаемому значению, и условие <code>= 0.3</code> не найдёт строку. Если сравнивать вещественные числа, сравнивают с допуском: <code>ABS(x - 0.3) &lt; 0.000001</code>, а не на равенство.</p>
 <p>Сумма текстовых значений, похожих на числа, тоже даёт приближение:</p>
 <div class="codehilite" data-lang="text"><pre><span></span><code><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="err">цена</span><span class="w"> </span><span class="p">(</span><span class="n">p</span><span class="w"> </span><span class="nb">TEXT</span><span class="p">);</span>
-<span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="err">цена</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="s1">&#39;19.99&#39;</span><span class="p">),</span><span class="w"> </span><span class="p">(</span><span class="s1">&#39;5.01&#39;</span><span class="p">),</span><span class="w"> </span><span class="p">(</span><span class="s1">&#39;0.10&#39;</span><span class="p">);</span>
+<span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="err">цена</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="s1">'19.99'</span><span class="p">),</span><span class="w"> </span><span class="p">(</span><span class="s1">'5.01'</span><span class="p">),</span><span class="w"> </span><span class="p">(</span><span class="s1">'0.10'</span><span class="p">);</span>
 <span class="k">SELECT</span><span class="w"> </span><span class="k">SUM</span><span class="p">(</span><span class="n">p</span><span class="p">),</span><span class="w"> </span><span class="n">typeof</span><span class="p">(</span><span class="k">SUM</span><span class="p">(</span><span class="n">p</span><span class="p">))</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="err">цена</span><span class="p">;</span>
 </code></pre></div>
 
@@ -991,7 +1015,7 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <span class="w">  </span><span class="err">название</span><span class="w"> </span><span class="nb">TEXT</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span>
 <span class="w">  </span><span class="err">год</span><span class="n">_издания</span><span class="w"> </span><span class="nb">INTEGER</span>
 <span class="p">);</span>
-<span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="err">книга</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="mi">204</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;978-5-17-118245-7&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Тихий Дон&#39;</span><span class="p">,</span><span class="w"> </span><span class="mi">1928</span><span class="p">);</span>
+<span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="err">книга</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="mi">204</span><span class="p">,</span><span class="w"> </span><span class="s1">'978-5-17-118245-7'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Тихий Дон'</span><span class="p">,</span><span class="w"> </span><span class="mi">1928</span><span class="p">);</span>
 <span class="k">SELECT</span><span class="w"> </span><span class="n">isbn</span><span class="p">,</span><span class="w"> </span><span class="n">typeof</span><span class="p">(</span><span class="n">isbn</span><span class="p">),</span><span class="w"> </span><span class="k">length</span><span class="p">(</span><span class="n">isbn</span><span class="p">)</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="err">книга</span><span class="p">;</span>
 </code></pre></div>
 
@@ -1003,16 +1027,16 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <span class="w">  </span><span class="err">номер</span><span class="n">_поставки</span><span class="w"> </span><span class="nb">INTEGER</span><span class="w"> </span><span class="k">PRIMARY</span><span class="w"> </span><span class="k">KEY</span><span class="p">,</span>
 <span class="w">  </span><span class="err">дата</span><span class="n">_поставки</span><span class="w"> </span><span class="nb">TEXT</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span>
 <span class="p">);</span>
-<span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="err">поставка</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;2026-11-05&#39;</span><span class="p">),</span><span class="w"> </span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;05.11.2026&#39;</span><span class="p">),</span><span class="w"> </span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;2026-03-09&#39;</span><span class="p">);</span>
+<span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="err">поставка</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="s1">'2026-11-05'</span><span class="p">),</span><span class="w"> </span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="s1">'05.11.2026'</span><span class="p">),</span><span class="w"> </span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="s1">'2026-03-09'</span><span class="p">);</span>
 <span class="k">SELECT</span><span class="w"> </span><span class="err">дата</span><span class="n">_поставки</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="err">поставка</span>
-<span class="k">WHERE</span><span class="w"> </span><span class="err">дата</span><span class="n">_поставки</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="s1">&#39;2026-01-01&#39;</span>
+<span class="k">WHERE</span><span class="w"> </span><span class="err">дата</span><span class="n">_поставки</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="s1">'2026-01-01'</span>
 <span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="err">дата</span><span class="n">_поставки</span><span class="p">;</span>
 </code></pre></div>
 
 <p>Результат: <code>2026-03-09</code> и <code>2026-11-05</code>. Строка <code>05.11.2026</code> в выборку не попала, потому что начинается с нуля и при сравнении строк оказалась меньше <code>2026-01-01</code>. Формат <code>ДД.ММ.ГГГГ</code> удобен человеку, но ломает сортировку и сравнение.</p>
 <p>С форматом ISO работают встроенные функции. <code>date('2026-11-05', '+1 month')</code> вернёт <code>2026-12-05</code>, а разница в днях считается через <code>julianday</code>.</p>
-<div class="codehilite" data-lang="text"><pre><span></span><code><span class="k">SELECT</span><span class="w"> </span><span class="nb">date</span><span class="p">(</span><span class="s1">&#39;2026-11-05&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;+1 month&#39;</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="err">через</span><span class="n">_месяц</span><span class="p">,</span>
-<span class="w">       </span><span class="n">julianday</span><span class="p">(</span><span class="s1">&#39;2026-11-05&#39;</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">julianday</span><span class="p">(</span><span class="s1">&#39;2026-10-05&#39;</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="err">дней</span><span class="p">;</span>
+<div class="codehilite" data-lang="text"><pre><span></span><code><span class="k">SELECT</span><span class="w"> </span><span class="nb">date</span><span class="p">(</span><span class="s1">'2026-11-05'</span><span class="p">,</span><span class="w"> </span><span class="s1">'+1 month'</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="err">через</span><span class="n">_месяц</span><span class="p">,</span>
+<span class="w">       </span><span class="n">julianday</span><span class="p">(</span><span class="s1">'2026-11-05'</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">julianday</span><span class="p">(</span><span class="s1">'2026-10-05'</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="err">дней</span><span class="p">;</span>
 </code></pre></div>
 
 <p>Результат: <code>2026-12-05 | 31.0</code>. Обратите внимание на округление календаря: <code>date('2026-01-31', '+1 month')</code> возвращает <code>2026-03-03</code>, потому что 31 февраля не существует. Арифметика месяцев в SQLite не переносит дату на последний день месяца автоматически.</p>
@@ -1110,15 +1134,15 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <p>Оценим порядок величин. Одна строка каталога с целым кодом, ISBN из 17 символов, названием из 40 символов и несколькими числами занимает около 150 байт. Умножим на 4800 и получим примерно 720 килобайт без учёта индексов. База из десятков тысяч строк всё ещё помещается в несколько мегабайт и свободно открывается в браузере. Поэтому на учебных объёмах экономить байты бессмысленно, а вот точность суммы и правильная сортировка важны каждый день.</p>
 <h2 id="приведение-типов-и-сравнение"><span class="num">09</span>Приведение типов и сравнение</h2>
 <p>Приведение бывает явным и неявным. Явное выполняет функция <code>CAST</code>, неявное СУБД делает сама при сравнении или арифметике. <code>CAST('12abc' AS INTEGER)</code> вернёт 12: SQLite читает числовой префикс и останавливается на первой букве. <code>CAST('abc' AS INTEGER)</code> вернёт 0. <code>CAST(12.9 AS INTEGER)</code> вернёт 12, то есть отбрасывает дробную часть, а не округляет.</p>
-<div class="codehilite" data-lang="text"><pre><span></span><code><span class="k">SELECT</span><span class="w"> </span><span class="k">CAST</span><span class="p">(</span><span class="s1">&#39;12abc&#39;</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="nb">INTEGER</span><span class="p">),</span><span class="w"> </span><span class="k">CAST</span><span class="p">(</span><span class="s1">&#39;abc&#39;</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="nb">INTEGER</span><span class="p">),</span><span class="w"> </span><span class="k">CAST</span><span class="p">(</span><span class="mi">12</span><span class="p">.</span><span class="mi">9</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="nb">INTEGER</span><span class="p">);</span>
+<div class="codehilite" data-lang="text"><pre><span></span><code><span class="k">SELECT</span><span class="w"> </span><span class="k">CAST</span><span class="p">(</span><span class="s1">'12abc'</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="nb">INTEGER</span><span class="p">),</span><span class="w"> </span><span class="k">CAST</span><span class="p">(</span><span class="s1">'abc'</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="nb">INTEGER</span><span class="p">),</span><span class="w"> </span><span class="k">CAST</span><span class="p">(</span><span class="mi">12</span><span class="p">.</span><span class="mi">9</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="nb">INTEGER</span><span class="p">);</span>
 </code></pre></div>
 
 <p>Результат: <code>12 | 0 | 12</code>. Молчаливое превращение текста в ноль опасно: опечатка в номере заказа не вызовет ошибку, а создаст строку с нулевым ключом. Поэтому в рабочей базе типы проверяют до вставки, а не после.</p>
 <p>При выводе денег из копеек делят на 100 и форматируют. <code>printf('%.2f', сумма_коп / 100.0)</code> вернёт строку с двумя знаками после точки, а не <code>25.1</code>. Для отчёта это удобнее, чем ручное округление, потому что формат задаётся один раз в запросе.</p>
 <p>Сравнение значений разных классов подчиняется порядку: <code>NULL</code> меньше чисел, числа меньше текста, текст меньше <code>BLOB</code>. Поэтому <code>'10' = 10</code> возвращает 0, если оба значения литералы без сродства столбца. Но в столбце с INTEGER сродством сравнение с <code>'10'</code> уже сработает, потому что СУБД приведёт текст к числу.</p>
 <div class="codehilite" data-lang="text"><pre><span></span><code><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="err">т</span><span class="w"> </span><span class="p">(</span><span class="n">a</span><span class="w"> </span><span class="nb">INTEGER</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="nb">TEXT</span><span class="p">);</span>
-<span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="err">т</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="s1">&#39;10&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;10&#39;</span><span class="p">);</span>
-<span class="k">SELECT</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;10&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;10&#39;</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="err">т</span><span class="p">;</span>
+<span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="err">т</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="s1">'10'</span><span class="p">,</span><span class="w"> </span><span class="s1">'10'</span><span class="p">);</span>
+<span class="k">SELECT</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'10'</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'10'</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="err">т</span><span class="p">;</span>
 </code></pre></div>
 
 <p>Результат: <code>1 | 1 | 1 | 1</code>. Все четыре сравнения истинны, потому что сродство столбца приводит операнд к своему классу. Без сродства, на литералах, результат был бы другим. Это и есть главная ловушка: одно и то же выражение ведёт себя по-разному в зависимости от объявления столбца.</p>
@@ -1209,6 +1233,40 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
       var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
       window.scrollTo({top: 0, behavior: reduce ? 'auto' : 'smooth'});
     });
+  });
+})();
+
+(function(){
+  document.querySelectorAll('[data-slider]').forEach(function(slider){
+    var track = slider.querySelector('[data-slider-track]');
+    var slides = track ? Array.prototype.slice.call(track.children) : [];
+    var counter = slider.querySelector('[data-slider-counter]');
+    var prev = slider.querySelector('[data-slider-prev]');
+    var next = slider.querySelector('[data-slider-next]');
+    if(!track || slides.length < 2) return;
+    function current(){
+      var best = 0, dist = Infinity;
+      slides.forEach(function(slide, i){
+        var d = Math.abs(slide.offsetLeft - track.scrollLeft);
+        if(d < dist){ dist = d; best = i; }
+      });
+      return best;
+    }
+    function update(){
+      if(counter) counter.textContent = (current() + 1) + ' / ' + slides.length;
+    }
+    function go(delta){
+      var i = Math.max(0, Math.min(slides.length - 1, current() + delta));
+      var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      track.scrollTo({left: slides[i].offsetLeft, behavior: reduce ? 'auto' : 'smooth'});
+    }
+    if(prev) prev.addEventListener('click', function(){ go(-1); });
+    if(next) next.addEventListener('click', function(){ go(1); });
+    track.addEventListener('scroll', function(){
+      clearTimeout(track._sliderTimer);
+      track._sliderTimer = setTimeout(update, 80);
+    }, {passive: true});
+    update();
   });
 })();
 (function(){

@@ -527,6 +527,12 @@ html.modal-open { overflow: hidden; }
 :root[data-theme=dark] .quiz-actions button[data-answer]:hover, :root[data-theme=dark] .quiz-actions button.quiz-answer:hover { background: #262626; background-color: #262626; color: #fff; border-color: #262626; }
 :root[data-theme=dark] .gate-q { background: #1E1E1E; color: #FF6B00; }
 
+/* the whole-variant archive is the main action in a download block */
+.files a.zip { background: #121212; color: #fff; border-color: #121212; font-weight: 700; box-shadow: 4px 4px 0 rgba(0,0,0,.18); }
+.files a.zip::before { color: #fff; }
+.files a.zip:hover { background: #1D1D1D; color: #fff; border-color: #1D1D1D; box-shadow: 5px 5px 0 rgba(0,0,0,.22); }
+.files a.zip:active { transform: translate(2px,2px); box-shadow: 1px 1px 0 rgba(0,0,0,.12); }
+
 /* ---------- practical work checklist ---------- */
 .work-checklist { width: 100%; border-collapse: collapse; margin: 14px 0 4px; }
 .work-checklist th, .work-checklist td { border: 1px solid var(--rule); padding: 9px 10px; vertical-align: top; }
@@ -564,6 +570,24 @@ html.modal-open { overflow: hidden; }
 .variant-body .task-list { margin: 8px 0 0; padding-left: 20px; }
 .variant-body .task-list li { margin: 0 0 8px; }
 @media (max-width: 620px) { .variant-body { overflow-x: auto; } .variant-body table { min-width: 520px; } }
+
+/* ---------- schema slider: all CREATE TABLE examples ---------- */
+.schema-slider { margin: 18px 0 24px; border: 1px solid #d8d5cc; border-radius: 14px; background: #fff; color: #1a1916; overflow: hidden; }
+.schema-slider-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 14px; background: #f5f2ea; border-bottom: 1px solid #d8d5cc; }
+.schema-slider-bar strong { font: 700 14px/1.2 var(--font-display); color: #1a1916; }
+.schema-slider-actions { display: flex; align-items: center; gap: 8px; }
+.schema-slider-counter { min-width: 62px; text-align: center; font: 600 13px/1 var(--font-mono); color: #59544a; }
+.schema-btn { width: 34px; height: 34px; border: 1px solid #c9c4b8; border-radius: 8px; background: #fff; color: #1a1916; font: 700 18px/1 var(--font-mono); cursor: pointer; }
+.schema-btn:hover { background: #ece7dc; }
+.schema-track { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: thin; }
+.schema-slide { flex: 0 0 100%; min-width: 100%; box-sizing: border-box; padding: 16px 18px 18px; scroll-snap-align: start; }
+.schema-slide h4 { margin: 0 0 10px; font: 700 16px/1.3 var(--font-display); color: #1a1916; }
+.schema-slide h4 code, .schema-slide p code { color: #1a1916; background: #f1ede4; padding: 1px 4px; border-radius: 4px; }
+.schema-slide p { margin: 0 0 10px; font-size: 14px; line-height: 1.55; color: #3a372f; }
+.schema-slide pre { margin: 0; padding: 14px 16px; overflow-x: auto; border: 1px solid #ddd8cc; border-radius: 10px; background: #fbfaf6; color: #1a1916; font: 12.5px/1.5 var(--font-mono); }
+.schema-slide code { color: inherit; background: none; padding: 0; }
+.schema-slider:focus-within { outline: 2px solid #b9a97f; outline-offset: 2px; }
+@media (max-width: 620px) { .schema-slide { padding: 12px; } .schema-slider-bar { padding: 8px 10px; } }
 
 /* ---------- print / PDF export ---------- */
 @page { margin: 16mm; }
@@ -847,7 +871,7 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <div class="glyph" aria-hidden="true">Л10</div></header><section class="outcomes"><b>После этого занятия вы сможете</b><ul><li>Различать системные и собственные исключения</li><li>Создавать класс ошибки с понятным сообщением</li><li>Выбирать место перехвата на границе модуля</li></ul></section><nav class="toc"><b>Содержание занятия</b><ol><li><a href="#сбой-в-07-40">Сбой в 07:40</a></li><li><a href="#что-несёт-исключение">Что несёт исключение</a></li><li><a href="#как-работает-try">Как работает try</a></li><li><a href="#собственная-ошибка">Собственная ошибка</a></li><li><a href="#стек-вызовов-и-причина-сбоя">Стек вызовов и причина сбоя</a></li><li><a href="#граница-модуля">Граница модуля</a></li><li><a href="#типичные-ошибки">Типичные ошибки</a></li><li><a href="#итоги">Итоги</a></li></ol></nav><article class="prose"><h2 id="сбой-в-07-40"><span class="num">01</span>Сбой в 07:40</h2>
 <p>В 07:40 кладовщик в Туле принимает машину от поставщика. В накладной 380 строк, приёмка идёт по одной позиции, и после каждой строки остаток товара увеличивается в базе. На 214-й строке количество записано как «12,5»: поставщик указал дробное число упаковок, а поле в «Склад+» принимает только целые штуки.</p>
 <p>Программа останавливается. В терминале последняя строка сообщения:</p>
-<div class="codehilite" data-lang="text"><pre><span></span><code>ValueError: invalid literal for int() with base 10: &#39;12,5&#39;
+<div class="codehilite" data-lang="text"><pre><span></span><code>ValueError: invalid literal for int() with base 10: '12,5'
 </code></pre></div>
 
 <p>Первые 213 строк уже записаны. Накладная не закрыта, остатки на 213 позиций разошлись с фактическим товаром на складе. Кладовщик не видит, на какой строке всё сломалось, и повторяет приёмку целиком. Теперь первые 213 позиций задваиваются, и расхождение растёт.</p>
@@ -912,16 +936,16 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <div class="codehilite" data-lang="python"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">parse_quantity</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
     <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
 
-<span class="k">for</span> <span class="n">raw</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;12&quot;</span><span class="p">,</span> <span class="s2">&quot;12,5&quot;</span><span class="p">]:</span>
+<span class="k">for</span> <span class="n">raw</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">"12"</span><span class="p">,</span> <span class="s2">"12,5"</span><span class="p">]:</span>
     <span class="k">try</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="n">raw</span><span class="p">,</span> <span class="s2">&quot;-&gt;&quot;</span><span class="p">,</span> <span class="n">parse_quantity</span><span class="p">(</span><span class="n">raw</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">raw</span><span class="p">,</span> <span class="s2">"-&gt;"</span><span class="p">,</span> <span class="n">parse_quantity</span><span class="p">(</span><span class="n">raw</span><span class="p">))</span>
     <span class="k">except</span> <span class="ne">ValueError</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="n">raw</span><span class="p">,</span> <span class="s2">&quot;-&gt;&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="n">err</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="s2">&quot;:&quot;</span><span class="p">,</span> <span class="n">err</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">raw</span><span class="p">,</span> <span class="s2">"-&gt;"</span><span class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="n">err</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="s2">":"</span><span class="p">,</span> <span class="n">err</span><span class="p">)</span>
 </code></pre></div>
 
 <p>Вывод показывает, что во втором случае управление ушло в <code>except</code>, а программа продолжила работу:</p>
 <div class="codehilite" data-lang="text"><pre><span></span><code>12 -&gt; 12
-12,5 -&gt; ValueError : invalid literal for int() with base 10: &#39;12,5&#39;
+12,5 -&gt; ValueError : invalid literal for int() with base 10: '12,5'
 </code></pre></div>
 
 <p>Обратите внимание на формат последней строки. Мы печатаем <code>type(err).__name__</code>, то есть имя класса, и только потом сообщение. Такой вывод сразу говорит, какая ветка обработки сработала бы, если бы обработчиков было несколько.</p>
@@ -963,25 +987,25 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 </table>
 <p>Порядок обработчиков важен. Python проверяет их сверху вниз и выбирает первый подходящий. Поэтому конкретный тип ставят раньше общего: <code>except ValueError</code> перед <code>except Exception</code>. Если поменять местами, второй обработчик перехватит всё, и первый станет недостижимым.</p>
 <div class="codehilite" data-lang="text"><pre><span></span><code><span class="k">try</span><span class="p">:</span>
-    <span class="n">number</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="s2">&quot;12,5&quot;</span><span class="p">)</span>
+    <span class="n">number</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="s2">"12,5"</span><span class="p">)</span>
 <span class="k">except</span> <span class="ne">ValueError</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;ValueError:&quot;</span><span class="p">,</span> <span class="n">err</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"ValueError:"</span><span class="p">,</span> <span class="n">err</span><span class="p">)</span>
 <span class="k">finally</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;finally выполнился&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"finally выполнился"</span><span class="p">)</span>
 
 <span class="k">try</span><span class="p">:</span>
-    <span class="n">number</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="s2">&quot;12,5&quot;</span><span class="p">)</span>
+    <span class="n">number</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="s2">"12,5"</span><span class="p">)</span>
 <span class="k">except</span> <span class="p">(</span><span class="ne">ValueError</span><span class="p">,</span> <span class="ne">TypeError</span><span class="p">)</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;перехвачено:&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="n">err</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"перехвачено:"</span><span class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="n">err</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
 
 <span class="k">try</span><span class="p">:</span>
-    <span class="n">number</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="s2">&quot;12,5&quot;</span><span class="p">)</span>
+    <span class="n">number</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="s2">"12,5"</span><span class="p">)</span>
 <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;широкий перехват:&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="n">err</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"широкий перехват:"</span><span class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="n">err</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
 </code></pre></div>
 
 <p>Во всех трёх случаях срабатывает <code>ValueError</code>, поэтому вывод называет один и тот же класс:</p>
-<div class="codehilite" data-lang="text"><pre><span></span><code>ValueError: invalid literal for int() with base 10: &#39;12,5&#39;
+<div class="codehilite" data-lang="text"><pre><span></span><code>ValueError: invalid literal for int() with base 10: '12,5'
 finally выполнился
 перехвачено: ValueError
 широкий перехват: ValueError
@@ -993,7 +1017,7 @@ finally выполнился
 <p>Системные исключения описывают язык и платформу, а не предметную область. <code>ValueError</code> говорит, что значение недопустимо, но не говорит, какое поле, какая строка накладной и что делать кладовщику. Для этого вводят собственный класс ошибки.</p>
 <p>Собственное исключение это обычный класс, унаследованный от <code>Exception</code> или от общего предка проекта. В нём есть сообщение и, что важнее, поля с данными: артикул, запрошенное количество, доступный остаток. Вызывающий код может прочитать эти поля и построить ответ, не разбирая текст сообщения.</p>
 <div class="codehilite" data-lang="text"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">SkladError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Базовая ошибка учебной системы.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Базовая ошибка учебной системы."""</span>
 
 
 <span class="k">class</span><span class="w"> </span><span class="nc">StockShortage</span><span class="p">(</span><span class="n">SkladError</span><span class="p">):</span>
@@ -1002,25 +1026,25 @@ finally выполнился
         <span class="bp">self</span><span class="o">.</span><span class="n">requested</span> <span class="o">=</span> <span class="n">requested</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">available</span> <span class="o">=</span> <span class="n">available</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;Товар </span><span class="si">{</span><span class="n">sku</span><span class="si">}</span><span class="s2">: запрошено </span><span class="si">{</span><span class="n">requested</span><span class="si">}</span><span class="s2">, доступно </span><span class="si">{</span><span class="n">available</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="sa">f</span><span class="s2">"Товар </span><span class="si">{</span><span class="n">sku</span><span class="si">}</span><span class="s2">: запрошено </span><span class="si">{</span><span class="n">requested</span><span class="si">}</span><span class="s2">, доступно </span><span class="si">{</span><span class="n">available</span><span class="si">}</span><span class="s2">"</span>
         <span class="p">)</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">reserve</span><span class="p">(</span><span class="n">product</span><span class="p">,</span> <span class="n">qty</span><span class="p">):</span>
-    <span class="k">if</span> <span class="n">qty</span> <span class="o">&gt;</span> <span class="n">product</span><span class="p">[</span><span class="s2">&quot;stock&quot;</span><span class="p">]:</span>
-        <span class="k">raise</span> <span class="n">StockShortage</span><span class="p">(</span><span class="n">product</span><span class="p">[</span><span class="s2">&quot;sku&quot;</span><span class="p">],</span> <span class="n">qty</span><span class="p">,</span> <span class="n">product</span><span class="p">[</span><span class="s2">&quot;stock&quot;</span><span class="p">])</span>
-    <span class="n">product</span><span class="p">[</span><span class="s2">&quot;stock&quot;</span><span class="p">]</span> <span class="o">-=</span> <span class="n">qty</span>
-    <span class="k">return</span> <span class="n">product</span><span class="p">[</span><span class="s2">&quot;stock&quot;</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">qty</span> <span class="o">&gt;</span> <span class="n">product</span><span class="p">[</span><span class="s2">"stock"</span><span class="p">]:</span>
+        <span class="k">raise</span> <span class="n">StockShortage</span><span class="p">(</span><span class="n">product</span><span class="p">[</span><span class="s2">"sku"</span><span class="p">],</span> <span class="n">qty</span><span class="p">,</span> <span class="n">product</span><span class="p">[</span><span class="s2">"stock"</span><span class="p">])</span>
+    <span class="n">product</span><span class="p">[</span><span class="s2">"stock"</span><span class="p">]</span> <span class="o">-=</span> <span class="n">qty</span>
+    <span class="k">return</span> <span class="n">product</span><span class="p">[</span><span class="s2">"stock"</span><span class="p">]</span>
 
 
-<span class="n">product</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;sku&quot;</span><span class="p">:</span> <span class="s2">&quot;SKU-1042&quot;</span><span class="p">,</span> <span class="s2">&quot;stock&quot;</span><span class="p">:</span> <span class="mi">40</span><span class="p">}</span>
+<span class="n">product</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"sku"</span><span class="p">:</span> <span class="s2">"SKU-1042"</span><span class="p">,</span> <span class="s2">"stock"</span><span class="p">:</span> <span class="mi">40</span><span class="p">}</span>
 <span class="k">try</span><span class="p">:</span>
     <span class="n">reserve</span><span class="p">(</span><span class="n">product</span><span class="p">,</span> <span class="mi">55</span><span class="p">)</span>
 <span class="k">except</span> <span class="n">StockShortage</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">err</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="s2">&quot;:&quot;</span><span class="p">,</span> <span class="n">err</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;не хватает:&quot;</span><span class="p">,</span> <span class="n">err</span><span class="o">.</span><span class="n">requested</span> <span class="o">-</span> <span class="n">err</span><span class="o">.</span><span class="n">available</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;остаток после отказа:&quot;</span><span class="p">,</span> <span class="n">product</span><span class="p">[</span><span class="s2">&quot;stock&quot;</span><span class="p">])</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;остаток после резерва:&quot;</span><span class="p">,</span> <span class="n">reserve</span><span class="p">(</span><span class="n">product</span><span class="p">,</span> <span class="mi">25</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">err</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="s2">":"</span><span class="p">,</span> <span class="n">err</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"не хватает:"</span><span class="p">,</span> <span class="n">err</span><span class="o">.</span><span class="n">requested</span> <span class="o">-</span> <span class="n">err</span><span class="o">.</span><span class="n">available</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"остаток после отказа:"</span><span class="p">,</span> <span class="n">product</span><span class="p">[</span><span class="s2">"stock"</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"остаток после резерва:"</span><span class="p">,</span> <span class="n">reserve</span><span class="p">(</span><span class="n">product</span><span class="p">,</span> <span class="mi">25</span><span class="p">))</span>
 </code></pre></div>
 
 <p>Функция <code>reserve</code> проверяет условие до изменения состояния. Если товара не хватает, остаток остаётся прежним, а вызывающий код получает объект с тремя полями:</p>
@@ -1045,7 +1069,7 @@ finally выполнился
 <span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">Available</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">private</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
 
 <span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="nf">StockShortageException</span><span class="p">(</span><span class="kt">string</span><span class="w"> </span><span class="n">sku</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">requested</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">available</span><span class="p">)</span>
-<span class="w">        </span><span class="p">:</span><span class="w"> </span><span class="k">base</span><span class="p">(</span><span class="s">&quot;Товар &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">sku</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">&quot;: запрошено &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">requested</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">&quot;, доступно &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">available</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="p">:</span><span class="w"> </span><span class="k">base</span><span class="p">(</span><span class="s">"Товар "</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">sku</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">": запрошено "</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">requested</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">", доступно "</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">available</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">        </span><span class="n">Sku</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sku</span><span class="p">;</span>
 <span class="w">        </span><span class="n">Requested</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">requested</span><span class="p">;</span>
 <span class="w">        </span><span class="n">Available</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">available</span><span class="p">;</span>
@@ -1063,10 +1087,10 @@ finally выполнился
 <span class="w">    </span><span class="k">static</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">Main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
 <span class="w">        </span><span class="n">Console</span><span class="p">.</span><span class="n">OutputEncoding</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Encoding</span><span class="p">.</span><span class="n">UTF8</span><span class="p">;</span>
 <span class="w">        </span><span class="k">try</span><span class="w"> </span><span class="p">{</span>
-<span class="w">            </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">&quot;остаток: &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">Reserve</span><span class="p">(</span><span class="mi">40</span><span class="p">,</span><span class="w"> </span><span class="mi">55</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;SKU-1042&quot;</span><span class="p">));</span>
+<span class="w">            </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">"остаток: "</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">Reserve</span><span class="p">(</span><span class="mi">40</span><span class="p">,</span><span class="w"> </span><span class="mi">55</span><span class="p">,</span><span class="w"> </span><span class="s">"SKU-1042"</span><span class="p">));</span>
 <span class="w">        </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="n">StockShortageException</span><span class="w"> </span><span class="n">err</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">            </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="n">err</span><span class="p">.</span><span class="n">GetType</span><span class="p">().</span><span class="n">Name</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">&quot;: &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">err</span><span class="p">.</span><span class="n">Message</span><span class="p">);</span>
-<span class="w">            </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">&quot;не хватает: &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="p">(</span><span class="n">err</span><span class="p">.</span><span class="n">Requested</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">err</span><span class="p">.</span><span class="n">Available</span><span class="p">));</span>
+<span class="w">            </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="n">err</span><span class="p">.</span><span class="n">GetType</span><span class="p">().</span><span class="n">Name</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">": "</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">err</span><span class="p">.</span><span class="n">Message</span><span class="p">);</span>
+<span class="w">            </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">"не хватает: "</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="p">(</span><span class="n">err</span><span class="p">.</span><span class="n">Requested</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">err</span><span class="p">.</span><span class="n">Available</span><span class="p">));</span>
 <span class="w">        </span><span class="p">}</span>
 <span class="w">    </span><span class="p">}</span>
 <span class="p">}</span>
@@ -1136,15 +1160,15 @@ finally выполнился
     <span class="k">return</span> <span class="n">total</span>
 
 <span class="k">try</span><span class="p">:</span>
-    <span class="n">import_batch</span><span class="p">([</span><span class="s2">&quot;120&quot;</span><span class="p">,</span> <span class="s2">&quot;80&quot;</span><span class="p">,</span> <span class="s2">&quot;12,5&quot;</span><span class="p">])</span>
+    <span class="n">import_batch</span><span class="p">([</span><span class="s2">"120"</span><span class="p">,</span> <span class="s2">"80"</span><span class="p">,</span> <span class="s2">"12,5"</span><span class="p">])</span>
 <span class="k">except</span> <span class="ne">ValueError</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
     <span class="n">frames</span> <span class="o">=</span> <span class="n">traceback</span><span class="o">.</span><span class="n">extract_tb</span><span class="p">(</span><span class="n">err</span><span class="o">.</span><span class="n">__traceback__</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;ошибка:&quot;</span><span class="p">,</span> <span class="n">err</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;путь:&quot;</span><span class="p">,</span> <span class="s2">&quot; -&gt; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">frame</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">frame</span> <span class="ow">in</span> <span class="n">frames</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"ошибка:"</span><span class="p">,</span> <span class="n">err</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"путь:"</span><span class="p">,</span> <span class="s2">" -&gt; "</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">frame</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">frame</span> <span class="ow">in</span> <span class="n">frames</span><span class="p">))</span>
 </code></pre></div>
 
 <p>Путь читается от запуска к месту сбоя: модуль, затем <code>import_batch</code>, затем <code>read_line</code>, затем <code>read_price</code>, где и произошёл сбой.</p>
-<div class="codehilite" data-lang="text"><pre><span></span><code>ошибка: invalid literal for int() with base 10: &#39;12,5&#39;
+<div class="codehilite" data-lang="text"><pre><span></span><code>ошибка: invalid literal for int() with base 10: '12,5'
 путь: &lt;module&gt; -&gt; import_batch -&gt; read_line -&gt; read_price
 </code></pre></div>
 
@@ -1158,20 +1182,20 @@ finally выполнился
         <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
     <span class="k">except</span> <span class="ne">ValueError</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
         <span class="k">raise</span> <span class="n">SkladError</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;количество должно быть целым числом, получено </span><span class="si">{</span><span class="n">text</span><span class="si">!r}</span><span class="s2">&quot;</span>
+            <span class="sa">f</span><span class="s2">"количество должно быть целым числом, получено </span><span class="si">{</span><span class="n">text</span><span class="si">!r}</span><span class="s2">"</span>
         <span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">err</span>
 
 
 <span class="k">try</span><span class="p">:</span>
-    <span class="n">parse_quantity</span><span class="p">(</span><span class="s2">&quot;12,5&quot;</span><span class="p">)</span>
+    <span class="n">parse_quantity</span><span class="p">(</span><span class="s2">"12,5"</span><span class="p">)</span>
 <span class="k">except</span> <span class="n">SkladError</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">err</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="s2">&quot;:&quot;</span><span class="p">,</span> <span class="n">err</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;причина:&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="n">err</span><span class="o">.</span><span class="n">__cause__</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="s2">&quot;:&quot;</span><span class="p">,</span> <span class="n">err</span><span class="o">.</span><span class="n">__cause__</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">err</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="s2">":"</span><span class="p">,</span> <span class="n">err</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"причина:"</span><span class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="n">err</span><span class="o">.</span><span class="n">__cause__</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="s2">":"</span><span class="p">,</span> <span class="n">err</span><span class="o">.</span><span class="n">__cause__</span><span class="p">)</span>
 </code></pre></div>
 
 <p>Вывод показывает обе части: понятное сообщение верхнего уровня и исходную системную ошибку.</p>
-<div class="codehilite" data-lang="text"><pre><span></span><code>SkladError : количество должно быть целым числом, получено &#39;12,5&#39;
-причина: ValueError : invalid literal for int() with base 10: &#39;12,5&#39;
+<div class="codehilite" data-lang="text"><pre><span></span><code>SkladError : количество должно быть целым числом, получено '12,5'
+причина: ValueError : invalid literal for int() with base 10: '12,5'
 </code></pre></div>
 
 <p>Без <code>from</code> Python тоже сохранит связь, но положит её в <code>__context__</code> с формулировкой «во время обработки предыдущего исключения». Такая связь появляется неявно и легко теряется, если между <code>except</code> и <code>raise</code> выполнить ещё код. <code>from</code> делает намерение явным: эта ошибка выросла из той.</p>
@@ -1184,17 +1208,17 @@ finally выполнился
 <span class="w">        </span><span class="k">try</span><span class="w"> </span><span class="p">{</span>
 <span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="kt">int</span><span class="p">.</span><span class="n">Parse</span><span class="p">(</span><span class="n">text</span><span class="p">);</span>
 <span class="w">        </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="n">FormatException</span><span class="w"> </span><span class="n">err</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">            </span><span class="k">throw</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="nf">ArgumentException</span><span class="p">(</span><span class="s">&quot;количество должно быть целым числом: &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">text</span><span class="p">,</span><span class="w"> </span><span class="n">err</span><span class="p">);</span>
+<span class="w">            </span><span class="k">throw</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="nf">ArgumentException</span><span class="p">(</span><span class="s">"количество должно быть целым числом: "</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">text</span><span class="p">,</span><span class="w"> </span><span class="n">err</span><span class="p">);</span>
 <span class="w">        </span><span class="p">}</span>
 <span class="w">    </span><span class="p">}</span>
 
 <span class="w">    </span><span class="k">static</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">Main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
 <span class="w">        </span><span class="n">Console</span><span class="p">.</span><span class="n">OutputEncoding</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Encoding</span><span class="p">.</span><span class="n">UTF8</span><span class="p">;</span>
 <span class="w">        </span><span class="k">try</span><span class="w"> </span><span class="p">{</span>
-<span class="w">            </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="n">ParseQuantity</span><span class="p">(</span><span class="s">&quot;12,5&quot;</span><span class="p">));</span>
+<span class="w">            </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="n">ParseQuantity</span><span class="p">(</span><span class="s">"12,5"</span><span class="p">));</span>
 <span class="w">        </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="n">ArgumentException</span><span class="w"> </span><span class="n">err</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">            </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="n">err</span><span class="p">.</span><span class="n">GetType</span><span class="p">().</span><span class="n">Name</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">&quot;: &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">err</span><span class="p">.</span><span class="n">Message</span><span class="p">);</span>
-<span class="w">            </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">&quot;внутренняя ошибка: &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">err</span><span class="p">.</span><span class="n">InnerException</span><span class="p">.</span><span class="n">GetType</span><span class="p">().</span><span class="n">Name</span><span class="p">);</span>
+<span class="w">            </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="n">err</span><span class="p">.</span><span class="n">GetType</span><span class="p">().</span><span class="n">Name</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">": "</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">err</span><span class="p">.</span><span class="n">Message</span><span class="p">);</span>
+<span class="w">            </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">"внутренняя ошибка: "</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">err</span><span class="p">.</span><span class="n">InnerException</span><span class="p">.</span><span class="n">GetType</span><span class="p">().</span><span class="n">Name</span><span class="p">);</span>
 <span class="w">        </span><span class="p">}</span>
 <span class="w">    </span><span class="p">}</span>
 <span class="p">}</span>
@@ -1253,9 +1277,9 @@ finally выполнился
 <span class="k">def</span><span class="w"> </span><span class="nf">import_stock</span><span class="p">(</span><span class="n">rows</span><span class="p">):</span>
     <span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">number</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">rows</span><span class="p">,</span> <span class="mi">1</span><span class="p">):</span>
-        <span class="n">sku</span><span class="p">,</span> <span class="n">qty</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;;&quot;</span><span class="p">)</span>
+        <span class="n">sku</span><span class="p">,</span> <span class="n">qty</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">";"</span><span class="p">)</span>
         <span class="k">if</span> <span class="nb">int</span><span class="p">(</span><span class="n">qty</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="n">SkladError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;строка </span><span class="si">{</span><span class="n">number</span><span class="si">}</span><span class="s2">: отрицательное количество </span><span class="si">{</span><span class="n">qty</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="n">SkladError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"строка </span><span class="si">{</span><span class="n">number</span><span class="si">}</span><span class="s2">: отрицательное количество </span><span class="si">{</span><span class="n">qty</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
         <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">sku</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">qty</span><span class="p">)))</span>
     <span class="k">return</span> <span class="n">result</span>
 
@@ -1264,14 +1288,14 @@ finally выполнился
     <span class="k">try</span><span class="p">:</span>
         <span class="n">data</span> <span class="o">=</span> <span class="n">import_stock</span><span class="p">(</span><span class="n">rows</span><span class="p">)</span>
     <span class="k">except</span> <span class="p">(</span><span class="n">SkladError</span><span class="p">,</span> <span class="ne">ValueError</span><span class="p">)</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Импорт отменён:&quot;</span><span class="p">,</span> <span class="n">err</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"Импорт отменён:"</span><span class="p">,</span> <span class="n">err</span><span class="p">)</span>
         <span class="k">return</span> <span class="mi">2</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Загружено позиций:&quot;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"Загружено позиций:"</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">))</span>
     <span class="k">return</span> <span class="mi">0</span>
 
 
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;код возврата:&quot;</span><span class="p">,</span> <span class="n">main</span><span class="p">([</span><span class="s2">&quot;SKU-1042;12&quot;</span><span class="p">,</span> <span class="s2">&quot;SKU-2087;4&quot;</span><span class="p">,</span> <span class="s2">&quot;SKU-3310;8&quot;</span><span class="p">]))</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;код возврата:&quot;</span><span class="p">,</span> <span class="n">main</span><span class="p">([</span><span class="s2">&quot;SKU-1042;12&quot;</span><span class="p">,</span> <span class="s2">&quot;SKU-2087;4&quot;</span><span class="p">,</span> <span class="s2">&quot;SKU-3310;-8&quot;</span><span class="p">]))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"код возврата:"</span><span class="p">,</span> <span class="n">main</span><span class="p">([</span><span class="s2">"SKU-1042;12"</span><span class="p">,</span> <span class="s2">"SKU-2087;4"</span><span class="p">,</span> <span class="s2">"SKU-3310;8"</span><span class="p">]))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"код возврата:"</span><span class="p">,</span> <span class="n">main</span><span class="p">([</span><span class="s2">"SKU-1042;12"</span><span class="p">,</span> <span class="s2">"SKU-2087;4"</span><span class="p">,</span> <span class="s2">"SKU-3310;-8"</span><span class="p">]))</span>
 </code></pre></div>
 
 <p>Первый запуск проходит целиком, второй отменяет весь пакет и возвращает код 2. Ни одна строка не записана, потому что проверка идёт до записи.</p>
@@ -1414,6 +1438,40 @@ finally выполнился
       var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
       window.scrollTo({top: 0, behavior: reduce ? 'auto' : 'smooth'});
     });
+  });
+})();
+
+(function(){
+  document.querySelectorAll('[data-slider]').forEach(function(slider){
+    var track = slider.querySelector('[data-slider-track]');
+    var slides = track ? Array.prototype.slice.call(track.children) : [];
+    var counter = slider.querySelector('[data-slider-counter]');
+    var prev = slider.querySelector('[data-slider-prev]');
+    var next = slider.querySelector('[data-slider-next]');
+    if(!track || slides.length < 2) return;
+    function current(){
+      var best = 0, dist = Infinity;
+      slides.forEach(function(slide, i){
+        var d = Math.abs(slide.offsetLeft - track.scrollLeft);
+        if(d < dist){ dist = d; best = i; }
+      });
+      return best;
+    }
+    function update(){
+      if(counter) counter.textContent = (current() + 1) + ' / ' + slides.length;
+    }
+    function go(delta){
+      var i = Math.max(0, Math.min(slides.length - 1, current() + delta));
+      var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      track.scrollTo({left: slides[i].offsetLeft, behavior: reduce ? 'auto' : 'smooth'});
+    }
+    if(prev) prev.addEventListener('click', function(){ go(-1); });
+    if(next) next.addEventListener('click', function(){ go(1); });
+    track.addEventListener('scroll', function(){
+      clearTimeout(track._sliderTimer);
+      track._sliderTimer = setTimeout(update, 80);
+    }, {passive: true});
+    update();
   });
 })();
 (function(){

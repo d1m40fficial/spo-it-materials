@@ -527,6 +527,12 @@ html.modal-open { overflow: hidden; }
 :root[data-theme=dark] .quiz-actions button[data-answer]:hover, :root[data-theme=dark] .quiz-actions button.quiz-answer:hover { background: #262626; background-color: #262626; color: #fff; border-color: #262626; }
 :root[data-theme=dark] .gate-q { background: #1E1E1E; color: #FF6B00; }
 
+/* the whole-variant archive is the main action in a download block */
+.files a.zip { background: #121212; color: #fff; border-color: #121212; font-weight: 700; box-shadow: 4px 4px 0 rgba(0,0,0,.18); }
+.files a.zip::before { color: #fff; }
+.files a.zip:hover { background: #1D1D1D; color: #fff; border-color: #1D1D1D; box-shadow: 5px 5px 0 rgba(0,0,0,.22); }
+.files a.zip:active { transform: translate(2px,2px); box-shadow: 1px 1px 0 rgba(0,0,0,.12); }
+
 /* ---------- practical work checklist ---------- */
 .work-checklist { width: 100%; border-collapse: collapse; margin: 14px 0 4px; }
 .work-checklist th, .work-checklist td { border: 1px solid var(--rule); padding: 9px 10px; vertical-align: top; }
@@ -564,6 +570,24 @@ html.modal-open { overflow: hidden; }
 .variant-body .task-list { margin: 8px 0 0; padding-left: 20px; }
 .variant-body .task-list li { margin: 0 0 8px; }
 @media (max-width: 620px) { .variant-body { overflow-x: auto; } .variant-body table { min-width: 520px; } }
+
+/* ---------- schema slider: all CREATE TABLE examples ---------- */
+.schema-slider { margin: 18px 0 24px; border: 1px solid #d8d5cc; border-radius: 14px; background: #fff; color: #1a1916; overflow: hidden; }
+.schema-slider-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 14px; background: #f5f2ea; border-bottom: 1px solid #d8d5cc; }
+.schema-slider-bar strong { font: 700 14px/1.2 var(--font-display); color: #1a1916; }
+.schema-slider-actions { display: flex; align-items: center; gap: 8px; }
+.schema-slider-counter { min-width: 62px; text-align: center; font: 600 13px/1 var(--font-mono); color: #59544a; }
+.schema-btn { width: 34px; height: 34px; border: 1px solid #c9c4b8; border-radius: 8px; background: #fff; color: #1a1916; font: 700 18px/1 var(--font-mono); cursor: pointer; }
+.schema-btn:hover { background: #ece7dc; }
+.schema-track { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: thin; }
+.schema-slide { flex: 0 0 100%; min-width: 100%; box-sizing: border-box; padding: 16px 18px 18px; scroll-snap-align: start; }
+.schema-slide h4 { margin: 0 0 10px; font: 700 16px/1.3 var(--font-display); color: #1a1916; }
+.schema-slide h4 code, .schema-slide p code { color: #1a1916; background: #f1ede4; padding: 1px 4px; border-radius: 4px; }
+.schema-slide p { margin: 0 0 10px; font-size: 14px; line-height: 1.55; color: #3a372f; }
+.schema-slide pre { margin: 0; padding: 14px 16px; overflow-x: auto; border: 1px solid #ddd8cc; border-radius: 10px; background: #fbfaf6; color: #1a1916; font: 12.5px/1.5 var(--font-mono); }
+.schema-slide code { color: inherit; background: none; padding: 0; }
+.schema-slider:focus-within { outline: 2px solid #b9a97f; outline-offset: 2px; }
+@media (max-width: 620px) { .schema-slide { padding: 12px; } .schema-slider-bar { padding: 8px 10px; } }
 
 /* ---------- print / PDF export ---------- */
 @page { margin: 16mm; }
@@ -851,7 +875,7 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <p><strong>Чем позже найден дефект, тем дороже он стоит.</strong> Причина не в злой воле, а в объёме переделки: ранняя находка меняет одну строку, поздняя тянет за собой схему, код, тесты, документацию, повторную приёмку и дату. Второе следствие: <strong>качество планируют, а не проверяют в конце.</strong> Проверка в конце только показывает, сколько уже потеряно.</p>
 <h2 id="стенд-воронка-проверок"><span class="num">02</span>Стенд: воронка проверок</h2>
 <p>Смотрите на воронку слева. Пять уровней стоят один под другим: требования, проект, код, тесты, приёмка. Рядом с каждым уровнем счётчик пойманных дефектов и множитель цены: 1x, 3x, 10x, 30x и 100x. Правее столбик цены, ещё правее панель итога. Ведите курсор по табло слева направо и смотрите не на число пойманных, а на то, как растёт цена.</p>
-<figure class="figure" data-fig="fig-08-quality" data-one="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"><iframe title="Figure 1: fig-08-quality" scrolling="no"></iframe><figcaption>Проведите по уровням: чем позже найден дефект, тем дороже он стоит.</figcaption></figure>
+<figure class="figure" data-fig="fig-08-quality" data-one="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"><iframe title="Figure 1: fig-08-quality" scrolling="no"></iframe><figcaption>Проведите по уровням: чем позже найден дефект, тем дороже он стоит.</figcaption></figure>
 
 <p>Вы прошли воронку до конца. В ней пять уровней: проверка требований, проверка проекта, проверка кода, тестирование и приёмка. Счётчики показывают 2, 3, 4, 3 и 0, цена растёт от 1x до 100x. Панель итога складывает результат: 12 из 12 дефектов поймано до приёмки, 95 процентов проверок пройдено.</p>
 <p>Порядок на табло:</p>
@@ -1257,6 +1281,40 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
       var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
       window.scrollTo({top: 0, behavior: reduce ? 'auto' : 'smooth'});
     });
+  });
+})();
+
+(function(){
+  document.querySelectorAll('[data-slider]').forEach(function(slider){
+    var track = slider.querySelector('[data-slider-track]');
+    var slides = track ? Array.prototype.slice.call(track.children) : [];
+    var counter = slider.querySelector('[data-slider-counter]');
+    var prev = slider.querySelector('[data-slider-prev]');
+    var next = slider.querySelector('[data-slider-next]');
+    if(!track || slides.length < 2) return;
+    function current(){
+      var best = 0, dist = Infinity;
+      slides.forEach(function(slide, i){
+        var d = Math.abs(slide.offsetLeft - track.scrollLeft);
+        if(d < dist){ dist = d; best = i; }
+      });
+      return best;
+    }
+    function update(){
+      if(counter) counter.textContent = (current() + 1) + ' / ' + slides.length;
+    }
+    function go(delta){
+      var i = Math.max(0, Math.min(slides.length - 1, current() + delta));
+      var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      track.scrollTo({left: slides[i].offsetLeft, behavior: reduce ? 'auto' : 'smooth'});
+    }
+    if(prev) prev.addEventListener('click', function(){ go(-1); });
+    if(next) next.addEventListener('click', function(){ go(1); });
+    track.addEventListener('scroll', function(){
+      clearTimeout(track._sliderTimer);
+      track._sliderTimer = setTimeout(update, 80);
+    }, {passive: true});
+    update();
   });
 })();
 (function(){

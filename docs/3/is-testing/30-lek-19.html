@@ -527,6 +527,12 @@ html.modal-open { overflow: hidden; }
 :root[data-theme=dark] .quiz-actions button[data-answer]:hover, :root[data-theme=dark] .quiz-actions button.quiz-answer:hover { background: #262626; background-color: #262626; color: #fff; border-color: #262626; }
 :root[data-theme=dark] .gate-q { background: #1E1E1E; color: #FF6B00; }
 
+/* the whole-variant archive is the main action in a download block */
+.files a.zip { background: #121212; color: #fff; border-color: #121212; font-weight: 700; box-shadow: 4px 4px 0 rgba(0,0,0,.18); }
+.files a.zip::before { color: #fff; }
+.files a.zip:hover { background: #1D1D1D; color: #fff; border-color: #1D1D1D; box-shadow: 5px 5px 0 rgba(0,0,0,.22); }
+.files a.zip:active { transform: translate(2px,2px); box-shadow: 1px 1px 0 rgba(0,0,0,.12); }
+
 /* ---------- practical work checklist ---------- */
 .work-checklist { width: 100%; border-collapse: collapse; margin: 14px 0 4px; }
 .work-checklist th, .work-checklist td { border: 1px solid var(--rule); padding: 9px 10px; vertical-align: top; }
@@ -564,6 +570,24 @@ html.modal-open { overflow: hidden; }
 .variant-body .task-list { margin: 8px 0 0; padding-left: 20px; }
 .variant-body .task-list li { margin: 0 0 8px; }
 @media (max-width: 620px) { .variant-body { overflow-x: auto; } .variant-body table { min-width: 520px; } }
+
+/* ---------- schema slider: all CREATE TABLE examples ---------- */
+.schema-slider { margin: 18px 0 24px; border: 1px solid #d8d5cc; border-radius: 14px; background: #fff; color: #1a1916; overflow: hidden; }
+.schema-slider-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 14px; background: #f5f2ea; border-bottom: 1px solid #d8d5cc; }
+.schema-slider-bar strong { font: 700 14px/1.2 var(--font-display); color: #1a1916; }
+.schema-slider-actions { display: flex; align-items: center; gap: 8px; }
+.schema-slider-counter { min-width: 62px; text-align: center; font: 600 13px/1 var(--font-mono); color: #59544a; }
+.schema-btn { width: 34px; height: 34px; border: 1px solid #c9c4b8; border-radius: 8px; background: #fff; color: #1a1916; font: 700 18px/1 var(--font-mono); cursor: pointer; }
+.schema-btn:hover { background: #ece7dc; }
+.schema-track { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: thin; }
+.schema-slide { flex: 0 0 100%; min-width: 100%; box-sizing: border-box; padding: 16px 18px 18px; scroll-snap-align: start; }
+.schema-slide h4 { margin: 0 0 10px; font: 700 16px/1.3 var(--font-display); color: #1a1916; }
+.schema-slide h4 code, .schema-slide p code { color: #1a1916; background: #f1ede4; padding: 1px 4px; border-radius: 4px; }
+.schema-slide p { margin: 0 0 10px; font-size: 14px; line-height: 1.55; color: #3a372f; }
+.schema-slide pre { margin: 0; padding: 14px 16px; overflow-x: auto; border: 1px solid #ddd8cc; border-radius: 10px; background: #fbfaf6; color: #1a1916; font: 12.5px/1.5 var(--font-mono); }
+.schema-slide code { color: inherit; background: none; padding: 0; }
+.schema-slider:focus-within { outline: 2px solid #b9a97f; outline-offset: 2px; }
+@media (max-width: 620px) { .schema-slide { padding: 12px; } .schema-slider-bar { padding: 8px 10px; } }
 
 /* ---------- print / PDF export ---------- */
 @page { margin: 16mm; }
@@ -1410,8 +1434,8 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <div class="codehilite" data-lang="text"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">sqlite3</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">date</span>
 
-<span class="n">conn</span> <span class="o">=</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s2">&quot;:memory:&quot;</span><span class="p">)</span>
-<span class="n">conn</span><span class="o">.</span><span class="n">executescript</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="n">conn</span> <span class="o">=</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s2">":memory:"</span><span class="p">)</span>
+<span class="n">conn</span><span class="o">.</span><span class="n">executescript</span><span class="p">(</span><span class="s2">"""</span>
 <span class="s2">CREATE TABLE defects (</span>
 <span class="s2">    id TEXT PRIMARY KEY,</span>
 <span class="s2">    title TEXT NOT NULL,</span>
@@ -1423,54 +1447,54 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <span class="s2">    reopened INTEGER NOT NULL DEFAULT 0</span>
 <span class="s2">);</span>
 <span class="s2">INSERT INTO defects VALUES</span>
-<span class="s2">(&#39;D-101&#39;, &#39;Приёмка сохраняется без ячейки&#39;, &#39;критическая&#39;, &#39;P1&#39;, &#39;открыт&#39;, &#39;2026-10-26&#39;, NULL, 0),</span>
-<span class="s2">(&#39;D-102&#39;, &#39;Отчёт по остаткам падает при пустом фильтре&#39;, &#39;критическая&#39;, &#39;P1&#39;, &#39;в работе&#39;, &#39;2026-10-27&#39;, NULL, 0),</span>
-<span class="s2">(&#39;D-103&#39;, &#39;Кладовщик Тулы видит накладные Москвы&#39;, &#39;критическая&#39;, &#39;P1&#39;, &#39;открыт&#39;, &#39;2026-10-28&#39;, NULL, 0),</span>
-<span class="s2">(&#39;D-104&#39;, &#39;Дубль накладной при повторном сохранении&#39;, &#39;значительная&#39;, &#39;P1&#39;, &#39;на проверке&#39;, &#39;2026-10-24&#39;, NULL, 1),</span>
-<span class="s2">(&#39;D-105&#39;, &#39;Поиск не находит товар по названию&#39;, &#39;значительная&#39;, &#39;P2&#39;, &#39;открыт&#39;, &#39;2026-10-20&#39;, NULL, 0),</span>
-<span class="s2">(&#39;D-106&#39;, &#39;Ошибка 500 при пустом поставщике&#39;, &#39;значительная&#39;, &#39;P2&#39;, &#39;в работе&#39;, &#39;2026-10-22&#39;, NULL, 0),</span>
-<span class="s2">(&#39;D-107&#39;, &#39;Количество принимает ноль&#39;, &#39;значительная&#39;, &#39;P2&#39;, &#39;на проверке&#39;, &#39;2026-10-18&#39;, NULL, 0),</span>
-<span class="s2">(&#39;D-108&#39;, &#39;Дата в отчёте в формате ISO&#39;, &#39;незначительная&#39;, &#39;P3&#39;, &#39;открыт&#39;, &#39;2026-10-10&#39;, NULL, 0),</span>
-<span class="s2">(&#39;D-109&#39;, &#39;Опечатка в названии кнопки&#39;, &#39;тривиальная&#39;, &#39;P4&#39;, &#39;открыт&#39;, &#39;2026-10-05&#39;, NULL, 0),</span>
-<span class="s2">(&#39;D-110&#39;, &#39;Кнопка отмены не видна кладовщику&#39;, &#39;значительная&#39;, &#39;P2&#39;, &#39;в работе&#39;, &#39;2026-10-23&#39;, NULL, 0),</span>
-<span class="s2">(&#39;D-111&#39;, &#39;Ячейка не сохраняется после выбора&#39;, &#39;значительная&#39;, &#39;P1&#39;, &#39;закрыт&#39;, &#39;2026-10-25&#39;, &#39;2026-10-29&#39;, 1),</span>
-<span class="s2">(&#39;D-112&#39;, &#39;Отчёт по остаткам открывается 8 секунд&#39;, &#39;незначительная&#39;, &#39;P3&#39;, &#39;открыт&#39;, &#39;2026-10-12&#39;, NULL, 0),</span>
-<span class="s2">(&#39;D-113&#39;, &#39;Дубль D-104&#39;, &#39;тривиальная&#39;, &#39;P4&#39;, &#39;закрыт&#39;, &#39;2026-10-06&#39;, &#39;2026-10-09&#39;, 0),</span>
-<span class="s2">(&#39;D-114&#39;, &#39;Пропадает фильтр после сортировки&#39;, &#39;незначительная&#39;, &#39;P3&#39;, &#39;закрыт&#39;, &#39;2026-10-11&#39;, &#39;2026-10-15&#39;, 0),</span>
-<span class="s2">(&#39;D-115&#39;, &#39;Накладная печатается без логотипа&#39;, &#39;значительная&#39;, &#39;P2&#39;, &#39;закрыт&#39;, &#39;2026-10-08&#39;, &#39;2026-10-14&#39;, 0),</span>
-<span class="s2">(&#39;D-116&#39;, &#39;Лишний пробел в заголовке&#39;, &#39;тривиальная&#39;, &#39;P4&#39;, &#39;закрыт&#39;, &#39;2026-10-07&#39;, &#39;2026-10-08&#39;, 0),</span>
-<span class="s2">(&#39;D-117&#39;, &#39;Приёмка не проверяет остаток ячейки&#39;, &#39;значительная&#39;, &#39;P2&#39;, &#39;открыт&#39;, &#39;2026-10-21&#39;, NULL, 0),</span>
-<span class="s2">(&#39;D-118&#39;, &#39;Статус документа не обновляется&#39;, &#39;незначительная&#39;, &#39;P3&#39;, &#39;в работе&#39;, &#39;2026-10-19&#39;, NULL, 0),</span>
-<span class="s2">(&#39;D-119&#39;, &#39;Подсказка перекрывает поле&#39;, &#39;тривиальная&#39;, &#39;P4&#39;, &#39;открыт&#39;, &#39;2026-10-07&#39;, NULL, 0);</span>
-<span class="s2">&quot;&quot;&quot;</span><span class="p">)</span>
+<span class="s2">('D-101', 'Приёмка сохраняется без ячейки', 'критическая', 'P1', 'открыт', '2026-10-26', NULL, 0),</span>
+<span class="s2">('D-102', 'Отчёт по остаткам падает при пустом фильтре', 'критическая', 'P1', 'в работе', '2026-10-27', NULL, 0),</span>
+<span class="s2">('D-103', 'Кладовщик Тулы видит накладные Москвы', 'критическая', 'P1', 'открыт', '2026-10-28', NULL, 0),</span>
+<span class="s2">('D-104', 'Дубль накладной при повторном сохранении', 'значительная', 'P1', 'на проверке', '2026-10-24', NULL, 1),</span>
+<span class="s2">('D-105', 'Поиск не находит товар по названию', 'значительная', 'P2', 'открыт', '2026-10-20', NULL, 0),</span>
+<span class="s2">('D-106', 'Ошибка 500 при пустом поставщике', 'значительная', 'P2', 'в работе', '2026-10-22', NULL, 0),</span>
+<span class="s2">('D-107', 'Количество принимает ноль', 'значительная', 'P2', 'на проверке', '2026-10-18', NULL, 0),</span>
+<span class="s2">('D-108', 'Дата в отчёте в формате ISO', 'незначительная', 'P3', 'открыт', '2026-10-10', NULL, 0),</span>
+<span class="s2">('D-109', 'Опечатка в названии кнопки', 'тривиальная', 'P4', 'открыт', '2026-10-05', NULL, 0),</span>
+<span class="s2">('D-110', 'Кнопка отмены не видна кладовщику', 'значительная', 'P2', 'в работе', '2026-10-23', NULL, 0),</span>
+<span class="s2">('D-111', 'Ячейка не сохраняется после выбора', 'значительная', 'P1', 'закрыт', '2026-10-25', '2026-10-29', 1),</span>
+<span class="s2">('D-112', 'Отчёт по остаткам открывается 8 секунд', 'незначительная', 'P3', 'открыт', '2026-10-12', NULL, 0),</span>
+<span class="s2">('D-113', 'Дубль D-104', 'тривиальная', 'P4', 'закрыт', '2026-10-06', '2026-10-09', 0),</span>
+<span class="s2">('D-114', 'Пропадает фильтр после сортировки', 'незначительная', 'P3', 'закрыт', '2026-10-11', '2026-10-15', 0),</span>
+<span class="s2">('D-115', 'Накладная печатается без логотипа', 'значительная', 'P2', 'закрыт', '2026-10-08', '2026-10-14', 0),</span>
+<span class="s2">('D-116', 'Лишний пробел в заголовке', 'тривиальная', 'P4', 'закрыт', '2026-10-07', '2026-10-08', 0),</span>
+<span class="s2">('D-117', 'Приёмка не проверяет остаток ячейки', 'значительная', 'P2', 'открыт', '2026-10-21', NULL, 0),</span>
+<span class="s2">('D-118', 'Статус документа не обновляется', 'незначительная', 'P3', 'в работе', '2026-10-19', NULL, 0),</span>
+<span class="s2">('D-119', 'Подсказка перекрывает поле', 'тривиальная', 'P4', 'открыт', '2026-10-07', NULL, 0);</span>
+<span class="s2">"""</span><span class="p">)</span>
 
 <span class="n">today</span> <span class="o">=</span> <span class="n">date</span><span class="p">(</span><span class="mi">2026</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">31</span><span class="p">)</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Открытые по серьёзности&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Открытые по серьёзности"</span><span class="p">)</span>
 <span class="k">for</span> <span class="n">severity</span><span class="p">,</span> <span class="n">count</span> <span class="ow">in</span> <span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
-    <span class="s2">&quot;SELECT severity, COUNT(*) FROM defects&quot;</span>
-    <span class="s2">&quot; WHERE status NOT IN (&#39;закрыт&#39;, &#39;отклонён&#39;, &#39;дубликат&#39;, &#39;не воспроизводится&#39;)&quot;</span>
-    <span class="s2">&quot; GROUP BY severity ORDER BY COUNT(*) DESC, severity&quot;</span>
+    <span class="s2">"SELECT severity, COUNT(*) FROM defects"</span>
+    <span class="s2">" WHERE status NOT IN ('закрыт', 'отклонён', 'дубликат', 'не воспроизводится')"</span>
+    <span class="s2">" GROUP BY severity ORDER BY COUNT(*) DESC, severity"</span>
 <span class="p">):</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  </span><span class="si">{</span><span class="n">severity</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">count</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  </span><span class="si">{</span><span class="n">severity</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">count</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 
 <span class="n">rows</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
-    <span class="s2">&quot;SELECT created FROM defects&quot;</span>
-    <span class="s2">&quot; WHERE status NOT IN (&#39;закрыт&#39;, &#39;отклонён&#39;, &#39;дубликат&#39;, &#39;не воспроизводится&#39;)&quot;</span>
+    <span class="s2">"SELECT created FROM defects"</span>
+    <span class="s2">" WHERE status NOT IN ('закрыт', 'отклонён', 'дубликат', 'не воспроизводится')"</span>
 <span class="p">)</span><span class="o">.</span><span class="n">fetchall</span><span class="p">()</span>
 <span class="n">ages</span> <span class="o">=</span> <span class="p">[(</span><span class="n">today</span> <span class="o">-</span> <span class="n">date</span><span class="o">.</span><span class="n">fromisoformat</span><span class="p">(</span><span class="n">created</span><span class="p">))</span><span class="o">.</span><span class="n">days</span> <span class="k">for</span> <span class="p">(</span><span class="n">created</span><span class="p">,)</span> <span class="ow">in</span> <span class="n">rows</span><span class="p">]</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Средний возраст открытого дефекта: </span><span class="si">{</span><span class="nb">sum</span><span class="p">(</span><span class="n">ages</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="nb">len</span><span class="p">(</span><span class="n">ages</span><span class="p">)</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2"> дня&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Средний возраст открытого дефекта: </span><span class="si">{</span><span class="nb">sum</span><span class="p">(</span><span class="n">ages</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="nb">len</span><span class="p">(</span><span class="n">ages</span><span class="p">)</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2"> дня"</span><span class="p">)</span>
 
-<span class="n">total</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;SELECT COUNT(*) FROM defects&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">fetchone</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">total</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">"SELECT COUNT(*) FROM defects"</span><span class="p">)</span><span class="o">.</span><span class="n">fetchone</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
 <span class="n">reopened</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
-    <span class="s2">&quot;SELECT COUNT(*) FROM defects WHERE reopened &gt; 0&quot;</span>
+    <span class="s2">"SELECT COUNT(*) FROM defects WHERE reopened &gt; 0"</span>
 <span class="p">)</span><span class="o">.</span><span class="n">fetchone</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Переоткрыто: </span><span class="si">{</span><span class="n">reopened</span><span class="si">}</span><span class="s2"> из </span><span class="si">{</span><span class="n">total</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">reopened</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">total</span><span class="si">:</span><span class="s2">.0%</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Переоткрыто: </span><span class="si">{</span><span class="n">reopened</span><span class="si">}</span><span class="s2"> из </span><span class="si">{</span><span class="n">total</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">reopened</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">total</span><span class="si">:</span><span class="s2">.0%</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 
 <span class="n">waiting</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
-    <span class="s2">&quot;SELECT COUNT(*) FROM defects WHERE status = &#39;на проверке&#39;&quot;</span>
+    <span class="s2">"SELECT COUNT(*) FROM defects WHERE status = 'на проверке'"</span>
 <span class="p">)</span><span class="o">.</span><span class="n">fetchone</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Ждут проверки исправления: </span><span class="si">{</span><span class="n">waiting</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Ждут проверки исправления: </span><span class="si">{</span><span class="n">waiting</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 </code></pre></div>
 
 <p>Скрипт печатает такой результат.</p>
@@ -1622,6 +1646,40 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
       var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
       window.scrollTo({top: 0, behavior: reduce ? 'auto' : 'smooth'});
     });
+  });
+})();
+
+(function(){
+  document.querySelectorAll('[data-slider]').forEach(function(slider){
+    var track = slider.querySelector('[data-slider-track]');
+    var slides = track ? Array.prototype.slice.call(track.children) : [];
+    var counter = slider.querySelector('[data-slider-counter]');
+    var prev = slider.querySelector('[data-slider-prev]');
+    var next = slider.querySelector('[data-slider-next]');
+    if(!track || slides.length < 2) return;
+    function current(){
+      var best = 0, dist = Infinity;
+      slides.forEach(function(slide, i){
+        var d = Math.abs(slide.offsetLeft - track.scrollLeft);
+        if(d < dist){ dist = d; best = i; }
+      });
+      return best;
+    }
+    function update(){
+      if(counter) counter.textContent = (current() + 1) + ' / ' + slides.length;
+    }
+    function go(delta){
+      var i = Math.max(0, Math.min(slides.length - 1, current() + delta));
+      var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      track.scrollTo({left: slides[i].offsetLeft, behavior: reduce ? 'auto' : 'smooth'});
+    }
+    if(prev) prev.addEventListener('click', function(){ go(-1); });
+    if(next) next.addEventListener('click', function(){ go(1); });
+    track.addEventListener('scroll', function(){
+      clearTimeout(track._sliderTimer);
+      track._sliderTimer = setTimeout(update, 80);
+    }, {passive: true});
+    update();
   });
 })();
 (function(){

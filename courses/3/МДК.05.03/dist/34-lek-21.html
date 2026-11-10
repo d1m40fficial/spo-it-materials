@@ -527,6 +527,12 @@ html.modal-open { overflow: hidden; }
 :root[data-theme=dark] .quiz-actions button[data-answer]:hover, :root[data-theme=dark] .quiz-actions button.quiz-answer:hover { background: #262626; background-color: #262626; color: #fff; border-color: #262626; }
 :root[data-theme=dark] .gate-q { background: #1E1E1E; color: #FF6B00; }
 
+/* the whole-variant archive is the main action in a download block */
+.files a.zip { background: #121212; color: #fff; border-color: #121212; font-weight: 700; box-shadow: 4px 4px 0 rgba(0,0,0,.18); }
+.files a.zip::before { color: #fff; }
+.files a.zip:hover { background: #1D1D1D; color: #fff; border-color: #1D1D1D; box-shadow: 5px 5px 0 rgba(0,0,0,.22); }
+.files a.zip:active { transform: translate(2px,2px); box-shadow: 1px 1px 0 rgba(0,0,0,.12); }
+
 /* ---------- practical work checklist ---------- */
 .work-checklist { width: 100%; border-collapse: collapse; margin: 14px 0 4px; }
 .work-checklist th, .work-checklist td { border: 1px solid var(--rule); padding: 9px 10px; vertical-align: top; }
@@ -564,6 +570,24 @@ html.modal-open { overflow: hidden; }
 .variant-body .task-list { margin: 8px 0 0; padding-left: 20px; }
 .variant-body .task-list li { margin: 0 0 8px; }
 @media (max-width: 620px) { .variant-body { overflow-x: auto; } .variant-body table { min-width: 520px; } }
+
+/* ---------- schema slider: all CREATE TABLE examples ---------- */
+.schema-slider { margin: 18px 0 24px; border: 1px solid #d8d5cc; border-radius: 14px; background: #fff; color: #1a1916; overflow: hidden; }
+.schema-slider-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 14px; background: #f5f2ea; border-bottom: 1px solid #d8d5cc; }
+.schema-slider-bar strong { font: 700 14px/1.2 var(--font-display); color: #1a1916; }
+.schema-slider-actions { display: flex; align-items: center; gap: 8px; }
+.schema-slider-counter { min-width: 62px; text-align: center; font: 600 13px/1 var(--font-mono); color: #59544a; }
+.schema-btn { width: 34px; height: 34px; border: 1px solid #c9c4b8; border-radius: 8px; background: #fff; color: #1a1916; font: 700 18px/1 var(--font-mono); cursor: pointer; }
+.schema-btn:hover { background: #ece7dc; }
+.schema-track { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: thin; }
+.schema-slide { flex: 0 0 100%; min-width: 100%; box-sizing: border-box; padding: 16px 18px 18px; scroll-snap-align: start; }
+.schema-slide h4 { margin: 0 0 10px; font: 700 16px/1.3 var(--font-display); color: #1a1916; }
+.schema-slide h4 code, .schema-slide p code { color: #1a1916; background: #f1ede4; padding: 1px 4px; border-radius: 4px; }
+.schema-slide p { margin: 0 0 10px; font-size: 14px; line-height: 1.55; color: #3a372f; }
+.schema-slide pre { margin: 0; padding: 14px 16px; overflow-x: auto; border: 1px solid #ddd8cc; border-radius: 10px; background: #fbfaf6; color: #1a1916; font: 12.5px/1.5 var(--font-mono); }
+.schema-slide code { color: inherit; background: none; padding: 0; }
+.schema-slider:focus-within { outline: 2px solid #b9a97f; outline-offset: 2px; }
+@media (max-width: 620px) { .schema-slide { padding: 12px; } .schema-slider-bar { padding: 8px 10px; } }
 
 /* ---------- print / PDF export ---------- */
 @page { margin: 16mm; }
@@ -948,9 +972,9 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <p>Ограничения проверяют не по описанию, а попыткой записи. Наличие строки в схеме ещё не значит, что база её применяет. Ниже учебная база склада: площадки, товары, остатки и движения.</p>
 <div class="codehilite" data-lang="text"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">sqlite3</span>
 
-<span class="n">conn</span> <span class="o">=</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s2">&quot;sklad_db_lecture.db&quot;</span><span class="p">)</span>
+<span class="n">conn</span> <span class="o">=</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s2">"sklad_db_lecture.db"</span><span class="p">)</span>
 <span class="n">conn</span><span class="o">.</span><span class="n">isolation_level</span> <span class="o">=</span> <span class="kc">None</span>
-<span class="n">conn</span><span class="o">.</span><span class="n">executescript</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="n">conn</span><span class="o">.</span><span class="n">executescript</span><span class="p">(</span><span class="s2">"""</span>
 <span class="s2">DROP TABLE IF EXISTS movements;</span>
 <span class="s2">DROP TABLE IF EXISTS stock;</span>
 <span class="s2">DROP TABLE IF EXISTS products;</span>
@@ -964,7 +988,7 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <span class="s2">  id        INTEGER PRIMARY KEY,</span>
 <span class="s2">  sku       TEXT NOT NULL UNIQUE,</span>
 <span class="s2">  title     TEXT NOT NULL,</span>
-<span class="s2">  unit      TEXT NOT NULL CHECK (unit IN (&#39;шт&#39;, &#39;кг&#39;, &#39;л&#39;)),</span>
+<span class="s2">  unit      TEXT NOT NULL CHECK (unit IN ('шт', 'кг', 'л')),</span>
 <span class="s2">  min_stock INTEGER NOT NULL DEFAULT 0 CHECK (min_stock &gt;= 0)</span>
 <span class="s2">);</span>
 <span class="s2">CREATE TABLE stock (</span>
@@ -976,44 +1000,44 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <span class="s2">CREATE TABLE movements (</span>
 <span class="s2">  id         INTEGER PRIMARY KEY,</span>
 <span class="s2">  doc        TEXT NOT NULL,</span>
-<span class="s2">  kind       TEXT NOT NULL CHECK (kind IN (&#39;приёмка&#39;, &#39;отгрузка&#39;)),</span>
+<span class="s2">  kind       TEXT NOT NULL CHECK (kind IN ('приёмка', 'отгрузка')),</span>
 <span class="s2">  site_code  TEXT NOT NULL REFERENCES sites(code),</span>
 <span class="s2">  product_id INTEGER NOT NULL REFERENCES products(id),</span>
 <span class="s2">  qty        INTEGER NOT NULL CHECK (qty &gt; 0),</span>
 <span class="s2">  created_at TEXT NOT NULL</span>
 <span class="s2">);</span>
-<span class="s2">&quot;&quot;&quot;</span><span class="p">)</span>
-<span class="n">conn</span><span class="o">.</span><span class="n">executemany</span><span class="p">(</span><span class="s2">&quot;INSERT INTO sites VALUES (?, ?)&quot;</span><span class="p">,</span>
-                 <span class="p">[(</span><span class="s2">&quot;MSK&quot;</span><span class="p">,</span> <span class="s2">&quot;Москва&quot;</span><span class="p">),</span> <span class="p">(</span><span class="s2">&quot;TVR&quot;</span><span class="p">,</span> <span class="s2">&quot;Тверь&quot;</span><span class="p">),</span> <span class="p">(</span><span class="s2">&quot;TUL&quot;</span><span class="p">,</span> <span class="s2">&quot;Тула&quot;</span><span class="p">),</span> <span class="p">(</span><span class="s2">&quot;KLG&quot;</span><span class="p">,</span> <span class="s2">&quot;Калуга&quot;</span><span class="p">)])</span>
-<span class="n">conn</span><span class="o">.</span><span class="n">executemany</span><span class="p">(</span><span class="s2">&quot;INSERT INTO products VALUES (?, ?, ?, ?, ?)&quot;</span><span class="p">,</span>
-                 <span class="p">[(</span><span class="mi">1001</span><span class="p">,</span> <span class="s2">&quot;SKU-1001&quot;</span><span class="p">,</span> <span class="s2">&quot;Кабель UTP&quot;</span><span class="p">,</span> <span class="s2">&quot;шт&quot;</span><span class="p">,</span> <span class="mi">50</span><span class="p">),</span>
-                  <span class="p">(</span><span class="mi">1002</span><span class="p">,</span> <span class="s2">&quot;SKU-1002&quot;</span><span class="p">,</span> <span class="s2">&quot;Коробка 400x300&quot;</span><span class="p">,</span> <span class="s2">&quot;шт&quot;</span><span class="p">,</span> <span class="mi">120</span><span class="p">),</span>
-                  <span class="p">(</span><span class="mi">1003</span><span class="p">,</span> <span class="s2">&quot;SKU-1003&quot;</span><span class="p">,</span> <span class="s2">&quot;Стяжка нейлоновая&quot;</span><span class="p">,</span> <span class="s2">&quot;шт&quot;</span><span class="p">,</span> <span class="mi">500</span><span class="p">)])</span>
-<span class="n">conn</span><span class="o">.</span><span class="n">executemany</span><span class="p">(</span><span class="s2">&quot;INSERT INTO stock VALUES (?, ?, ?)&quot;</span><span class="p">,</span>
-                 <span class="p">[(</span><span class="s2">&quot;MSK&quot;</span><span class="p">,</span> <span class="mi">1001</span><span class="p">,</span> <span class="mi">42</span><span class="p">),</span> <span class="p">(</span><span class="s2">&quot;MSK&quot;</span><span class="p">,</span> <span class="mi">1002</span><span class="p">,</span> <span class="mi">300</span><span class="p">),</span> <span class="p">(</span><span class="s2">&quot;TVR&quot;</span><span class="p">,</span> <span class="mi">1001</span><span class="p">,</span> <span class="mi">1240</span><span class="p">),</span> <span class="p">(</span><span class="s2">&quot;TVR&quot;</span><span class="p">,</span> <span class="mi">1003</span><span class="p">,</span> <span class="mi">800</span><span class="p">)])</span>
-<span class="n">conn</span><span class="o">.</span><span class="n">executemany</span><span class="p">(</span><span class="s2">&quot;INSERT INTO movements VALUES (?, ?, ?, ?, ?, ?, ?)&quot;</span><span class="p">,</span>
-                 <span class="p">[(</span><span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;ПР-501&quot;</span><span class="p">,</span> <span class="s2">&quot;приёмка&quot;</span><span class="p">,</span> <span class="s2">&quot;MSK&quot;</span><span class="p">,</span> <span class="mi">1001</span><span class="p">,</span> <span class="mi">60</span><span class="p">,</span> <span class="s2">&quot;2026-10-02 09:12:00&quot;</span><span class="p">),</span>
-                  <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="s2">&quot;ОТ-310&quot;</span><span class="p">,</span> <span class="s2">&quot;отгрузка&quot;</span><span class="p">,</span> <span class="s2">&quot;MSK&quot;</span><span class="p">,</span> <span class="mi">1001</span><span class="p">,</span> <span class="mi">18</span><span class="p">,</span> <span class="s2">&quot;2026-10-03 14:40:00&quot;</span><span class="p">),</span>
-                  <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="s2">&quot;ПР-502&quot;</span><span class="p">,</span> <span class="s2">&quot;приёмка&quot;</span><span class="p">,</span> <span class="s2">&quot;TVR&quot;</span><span class="p">,</span> <span class="mi">1001</span><span class="p">,</span> <span class="mi">1240</span><span class="p">,</span> <span class="s2">&quot;2026-10-04 10:05:00&quot;</span><span class="p">),</span>
-                  <span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="s2">&quot;ПР-503&quot;</span><span class="p">,</span> <span class="s2">&quot;приёмка&quot;</span><span class="p">,</span> <span class="s2">&quot;TVR&quot;</span><span class="p">,</span> <span class="mi">1003</span><span class="p">,</span> <span class="mi">800</span><span class="p">,</span> <span class="s2">&quot;2026-10-05 11:30:00&quot;</span><span class="p">)])</span>
+<span class="s2">"""</span><span class="p">)</span>
+<span class="n">conn</span><span class="o">.</span><span class="n">executemany</span><span class="p">(</span><span class="s2">"INSERT INTO sites VALUES (?, ?)"</span><span class="p">,</span>
+                 <span class="p">[(</span><span class="s2">"MSK"</span><span class="p">,</span> <span class="s2">"Москва"</span><span class="p">),</span> <span class="p">(</span><span class="s2">"TVR"</span><span class="p">,</span> <span class="s2">"Тверь"</span><span class="p">),</span> <span class="p">(</span><span class="s2">"TUL"</span><span class="p">,</span> <span class="s2">"Тула"</span><span class="p">),</span> <span class="p">(</span><span class="s2">"KLG"</span><span class="p">,</span> <span class="s2">"Калуга"</span><span class="p">)])</span>
+<span class="n">conn</span><span class="o">.</span><span class="n">executemany</span><span class="p">(</span><span class="s2">"INSERT INTO products VALUES (?, ?, ?, ?, ?)"</span><span class="p">,</span>
+                 <span class="p">[(</span><span class="mi">1001</span><span class="p">,</span> <span class="s2">"SKU-1001"</span><span class="p">,</span> <span class="s2">"Кабель UTP"</span><span class="p">,</span> <span class="s2">"шт"</span><span class="p">,</span> <span class="mi">50</span><span class="p">),</span>
+                  <span class="p">(</span><span class="mi">1002</span><span class="p">,</span> <span class="s2">"SKU-1002"</span><span class="p">,</span> <span class="s2">"Коробка 400x300"</span><span class="p">,</span> <span class="s2">"шт"</span><span class="p">,</span> <span class="mi">120</span><span class="p">),</span>
+                  <span class="p">(</span><span class="mi">1003</span><span class="p">,</span> <span class="s2">"SKU-1003"</span><span class="p">,</span> <span class="s2">"Стяжка нейлоновая"</span><span class="p">,</span> <span class="s2">"шт"</span><span class="p">,</span> <span class="mi">500</span><span class="p">)])</span>
+<span class="n">conn</span><span class="o">.</span><span class="n">executemany</span><span class="p">(</span><span class="s2">"INSERT INTO stock VALUES (?, ?, ?)"</span><span class="p">,</span>
+                 <span class="p">[(</span><span class="s2">"MSK"</span><span class="p">,</span> <span class="mi">1001</span><span class="p">,</span> <span class="mi">42</span><span class="p">),</span> <span class="p">(</span><span class="s2">"MSK"</span><span class="p">,</span> <span class="mi">1002</span><span class="p">,</span> <span class="mi">300</span><span class="p">),</span> <span class="p">(</span><span class="s2">"TVR"</span><span class="p">,</span> <span class="mi">1001</span><span class="p">,</span> <span class="mi">1240</span><span class="p">),</span> <span class="p">(</span><span class="s2">"TVR"</span><span class="p">,</span> <span class="mi">1003</span><span class="p">,</span> <span class="mi">800</span><span class="p">)])</span>
+<span class="n">conn</span><span class="o">.</span><span class="n">executemany</span><span class="p">(</span><span class="s2">"INSERT INTO movements VALUES (?, ?, ?, ?, ?, ?, ?)"</span><span class="p">,</span>
+                 <span class="p">[(</span><span class="mi">1</span><span class="p">,</span> <span class="s2">"ПР-501"</span><span class="p">,</span> <span class="s2">"приёмка"</span><span class="p">,</span> <span class="s2">"MSK"</span><span class="p">,</span> <span class="mi">1001</span><span class="p">,</span> <span class="mi">60</span><span class="p">,</span> <span class="s2">"2026-10-02 09:12:00"</span><span class="p">),</span>
+                  <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="s2">"ОТ-310"</span><span class="p">,</span> <span class="s2">"отгрузка"</span><span class="p">,</span> <span class="s2">"MSK"</span><span class="p">,</span> <span class="mi">1001</span><span class="p">,</span> <span class="mi">18</span><span class="p">,</span> <span class="s2">"2026-10-03 14:40:00"</span><span class="p">),</span>
+                  <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="s2">"ПР-502"</span><span class="p">,</span> <span class="s2">"приёмка"</span><span class="p">,</span> <span class="s2">"TVR"</span><span class="p">,</span> <span class="mi">1001</span><span class="p">,</span> <span class="mi">1240</span><span class="p">,</span> <span class="s2">"2026-10-04 10:05:00"</span><span class="p">),</span>
+                  <span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="s2">"ПР-503"</span><span class="p">,</span> <span class="s2">"приёмка"</span><span class="p">,</span> <span class="s2">"TVR"</span><span class="p">,</span> <span class="mi">1003</span><span class="p">,</span> <span class="mi">800</span><span class="p">,</span> <span class="s2">"2026-10-05 11:30:00"</span><span class="p">)])</span>
 <span class="n">conn</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;колонки stock:&quot;</span><span class="p">)</span>
-<span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;PRAGMA table_info(stock)&quot;</span><span class="p">):</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  </span><span class="si">{</span><span class="n">col</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">:</span><span class="s2">10</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">col</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="si">:</span><span class="s2">7</span><span class="si">}</span><span class="s2"> notnull=</span><span class="si">{</span><span class="n">col</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="si">}</span><span class="s2"> pk=</span><span class="si">{</span><span class="n">col</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;внешних ключей у stock:&quot;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;PRAGMA foreign_key_list(stock)&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">fetchall</span><span class="p">()))</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;режим внешних ключей:&quot;</span><span class="p">,</span> <span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;PRAGMA foreign_keys&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">fetchone</span><span class="p">()[</span><span class="mi">0</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"колонки stock:"</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">"PRAGMA table_info(stock)"</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  </span><span class="si">{</span><span class="n">col</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">:</span><span class="s2">10</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">col</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="si">:</span><span class="s2">7</span><span class="si">}</span><span class="s2"> notnull=</span><span class="si">{</span><span class="n">col</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="si">}</span><span class="s2"> pk=</span><span class="si">{</span><span class="n">col</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"внешних ключей у stock:"</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">"PRAGMA foreign_key_list(stock)"</span><span class="p">)</span><span class="o">.</span><span class="n">fetchall</span><span class="p">()))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"режим внешних ключей:"</span><span class="p">,</span> <span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">"PRAGMA foreign_keys"</span><span class="p">)</span><span class="o">.</span><span class="n">fetchone</span><span class="p">()[</span><span class="mi">0</span><span class="p">])</span>
 
 <span class="k">try</span><span class="p">:</span>
-    <span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;INSERT INTO stock VALUES (&#39;MSK&#39;, 1003, -5)&quot;</span><span class="p">)</span>
+    <span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">"INSERT INTO stock VALUES ('MSK', 1003, -5)"</span><span class="p">)</span>
 <span class="k">except</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">IntegrityError</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;отрицательный остаток:&quot;</span><span class="p">,</span> <span class="n">error</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"отрицательный остаток:"</span><span class="p">,</span> <span class="n">error</span><span class="p">)</span>
 
-<span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;UPDATE stock SET qty = &#39;12 шт&#39; WHERE site_code = &#39;MSK&#39; AND product_id = 1001&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;значение и тип:&quot;</span><span class="p">,</span> <span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
-    <span class="s2">&quot;SELECT qty, typeof(qty) FROM stock WHERE site_code = &#39;MSK&#39; AND product_id = 1001&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">fetchone</span><span class="p">())</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;сравнение и арифметика:&quot;</span><span class="p">,</span> <span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
-    <span class="s2">&quot;SELECT qty &gt;= 0, qty + 10 FROM stock WHERE site_code = &#39;MSK&#39; AND product_id = 1001&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">fetchone</span><span class="p">())</span>
+<span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">"UPDATE stock SET qty = '12 шт' WHERE site_code = 'MSK' AND product_id = 1001"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"значение и тип:"</span><span class="p">,</span> <span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
+    <span class="s2">"SELECT qty, typeof(qty) FROM stock WHERE site_code = 'MSK' AND product_id = 1001"</span><span class="p">)</span><span class="o">.</span><span class="n">fetchone</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"сравнение и арифметика:"</span><span class="p">,</span> <span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
+    <span class="s2">"SELECT qty &gt;= 0, qty + 10 FROM stock WHERE site_code = 'MSK' AND product_id = 1001"</span><span class="p">)</span><span class="o">.</span><span class="n">fetchone</span><span class="p">())</span>
 </code></pre></div>
 
 <p>Скрипт создаёт базу и сразу проверяет три вещи: состав колонок, наличие внешних ключей и реакцию на неверное значение. Вот его вывод.</p>
@@ -1024,7 +1048,7 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 внешних ключей у stock: 2
 режим внешних ключей: 0
 отрицательный остаток: CHECK constraint failed: qty &gt;= 0
-значение и тип: (&#39;12 шт&#39;, &#39;text&#39;)
+значение и тип: ('12 шт', 'text')
 сравнение и арифметика: (1, 22)
 </code></pre></div>
 
@@ -1084,46 +1108,46 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <p>Дубликат ищут группировкой по бизнес-ключу. Бизнес-ключ это набор полей, который для пользователя означает один объект: номер документа, артикул, сочетание площадки и товара, номер накладной вместе с датой.</p>
 <div class="codehilite" data-lang="text"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">sqlite3</span>
 
-<span class="n">conn</span> <span class="o">=</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s2">&quot;sklad_db_lecture.db&quot;</span><span class="p">)</span>
+<span class="n">conn</span> <span class="o">=</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s2">"sklad_db_lecture.db"</span><span class="p">)</span>
 <span class="n">conn</span><span class="o">.</span><span class="n">isolation_level</span> <span class="o">=</span> <span class="kc">None</span>
 
-<span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;INSERT INTO movements VALUES (5, &#39;ПР-501&#39;, &#39;приёмка&#39;, &#39;MSK&#39;, 1001, 60, &#39;2026-10-06 08:00:00&#39;)&quot;</span><span class="p">)</span>
-<span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;INSERT INTO movements VALUES (6, &#39;ПР-504&#39;, &#39;приёмка&#39;, &#39;SAR&#39;, 1001, 5, &#39;2026-10-06 08:10:00&#39;)&quot;</span><span class="p">)</span>
+<span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">"INSERT INTO movements VALUES (5, 'ПР-501', 'приёмка', 'MSK', 1001, 60, '2026-10-06 08:00:00')"</span><span class="p">)</span>
+<span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">"INSERT INTO movements VALUES (6, 'ПР-504', 'приёмка', 'SAR', 1001, 5, '2026-10-06 08:10:00')"</span><span class="p">)</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;дубли по номеру документа:&quot;</span><span class="p">)</span>
-<span class="k">for</span> <span class="n">doc</span><span class="p">,</span> <span class="n">count</span> <span class="ow">in</span> <span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;SELECT doc, COUNT(*) FROM movements GROUP BY doc HAVING COUNT(*) &gt; 1&quot;</span><span class="p">):</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  </span><span class="si">{</span><span class="n">doc</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">count</span><span class="si">}</span><span class="s2"> строки&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"дубли по номеру документа:"</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">doc</span><span class="p">,</span> <span class="n">count</span> <span class="ow">in</span> <span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">"SELECT doc, COUNT(*) FROM movements GROUP BY doc HAVING COUNT(*) &gt; 1"</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  </span><span class="si">{</span><span class="n">doc</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">count</span><span class="si">}</span><span class="s2"> строки"</span><span class="p">)</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;движения без площадки:&quot;</span><span class="p">)</span>
-<span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;SELECT m.id, m.doc, m.site_code</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"движения без площадки:"</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">"""SELECT m.id, m.doc, m.site_code</span>
 <span class="s2">                           FROM movements m</span>
 <span class="s2">                           LEFT JOIN sites s ON s.code = m.site_code</span>
-<span class="s2">                           WHERE s.code IS NULL&quot;&quot;&quot;</span><span class="p">):</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="n">row</span><span class="p">)</span>
+<span class="s2">                           WHERE s.code IS NULL"""</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">" "</span><span class="p">,</span> <span class="n">row</span><span class="p">)</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;нарушения внешних ключей:&quot;</span><span class="p">,</span> <span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;PRAGMA foreign_key_check&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">fetchall</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"нарушения внешних ключей:"</span><span class="p">,</span> <span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">"PRAGMA foreign_key_check"</span><span class="p">)</span><span class="o">.</span><span class="n">fetchall</span><span class="p">())</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;сверка остатка с движениями:&quot;</span><span class="p">)</span>
-<span class="n">query</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"сверка остатка с движениями:"</span><span class="p">)</span>
+<span class="n">query</span> <span class="o">=</span> <span class="s2">"""</span>
 <span class="s2">SELECT s.site_code, p.sku, s.qty,</span>
-<span class="s2">       COALESCE(SUM(CASE WHEN m.kind = &#39;приёмка&#39; THEN m.qty ELSE -m.qty END), 0) AS calc</span>
+<span class="s2">       COALESCE(SUM(CASE WHEN m.kind = 'приёмка' THEN m.qty ELSE -m.qty END), 0) AS calc</span>
 <span class="s2">FROM stock s</span>
 <span class="s2">JOIN products p ON p.id = s.product_id</span>
 <span class="s2">LEFT JOIN movements m ON m.site_code = s.site_code AND m.product_id = s.product_id</span>
 <span class="s2">GROUP BY s.site_code, p.sku, s.qty</span>
 <span class="s2">ORDER BY s.site_code, p.sku</span>
-<span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">"""</span>
 <span class="k">for</span> <span class="n">site</span><span class="p">,</span> <span class="n">sku</span><span class="p">,</span> <span class="n">qty</span><span class="p">,</span> <span class="n">calc</span> <span class="ow">in</span> <span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">query</span><span class="p">):</span>
-    <span class="n">mark</span> <span class="o">=</span> <span class="s2">&quot;ок&quot;</span> <span class="k">if</span> <span class="n">qty</span> <span class="o">==</span> <span class="n">calc</span> <span class="k">else</span> <span class="s2">&quot;расхождение&quot;</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  </span><span class="si">{</span><span class="n">site</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">sku</span><span class="si">}</span><span class="s2">: в остатках </span><span class="si">{</span><span class="n">qty</span><span class="si">}</span><span class="s2">, по движениям </span><span class="si">{</span><span class="n">calc</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">mark</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">mark</span> <span class="o">=</span> <span class="s2">"ок"</span> <span class="k">if</span> <span class="n">qty</span> <span class="o">==</span> <span class="n">calc</span> <span class="k">else</span> <span class="s2">"расхождение"</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  </span><span class="si">{</span><span class="n">site</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">sku</span><span class="si">}</span><span class="s2">: в остатках </span><span class="si">{</span><span class="n">qty</span><span class="si">}</span><span class="s2">, по движениям </span><span class="si">{</span><span class="n">calc</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">mark</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 </code></pre></div>
 
 <p>Скрипт добавляет в базу две плохие строки: повтор приёмки ПР-501 и приёмку с площадкой <code>SAR</code>, которой нет в справочнике. Затем он ищет дубли, потерянные связи и сверяет остаток с движениями.</p>
 <div class="codehilite" data-lang="text"><pre><span></span><code>дубли по номеру документа:
   ПР-501: 2 строки
 движения без площадки:
-  (6, &#39;ПР-504&#39;, &#39;SAR&#39;)
-нарушения внешних ключей: [(&#39;movements&#39;, 6, &#39;sites&#39;, 1)]
+  (6, 'ПР-504', 'SAR')
+нарушения внешних ключей: [('movements', 6, 'sites', 1)]
 сверка остатка с движениями:
   MSK SKU-1001: в остатках 12 шт, по движениям 102, расхождение
   MSK SKU-1002: в остатках 300, по движениям 0, расхождение
@@ -1186,36 +1210,36 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <p>Проверка транзакции строится на откате. Сначала читают состояние, потом начинают транзакцию, выполняют операцию, намеренно вызывают ошибку, откатывают и снова читают состояние. Если числа совпали, атомарность работает.</p>
 <div class="codehilite" data-lang="text"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">sqlite3</span>
 
-<span class="n">conn</span> <span class="o">=</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s2">&quot;sklad_db_lecture.db&quot;</span><span class="p">)</span>
+<span class="n">conn</span> <span class="o">=</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s2">"sklad_db_lecture.db"</span><span class="p">)</span>
 <span class="n">conn</span><span class="o">.</span><span class="n">isolation_level</span> <span class="o">=</span> <span class="kc">None</span>
 
-<span class="n">before</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;SELECT COUNT(*) FROM movements&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">fetchone</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
-<span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;BEGIN&quot;</span><span class="p">)</span>
-<span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;INSERT INTO movements VALUES (7, &#39;ПР-505&#39;, &#39;приёмка&#39;, &#39;KLG&#39;, 1002, 40, &#39;2026-10-07 09:00:00&#39;)&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;внутри транзакции:&quot;</span><span class="p">,</span> <span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;SELECT COUNT(*) FROM movements&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">fetchone</span><span class="p">()[</span><span class="mi">0</span><span class="p">])</span>
-<span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;ROLLBACK&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;после отката:&quot;</span><span class="p">,</span> <span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;SELECT COUNT(*) FROM movements&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">fetchone</span><span class="p">()[</span><span class="mi">0</span><span class="p">],</span> <span class="s2">&quot;было:&quot;</span><span class="p">,</span> <span class="n">before</span><span class="p">)</span>
+<span class="n">before</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">"SELECT COUNT(*) FROM movements"</span><span class="p">)</span><span class="o">.</span><span class="n">fetchone</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">"BEGIN"</span><span class="p">)</span>
+<span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">"INSERT INTO movements VALUES (7, 'ПР-505', 'приёмка', 'KLG', 1002, 40, '2026-10-07 09:00:00')"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"внутри транзакции:"</span><span class="p">,</span> <span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">"SELECT COUNT(*) FROM movements"</span><span class="p">)</span><span class="o">.</span><span class="n">fetchone</span><span class="p">()[</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">"ROLLBACK"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"после отката:"</span><span class="p">,</span> <span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">"SELECT COUNT(*) FROM movements"</span><span class="p">)</span><span class="o">.</span><span class="n">fetchone</span><span class="p">()[</span><span class="mi">0</span><span class="p">],</span> <span class="s2">"было:"</span><span class="p">,</span> <span class="n">before</span><span class="p">)</span>
 
-<span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;INSERT INTO movements VALUES (8, &#39;ПР-506&#39;, &#39;приёмка&#39;, &#39;KLG&#39;, 1002, 40, &#39;2026-10-07 09:00:00&#39;)&quot;</span><span class="p">)</span>
+<span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">"INSERT INTO movements VALUES (8, 'ПР-506', 'приёмка', 'KLG', 1002, 40, '2026-10-07 09:00:00')"</span><span class="p">)</span>
 <span class="k">try</span><span class="p">:</span>
-    <span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;INSERT INTO movements VALUES (9, &#39;ПР-506&#39;, &#39;приёмка&#39;, &#39;KLG&#39;, 1002, 0, &#39;2026-10-07 09:00:05&#39;)&quot;</span><span class="p">)</span>
+    <span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">"INSERT INTO movements VALUES (9, 'ПР-506', 'приёмка', 'KLG', 1002, 0, '2026-10-07 09:00:05')"</span><span class="p">)</span>
 <span class="k">except</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">IntegrityError</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;вторая строка отклонена:&quot;</span><span class="p">,</span> <span class="n">error</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;строк по документу ПР-506:&quot;</span><span class="p">,</span> <span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
-    <span class="s2">&quot;SELECT COUNT(*) FROM movements WHERE doc = &#39;ПР-506&#39;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">fetchone</span><span class="p">()[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"вторая строка отклонена:"</span><span class="p">,</span> <span class="n">error</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"строк по документу ПР-506:"</span><span class="p">,</span> <span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
+    <span class="s2">"SELECT COUNT(*) FROM movements WHERE doc = 'ПР-506'"</span><span class="p">)</span><span class="o">.</span><span class="n">fetchone</span><span class="p">()[</span><span class="mi">0</span><span class="p">])</span>
 
-<span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;BEGIN&quot;</span><span class="p">)</span>
-<span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;INSERT INTO movements VALUES (10, &#39;ПР-507&#39;, &#39;приёмка&#39;, &#39;KLG&#39;, 1002, 40, &#39;2026-10-07 10:00:00&#39;)&quot;</span><span class="p">)</span>
+<span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">"BEGIN"</span><span class="p">)</span>
+<span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">"INSERT INTO movements VALUES (10, 'ПР-507', 'приёмка', 'KLG', 1002, 40, '2026-10-07 10:00:00')"</span><span class="p">)</span>
 <span class="k">try</span><span class="p">:</span>
-    <span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;INSERT INTO movements VALUES (11, &#39;ПР-507&#39;, &#39;приёмка&#39;, &#39;KLG&#39;, 1002, 0, &#39;2026-10-07 10:00:05&#39;)&quot;</span><span class="p">)</span>
+    <span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">"INSERT INTO movements VALUES (11, 'ПР-507', 'приёмка', 'KLG', 1002, 0, '2026-10-07 10:00:05')"</span><span class="p">)</span>
 <span class="k">except</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">IntegrityError</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
-    <span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;ROLLBACK&quot;</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;откат после ошибки:&quot;</span><span class="p">,</span> <span class="n">error</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;строк по документу ПР-507:&quot;</span><span class="p">,</span> <span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
-    <span class="s2">&quot;SELECT COUNT(*) FROM movements WHERE doc = &#39;ПР-507&#39;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">fetchone</span><span class="p">()[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">"ROLLBACK"</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"откат после ошибки:"</span><span class="p">,</span> <span class="n">error</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"строк по документу ПР-507:"</span><span class="p">,</span> <span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
+    <span class="s2">"SELECT COUNT(*) FROM movements WHERE doc = 'ПР-507'"</span><span class="p">)</span><span class="o">.</span><span class="n">fetchone</span><span class="p">()[</span><span class="mi">0</span><span class="p">])</span>
 
-<span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;DELETE FROM movements WHERE doc = &#39;ПР-506&#39;&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;после уборки тестовых строк:&quot;</span><span class="p">,</span> <span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;SELECT COUNT(*) FROM movements&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">fetchone</span><span class="p">()[</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">"DELETE FROM movements WHERE doc = 'ПР-506'"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"после уборки тестовых строк:"</span><span class="p">,</span> <span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">"SELECT COUNT(*) FROM movements"</span><span class="p">)</span><span class="o">.</span><span class="n">fetchone</span><span class="p">()[</span><span class="mi">0</span><span class="p">])</span>
 </code></pre></div>
 
 <p>Скрипт проверяет три сценария: чистый откат, частичную запись без транзакции и ту же операцию внутри транзакции. Вывод показывает разницу.</p>
@@ -1275,7 +1299,7 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <p>Проверка данных отличается от проверки интерфейса тем, что ожидаемый результат нельзя увидеть на экране. Его нужно вычислить из независимого источника. Таким источником может быть первичный документ, сумма движений, внешняя система или правило, которому обязаны подчиняться данные.</p>
 <p>Правило, которому подчиняются данные, называют инвариантом. Для склада основной инвариант простой: остаток равен сумме приёмок минус сумма отгрузок по этой позиции и площадке. Если остаток ввели вручную при открытии склада, добавляется начальный остаток, и это должно быть записано в правилах.</p>
 <div class="codehilite" data-lang="text"><pre><span></span><code><span class="k">SELECT</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="n">site_code</span><span class="p">,</span><span class="w"> </span><span class="n">p</span><span class="p">.</span><span class="n">sku</span><span class="p">,</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="n">qty</span><span class="p">,</span>
-<span class="w">       </span><span class="k">COALESCE</span><span class="p">(</span><span class="k">SUM</span><span class="p">(</span><span class="k">CASE</span><span class="w"> </span><span class="k">WHEN</span><span class="w"> </span><span class="n">m</span><span class="p">.</span><span class="n">kind</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;приёмка&#39;</span><span class="w"> </span><span class="k">THEN</span><span class="w"> </span><span class="n">m</span><span class="p">.</span><span class="n">qty</span><span class="w"> </span><span class="k">ELSE</span><span class="w"> </span><span class="o">-</span><span class="n">m</span><span class="p">.</span><span class="n">qty</span><span class="w"> </span><span class="k">END</span><span class="p">),</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">calc</span>
+<span class="w">       </span><span class="k">COALESCE</span><span class="p">(</span><span class="k">SUM</span><span class="p">(</span><span class="k">CASE</span><span class="w"> </span><span class="k">WHEN</span><span class="w"> </span><span class="n">m</span><span class="p">.</span><span class="n">kind</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'приёмка'</span><span class="w"> </span><span class="k">THEN</span><span class="w"> </span><span class="n">m</span><span class="p">.</span><span class="n">qty</span><span class="w"> </span><span class="k">ELSE</span><span class="w"> </span><span class="o">-</span><span class="n">m</span><span class="p">.</span><span class="n">qty</span><span class="w"> </span><span class="k">END</span><span class="p">),</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">calc</span>
 <span class="k">FROM</span><span class="w"> </span><span class="n">stock</span><span class="w"> </span><span class="n">s</span>
 <span class="k">JOIN</span><span class="w"> </span><span class="n">products</span><span class="w"> </span><span class="n">p</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">p</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="n">product_id</span>
 <span class="k">LEFT</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">movements</span><span class="w"> </span><span class="n">m</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">m</span><span class="p">.</span><span class="n">site_code</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="n">site_code</span><span class="w"> </span><span class="k">AND</span><span class="w"> </span><span class="n">m</span><span class="p">.</span><span class="n">product_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="n">product_id</span>
@@ -1571,6 +1595,40 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
       var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
       window.scrollTo({top: 0, behavior: reduce ? 'auto' : 'smooth'});
     });
+  });
+})();
+
+(function(){
+  document.querySelectorAll('[data-slider]').forEach(function(slider){
+    var track = slider.querySelector('[data-slider-track]');
+    var slides = track ? Array.prototype.slice.call(track.children) : [];
+    var counter = slider.querySelector('[data-slider-counter]');
+    var prev = slider.querySelector('[data-slider-prev]');
+    var next = slider.querySelector('[data-slider-next]');
+    if(!track || slides.length < 2) return;
+    function current(){
+      var best = 0, dist = Infinity;
+      slides.forEach(function(slide, i){
+        var d = Math.abs(slide.offsetLeft - track.scrollLeft);
+        if(d < dist){ dist = d; best = i; }
+      });
+      return best;
+    }
+    function update(){
+      if(counter) counter.textContent = (current() + 1) + ' / ' + slides.length;
+    }
+    function go(delta){
+      var i = Math.max(0, Math.min(slides.length - 1, current() + delta));
+      var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      track.scrollTo({left: slides[i].offsetLeft, behavior: reduce ? 'auto' : 'smooth'});
+    }
+    if(prev) prev.addEventListener('click', function(){ go(-1); });
+    if(next) next.addEventListener('click', function(){ go(1); });
+    track.addEventListener('scroll', function(){
+      clearTimeout(track._sliderTimer);
+      track._sliderTimer = setTimeout(update, 80);
+    }, {passive: true});
+    update();
   });
 })();
 (function(){

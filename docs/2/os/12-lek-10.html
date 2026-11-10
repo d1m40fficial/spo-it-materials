@@ -527,6 +527,12 @@ html.modal-open { overflow: hidden; }
 :root[data-theme=dark] .quiz-actions button[data-answer]:hover, :root[data-theme=dark] .quiz-actions button.quiz-answer:hover { background: #262626; background-color: #262626; color: #fff; border-color: #262626; }
 :root[data-theme=dark] .gate-q { background: #1E1E1E; color: #FF6B00; }
 
+/* the whole-variant archive is the main action in a download block */
+.files a.zip { background: #121212; color: #fff; border-color: #121212; font-weight: 700; box-shadow: 4px 4px 0 rgba(0,0,0,.18); }
+.files a.zip::before { color: #fff; }
+.files a.zip:hover { background: #1D1D1D; color: #fff; border-color: #1D1D1D; box-shadow: 5px 5px 0 rgba(0,0,0,.22); }
+.files a.zip:active { transform: translate(2px,2px); box-shadow: 1px 1px 0 rgba(0,0,0,.12); }
+
 /* ---------- practical work checklist ---------- */
 .work-checklist { width: 100%; border-collapse: collapse; margin: 14px 0 4px; }
 .work-checklist th, .work-checklist td { border: 1px solid var(--rule); padding: 9px 10px; vertical-align: top; }
@@ -564,6 +570,24 @@ html.modal-open { overflow: hidden; }
 .variant-body .task-list { margin: 8px 0 0; padding-left: 20px; }
 .variant-body .task-list li { margin: 0 0 8px; }
 @media (max-width: 620px) { .variant-body { overflow-x: auto; } .variant-body table { min-width: 520px; } }
+
+/* ---------- schema slider: all CREATE TABLE examples ---------- */
+.schema-slider { margin: 18px 0 24px; border: 1px solid #d8d5cc; border-radius: 14px; background: #fff; color: #1a1916; overflow: hidden; }
+.schema-slider-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 14px; background: #f5f2ea; border-bottom: 1px solid #d8d5cc; }
+.schema-slider-bar strong { font: 700 14px/1.2 var(--font-display); color: #1a1916; }
+.schema-slider-actions { display: flex; align-items: center; gap: 8px; }
+.schema-slider-counter { min-width: 62px; text-align: center; font: 600 13px/1 var(--font-mono); color: #59544a; }
+.schema-btn { width: 34px; height: 34px; border: 1px solid #c9c4b8; border-radius: 8px; background: #fff; color: #1a1916; font: 700 18px/1 var(--font-mono); cursor: pointer; }
+.schema-btn:hover { background: #ece7dc; }
+.schema-track { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: thin; }
+.schema-slide { flex: 0 0 100%; min-width: 100%; box-sizing: border-box; padding: 16px 18px 18px; scroll-snap-align: start; }
+.schema-slide h4 { margin: 0 0 10px; font: 700 16px/1.3 var(--font-display); color: #1a1916; }
+.schema-slide h4 code, .schema-slide p code { color: #1a1916; background: #f1ede4; padding: 1px 4px; border-radius: 4px; }
+.schema-slide p { margin: 0 0 10px; font-size: 14px; line-height: 1.55; color: #3a372f; }
+.schema-slide pre { margin: 0; padding: 14px 16px; overflow-x: auto; border: 1px solid #ddd8cc; border-radius: 10px; background: #fbfaf6; color: #1a1916; font: 12.5px/1.5 var(--font-mono); }
+.schema-slide code { color: inherit; background: none; padding: 0; }
+.schema-slider:focus-within { outline: 2px solid #b9a97f; outline-offset: 2px; }
+@media (max-width: 620px) { .schema-slide { padding: 12px; } .schema-slider-bar { padding: 8px 10px; } }
 
 /* ---------- print / PDF export ---------- */
 @page { margin: 16mm; }
@@ -863,7 +887,7 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <span class="nb">echo</span><span class="w"> </span><span class="nv">$?</span>
 </code></pre></div>
 
-<div class="codehilite" data-lang="text"><pre><span></span><code>ls: cannot access &#39;missing.txt&#39;: No such file or directory
+<div class="codehilite" data-lang="text"><pre><span></span><code>ls: cannot access 'missing.txt': No such file or directory
 2
 </code></pre></div>
 
@@ -1031,13 +1055,13 @@ d-----         03.11.2026     09:12                logs
 <p>Путь бывает абсолютным и относительным. Абсолютный начинается от корня файловой системы, относительный от текущего каталога. Точка <code>.</code> означает текущий каталог, две точки <code>..</code> родительский. Команда <code>cd -</code> в bash возвращает в предыдущий каталог, а <code>Set-Location -</code> делает то же в PowerShell. Если в пути есть пробелы, его заключают в кавычки, иначе оболочка разобьёт путь на несколько аргументов.</p>
 <h2 id="поиск-файлов-и-текста"><span class="num">04</span>Поиск файлов и текста</h2>
 <p>Поиск файла по имени в Linux выполняет <code>find</code>. Первый аргумент задаёт каталог, <code>-name</code> шаблон имени, <code>-type f</code> ограничивает поиск файлами. Шаблон в кавычках защищает звёздочку от преждевременного раскрытия оболочкой.</p>
-<div class="codehilite" data-lang="text"><pre><span></span><code>find<span class="w"> </span>.<span class="w"> </span>-type<span class="w"> </span>f<span class="w"> </span>-name<span class="w"> </span><span class="s2">&quot;*.log&quot;</span>
-find<span class="w"> </span>.<span class="w"> </span>-type<span class="w"> </span>f<span class="w"> </span>-name<span class="w"> </span><span class="s2">&quot;*.log&quot;</span><span class="w"> </span>-mtime<span class="w"> </span>+30
+<div class="codehilite" data-lang="text"><pre><span></span><code>find<span class="w"> </span>.<span class="w"> </span>-type<span class="w"> </span>f<span class="w"> </span>-name<span class="w"> </span><span class="s2">"*.log"</span>
+find<span class="w"> </span>.<span class="w"> </span>-type<span class="w"> </span>f<span class="w"> </span>-name<span class="w"> </span><span class="s2">"*.log"</span><span class="w"> </span>-mtime<span class="w"> </span>+30
 </code></pre></div>
 
 <p>Ключ <code>-mtime +30</code> означает, что файл изменялся более тридцати суток назад. Найденные имена можно сразу передать в другую команду через <code>-exec</code> или <code>xargs</code>.</p>
-<div class="codehilite" data-lang="text"><pre><span></span><code>find<span class="w"> </span>.<span class="w"> </span>-type<span class="w"> </span>f<span class="w"> </span>-name<span class="w"> </span><span class="s2">&quot;*.log&quot;</span><span class="w"> </span>-mtime<span class="w"> </span>+30<span class="w"> </span>-exec<span class="w"> </span>wc<span class="w"> </span>-l<span class="w"> </span><span class="o">{}</span><span class="w"> </span><span class="se">\;</span>
-find<span class="w"> </span>.<span class="w"> </span>-type<span class="w"> </span>f<span class="w"> </span>-name<span class="w"> </span><span class="s2">&quot;*.log&quot;</span><span class="w"> </span>-mtime<span class="w"> </span>+30<span class="w"> </span>-print0<span class="w"> </span><span class="p">|</span><span class="w"> </span>xargs<span class="w"> </span>-0<span class="w"> </span>-r<span class="w"> </span>wc<span class="w"> </span>-l
+<div class="codehilite" data-lang="text"><pre><span></span><code>find<span class="w"> </span>.<span class="w"> </span>-type<span class="w"> </span>f<span class="w"> </span>-name<span class="w"> </span><span class="s2">"*.log"</span><span class="w"> </span>-mtime<span class="w"> </span>+30<span class="w"> </span>-exec<span class="w"> </span>wc<span class="w"> </span>-l<span class="w"> </span><span class="o">{}</span><span class="w"> </span><span class="se">\;</span>
+find<span class="w"> </span>.<span class="w"> </span>-type<span class="w"> </span>f<span class="w"> </span>-name<span class="w"> </span><span class="s2">"*.log"</span><span class="w"> </span>-mtime<span class="w"> </span>+30<span class="w"> </span>-print0<span class="w"> </span><span class="p">|</span><span class="w"> </span>xargs<span class="w"> </span>-0<span class="w"> </span>-r<span class="w"> </span>wc<span class="w"> </span>-l
 </code></pre></div>
 
 <p><code>-exec</code> запускает команду для каждого найденного файла, а <code>{}</code> подставляет его имя. Конструкция <code>xargs</code> собирает имена в пакет и запускает команду реже, поэтому работает быстрее на большом числе файлов. Ключ <code>-print0</code> вместе с <code>xargs -0</code> разделяет имена нулевым байтом и не ломается, если в имени есть пробел или перевод строки. Ключ <code>-r</code> запрещает запуск команды при пустом списке.</p>
@@ -1048,12 +1072,12 @@ find<span class="w"> </span>.<span class="w"> </span>-type<span class="w"> </spa
 </code></pre></div>
 
 <p>Поиск текста внутри файлов в Linux выполняет <code>grep</code>. Ключ <code>-r</code> включает рекурсивный обход, <code>-n</code> печатает номера строк, <code>-i</code> игнорирует регистр.</p>
-<div class="codehilite" data-lang="text"><pre><span></span><code>grep<span class="w"> </span>-rn<span class="w"> </span><span class="s2">&quot;ERROR&quot;</span><span class="w"> </span>logs/
+<div class="codehilite" data-lang="text"><pre><span></span><code>grep<span class="w"> </span>-rn<span class="w"> </span><span class="s2">"ERROR"</span><span class="w"> </span>logs/
 </code></pre></div>
 
 <p>В PowerShell поиск строк выполняет <code>Select-String</code>. Он принимает файлы из конвейера и печатает имя файла, номер строки и совпадение.</p>
 <div class="codehilite" data-lang="text"><pre><span></span><code><span class="nb">Get-ChildItem</span> <span class="n">logs</span> <span class="n">-Recurse</span> <span class="o">-File</span> <span class="p">|</span>
-  <span class="nb">Select-String</span> <span class="n">-Pattern</span> <span class="s2">&quot;ERROR&quot;</span>
+  <span class="nb">Select-String</span> <span class="n">-Pattern</span> <span class="s2">"ERROR"</span>
 </code></pre></div>
 
 <p>Команда <code>where.exe</code> в Windows ищет исполняемые файлы по путям, а с ключом <code>/r</code> умеет обходить каталог рекурсивно. В Linux команда <code>which</code> показывает, какой исполняемый файл будет запущен, а <code>type</code> дополнительно сообщает, является ли имя псевдонимом или встроенной командой.</p>
@@ -1082,7 +1106,7 @@ find<span class="w"> </span>.<span class="w"> </span>-type<span class="w"> </spa
 </code></pre></div>
 
 <p><strong>Перенаправление</strong> меняет поток вывода. Знак <code>&gt;</code> записывает стандартный вывод в файл и перезаписывает его, <code>&gt;&gt;</code> дописывает в конец. Запись <code>2&gt;</code> отправляет стандартный поток ошибок, <code>2&gt;&amp;1</code> объединяет ошибки с обычным выводом.</p>
-<div class="codehilite" data-lang="text"><pre><span></span><code>find<span class="w"> </span>.<span class="w"> </span>-name<span class="w"> </span><span class="s2">&quot;*.log&quot;</span><span class="w"> </span>&gt;<span class="w"> </span>logs.txt<span class="w"> </span><span class="m">2</span>&gt;<span class="w"> </span>errors.txt
+<div class="codehilite" data-lang="text"><pre><span></span><code>find<span class="w"> </span>.<span class="w"> </span>-name<span class="w"> </span><span class="s2">"*.log"</span><span class="w"> </span>&gt;<span class="w"> </span>logs.txt<span class="w"> </span><span class="m">2</span>&gt;<span class="w"> </span>errors.txt
 </code></pre></div>
 
 <div class="codehilite" data-lang="text"><pre><span></span><code><span class="nb">Get-ChildItem</span> <span class="n">-Recurse</span> <span class="n">-Filter</span> <span class="p">*.</span><span class="n">log</span> <span class="p">|</span>
@@ -1091,11 +1115,11 @@ find<span class="w"> </span>.<span class="w"> </span>-type<span class="w"> </spa
 
 <p>В Windows PowerShell 5.1 знак <code>&gt;</code> по умолчанию создаёт файл в кодировке UTF-16, а не UTF-8. Для обмена с Linux и другими программами лучше явно указывать <code>-Encoding utf8</code> через <code>Out-File</code> или <code>Set-Content</code>. В PowerShell 7 кодировка по умолчанию уже UTF-8.</p>
 <p>Условия в bash записывают через <code>&amp;&amp;</code> и <code>||</code>. <code>&amp;&amp;</code> выполняет вторую команду только при успехе первой, <code>||</code> только при ошибке. PowerShell 7 поддерживает те же операторы, а Windows PowerShell 5.1 их не понимает и требует <code>;</code> с проверкой <code>$?</code>.</p>
-<div class="codehilite" data-lang="text"><pre><span></span><code>mkdir<span class="w"> </span>-p<span class="w"> </span>backup<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>cp<span class="w"> </span>notes.txt<span class="w"> </span>backup/<span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;копирование не удалось&quot;</span>
+<div class="codehilite" data-lang="text"><pre><span></span><code>mkdir<span class="w"> </span>-p<span class="w"> </span>backup<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>cp<span class="w"> </span>notes.txt<span class="w"> </span>backup/<span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">"копирование не удалось"</span>
 </code></pre></div>
 
 <div class="codehilite" data-lang="text"><pre><span></span><code><span class="nb">New-Item</span> <span class="n">-ItemType</span> <span class="n">Directory</span> <span class="n">-Force</span> <span class="n">backup</span>
-<span class="k">if</span> <span class="p">($?)</span> <span class="p">{</span> <span class="nb">Copy-Item</span> <span class="n">notes</span><span class="p">.</span><span class="n">txt</span> <span class="n">backup</span><span class="p">\</span> <span class="p">}</span> <span class="k">else</span> <span class="p">{</span> <span class="nb">Write-Output</span> <span class="s2">&quot;копирование не удалось&quot;</span> <span class="p">}</span>
+<span class="k">if</span> <span class="p">($?)</span> <span class="p">{</span> <span class="nb">Copy-Item</span> <span class="n">notes</span><span class="p">.</span><span class="n">txt</span> <span class="n">backup</span><span class="p">\</span> <span class="p">}</span> <span class="k">else</span> <span class="p">{</span> <span class="nb">Write-Output</span> <span class="s2">"копирование не удалось"</span> <span class="p">}</span>
 </code></pre></div>
 
 <table>
@@ -1150,7 +1174,7 @@ find<span class="w"> </span>.<span class="w"> </span>-type<span class="w"> </spa
 <p>В Linux справка встроена в систему страниц руководства. <code>man ls</code> открывает полное описание, <code>ls --help</code> краткую справку, <code>apropos copy</code> ищет команды по описанию. Если страница не установлена, <code>man</code> сообщит об этом, и тогда остаётся <code>--help</code>.</p>
 <div class="codehilite" data-lang="text"><pre><span></span><code>man<span class="w"> </span>ls
 ls<span class="w"> </span>--help
-apropos<span class="w"> </span><span class="s2">&quot;copy files&quot;</span>
+apropos<span class="w"> </span><span class="s2">"copy files"</span>
 </code></pre></div>
 
 <p>В PowerShell справка построена на командлетах. <code>Get-Help Get-ChildItem</code> показывает описание, <code>-Examples</code> примеры, <code>-Full</code> все разделы. <code>Get-Command</code> ищет команды по имени, а <code>Get-Help about_Redirection</code> объясняет тему целиком.</p>
@@ -1168,35 +1192,35 @@ apropos<span class="w"> </span><span class="s2">&quot;copy files&quot;</span>
 <p class="gate-action"><button type="button" class="gate-btn" aria-expanded="false"><span class="gate-q" aria-hidden="true">?</span><span>Почему одна и та же строка с кавычками даёт разный результат в bash и PowerShell?</span></button></p>
 <div class="gate-content" hidden><h2 id="переменные-кавычки-и-сценарии"><span class="num">07</span>Переменные, кавычки и сценарии</h2>
 <p>Переменная хранит значение, которое подставляется в команду. В bash присваивание не должно содержать пробелов вокруг знака равенства, а обращение к переменной начинается со знака доллара.</p>
-<div class="codehilite" data-lang="text"><pre><span></span><code><span class="nv">NAME</span><span class="o">=</span><span class="s2">&quot;os-lab&quot;</span>
-<span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Стенд: </span><span class="nv">$NAME</span><span class="s2">&quot;</span>
+<div class="codehilite" data-lang="text"><pre><span></span><code><span class="nv">NAME</span><span class="o">=</span><span class="s2">"os-lab"</span>
+<span class="nb">echo</span><span class="w"> </span><span class="s2">"Стенд: </span><span class="nv">$NAME</span><span class="s2">"</span>
 </code></pre></div>
 
 <p>В PowerShell переменная начинается со знака доллара, а присваивание допускает пробелы.</p>
-<div class="codehilite" data-lang="text"><pre><span></span><code><span class="nv">$Name</span> <span class="p">=</span> <span class="s2">&quot;os-lab&quot;</span>
-<span class="nb">Write-Output</span> <span class="s2">&quot;Стенд: $Name&quot;</span>
+<div class="codehilite" data-lang="text"><pre><span></span><code><span class="nv">$Name</span> <span class="p">=</span> <span class="s2">"os-lab"</span>
+<span class="nb">Write-Output</span> <span class="s2">"Стенд: $Name"</span>
 </code></pre></div>
 
 <p>Кавычки управляют подстановкой. В bash одинарные кавычки сохраняют всё буквально, двойные раскрывают переменные и команды. В PowerShell одинарные кавычки тоже буквальные, а двойные раскрывают переменные. Разница в деталях, но правило похожее: если нужен точный текст, берите одинарные кавычки.</p>
-<div class="codehilite" data-lang="text"><pre><span></span><code><span class="nb">echo</span><span class="w"> </span><span class="s1">&#39;$HOME&#39;</span>
-<span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$HOME</span><span class="s2">&quot;</span>
+<div class="codehilite" data-lang="text"><pre><span></span><code><span class="nb">echo</span><span class="w"> </span><span class="s1">'$HOME'</span>
+<span class="nb">echo</span><span class="w"> </span><span class="s2">"</span><span class="nv">$HOME</span><span class="s2">"</span>
 </code></pre></div>
 
-<div class="codehilite" data-lang="text"><pre><span></span><code><span class="nb">Write-Output</span> <span class="s1">&#39;$HOME&#39;</span>
-<span class="nb">Write-Output</span> <span class="s2">&quot;$HOME&quot;</span>
+<div class="codehilite" data-lang="text"><pre><span></span><code><span class="nb">Write-Output</span> <span class="s1">'$HOME'</span>
+<span class="nb">Write-Output</span> <span class="s2">"$HOME"</span>
 </code></pre></div>
 
 <p>Сценарий в Linux это текстовый файл с первой строкой <code>#!/bin/bash</code>, которая указывает интерпретатор. Файлу нужно дать право на выполнение командой <code>chmod +x</code>, после чего его запускают как <code>./script.sh</code>. В PowerShell сценарий имеет расширение <code>.ps1</code>, а запуск может блокироваться политикой выполнения.</p>
 <div class="codehilite" data-lang="text"><pre><span></span><code><span class="ch">#!/bin/bash</span>
 <span class="nb">set</span><span class="w"> </span>-e
 <span class="k">for</span><span class="w"> </span>file<span class="w"> </span><span class="k">in</span><span class="w"> </span>*.log<span class="p">;</span><span class="w"> </span><span class="k">do</span>
-<span class="w">  </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Обработка </span><span class="nv">$file</span><span class="s2">&quot;</span>
+<span class="w">  </span><span class="nb">echo</span><span class="w"> </span><span class="s2">"Обработка </span><span class="nv">$file</span><span class="s2">"</span>
 <span class="k">done</span>
 </code></pre></div>
 
 <div class="codehilite" data-lang="text"><pre><span></span><code><span class="nv">$files</span> <span class="p">=</span> <span class="nb">Get-ChildItem</span> <span class="n">-Filter</span> <span class="p">*.</span><span class="n">log</span>
 <span class="k">foreach</span> <span class="p">(</span><span class="nv">$file</span> <span class="k">in</span> <span class="nv">$files</span><span class="p">)</span> <span class="p">{</span>
-  <span class="nb">Write-Output</span> <span class="s2">&quot;Обработка </span><span class="p">$(</span><span class="nv">$file</span><span class="p">.</span><span class="n">Name</span><span class="p">)</span><span class="s2">&quot;</span>
+  <span class="nb">Write-Output</span> <span class="s2">"Обработка </span><span class="p">$(</span><span class="nv">$file</span><span class="p">.</span><span class="n">Name</span><span class="p">)</span><span class="s2">"</span>
 <span class="p">}</span>
 </code></pre></div>
 
@@ -1404,6 +1428,40 @@ ps<span class="w"> </span>-eo<span class="w"> </span>pid,comm,%cpu,%mem<span cla
       var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
       window.scrollTo({top: 0, behavior: reduce ? 'auto' : 'smooth'});
     });
+  });
+})();
+
+(function(){
+  document.querySelectorAll('[data-slider]').forEach(function(slider){
+    var track = slider.querySelector('[data-slider-track]');
+    var slides = track ? Array.prototype.slice.call(track.children) : [];
+    var counter = slider.querySelector('[data-slider-counter]');
+    var prev = slider.querySelector('[data-slider-prev]');
+    var next = slider.querySelector('[data-slider-next]');
+    if(!track || slides.length < 2) return;
+    function current(){
+      var best = 0, dist = Infinity;
+      slides.forEach(function(slide, i){
+        var d = Math.abs(slide.offsetLeft - track.scrollLeft);
+        if(d < dist){ dist = d; best = i; }
+      });
+      return best;
+    }
+    function update(){
+      if(counter) counter.textContent = (current() + 1) + ' / ' + slides.length;
+    }
+    function go(delta){
+      var i = Math.max(0, Math.min(slides.length - 1, current() + delta));
+      var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      track.scrollTo({left: slides[i].offsetLeft, behavior: reduce ? 'auto' : 'smooth'});
+    }
+    if(prev) prev.addEventListener('click', function(){ go(-1); });
+    if(next) next.addEventListener('click', function(){ go(1); });
+    track.addEventListener('scroll', function(){
+      clearTimeout(track._sliderTimer);
+      track._sliderTimer = setTimeout(update, 80);
+    }, {passive: true});
+    update();
   });
 })();
 (function(){

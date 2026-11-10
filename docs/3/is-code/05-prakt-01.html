@@ -527,6 +527,12 @@ html.modal-open { overflow: hidden; }
 :root[data-theme=dark] .quiz-actions button[data-answer]:hover, :root[data-theme=dark] .quiz-actions button.quiz-answer:hover { background: #262626; background-color: #262626; color: #fff; border-color: #262626; }
 :root[data-theme=dark] .gate-q { background: #1E1E1E; color: #FF6B00; }
 
+/* the whole-variant archive is the main action in a download block */
+.files a.zip { background: #121212; color: #fff; border-color: #121212; font-weight: 700; box-shadow: 4px 4px 0 rgba(0,0,0,.18); }
+.files a.zip::before { color: #fff; }
+.files a.zip:hover { background: #1D1D1D; color: #fff; border-color: #1D1D1D; box-shadow: 5px 5px 0 rgba(0,0,0,.22); }
+.files a.zip:active { transform: translate(2px,2px); box-shadow: 1px 1px 0 rgba(0,0,0,.12); }
+
 /* ---------- practical work checklist ---------- */
 .work-checklist { width: 100%; border-collapse: collapse; margin: 14px 0 4px; }
 .work-checklist th, .work-checklist td { border: 1px solid var(--rule); padding: 9px 10px; vertical-align: top; }
@@ -564,6 +570,24 @@ html.modal-open { overflow: hidden; }
 .variant-body .task-list { margin: 8px 0 0; padding-left: 20px; }
 .variant-body .task-list li { margin: 0 0 8px; }
 @media (max-width: 620px) { .variant-body { overflow-x: auto; } .variant-body table { min-width: 520px; } }
+
+/* ---------- schema slider: all CREATE TABLE examples ---------- */
+.schema-slider { margin: 18px 0 24px; border: 1px solid #d8d5cc; border-radius: 14px; background: #fff; color: #1a1916; overflow: hidden; }
+.schema-slider-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 14px; background: #f5f2ea; border-bottom: 1px solid #d8d5cc; }
+.schema-slider-bar strong { font: 700 14px/1.2 var(--font-display); color: #1a1916; }
+.schema-slider-actions { display: flex; align-items: center; gap: 8px; }
+.schema-slider-counter { min-width: 62px; text-align: center; font: 600 13px/1 var(--font-mono); color: #59544a; }
+.schema-btn { width: 34px; height: 34px; border: 1px solid #c9c4b8; border-radius: 8px; background: #fff; color: #1a1916; font: 700 18px/1 var(--font-mono); cursor: pointer; }
+.schema-btn:hover { background: #ece7dc; }
+.schema-track { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: thin; }
+.schema-slide { flex: 0 0 100%; min-width: 100%; box-sizing: border-box; padding: 16px 18px 18px; scroll-snap-align: start; }
+.schema-slide h4 { margin: 0 0 10px; font: 700 16px/1.3 var(--font-display); color: #1a1916; }
+.schema-slide h4 code, .schema-slide p code { color: #1a1916; background: #f1ede4; padding: 1px 4px; border-radius: 4px; }
+.schema-slide p { margin: 0 0 10px; font-size: 14px; line-height: 1.55; color: #3a372f; }
+.schema-slide pre { margin: 0; padding: 14px 16px; overflow-x: auto; border: 1px solid #ddd8cc; border-radius: 10px; background: #fbfaf6; color: #1a1916; font: 12.5px/1.5 var(--font-mono); }
+.schema-slide code { color: inherit; background: none; padding: 0; }
+.schema-slider:focus-within { outline: 2px solid #b9a97f; outline-offset: 2px; }
+@media (max-width: 620px) { .schema-slide { padding: 12px; } .schema-slider-bar { padding: 8px 10px; } }
 
 /* ---------- print / PDF export ---------- */
 @page { margin: 16mm; }
@@ -894,9 +918,9 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <p>Файлы <code>__init__.py</code> могут быть пустыми. Их наличие сообщает Python, что каталоги <code>sklad</code> и <code>sklad.service</code> это пакеты, а не просто папки с файлами.</p>
 <p>Создайте файл <code>pyproject.toml</code> в корне проекта:</p>
 <div class="codehilite" data-lang="toml"><pre><span></span><code><span class="k">[project]</span>
-<span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;sklad-plus&quot;</span>
-<span class="n">version</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;0.1.0&quot;</span>
-<span class="n">requires-python</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;&gt;=3.13&quot;</span>
+<span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"sklad-plus"</span>
+<span class="n">version</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"0.1.0"</span>
+<span class="n">requires-python</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"&gt;=3.13"</span>
 <span class="n">dependencies</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[]</span>
 </code></pre></div>
 
@@ -934,7 +958,7 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <div class="codehilite" data-lang="powershell"><pre><span></span><code><span class="n">git</span> <span class="n">init</span>
 <span class="n">git</span> <span class="n">status</span>
 <span class="n">git</span> <span class="n">add</span> <span class="p">.</span>
-<span class="n">git</span> <span class="n">commit</span> <span class="n">-m</span> <span class="s2">&quot;Каркас учебного проекта&quot;</span>
+<span class="n">git</span> <span class="n">commit</span> <span class="n">-m</span> <span class="s2">"Каркас учебного проекта"</span>
 </code></pre></div>
 
 <p>Команда <code>git init</code> создаёт скрытый каталог <code>.git</code>. Команда <code>git status</code> показывает, какие файлы ещё не отслеживаются. <code>git add .</code> готовит их к коммиту, а <code>git commit</code> записывает снимок с сообщением. После коммита <code>git status</code> должен сообщить, что рабочая копия чиста.</p>
@@ -950,11 +974,11 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 </code></pre></div>
 
 <p>Теперь перенесите функцию в файл <code>.../sklad-plus/src/sklad/service/storage.py</code>. Добавьте строку документации и подсказки типов: они не меняют работу программы, но показывают, что функция принимает и что возвращает.</p>
-<div class="codehilite" data-lang="python"><pre><span></span><code><span class="sd">&quot;&quot;&quot;Расчёты хранения для ИС «Склад+».&quot;&quot;&quot;</span>
+<div class="codehilite" data-lang="python"><pre><span></span><code><span class="sd">"""Расчёты хранения для ИС «Склад+»."""</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">box_volume</span><span class="p">(</span><span class="n">length_cm</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">width_cm</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">height_cm</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Объём коробки в кубических метрах.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Объём коробки в кубических метрах."""</span>
     <span class="k">return</span> <span class="n">length_cm</span> <span class="o">*</span> <span class="n">width_cm</span> <span class="o">*</span> <span class="n">height_cm</span> <span class="o">/</span> <span class="mi">1_000_000</span>
 </code></pre></div>
 
@@ -977,7 +1001,7 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">pallets_needed</span><span class="p">(</span><span class="n">total_volume_m3</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">pallet_volume_m3</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">PALLET_VOLUME_M3</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Количество паллет для груза заданного объёма.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Количество паллет для груза заданного объёма."""</span>
     <span class="k">return</span> <span class="n">math</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">total_volume_m3</span> <span class="o">/</span> <span class="n">pallet_volume_m3</span><span class="p">)</span>
 </code></pre></div>
 
@@ -1015,18 +1039,18 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 </table>
 <h3>Шаг 5. Соберите точку входа</h3>
 <p>Файл <code>__main__.py</code> связывает функции с данными и печатает результат. Импорт берёт функции из слоя <code>service</code>.</p>
-<div class="codehilite" data-lang="python"><pre><span></span><code><span class="sd">&quot;&quot;&quot;Точка входа приложения «Склад+».&quot;&quot;&quot;</span>
+<div class="codehilite" data-lang="python"><pre><span></span><code><span class="sd">"""Точка входа приложения «Склад+»."""</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">sklad.service.storage</span><span class="w"> </span><span class="kn">import</span> <span class="n">box_volume</span><span class="p">,</span> <span class="n">pallets_needed</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
     <span class="n">volume</span> <span class="o">=</span> <span class="n">box_volume</span><span class="p">(</span><span class="mi">40</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">25</span><span class="p">)</span> <span class="o">*</span> <span class="mi">24</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Объём: </span><span class="si">{</span><span class="nb">round</span><span class="p">(</span><span class="n">volume</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">)</span><span class="si">}</span><span class="s2"> м3&quot;</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Паллет: </span><span class="si">{</span><span class="n">pallets_needed</span><span class="p">(</span><span class="n">volume</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Объём: </span><span class="si">{</span><span class="nb">round</span><span class="p">(</span><span class="n">volume</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">)</span><span class="si">}</span><span class="s2"> м3"</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Паллет: </span><span class="si">{</span><span class="n">pallets_needed</span><span class="p">(</span><span class="n">volume</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 
 
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
     <span class="n">main</span><span class="p">()</span>
 </code></pre></div>
 
@@ -1038,7 +1062,7 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 
 <p>Ключ <code>-m</code> означает «запустить модуль по имени». Попробуйте для сравнения запустить файл напрямую из корня проекта:</p>
 <div class="codehilite" data-lang="text"><pre><span></span><code>&gt; python src/sklad/__main__.py
-ModuleNotFoundError: No module named &#39;sklad&#39;
+ModuleNotFoundError: No module named 'sklad'
 </code></pre></div>
 
 <p>Ошибка появляется потому, что при прямом запуске Python ищет модули в папке самого файла <code>.../src/sklad</code>, а пакета <code>sklad</code> там нет. Команда <code>python -m sklad</code> решает задачу иначе: она ищет пакет от текущего каталога, и <code>src</code> оказывается на месте.</p>
@@ -1117,28 +1141,28 @@ ModuleNotFoundError: No module named &#39;sklad&#39;
 <p>Если числа расходятся, ищите причину в трёх местах: размеры в сантиметрах, деление на миллион, округление промежуточных значений. Ошибка в одном нуле даёт расхождение в тысячу раз.</p>
 <h3>Шаг 8. Добавьте ввод с клавиатуры</h3>
 <p>Программа должна уметь считать не только заранее записанные отгрузки. Добавьте в <code>main</code> запрос размеров одной коробки. Функция <code>input</code> возвращает строку, поэтому её сразу преобразуют в число: <code>float</code> для размеров и <code>int</code> для количества.</p>
-<div class="codehilite" data-lang="python"><pre><span></span><code><span class="n">length</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="nb">input</span><span class="p">(</span><span class="s2">&quot;Длина коробки, см: &quot;</span><span class="p">))</span>
-<span class="n">width</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="nb">input</span><span class="p">(</span><span class="s2">&quot;Ширина коробки, см: &quot;</span><span class="p">))</span>
-<span class="n">height</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="nb">input</span><span class="p">(</span><span class="s2">&quot;Высота коробки, см: &quot;</span><span class="p">))</span>
-<span class="n">count</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">input</span><span class="p">(</span><span class="s2">&quot;Количество коробок: &quot;</span><span class="p">))</span>
+<div class="codehilite" data-lang="python"><pre><span></span><code><span class="n">length</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="nb">input</span><span class="p">(</span><span class="s2">"Длина коробки, см: "</span><span class="p">))</span>
+<span class="n">width</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="nb">input</span><span class="p">(</span><span class="s2">"Ширина коробки, см: "</span><span class="p">))</span>
+<span class="n">height</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="nb">input</span><span class="p">(</span><span class="s2">"Высота коробки, см: "</span><span class="p">))</span>
+<span class="n">count</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">input</span><span class="p">(</span><span class="s2">"Количество коробок: "</span><span class="p">))</span>
 <span class="n">volume</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">box_volume</span><span class="p">(</span><span class="n">length</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">)</span> <span class="o">*</span> <span class="n">count</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Партия: объём </span><span class="si">{</span><span class="n">volume</span><span class="si">}</span><span class="s2"> м3, паллет </span><span class="si">{</span><span class="n">pallets_needed</span><span class="p">(</span><span class="n">volume</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Партия: объём </span><span class="si">{</span><span class="n">volume</span><span class="si">}</span><span class="s2"> м3, паллет </span><span class="si">{</span><span class="n">pallets_needed</span><span class="p">(</span><span class="n">volume</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 </code></pre></div>
 
 <p>Запустите программу и введите коробку 50 на 40 на 30 сантиметров в количестве 30 штук. Запишите результат в отчёт. Затем введите размеры с десятичной точкой, например 45.5, и проверьте, что программа принимает такое значение.</p>
 <p>С десятичной запятой возникнет ошибка. Ввод <code>4,5</code> функция <code>float</code> не принимает, потому что в Python разделителем дробной части служит точка:</p>
-<div class="codehilite" data-lang="text"><pre><span></span><code>ValueError: could not convert string to float: &#39;4,5&#39;
+<div class="codehilite" data-lang="text"><pre><span></span><code>ValueError: could not convert string to float: '4,5'
 </code></pre></div>
 
 <p>Это не поломка программы, а сигнал о неверном формате данных. Обработку таких ошибок разберут отдельно, а пока достаточно знать, что ввод с запятой программа не примет и завершится с сообщением.</p>
 <h3>Шаг 9. Напишите проверки</h3>
 <p>Проверки фиксируют ожидаемое поведение функций. Файл <code>.../sklad-plus/tests/service/check_storage.py</code> повторяет структуру модуля и запускается из корня проекта.</p>
-<div class="codehilite" data-lang="python"><pre><span></span><code><span class="sd">&quot;&quot;&quot;Проверки расчётов хранения.&quot;&quot;&quot;</span>
+<div class="codehilite" data-lang="python"><pre><span></span><code><span class="sd">"""Проверки расчётов хранения."""</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
 
-<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span><span class="o">.</span><span class="n">parents</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">/</span> <span class="s2">&quot;src&quot;</span><span class="p">))</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span><span class="o">.</span><span class="n">parents</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">/</span> <span class="s2">"src"</span><span class="p">))</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">sklad.service.storage</span><span class="w"> </span><span class="kn">import</span> <span class="n">box_volume</span><span class="p">,</span> <span class="n">pallets_needed</span>
 
@@ -1146,7 +1170,7 @@ ModuleNotFoundError: No module named &#39;sklad&#39;
 <span class="k">assert</span> <span class="nb">round</span><span class="p">(</span><span class="n">box_volume</span><span class="p">(</span><span class="mi">40</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">25</span><span class="p">),</span> <span class="mi">3</span><span class="p">)</span> <span class="o">==</span> <span class="mf">0.03</span>
 <span class="k">assert</span> <span class="n">pallets_needed</span><span class="p">(</span><span class="mf">1.44</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span>
 <span class="k">assert</span> <span class="n">pallets_needed</span><span class="p">(</span><span class="mf">1.5</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Все проверки пройдены&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Все проверки пройдены"</span><span class="p">)</span>
 </code></pre></div>
 
 <p>Строка с <code>sys.path</code> добавляет каталог <code>src</code> в список мест, где Python ищет пакеты. Без неё скрипт из папки <code>tests</code> не увидит пакет <code>sklad</code>. Выражение <code>parents[2]</code> поднимается на два уровня вверх, от <code>tests/service</code> к корню проекта.</p>
@@ -1170,7 +1194,7 @@ ModuleNotFoundError: No module named &#39;sklad&#39;
 <p>В раздел «Пример вывода» вставьте настоящий вывод своей программы, а не придуманный. Если вывод изменится после правки кода, обновите README в том же коммите.</p>
 <p>Завершите работу коммитом:</p>
 <div class="codehilite" data-lang="powershell"><pre><span></span><code><span class="n">git</span> <span class="n">add</span> <span class="p">.</span>
-<span class="n">git</span> <span class="n">commit</span> <span class="n">-m</span> <span class="s2">&quot;Модуль расчёта отгрузок и проверки&quot;</span>
+<span class="n">git</span> <span class="n">commit</span> <span class="n">-m</span> <span class="s2">"Модуль расчёта отгрузок и проверки"</span>
 <span class="n">git</span> <span class="n">status</span>
 <span class="n">git</span> <span class="n">log</span> <span class="p">-</span><span class="n">-oneline</span>
 </code></pre></div>
@@ -1278,6 +1302,40 @@ ModuleNotFoundError: No module named &#39;sklad&#39;
       var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
       window.scrollTo({top: 0, behavior: reduce ? 'auto' : 'smooth'});
     });
+  });
+})();
+
+(function(){
+  document.querySelectorAll('[data-slider]').forEach(function(slider){
+    var track = slider.querySelector('[data-slider-track]');
+    var slides = track ? Array.prototype.slice.call(track.children) : [];
+    var counter = slider.querySelector('[data-slider-counter]');
+    var prev = slider.querySelector('[data-slider-prev]');
+    var next = slider.querySelector('[data-slider-next]');
+    if(!track || slides.length < 2) return;
+    function current(){
+      var best = 0, dist = Infinity;
+      slides.forEach(function(slide, i){
+        var d = Math.abs(slide.offsetLeft - track.scrollLeft);
+        if(d < dist){ dist = d; best = i; }
+      });
+      return best;
+    }
+    function update(){
+      if(counter) counter.textContent = (current() + 1) + ' / ' + slides.length;
+    }
+    function go(delta){
+      var i = Math.max(0, Math.min(slides.length - 1, current() + delta));
+      var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      track.scrollTo({left: slides[i].offsetLeft, behavior: reduce ? 'auto' : 'smooth'});
+    }
+    if(prev) prev.addEventListener('click', function(){ go(-1); });
+    if(next) next.addEventListener('click', function(){ go(1); });
+    track.addEventListener('scroll', function(){
+      clearTimeout(track._sliderTimer);
+      track._sliderTimer = setTimeout(update, 80);
+    }, {passive: true});
+    update();
   });
 })();
 (function(){

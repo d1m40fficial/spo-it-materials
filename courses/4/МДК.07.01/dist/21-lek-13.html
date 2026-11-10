@@ -527,6 +527,12 @@ html.modal-open { overflow: hidden; }
 :root[data-theme=dark] .quiz-actions button[data-answer]:hover, :root[data-theme=dark] .quiz-actions button.quiz-answer:hover { background: #262626; background-color: #262626; color: #fff; border-color: #262626; }
 :root[data-theme=dark] .gate-q { background: #1E1E1E; color: #FF6B00; }
 
+/* the whole-variant archive is the main action in a download block */
+.files a.zip { background: #121212; color: #fff; border-color: #121212; font-weight: 700; box-shadow: 4px 4px 0 rgba(0,0,0,.18); }
+.files a.zip::before { color: #fff; }
+.files a.zip:hover { background: #1D1D1D; color: #fff; border-color: #1D1D1D; box-shadow: 5px 5px 0 rgba(0,0,0,.22); }
+.files a.zip:active { transform: translate(2px,2px); box-shadow: 1px 1px 0 rgba(0,0,0,.12); }
+
 /* ---------- practical work checklist ---------- */
 .work-checklist { width: 100%; border-collapse: collapse; margin: 14px 0 4px; }
 .work-checklist th, .work-checklist td { border: 1px solid var(--rule); padding: 9px 10px; vertical-align: top; }
@@ -564,6 +570,24 @@ html.modal-open { overflow: hidden; }
 .variant-body .task-list { margin: 8px 0 0; padding-left: 20px; }
 .variant-body .task-list li { margin: 0 0 8px; }
 @media (max-width: 620px) { .variant-body { overflow-x: auto; } .variant-body table { min-width: 520px; } }
+
+/* ---------- schema slider: all CREATE TABLE examples ---------- */
+.schema-slider { margin: 18px 0 24px; border: 1px solid #d8d5cc; border-radius: 14px; background: #fff; color: #1a1916; overflow: hidden; }
+.schema-slider-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 14px; background: #f5f2ea; border-bottom: 1px solid #d8d5cc; }
+.schema-slider-bar strong { font: 700 14px/1.2 var(--font-display); color: #1a1916; }
+.schema-slider-actions { display: flex; align-items: center; gap: 8px; }
+.schema-slider-counter { min-width: 62px; text-align: center; font: 600 13px/1 var(--font-mono); color: #59544a; }
+.schema-btn { width: 34px; height: 34px; border: 1px solid #c9c4b8; border-radius: 8px; background: #fff; color: #1a1916; font: 700 18px/1 var(--font-mono); cursor: pointer; }
+.schema-btn:hover { background: #ece7dc; }
+.schema-track { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: thin; }
+.schema-slide { flex: 0 0 100%; min-width: 100%; box-sizing: border-box; padding: 16px 18px 18px; scroll-snap-align: start; }
+.schema-slide h4 { margin: 0 0 10px; font: 700 16px/1.3 var(--font-display); color: #1a1916; }
+.schema-slide h4 code, .schema-slide p code { color: #1a1916; background: #f1ede4; padding: 1px 4px; border-radius: 4px; }
+.schema-slide p { margin: 0 0 10px; font-size: 14px; line-height: 1.55; color: #3a372f; }
+.schema-slide pre { margin: 0; padding: 14px 16px; overflow-x: auto; border: 1px solid #ddd8cc; border-radius: 10px; background: #fbfaf6; color: #1a1916; font: 12.5px/1.5 var(--font-mono); }
+.schema-slide code { color: inherit; background: none; padding: 0; }
+.schema-slider:focus-within { outline: 2px solid #b9a97f; outline-offset: 2px; }
+@media (max-width: 620px) { .schema-slide { padding: 12px; } .schema-slider-bar { padding: 8px 10px; } }
 
 /* ---------- print / PDF export ---------- */
 @page { margin: 16mm; }
@@ -895,16 +919,16 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <li><strong>Параметры.</strong> «Если задача уже выполняется, то: не запускать новый экземпляр», предел времени выполнения.</li>
 </ol>
 <p>То же самое из командной строки:</p>
-<div class="codehilite" data-lang="powershell"><pre><span></span><code><span class="nv">$action</span> <span class="p">=</span> <span class="nb">New-ScheduledTaskAction</span> <span class="n">-Execute</span> <span class="s2">&quot;.../DeanAdmin/publish/DeanAdmin.exe&quot;</span> <span class="p">`</span>
-  <span class="n">-Argument</span> <span class="s2">&quot;backup&quot;</span> <span class="n">-WorkingDirectory</span> <span class="s2">&quot;.../DeanAdmin/publish&quot;</span>
+<div class="codehilite" data-lang="powershell"><pre><span></span><code><span class="nv">$action</span> <span class="p">=</span> <span class="nb">New-ScheduledTaskAction</span> <span class="n">-Execute</span> <span class="s2">".../DeanAdmin/publish/DeanAdmin.exe"</span> <span class="p">`</span>
+  <span class="n">-Argument</span> <span class="s2">"backup"</span> <span class="n">-WorkingDirectory</span> <span class="s2">".../DeanAdmin/publish"</span>
 <span class="nv">$trigger</span> <span class="p">=</span> <span class="nb">New-ScheduledTaskTrigger</span> <span class="n">-Daily</span> <span class="n">-At</span> <span class="n">23</span><span class="p">:</span><span class="n">00</span>
 <span class="nv">$settings</span> <span class="p">=</span> <span class="nb">New-ScheduledTaskSettingsSet</span> <span class="n">-MultipleInstances</span> <span class="n">IgnoreNew</span>
-<span class="nb">Register-ScheduledTask</span> <span class="n">-TaskName</span> <span class="s2">&quot;Dean backup&quot;</span> <span class="n">-Action</span> <span class="nv">$action</span> <span class="p">`</span>
-  <span class="n">-Trigger</span> <span class="nv">$trigger</span> <span class="n">-Settings</span> <span class="nv">$settings</span> <span class="n">-User</span> <span class="s2">&quot;dean_task&quot;</span>
+<span class="nb">Register-ScheduledTask</span> <span class="n">-TaskName</span> <span class="s2">"Dean backup"</span> <span class="n">-Action</span> <span class="nv">$action</span> <span class="p">`</span>
+  <span class="n">-Trigger</span> <span class="nv">$trigger</span> <span class="n">-Settings</span> <span class="nv">$settings</span> <span class="n">-User</span> <span class="s2">"dean_task"</span>
 </code></pre></div>
 
 <p>Регистрация через PowerShell требует прав администратора. Командлет создаёт задание в корне библиотеки, а имя с обратной косой чертой, например <code>Dean\Backup</code>, раскладывает задания по папкам. Проверить результат можно до наступления ночи.</p>
-<div class="codehilite" data-lang="powershell"><pre><span></span><code><span class="nb">Get-ScheduledTask</span> <span class="n">-TaskName</span> <span class="s2">&quot;Dean backup&quot;</span> <span class="p">|</span> <span class="nb">Select-Object</span> <span class="n">TaskName</span><span class="p">,</span> <span class="n">State</span>
+<div class="codehilite" data-lang="powershell"><pre><span></span><code><span class="nb">Get-ScheduledTask</span> <span class="n">-TaskName</span> <span class="s2">"Dean backup"</span> <span class="p">|</span> <span class="nb">Select-Object</span> <span class="n">TaskName</span><span class="p">,</span> <span class="n">State</span>
 </code></pre></div>
 
 <p>Состояние <code>Ready</code> означает, что задание зарегистрировано и ждёт триггера. Состояние <code>Disabled</code> означает, что его выключили вручную или оно отключено политикой. Если задание не появилось, смотрят, от имени какого пользователя выполнялась регистрация: без прав администратора командлет вернёт отказ доступа.</p>
@@ -914,7 +938,7 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <p><strong>Переменная PATH.</strong> У системной учётной записи другой набор путей, и <code>mysqldump</code> может не найтись. Лечение: полный путь <code>mysqldump</code> вместо имени.</p>
 <p><strong>Пользователь и права.</strong> Задание от вашей учётной записи работает, пока вы вошли в систему. Отметка «вне зависимости от входа» требует пароля при регистрации и сохранённых учётных данных. Отдельный пользователь <code>dean_task</code> с правом читать каталог программы и писать в каталог копий решает обе задачи.</p>
 <p><strong>Код возврата.</strong> Планировщик показывает последний результат задания. Ноль это успех, всё остальное это сбой, и именно код связывает задание с журналом программы.</p>
-<div class="codehilite" data-lang="powershell"><pre><span></span><code><span class="nb">Get-ScheduledTaskInfo</span> <span class="n">-TaskName</span> <span class="s2">&quot;Dean backup&quot;</span> <span class="p">|</span>
+<div class="codehilite" data-lang="powershell"><pre><span></span><code><span class="nb">Get-ScheduledTaskInfo</span> <span class="n">-TaskName</span> <span class="s2">"Dean backup"</span> <span class="p">|</span>
   <span class="nb">Select-Object</span> <span class="n">LastRunTime</span><span class="p">,</span> <span class="n">LastTaskResult</span><span class="p">,</span> <span class="n">NextRunTime</span>
 </code></pre></div>
 
@@ -930,7 +954,7 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <h2 id="события-mysql"><span class="num">05</span>События MySQL</h2>
 <p>Событие это именованный SQL-код, который сервер выполняет по расписанию. Оно живёт внутри базы и не зависит от того, вошёл ли человек в Windows.</p>
 <p>Планировщик событий включается параметром <code>event_scheduler</code>. Проверка:</p>
-<div class="codehilite" data-lang="text"><pre><span></span><code><span class="k">SHOW</span><span class="w"> </span><span class="n">VARIABLES</span><span class="w"> </span><span class="k">LIKE</span><span class="w"> </span><span class="s1">&#39;event_scheduler&#39;</span><span class="p">;</span>
+<div class="codehilite" data-lang="text"><pre><span></span><code><span class="k">SHOW</span><span class="w"> </span><span class="n">VARIABLES</span><span class="w"> </span><span class="k">LIKE</span><span class="w"> </span><span class="s1">'event_scheduler'</span><span class="p">;</span>
 </code></pre></div>
 
 <p>Значение <code>ON</code> означает, что планировщик работает, <code>OFF</code> что выключен, <code>DISABLED</code> что его запрещено включать на ходу. Включение на время сессии сервера:</p>
@@ -946,7 +970,7 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <p>Событие задаёт расписание, момент начала и команду.</p>
 <div class="codehilite" data-lang="text"><pre><span></span><code><span class="k">CREATE</span><span class="w"> </span><span class="n">EVENT</span><span class="w"> </span><span class="k">IF</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">EXISTS</span><span class="w"> </span><span class="n">ev_cleanup_audit</span>
 <span class="k">ON</span><span class="w"> </span><span class="n">SCHEDULE</span><span class="w"> </span><span class="k">EVERY</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="k">DAY</span>
-<span class="n">STARTS</span><span class="w"> </span><span class="s1">&#39;2026-04-01 23:30:00&#39;</span>
+<span class="n">STARTS</span><span class="w"> </span><span class="s1">'2026-04-01 23:30:00'</span>
 <span class="k">ON</span><span class="w"> </span><span class="k">COMPLETION</span><span class="w"> </span><span class="k">PRESERVE</span>
 <span class="n">ENABLE</span>
 <span class="k">DO</span>
@@ -961,14 +985,14 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <span class="k">SELECT</span><span class="w"> </span><span class="n">event_name</span><span class="p">,</span><span class="w"> </span><span class="n">status</span><span class="p">,</span><span class="w"> </span><span class="n">last_executed</span><span class="p">,</span><span class="w"> </span><span class="n">starts</span><span class="p">,</span>
 <span class="w">       </span><span class="n">interval_value</span><span class="p">,</span><span class="w"> </span><span class="n">interval_field</span><span class="p">,</span><span class="w"> </span><span class="k">definer</span>
 <span class="k">FROM</span><span class="w"> </span><span class="n">information_schema</span><span class="p">.</span><span class="n">EVENTS</span>
-<span class="k">WHERE</span><span class="w"> </span><span class="n">event_schema</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;dean&#39;</span><span class="p">;</span>
+<span class="k">WHERE</span><span class="w"> </span><span class="n">event_schema</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'dean'</span><span class="p">;</span>
 </code></pre></div>
 
 <p><code>last_executed</code> это главный столбец. Если он пуст, событие ни разу не срабатывало, и причина почти всегда в выключенном планировщике или в статусе <code>DISABLED</code>.</p>
 <p>Перед включением тело события выполняют вручную: тот же <code>DELETE</code> запускают в phpMyAdmin и смотрят, сколько строк он затрагивает. Если число неожиданно большое, условие переписывают до включения события. После проверки событие включают и ждут первого срабатывания, чтобы увидеть <code>last_executed</code>.</p>
 <p>Остановить событие можно, не удаляя его. <code>ALTER EVENT ev_cleanup_audit DISABLE;</code> выключает расписание, а <code>ENABLE</code> возвращает. Удаление через <code>DROP EVENT</code> стирает и расписание, и тело, поэтому перед удалением полезно сохранить текст из <code>SHOW CREATE EVENT ev_cleanup_audit;</code>.</p>
 <p>Права на создание события выдаются отдельно:</p>
-<div class="codehilite" data-lang="text"><pre><span></span><code><span class="k">GRANT</span><span class="w"> </span><span class="n">EVENT</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">dean</span><span class="p">.</span><span class="o">*</span><span class="w"> </span><span class="k">TO</span><span class="w"> </span><span class="s1">&#39;dean_app&#39;</span><span class="o">@</span><span class="s1">&#39;localhost&#39;</span><span class="p">;</span>
+<div class="codehilite" data-lang="text"><pre><span></span><code><span class="k">GRANT</span><span class="w"> </span><span class="n">EVENT</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">dean</span><span class="p">.</span><span class="o">*</span><span class="w"> </span><span class="k">TO</span><span class="w"> </span><span class="s1">'dean_app'</span><span class="o">@</span><span class="s1">'localhost'</span><span class="p">;</span>
 </code></pre></div>
 
 <p>Событие выполняется от имени того, кто его создал, то есть от <code>definer</code>. Если этого пользователя удалить или лишить прав, событие перестанет работать, хотя останется в списке. Поэтому события создают от служебной учётной записи, а не от личной.</p>
@@ -982,7 +1006,7 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <p>Внутри окна задачи разносят по времени: копия в 23:00, чистка в 23:30, пересчёт отчётов в 00:00. Так они не конкурируют за блокировки и диск.</p>
 <div class="codehilite" data-lang="text"><pre><span></span><code><span class="k">CREATE</span><span class="w"> </span><span class="n">EVENT</span><span class="w"> </span><span class="k">IF</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">EXISTS</span><span class="w"> </span><span class="n">ev_refresh_stats</span>
 <span class="k">ON</span><span class="w"> </span><span class="n">SCHEDULE</span><span class="w"> </span><span class="k">EVERY</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="n">WEEK</span>
-<span class="n">STARTS</span><span class="w"> </span><span class="s1">&#39;2026-04-05 00:00:00&#39;</span>
+<span class="n">STARTS</span><span class="w"> </span><span class="s1">'2026-04-05 00:00:00'</span>
 <span class="k">ON</span><span class="w"> </span><span class="k">COMPLETION</span><span class="w"> </span><span class="k">PRESERVE</span>
 <span class="k">DO</span>
 <span class="w">  </span><span class="k">ANALYZE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">students</span><span class="p">,</span><span class="w"> </span><span class="n">enrollments</span><span class="p">,</span><span class="w"> </span><span class="n">payments</span><span class="p">;</span>
@@ -997,10 +1021,10 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <span class="k">ALTER</span><span class="w"> </span><span class="n">EVENT</span><span class="w"> </span><span class="n">ev_cleanup_audit</span>
 <span class="k">DO</span>
 <span class="k">BEGIN</span>
-<span class="w">  </span><span class="k">IF</span><span class="w"> </span><span class="n">GET_LOCK</span><span class="p">(</span><span class="s1">&#39;dean_cleanup&#39;</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="k">THEN</span>
+<span class="w">  </span><span class="k">IF</span><span class="w"> </span><span class="n">GET_LOCK</span><span class="p">(</span><span class="s1">'dean_cleanup'</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="k">THEN</span>
 <span class="w">    </span><span class="k">DELETE</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">audit_log</span>
 <span class="w">    </span><span class="k">WHERE</span><span class="w"> </span><span class="k">at</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">NOW</span><span class="p">()</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="nb">INTERVAL</span><span class="w"> </span><span class="mi">365</span><span class="w"> </span><span class="k">DAY</span><span class="p">;</span>
-<span class="w">    </span><span class="k">DO</span><span class="w"> </span><span class="n">RELEASE_LOCK</span><span class="p">(</span><span class="s1">&#39;dean_cleanup&#39;</span><span class="p">);</span>
+<span class="w">    </span><span class="k">DO</span><span class="w"> </span><span class="n">RELEASE_LOCK</span><span class="p">(</span><span class="s1">'dean_cleanup'</span><span class="p">);</span>
 <span class="w">  </span><span class="k">END</span><span class="w"> </span><span class="k">IF</span><span class="p">;</span>
 <span class="k">END</span><span class="err">$$</span>
 
@@ -1019,7 +1043,7 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <p>Порция удаляется быстро, а остальное дочищается следующим запуском. Так окно обслуживания не растягивается на всю ночь.</p>
 <h2 id="проверка-после-настройки"><span class="num">09</span>Проверка после настройки</h2>
 <p>Настроенное задание проверяют, не дожидаясь ночи. В Планировщике есть «Выполнить» в контекстном меню, а в PowerShell команда запуска.</p>
-<div class="codehilite" data-lang="text"><pre><span></span><code><span class="nb">Start-ScheduledTask</span> <span class="n">-TaskName</span> <span class="s2">&quot;Dean backup&quot;</span>
+<div class="codehilite" data-lang="text"><pre><span></span><code><span class="nb">Start-ScheduledTask</span> <span class="n">-TaskName</span> <span class="s2">"Dean backup"</span>
 </code></pre></div>
 
 <p>После запуска смотрят три вещи: код возврата, строку в журнале программы и появившийся файл копии. Если что-то не совпало, разбор идёт по цепочке: сработал ли триггер, запустился ли процесс, дошёл ли он до базы, записался ли результат.</p>
@@ -1122,6 +1146,40 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
       var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
       window.scrollTo({top: 0, behavior: reduce ? 'auto' : 'smooth'});
     });
+  });
+})();
+
+(function(){
+  document.querySelectorAll('[data-slider]').forEach(function(slider){
+    var track = slider.querySelector('[data-slider-track]');
+    var slides = track ? Array.prototype.slice.call(track.children) : [];
+    var counter = slider.querySelector('[data-slider-counter]');
+    var prev = slider.querySelector('[data-slider-prev]');
+    var next = slider.querySelector('[data-slider-next]');
+    if(!track || slides.length < 2) return;
+    function current(){
+      var best = 0, dist = Infinity;
+      slides.forEach(function(slide, i){
+        var d = Math.abs(slide.offsetLeft - track.scrollLeft);
+        if(d < dist){ dist = d; best = i; }
+      });
+      return best;
+    }
+    function update(){
+      if(counter) counter.textContent = (current() + 1) + ' / ' + slides.length;
+    }
+    function go(delta){
+      var i = Math.max(0, Math.min(slides.length - 1, current() + delta));
+      var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      track.scrollTo({left: slides[i].offsetLeft, behavior: reduce ? 'auto' : 'smooth'});
+    }
+    if(prev) prev.addEventListener('click', function(){ go(-1); });
+    if(next) next.addEventListener('click', function(){ go(1); });
+    track.addEventListener('scroll', function(){
+      clearTimeout(track._sliderTimer);
+      track._sliderTimer = setTimeout(update, 80);
+    }, {passive: true});
+    update();
   });
 })();
 (function(){

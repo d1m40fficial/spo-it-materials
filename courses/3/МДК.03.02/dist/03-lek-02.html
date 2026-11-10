@@ -527,6 +527,12 @@ html.modal-open { overflow: hidden; }
 :root[data-theme=dark] .quiz-actions button[data-answer]:hover, :root[data-theme=dark] .quiz-actions button.quiz-answer:hover { background: #262626; background-color: #262626; color: #fff; border-color: #262626; }
 :root[data-theme=dark] .gate-q { background: #1E1E1E; color: #FF6B00; }
 
+/* the whole-variant archive is the main action in a download block */
+.files a.zip { background: #121212; color: #fff; border-color: #121212; font-weight: 700; box-shadow: 4px 4px 0 rgba(0,0,0,.18); }
+.files a.zip::before { color: #fff; }
+.files a.zip:hover { background: #1D1D1D; color: #fff; border-color: #1D1D1D; box-shadow: 5px 5px 0 rgba(0,0,0,.22); }
+.files a.zip:active { transform: translate(2px,2px); box-shadow: 1px 1px 0 rgba(0,0,0,.12); }
+
 /* ---------- practical work checklist ---------- */
 .work-checklist { width: 100%; border-collapse: collapse; margin: 14px 0 4px; }
 .work-checklist th, .work-checklist td { border: 1px solid var(--rule); padding: 9px 10px; vertical-align: top; }
@@ -564,6 +570,24 @@ html.modal-open { overflow: hidden; }
 .variant-body .task-list { margin: 8px 0 0; padding-left: 20px; }
 .variant-body .task-list li { margin: 0 0 8px; }
 @media (max-width: 620px) { .variant-body { overflow-x: auto; } .variant-body table { min-width: 520px; } }
+
+/* ---------- schema slider: all CREATE TABLE examples ---------- */
+.schema-slider { margin: 18px 0 24px; border: 1px solid #d8d5cc; border-radius: 14px; background: #fff; color: #1a1916; overflow: hidden; }
+.schema-slider-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 14px; background: #f5f2ea; border-bottom: 1px solid #d8d5cc; }
+.schema-slider-bar strong { font: 700 14px/1.2 var(--font-display); color: #1a1916; }
+.schema-slider-actions { display: flex; align-items: center; gap: 8px; }
+.schema-slider-counter { min-width: 62px; text-align: center; font: 600 13px/1 var(--font-mono); color: #59544a; }
+.schema-btn { width: 34px; height: 34px; border: 1px solid #c9c4b8; border-radius: 8px; background: #fff; color: #1a1916; font: 700 18px/1 var(--font-mono); cursor: pointer; }
+.schema-btn:hover { background: #ece7dc; }
+.schema-track { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: thin; }
+.schema-slide { flex: 0 0 100%; min-width: 100%; box-sizing: border-box; padding: 16px 18px 18px; scroll-snap-align: start; }
+.schema-slide h4 { margin: 0 0 10px; font: 700 16px/1.3 var(--font-display); color: #1a1916; }
+.schema-slide h4 code, .schema-slide p code { color: #1a1916; background: #f1ede4; padding: 1px 4px; border-radius: 4px; }
+.schema-slide p { margin: 0 0 10px; font-size: 14px; line-height: 1.55; color: #3a372f; }
+.schema-slide pre { margin: 0; padding: 14px 16px; overflow-x: auto; border: 1px solid #ddd8cc; border-radius: 10px; background: #fbfaf6; color: #1a1916; font: 12.5px/1.5 var(--font-mono); }
+.schema-slide code { color: inherit; background: none; padding: 0; }
+.schema-slider:focus-within { outline: 2px solid #b9a97f; outline-offset: 2px; }
+@media (max-width: 620px) { .schema-slide { padding: 12px; } .schema-slider-bar { padding: 8px 10px; } }
 
 /* ---------- print / PDF export ---------- */
 @page { margin: 16mm; }
@@ -853,7 +877,7 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 
 <h2 id="пять-фаз-и-четверо-ворот"><span class="num">02</span>Пять фаз и четверо ворот</h2>
 <p>Посмотрите на стенд ниже. По маршруту едет тележка с табличкой «Заявки», на пути пять станций: инициация, планирование, исполнение, контроль, закрытие. Перед станциями стоят ворота, а с контроля вниз уходит возвратная петля. Следите за табло: оно меняет восемь состояний, и в каждом видно, какой предмет остаётся после фазы. Обратите внимание на две вещи: где тележка останавливается и что именно спрашивают ворота, прежде чем пропустить её дальше.</p>
-<figure class="figure" data-fig="fig-02-lifecycle" data-one="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"><iframe title="Figure 1: fig-02-lifecycle" scrolling="no"></iframe><figcaption>Проведите тележку по фазам: каждая пара ворот спрашивает результат.</figcaption></figure>
+<figure class="figure" data-fig="fig-02-lifecycle" data-one="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"><iframe title="Figure 1: fig-02-lifecycle" scrolling="no"></iframe><figcaption>Проведите тележку по фазам: каждая пара ворот спрашивает результат.</figcaption></figure>
 
 <p>Вы провели тележку по всему маршруту. Табло прошло восемь состояний: «инициация: устав», «ворота 1: устав подписан», «планирование: WBS и бюджет», «ворота 2: базовый план», «исполнение: продукт», «контроль: отклонение», «возврат: перепланирование», «закрытие: приёмка и уроки». У проекта 5 фаз, 4 ворот, 6 месяцев и 3 итерации: двенадцать функций разложены на три поставки по четыре функции, по два месяца каждая.</p>
 <p>Четверо ворот стоят на четырёх границах: после инициации, после планирования, перед приёмкой и на выходе из закрытия. На табло первые двое видны отдельными строками, третьи находятся между контролем и закрытием, четвёртые совпадают с последней строкой. Возвратная петля ведёт с контроля не в начало, а в планирование: когда факт расходится с планом, пересматривают объём ближайшей поставки, сроки и бюджет, но не отменяют уже достигнутых договорённостей. Тележка при этом остаётся одна и та же: продукт не пересоздают на каждой фазе, его достраивают.</p>
@@ -1087,6 +1111,40 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
       var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
       window.scrollTo({top: 0, behavior: reduce ? 'auto' : 'smooth'});
     });
+  });
+})();
+
+(function(){
+  document.querySelectorAll('[data-slider]').forEach(function(slider){
+    var track = slider.querySelector('[data-slider-track]');
+    var slides = track ? Array.prototype.slice.call(track.children) : [];
+    var counter = slider.querySelector('[data-slider-counter]');
+    var prev = slider.querySelector('[data-slider-prev]');
+    var next = slider.querySelector('[data-slider-next]');
+    if(!track || slides.length < 2) return;
+    function current(){
+      var best = 0, dist = Infinity;
+      slides.forEach(function(slide, i){
+        var d = Math.abs(slide.offsetLeft - track.scrollLeft);
+        if(d < dist){ dist = d; best = i; }
+      });
+      return best;
+    }
+    function update(){
+      if(counter) counter.textContent = (current() + 1) + ' / ' + slides.length;
+    }
+    function go(delta){
+      var i = Math.max(0, Math.min(slides.length - 1, current() + delta));
+      var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      track.scrollTo({left: slides[i].offsetLeft, behavior: reduce ? 'auto' : 'smooth'});
+    }
+    if(prev) prev.addEventListener('click', function(){ go(-1); });
+    if(next) next.addEventListener('click', function(){ go(1); });
+    track.addEventListener('scroll', function(){
+      clearTimeout(track._sliderTimer);
+      track._sliderTimer = setTimeout(update, 80);
+    }, {passive: true});
+    update();
   });
 })();
 (function(){

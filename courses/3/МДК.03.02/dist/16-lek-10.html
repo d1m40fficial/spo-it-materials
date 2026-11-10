@@ -527,6 +527,12 @@ html.modal-open { overflow: hidden; }
 :root[data-theme=dark] .quiz-actions button[data-answer]:hover, :root[data-theme=dark] .quiz-actions button.quiz-answer:hover { background: #262626; background-color: #262626; color: #fff; border-color: #262626; }
 :root[data-theme=dark] .gate-q { background: #1E1E1E; color: #FF6B00; }
 
+/* the whole-variant archive is the main action in a download block */
+.files a.zip { background: #121212; color: #fff; border-color: #121212; font-weight: 700; box-shadow: 4px 4px 0 rgba(0,0,0,.18); }
+.files a.zip::before { color: #fff; }
+.files a.zip:hover { background: #1D1D1D; color: #fff; border-color: #1D1D1D; box-shadow: 5px 5px 0 rgba(0,0,0,.22); }
+.files a.zip:active { transform: translate(2px,2px); box-shadow: 1px 1px 0 rgba(0,0,0,.12); }
+
 /* ---------- practical work checklist ---------- */
 .work-checklist { width: 100%; border-collapse: collapse; margin: 14px 0 4px; }
 .work-checklist th, .work-checklist td { border: 1px solid var(--rule); padding: 9px 10px; vertical-align: top; }
@@ -564,6 +570,24 @@ html.modal-open { overflow: hidden; }
 .variant-body .task-list { margin: 8px 0 0; padding-left: 20px; }
 .variant-body .task-list li { margin: 0 0 8px; }
 @media (max-width: 620px) { .variant-body { overflow-x: auto; } .variant-body table { min-width: 520px; } }
+
+/* ---------- schema slider: all CREATE TABLE examples ---------- */
+.schema-slider { margin: 18px 0 24px; border: 1px solid #d8d5cc; border-radius: 14px; background: #fff; color: #1a1916; overflow: hidden; }
+.schema-slider-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 14px; background: #f5f2ea; border-bottom: 1px solid #d8d5cc; }
+.schema-slider-bar strong { font: 700 14px/1.2 var(--font-display); color: #1a1916; }
+.schema-slider-actions { display: flex; align-items: center; gap: 8px; }
+.schema-slider-counter { min-width: 62px; text-align: center; font: 600 13px/1 var(--font-mono); color: #59544a; }
+.schema-btn { width: 34px; height: 34px; border: 1px solid #c9c4b8; border-radius: 8px; background: #fff; color: #1a1916; font: 700 18px/1 var(--font-mono); cursor: pointer; }
+.schema-btn:hover { background: #ece7dc; }
+.schema-track { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: thin; }
+.schema-slide { flex: 0 0 100%; min-width: 100%; box-sizing: border-box; padding: 16px 18px 18px; scroll-snap-align: start; }
+.schema-slide h4 { margin: 0 0 10px; font: 700 16px/1.3 var(--font-display); color: #1a1916; }
+.schema-slide h4 code, .schema-slide p code { color: #1a1916; background: #f1ede4; padding: 1px 4px; border-radius: 4px; }
+.schema-slide p { margin: 0 0 10px; font-size: 14px; line-height: 1.55; color: #3a372f; }
+.schema-slide pre { margin: 0; padding: 14px 16px; overflow-x: auto; border: 1px solid #ddd8cc; border-radius: 10px; background: #fbfaf6; color: #1a1916; font: 12.5px/1.5 var(--font-mono); }
+.schema-slide code { color: inherit; background: none; padding: 0; }
+.schema-slider:focus-within { outline: 2px solid #b9a97f; outline-offset: 2px; }
+@media (max-width: 620px) { .schema-slide { padding: 12px; } .schema-slider-bar { padding: 8px 10px; } }
 
 /* ---------- print / PDF export ---------- */
 @page { margin: 16mm; }
@@ -853,7 +877,7 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <h2 id="спринт-карусель-и-сгорание"><span class="num">02</span>Спринт-карусель и сгорание</h2>
 <p>На стенде слева колесо из шести остановок: бэклог, план, спринт, ежедневка, обзор, ретро. Справа график сгорания: по вертикали остаток работы в story points, по горизонтали десять рабочих дней, пунктир это идеальная линия, красная линия это факт. Внизу подпись, которая меняется вместе с колесом.</p>
 <p>Смотрите на два места сразу. Колесо отвечает, из каких встреч состоит цикл и что каждая из них производит. График отвечает на другой вопрос: успевает ли команда. Пока красная линия идёт выше пунктира, работы осталось больше, чем планировали на этот день.</p>
-<figure class="figure" data-fig="fig-10-agile" data-one="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"><iframe title="Figure 1: fig-10-agile" scrolling="no"></iframe><figcaption>Проведите по циклу: факт сгорания отвечает, успела ли команда.</figcaption></figure>
+<figure class="figure" data-fig="fig-10-agile" data-one="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"><iframe title="Figure 1: fig-10-agile" scrolling="no"></iframe><figcaption>Проведите по циклу: факт сгорания отвечает, успела ли команда.</figcaption></figure>
 
 <p>Вы прошли шесть остановок: бэклог как вход, планирование, спринт, ежедневная встреча, обзор, ретроспектива. В терминах Scrum спринт это контейнер, внутри него четыре встречи, а бэклог это артефакт, а не событие.</p>
 <p>Теперь числа. В продуктовом бэклоге 40 story points. Команда взяла в спринт 32 и обещала закрыть их за десять рабочих дней. На прошлых спринтах её скорость была 20 пунктов, то есть обещание превышало обычный темп в 1,6 раза. На пятый день владелец продукта добавил историю на 6 пунктов, и обязательство выросло до 38. К закрытию красная линия пришла в ноль: 38 пунктов закрыты, в бэклоге осталось два.</p>
@@ -1075,6 +1099,40 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
       var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
       window.scrollTo({top: 0, behavior: reduce ? 'auto' : 'smooth'});
     });
+  });
+})();
+
+(function(){
+  document.querySelectorAll('[data-slider]').forEach(function(slider){
+    var track = slider.querySelector('[data-slider-track]');
+    var slides = track ? Array.prototype.slice.call(track.children) : [];
+    var counter = slider.querySelector('[data-slider-counter]');
+    var prev = slider.querySelector('[data-slider-prev]');
+    var next = slider.querySelector('[data-slider-next]');
+    if(!track || slides.length < 2) return;
+    function current(){
+      var best = 0, dist = Infinity;
+      slides.forEach(function(slide, i){
+        var d = Math.abs(slide.offsetLeft - track.scrollLeft);
+        if(d < dist){ dist = d; best = i; }
+      });
+      return best;
+    }
+    function update(){
+      if(counter) counter.textContent = (current() + 1) + ' / ' + slides.length;
+    }
+    function go(delta){
+      var i = Math.max(0, Math.min(slides.length - 1, current() + delta));
+      var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      track.scrollTo({left: slides[i].offsetLeft, behavior: reduce ? 'auto' : 'smooth'});
+    }
+    if(prev) prev.addEventListener('click', function(){ go(-1); });
+    if(next) next.addEventListener('click', function(){ go(1); });
+    track.addEventListener('scroll', function(){
+      clearTimeout(track._sliderTimer);
+      track._sliderTimer = setTimeout(update, 80);
+    }, {passive: true});
+    update();
   });
 })();
 (function(){

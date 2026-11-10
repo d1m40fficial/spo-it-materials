@@ -114,6 +114,42 @@ TO_TOP_SCRIPT = r"""
 })();
 """
 
+SLIDER_SCRIPT = r"""
+(function(){
+  document.querySelectorAll('[data-slider]').forEach(function(slider){
+    var track = slider.querySelector('[data-slider-track]');
+    var slides = track ? Array.prototype.slice.call(track.children) : [];
+    var counter = slider.querySelector('[data-slider-counter]');
+    var prev = slider.querySelector('[data-slider-prev]');
+    var next = slider.querySelector('[data-slider-next]');
+    if(!track || slides.length < 2) return;
+    function current(){
+      var best = 0, dist = Infinity;
+      slides.forEach(function(slide, i){
+        var d = Math.abs(slide.offsetLeft - track.scrollLeft);
+        if(d < dist){ dist = d; best = i; }
+      });
+      return best;
+    }
+    function update(){
+      if(counter) counter.textContent = (current() + 1) + ' / ' + slides.length;
+    }
+    function go(delta){
+      var i = Math.max(0, Math.min(slides.length - 1, current() + delta));
+      var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      track.scrollTo({left: slides[i].offsetLeft, behavior: reduce ? 'auto' : 'smooth'});
+    }
+    if(prev) prev.addEventListener('click', function(){ go(-1); });
+    if(next) next.addEventListener('click', function(){ go(1); });
+    track.addEventListener('scroll', function(){
+      clearTimeout(track._sliderTimer);
+      track._sliderTimer = setTimeout(update, 80);
+    }, {passive: true});
+    update();
+  });
+})();
+"""
+
 # Preset identities for the four built-in courses (matched by slug). course.json can override any of these.
 KNOWN = {
     "dsa": {"code": "DSA", "accent": "#D04A28", "tint": "#F4E1D8", "accentDark": "#F06A45", "tintDark": "#3A2219"},
@@ -248,7 +284,7 @@ def page(title: str, body: str, style_vars: str = "", extra_css: str = "", scrip
 </head>
 <body>
 {body}
-<script>{THEME_SCRIPT}{TO_TOP_SCRIPT}{script}</script>
+<script>{THEME_SCRIPT}{TO_TOP_SCRIPT}{SLIDER_SCRIPT}{script}</script>
 </body>
 </html>
 """

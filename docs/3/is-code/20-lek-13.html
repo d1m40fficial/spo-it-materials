@@ -527,6 +527,12 @@ html.modal-open { overflow: hidden; }
 :root[data-theme=dark] .quiz-actions button[data-answer]:hover, :root[data-theme=dark] .quiz-actions button.quiz-answer:hover { background: #262626; background-color: #262626; color: #fff; border-color: #262626; }
 :root[data-theme=dark] .gate-q { background: #1E1E1E; color: #FF6B00; }
 
+/* the whole-variant archive is the main action in a download block */
+.files a.zip { background: #121212; color: #fff; border-color: #121212; font-weight: 700; box-shadow: 4px 4px 0 rgba(0,0,0,.18); }
+.files a.zip::before { color: #fff; }
+.files a.zip:hover { background: #1D1D1D; color: #fff; border-color: #1D1D1D; box-shadow: 5px 5px 0 rgba(0,0,0,.22); }
+.files a.zip:active { transform: translate(2px,2px); box-shadow: 1px 1px 0 rgba(0,0,0,.12); }
+
 /* ---------- practical work checklist ---------- */
 .work-checklist { width: 100%; border-collapse: collapse; margin: 14px 0 4px; }
 .work-checklist th, .work-checklist td { border: 1px solid var(--rule); padding: 9px 10px; vertical-align: top; }
@@ -564,6 +570,24 @@ html.modal-open { overflow: hidden; }
 .variant-body .task-list { margin: 8px 0 0; padding-left: 20px; }
 .variant-body .task-list li { margin: 0 0 8px; }
 @media (max-width: 620px) { .variant-body { overflow-x: auto; } .variant-body table { min-width: 520px; } }
+
+/* ---------- schema slider: all CREATE TABLE examples ---------- */
+.schema-slider { margin: 18px 0 24px; border: 1px solid #d8d5cc; border-radius: 14px; background: #fff; color: #1a1916; overflow: hidden; }
+.schema-slider-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 14px; background: #f5f2ea; border-bottom: 1px solid #d8d5cc; }
+.schema-slider-bar strong { font: 700 14px/1.2 var(--font-display); color: #1a1916; }
+.schema-slider-actions { display: flex; align-items: center; gap: 8px; }
+.schema-slider-counter { min-width: 62px; text-align: center; font: 600 13px/1 var(--font-mono); color: #59544a; }
+.schema-btn { width: 34px; height: 34px; border: 1px solid #c9c4b8; border-radius: 8px; background: #fff; color: #1a1916; font: 700 18px/1 var(--font-mono); cursor: pointer; }
+.schema-btn:hover { background: #ece7dc; }
+.schema-track { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: thin; }
+.schema-slide { flex: 0 0 100%; min-width: 100%; box-sizing: border-box; padding: 16px 18px 18px; scroll-snap-align: start; }
+.schema-slide h4 { margin: 0 0 10px; font: 700 16px/1.3 var(--font-display); color: #1a1916; }
+.schema-slide h4 code, .schema-slide p code { color: #1a1916; background: #f1ede4; padding: 1px 4px; border-radius: 4px; }
+.schema-slide p { margin: 0 0 10px; font-size: 14px; line-height: 1.55; color: #3a372f; }
+.schema-slide pre { margin: 0; padding: 14px 16px; overflow-x: auto; border: 1px solid #ddd8cc; border-radius: 10px; background: #fbfaf6; color: #1a1916; font: 12.5px/1.5 var(--font-mono); }
+.schema-slide code { color: inherit; background: none; padding: 0; }
+.schema-slider:focus-within { outline: 2px solid #b9a97f; outline-offset: 2px; }
+@media (max-width: 620px) { .schema-slide { padding: 12px; } .schema-slider-bar { padding: 8px 10px; } }
 
 /* ---------- print / PDF export ---------- */
 @page { margin: 16mm; }
@@ -853,22 +877,22 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <p>Файл базы делится на страницы. По умолчанию размер страницы 4096 байт. Первая страница содержит заголовок файла и корень служебной таблицы <code>sqlite_master</code>. В ней описана схема: какие таблицы, индексы и представления существуют и каким оператором они созданы. После создания учебных таблиц запрос к служебной таблице возвращает их список.</p>
 <div class="codehilite" data-lang="python"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">sqlite3</span>
 
-<span class="n">conn</span> <span class="o">=</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s2">&quot;.../sklad-plus/data/sklad.db&quot;</span><span class="p">)</span>
+<span class="n">conn</span> <span class="o">=</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s2">".../sklad-plus/data/sklad.db"</span><span class="p">)</span>
 
 <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
-    <span class="s2">&quot;SELECT type, name, tbl_name FROM sqlite_master ORDER BY type, name&quot;</span>
+    <span class="s2">"SELECT type, name, tbl_name FROM sqlite_master ORDER BY type, name"</span>
 <span class="p">):</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">row</span><span class="p">)</span>
 </code></pre></div>
 
-<div class="codehilite" data-lang="text"><pre><span></span><code>(&#39;index&#39;, &#39;sqlite_autoindex_categories_1&#39;, &#39;categories&#39;)
-(&#39;index&#39;, &#39;sqlite_autoindex_products_1&#39;, &#39;products&#39;)
-(&#39;index&#39;, &#39;sqlite_autoindex_stock_1&#39;, &#39;stock&#39;)
-(&#39;index&#39;, &#39;sqlite_autoindex_warehouses_1&#39;, &#39;warehouses&#39;)
-(&#39;table&#39;, &#39;categories&#39;, &#39;categories&#39;)
-(&#39;table&#39;, &#39;products&#39;, &#39;products&#39;)
-(&#39;table&#39;, &#39;stock&#39;, &#39;stock&#39;)
-(&#39;table&#39;, &#39;warehouses&#39;, &#39;warehouses&#39;)
+<div class="codehilite" data-lang="text"><pre><span></span><code>('index', 'sqlite_autoindex_categories_1', 'categories')
+('index', 'sqlite_autoindex_products_1', 'products')
+('index', 'sqlite_autoindex_stock_1', 'stock')
+('index', 'sqlite_autoindex_warehouses_1', 'warehouses')
+('table', 'categories', 'categories')
+('table', 'products', 'products')
+('table', 'stock', 'stock')
+('table', 'warehouses', 'warehouses')
 </code></pre></div>
 
 <p>Запрос показывает две вещи. Первая: схема сама является данными, её можно прочитать обычным <code>SELECT</code>. Вторая: некоторые индексы созданы автоматически. <code>sqlite_autoindex_products_1</code> появился из-за ограничения <code>UNIQUE</code> на артикул, <code>sqlite_autoindex_stock_1</code> из-за составного первичного ключа. Это не отдельные таблицы, а структуры ускорения и проверки уникальности.</p>
@@ -877,11 +901,11 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <p>Режим журнала определяет, как фиксируются изменения. В режиме <code>DELETE</code> рядом с базой на время транзакции создаётся отдельный файл журнала, а после фиксации он удаляется. В режиме <code>WAL</code> изменения сначала пишутся в файл <code>-wal</code>, а читатели видят прежнюю версию, пока новая не зафиксирована. Новый файл открывается в режиме <code>DELETE</code>, а переключение выполняет команда <code>PRAGMA journal_mode = WAL</code>, которая возвращает новое значение режима.</p>
 <h2 id="схема-учебной-базы"><span class="num">03</span>Схема учебной базы</h2>
 <p>Схема это договор о данных, записанный на языке SQL. Она задаёт таблицы, столбцы, типы и правила. Для склада достаточно четырёх таблиц: площадки, категории, товары и остатки.</p>
-<div class="codehilite" data-lang="python"><pre><span></span><code><span class="n">conn</span> <span class="o">=</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s2">&quot;.../sklad-plus/data/sklad.db&quot;</span><span class="p">)</span>
-<span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;PRAGMA foreign_keys = ON&quot;</span><span class="p">)</span>
+<div class="codehilite" data-lang="python"><pre><span></span><code><span class="n">conn</span> <span class="o">=</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s2">".../sklad-plus/data/sklad.db"</span><span class="p">)</span>
+<span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">"PRAGMA foreign_keys = ON"</span><span class="p">)</span>
 
 <span class="n">conn</span><span class="o">.</span><span class="n">executescript</span><span class="p">(</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    CREATE TABLE warehouses (</span>
 <span class="sd">        id    INTEGER PRIMARY KEY,</span>
 <span class="sd">        code  TEXT NOT NULL UNIQUE,</span>
@@ -906,26 +930,26 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <span class="sd">        qty          INTEGER NOT NULL CHECK (qty &gt;= 0),</span>
 <span class="sd">        PRIMARY KEY (warehouse_id, product_id)</span>
 <span class="sd">    );</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 <span class="p">)</span>
 
 <span class="n">conn</span><span class="o">.</span><span class="n">executemany</span><span class="p">(</span>
-    <span class="s2">&quot;INSERT INTO warehouses (code, title) VALUES (?, ?)&quot;</span><span class="p">,</span>
-    <span class="p">[(</span><span class="s2">&quot;MSK&quot;</span><span class="p">,</span> <span class="s2">&quot;Москва&quot;</span><span class="p">),</span> <span class="p">(</span><span class="s2">&quot;TVR&quot;</span><span class="p">,</span> <span class="s2">&quot;Тверь&quot;</span><span class="p">),</span> <span class="p">(</span><span class="s2">&quot;TUL&quot;</span><span class="p">,</span> <span class="s2">&quot;Тула&quot;</span><span class="p">),</span> <span class="p">(</span><span class="s2">&quot;KLG&quot;</span><span class="p">,</span> <span class="s2">&quot;Калуга&quot;</span><span class="p">)],</span>
+    <span class="s2">"INSERT INTO warehouses (code, title) VALUES (?, ?)"</span><span class="p">,</span>
+    <span class="p">[(</span><span class="s2">"MSK"</span><span class="p">,</span> <span class="s2">"Москва"</span><span class="p">),</span> <span class="p">(</span><span class="s2">"TVR"</span><span class="p">,</span> <span class="s2">"Тверь"</span><span class="p">),</span> <span class="p">(</span><span class="s2">"TUL"</span><span class="p">,</span> <span class="s2">"Тула"</span><span class="p">),</span> <span class="p">(</span><span class="s2">"KLG"</span><span class="p">,</span> <span class="s2">"Калуга"</span><span class="p">)],</span>
 <span class="p">)</span>
 
 <span class="n">titles</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="s2">&quot;Крепёж&quot;</span><span class="p">,</span> <span class="s2">&quot;Электрика&quot;</span><span class="p">,</span> <span class="s2">&quot;Сантехника&quot;</span><span class="p">,</span> <span class="s2">&quot;Инструмент&quot;</span><span class="p">,</span> <span class="s2">&quot;Спецодежда&quot;</span><span class="p">,</span> <span class="s2">&quot;Упаковка&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;Хозтовары&quot;</span><span class="p">,</span> <span class="s2">&quot;Метизы&quot;</span><span class="p">,</span> <span class="s2">&quot;Лакокраска&quot;</span><span class="p">,</span> <span class="s2">&quot;Стройматериалы&quot;</span><span class="p">,</span> <span class="s2">&quot;Перчатки&quot;</span><span class="p">,</span> <span class="s2">&quot;Плёнка&quot;</span><span class="p">,</span>
+    <span class="s2">"Крепёж"</span><span class="p">,</span> <span class="s2">"Электрика"</span><span class="p">,</span> <span class="s2">"Сантехника"</span><span class="p">,</span> <span class="s2">"Инструмент"</span><span class="p">,</span> <span class="s2">"Спецодежда"</span><span class="p">,</span> <span class="s2">"Упаковка"</span><span class="p">,</span>
+    <span class="s2">"Хозтовары"</span><span class="p">,</span> <span class="s2">"Метизы"</span><span class="p">,</span> <span class="s2">"Лакокраска"</span><span class="p">,</span> <span class="s2">"Стройматериалы"</span><span class="p">,</span> <span class="s2">"Перчатки"</span><span class="p">,</span> <span class="s2">"Плёнка"</span><span class="p">,</span>
 <span class="p">]</span>
-<span class="n">conn</span><span class="o">.</span><span class="n">executemany</span><span class="p">(</span><span class="s2">&quot;INSERT INTO categories (title) VALUES (?)&quot;</span><span class="p">,</span> <span class="p">[(</span><span class="n">t</span><span class="p">,)</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">titles</span><span class="p">])</span>
+<span class="n">conn</span><span class="o">.</span><span class="n">executemany</span><span class="p">(</span><span class="s2">"INSERT INTO categories (title) VALUES (?)"</span><span class="p">,</span> <span class="p">[(</span><span class="n">t</span><span class="p">,)</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">titles</span><span class="p">])</span>
 
 <span class="n">conn</span><span class="o">.</span><span class="n">executemany</span><span class="p">(</span>
-    <span class="s2">&quot;INSERT INTO products (sku, title, category_id) VALUES (?, ?, ?)&quot;</span><span class="p">,</span>
-    <span class="p">[(</span><span class="sa">f</span><span class="s2">&quot;SKU-</span><span class="si">{</span><span class="mi">1000</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">i</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Товар </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">i</span> <span class="o">%</span> <span class="mi">12</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">4800</span><span class="p">)],</span>
+    <span class="s2">"INSERT INTO products (sku, title, category_id) VALUES (?, ?, ?)"</span><span class="p">,</span>
+    <span class="p">[(</span><span class="sa">f</span><span class="s2">"SKU-</span><span class="si">{</span><span class="mi">1000</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">i</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span> <span class="sa">f</span><span class="s2">"Товар </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span> <span class="n">i</span> <span class="o">%</span> <span class="mi">12</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">4800</span><span class="p">)],</span>
 <span class="p">)</span>
 <span class="n">conn</span><span class="o">.</span><span class="n">executemany</span><span class="p">(</span>
-    <span class="s2">&quot;INSERT INTO stock (warehouse_id, product_id, qty) VALUES (?, ?, ?)&quot;</span><span class="p">,</span>
+    <span class="s2">"INSERT INTO stock (warehouse_id, product_id, qty) VALUES (?, ?, ?)"</span><span class="p">,</span>
     <span class="p">[((</span><span class="n">i</span> <span class="o">%</span> <span class="mi">4</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="p">(</span><span class="n">i</span> <span class="o">*</span> <span class="mi">7</span><span class="p">)</span> <span class="o">%</span> <span class="mi">250</span> <span class="o">+</span> <span class="mi">10</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">4800</span><span class="p">)],</span>
 <span class="p">)</span>
 <span class="n">conn</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
@@ -941,13 +965,13 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <p><code>REFERENCES</code> объявляет внешний ключ. Он говорит, что <code>category_id</code> должен указывать на существующую строку в <code>categories</code>. Но одного объявления мало: SQLite по умолчанию не проверяет внешние ключи. Проверка включается отдельной командой <code>PRAGMA foreign_keys = ON</code> для каждого соединения. Об этом ниже.</p>
 <p><code>CHECK</code> задаёт условие на значение. <code>CHECK (qty &gt;= 0)</code> не даст записать отрицательный остаток. Это пример правила, которое лучше держать в базе, а не только в коде: база защищает данные от любой программы, включая ручной запрос и будущий скрипт импорта.</p>
 <p>Посмотреть схему конкретной таблицы можно через <code>PRAGMA table_info</code>.</p>
-<div class="codehilite" data-lang="python"><pre><span></span><code><span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;PRAGMA table_info(stock)&quot;</span><span class="p">):</span>
+<div class="codehilite" data-lang="python"><pre><span></span><code><span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">"PRAGMA table_info(stock)"</span><span class="p">):</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">row</span><span class="p">)</span>
 </code></pre></div>
 
-<div class="codehilite" data-lang="text"><pre><span></span><code>(0, &#39;warehouse_id&#39;, &#39;INTEGER&#39;, 1, None, 1)
-(1, &#39;product_id&#39;, &#39;INTEGER&#39;, 1, None, 2)
-(2, &#39;qty&#39;, &#39;INTEGER&#39;, 1, None, 0)
+<div class="codehilite" data-lang="text"><pre><span></span><code>(0, 'warehouse_id', 'INTEGER', 1, None, 1)
+(1, 'product_id', 'INTEGER', 1, None, 2)
+(2, 'qty', 'INTEGER', 1, None, 0)
 </code></pre></div>
 
 <p>Второй столбец вывода это имя, третий объявленный тип, четвёртый признак <code>NOT NULL</code>, шестой позиция в первичном ключе. У <code>warehouse_id</code> и <code>product_id</code> позиции 1 и 2, значит ключ составной. У <code>qty</code> позиция 0, значит в ключ он не входит.</p>
@@ -957,24 +981,24 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <div class="gate-content" hidden><h2 id="индекс-как-поиск-перестаёт-быть-перебором"><span class="num">04</span>Индекс: как поиск перестаёт быть перебором</h2>
 <p>Индекс это отдельное B-дерево, в котором хранятся значения столбца и ссылки на строки. Если индекс есть, база находит нужные строки по дереву, а не просматривает таблицу целиком. Разница видна в плане запроса.</p>
 <div class="codehilite" data-lang="text"><pre><span></span><code><span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
-    <span class="s2">&quot;EXPLAIN QUERY PLAN SELECT sku FROM products WHERE category_id = 3&quot;</span>
+    <span class="s2">"EXPLAIN QUERY PLAN SELECT sku FROM products WHERE category_id = 3"</span>
 <span class="p">):</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">row</span><span class="p">)</span>
 </code></pre></div>
 
-<div class="codehilite" data-lang="text"><pre><span></span><code>(2, 0, 216, &#39;SCAN products&#39;)
+<div class="codehilite" data-lang="text"><pre><span></span><code>(2, 0, 216, 'SCAN products')
 </code></pre></div>
 
 <p><code>SCAN</code> означает полный просмотр таблицы. Для 4800 строк это ещё терпимо, для миллиона строк уже заметно. Создадим индекс по столбцу категории.</p>
-<div class="codehilite" data-lang="text"><pre><span></span><code><span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;CREATE INDEX idx_products_category ON products(category_id)&quot;</span><span class="p">)</span>
+<div class="codehilite" data-lang="text"><pre><span></span><code><span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">"CREATE INDEX idx_products_category ON products(category_id)"</span><span class="p">)</span>
 
 <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
-    <span class="s2">&quot;EXPLAIN QUERY PLAN SELECT sku FROM products WHERE category_id = 3&quot;</span>
+    <span class="s2">"EXPLAIN QUERY PLAN SELECT sku FROM products WHERE category_id = 3"</span>
 <span class="p">):</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">row</span><span class="p">)</span>
 </code></pre></div>
 
-<div class="codehilite" data-lang="text"><pre><span></span><code>(3, 0, 61, &#39;SEARCH products USING INDEX idx_products_category (category_id=?)&#39;)
+<div class="codehilite" data-lang="text"><pre><span></span><code>(3, 0, 61, 'SEARCH products USING INDEX idx_products_category (category_id=?)')
 </code></pre></div>
 
 <p><code>SEARCH</code> означает поиск по индексу. Третье число в выводе этой версии SQLite это оценка стоимости плана: 216 против 61. Оценка не гарантирует реальное время, но показывает, что план изменился.</p>
@@ -988,18 +1012,18 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <div class="codehilite" data-lang="text"><pre><span></span><code><span class="k">try</span><span class="p">:</span>
     <span class="k">with</span> <span class="n">conn</span><span class="p">:</span>
         <span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
-            <span class="s2">&quot;UPDATE stock SET qty = qty - 10 WHERE product_id = 1 AND warehouse_id = 1&quot;</span>
+            <span class="s2">"UPDATE stock SET qty = qty - 10 WHERE product_id = 1 AND warehouse_id = 1"</span>
         <span class="p">)</span>
         <span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
-            <span class="s2">&quot;UPDATE stock SET qty = -1 WHERE product_id = 2 AND warehouse_id = 2&quot;</span>
+            <span class="s2">"UPDATE stock SET qty = -1 WHERE product_id = 2 AND warehouse_id = 2"</span>
         <span class="p">)</span>
 <span class="k">except</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">IntegrityError</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;транзакция отменена:&quot;</span><span class="p">,</span> <span class="n">error</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"транзакция отменена:"</span><span class="p">,</span> <span class="n">error</span><span class="p">)</span>
 
 <span class="nb">print</span><span class="p">(</span>
-    <span class="s2">&quot;остаток после отмены:&quot;</span><span class="p">,</span>
+    <span class="s2">"остаток после отмены:"</span><span class="p">,</span>
     <span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
-        <span class="s2">&quot;SELECT qty FROM stock WHERE product_id = 1 AND warehouse_id = 1&quot;</span>
+        <span class="s2">"SELECT qty FROM stock WHERE product_id = 1 AND warehouse_id = 1"</span>
     <span class="p">)</span><span class="o">.</span><span class="n">fetchone</span><span class="p">()[</span><span class="mi">0</span><span class="p">],</span>
 <span class="p">)</span>
 </code></pre></div>
@@ -1013,7 +1037,7 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <p>SQLite обеспечивает сериализуемую изоляцию транзакций: читатель не видит незафиксированные изменения, а писатель блокирует других писателей. Один писатель в каждый момент времени, несколько читателей параллельно. Для склада с 120 сотрудниками это обычно достаточно, если транзакции короткие.</p>
 <p>Долгая транзакция держит блокировку и мешает другим. Если программа открыла транзакцию, изменила строку и ушла на обед, остальные получат ошибку <code>database is locked</code>. Лечение простое: не держать транзакцию во время ввода пользователя, сетевых запросов и ожидания. Сначала соберите данные, затем откройте транзакцию, выполните изменения и сразу зафиксируйте.</p>
 <p>Для ожидания блокировки используют <code>PRAGMA busy_timeout</code>. Значение задаётся в миллисекундах: база подождёт указанное время, прежде чем вернуть ошибку.</p>
-<div class="codehilite" data-lang="text"><pre><span></span><code><span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;PRAGMA busy_timeout = 5000&quot;</span><span class="p">)</span>
+<div class="codehilite" data-lang="text"><pre><span></span><code><span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">"PRAGMA busy_timeout = 5000"</span><span class="p">)</span>
 </code></pre></div>
 
 <p>Пять секунд это разумный запас для учебного проекта. Бесконечное ожидание опасно: программа зависнет, и пользователь не поймёт причину.</p></div>
@@ -1024,14 +1048,14 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <div class="gate-content" hidden><h2 id="ограничения-целостности"><span class="num">06</span>Ограничения целостности</h2>
 <p>Ограничения это правила, которые база проверяет сама. Программа может забыть проверить поле, ручной запрос может обойти код, но ограничение сработает в обоих случаях.</p>
 <p>Начнём с внешнего ключа. По умолчанию SQLite не проверяет его, даже если он объявлен в схеме. Это историческое решение для совместимости. Включать проверку нужно для каждого соединения.</p>
-<div class="codehilite" data-lang="text"><pre><span></span><code><span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;PRAGMA foreign_keys = ON&quot;</span><span class="p">)</span>
+<div class="codehilite" data-lang="text"><pre><span></span><code><span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">"PRAGMA foreign_keys = ON"</span><span class="p">)</span>
 
 <span class="k">try</span><span class="p">:</span>
     <span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
-        <span class="s2">&quot;INSERT INTO stock (warehouse_id, product_id, qty) VALUES (1, 99999, 5)&quot;</span>
+        <span class="s2">"INSERT INTO stock (warehouse_id, product_id, qty) VALUES (1, 99999, 5)"</span>
     <span class="p">)</span>
 <span class="k">except</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">IntegrityError</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;внешний ключ:&quot;</span><span class="p">,</span> <span class="n">error</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"внешний ключ:"</span><span class="p">,</span> <span class="n">error</span><span class="p">)</span>
 </code></pre></div>
 
 <div class="codehilite" data-lang="text"><pre><span></span><code>внешний ключ: FOREIGN KEY constraint failed
@@ -1039,7 +1063,7 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 
 <p>Товара с идентификатором 99999 нет, поэтому вставка отклонена. Если убрать <code>PRAGMA</code>, строка с несуществующим товаром попадёт в таблицу, и отчёт по остаткам начнёт ссылаться на пустое место. Ошибка проявится позже и в другом месте, что всегда дороже.</p>
 <p>Проверить, включена ли проверка, можно запросом.</p>
-<div class="codehilite" data-lang="text"><pre><span></span><code><span class="nb">print</span><span class="p">(</span><span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;PRAGMA foreign_keys&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">fetchone</span><span class="p">())</span>
+<div class="codehilite" data-lang="text"><pre><span></span><code><span class="nb">print</span><span class="p">(</span><span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">"PRAGMA foreign_keys"</span><span class="p">)</span><span class="o">.</span><span class="n">fetchone</span><span class="p">())</span>
 </code></pre></div>
 
 <div class="codehilite" data-lang="text"><pre><span></span><code>(1,)
@@ -1049,10 +1073,10 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <p>Ограничение <code>UNIQUE</code> тоже проверяется базой.</p>
 <div class="codehilite" data-lang="text"><pre><span></span><code><span class="k">try</span><span class="p">:</span>
     <span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
-        <span class="s2">&quot;INSERT INTO products (sku, title, category_id) VALUES (&#39;SKU-1000&#39;, &#39;Дубль&#39;, 1)&quot;</span>
+        <span class="s2">"INSERT INTO products (sku, title, category_id) VALUES ('SKU-1000', 'Дубль', 1)"</span>
     <span class="p">)</span>
 <span class="k">except</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">IntegrityError</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;уникальность:&quot;</span><span class="p">,</span> <span class="n">error</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"уникальность:"</span><span class="p">,</span> <span class="n">error</span><span class="p">)</span>
 </code></pre></div>
 
 <div class="codehilite" data-lang="text"><pre><span></span><code>уникальность: UNIQUE constraint failed: products.sku
@@ -1085,22 +1109,22 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <p>В .NET для SQLite используют пакет <code>Microsoft.Data.Sqlite</code>. Код открывает соединение, создаёт команду с параметрами и читает результат.</p>
 <div class="codehilite" data-lang="text"><pre><span></span><code><span class="k">using</span><span class="w"> </span><span class="nn">Microsoft.Data.Sqlite</span><span class="p">;</span>
 
-<span class="k">using</span><span class="w"> </span><span class="nn">var</span><span class="w"> </span><span class="n">connection</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">SqliteConnection</span><span class="p">(</span><span class="s">&quot;Data Source=.../sklad-plus/data/sklad.db&quot;</span><span class="p">);</span>
+<span class="k">using</span><span class="w"> </span><span class="nn">var</span><span class="w"> </span><span class="n">connection</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">SqliteConnection</span><span class="p">(</span><span class="s">"Data Source=.../sklad-plus/data/sklad.db"</span><span class="p">);</span>
 <span class="n">connection</span><span class="p">.</span><span class="n">Open</span><span class="p">();</span>
 
 <span class="k">using</span><span class="w"> </span><span class="nn">var</span><span class="w"> </span><span class="n">command</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">connection</span><span class="p">.</span><span class="n">CreateCommand</span><span class="p">();</span>
-<span class="n">command</span><span class="p">.</span><span class="n">CommandText</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;&quot;&quot;</span>
-<span class="w">    </span><span class="n">SELECT</span><span class="w"> </span><span class="n">w</span><span class="p">.</span><span class="n">title</span><span class="p">,</span><span class="w"> </span><span class="n">SUM</span><span class="p">(</span><span class="n">s</span><span class="p">.</span><span class="n">qty</span><span class="p">)</span>
-<span class="w">    </span><span class="n">FROM</span><span class="w"> </span><span class="n">stock</span><span class="w"> </span><span class="n">AS</span><span class="w"> </span><span class="n">s</span>
-<span class="w">    </span><span class="n">JOIN</span><span class="w"> </span><span class="n">warehouses</span><span class="w"> </span><span class="n">AS</span><span class="w"> </span><span class="n">w</span><span class="w"> </span><span class="n">ON</span><span class="w"> </span><span class="n">w</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="n">warehouse_id</span>
-<span class="w">    </span><span class="n">GROUP</span><span class="w"> </span><span class="n">BY</span><span class="w"> </span><span class="n">w</span><span class="p">.</span><span class="n">title</span>
-<span class="w">    </span><span class="n">ORDER</span><span class="w"> </span><span class="n">BY</span><span class="w"> </span><span class="nf">SUM</span><span class="p">(</span><span class="n">s</span><span class="p">.</span><span class="n">qty</span><span class="p">)</span><span class="w"> </span><span class="n">DESC</span>
-<span class="w">    </span><span class="s">&quot;&quot;&quot;;</span>
+<span class="n">command</span><span class="p">.</span><span class="n">CommandText</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"""</span>
+<span class="s">    SELECT w.title, SUM(s.qty)</span>
+<span class="s">    FROM stock AS s</span>
+<span class="s">    JOIN warehouses AS w ON w.id = s.warehouse_id</span>
+<span class="s">    GROUP BY w.title</span>
+<span class="s">    ORDER BY SUM(s.qty) DESC</span>
+<span class="s">    """</span><span class="p">;</span>
 
 <span class="k">using</span><span class="w"> </span><span class="nn">var</span><span class="w"> </span><span class="n">reader</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">command</span><span class="p">.</span><span class="n">ExecuteReader</span><span class="p">();</span>
 <span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">reader</span><span class="p">.</span><span class="n">Read</span><span class="p">())</span>
 <span class="p">{</span>
-<span class="w">    </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">$&quot;{reader.GetString(0)}: {reader.GetInt64(1)}&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">$"{reader.GetString(0)}: {reader.GetInt64(1)}"</span><span class="p">);</span>
 <span class="p">}</span>
 </code></pre></div>
 
@@ -1194,6 +1218,40 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
       var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
       window.scrollTo({top: 0, behavior: reduce ? 'auto' : 'smooth'});
     });
+  });
+})();
+
+(function(){
+  document.querySelectorAll('[data-slider]').forEach(function(slider){
+    var track = slider.querySelector('[data-slider-track]');
+    var slides = track ? Array.prototype.slice.call(track.children) : [];
+    var counter = slider.querySelector('[data-slider-counter]');
+    var prev = slider.querySelector('[data-slider-prev]');
+    var next = slider.querySelector('[data-slider-next]');
+    if(!track || slides.length < 2) return;
+    function current(){
+      var best = 0, dist = Infinity;
+      slides.forEach(function(slide, i){
+        var d = Math.abs(slide.offsetLeft - track.scrollLeft);
+        if(d < dist){ dist = d; best = i; }
+      });
+      return best;
+    }
+    function update(){
+      if(counter) counter.textContent = (current() + 1) + ' / ' + slides.length;
+    }
+    function go(delta){
+      var i = Math.max(0, Math.min(slides.length - 1, current() + delta));
+      var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      track.scrollTo({left: slides[i].offsetLeft, behavior: reduce ? 'auto' : 'smooth'});
+    }
+    if(prev) prev.addEventListener('click', function(){ go(-1); });
+    if(next) next.addEventListener('click', function(){ go(1); });
+    track.addEventListener('scroll', function(){
+      clearTimeout(track._sliderTimer);
+      track._sliderTimer = setTimeout(update, 80);
+    }, {passive: true});
+    update();
   });
 })();
 (function(){

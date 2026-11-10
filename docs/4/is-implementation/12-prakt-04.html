@@ -527,6 +527,12 @@ html.modal-open { overflow: hidden; }
 :root[data-theme=dark] .quiz-actions button[data-answer]:hover, :root[data-theme=dark] .quiz-actions button.quiz-answer:hover { background: #262626; background-color: #262626; color: #fff; border-color: #262626; }
 :root[data-theme=dark] .gate-q { background: #1E1E1E; color: #FF6B00; }
 
+/* the whole-variant archive is the main action in a download block */
+.files a.zip { background: #121212; color: #fff; border-color: #121212; font-weight: 700; box-shadow: 4px 4px 0 rgba(0,0,0,.18); }
+.files a.zip::before { color: #fff; }
+.files a.zip:hover { background: #1D1D1D; color: #fff; border-color: #1D1D1D; box-shadow: 5px 5px 0 rgba(0,0,0,.22); }
+.files a.zip:active { transform: translate(2px,2px); box-shadow: 1px 1px 0 rgba(0,0,0,.12); }
+
 /* ---------- practical work checklist ---------- */
 .work-checklist { width: 100%; border-collapse: collapse; margin: 14px 0 4px; }
 .work-checklist th, .work-checklist td { border: 1px solid var(--rule); padding: 9px 10px; vertical-align: top; }
@@ -564,6 +570,24 @@ html.modal-open { overflow: hidden; }
 .variant-body .task-list { margin: 8px 0 0; padding-left: 20px; }
 .variant-body .task-list li { margin: 0 0 8px; }
 @media (max-width: 620px) { .variant-body { overflow-x: auto; } .variant-body table { min-width: 520px; } }
+
+/* ---------- schema slider: all CREATE TABLE examples ---------- */
+.schema-slider { margin: 18px 0 24px; border: 1px solid #d8d5cc; border-radius: 14px; background: #fff; color: #1a1916; overflow: hidden; }
+.schema-slider-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 14px; background: #f5f2ea; border-bottom: 1px solid #d8d5cc; }
+.schema-slider-bar strong { font: 700 14px/1.2 var(--font-display); color: #1a1916; }
+.schema-slider-actions { display: flex; align-items: center; gap: 8px; }
+.schema-slider-counter { min-width: 62px; text-align: center; font: 600 13px/1 var(--font-mono); color: #59544a; }
+.schema-btn { width: 34px; height: 34px; border: 1px solid #c9c4b8; border-radius: 8px; background: #fff; color: #1a1916; font: 700 18px/1 var(--font-mono); cursor: pointer; }
+.schema-btn:hover { background: #ece7dc; }
+.schema-track { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: thin; }
+.schema-slide { flex: 0 0 100%; min-width: 100%; box-sizing: border-box; padding: 16px 18px 18px; scroll-snap-align: start; }
+.schema-slide h4 { margin: 0 0 10px; font: 700 16px/1.3 var(--font-display); color: #1a1916; }
+.schema-slide h4 code, .schema-slide p code { color: #1a1916; background: #f1ede4; padding: 1px 4px; border-radius: 4px; }
+.schema-slide p { margin: 0 0 10px; font-size: 14px; line-height: 1.55; color: #3a372f; }
+.schema-slide pre { margin: 0; padding: 14px 16px; overflow-x: auto; border: 1px solid #ddd8cc; border-radius: 10px; background: #fbfaf6; color: #1a1916; font: 12.5px/1.5 var(--font-mono); }
+.schema-slide code { color: inherit; background: none; padding: 0; }
+.schema-slider:focus-within { outline: 2px solid #b9a97f; outline-offset: 2px; }
+@media (max-width: 620px) { .schema-slide { padding: 12px; } .schema-slider-bar { padding: 8px 10px; } }
 
 /* ---------- print / PDF export ---------- */
 @page { margin: 16mm; }
@@ -872,20 +896,20 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <span class="p">);</span>
 
 <span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">customers_old</span><span class="w"> </span><span class="k">VALUES</span>
-<span class="p">(</span><span class="s1">&#39;C-1001&#39;</span><span class="p">,</span><span class="s1">&#39;ООО &quot;Стройбаза Тверь&quot;&#39;</span><span class="p">,</span><span class="s1">&#39;5047001234&#39;</span><span class="p">,</span><span class="s1">&#39;+7 (4822) 33-15-40&#39;</span><span class="p">,</span><span class="s1">&#39;Тверь&#39;</span><span class="p">,</span><span class="s1">&#39;27.10.2026&#39;</span><span class="p">,</span><span class="s1">&#39;250000,00&#39;</span><span class="p">,</span><span class="s1">&#39;1&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="s1">&#39;C-1002&#39;</span><span class="p">,</span><span class="s1">&#39;ИП Ковалёв А.С.&#39;</span><span class="p">,</span><span class="s1">&#39;504700987654&#39;</span><span class="p">,</span><span class="k">NULL</span><span class="p">,</span><span class="s1">&#39;Тула&#39;</span><span class="p">,</span><span class="s1">&#39;2026-10-27&#39;</span><span class="p">,</span><span class="s1">&#39;0&#39;</span><span class="p">,</span><span class="s1">&#39;1&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="s1">&#39;C-1002&#39;</span><span class="p">,</span><span class="s1">&#39;ИП Ковалёв А.С.&#39;</span><span class="p">,</span><span class="s1">&#39;504700987654&#39;</span><span class="p">,</span><span class="k">NULL</span><span class="p">,</span><span class="s1">&#39;Тула&#39;</span><span class="p">,</span><span class="s1">&#39;2026-10-27&#39;</span><span class="p">,</span><span class="s1">&#39;0&#39;</span><span class="p">,</span><span class="s1">&#39;1&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="s1">&#39;C-1003&#39;</span><span class="p">,</span><span class="s1">&#39; ООО Ромашка &#39;</span><span class="p">,</span><span class="s1">&#39;5047001111 &#39;</span><span class="p">,</span><span class="s1">&#39;8 (910) 000-11-22&#39;</span><span class="p">,</span><span class="s1">&#39;Калуга&#39;</span><span class="p">,</span><span class="s1">&#39;27/10/2026&#39;</span><span class="p">,</span><span class="s1">&#39;1 200 000,50&#39;</span><span class="p">,</span><span class="s1">&#39;1&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="s1">&#39;C-1004&#39;</span><span class="p">,</span><span class="s1">&#39;ООО &quot;Строймаркет&quot;&#39;</span><span class="p">,</span><span class="s1">&#39;5047002222&#39;</span><span class="p">,</span><span class="s1">&#39;+7 4822 44-22-11&#39;</span><span class="p">,</span><span class="s1">&#39;Москва&#39;</span><span class="p">,</span><span class="s1">&#39;2026-10-27&#39;</span><span class="p">,</span><span class="s1">&#39;0&#39;</span><span class="p">,</span><span class="s1">&#39;0&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="s1">&#39;C-1005&#39;</span><span class="p">,</span><span class="s1">&#39;ИП Сидоров&#39;</span><span class="p">,</span><span class="s1">&#39;504700333&#39;</span><span class="p">,</span><span class="s1">&#39;8-920-111-22-33&#39;</span><span class="p">,</span><span class="s1">&#39;Москва&#39;</span><span class="p">,</span><span class="s1">&#39;27.10.2026&#39;</span><span class="p">,</span><span class="s1">&#39;50000,00&#39;</span><span class="p">,</span><span class="s1">&#39;1&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="s1">&#39;C-1006&#39;</span><span class="p">,</span><span class="s1">&#39;ООО &quot;Мастер&quot;&#39;</span><span class="p">,</span><span class="k">NULL</span><span class="p">,</span><span class="k">NULL</span><span class="p">,</span><span class="s1">&#39;Тверь&#39;</span><span class="p">,</span><span class="s1">&#39;27.10.2026&#39;</span><span class="p">,</span><span class="s1">&#39;75000,00&#39;</span><span class="p">,</span><span class="s1">&#39;1&#39;</span><span class="p">),</span>
-<span class="p">(</span><span class="s1">&#39;C-1010&#39;</span><span class="p">,</span><span class="s1">&#39;   &#39;</span><span class="p">,</span><span class="s1">&#39;5047007777&#39;</span><span class="p">,</span><span class="s1">&#39;+7 4822 00-00-00&#39;</span><span class="p">,</span><span class="s1">&#39;Тверь&#39;</span><span class="p">,</span><span class="s1">&#39;27.10.2026&#39;</span><span class="p">,</span><span class="s1">&#39;0&#39;</span><span class="p">,</span><span class="s1">&#39;1&#39;</span><span class="p">);</span>
+<span class="p">(</span><span class="s1">'C-1001'</span><span class="p">,</span><span class="s1">'ООО "Стройбаза Тверь"'</span><span class="p">,</span><span class="s1">'5047001234'</span><span class="p">,</span><span class="s1">'+7 (4822) 33-15-40'</span><span class="p">,</span><span class="s1">'Тверь'</span><span class="p">,</span><span class="s1">'27.10.2026'</span><span class="p">,</span><span class="s1">'250000,00'</span><span class="p">,</span><span class="s1">'1'</span><span class="p">),</span>
+<span class="p">(</span><span class="s1">'C-1002'</span><span class="p">,</span><span class="s1">'ИП Ковалёв А.С.'</span><span class="p">,</span><span class="s1">'504700987654'</span><span class="p">,</span><span class="k">NULL</span><span class="p">,</span><span class="s1">'Тула'</span><span class="p">,</span><span class="s1">'2026-10-27'</span><span class="p">,</span><span class="s1">'0'</span><span class="p">,</span><span class="s1">'1'</span><span class="p">),</span>
+<span class="p">(</span><span class="s1">'C-1002'</span><span class="p">,</span><span class="s1">'ИП Ковалёв А.С.'</span><span class="p">,</span><span class="s1">'504700987654'</span><span class="p">,</span><span class="k">NULL</span><span class="p">,</span><span class="s1">'Тула'</span><span class="p">,</span><span class="s1">'2026-10-27'</span><span class="p">,</span><span class="s1">'0'</span><span class="p">,</span><span class="s1">'1'</span><span class="p">),</span>
+<span class="p">(</span><span class="s1">'C-1003'</span><span class="p">,</span><span class="s1">' ООО Ромашка '</span><span class="p">,</span><span class="s1">'5047001111 '</span><span class="p">,</span><span class="s1">'8 (910) 000-11-22'</span><span class="p">,</span><span class="s1">'Калуга'</span><span class="p">,</span><span class="s1">'27/10/2026'</span><span class="p">,</span><span class="s1">'1 200 000,50'</span><span class="p">,</span><span class="s1">'1'</span><span class="p">),</span>
+<span class="p">(</span><span class="s1">'C-1004'</span><span class="p">,</span><span class="s1">'ООО "Строймаркет"'</span><span class="p">,</span><span class="s1">'5047002222'</span><span class="p">,</span><span class="s1">'+7 4822 44-22-11'</span><span class="p">,</span><span class="s1">'Москва'</span><span class="p">,</span><span class="s1">'2026-10-27'</span><span class="p">,</span><span class="s1">'0'</span><span class="p">,</span><span class="s1">'0'</span><span class="p">),</span>
+<span class="p">(</span><span class="s1">'C-1005'</span><span class="p">,</span><span class="s1">'ИП Сидоров'</span><span class="p">,</span><span class="s1">'504700333'</span><span class="p">,</span><span class="s1">'8-920-111-22-33'</span><span class="p">,</span><span class="s1">'Москва'</span><span class="p">,</span><span class="s1">'27.10.2026'</span><span class="p">,</span><span class="s1">'50000,00'</span><span class="p">,</span><span class="s1">'1'</span><span class="p">),</span>
+<span class="p">(</span><span class="s1">'C-1006'</span><span class="p">,</span><span class="s1">'ООО "Мастер"'</span><span class="p">,</span><span class="k">NULL</span><span class="p">,</span><span class="k">NULL</span><span class="p">,</span><span class="s1">'Тверь'</span><span class="p">,</span><span class="s1">'27.10.2026'</span><span class="p">,</span><span class="s1">'75000,00'</span><span class="p">,</span><span class="s1">'1'</span><span class="p">),</span>
+<span class="p">(</span><span class="s1">'C-1010'</span><span class="p">,</span><span class="s1">'   '</span><span class="p">,</span><span class="s1">'5047007777'</span><span class="p">,</span><span class="s1">'+7 4822 00-00-00'</span><span class="p">,</span><span class="s1">'Тверь'</span><span class="p">,</span><span class="s1">'27.10.2026'</span><span class="p">,</span><span class="s1">'0'</span><span class="p">,</span><span class="s1">'1'</span><span class="p">);</span>
 </code></pre></div>
 
 <p>Снимите показатели в таблицу. Сумму считайте, заменив запятую точкой и убрав пробелы.</p>
 <div class="codehilite" data-lang="sql"><pre><span></span><code><span class="k">SELECT</span><span class="w"> </span><span class="k">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">rows_total</span><span class="p">,</span>
 <span class="w">       </span><span class="k">COUNT</span><span class="p">(</span><span class="k">DISTINCT</span><span class="w"> </span><span class="n">external_id</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">keys_total</span><span class="p">,</span>
-<span class="w">       </span><span class="k">SUM</span><span class="p">(</span><span class="k">CAST</span><span class="p">(</span><span class="k">REPLACE</span><span class="p">(</span><span class="k">REPLACE</span><span class="p">(</span><span class="n">credit_limit</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39; &#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="p">),</span><span class="w"> </span><span class="s1">&#39;,&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;.&#39;</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="nb">DECIMAL</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span><span class="mi">2</span><span class="p">)))</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">credit_sum</span><span class="p">,</span>
+<span class="w">       </span><span class="k">SUM</span><span class="p">(</span><span class="k">CAST</span><span class="p">(</span><span class="k">REPLACE</span><span class="p">(</span><span class="k">REPLACE</span><span class="p">(</span><span class="n">credit_limit</span><span class="p">,</span><span class="w"> </span><span class="s1">' '</span><span class="p">,</span><span class="w"> </span><span class="s1">''</span><span class="p">),</span><span class="w"> </span><span class="s1">','</span><span class="p">,</span><span class="w"> </span><span class="s1">'.'</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="nb">DECIMAL</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span><span class="mi">2</span><span class="p">)))</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">credit_sum</span><span class="p">,</span>
 <span class="w">       </span><span class="k">MIN</span><span class="p">(</span><span class="n">created_at</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">first_date</span><span class="p">,</span>
 <span class="w">       </span><span class="k">MAX</span><span class="p">(</span><span class="n">created_at</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">last_date</span>
 <span class="k">FROM</span><span class="w"> </span><span class="n">customers_old</span><span class="p">;</span>
@@ -947,7 +971,7 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <span class="w">  </span><span class="n">rows_total</span><span class="w"> </span><span class="nb">INT</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
 <span class="w">  </span><span class="n">rows_loaded</span><span class="w"> </span><span class="nb">INT</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
 <span class="w">  </span><span class="n">rows_rejected</span><span class="w"> </span><span class="nb">INT</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
-<span class="w">  </span><span class="n">status</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="s1">&#39;running&#39;</span>
+<span class="w">  </span><span class="n">status</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="s1">'running'</span>
 <span class="p">);</span>
 </code></pre></div>
 
@@ -960,13 +984,13 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <div class="codehilite" data-lang="python"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">norm_phone</span><span class="p">(</span><span class="n">raw</span><span class="p">):</span>
-    <span class="n">digits</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\D&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">raw</span> <span class="ow">or</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
-    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">digits</span><span class="p">)</span> <span class="o">==</span> <span class="mi">11</span> <span class="ow">and</span> <span class="n">digits</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">in</span> <span class="s2">&quot;78&quot;</span><span class="p">:</span>
-        <span class="k">return</span> <span class="s2">&quot;+7&quot;</span> <span class="o">+</span> <span class="n">digits</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+    <span class="n">digits</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">"\D"</span><span class="p">,</span> <span class="s2">""</span><span class="p">,</span> <span class="n">raw</span> <span class="ow">or</span> <span class="s2">""</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">digits</span><span class="p">)</span> <span class="o">==</span> <span class="mi">11</span> <span class="ow">and</span> <span class="n">digits</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">in</span> <span class="s2">"78"</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">"+7"</span> <span class="o">+</span> <span class="n">digits</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
     <span class="k">return</span> <span class="kc">None</span>
 
-<span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;8 (910) 000-11-22&quot;</span><span class="p">,</span> <span class="s2">&quot;+7 4822 44-22-11&quot;</span><span class="p">,</span> <span class="s2">&quot;33-15&quot;</span><span class="p">]:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="s2">&quot;-&gt;&quot;</span><span class="p">,</span> <span class="n">norm_phone</span><span class="p">(</span><span class="n">value</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">"8 (910) 000-11-22"</span><span class="p">,</span> <span class="s2">"+7 4822 44-22-11"</span><span class="p">,</span> <span class="s2">"33-15"</span><span class="p">]:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="s2">"-&gt;"</span><span class="p">,</span> <span class="n">norm_phone</span><span class="p">(</span><span class="n">value</span><span class="p">))</span>
 </code></pre></div>
 
 <p>Первые два значения дают <code>+79100001122</code> и <code>+74822442211</code>, третье даёт <code>None</code>.</p>
@@ -974,17 +998,17 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <div class="codehilite" data-lang="python"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">csv</span><span class="o">,</span><span class="w"> </span><span class="nn">hashlib</span><span class="o">,</span><span class="w"> </span><span class="nn">json</span><span class="o">,</span><span class="w"> </span><span class="nn">re</span>
 
 <span class="n">rows</span><span class="p">,</span> <span class="n">rejected</span><span class="p">,</span> <span class="n">seen</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[],</span> <span class="nb">set</span><span class="p">()</span>
-<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;customers_old.csv&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8-sig&quot;</span><span class="p">,</span> <span class="n">newline</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">r</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">csv</span><span class="o">.</span><span class="n">DictReader</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s2">&quot;;&quot;</span><span class="p">),</span> <span class="n">start</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">"customers_old.csv"</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8-sig"</span><span class="p">,</span> <span class="n">newline</span><span class="o">=</span><span class="s2">""</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">r</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">csv</span><span class="o">.</span><span class="n">DictReader</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s2">";"</span><span class="p">),</span> <span class="n">start</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
         <span class="c1"># название: без пробелов по краям, двойные схлопнуть</span>
         <span class="c1"># ИНН: только цифры, длина 10 или 12</span>
         <span class="c1"># отклонить строку с пустым названием, повторным ключом или битым ИНН</span>
         <span class="c1"># собрать словарь полей приёмника и посчитать row_hash</span>
         <span class="k">pass</span>
 
-<span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">({</span><span class="s2">&quot;batch_id&quot;</span><span class="p">:</span> <span class="s2">&quot;2026-10-27-customers&quot;</span><span class="p">,</span> <span class="s2">&quot;customers&quot;</span><span class="p">:</span> <span class="n">rows</span><span class="p">},</span>
-          <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;customers.json&quot;</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">),</span> <span class="n">ensure_ascii</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;к загрузке&quot;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">rows</span><span class="p">),</span> <span class="s2">&quot;отклонено&quot;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">rejected</span><span class="p">))</span>
+<span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">({</span><span class="s2">"batch_id"</span><span class="p">:</span> <span class="s2">"2026-10-27-customers"</span><span class="p">,</span> <span class="s2">"customers"</span><span class="p">:</span> <span class="n">rows</span><span class="p">},</span>
+          <span class="nb">open</span><span class="p">(</span><span class="s2">"customers.json"</span><span class="p">,</span> <span class="s2">"w"</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">),</span> <span class="n">ensure_ascii</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"к загрузке"</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">rows</span><span class="p">),</span> <span class="s2">"отклонено"</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">rejected</span><span class="p">))</span>
 </code></pre></div>
 
 <p>Дата встречается в трёх видах: <code>27.10.2026</code>, <code>2026-10-27</code> и <code>27/10/2026</code>. Сумма записана с запятой и пробелом между разрядами. Приведите дату к виду <code>ГГГГ-ММ-ДД ЧЧ:ММ:СС</code>, сумму к числу. Запустите скрипт, запишите число записей и отказов, объясните каждый отказ номером строки.</p>
@@ -1041,12 +1065,12 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <p>Строка в SQL берётся в кавычки, одиночная кавычка внутри удваивается.</p>
 <div class="codehilite" data-lang="python"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">q</span><span class="p">(</span><span class="n">v</span><span class="p">):</span>
     <span class="k">if</span> <span class="n">v</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="k">return</span> <span class="s2">&quot;NULL&quot;</span>
+        <span class="k">return</span> <span class="s2">"NULL"</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">)):</span>
         <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
-    <span class="k">return</span> <span class="s2">&quot;&#39;&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">v</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;&#39;&quot;</span><span class="p">,</span> <span class="s2">&quot;&#39;&#39;&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;&#39;&quot;</span>
+    <span class="k">return</span> <span class="s2">"'"</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">v</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">"'"</span><span class="p">,</span> <span class="s2">"''"</span><span class="p">)</span> <span class="o">+</span> <span class="s2">"'"</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="n">q</span><span class="p">(</span><span class="kc">None</span><span class="p">),</span> <span class="n">q</span><span class="p">(</span><span class="mf">1200000.5</span><span class="p">),</span> <span class="n">q</span><span class="p">(</span><span class="s2">&quot;ООО Ромашка&quot;</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">q</span><span class="p">(</span><span class="kc">None</span><span class="p">),</span> <span class="n">q</span><span class="p">(</span><span class="mf">1200000.5</span><span class="p">),</span> <span class="n">q</span><span class="p">(</span><span class="s2">"ООО Ромашка"</span><span class="p">))</span>
 </code></pre></div>
 
 <p>Вывод: <code>NULL 1200000.5 'ООО Ромашка'</code>.</p>
@@ -1084,7 +1108,7 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <div class="codehilite" data-lang="sql"><pre><span></span><code><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">import_batch</span>
 <span class="w">  </span><span class="p">(</span><span class="n">file_name</span><span class="p">,</span><span class="w"> </span><span class="n">file_hash</span><span class="p">,</span><span class="w"> </span><span class="n">started_at</span><span class="p">,</span><span class="w"> </span><span class="n">finished_at</span><span class="p">,</span><span class="w"> </span><span class="n">rows_total</span><span class="p">,</span><span class="w"> </span><span class="n">rows_loaded</span><span class="p">,</span><span class="w"> </span><span class="n">rows_rejected</span><span class="p">,</span><span class="w"> </span><span class="n">status</span><span class="p">)</span>
 <span class="k">VALUES</span>
-<span class="w">  </span><span class="p">(</span><span class="s1">&#39;customers.json&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">SHA2</span><span class="p">(</span><span class="s1">&#39;2026-10-27-customers&#39;</span><span class="p">,</span><span class="w"> </span><span class="mi">256</span><span class="p">),</span><span class="w"> </span><span class="n">NOW</span><span class="p">(),</span><span class="w"> </span><span class="n">NOW</span><span class="p">(),</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;done&#39;</span><span class="p">);</span>
+<span class="w">  </span><span class="p">(</span><span class="s1">'customers.json'</span><span class="p">,</span><span class="w"> </span><span class="n">SHA2</span><span class="p">(</span><span class="s1">'2026-10-27-customers'</span><span class="p">,</span><span class="w"> </span><span class="mi">256</span><span class="p">),</span><span class="w"> </span><span class="n">NOW</span><span class="p">(),</span><span class="w"> </span><span class="n">NOW</span><span class="p">(),</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="s1">'done'</span><span class="p">);</span>
 </code></pre></div>
 
 <h3>Шаг 9. Сверьте результат и заполните протокол</h3>
@@ -1264,6 +1288,40 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
       var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
       window.scrollTo({top: 0, behavior: reduce ? 'auto' : 'smooth'});
     });
+  });
+})();
+
+(function(){
+  document.querySelectorAll('[data-slider]').forEach(function(slider){
+    var track = slider.querySelector('[data-slider-track]');
+    var slides = track ? Array.prototype.slice.call(track.children) : [];
+    var counter = slider.querySelector('[data-slider-counter]');
+    var prev = slider.querySelector('[data-slider-prev]');
+    var next = slider.querySelector('[data-slider-next]');
+    if(!track || slides.length < 2) return;
+    function current(){
+      var best = 0, dist = Infinity;
+      slides.forEach(function(slide, i){
+        var d = Math.abs(slide.offsetLeft - track.scrollLeft);
+        if(d < dist){ dist = d; best = i; }
+      });
+      return best;
+    }
+    function update(){
+      if(counter) counter.textContent = (current() + 1) + ' / ' + slides.length;
+    }
+    function go(delta){
+      var i = Math.max(0, Math.min(slides.length - 1, current() + delta));
+      var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      track.scrollTo({left: slides[i].offsetLeft, behavior: reduce ? 'auto' : 'smooth'});
+    }
+    if(prev) prev.addEventListener('click', function(){ go(-1); });
+    if(next) next.addEventListener('click', function(){ go(1); });
+    track.addEventListener('scroll', function(){
+      clearTimeout(track._sliderTimer);
+      track._sliderTimer = setTimeout(update, 80);
+    }, {passive: true});
+    update();
   });
 })();
 (function(){

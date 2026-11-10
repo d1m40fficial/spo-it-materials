@@ -527,6 +527,12 @@ html.modal-open { overflow: hidden; }
 :root[data-theme=dark] .quiz-actions button[data-answer]:hover, :root[data-theme=dark] .quiz-actions button.quiz-answer:hover { background: #262626; background-color: #262626; color: #fff; border-color: #262626; }
 :root[data-theme=dark] .gate-q { background: #1E1E1E; color: #FF6B00; }
 
+/* the whole-variant archive is the main action in a download block */
+.files a.zip { background: #121212; color: #fff; border-color: #121212; font-weight: 700; box-shadow: 4px 4px 0 rgba(0,0,0,.18); }
+.files a.zip::before { color: #fff; }
+.files a.zip:hover { background: #1D1D1D; color: #fff; border-color: #1D1D1D; box-shadow: 5px 5px 0 rgba(0,0,0,.22); }
+.files a.zip:active { transform: translate(2px,2px); box-shadow: 1px 1px 0 rgba(0,0,0,.12); }
+
 /* ---------- practical work checklist ---------- */
 .work-checklist { width: 100%; border-collapse: collapse; margin: 14px 0 4px; }
 .work-checklist th, .work-checklist td { border: 1px solid var(--rule); padding: 9px 10px; vertical-align: top; }
@@ -564,6 +570,24 @@ html.modal-open { overflow: hidden; }
 .variant-body .task-list { margin: 8px 0 0; padding-left: 20px; }
 .variant-body .task-list li { margin: 0 0 8px; }
 @media (max-width: 620px) { .variant-body { overflow-x: auto; } .variant-body table { min-width: 520px; } }
+
+/* ---------- schema slider: all CREATE TABLE examples ---------- */
+.schema-slider { margin: 18px 0 24px; border: 1px solid #d8d5cc; border-radius: 14px; background: #fff; color: #1a1916; overflow: hidden; }
+.schema-slider-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 14px; background: #f5f2ea; border-bottom: 1px solid #d8d5cc; }
+.schema-slider-bar strong { font: 700 14px/1.2 var(--font-display); color: #1a1916; }
+.schema-slider-actions { display: flex; align-items: center; gap: 8px; }
+.schema-slider-counter { min-width: 62px; text-align: center; font: 600 13px/1 var(--font-mono); color: #59544a; }
+.schema-btn { width: 34px; height: 34px; border: 1px solid #c9c4b8; border-radius: 8px; background: #fff; color: #1a1916; font: 700 18px/1 var(--font-mono); cursor: pointer; }
+.schema-btn:hover { background: #ece7dc; }
+.schema-track { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: thin; }
+.schema-slide { flex: 0 0 100%; min-width: 100%; box-sizing: border-box; padding: 16px 18px 18px; scroll-snap-align: start; }
+.schema-slide h4 { margin: 0 0 10px; font: 700 16px/1.3 var(--font-display); color: #1a1916; }
+.schema-slide h4 code, .schema-slide p code { color: #1a1916; background: #f1ede4; padding: 1px 4px; border-radius: 4px; }
+.schema-slide p { margin: 0 0 10px; font-size: 14px; line-height: 1.55; color: #3a372f; }
+.schema-slide pre { margin: 0; padding: 14px 16px; overflow-x: auto; border: 1px solid #ddd8cc; border-radius: 10px; background: #fbfaf6; color: #1a1916; font: 12.5px/1.5 var(--font-mono); }
+.schema-slide code { color: inherit; background: none; padding: 0; }
+.schema-slider:focus-within { outline: 2px solid #b9a97f; outline-offset: 2px; }
+@media (max-width: 620px) { .schema-slide { padding: 12px; } .schema-slider-bar { padding: 8px 10px; } }
 
 /* ---------- print / PDF export ---------- */
 @page { margin: 16mm; }
@@ -858,7 +882,7 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <p>Файл должен быть исполняемым. Права <code>rw-r--r--</code> позволяют читать сценарий, но не запускать его. Команда <code>chmod +x check-lab.sh</code> добавляет бит выполнения, после чего сценарий запускается как обычная программа.</p>
 <div class="codehilite" data-lang="bash"><pre><span></span><code><span class="nb">cd</span><span class="w"> </span>~/os-lab
 mkdir<span class="w"> </span>-p<span class="w"> </span>bin<span class="w"> </span>logs
-<span class="nb">printf</span><span class="w"> </span><span class="s1">&#39;%s\n&#39;</span><span class="w"> </span><span class="s1">&#39;#!/usr/bin/env bash&#39;</span><span class="w"> </span><span class="s1">&#39;echo &quot;стенд проверен&quot;&#39;</span><span class="w"> </span>&gt;<span class="w"> </span>bin/hello.sh
+<span class="nb">printf</span><span class="w"> </span><span class="s1">'%s\n'</span><span class="w"> </span><span class="s1">'#!/usr/bin/env bash'</span><span class="w"> </span><span class="s1">'echo "стенд проверен"'</span><span class="w"> </span>&gt;<span class="w"> </span>bin/hello.sh
 chmod<span class="w"> </span>+x<span class="w"> </span>bin/hello.sh
 ./bin/hello.sh
 </code></pre></div>
@@ -867,31 +891,31 @@ chmod<span class="w"> </span>+x<span class="w"> </span>bin/hello.sh
 <p>Сценарий читается сверху вниз, как рецепт. Оболочка разбирает строку, подставляет переменные, делит результат на слова и только потом запускает команду. Почти все ошибки новичка происходят на этапе подстановки и разбиения на слова, а не в самих командах.</p>
 <h2 id="переменные-кавычки-и-подстановки"><span class="num">03</span>Переменные, кавычки и подстановки</h2>
 <p>Переменная хранит строку или число и задаётся без пробелов вокруг знака равенства.</p>
-<div class="codehilite" data-lang="bash"><pre><span></span><code><span class="nv">name</span><span class="o">=</span><span class="s2">&quot;учебный стенд&quot;</span>
+<div class="codehilite" data-lang="bash"><pre><span></span><code><span class="nv">name</span><span class="o">=</span><span class="s2">"учебный стенд"</span>
 <span class="nv">count</span><span class="o">=</span><span class="m">12</span>
-<span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Проверяю </span><span class="nv">$name</span><span class="s2">, машин: </span><span class="nv">$count</span><span class="s2">&quot;</span>
-<span class="nb">echo</span><span class="w"> </span><span class="s1">&#39;Проверяю $name, машин: $count&#39;</span>
+<span class="nb">echo</span><span class="w"> </span><span class="s2">"Проверяю </span><span class="nv">$name</span><span class="s2">, машин: </span><span class="nv">$count</span><span class="s2">"</span>
+<span class="nb">echo</span><span class="w"> </span><span class="s1">'Проверяю $name, машин: $count'</span>
 </code></pre></div>
 
 <p>Первый <code>echo</code> подставляет значения, второй печатает текст буквально. Двойные кавычки разрешают подстановку переменных и команд, одинарные запрещают. Это различие важнее, чем кажется: путь с пробелом внутри ломает команду, если его не обернуть в двойные кавычки.</p>
-<div class="codehilite" data-lang="bash"><pre><span></span><code><span class="nv">dir</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$HOME</span><span class="s2">/os-lab/учебные материалы&quot;</span>
-mkdir<span class="w"> </span>-p<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$dir</span><span class="s2">&quot;</span>
+<div class="codehilite" data-lang="bash"><pre><span></span><code><span class="nv">dir</span><span class="o">=</span><span class="s2">"</span><span class="nv">$HOME</span><span class="s2">/os-lab/учебные материалы"</span>
+mkdir<span class="w"> </span>-p<span class="w"> </span><span class="s2">"</span><span class="nv">$dir</span><span class="s2">"</span>
 </code></pre></div>
 
 <p>Без кавычек оболочка разбила бы строку на два аргумента и создала два каталога с неверными именами. С кавычками создаётся один каталог. Правило простое: подставляйте переменную в кавычках, пока не доказано, что разбиение на слова нужно.</p>
 <p>Результат команды подставляется через <code>$(...)</code>. Так в сценарий попадает дата, имя машины или число файлов.</p>
 <div class="codehilite" data-lang="bash"><pre><span></span><code><span class="nv">today</span><span class="o">=</span><span class="k">$(</span>date<span class="w"> </span>+%F<span class="k">)</span>
-<span class="nv">report</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$HOME</span><span class="s2">/os-lab/logs/report-</span><span class="nv">$today</span><span class="s2">.log&quot;</span>
-<span class="nb">printf</span><span class="w"> </span><span class="s1">&#39;Отчёт за %s: %s\n&#39;</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$today</span><span class="s2">&quot;</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$report</span><span class="s2">&quot;</span>
+<span class="nv">report</span><span class="o">=</span><span class="s2">"</span><span class="nv">$HOME</span><span class="s2">/os-lab/logs/report-</span><span class="nv">$today</span><span class="s2">.log"</span>
+<span class="nb">printf</span><span class="w"> </span><span class="s1">'Отчёт за %s: %s\n'</span><span class="w"> </span><span class="s2">"</span><span class="nv">$today</span><span class="s2">"</span><span class="w"> </span><span class="s2">"</span><span class="nv">$report</span><span class="s2">"</span>
 </code></pre></div>
 
 <p><code>date +%F</code> печатает дату в формате <code>2026-11-03</code>, а <code>printf</code> подставляет её в шаблон. <code>printf</code> предпочтительнее <code>echo</code> для отчётов: он одинаково обрабатывает пробелы, проценты и переводы строк.</p>
 <p>У сценария есть аргументы. <code>$0</code> это имя самого сценария, <code>$1</code> первый аргумент, <code>$#</code> их число, <code>$@</code> весь список. Проверка числа аргументов защищает от запуска без параметров.</p>
-<div class="codehilite" data-lang="bash"><pre><span></span><code><span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$#</span><span class="s2">&quot;</span><span class="w"> </span>-ne<span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
-<span class="w">  </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Использование: </span><span class="nv">$0</span><span class="s2"> каталог&quot;</span><span class="w"> </span>&gt;<span class="p">&amp;</span><span class="m">2</span>
+<div class="codehilite" data-lang="bash"><pre><span></span><code><span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="s2">"</span><span class="nv">$#</span><span class="s2">"</span><span class="w"> </span>-ne<span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<span class="w">  </span><span class="nb">echo</span><span class="w"> </span><span class="s2">"Использование: </span><span class="nv">$0</span><span class="s2"> каталог"</span><span class="w"> </span>&gt;<span class="p">&amp;</span><span class="m">2</span>
 <span class="w">  </span><span class="nb">exit</span><span class="w"> </span><span class="m">2</span>
 <span class="k">fi</span>
-<span class="nv">target</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$1</span><span class="s2">&quot;</span>
+<span class="nv">target</span><span class="o">=</span><span class="s2">"</span><span class="nv">$1</span><span class="s2">"</span>
 </code></pre></div>
 
 <p>Запись <code>&gt;&amp;2</code> направляет сообщение в поток ошибок, а не в обычный вывод. Это позволяет отделить диагностику от данных: отчёт можно перенаправить в файл, а ошибка всё равно останется на экране.</p>
@@ -909,56 +933,56 @@ mkdir<span class="w"> </span>-p<span class="w"> </span><span class="s2">&quot;</
 <p class="gate-action"><button type="button" class="gate-btn" aria-expanded="false"><span class="gate-q" aria-hidden="true">?</span><span>Что произойдёт, если подставить переменную без кавычек и почему это опасно для путей с пробелами?</span></button></p>
 <div class="gate-content" hidden><h2 id="условия-циклы-и-функции"><span class="num">04</span>Условия, циклы и функции</h2>
 <p>У каждой команды есть код возврата: <code>0</code> означает успех, ненулевое число означает ошибку. Оболочка хранит код последней команды в <code>$?</code>, но проверять его вручную почти не нужно: для этого есть <code>if</code>, <code>&amp;&amp;</code> и <code>||</code>.</p>
-<div class="codehilite" data-lang="text"><pre><span></span><code><span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span>-d<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$HOME</span><span class="s2">/os-lab/logs&quot;</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
-<span class="w">  </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;каталог журналов есть&quot;</span>
+<div class="codehilite" data-lang="text"><pre><span></span><code><span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span>-d<span class="w"> </span><span class="s2">"</span><span class="nv">$HOME</span><span class="s2">/os-lab/logs"</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<span class="w">  </span><span class="nb">echo</span><span class="w"> </span><span class="s2">"каталог журналов есть"</span>
 <span class="k">else</span>
-<span class="w">  </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;каталог журналов отсутствует&quot;</span>
+<span class="w">  </span><span class="nb">echo</span><span class="w"> </span><span class="s2">"каталог журналов отсутствует"</span>
 <span class="k">fi</span>
 </code></pre></div>
 
 <p>Квадратные скобки это команда <code>test</code>, поэтому пробелы внутри обязательны. <code>-d</code> проверяет каталог, <code>-f</code> обычный файл, <code>-e</code> существование, <code>-z</code> пустую строку, <code>-n</code> непустую. Для чисел используются <code>-eq</code>, <code>-ne</code>, <code>-lt</code>, <code>-gt</code>, для строк <code>=</code> и <code>!=</code>. В bash есть улучшенные двойные скобки <code>[[ ... ]]</code>, где не нужно заключать переменные в кавычки, но в переносимых сценариях чаще пишут <code>[ ... ]</code> с кавычками.</p>
 <p>Проверка условий через <code>&amp;&amp;</code> и <code>||</code> читается как «сделай это, и если успешно, сделай то».</p>
-<div class="codehilite" data-lang="text"><pre><span></span><code>mkdir<span class="w"> </span>-p<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$HOME</span><span class="s2">/os-lab/logs&quot;</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;каталог готов&quot;</span>
-<span class="nb">command</span><span class="w"> </span>-v<span class="w"> </span>ssh<span class="w"> </span>&gt;/dev/null<span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;клиент ssh не установлен&quot;</span><span class="w"> </span>&gt;<span class="p">&amp;</span><span class="m">2</span>
+<div class="codehilite" data-lang="text"><pre><span></span><code>mkdir<span class="w"> </span>-p<span class="w"> </span><span class="s2">"</span><span class="nv">$HOME</span><span class="s2">/os-lab/logs"</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">"каталог готов"</span>
+<span class="nb">command</span><span class="w"> </span>-v<span class="w"> </span>ssh<span class="w"> </span>&gt;/dev/null<span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">"клиент ssh не установлен"</span><span class="w"> </span>&gt;<span class="p">&amp;</span><span class="m">2</span>
 </code></pre></div>
 
 <p>Первая строка выполняет вторую команду только при успехе. Вторая печатает предупреждение, если <code>ssh</code> не найден. <code>command -v</code> ищет программу в <code>PATH</code> и возвращает успех, если она есть.</p>
 <p>Ветвление по нескольким вариантам удобно оформлять через <code>case</code>. Он читается лучше длинной цепочки <code>elif</code>.</p>
-<div class="codehilite" data-lang="text"><pre><span></span><code><span class="k">case</span><span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">1</span><span class="k">:-</span><span class="nv">status</span><span class="si">}</span><span class="s2">&quot;</span><span class="w"> </span><span class="k">in</span>
-<span class="w">  </span>status<span class="o">)</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;проверка состояния&quot;</span><span class="w"> </span><span class="p">;;</span>
-<span class="w">  </span>start<span class="o">)</span><span class="w">  </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;запуск проверки&quot;</span><span class="w"> </span><span class="p">;;</span>
-<span class="w">  </span>stop<span class="o">)</span><span class="w">   </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;остановка&quot;</span><span class="w"> </span><span class="p">;;</span>
-<span class="w">  </span>*<span class="o">)</span><span class="w">      </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;неизвестная команда: </span><span class="nv">$1</span><span class="s2">&quot;</span><span class="w"> </span>&gt;<span class="p">&amp;</span><span class="m">2</span><span class="p">;</span><span class="w"> </span><span class="nb">exit</span><span class="w"> </span><span class="m">2</span><span class="w"> </span><span class="p">;;</span>
+<div class="codehilite" data-lang="text"><pre><span></span><code><span class="k">case</span><span class="w"> </span><span class="s2">"</span><span class="si">${</span><span class="nv">1</span><span class="k">:-</span><span class="nv">status</span><span class="si">}</span><span class="s2">"</span><span class="w"> </span><span class="k">in</span>
+<span class="w">  </span>status<span class="o">)</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">"проверка состояния"</span><span class="w"> </span><span class="p">;;</span>
+<span class="w">  </span>start<span class="o">)</span><span class="w">  </span><span class="nb">echo</span><span class="w"> </span><span class="s2">"запуск проверки"</span><span class="w"> </span><span class="p">;;</span>
+<span class="w">  </span>stop<span class="o">)</span><span class="w">   </span><span class="nb">echo</span><span class="w"> </span><span class="s2">"остановка"</span><span class="w"> </span><span class="p">;;</span>
+<span class="w">  </span>*<span class="o">)</span><span class="w">      </span><span class="nb">echo</span><span class="w"> </span><span class="s2">"неизвестная команда: </span><span class="nv">$1</span><span class="s2">"</span><span class="w"> </span>&gt;<span class="p">&amp;</span><span class="m">2</span><span class="p">;</span><span class="w"> </span><span class="nb">exit</span><span class="w"> </span><span class="m">2</span><span class="w"> </span><span class="p">;;</span>
 <span class="k">esac</span>
 </code></pre></div>
 
 <p>Запись <code>${1:-status}</code> подставляет значение по умолчанию, если аргумент не передан. Это дешёвый способ сделать сценарий удобным: без аргумента он показывает состояние, с аргументом выполняет действие.</p>
 <p>Цикл <code>for</code> перебирает список значений или файлы по маске.</p>
 <div class="codehilite" data-lang="text"><pre><span></span><code><span class="k">for</span><span class="w"> </span>machine<span class="w"> </span><span class="k">in</span><span class="w"> </span>ubuntu-lab<span class="w"> </span>win-lab<span class="p">;</span><span class="w"> </span><span class="k">do</span>
-<span class="w">  </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;проверяю </span><span class="nv">$machine</span><span class="s2">&quot;</span>
+<span class="w">  </span><span class="nb">echo</span><span class="w"> </span><span class="s2">"проверяю </span><span class="nv">$machine</span><span class="s2">"</span>
 <span class="k">done</span>
 
-<span class="k">for</span><span class="w"> </span>file<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$HOME</span><span class="s2">&quot;</span>/os-lab/logs/*.log<span class="p">;</span><span class="w"> </span><span class="k">do</span>
-<span class="w">  </span><span class="o">[</span><span class="w"> </span>-e<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$file</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">]</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="k">continue</span>
-<span class="w">  </span><span class="nb">printf</span><span class="w"> </span><span class="s1">&#39;%s: %s строк\n&#39;</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$file</span><span class="s2">&quot;</span><span class="w"> </span><span class="s2">&quot;</span><span class="k">$(</span>wc<span class="w"> </span>-l<span class="w"> </span>&lt;<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$file</span><span class="s2">&quot;</span><span class="k">)</span><span class="s2">&quot;</span>
+<span class="k">for</span><span class="w"> </span>file<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="s2">"</span><span class="nv">$HOME</span><span class="s2">"</span>/os-lab/logs/*.log<span class="p">;</span><span class="w"> </span><span class="k">do</span>
+<span class="w">  </span><span class="o">[</span><span class="w"> </span>-e<span class="w"> </span><span class="s2">"</span><span class="nv">$file</span><span class="s2">"</span><span class="w"> </span><span class="o">]</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="k">continue</span>
+<span class="w">  </span><span class="nb">printf</span><span class="w"> </span><span class="s1">'%s: %s строк\n'</span><span class="w"> </span><span class="s2">"</span><span class="nv">$file</span><span class="s2">"</span><span class="w"> </span><span class="s2">"</span><span class="k">$(</span>wc<span class="w"> </span>-l<span class="w"> </span>&lt;<span class="w"> </span><span class="s2">"</span><span class="nv">$file</span><span class="s2">"</span><span class="k">)</span><span class="s2">"</span>
 <span class="k">done</span>
 </code></pre></div>
 
 <p>Проверка <code>[ -e "$file" ] || continue</code> нужна на случай, когда маска не совпала ни с одним файлом: bash подставит саму строку с звёздочкой, и без проверки цикл попытается обработать несуществующий файл.</p>
 <p>Цикл <code>while read</code> читает файл построчно и не теряет пробелы, если указать <code>IFS=</code> и <code>-r</code>.</p>
 <div class="codehilite" data-lang="text"><pre><span></span><code><span class="k">while</span><span class="w"> </span><span class="nv">IFS</span><span class="o">=</span><span class="w"> </span><span class="nb">read</span><span class="w"> </span>-r<span class="w"> </span>line<span class="p">;</span><span class="w"> </span><span class="k">do</span>
-<span class="w">  </span><span class="k">case</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$line</span><span class="s2">&quot;</span><span class="w"> </span><span class="k">in</span>
-<span class="w">    </span>*ERROR*<span class="o">)</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;ошибка: </span><span class="nv">$line</span><span class="s2">&quot;</span><span class="w"> </span><span class="p">;;</span>
+<span class="w">  </span><span class="k">case</span><span class="w"> </span><span class="s2">"</span><span class="nv">$line</span><span class="s2">"</span><span class="w"> </span><span class="k">in</span>
+<span class="w">    </span>*ERROR*<span class="o">)</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">"ошибка: </span><span class="nv">$line</span><span class="s2">"</span><span class="w"> </span><span class="p">;;</span>
 <span class="w">  </span><span class="k">esac</span>
-<span class="k">done</span><span class="w"> </span>&lt;<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$HOME</span><span class="s2">/os-lab/logs/check.log&quot;</span>
+<span class="k">done</span><span class="w"> </span>&lt;<span class="w"> </span><span class="s2">"</span><span class="nv">$HOME</span><span class="s2">/os-lab/logs/check.log"</span>
 </code></pre></div>
 
 <p><code>IFS=</code> отключает обрезку пробелов по краям, <code>-r</code> запрещает трактовать обратную косую черту как спецсимвол. Без них строки журнала могут измениться до неузнаваемости.</p>
 <p>Функция выносит повторяющийся блок и даёт ему имя. Внутри функции полезно объявлять переменные локальными, иначе они останутся в сценарии после вызова.</p>
 <div class="codehilite" data-lang="text"><pre><span></span><code>log<span class="o">()</span><span class="w"> </span><span class="o">{</span>
-<span class="w">  </span><span class="nb">local</span><span class="w"> </span><span class="nv">level</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$1</span><span class="s2">&quot;</span>
+<span class="w">  </span><span class="nb">local</span><span class="w"> </span><span class="nv">level</span><span class="o">=</span><span class="s2">"</span><span class="nv">$1</span><span class="s2">"</span>
 <span class="w">  </span><span class="nb">shift</span>
-<span class="w">  </span><span class="nb">printf</span><span class="w"> </span><span class="s1">&#39;%s %-5s %s\n&#39;</span><span class="w"> </span><span class="s2">&quot;</span><span class="k">$(</span>date<span class="w"> </span><span class="s1">&#39;+%F %T&#39;</span><span class="k">)</span><span class="s2">&quot;</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$level</span><span class="s2">&quot;</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$*</span><span class="s2">&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>tee<span class="w"> </span>-a<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$LOG</span><span class="s2">&quot;</span>
+<span class="w">  </span><span class="nb">printf</span><span class="w"> </span><span class="s1">'%s %-5s %s\n'</span><span class="w"> </span><span class="s2">"</span><span class="k">$(</span>date<span class="w"> </span><span class="s1">'+%F %T'</span><span class="k">)</span><span class="s2">"</span><span class="w"> </span><span class="s2">"</span><span class="nv">$level</span><span class="s2">"</span><span class="w"> </span><span class="s2">"</span><span class="nv">$*</span><span class="s2">"</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>tee<span class="w"> </span>-a<span class="w"> </span><span class="s2">"</span><span class="nv">$LOG</span><span class="s2">"</span>
 <span class="o">}</span>
 </code></pre></div>
 
@@ -967,49 +991,49 @@ mkdir<span class="w"> </span>-p<span class="w"> </span><span class="s2">&quot;</
 <div class="codehilite" data-lang="text"><pre><span></span><code><span class="ch">#!/usr/bin/env bash</span>
 <span class="nb">set</span><span class="w"> </span>-euo<span class="w"> </span>pipefail
 
-<span class="nv">LOG_DIR</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$HOME</span><span class="s2">/os-lab/logs&quot;</span>
-<span class="nv">REPORT</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$LOG_DIR</span><span class="s2">/check-</span><span class="k">$(</span>date<span class="w"> </span>+%F<span class="k">)</span><span class="s2">.log&quot;</span>
+<span class="nv">LOG_DIR</span><span class="o">=</span><span class="s2">"</span><span class="nv">$HOME</span><span class="s2">/os-lab/logs"</span>
+<span class="nv">REPORT</span><span class="o">=</span><span class="s2">"</span><span class="nv">$LOG_DIR</span><span class="s2">/check-</span><span class="k">$(</span>date<span class="w"> </span>+%F<span class="k">)</span><span class="s2">.log"</span>
 <span class="nv">WARN_PERCENT</span><span class="o">=</span><span class="m">80</span>
-<span class="nv">LOG</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$REPORT</span><span class="s2">&quot;</span>
+<span class="nv">LOG</span><span class="o">=</span><span class="s2">"</span><span class="nv">$REPORT</span><span class="s2">"</span>
 
-mkdir<span class="w"> </span>-p<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$LOG_DIR</span><span class="s2">&quot;</span>
-:<span class="w"> </span>&gt;<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$REPORT</span><span class="s2">&quot;</span>
+mkdir<span class="w"> </span>-p<span class="w"> </span><span class="s2">"</span><span class="nv">$LOG_DIR</span><span class="s2">"</span>
+:<span class="w"> </span>&gt;<span class="w"> </span><span class="s2">"</span><span class="nv">$REPORT</span><span class="s2">"</span>
 
 log<span class="o">()</span><span class="w"> </span><span class="o">{</span>
-<span class="w">  </span><span class="nb">local</span><span class="w"> </span><span class="nv">level</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$1</span><span class="s2">&quot;</span>
+<span class="w">  </span><span class="nb">local</span><span class="w"> </span><span class="nv">level</span><span class="o">=</span><span class="s2">"</span><span class="nv">$1</span><span class="s2">"</span>
 <span class="w">  </span><span class="nb">shift</span>
-<span class="w">  </span><span class="nb">printf</span><span class="w"> </span><span class="s1">&#39;%s %-5s %s\n&#39;</span><span class="w"> </span><span class="s2">&quot;</span><span class="k">$(</span>date<span class="w"> </span><span class="s1">&#39;+%F %T&#39;</span><span class="k">)</span><span class="s2">&quot;</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$level</span><span class="s2">&quot;</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$*</span><span class="s2">&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>tee<span class="w"> </span>-a<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$LOG</span><span class="s2">&quot;</span>
+<span class="w">  </span><span class="nb">printf</span><span class="w"> </span><span class="s1">'%s %-5s %s\n'</span><span class="w"> </span><span class="s2">"</span><span class="k">$(</span>date<span class="w"> </span><span class="s1">'+%F %T'</span><span class="k">)</span><span class="s2">"</span><span class="w"> </span><span class="s2">"</span><span class="nv">$level</span><span class="s2">"</span><span class="w"> </span><span class="s2">"</span><span class="nv">$*</span><span class="s2">"</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>tee<span class="w"> </span>-a<span class="w"> </span><span class="s2">"</span><span class="nv">$LOG</span><span class="s2">"</span>
 <span class="o">}</span>
 
 check_disk<span class="o">()</span><span class="w"> </span><span class="o">{</span>
-<span class="w">  </span><span class="nb">local</span><span class="w"> </span><span class="nv">path</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$1</span><span class="s2">&quot;</span>
+<span class="w">  </span><span class="nb">local</span><span class="w"> </span><span class="nv">path</span><span class="o">=</span><span class="s2">"</span><span class="nv">$1</span><span class="s2">"</span>
 <span class="w">  </span><span class="nb">local</span><span class="w"> </span>used
-<span class="w">  </span><span class="nv">used</span><span class="o">=</span><span class="k">$(</span>df<span class="w"> </span>--output<span class="o">=</span>pcent<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$path</span><span class="s2">&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>tail<span class="w"> </span>-n<span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>tr<span class="w"> </span>-dc<span class="w"> </span><span class="s1">&#39;0-9&#39;</span><span class="k">)</span>
-<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$used</span><span class="s2">&quot;</span><span class="w"> </span>-ge<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$WARN_PERCENT</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
-<span class="w">    </span>log<span class="w"> </span><span class="s2">&quot;WARN&quot;</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$path</span><span class="s2"> занят на </span><span class="si">${</span><span class="nv">used</span><span class="si">}</span><span class="s2">%&quot;</span>
+<span class="w">  </span><span class="nv">used</span><span class="o">=</span><span class="k">$(</span>df<span class="w"> </span>--output<span class="o">=</span>pcent<span class="w"> </span><span class="s2">"</span><span class="nv">$path</span><span class="s2">"</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>tail<span class="w"> </span>-n<span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>tr<span class="w"> </span>-dc<span class="w"> </span><span class="s1">'0-9'</span><span class="k">)</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="s2">"</span><span class="nv">$used</span><span class="s2">"</span><span class="w"> </span>-ge<span class="w"> </span><span class="s2">"</span><span class="nv">$WARN_PERCENT</span><span class="s2">"</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<span class="w">    </span>log<span class="w"> </span><span class="s2">"WARN"</span><span class="w"> </span><span class="s2">"</span><span class="nv">$path</span><span class="s2"> занят на </span><span class="si">${</span><span class="nv">used</span><span class="si">}</span><span class="s2">%"</span>
 <span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="m">1</span>
 <span class="w">  </span><span class="k">fi</span>
-<span class="w">  </span>log<span class="w"> </span><span class="s2">&quot;OK&quot;</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$path</span><span class="s2"> занят на </span><span class="si">${</span><span class="nv">used</span><span class="si">}</span><span class="s2">%&quot;</span>
+<span class="w">  </span>log<span class="w"> </span><span class="s2">"OK"</span><span class="w"> </span><span class="s2">"</span><span class="nv">$path</span><span class="s2"> занят на </span><span class="si">${</span><span class="nv">used</span><span class="si">}</span><span class="s2">%"</span>
 <span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="m">0</span>
 <span class="o">}</span>
 
 main<span class="o">()</span><span class="w"> </span><span class="o">{</span>
 <span class="w">  </span><span class="nb">local</span><span class="w"> </span><span class="nv">failed</span><span class="o">=</span><span class="m">0</span>
-<span class="w">  </span>check_disk<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$HOME</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nv">failed</span><span class="o">=</span><span class="k">$((</span><span class="nv">failed</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="m">1</span><span class="k">))</span>
+<span class="w">  </span>check_disk<span class="w"> </span><span class="s2">"</span><span class="nv">$HOME</span><span class="s2">"</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nv">failed</span><span class="o">=</span><span class="k">$((</span><span class="nv">failed</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="m">1</span><span class="k">))</span>
 <span class="w">  </span><span class="k">if</span><span class="w"> </span>systemctl<span class="w"> </span>is-active<span class="w"> </span>--quiet<span class="w"> </span>ssh<span class="p">;</span><span class="w"> </span><span class="k">then</span>
-<span class="w">    </span>log<span class="w"> </span><span class="s2">&quot;OK&quot;</span><span class="w"> </span><span class="s2">&quot;служба ssh работает&quot;</span>
+<span class="w">    </span>log<span class="w"> </span><span class="s2">"OK"</span><span class="w"> </span><span class="s2">"служба ssh работает"</span>
 <span class="w">  </span><span class="k">else</span>
-<span class="w">    </span>log<span class="w"> </span><span class="s2">&quot;FAIL&quot;</span><span class="w"> </span><span class="s2">&quot;служба ssh не работает&quot;</span>
+<span class="w">    </span>log<span class="w"> </span><span class="s2">"FAIL"</span><span class="w"> </span><span class="s2">"служба ssh не работает"</span>
 <span class="w">    </span><span class="nv">failed</span><span class="o">=</span><span class="k">$((</span><span class="nv">failed</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="m">1</span><span class="k">))</span>
 <span class="w">  </span><span class="k">fi</span>
-<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$failed</span><span class="s2">&quot;</span><span class="w"> </span>-gt<span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
-<span class="w">    </span>log<span class="w"> </span><span class="s2">&quot;TOTAL&quot;</span><span class="w"> </span><span class="s2">&quot;проблем: </span><span class="nv">$failed</span><span class="s2">&quot;</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="s2">"</span><span class="nv">$failed</span><span class="s2">"</span><span class="w"> </span>-gt<span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<span class="w">    </span>log<span class="w"> </span><span class="s2">"TOTAL"</span><span class="w"> </span><span class="s2">"проблем: </span><span class="nv">$failed</span><span class="s2">"</span>
 <span class="w">    </span><span class="nb">exit</span><span class="w"> </span><span class="m">1</span>
 <span class="w">  </span><span class="k">fi</span>
-<span class="w">  </span>log<span class="w"> </span><span class="s2">&quot;TOTAL&quot;</span><span class="w"> </span><span class="s2">&quot;проверки пройдены&quot;</span>
+<span class="w">  </span>log<span class="w"> </span><span class="s2">"TOTAL"</span><span class="w"> </span><span class="s2">"проверки пройдены"</span>
 <span class="o">}</span>
 
-main<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$@</span><span class="s2">&quot;</span>
+main<span class="w"> </span><span class="s2">"</span><span class="nv">$@</span><span class="s2">"</span>
 </code></pre></div>
 
 <p>Разберём ключевые строки. <code>set -euo pipefail</code> включает три защиты: выход при ошибке, ошибку при обращении к необъявленной переменной и ошибку в конвейере, если упала любая его часть. <code>: &gt; "$REPORT"</code> очищает файл перед новым запуском, чтобы отчёт не смешивался со вчерашним. <code>df --output=pcent</code> печатает только процент, <code>tail -n 1</code> берёт строку с числом, <code>tr -dc '0-9'</code> оставляет цифры. <code>return 1</code> сообщает вызывающей стороне о проблеме, а <code>failed=$((failed + 1))</code> считает такие случаи.</p>
@@ -1029,23 +1053,23 @@ main<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$@</s
 <p>Простейший пакетный файл начинается с отключения эха команд и включает локальную область переменных.</p>
 <div class="codehilite" data-lang="text"><pre><span></span><code><span class="p">@</span><span class="k">echo</span> off
 <span class="k">setlocal</span>
-<span class="k">set</span> <span class="s2">&quot;LOG=</span><span class="nv">%USERPROFILE%</span><span class="s2">\os-lab\logs\check.log&quot;</span>
-<span class="k">if</span> <span class="k">not</span> <span class="k">exist</span> <span class="s2">&quot;</span><span class="nv">%USERPROFILE%</span><span class="s2">\os-lab\logs&quot;</span> <span class="k">mkdir</span> <span class="s2">&quot;</span><span class="nv">%USERPROFILE%</span><span class="s2">\os-lab\logs&quot;</span>
-<span class="k">echo</span> <span class="nv">%DATE%</span> <span class="nv">%TIME%</span> старт проверки<span class="p">&gt;&gt;</span><span class="s2">&quot;</span><span class="nv">%LOG%</span><span class="s2">&quot;</span>
-<span class="k">if</span> <span class="k">exist</span> <span class="s2">&quot;</span><span class="nv">%USERPROFILE%</span><span class="s2">\os-lab\data\report.csv&quot;</span> <span class="p">(</span>
-  <span class="k">echo</span> файл найден<span class="p">&gt;&gt;</span><span class="s2">&quot;</span><span class="nv">%LOG%</span><span class="s2">&quot;</span>
+<span class="k">set</span> <span class="s2">"LOG=</span><span class="nv">%USERPROFILE%</span><span class="s2">\os-lab\logs\check.log"</span>
+<span class="k">if</span> <span class="k">not</span> <span class="k">exist</span> <span class="s2">"</span><span class="nv">%USERPROFILE%</span><span class="s2">\os-lab\logs"</span> <span class="k">mkdir</span> <span class="s2">"</span><span class="nv">%USERPROFILE%</span><span class="s2">\os-lab\logs"</span>
+<span class="k">echo</span> <span class="nv">%DATE%</span> <span class="nv">%TIME%</span> старт проверки<span class="p">&gt;&gt;</span><span class="s2">"</span><span class="nv">%LOG%</span><span class="s2">"</span>
+<span class="k">if</span> <span class="k">exist</span> <span class="s2">"</span><span class="nv">%USERPROFILE%</span><span class="s2">\os-lab\data\report.csv"</span> <span class="p">(</span>
+  <span class="k">echo</span> файл найден<span class="p">&gt;&gt;</span><span class="s2">"</span><span class="nv">%LOG%</span><span class="s2">"</span>
 <span class="p">)</span> <span class="k">else</span> <span class="p">(</span>
-  <span class="k">echo</span> файл не найден<span class="p">&gt;&gt;</span><span class="s2">&quot;</span><span class="nv">%LOG%</span><span class="s2">&quot;</span>
+  <span class="k">echo</span> файл не найден<span class="p">&gt;&gt;</span><span class="s2">"</span><span class="nv">%LOG%</span><span class="s2">"</span>
   <span class="k">exit</span> /b 1
 <span class="p">)</span>
 </code></pre></div>
 
 <p><code>@echo off</code> убирает печать каждой команды, <code>setlocal</code> ограничивает переменные файлом. Запись <code>set "LOG=..."</code> с кавычками вокруг всего присваивания защищает от пробела в конце строки. Обращение к переменной идёт через <code>%LOG%</code>. Условие <code>if exist</code> проверяет файл или каталог, <code>exit /b 1</code> возвращает код ошибки, не закрывая окно.</p>
 <p>Цикл по файлам записывается через <code>for</code>, а разбор строк через <code>for /f</code>. В файле, в отличие от командной строки, переменная цикла требует двойного процента.</p>
-<div class="codehilite" data-lang="text"><pre><span></span><code><span class="k">for</span> <span class="se">%%</span>f <span class="k">in</span> <span class="p">(</span><span class="s2">&quot;</span><span class="nv">%USERPROFILE%</span><span class="s2">\os-lab\logs\*.log&quot;</span><span class="p">)</span> <span class="k">do</span> <span class="p">(</span>
+<div class="codehilite" data-lang="text"><pre><span></span><code><span class="k">for</span> <span class="se">%%</span>f <span class="k">in</span> <span class="p">(</span><span class="s2">"</span><span class="nv">%USERPROFILE%</span><span class="s2">\os-lab\logs\*.log"</span><span class="p">)</span> <span class="k">do</span> <span class="p">(</span>
   <span class="k">echo</span> обрабатываю <span class="se">%%</span>~nxf
 <span class="p">)</span>
-<span class="k">for</span> <span class="k">/f</span> <span class="s2">&quot;tokens=1,2 delims= &quot;</span> <span class="se">%%</span>a <span class="k">in</span> <span class="p">(</span>list.txt<span class="p">)</span> <span class="k">do</span> <span class="p">(</span>
+<span class="k">for</span> <span class="k">/f</span> <span class="s2">"tokens=1,2 delims= "</span> <span class="se">%%</span>a <span class="k">in</span> <span class="p">(</span>list.txt<span class="p">)</span> <span class="k">do</span> <span class="p">(</span>
   <span class="k">echo</span> <span class="se">%%</span>a <span class="se">%%</span>b
 <span class="p">)</span>
 </code></pre></div>
@@ -1110,34 +1134,34 @@ main<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$@</s
 <p>Ручной запуск требует человека. Планировщик запускает сценарий по времени, и тогда проверка не зависит от того, кто открыл кабинет.</p>
 <p>В Linux расписанием заведует служба <code>cron</code>, а задачи пользователя хранятся в его таблице <code>crontab</code>. Команда <code>crontab -e</code> открывает таблицу в редакторе, <code>crontab -l</code> печатает её содержимое. Формат строки состоит из пяти полей времени и команды.</p>
 <div class="codehilite" data-lang="text"><pre><span></span><code># минута час день_месяца месяц день_недели команда
-*/15 * * * *  &quot;$HOME/os-lab/bin/check-lab.sh&quot; &gt;&gt; &quot;$HOME/os-lab/logs/cron.log&quot; 2&gt;&amp;1
-0 8 * * 1-5   &quot;$HOME/os-lab/bin/morning-report.sh&quot;
-30 23 * * 0   &quot;$HOME/os-lab/bin/weekly-clean.sh&quot;
-@reboot       &quot;$HOME/os-lab/bin/start-heartbeat.sh&quot;
+*/15 * * * *  "$HOME/os-lab/bin/check-lab.sh" &gt;&gt; "$HOME/os-lab/logs/cron.log" 2&gt;&amp;1
+0 8 * * 1-5   "$HOME/os-lab/bin/morning-report.sh"
+30 23 * * 0   "$HOME/os-lab/bin/weekly-clean.sh"
+@reboot       "$HOME/os-lab/bin/start-heartbeat.sh"
 </code></pre></div>
 
 <p><code>*/15</code> означает каждые пятнадцать минут, <code>0 8 * * 1-5</code> означает в 08:00 с понедельника по пятницу, <code>30 23 * * 0</code> означает в 23:30 по воскресеньям. <code>@reboot</code> выполняет команду после загрузки. Символ <code>%</code> в crontab означает перевод строки, поэтому внутри команды его экранируют как <code>\%</code>; это частая причина странного поведения задач с датой.</p>
 <p>У cron своё окружение. Он запускает команду через <code>/bin/sh</code> с минимальным набором переменных, обычно <code>PATH=/usr/bin:/bin</code>, и домашним каталогом пользователя. Ваш <code>PATH</code>, добавленный в <code>~/.bashrc</code>, не подхватывается, потому что <code>~/.bashrc</code> читают интерактивные оболочки, а не cron. Поэтому в сценарии для расписания либо указывают полные пути к программам, либо задают <code>PATH</code> явно.</p>
-<div class="codehilite" data-lang="text"><pre><span></span><code><span class="nv">PATH</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$HOME</span><span class="s2">/.local/bin:/usr/local/bin:/usr/bin:/bin&quot;</span>
+<div class="codehilite" data-lang="text"><pre><span></span><code><span class="nv">PATH</span><span class="o">=</span><span class="s2">"</span><span class="nv">$HOME</span><span class="s2">/.local/bin:/usr/local/bin:/usr/bin:/bin"</span>
 <span class="nb">export</span><span class="w"> </span>PATH
 </code></pre></div>
 
 <p>Второе отличие это отсутствие терминала. Команда, которая спрашивает подтверждение, в cron зависнет навсегда. Все интерактивные запросы из сценария для расписания убирают, а вывод и ошибки направляют в файл.</p>
 <p>Проверить задание можно, не дожидаясь срока. <code>crontab -l</code> показывает, что запись принята. Журнал cron в Ubuntu смотрят через <code>journalctl -u cron</code> или <code>grep CRON /var/log/syslog</code>. Если сценарий не запустился, сначала проверяют права на файл, затем путь и только потом синтаксис.</p>
 <p>В Windows расписанием управляет Планировщик заданий. Его настройки доступны через графический интерфейс, а для сценариев и учебных работ удобнее командная строка.</p>
-<div class="codehilite" data-lang="text"><pre><span></span><code>schtasks /Create /TN <span class="s2">&quot;OSLab Check&quot;</span> /SC DAILY /ST 08:00 <span class="se">^</span>
-<span class="se"> </span> /TR <span class="s2">&quot;powershell.exe -NoProfile -File </span><span class="nv">%USERPROFILE%</span><span class="s2">\os-lab\bin\check-lab.ps1&quot;</span>
-schtasks /Query /TN <span class="s2">&quot;OSLab Check&quot;</span> /V /FO LIST
-schtasks /Run /TN <span class="s2">&quot;OSLab Check&quot;</span>
+<div class="codehilite" data-lang="text"><pre><span></span><code>schtasks /Create /TN <span class="s2">"OSLab Check"</span> /SC DAILY /ST 08:00 <span class="se">^</span>
+<span class="se"> </span> /TR <span class="s2">"powershell.exe -NoProfile -File </span><span class="nv">%USERPROFILE%</span><span class="s2">\os-lab\bin\check-lab.ps1"</span>
+schtasks /Query /TN <span class="s2">"OSLab Check"</span> /V /FO LIST
+schtasks /Run /TN <span class="s2">"OSLab Check"</span>
 </code></pre></div>
 
 <p>Ключ <code>/SC DAILY</code> задаёт ежедневный запуск, <code>/ST</code> время, <code>/TR</code> команду. <code>schtasks /Query</code> показывает состояние, время последнего запуска и код результата. <code>/Run</code> запускает задание немедленно, что удобно для проверки. Удаление выполняется ключом <code>/Delete</code>, но перед ним стоит сохранить описание задания: восстановить его из памяти сложнее, чем посмотреть.</p>
 <p>Современный способ в PowerShell использует командлеты и объекты, а не строки.</p>
-<div class="codehilite" data-lang="text"><pre><span></span><code><span class="nv">$action</span> <span class="p">=</span> <span class="nb">New-ScheduledTaskAction</span> <span class="n">-Execute</span> <span class="s1">&#39;powershell.exe&#39;</span> <span class="p">`</span>
-  <span class="n">-Argument</span> <span class="s2">&quot;-NoProfile -File </span><span class="se">`&quot;</span><span class="s2">$env:USERPROFILE\os-lab\bin\check-lab.ps1</span><span class="se">`&quot;</span><span class="s2">&quot;</span>
+<div class="codehilite" data-lang="text"><pre><span></span><code><span class="nv">$action</span> <span class="p">=</span> <span class="nb">New-ScheduledTaskAction</span> <span class="n">-Execute</span> <span class="s1">'powershell.exe'</span> <span class="p">`</span>
+  <span class="n">-Argument</span> <span class="s2">"-NoProfile -File </span><span class="se">`"</span><span class="s2">$env:USERPROFILE\os-lab\bin\check-lab.ps1</span><span class="se">`"</span><span class="s2">"</span>
 <span class="nv">$trigger</span> <span class="p">=</span> <span class="nb">New-ScheduledTaskTrigger</span> <span class="n">-Daily</span> <span class="n">-At</span> <span class="n">8</span><span class="p">:</span><span class="n">00</span>
-<span class="nb">Register-ScheduledTask</span> <span class="n">-TaskName</span> <span class="s1">&#39;OSLab Check&#39;</span> <span class="n">-Action</span> <span class="nv">$action</span> <span class="n">-Trigger</span> <span class="nv">$trigger</span>
-<span class="nb">Get-ScheduledTaskInfo</span> <span class="n">-TaskName</span> <span class="s1">&#39;OSLab Check&#39;</span>
+<span class="nb">Register-ScheduledTask</span> <span class="n">-TaskName</span> <span class="s1">'OSLab Check'</span> <span class="n">-Action</span> <span class="nv">$action</span> <span class="n">-Trigger</span> <span class="nv">$trigger</span>
+<span class="nb">Get-ScheduledTaskInfo</span> <span class="n">-TaskName</span> <span class="s1">'OSLab Check'</span>
 </code></pre></div>
 
 <p><code>New-ScheduledTaskAction</code> описывает, что запускать, <code>New-ScheduledTaskTrigger</code> когда, <code>Register-ScheduledTask</code> регистрирует задание. Обратные кавычки в конце строки продолжают команду на следующей строке, а вложенные кавычки вокруг пути нужны, потому что путь может содержать пробелы.</p>
@@ -1269,6 +1293,40 @@ schtasks /Run /TN <span class="s2">&quot;OSLab Check&quot;</span>
       var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
       window.scrollTo({top: 0, behavior: reduce ? 'auto' : 'smooth'});
     });
+  });
+})();
+
+(function(){
+  document.querySelectorAll('[data-slider]').forEach(function(slider){
+    var track = slider.querySelector('[data-slider-track]');
+    var slides = track ? Array.prototype.slice.call(track.children) : [];
+    var counter = slider.querySelector('[data-slider-counter]');
+    var prev = slider.querySelector('[data-slider-prev]');
+    var next = slider.querySelector('[data-slider-next]');
+    if(!track || slides.length < 2) return;
+    function current(){
+      var best = 0, dist = Infinity;
+      slides.forEach(function(slide, i){
+        var d = Math.abs(slide.offsetLeft - track.scrollLeft);
+        if(d < dist){ dist = d; best = i; }
+      });
+      return best;
+    }
+    function update(){
+      if(counter) counter.textContent = (current() + 1) + ' / ' + slides.length;
+    }
+    function go(delta){
+      var i = Math.max(0, Math.min(slides.length - 1, current() + delta));
+      var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      track.scrollTo({left: slides[i].offsetLeft, behavior: reduce ? 'auto' : 'smooth'});
+    }
+    if(prev) prev.addEventListener('click', function(){ go(-1); });
+    if(next) next.addEventListener('click', function(){ go(1); });
+    track.addEventListener('scroll', function(){
+      clearTimeout(track._sliderTimer);
+      track._sliderTimer = setTimeout(update, 80);
+    }, {passive: true});
+    update();
   });
 })();
 (function(){

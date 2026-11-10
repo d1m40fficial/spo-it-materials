@@ -527,6 +527,12 @@ html.modal-open { overflow: hidden; }
 :root[data-theme=dark] .quiz-actions button[data-answer]:hover, :root[data-theme=dark] .quiz-actions button.quiz-answer:hover { background: #262626; background-color: #262626; color: #fff; border-color: #262626; }
 :root[data-theme=dark] .gate-q { background: #1E1E1E; color: #FF6B00; }
 
+/* the whole-variant archive is the main action in a download block */
+.files a.zip { background: #121212; color: #fff; border-color: #121212; font-weight: 700; box-shadow: 4px 4px 0 rgba(0,0,0,.18); }
+.files a.zip::before { color: #fff; }
+.files a.zip:hover { background: #1D1D1D; color: #fff; border-color: #1D1D1D; box-shadow: 5px 5px 0 rgba(0,0,0,.22); }
+.files a.zip:active { transform: translate(2px,2px); box-shadow: 1px 1px 0 rgba(0,0,0,.12); }
+
 /* ---------- practical work checklist ---------- */
 .work-checklist { width: 100%; border-collapse: collapse; margin: 14px 0 4px; }
 .work-checklist th, .work-checklist td { border: 1px solid var(--rule); padding: 9px 10px; vertical-align: top; }
@@ -564,6 +570,24 @@ html.modal-open { overflow: hidden; }
 .variant-body .task-list { margin: 8px 0 0; padding-left: 20px; }
 .variant-body .task-list li { margin: 0 0 8px; }
 @media (max-width: 620px) { .variant-body { overflow-x: auto; } .variant-body table { min-width: 520px; } }
+
+/* ---------- schema slider: all CREATE TABLE examples ---------- */
+.schema-slider { margin: 18px 0 24px; border: 1px solid #d8d5cc; border-radius: 14px; background: #fff; color: #1a1916; overflow: hidden; }
+.schema-slider-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 14px; background: #f5f2ea; border-bottom: 1px solid #d8d5cc; }
+.schema-slider-bar strong { font: 700 14px/1.2 var(--font-display); color: #1a1916; }
+.schema-slider-actions { display: flex; align-items: center; gap: 8px; }
+.schema-slider-counter { min-width: 62px; text-align: center; font: 600 13px/1 var(--font-mono); color: #59544a; }
+.schema-btn { width: 34px; height: 34px; border: 1px solid #c9c4b8; border-radius: 8px; background: #fff; color: #1a1916; font: 700 18px/1 var(--font-mono); cursor: pointer; }
+.schema-btn:hover { background: #ece7dc; }
+.schema-track { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: thin; }
+.schema-slide { flex: 0 0 100%; min-width: 100%; box-sizing: border-box; padding: 16px 18px 18px; scroll-snap-align: start; }
+.schema-slide h4 { margin: 0 0 10px; font: 700 16px/1.3 var(--font-display); color: #1a1916; }
+.schema-slide h4 code, .schema-slide p code { color: #1a1916; background: #f1ede4; padding: 1px 4px; border-radius: 4px; }
+.schema-slide p { margin: 0 0 10px; font-size: 14px; line-height: 1.55; color: #3a372f; }
+.schema-slide pre { margin: 0; padding: 14px 16px; overflow-x: auto; border: 1px solid #ddd8cc; border-radius: 10px; background: #fbfaf6; color: #1a1916; font: 12.5px/1.5 var(--font-mono); }
+.schema-slide code { color: inherit; background: none; padding: 0; }
+.schema-slider:focus-within { outline: 2px solid #b9a97f; outline-offset: 2px; }
+@media (max-width: 620px) { .schema-slide { padding: 12px; } .schema-slider-bar { padding: 8px 10px; } }
 
 /* ---------- print / PDF export ---------- */
 @page { margin: 16mm; }
@@ -894,17 +918,17 @@ auditor_1,аудитор,Тверь,активен,Audit-2026
 <span class="k">def</span><span class="w"> </span><span class="nf">hash_password</span><span class="p">(</span><span class="n">password</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
     <span class="n">salt</span> <span class="o">=</span> <span class="n">secrets</span><span class="o">.</span><span class="n">token_hex</span><span class="p">(</span><span class="mi">16</span><span class="p">)</span>
     <span class="n">digest</span> <span class="o">=</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">pbkdf2_hmac</span><span class="p">(</span>
-        <span class="s2">&quot;sha256&quot;</span><span class="p">,</span> <span class="n">password</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">),</span> <span class="nb">bytes</span><span class="o">.</span><span class="n">fromhex</span><span class="p">(</span><span class="n">salt</span><span class="p">),</span> <span class="n">ITERATIONS</span>
+        <span class="s2">"sha256"</span><span class="p">,</span> <span class="n">password</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">"utf-8"</span><span class="p">),</span> <span class="nb">bytes</span><span class="o">.</span><span class="n">fromhex</span><span class="p">(</span><span class="n">salt</span><span class="p">),</span> <span class="n">ITERATIONS</span>
     <span class="p">)</span>
-    <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;pbkdf2_sha256$</span><span class="si">{</span><span class="n">ITERATIONS</span><span class="si">}</span><span class="s2">$</span><span class="si">{</span><span class="n">salt</span><span class="si">}</span><span class="s2">$</span><span class="si">{</span><span class="n">digest</span><span class="o">.</span><span class="n">hex</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="k">return</span> <span class="sa">f</span><span class="s2">"pbkdf2_sha256$</span><span class="si">{</span><span class="n">ITERATIONS</span><span class="si">}</span><span class="s2">$</span><span class="si">{</span><span class="n">salt</span><span class="si">}</span><span class="s2">$</span><span class="si">{</span><span class="n">digest</span><span class="o">.</span><span class="n">hex</span><span class="p">()</span><span class="si">}</span><span class="s2">"</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">verify_password</span><span class="p">(</span><span class="n">password</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">stored</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-    <span class="n">algorithm</span><span class="p">,</span> <span class="n">iterations</span><span class="p">,</span> <span class="n">salt</span><span class="p">,</span> <span class="n">expected</span> <span class="o">=</span> <span class="n">stored</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;$&quot;</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">algorithm</span> <span class="o">!=</span> <span class="s2">&quot;pbkdf2_sha256&quot;</span><span class="p">:</span>
+    <span class="n">algorithm</span><span class="p">,</span> <span class="n">iterations</span><span class="p">,</span> <span class="n">salt</span><span class="p">,</span> <span class="n">expected</span> <span class="o">=</span> <span class="n">stored</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">"$"</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">algorithm</span> <span class="o">!=</span> <span class="s2">"pbkdf2_sha256"</span><span class="p">:</span>
         <span class="k">return</span> <span class="kc">False</span>
     <span class="n">digest</span> <span class="o">=</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">pbkdf2_hmac</span><span class="p">(</span>
-        <span class="s2">&quot;sha256&quot;</span><span class="p">,</span> <span class="n">password</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">),</span> <span class="nb">bytes</span><span class="o">.</span><span class="n">fromhex</span><span class="p">(</span><span class="n">salt</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">iterations</span><span class="p">)</span>
+        <span class="s2">"sha256"</span><span class="p">,</span> <span class="n">password</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">"utf-8"</span><span class="p">),</span> <span class="nb">bytes</span><span class="o">.</span><span class="n">fromhex</span><span class="p">(</span><span class="n">salt</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">iterations</span><span class="p">)</span>
     <span class="p">)</span>
     <span class="k">return</span> <span class="n">hmac</span><span class="o">.</span><span class="n">compare_digest</span><span class="p">(</span><span class="n">digest</span><span class="o">.</span><span class="n">hex</span><span class="p">(),</span> <span class="n">expected</span><span class="p">)</span>
 </code></pre></div>
@@ -920,17 +944,17 @@ auditor_1,аудитор,Тверь,активен,Audit-2026
 <h3>Шаг 2. Реализуйте проверку пары логин и пароль</h3>
 <p>Маршрут входа принимает JSON с полями <code>login</code> и <code>password</code>. Сервер ищет пользователя по логину, проверяет пароль и только потом смотрит на блокировку. Такой порядок не даёт отличить заблокированную запись от несуществующей, если пароль неверен: обе получают <code>401</code>.</p>
 <p>Ниже рабочий пример маршрута. В проекте он будет обращаться к базе, а не к списку в памяти, но порядок проверок остаётся тем же.</p>
-<div class="codehilite" data-lang="python"><pre><span></span><code><span class="nd">@app</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;/api/login&quot;</span><span class="p">)</span>
+<div class="codehilite" data-lang="python"><pre><span></span><code><span class="nd">@app</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">"/api/login"</span><span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">login</span><span class="p">():</span>
     <span class="n">data</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">get_json</span><span class="p">(</span><span class="n">silent</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{}</span>
-    <span class="n">login_name</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;login&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
-    <span class="n">password</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;password&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">))</span>
+    <span class="n">login_name</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"login"</span><span class="p">,</span> <span class="s2">""</span><span class="p">))</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+    <span class="n">password</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"password"</span><span class="p">,</span> <span class="s2">""</span><span class="p">))</span>
     <span class="n">user</span> <span class="o">=</span> <span class="n">find_user</span><span class="p">(</span><span class="n">login_name</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">user</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">verify_password</span><span class="p">(</span><span class="n">password</span><span class="p">,</span> <span class="n">user</span><span class="p">[</span><span class="s2">&quot;password_hash&quot;</span><span class="p">]):</span>
-        <span class="k">return</span> <span class="n">jsonify</span><span class="p">({</span><span class="s2">&quot;error&quot;</span><span class="p">:</span> <span class="s2">&quot;invalid_credentials&quot;</span><span class="p">,</span> <span class="s2">&quot;message&quot;</span><span class="p">:</span> <span class="s2">&quot;Неверный логин или пароль&quot;</span><span class="p">}),</span> <span class="mi">401</span>
-    <span class="k">if</span> <span class="n">user</span><span class="p">[</span><span class="s2">&quot;is_blocked&quot;</span><span class="p">]:</span>
-        <span class="k">return</span> <span class="n">jsonify</span><span class="p">({</span><span class="s2">&quot;error&quot;</span><span class="p">:</span> <span class="s2">&quot;blocked&quot;</span><span class="p">,</span> <span class="s2">&quot;message&quot;</span><span class="p">:</span> <span class="s2">&quot;Учётная запись заблокирована&quot;</span><span class="p">}),</span> <span class="mi">403</span>
-    <span class="k">return</span> <span class="n">jsonify</span><span class="p">({</span><span class="s2">&quot;token&quot;</span><span class="p">:</span> <span class="n">issue_token</span><span class="p">(</span><span class="n">user</span><span class="p">),</span> <span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="n">user</span><span class="p">[</span><span class="s2">&quot;role&quot;</span><span class="p">],</span> <span class="s2">&quot;site&quot;</span><span class="p">:</span> <span class="n">user</span><span class="p">[</span><span class="s2">&quot;site&quot;</span><span class="p">]}),</span> <span class="mi">200</span>
+    <span class="k">if</span> <span class="n">user</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">verify_password</span><span class="p">(</span><span class="n">password</span><span class="p">,</span> <span class="n">user</span><span class="p">[</span><span class="s2">"password_hash"</span><span class="p">]):</span>
+        <span class="k">return</span> <span class="n">jsonify</span><span class="p">({</span><span class="s2">"error"</span><span class="p">:</span> <span class="s2">"invalid_credentials"</span><span class="p">,</span> <span class="s2">"message"</span><span class="p">:</span> <span class="s2">"Неверный логин или пароль"</span><span class="p">}),</span> <span class="mi">401</span>
+    <span class="k">if</span> <span class="n">user</span><span class="p">[</span><span class="s2">"is_blocked"</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="n">jsonify</span><span class="p">({</span><span class="s2">"error"</span><span class="p">:</span> <span class="s2">"blocked"</span><span class="p">,</span> <span class="s2">"message"</span><span class="p">:</span> <span class="s2">"Учётная запись заблокирована"</span><span class="p">}),</span> <span class="mi">403</span>
+    <span class="k">return</span> <span class="n">jsonify</span><span class="p">({</span><span class="s2">"token"</span><span class="p">:</span> <span class="n">issue_token</span><span class="p">(</span><span class="n">user</span><span class="p">),</span> <span class="s2">"role"</span><span class="p">:</span> <span class="n">user</span><span class="p">[</span><span class="s2">"role"</span><span class="p">],</span> <span class="s2">"site"</span><span class="p">:</span> <span class="n">user</span><span class="p">[</span><span class="s2">"site"</span><span class="p">]}),</span> <span class="mi">200</span>
 </code></pre></div>
 
 <p>Ответ на верный вход выглядит так, значение токена при каждом запуске новое:</p>
@@ -939,8 +963,8 @@ token eyJ1c2VyX2lkIjoxLCJyb2xlIjoi0LrQu9Cw0LTQvtCy0YnQuNC6In0.auWJVw.hZY1TEN6gHV
 </code></pre></div>
 
 <p>Неверный пароль возвращает <code>401</code> с общим текстом. Заблокированная запись с верным паролем возвращает <code>403</code>. Проверьте оба случая и убедитесь, что в ответе нет подсказки, существует ли логин.</p>
-<div class="codehilite" data-lang="text"><pre><span></span><code>HTTP 401 {&#39;error&#39;: &#39;invalid_credentials&#39;, &#39;message&#39;: &#39;Неверный логин или пароль&#39;}
-HTTP 403 {&#39;error&#39;: &#39;blocked&#39;, &#39;message&#39;: &#39;Учётная запись заблокирована&#39;}
+<div class="codehilite" data-lang="text"><pre><span></span><code>HTTP 401 {'error': 'invalid_credentials', 'message': 'Неверный логин или пароль'}
+HTTP 403 {'error': 'blocked', 'message': 'Учётная запись заблокирована'}
 </code></pre></div>
 
 <p>Добавьте в маршрут счётчик неудачных попыток. После третьей ошибки подряд учётная запись блокируется, а в ответе остаётся тот же текст <code>invalid_credentials</code>. Счётчик можно хранить в отдельной колонке или в таблице событий; выберите вариант и объясните его в отчёте.</p>
@@ -950,12 +974,12 @@ HTTP 403 {&#39;error&#39;: &#39;blocked&#39;, &#39;message&#39;: &#39;Учётн
 <div class="codehilite" data-lang="python"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">itsdangerous</span><span class="w"> </span><span class="kn">import</span> <span class="n">BadSignature</span><span class="p">,</span> <span class="n">SignatureExpired</span><span class="p">,</span> <span class="n">URLSafeTimedSerializer</span>
 
-<span class="n">SECRET</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;SKLAD_SECRET&quot;</span><span class="p">]</span>
-<span class="n">serializer</span> <span class="o">=</span> <span class="n">URLSafeTimedSerializer</span><span class="p">(</span><span class="n">SECRET</span><span class="p">,</span> <span class="n">salt</span><span class="o">=</span><span class="s2">&quot;sklad-plus-auth&quot;</span><span class="p">)</span>
+<span class="n">SECRET</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">"SKLAD_SECRET"</span><span class="p">]</span>
+<span class="n">serializer</span> <span class="o">=</span> <span class="n">URLSafeTimedSerializer</span><span class="p">(</span><span class="n">SECRET</span><span class="p">,</span> <span class="n">salt</span><span class="o">=</span><span class="s2">"sklad-plus-auth"</span><span class="p">)</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">issue_token</span><span class="p">(</span><span class="n">user</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">serializer</span><span class="o">.</span><span class="n">dumps</span><span class="p">({</span><span class="s2">&quot;user_id&quot;</span><span class="p">:</span> <span class="n">user</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">],</span> <span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="n">user</span><span class="p">[</span><span class="s2">&quot;role&quot;</span><span class="p">]})</span>
+    <span class="k">return</span> <span class="n">serializer</span><span class="o">.</span><span class="n">dumps</span><span class="p">({</span><span class="s2">"user_id"</span><span class="p">:</span> <span class="n">user</span><span class="p">[</span><span class="s2">"id"</span><span class="p">],</span> <span class="s2">"role"</span><span class="p">:</span> <span class="n">user</span><span class="p">[</span><span class="s2">"role"</span><span class="p">]})</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">read_token</span><span class="p">(</span><span class="n">token</span><span class="p">,</span> <span class="n">max_age</span><span class="o">=</span><span class="mi">1800</span><span class="p">):</span>
@@ -978,12 +1002,12 @@ HTTP 403 {&#39;error&#39;: &#39;blocked&#39;, &#39;message&#39;: &#39;Учётн
 <span class="k">def</span><span class="w"> </span><span class="nf">require_token</span><span class="p">(</span><span class="n">view</span><span class="p">):</span>
     <span class="nd">@wraps</span><span class="p">(</span><span class="n">view</span><span class="p">)</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="n">header</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;Authorization&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">header</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;Bearer &quot;</span><span class="p">):</span>
-            <span class="k">return</span> <span class="n">jsonify</span><span class="p">({</span><span class="s2">&quot;error&quot;</span><span class="p">:</span> <span class="s2">&quot;unauthorized&quot;</span><span class="p">,</span> <span class="s2">&quot;message&quot;</span><span class="p">:</span> <span class="s2">&quot;Нужен токен&quot;</span><span class="p">}),</span> <span class="mi">401</span>
-        <span class="n">payload</span> <span class="o">=</span> <span class="n">read_token</span><span class="p">(</span><span class="n">header</span><span class="o">.</span><span class="n">removeprefix</span><span class="p">(</span><span class="s2">&quot;Bearer &quot;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
+        <span class="n">header</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"Authorization"</span><span class="p">,</span> <span class="s2">""</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">header</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">"Bearer "</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">jsonify</span><span class="p">({</span><span class="s2">"error"</span><span class="p">:</span> <span class="s2">"unauthorized"</span><span class="p">,</span> <span class="s2">"message"</span><span class="p">:</span> <span class="s2">"Нужен токен"</span><span class="p">}),</span> <span class="mi">401</span>
+        <span class="n">payload</span> <span class="o">=</span> <span class="n">read_token</span><span class="p">(</span><span class="n">header</span><span class="o">.</span><span class="n">removeprefix</span><span class="p">(</span><span class="s2">"Bearer "</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
         <span class="k">if</span> <span class="n">payload</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">jsonify</span><span class="p">({</span><span class="s2">&quot;error&quot;</span><span class="p">:</span> <span class="s2">&quot;unauthorized&quot;</span><span class="p">,</span> <span class="s2">&quot;message&quot;</span><span class="p">:</span> <span class="s2">&quot;Токен неверен или истёк&quot;</span><span class="p">}),</span> <span class="mi">401</span>
+            <span class="k">return</span> <span class="n">jsonify</span><span class="p">({</span><span class="s2">"error"</span><span class="p">:</span> <span class="s2">"unauthorized"</span><span class="p">,</span> <span class="s2">"message"</span><span class="p">:</span> <span class="s2">"Токен неверен или истёк"</span><span class="p">}),</span> <span class="mi">401</span>
         <span class="n">g</span><span class="o">.</span><span class="n">user</span> <span class="o">=</span> <span class="n">payload</span>
         <span class="k">return</span> <span class="n">view</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
@@ -991,8 +1015,8 @@ HTTP 403 {&#39;error&#39;: &#39;blocked&#39;, &#39;message&#39;: &#39;Учётн
 </code></pre></div>
 
 <p>Подключите декоратор к маршруту списка остатков. Запрос без заголовка получает <code>401</code>, запрос с рабочим токеном получает <code>200</code> и данные. Проверьте оба ответа и запишите их в таблицу сценариев.</p>
-<div class="codehilite" data-lang="text"><pre><span></span><code>HTTP 401 {&#39;error&#39;: &#39;unauthorized&#39;, &#39;message&#39;: &#39;Нужен токен&#39;}
-HTTP 200 {&#39;user_id&#39;: 1, &#39;rows&#39;: 4800}
+<div class="codehilite" data-lang="text"><pre><span></span><code>HTTP 401 {'error': 'unauthorized', 'message': 'Нужен токен'}
+HTTP 200 {'user_id': 1, 'rows': 4800}
 </code></pre></div>
 
 <p>Добавьте проверку роли: список остатков доступен кладовщику и менеджеру, а изменение ролей только администратору. Если роль не подходит, верните <code>403</code> с кодом <code>forbidden</code>. Роль берут из токена, а не из тела запроса, иначе клиент сможет назвать себя кем угодно.</p>
@@ -1051,34 +1075,34 @@ HTTP 200 {&#39;user_id&#39;: 1, &#39;rows&#39;: 4800}
 <p>Ниже каркас валидатора с одной готовой проверкой. Остальные правила добавьте сами, сохранив порядок «наличие, тип, диапазон»: он даёт понятные сообщения.</p>
 <div class="codehilite" data-lang="python"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
 
-<span class="n">SITES</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;Москва&quot;</span><span class="p">,</span> <span class="s2">&quot;Тверь&quot;</span><span class="p">,</span> <span class="s2">&quot;Тула&quot;</span><span class="p">,</span> <span class="s2">&quot;Калуга&quot;</span><span class="p">}</span>
+<span class="n">SITES</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"Москва"</span><span class="p">,</span> <span class="s2">"Тверь"</span><span class="p">,</span> <span class="s2">"Тула"</span><span class="p">,</span> <span class="s2">"Калуга"</span><span class="p">}</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">validate_position</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
     <span class="n">errors</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="n">sku</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;sku&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
+    <span class="n">sku</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"sku"</span><span class="p">,</span> <span class="s2">""</span><span class="p">))</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">sku</span><span class="p">:</span>
-        <span class="n">errors</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s2">&quot;field&quot;</span><span class="p">:</span> <span class="s2">&quot;sku&quot;</span><span class="p">,</span> <span class="s2">&quot;code&quot;</span><span class="p">:</span> <span class="s2">&quot;required&quot;</span><span class="p">,</span> <span class="s2">&quot;message&quot;</span><span class="p">:</span> <span class="s2">&quot;Укажите артикул&quot;</span><span class="p">})</span>
-    <span class="k">elif</span> <span class="ow">not</span> <span class="n">re</span><span class="o">.</span><span class="n">fullmatch</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;SKU-\d</span><span class="si">{4}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">sku</span><span class="p">):</span>
-        <span class="n">errors</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s2">&quot;field&quot;</span><span class="p">:</span> <span class="s2">&quot;sku&quot;</span><span class="p">,</span> <span class="s2">&quot;code&quot;</span><span class="p">:</span> <span class="s2">&quot;format&quot;</span><span class="p">,</span> <span class="s2">&quot;message&quot;</span><span class="p">:</span> <span class="s2">&quot;Артикул вида SKU-1001&quot;</span><span class="p">})</span>
+        <span class="n">errors</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s2">"field"</span><span class="p">:</span> <span class="s2">"sku"</span><span class="p">,</span> <span class="s2">"code"</span><span class="p">:</span> <span class="s2">"required"</span><span class="p">,</span> <span class="s2">"message"</span><span class="p">:</span> <span class="s2">"Укажите артикул"</span><span class="p">})</span>
+    <span class="k">elif</span> <span class="ow">not</span> <span class="n">re</span><span class="o">.</span><span class="n">fullmatch</span><span class="p">(</span><span class="sa">r</span><span class="s2">"SKU-\d</span><span class="si">{4}</span><span class="s2">"</span><span class="p">,</span> <span class="n">sku</span><span class="p">):</span>
+        <span class="n">errors</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s2">"field"</span><span class="p">:</span> <span class="s2">"sku"</span><span class="p">,</span> <span class="s2">"code"</span><span class="p">:</span> <span class="s2">"format"</span><span class="p">,</span> <span class="s2">"message"</span><span class="p">:</span> <span class="s2">"Артикул вида SKU-1001"</span><span class="p">})</span>
     <span class="c1"># добавьте проверки qty, price, site и comment</span>
     <span class="k">return</span> <span class="n">errors</span>
 </code></pre></div>
 
 <h3>Шаг 6. Верните 400 со списком полей</h3>
 <p>Маршрут создания приёмки сначала вызывает валидатор, потом сохраняет запись. Если список ошибок не пуст, запись не сохраняется вообще: ни одна строка из документа не попадает в базу. Ответ содержит общий код ошибки и массив нарушений.</p>
-<div class="codehilite" data-lang="python"><pre><span></span><code><span class="nd">@app</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;/api/acceptance&quot;</span><span class="p">)</span>
+<div class="codehilite" data-lang="python"><pre><span></span><code><span class="nd">@app</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">"/api/acceptance"</span><span class="p">)</span>
 <span class="nd">@require_token</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">acceptance</span><span class="p">():</span>
     <span class="n">data</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">get_json</span><span class="p">(</span><span class="n">silent</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{}</span>
     <span class="n">errors</span> <span class="o">=</span> <span class="n">validate_position</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">errors</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">jsonify</span><span class="p">({</span><span class="s2">&quot;error&quot;</span><span class="p">:</span> <span class="s2">&quot;validation_failed&quot;</span><span class="p">,</span> <span class="s2">&quot;fields&quot;</span><span class="p">:</span> <span class="n">errors</span><span class="p">}),</span> <span class="mi">400</span>
-    <span class="k">return</span> <span class="n">jsonify</span><span class="p">({</span><span class="s2">&quot;status&quot;</span><span class="p">:</span> <span class="s2">&quot;created&quot;</span><span class="p">,</span> <span class="s2">&quot;sku&quot;</span><span class="p">:</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;sku&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">upper</span><span class="p">()}),</span> <span class="mi">201</span>
+        <span class="k">return</span> <span class="n">jsonify</span><span class="p">({</span><span class="s2">"error"</span><span class="p">:</span> <span class="s2">"validation_failed"</span><span class="p">,</span> <span class="s2">"fields"</span><span class="p">:</span> <span class="n">errors</span><span class="p">}),</span> <span class="mi">400</span>
+    <span class="k">return</span> <span class="n">jsonify</span><span class="p">({</span><span class="s2">"status"</span><span class="p">:</span> <span class="s2">"created"</span><span class="p">,</span> <span class="s2">"sku"</span><span class="p">:</span> <span class="n">data</span><span class="p">[</span><span class="s2">"sku"</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">upper</span><span class="p">()}),</span> <span class="mi">201</span>
 </code></pre></div>
 
 <p>Проверка неверной позиции даёт такой ответ:</p>
-<div class="codehilite" data-lang="text"><pre><span></span><code>HTTP 400 {&#39;error&#39;: &#39;validation_failed&#39;, &#39;fields&#39;: [{&#39;field&#39;: &#39;sku&#39;, &#39;code&#39;: &#39;format&#39;, &#39;message&#39;: &#39;Артикул вида SKU-1001&#39;}, {&#39;field&#39;: &#39;qty&#39;, &#39;code&#39;: &#39;range&#39;, &#39;message&#39;: &#39;Количество от 1 до 10000&#39;}, {&#39;field&#39;: &#39;site&#39;, &#39;code&#39;: &#39;choice&#39;, &#39;message&#39;: &#39;Площадка: Москва, Тверь, Тула или Калуга&#39;}]}
+<div class="codehilite" data-lang="text"><pre><span></span><code>HTTP 400 {'error': 'validation_failed', 'fields': [{'field': 'sku', 'code': 'format', 'message': 'Артикул вида SKU-1001'}, {'field': 'qty', 'code': 'range', 'message': 'Количество от 1 до 10000'}, {'field': 'site', 'code': 'choice', 'message': 'Площадка: Москва, Тверь, Тула или Калуга'}]}
 </code></pre></div>
 
 <p>Обратите внимание, что сервер вернул три нарушения сразу, а не остановился на первом. Проверьте, что при пустом списке ошибок запись сохраняется и ответ имеет код <code>201</code>. Отдельно проверьте, что при неверном поле в базу не добавилось ни одной строки: сравните количество записей до и после запроса.</p>
@@ -1247,6 +1271,40 @@ HTTP 200 {&#39;user_id&#39;: 1, &#39;rows&#39;: 4800}
       var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
       window.scrollTo({top: 0, behavior: reduce ? 'auto' : 'smooth'});
     });
+  });
+})();
+
+(function(){
+  document.querySelectorAll('[data-slider]').forEach(function(slider){
+    var track = slider.querySelector('[data-slider-track]');
+    var slides = track ? Array.prototype.slice.call(track.children) : [];
+    var counter = slider.querySelector('[data-slider-counter]');
+    var prev = slider.querySelector('[data-slider-prev]');
+    var next = slider.querySelector('[data-slider-next]');
+    if(!track || slides.length < 2) return;
+    function current(){
+      var best = 0, dist = Infinity;
+      slides.forEach(function(slide, i){
+        var d = Math.abs(slide.offsetLeft - track.scrollLeft);
+        if(d < dist){ dist = d; best = i; }
+      });
+      return best;
+    }
+    function update(){
+      if(counter) counter.textContent = (current() + 1) + ' / ' + slides.length;
+    }
+    function go(delta){
+      var i = Math.max(0, Math.min(slides.length - 1, current() + delta));
+      var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      track.scrollTo({left: slides[i].offsetLeft, behavior: reduce ? 'auto' : 'smooth'});
+    }
+    if(prev) prev.addEventListener('click', function(){ go(-1); });
+    if(next) next.addEventListener('click', function(){ go(1); });
+    track.addEventListener('scroll', function(){
+      clearTimeout(track._sliderTimer);
+      track._sliderTimer = setTimeout(update, 80);
+    }, {passive: true});
+    update();
   });
 })();
 (function(){

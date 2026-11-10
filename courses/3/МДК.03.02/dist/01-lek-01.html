@@ -527,6 +527,12 @@ html.modal-open { overflow: hidden; }
 :root[data-theme=dark] .quiz-actions button[data-answer]:hover, :root[data-theme=dark] .quiz-actions button.quiz-answer:hover { background: #262626; background-color: #262626; color: #fff; border-color: #262626; }
 :root[data-theme=dark] .gate-q { background: #1E1E1E; color: #FF6B00; }
 
+/* the whole-variant archive is the main action in a download block */
+.files a.zip { background: #121212; color: #fff; border-color: #121212; font-weight: 700; box-shadow: 4px 4px 0 rgba(0,0,0,.18); }
+.files a.zip::before { color: #fff; }
+.files a.zip:hover { background: #1D1D1D; color: #fff; border-color: #1D1D1D; box-shadow: 5px 5px 0 rgba(0,0,0,.22); }
+.files a.zip:active { transform: translate(2px,2px); box-shadow: 1px 1px 0 rgba(0,0,0,.12); }
+
 /* ---------- practical work checklist ---------- */
 .work-checklist { width: 100%; border-collapse: collapse; margin: 14px 0 4px; }
 .work-checklist th, .work-checklist td { border: 1px solid var(--rule); padding: 9px 10px; vertical-align: top; }
@@ -564,6 +570,24 @@ html.modal-open { overflow: hidden; }
 .variant-body .task-list { margin: 8px 0 0; padding-left: 20px; }
 .variant-body .task-list li { margin: 0 0 8px; }
 @media (max-width: 620px) { .variant-body { overflow-x: auto; } .variant-body table { min-width: 520px; } }
+
+/* ---------- schema slider: all CREATE TABLE examples ---------- */
+.schema-slider { margin: 18px 0 24px; border: 1px solid #d8d5cc; border-radius: 14px; background: #fff; color: #1a1916; overflow: hidden; }
+.schema-slider-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 14px; background: #f5f2ea; border-bottom: 1px solid #d8d5cc; }
+.schema-slider-bar strong { font: 700 14px/1.2 var(--font-display); color: #1a1916; }
+.schema-slider-actions { display: flex; align-items: center; gap: 8px; }
+.schema-slider-counter { min-width: 62px; text-align: center; font: 600 13px/1 var(--font-mono); color: #59544a; }
+.schema-btn { width: 34px; height: 34px; border: 1px solid #c9c4b8; border-radius: 8px; background: #fff; color: #1a1916; font: 700 18px/1 var(--font-mono); cursor: pointer; }
+.schema-btn:hover { background: #ece7dc; }
+.schema-track { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: thin; }
+.schema-slide { flex: 0 0 100%; min-width: 100%; box-sizing: border-box; padding: 16px 18px 18px; scroll-snap-align: start; }
+.schema-slide h4 { margin: 0 0 10px; font: 700 16px/1.3 var(--font-display); color: #1a1916; }
+.schema-slide h4 code, .schema-slide p code { color: #1a1916; background: #f1ede4; padding: 1px 4px; border-radius: 4px; }
+.schema-slide p { margin: 0 0 10px; font-size: 14px; line-height: 1.55; color: #3a372f; }
+.schema-slide pre { margin: 0; padding: 14px 16px; overflow-x: auto; border: 1px solid #ddd8cc; border-radius: 10px; background: #fbfaf6; color: #1a1916; font: 12.5px/1.5 var(--font-mono); }
+.schema-slide code { color: inherit; background: none; padding: 0; }
+.schema-slider:focus-within { outline: 2px solid #b9a97f; outline-offset: 2px; }
+@media (max-width: 620px) { .schema-slide { padding: 12px; } .schema-slider-bar { padding: 8px 10px; } }
 
 /* ---------- print / PDF export ---------- */
 @page { margin: 16mm; }
@@ -851,7 +875,7 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <p>Отсюда сразу следует неприятный вывод. Содержание, срок и деньги нельзя зафиксировать одновременно и ещё обещать качество. Что-то должно уступить, и вопрос не в том, уступит ли оно, а в том, кто и когда это решит. Если решение не примет спонсор в марте, его примет команда в августе, ночными сменами и дефектами.</p>
 <h2 id="что-смотреть-в-треугольнике"><span class="num">02</span>Что смотреть в треугольнике</h2>
 <p>Посмотрите на схему ниже, прежде чем читать дальше. Первый шаг спрашивает, с чем вы имеете дело: с операцией, которая повторяется каждый семестр, или с проектом, у которого есть конец. От этого выбора зависит вся дальнейшая арифметика, и именно здесь чаще всего ошибаются. Затем задайте цель и посмотрите, как на табло собираются числа учебного проекта: содержание из 12 функций, срок 6 месяцев, бюджет 1,2 млн рублей и планка качества 95 процентов. После этого потяните вершину содержания вправо. Машина покажет, что произойдёт с остальными вершинами, и выдаст компромисс в неделях. В конце она проверит успех по четырём признакам.</p>
-<figure class="figure" data-fig="fig-01-triangle" data-one="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"><iframe title="Figure 1: fig-01-triangle" scrolling="no"></iframe><figcaption>Потяните за вершину: проект отдаст срок, деньги или качество.</figcaption></figure>
+<figure class="figure" data-fig="fig-01-triangle" data-one="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"><iframe title="Figure 1: fig-01-triangle" scrolling="no"></iframe><figcaption>Потяните за вершину: проект отдаст срок, деньги или качество.</figcaption></figure>
 
 <p>Вы только что видели, как одно движение меняет всю картину. Вершины называются «содержание», «срок» и «стоимость». В центре стоит «качество». Ползунки под вершинами задают числа, а табло внизу считает последствия: сколько недель добавится, сколько денег понадобится, что станет с планкой 95 процентов. Когда вы добавляете две функции, табло выдаёт строку «+2 функции = +6 недель» и показывает, что прежний срок 6 месяцев больше не держится. Машина не запрещает добавлять функции. Она делает цену добавки видимой до того, как её заплатит команда.</p>
 <p>В конце машина проверяет успех по четырём признакам: результат, срок, бюджет и выгода. Планка качества при этом остаётся в центре, потому что качество не отдельная вершина, а мера того, насколько результат соответствует требованиям.</p>
@@ -1036,6 +1060,40 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
       var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
       window.scrollTo({top: 0, behavior: reduce ? 'auto' : 'smooth'});
     });
+  });
+})();
+
+(function(){
+  document.querySelectorAll('[data-slider]').forEach(function(slider){
+    var track = slider.querySelector('[data-slider-track]');
+    var slides = track ? Array.prototype.slice.call(track.children) : [];
+    var counter = slider.querySelector('[data-slider-counter]');
+    var prev = slider.querySelector('[data-slider-prev]');
+    var next = slider.querySelector('[data-slider-next]');
+    if(!track || slides.length < 2) return;
+    function current(){
+      var best = 0, dist = Infinity;
+      slides.forEach(function(slide, i){
+        var d = Math.abs(slide.offsetLeft - track.scrollLeft);
+        if(d < dist){ dist = d; best = i; }
+      });
+      return best;
+    }
+    function update(){
+      if(counter) counter.textContent = (current() + 1) + ' / ' + slides.length;
+    }
+    function go(delta){
+      var i = Math.max(0, Math.min(slides.length - 1, current() + delta));
+      var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      track.scrollTo({left: slides[i].offsetLeft, behavior: reduce ? 'auto' : 'smooth'});
+    }
+    if(prev) prev.addEventListener('click', function(){ go(-1); });
+    if(next) next.addEventListener('click', function(){ go(1); });
+    track.addEventListener('scroll', function(){
+      clearTimeout(track._sliderTimer);
+      track._sliderTimer = setTimeout(update, 80);
+    }, {passive: true});
+    update();
   });
 })();
 (function(){

@@ -12,7 +12,7 @@ outcomes:
 
 ## Зачем этот раздел
 
-Первые три задания проверяют модель данных, базу и расчёт. В этом разделе они разобраны на варианте V01 «Ателье Стежок» в приложениях, которые уже установлены: draw.io для диаграммы, XAMPP и phpMyAdmin для базы. Дополнительно в конце раздела разобран вариант V02 на тех же инструментах.
+Первые три задания проверяют модель данных, базу и расчёт. В этом разделе они разобраны на варианте V01 «ООО ТД «Вершина»» в приложениях, которые уже установлены: draw.io для диаграммы, XAMPP и phpMyAdmin для базы. Дополнительно в конце раздела разобран вариант V02 на тех же инструментах.
 
 | Задание | Инструмент | Что сдать |
 |---|---|---|
@@ -20,13 +20,13 @@ outcomes:
 | 2. База и импорт | XAMPP, phpMyAdmin | SQL-скрипт схемы, выгрузка базы |
 | 3. SQL-запрос стоимости | phpMyAdmin | SQL-запрос и таблица результата |
 
-Разбор идёт на варианте V01 «Швейное производство». Варианты V02 и V03 даны для самостоятельной работы: структура заданий та же, меняются предприятие, продукция и числа. Снимки экрана кликабельны: по щелчку они открываются в полном размере.
+Разбор идёт на варианте V01 «Мебельное производство». Варианты V02 и V03 даны для самостоятельной работы: структура заданий та же, меняются предприятие, продукция и числа. Снимки экрана кликабельны: по щелчку они открываются в полном размере.
 
 ## Три тестовых варианта
 
 | Вариант | Предприятие | Продукция | Количество |
 |---|---|---|---|
-| V01 | Ателье «Стежок» | Фартук поварской | 12 |
+| V01 | ООО ТД «Вершина» | Стол кухонный «Самобранка» | 2 |
 | V02 | Пекарня «Колос» | Хлеб ржаной 500 г | 40 |
 | V03 | Мастерская «Глина» | Кружка 300 мл | 18 |
 
@@ -364,82 +364,305 @@ outcomes:
 <figcaption>Создание базы: имя, кодировка utf8mb4 и сравнение utf8mb4_unicode_ci.</figcaption>
 </figure>
 
-### Шаг 3. Создайте первую таблицу через интерфейс
+### Шаг 3. Создайте таблицы запросами
 
-Выберите базу `dkip2027_course`, откройте вкладку `Структура` и нажмите `Создать таблицу`. В поле имени введите `counterparty`. Ниже заполните шесть строк:
+Все таблицы создаются запросами. Перед первым запросом откройте общую шпаргалку.
 
-| Имя | Тип | Длина | Null | Индекс |
-|---|---|---|---|---|
-| `id` | `VARCHAR` | 32 | нет | `PRIMARY` |
-| `name` | `VARCHAR` | 255 | нет | |
-| `inn` | `VARCHAR` | 20 | нет | |
-| `address` | `VARCHAR` | 500 | нет | |
-| `phone` | `VARCHAR` | 64 | нет | |
-| `party_type` | `VARCHAR` | 24 | нет | |
+<details class="hint">
+<summary>Шпаргалка: CREATE TABLE, ALTER TABLE, INSERT</summary>
 
-Внизу выберите движок `InnoDB` и нажмите `Сохранить`. В списке таблиц появится `counterparty`. Откройте её вкладку `Структура`: видны поля, типы и ключ `PRIMARY`.
-
-<figure class="diagram">
-<img src="reports/screens/mysql/t2-create-table-ui.png" alt="Создание таблицы counterparty через форму phpMyAdmin">
-<figcaption>Создание таблицы через интерфейс: имя, число столбцов, типы и кнопка «Сохранить». Кнопка «Предпросмотр SQL» показывает будущий запрос.</figcaption>
-</figure>
-
-Проверьте себя: код `001000001` должен храниться текстом, иначе ведущие нули исчезнут. Поэтому `id` имеет тип `VARCHAR`, а не `INT`.
-
-### Шаг 4. Создайте вторую таблицу запросом
-
-Теперь создайте `item` не через форму, а запросом. Откройте вкладку `SQL` и введите команду.
-
-<figure class="diagram">
-<img src="reports/screens/mysql/t2-create-item-sql.png" alt="Создание таблицы item запросом в phpMyAdmin">
-<figcaption>Создание таблицы запросом: вкладка SQL, команда `CREATE TABLE item` и кнопка «Вперёд».</figcaption>
-</figure>
+**Создание таблицы**
 
 ```sql
-CREATE TABLE item (
-  id INT AUTO_INCREMENT NOT NULL,
-  code VARCHAR(64) UNIQUE NOT NULL,
+CREATE TABLE имя_таблицы (
+  имя_поля ТИП ОГРАНИЧЕНИЕ,
+  имя_поля ТИП ОГРАНИЧЕНИЕ,
+  PRIMARY KEY (имя_поля),
+  CONSTRAINT имя_правила FOREIGN KEY (имя_поля)
+    REFERENCES родительская_таблица (имя_поля)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+```
+
+`CREATE TABLE` создаёт таблицу. В скобках перечисляются поля, затем ключи и проверки. Каждое поле описывается тремя частями: имя, тип и ограничение. Запятая разделяет описания, после последнего запятая не ставится.
+
+**Добавление связи**
+
+```sql
+ALTER TABLE дочерняя_таблица
+  ADD CONSTRAINT имя_связи
+  FOREIGN KEY (поле_дочерней)
+  REFERENCES родительская_таблица (поле_родительской);
+```
+
+`ALTER TABLE` меняет уже созданную таблицу. `ADD CONSTRAINT` добавляет правило с именем. `FOREIGN KEY` называет поле текущей таблицы. `REFERENCES` указывает родительскую таблицу и её ключ.
+
+**Вставка строк**
+
+```sql
+INSERT INTO имя_таблицы (поле1, поле2, поле3)
+VALUES (значение1, значение2, значение3);
+```
+
+`INSERT INTO` выбирает таблицу. В скобках перечислены поля в порядке значений. `VALUES` начинает список. Текст и даты в кавычках, числа без кавычек. Строки разделяют запятыми, после последней запятой нет.
+
+</details>
+
+Разберём `CREATE TABLE` на таблице `counterparty`:
+
+```sql
+CREATE TABLE counterparty (
+  id VARCHAR(32) NOT NULL,
+  name VARCHAR(255) NOT NULL,
+  inn VARCHAR(20) NOT NULL DEFAULT '',
+  address VARCHAR(500) NOT NULL,
+  phone VARCHAR(64) NOT NULL,
+  party_type VARCHAR(24) NOT NULL,
+  PRIMARY KEY (id),
+  CONSTRAINT ck_party_type
+    CHECK (party_type IN ('Покупатель', 'Поставщик', 'Изготовитель'))
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+```
+
+- `CREATE TABLE counterparty` создаёт таблицу с именем `counterparty`.
+- В скобках перечислены поля. У каждого три части: имя, тип и ограничения.
+- `id VARCHAR(32) NOT NULL` хранит код текстом, поэтому ведущие нули не теряются.
+- `PRIMARY KEY (id)` делает `id` первичным ключом.
+- `CONSTRAINT ck_party_type CHECK (...)` разрешает только три значения типа контрагента.
+- `ENGINE=InnoDB` включает поддержку внешних ключей, `DEFAULT CHARSET=utf8mb4` задаёт кодировку.
+
+Остальные таблицы создайте по диаграмме. Ниже слайдер с двенадцатью определениями. Листайте стрелками и сверяйте поля, типы и ключи.
+
+<div class="schema-slider" data-slider>
+<div class="schema-slider-bar">
+<strong>Все двенадцать таблиц: листайте стрелками</strong>
+<div class="schema-slider-actions">
+<button type="button" class="schema-btn" data-slider-prev aria-label="Предыдущая таблица">←</button>
+<span class="schema-slider-counter" data-slider-counter>1 / 12</span>
+<button type="button" class="schema-btn" data-slider-next aria-label="Следующая таблица">→</button>
+</div>
+</div>
+<div class="schema-track" data-slider-track>
+<article class="schema-slide" aria-label="counterparty">
+<h4>1. <code>counterparty</code></h4>
+<p>Контрагенты: покупатели, поставщики и изготовители. Код хранится текстом, поэтому ведущие нули не теряются.</p>
+<pre><code>CREATE TABLE counterparty (
+  id VARCHAR(32) NOT NULL,
+  name VARCHAR(255) NOT NULL,
+  inn VARCHAR(20) NOT NULL DEFAULT &#x27;&#x27;,
+  address VARCHAR(500) NOT NULL,
+  phone VARCHAR(64) NOT NULL,
+  party_type VARCHAR(24) NOT NULL,
+  PRIMARY KEY (id),
+  CONSTRAINT ck_party_type
+    CHECK (party_type IN (&#x27;Покупатель&#x27;, &#x27;Поставщик&#x27;, &#x27;Изготовитель&#x27;))
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;</code></pre>
+</article>
+<article class="schema-slide" aria-label="item">
+<h4>2. <code>item</code></h4>
+<p>Справочник продукции, материалов и операций. Поле kind показывает, что это за ресурс.</p>
+<pre><code>CREATE TABLE item (
+  id INT NOT NULL,
+  code VARCHAR(64) DEFAULT NULL,
   name VARCHAR(255) NOT NULL,
   kind VARCHAR(16) NOT NULL,
   unit VARCHAR(16) NOT NULL,
   PRIMARY KEY (id),
-  CONSTRAINT ck_item_kind CHECK (kind IN ('product','material','operation'))
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-```
-
-Разберите команду по частям.
-
-- `CREATE TABLE item` создаёт таблицу с именем `item`.
-- В скобках перечислены столбцы. У каждого три части: имя, тип и ограничения.
-- `PRIMARY KEY (id)` делает `id` первичным ключом.
-- `CONSTRAINT ck_item_kind CHECK (...)` задаёт проверку: в поле `kind` можно записать только `product`, `material` или `operation`.
-- `ENGINE=InnoDB` включает поддержку внешних ключей, `DEFAULT CHARSET=utf8mb4` задаёт кодировку.
-
-Запятая разделяет столбцы и правила. После последнего правила запятая не ставится. Если забыть запятую, MySQL покажет ошибку 1064 с номером строки.
-
-Остальные таблицы создайте по диаграмме. Для каждой ответьте: какие поля, какой первичный ключ, на что ссылаются внешние ключи. Например, у `price` ключ составной:
-
-```sql
-CREATE TABLE price (
+  UNIQUE KEY uq_item_code (code),
+  CONSTRAINT ck_item_kind
+    CHECK (kind IN (&#x27;product&#x27;, &#x27;material&#x27;, &#x27;operation&#x27;))
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;</code></pre>
+</article>
+<article class="schema-slide" aria-label="price">
+<h4>3. <code>price</code></h4>
+<p>История цен. Ключ из ресурса и даты не даёт двум ценам действовать с одной даты.</p>
+<pre><code>CREATE TABLE price (
   item_id INT NOT NULL,
   valid_from DATE NOT NULL,
   amount DECIMAL(14,2) NOT NULL,
   PRIMARY KEY (item_id, valid_from),
-  CONSTRAINT fk_price_item FOREIGN KEY (item_id) REFERENCES item(id),
-  CONSTRAINT ck_price_amount CHECK (amount >= 0)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-```
-
-### Шаг 5. Постройте связи через интерфейс и SQL
-
-Связи можно добавить мышью. Откройте таблицу `customer_order`, вкладку `Структура`, затем `Связи`. Выберите столбец `customer_id`, базу `dkip2027_course`, таблицу `counterparty` и столбец `id`. Нажмите `Сохранить`. Повторите для `executor_id` и остальных внешних ключей.
+  CONSTRAINT fk_price_item
+    FOREIGN KEY (item_id) REFERENCES item (id),
+  CONSTRAINT ck_price_amount CHECK (amount &gt;= 0)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;</code></pre>
+</article>
+<article class="schema-slide" aria-label="specification">
+<h4>4. <code>specification</code></h4>
+<p>Шапка спецификации изделия. Поле output_qty показывает, на какое количество изделий даны нормы.</p>
+<pre><code>CREATE TABLE specification (
+  id INT NOT NULL,
+  product_id INT NOT NULL,
+  name VARCHAR(255) NOT NULL,
+  output_qty DECIMAL(14,3) NOT NULL,
+  manufacturer_id VARCHAR(32) NOT NULL,
+  PRIMARY KEY (id),
+  UNIQUE KEY uq_spec_product (product_id),
+  KEY ix_spec_maker (manufacturer_id),
+  CONSTRAINT fk_spec_product
+    FOREIGN KEY (product_id) REFERENCES item (id),
+  CONSTRAINT fk_spec_maker
+    FOREIGN KEY (manufacturer_id) REFERENCES counterparty (id),
+  CONSTRAINT ck_spec_output CHECK (output_qty &gt; 0)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;</code></pre>
+</article>
+<article class="schema-slide" aria-label="specification_component">
+<h4>5. <code>specification_component</code></h4>
+<p>Нормы материалов и время операций. Для материала заполнено qty, для операции time_norm.</p>
+<pre><code>CREATE TABLE specification_component (
+  specification_id INT NOT NULL,
+  item_id INT NOT NULL,
+  qty DECIMAL(14,3) NOT NULL,
+  time_norm DECIMAL(14,3) NOT NULL,
+  PRIMARY KEY (specification_id, item_id),
+  KEY ix_comp_item (item_id),
+  CONSTRAINT fk_comp_spec
+    FOREIGN KEY (specification_id) REFERENCES specification (id),
+  CONSTRAINT fk_comp_item
+    FOREIGN KEY (item_id) REFERENCES item (id),
+  CONSTRAINT ck_comp_qty CHECK (qty &gt;= 0),
+  CONSTRAINT ck_comp_time CHECK (time_norm &gt;= 0)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;</code></pre>
+</article>
+<article class="schema-slide" aria-label="customer_order">
+<h4>6. <code>customer_order</code></h4>
+<p>Шапка заказа покупателя: номер, дата, заказчик и исполнитель.</p>
+<pre><code>CREATE TABLE customer_order (
+  id INT NOT NULL,
+  doc_no VARCHAR(64) NOT NULL,
+  doc_date DATE NOT NULL,
+  customer_id VARCHAR(32) NOT NULL,
+  executor_id VARCHAR(32) NOT NULL,
+  PRIMARY KEY (id),
+  UNIQUE KEY uq_order_doc (doc_no),
+  KEY ix_order_customer (customer_id),
+  KEY ix_order_executor (executor_id),
+  CONSTRAINT fk_order_customer
+    FOREIGN KEY (customer_id) REFERENCES counterparty (id),
+  CONSTRAINT fk_order_executor
+    FOREIGN KEY (executor_id) REFERENCES counterparty (id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;</code></pre>
+</article>
+<article class="schema-slide" aria-label="customer_order_line">
+<h4>7. <code>customer_order_line</code></h4>
+<p>Строки заказа: изделие, количество, продажная цена и скидка.</p>
+<pre><code>CREATE TABLE customer_order_line (
+  id INT NOT NULL,
+  order_id INT NOT NULL,
+  product_id INT NOT NULL,
+  qty INT NOT NULL,
+  sale_price DECIMAL(14,2) NOT NULL,
+  discount DECIMAL(14,2) NOT NULL DEFAULT 0.00,
+  PRIMARY KEY (id),
+  KEY ix_line_order (order_id),
+  KEY ix_line_product (product_id),
+  CONSTRAINT fk_line_order
+    FOREIGN KEY (order_id) REFERENCES customer_order (id),
+  CONSTRAINT fk_line_product
+    FOREIGN KEY (product_id) REFERENCES item (id),
+  CONSTRAINT ck_line_qty CHECK (qty &gt; 0),
+  CONSTRAINT ck_line_price CHECK (sale_price &gt;= 0),
+  CONSTRAINT ck_line_discount CHECK (discount &gt;= 0)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;</code></pre>
+</article>
+<article class="schema-slide" aria-label="production_order">
+<h4>8. <code>production_order</code></h4>
+<p>Шапка производственного заказа: номер, дата документа, дата запуска и подразделение.</p>
+<pre><code>CREATE TABLE production_order (
+  id INT NOT NULL,
+  doc_no VARCHAR(64) NOT NULL,
+  doc_date DATE NOT NULL,
+  launch_date DATE NOT NULL,
+  department VARCHAR(128) NOT NULL,
+  PRIMARY KEY (id),
+  UNIQUE KEY uq_prod_doc (doc_no)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;</code></pre>
+</article>
+<article class="schema-slide" aria-label="production_product">
+<h4>9. <code>production_product</code></h4>
+<p>Продукция к выпуску по производственному заказу.</p>
+<pre><code>CREATE TABLE production_product (
+  production_id INT NOT NULL,
+  product_id INT NOT NULL,
+  qty INT NOT NULL,
+  PRIMARY KEY (production_id, product_id),
+  KEY ix_prod_product (product_id),
+  CONSTRAINT fk_pp_order
+    FOREIGN KEY (production_id) REFERENCES production_order (id),
+  CONSTRAINT fk_pp_item
+    FOREIGN KEY (product_id) REFERENCES item (id),
+  CONSTRAINT ck_pp_qty CHECK (qty &gt; 0)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;</code></pre>
+</article>
+<article class="schema-slide" aria-label="production_resource">
+<h4>10. <code>production_resource</code></h4>
+<p>Плановый расход материалов и времени по производственному заказу.</p>
+<pre><code>CREATE TABLE production_resource (
+  production_id INT NOT NULL,
+  item_id INT NOT NULL,
+  qty DECIMAL(14,3) NOT NULL,
+  time_norm DECIMAL(14,3) NOT NULL,
+  PRIMARY KEY (production_id, item_id),
+  KEY ix_prod_resource (item_id),
+  CONSTRAINT fk_pr_order
+    FOREIGN KEY (production_id) REFERENCES production_order (id),
+  CONSTRAINT fk_pr_item
+    FOREIGN KEY (item_id) REFERENCES item (id),
+  CONSTRAINT ck_pr_qty CHECK (qty &gt;= 0),
+  CONSTRAINT ck_pr_time CHECK (time_norm &gt;= 0)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;</code></pre>
+</article>
+<article class="schema-slide" aria-label="users">
+<h4>11. <code>users</code></h4>
+<p>Учётные записи приложения. Пароль хранится не открытым текстом, а хешем с солью.</p>
+<pre><code>CREATE TABLE users (
+  id INT NOT NULL AUTO_INCREMENT,
+  login VARCHAR(64) NOT NULL,
+  password_hash VARCHAR(64) NOT NULL,
+  salt VARCHAR(32) NOT NULL,
+  role ENUM(&#x27;admin&#x27;, &#x27;user&#x27;) NOT NULL DEFAULT &#x27;user&#x27;,
+  failed_attempts INT NOT NULL DEFAULT 0,
+  is_locked TINYINT(1) NOT NULL DEFAULT 0,
+  PRIMARY KEY (id),
+  UNIQUE KEY uq_users_login (login)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;</code></pre>
+</article>
+<article class="schema-slide" aria-label="notes">
+<h4>12. <code>notes</code></h4>
+<p>Заметки сотрудников. Внешний ключ связывает заметку с автором.</p>
+<pre><code>CREATE TABLE notes (
+  id INT NOT NULL AUTO_INCREMENT,
+  title VARCHAR(255) NOT NULL,
+  content TEXT NOT NULL,
+  id_user INT NOT NULL,
+  created_at DATE NOT NULL,
+  PRIMARY KEY (id),
+  KEY ix_notes_user (id_user),
+  CONSTRAINT fk_notes_user
+    FOREIGN KEY (id_user) REFERENCES users (id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;</code></pre>
+</article>
+</div>
+</div>
 
 <figure class="diagram">
-<img src="reports/screens/mysql/t2-relations-ui.png" alt="Вкладка Связи в phpMyAdmin: внешние ключи заказа">
-<figcaption>Связи через интерфейс: у заказа два внешних ключа в counterparty. Правила ON DELETE и ON UPDATE видны рядом.</figcaption>
+<img src="reports/screens/mysql/t2-tables.png" alt="Список таблиц базы dkip2027_course после выполнения CREATE TABLE">
+<figcaption>Результат: в базе двенадцать таблиц. Проверьте список перед добавлением связей и данных.</figcaption>
 </figure>
 
-То же запросом:
+### Шаг 4. Постройте связи запросами
+
+<details class="hint">
+<summary>Шпаргалка: ALTER TABLE</summary>
+
+```sql
+ALTER TABLE дочерняя_таблица
+  ADD CONSTRAINT имя_связи
+  FOREIGN KEY (поле_дочерней)
+  REFERENCES родительская_таблица (поле_родительской);
+```
+
+`ALTER TABLE` меняет готовую таблицу. `ADD CONSTRAINT` добавляет правило, `FOREIGN KEY` выбирает поле, `REFERENCES` указывает родительский ключ.
+
+</details>
 
 ```sql
 ALTER TABLE customer_order
@@ -449,120 +672,335 @@ ALTER TABLE customer_order
   FOREIGN KEY (executor_id) REFERENCES counterparty(id);
 ```
 
-`ALTER TABLE` меняет уже созданную таблицу. `ADD CONSTRAINT` добавляет правило с именем. Имя помогает понять, какое ограничение нарушено.
-
-### Шаг 6. Вставьте данные через интерфейс
-
-Откройте таблицу `counterparty`, вкладку `Вставка`. Появится форма: слева имена столбцов, справа поля значений. Заполните `id`, `name`, `inn`, `address`, `phone`, `party_type` и нажмите `Вперёд`.
-
 <figure class="diagram">
-<img src="reports/screens/mysql/t2-insert-ui.png" alt="Вкладка Вставка в phpMyAdmin: поля таблицы counterparty">
-<figcaption>Вставка через интерфейс: каждому столбцу соответствует поле. Пустой ИНН оставьте пустым, код вводите с ведущими нулями.</figcaption>
+<img src="reports/screens/mysql/t2-alter-sql.png" alt="Добавление внешних ключей запросом ALTER TABLE">
+<figcaption>Связи запросом: два внешних ключа заказа добавляются одной командой `ALTER TABLE`.</figcaption>
 </figure>
 
-Повторите для шести заказчиков из `Заказчики.json` и добавьте изготовителя `M-001`.
+`ADD CONSTRAINT` добавляет правило с именем. Имя помогает понять, какое ограничение нарушено.
 
-### Шаг 7. Вставьте данные запросом
+Ниже все четырнадцать связей модели. Если таблицы уже созданы с `FOREIGN KEY` внутри `CREATE TABLE`, повторно эти команды не выполняйте. Если создавали таблицы без внешних ключей, выполняйте команды по одной.
 
-Запрос `INSERT` состоит из трёх частей: таблица, список столбцов и список значений.
+<div class="schema-slider" data-slider>
+<div class="schema-slider-bar">
+<strong>Все 14 связей: листайте стрелками</strong>
+<div class="schema-slider-actions">
+<button type="button" class="schema-btn" data-slider-prev aria-label="Предыдущая связь">←</button>
+<span class="schema-slider-counter" data-slider-counter>1 / 14</span>
+<button type="button" class="schema-btn" data-slider-next aria-label="Следующая связь">→</button>
+</div>
+</div>
+<div class="schema-track" data-slider-track>
+<article class="schema-slide" aria-label="price → item">
+<h4>1. price → item</h4>
+<p>Каждая цена ссылается на ресурс. Один ресурс может иметь несколько цен с разными датами.</p>
+<pre><code>ALTER TABLE price
+  ADD CONSTRAINT fk_price_item
+  FOREIGN KEY (item_id)
+  REFERENCES item (id);</code></pre>
+</article>
+<article class="schema-slide" aria-label="specification → item">
+<h4>2. specification → item</h4>
+<p>Спецификация описывает изделие. Ссылка ведёт на строку продукции в справочнике item.</p>
+<pre><code>ALTER TABLE specification
+  ADD CONSTRAINT fk_spec_product
+  FOREIGN KEY (product_id)
+  REFERENCES item (id);</code></pre>
+</article>
+<article class="schema-slide" aria-label="specification → counterparty">
+<h4>3. specification → counterparty</h4>
+<p>Изготовитель спецификации это контрагент с типом «Изготовитель».</p>
+<pre><code>ALTER TABLE specification
+  ADD CONSTRAINT fk_spec_maker
+  FOREIGN KEY (manufacturer_id)
+  REFERENCES counterparty (id);</code></pre>
+</article>
+<article class="schema-slide" aria-label="specification_component → specification">
+<h4>4. specification_component → specification</h4>
+<p>Строка состава принадлежит одной спецификации.</p>
+<pre><code>ALTER TABLE specification_component
+  ADD CONSTRAINT fk_comp_spec
+  FOREIGN KEY (specification_id)
+  REFERENCES specification (id);</code></pre>
+</article>
+<article class="schema-slide" aria-label="specification_component → item">
+<h4>5. specification_component → item</h4>
+<p>Строка состава ссылается на материал или операцию.</p>
+<pre><code>ALTER TABLE specification_component
+  ADD CONSTRAINT fk_comp_item
+  FOREIGN KEY (item_id)
+  REFERENCES item (id);</code></pre>
+</article>
+<article class="schema-slide" aria-label="customer_order → counterparty">
+<h4>6. customer_order → counterparty</h4>
+<p>Заказчик заказа это контрагент с типом «Покупатель».</p>
+<pre><code>ALTER TABLE customer_order
+  ADD CONSTRAINT fk_order_customer
+  FOREIGN KEY (customer_id)
+  REFERENCES counterparty (id);</code></pre>
+</article>
+<article class="schema-slide" aria-label="customer_order → counterparty">
+<h4>7. customer_order → counterparty</h4>
+<p>Исполнитель заказа это контрагент с типом «Изготовитель».</p>
+<pre><code>ALTER TABLE customer_order
+  ADD CONSTRAINT fk_order_executor
+  FOREIGN KEY (executor_id)
+  REFERENCES counterparty (id);</code></pre>
+</article>
+<article class="schema-slide" aria-label="customer_order_line → customer_order">
+<h4>8. customer_order_line → customer_order</h4>
+<p>Строка заказа принадлежит шапке заказа.</p>
+<pre><code>ALTER TABLE customer_order_line
+  ADD CONSTRAINT fk_line_order
+  FOREIGN KEY (order_id)
+  REFERENCES customer_order (id);</code></pre>
+</article>
+<article class="schema-slide" aria-label="customer_order_line → item">
+<h4>9. customer_order_line → item</h4>
+<p>Строка заказа ссылается на изделие из справочника.</p>
+<pre><code>ALTER TABLE customer_order_line
+  ADD CONSTRAINT fk_line_product
+  FOREIGN KEY (product_id)
+  REFERENCES item (id);</code></pre>
+</article>
+<article class="schema-slide" aria-label="production_product → production_order">
+<h4>10. production_product → production_order</h4>
+<p>Продукция к выпуску принадлежит производственному заказу.</p>
+<pre><code>ALTER TABLE production_product
+  ADD CONSTRAINT fk_pp_order
+  FOREIGN KEY (production_id)
+  REFERENCES production_order (id);</code></pre>
+</article>
+<article class="schema-slide" aria-label="production_product → item">
+<h4>11. production_product → item</h4>
+<p>Продукция к выпуску ссылается на изделие.</p>
+<pre><code>ALTER TABLE production_product
+  ADD CONSTRAINT fk_pp_item
+  FOREIGN KEY (product_id)
+  REFERENCES item (id);</code></pre>
+</article>
+<article class="schema-slide" aria-label="production_resource → production_order">
+<h4>12. production_resource → production_order</h4>
+<p>Плановый расход принадлежит производственному заказу.</p>
+<pre><code>ALTER TABLE production_resource
+  ADD CONSTRAINT fk_pr_order
+  FOREIGN KEY (production_id)
+  REFERENCES production_order (id);</code></pre>
+</article>
+<article class="schema-slide" aria-label="production_resource → item">
+<h4>13. production_resource → item</h4>
+<p>Плановый расход ссылается на материал или операцию.</p>
+<pre><code>ALTER TABLE production_resource
+  ADD CONSTRAINT fk_pr_item
+  FOREIGN KEY (item_id)
+  REFERENCES item (id);</code></pre>
+</article>
+<article class="schema-slide" aria-label="notes → users">
+<h4>14. notes → users</h4>
+<p>Заметка ссылается на автора в таблице пользователей.</p>
+<pre><code>ALTER TABLE notes
+  ADD CONSTRAINT fk_notes_user
+  FOREIGN KEY (id_user)
+  REFERENCES users (id);</code></pre>
+</article>
+</div>
+</div>
+
+### Шаг 5. Вставьте данные запросами
+
+<details class="hint">
+<summary>Шпаргалка: INSERT</summary>
 
 ```sql
-INSERT INTO counterparty (id, name, inn, address, phone, party_type)
-VALUES ('001000001', 'Магазин «Стежок-1»', '', 'Учебный город, улица Производственная, 1, офис 1', '+79990010001', 'Покупатель');
+INSERT INTO имя_таблицы (поле1, поле2, поле3)
+VALUES (значение1, значение2, значение3);
 ```
 
-- `INSERT INTO counterparty` выбирает таблицу.
-- В скобках перечислены столбцы в том порядке, в котором пойдут значения.
-- `VALUES` начинает список значений. Текст и даты пишут в кавычках, числа без кавычек.
-- Между значениями запятые, после последнего значения запятой нет.
-- Несколько строк можно вставить одним запросом: после каждой строки значений ставится запятая, кроме последней.
+`INSERT INTO` выбирает таблицу. В скобках перечислены поля в порядке значений. `VALUES` начинает список. Текст и даты в кавычках, числа без кавычек. Строки разделяют запятыми, после последней запятой нет.
+
+</details>
+
+Сначала заказчики из JSON:
 
 ```sql
 INSERT INTO counterparty (id, name, inn, address, phone, party_type) VALUES
-('001000001', 'Магазин «Стежок-1»', '', 'Учебный город, улица Производственная, 1, офис 1', '+79990010001', 'Покупатель'),
-('001000002', 'Торговый дом «Стежок-2»', '', 'Учебный город, улица Производственная, 1, офис 2', '+79990010002', 'Покупатель');
+('000000001', 'ООО "Поставка"', '', 'г. Пятигорск', '+79198634592', 'Поставщик'),
+('000000002', 'ООО "Кинотеатр Квант"', '26320045123', 'г. Железноводск, ул. Мира, 123', '+79884581555', 'Покупатель'),
+('000000008', 'ООО "Новый JDTO"', '26320045111', 'г. Железноводск', '+79884581555', 'Покупатель'),
+('000000003', 'ООО "Ромашка"', '4140784214', 'г. Омск, ул. Строителей, 294', '+79882584546', 'Поставщик'),
+('000000009', 'ООО "Ипподром"', '5874045632', 'г. Уфа, ул. Набережная, 37', '+79627486389', 'Поставщик'),
+('000000010', 'ООО "Ассоль"', '2629011278', 'г. Калуга, ул. Пушкина, 94', '+79184572398', 'Покупатель');
+```
+
+ИП Томилин из заказа и изготовитель добавляются отдельно:
+
+```sql
+INSERT INTO counterparty (id, name, inn, address, phone, party_type) VALUES
+('000000004', 'ИП Томилин Александр Сергеевич', '', 'г. Пятигорск', '', 'Покупатель'),
+('M-001', 'ООО ТД "Вершина"', '', 'г. Пятигорск', '', 'Изготовитель');
 ```
 
 <figure class="diagram">
 <img src="reports/screens/mysql/t2-customers.png" alt="Таблица counterparty после вставки: заказчики и изготовитель">
-<figcaption>Результат вставки: коды `001000001`…`001000006` сохранили ведущие нули, изготовитель хранится отдельной строкой.</figcaption>
+<figcaption>Результат вставки: шесть записей JSON, ИП Томилин и изготовитель. Коды сохранили ведущие нули.</figcaption>
 </figure>
 
-### Шаг 8. Загрузите заказ, спецификацию и цены
+### Шаг 6. Загрузите заказ, спецификацию и цены
 
-Данные из Excel вставляются тем же способом. Сначала создайте изделие и ресурсы в `item`, затем цены, спецификацию, состав, заказ и строку заказа. Порядок важен: строка заказа ссылается на заказ и изделие, цена ссылается на ресурс.
+Перед вставкой сопоставьте файлы и таблицы.
 
-Пример для цен:
+| Файл | Поля | Таблица |
+|---|---|---|
+| `Заказ покупателя.xlsx` | номер, дата, срок, код заказчика, изделие, количество, цена, скидка | `customer_order`, `customer_order_line` |
+| `Спецификация.xlsx` | материал, операция, единица, норма, часы | `item`, `specification`, `specification_component` |
+| `Цены.xlsx` | ресурс, цена | `price` |
+| `Заказ на производство.xlsx` | заказ, дата запуска, изделие, расход | `production_order`, `production_product`, `production_resource` |
+
+<figure class="diagram">
+<img src="reports/screens/prep/V01_order_xlsx.png" alt="Заказ покупателя: шапка и строка продукции">
+<figcaption>Заказ покупателя: номер, дата, срок, код заказчика, изделие, количество, цена и скидка.</figcaption>
+</figure>
+
+<figure class="diagram">
+<img src="reports/screens/mysql/t2-order.png" alt="Шапка заказа V01-01 в таблице customer_order">
+<figcaption>Результат: шапка заказа в `customer_order`.</figcaption>
+</figure>
+
+<figure class="diagram">
+<img src="reports/screens/prep/V01_spec_xlsx.png" alt="Спецификация: материалы, операции и нормы">
+<figcaption>Спецификация: строки материалов и операций с нормами и часами.</figcaption>
+</figure>
+
+<figure class="diagram">
+<img src="reports/screens/mysql/t2-spec.png" alt="Состав спецификации в таблице specification_component">
+<figcaption>Результат: состав в `specification_component`.</figcaption>
+</figure>
+
+<figure class="diagram">
+<img src="reports/screens/prep/V01_prices_xlsx.png" alt="Цены: ресурс и цена">
+<figcaption>Цены: ресурс и цена. Дата начала действия задана условием варианта.</figcaption>
+</figure>
+
+<figure class="diagram">
+<img src="reports/screens/mysql/t2-price-table.png" alt="Таблица price после вставки цен">
+<figcaption>Результат: цены в `price`, дата записана как `2026-04-01`.</figcaption>
+</figure>
+
+Данные из Excel вставляются тем же запросом `INSERT`. Сначала создайте изделие и ресурсы в `item`, затем цены, спецификацию, состав, заказ и строку заказа. Порядок важен: строка заказа ссылается на заказ и изделие, цена ссылается на ресурс.
 
 ```sql
+INSERT INTO item (id, code, name, kind, unit) VALUES
+(1, 'ФР-00000034', 'Стол кухонный "Самобранка"', 'product', 'шт'),
+(2, 'ФР-00000009', 'Столешница круглая', 'material', 'шт'),
+(3, 'ФР-00000013', 'Мебельная деталь 500х800', 'material', 'шт'),
+(4, 'ФР-00000016', 'Мебельная деталь 600х800', 'material', 'шт'),
+(5, 'ФР-00000027', 'Евровинт 6,5х5', 'material', 'тыс. шт'),
+(6, 'ФР-00000026', 'Опора', 'material', 'шт'),
+(7, 'ФР-00000053', 'Сборка модулей', 'operation', 'ч'),
+(8, 'ФР-00000052', 'Распил ДСП, МДФ и листового материала', 'operation', 'ч'),
+(9, 'ФР-00000494', 'Упаковка', 'operation', 'ч');
+
 INSERT INTO price (item_id, valid_from, amount) VALUES
-(2, '2027-03-01', 280.00),
-(3, '2027-03-01', 25.00),
-(4, '2027-03-01', 0.40),
-(5, '2027-03-01', 600.00),
-(6, '2027-03-01', 800.00);
+(2, '2026-04-01', 3250.00),
+(3, '2026-04-01', 95.00),
+(4, '2026-04-01', 140.00),
+(5, '2026-04-01', 595.00),
+(6, '2026-04-01', 245.00),
+(7, '2026-04-01', 1400.00),
+(8, '2026-04-01', 450.00),
+(9, '2026-04-01', 950.00);
+
+INSERT INTO specification (id, product_id, name, output_qty, manufacturer_id)
+VALUES (1, 1, 'Стол кухонный "Самобранка"', 1.000, 'M-001');
+
+INSERT INTO specification_component (specification_id, item_id, qty, time_norm) VALUES
+(1, 2, 1.000, 0.000),
+(1, 3, 2.000, 0.000),
+(1, 4, 4.000, 0.000),
+(1, 5, 0.012, 0.000),
+(1, 6, 4.000, 0.000),
+(1, 7, 0.000, 0.750),
+(1, 8, 0.000, 1.500),
+(1, 9, 0.000, 0.500);
+
+INSERT INTO customer_order (id, doc_no, doc_date, customer_id, executor_id)
+VALUES (1, 'V01-01', '2026-04-22', '000000004', 'M-001');
+
+INSERT INTO customer_order_line (id, order_id, product_id, qty, sale_price, discount)
+VALUES (1, 1, 1, 2, 14120.00, 1412.00);
 ```
 
-<figure class="diagram">
-<img src="reports/screens/mysql/t2-order.png" alt="Заказ V01-01 в phpMyAdmin">
-<figcaption>Шапка заказа V01-01: дата 15.03.2027, заказчик 001000001, исполнитель M-001.</figcaption>
-</figure>
+Производственный заказ:
 
-<figure class="diagram">
-<img src="reports/screens/mysql/t2-spec.png" alt="Состав спецификации V01: материалы и операции">
-<figcaption>Состав спецификации: пять строк, у материалов норма расхода, у операций время.</figcaption>
-</figure>
+```sql
+INSERT INTO production_order (id, doc_no, doc_date, launch_date, department)
+VALUES (1, 'V01-P-01', '2026-04-22', '2026-04-23', 'Основное подразделение');
 
-### Шаг 9. Сделайте выгрузку и восстановите её
+INSERT INTO production_product (production_id, product_id, qty)
+VALUES (1, 1, 2);
 
-Откройте вкладку `Экспорт`, выберите формат SQL, метод `Быстрый`, нажмите `Экспорт` и сохраните файл `dkip2027-mysql.sql`. Затем создайте пустую базу `dkip2027_restore`, откройте в ней вкладку `Импорт` и загрузите тот же файл. Если таблицы и данные появились, выгрузка рабочая.
+INSERT INTO production_resource (production_id, item_id, qty, time_norm) VALUES
+(1, 2, 2.000, 0.000),
+(1, 3, 4.000, 0.000),
+(1, 4, 8.000, 0.000),
+(1, 5, 0.024, 0.000),
+(1, 6, 8.000, 0.000),
+(1, 7, 0.000, 2.000),
+(1, 8, 0.000, 2.000),
+(1, 9, 0.000, 2.000);
+```
 
-<figure class="diagram">
-<img src="reports/screens/mysql/t2-export.png" alt="Экспорт базы dkip2027_course в SQL-файл">
-<figcaption>Экспорт SQL: выбран формат SQL и метод Быстрый. Файл можно приложить к работе.</figcaption>
-</figure>
+### Шаг 7. Сделайте выгрузку и восстановите её
 
-## Задание 3. Стоимость заказа
+Откройте базу `dkip2027_course`, вкладку `Экспорт`, выберите `Быстрый` и `SQL`. Сохраните файл как `dkip2027-mysql.sql`. Затем создайте пустую базу `dkip2027_restore`, откройте `Импорт`, выберите файл и загрузите его. Если таблицы и строки появились снова, выгрузка рабочая.
 
-Запрос выполняется в phpMyAdmin: выберите базу `dkip2027_course`, откройте вкладку `SQL`, вставьте запрос и нажмите `Выполнить`. Пошаговые скриншоты phpMyAdmin и разбор каждого соединения находятся в карточке [Задание 3. SQL-запрос стоимости](04-task-3-sql.html).
+## Задание 3. SQL-запрос стоимости
+
+Полный разбор запроса находится в методичке [Задание 3. SQL-запрос стоимости](04-task-3-sql.html). Здесь короткий маршрут V01.
 
 ### Как собрать запрос стоимости
 
-Запрос стоимости отвечает на вопрос «сколько стоит заказ по нормам и ценам». Он не берёт продажную цену из строки заказа: та включает наценку и скидку, а нормативная стоимость считается по спецификации.
-
-Понадобятся пять таблиц:
-
-```text
-customer_order(id, doc_no, doc_date)
-customer_order_line(id, order_id, product_id, qty)
-specification(id, product_id, output_qty)
-specification_component(specification_id, item_id, qty, time_norm)
-price(item_id, valid_from, amount)
-```
-
-Сначала разберите каждую команду отдельно.
-
-**`SELECT` и `FROM`.** Выберите нужные столбцы и таблицу. Звёздочку не используйте: в отчёт идут только номер заказа и итог.
+<details class="hint">
+<summary>Шпаргалка: SELECT, JOIN, GROUP BY, SUM и ROUND</summary>
 
 ```sql
-SELECT doc_no, doc_date FROM customer_order;
+SELECT o.doc_no, ROUND(SUM(...), 2) AS total_cost
+FROM customer_order o
+JOIN customer_order_line l ON l.order_id = o.id
+JOIN price p ON p.item_id = l.product_id
+WHERE o.doc_no = 'V01-01'
+GROUP BY o.doc_no;
 ```
 
-**`WHERE`.** Отберите строки до группировки. Например, только заказы за март.
+`SELECT` выбирает столбцы, `FROM` задаёт таблицу, `JOIN ... ON` соединяет по ключу, `WHERE` фильтрует строки, `GROUP BY` собирает их в группы, `SUM` складывает, `ROUND` округляет итог. `AS` задаёт имя столбца результата.
 
-```sql
-SELECT doc_no FROM customer_order WHERE doc_date >= '2027-03-01';
-```
+</details>
+
+Запрос стоимости отвечает на вопрос «сколько стоит заказ по нормам и ценам». В V01 две единицы изделия, восемь строк состава и цены от 1 апреля 2026 года.
 
 **`JOIN ... ON`.** Соедините строки заказа с шапкой по ключу `order_id`.
 
+<details class="hint">
+<summary>Шпаргалка: JOIN</summary>
+
 ```sql
-SELECT o.doc_no, l.product_id, l.qty
-FROM customer_order o
-JOIN customer_order_line l ON l.order_id = o.id;
+JOIN customer_order_line l ON l.order_id = o.id
+```
+
+`JOIN` добавляет таблицу, `ON` задаёт условие. Внешний ключ дочерней таблицы сравнивается с первичным ключом родительской.
+
+</details>
+
+**`CASE`.** Для материала берите норму `c.qty`, для операции время `c.time_norm`:
+
+```sql
+CASE WHEN i.kind = 'operation' THEN c.time_norm ELSE c.qty END
 ```
 
 **`GROUP BY` и `SUM`.** Соберите строки в группы по заказу и сложите количество.
+
+<details class="hint">
+<summary>Шпаргалка: GROUP BY и SUM</summary>
 
 ```sql
 SELECT o.doc_no, SUM(l.qty) AS total_qty
@@ -571,213 +1009,132 @@ JOIN customer_order_line l ON l.order_id = o.id
 GROUP BY o.doc_no;
 ```
 
-**`ROUND`.** Округляйте один раз, после суммы. Если округлить каждую строку, итог разойдётся с проверкой.
+`GROUP BY` собирает строки в одну на группу, `SUM` складывает значения внутри группы, `AS` задаёт имя результата.
 
-```sql
-SELECT ROUND(SUM(l.qty * 640.0), 2) AS total_cost
-FROM customer_order_line l
-WHERE l.order_id = 1;
-```
+</details>
 
 **`WITH`.** Общее табличное выражение называет промежуточный результат. В расчёте стоимости так выбирают действующую цену на дату заказа.
 
-```sql
-WITH price_on_date AS (
-    SELECT p.item_id, p.amount
-    FROM price p
-    WHERE p.valid_from = (
-        SELECT MAX(p2.valid_from)
-        FROM price p2
-        WHERE p2.item_id = p.item_id
-          AND p2.valid_from <= '2027-03-15'
-    )
-)
-SELECT item_id, amount FROM price_on_date;
-```
-
-Почему нельзя соединить `price` и `specification_component` напрямую? У одного ресурса несколько цен, у одной спецификации несколько строк. Прямое соединение размножит строки: каждая строка состава получит каждую цену. Сначала оставьте одну действующую цену на ресурс, потом соединяйте.
-
-
-
-Формула читается так:
-
-```text
-количество в заказе / выпуск по спецификации × норма × коэффициент времени × цена
-```
-
-Для материала `time_norm` равно `1`, для операции это часы. Поэтому одна формула считает и материалы, и операции.
-
-### Шаг 1. Проверьте данные в базе
-
-Заказ, спецификация, состав и цены уже загружены в задании 2. Откройте phpMyAdmin, выберите `dkip2027_course` и выполните проверку:
-
-```sql
-SELECT o.doc_no, o.doc_date, l.qty, i.name
-FROM customer_order o
-JOIN customer_order_line l ON l.order_id = o.id
-JOIN item i ON i.id = l.product_id
-WHERE o.doc_no = 'V01-01';
-```
-
-В результате одна строка: заказ `V01-01`, дата `2027-03-15`, изделие «Фартук поварской», количество 12. Если строка пустая, вернитесь к заданию 2: без заказа и строки расчёт не построить.
-
-### Шаг 2. Соберите запрос
-
-Сначала выберите цену, действующую на дату заказа. Затем соедините заказ, строки, спецификацию, состав и цену. Формула:
-
-```text
-количество в заказе / выпуск по спецификации × норма × коэффициент времени × цена
-```
-
-Для материалов коэффициент времени равен `1`, для операций он равен часам. Итог округляется один раз, после суммы.
+<details class="hint">
+<summary>Шпаргалка: WITH</summary>
 
 ```sql
 WITH price_on_date AS (
-    SELECT p.item_id, p.amount
-    FROM price p
-    WHERE p.valid_from = (
-        SELECT MAX(p2.valid_from)
-        FROM price p2
-        WHERE p2.item_id = p.item_id
-          AND p2.valid_from <= '2027-03-15'
-    )
+  SELECT item_id, amount FROM price WHERE valid_from <= '2026-04-22'
 )
-SELECT o.doc_no,
-       ROUND(SUM(l.qty / s.output_qty * c.qty * c.time_norm * pd.amount), 2) AS total_cost
+SELECT * FROM price_on_date;
+```
+
+`WITH имя AS (...)` создаёт временный набор строк. Его используют, чтобы вынести выбор цены отдельно и не повторять подзапрос.
+
+</details>
+
+Итоговый запрос:
+
+```sql
+SELECT
+  o.doc_no,
+  ROUND(SUM(l.qty / s.output_qty
+    * CASE WHEN i.kind = 'operation' THEN c.time_norm ELSE c.qty END
+    * p.amount), 2) AS total_cost
 FROM customer_order o
 JOIN customer_order_line l ON l.order_id = o.id
 JOIN specification s ON s.product_id = l.product_id
 JOIN specification_component c ON c.specification_id = s.id
-JOIN price_on_date pd ON pd.item_id = c.item_id
+JOIN item i ON i.id = c.item_id
+JOIN price p ON p.item_id = c.item_id
+  AND p.valid_from = (
+    SELECT MAX(p2.valid_from)
+    FROM price p2
+    WHERE p2.item_id = c.item_id
+      AND p2.valid_from <= o.doc_date
+  )
 WHERE o.doc_no = 'V01-01'
 GROUP BY o.doc_no;
 ```
 
 <figure class="diagram">
-<img src="reports/screens/mysql/t3-cte.png" alt="Результат запроса стоимости заказа V01: 7680.00">
-<figcaption>Запрос с общим табличным выражением: одна строка V01-01 со стоимостью 7680.00.</figcaption>
+<img src="reports/screens/mysql/t3-total.png" alt="Итоговая стоимость заказа V01-01: 14374.28">
+<figcaption>Итог запроса: номер заказа и нормативная стоимость 14 374,28.</figcaption>
 </figure>
 
-Если соединить `price` и `specification_component` без подготовки, строки начнут размножаться: каждая строка состава получит несколько цен. Общее табличное выражение `price_on_date` оставляет одну действующую цену на ресурс.
+Проверьте строки расчёта:
 
-### Шаг 3. Проверьте результат
-
-<figure class="diagram">
-<img src="reports/screens/mysql/t3-total.png" alt="Итоговая стоимость заказа V01-01: 7680.00">
-<figcaption>Итоговая строка: номер заказа и стоимость 7680.00.</figcaption>
-</figure>
-
-Проверьте арифметику вручную:
-
-```text
-Материалы на единицу: 0,8 × 280 + 2 × 25 + 35 × 0,4 = 224 + 50 + 14 = 288
-Операции на единицу: 0,12 × 600 + 0,35 × 800 = 72 + 280 = 352
-Стоимость единицы: 288 + 352 = 640
-Заказ на 12 единиц: 640 × 12 = 7680
+```sql
+SELECT
+  i.name,
+  i.kind,
+  c.qty,
+  c.time_norm,
+  p.amount,
+  ROUND(l.qty / s.output_qty
+    * CASE WHEN i.kind = 'operation' THEN c.time_norm ELSE c.qty END
+    * p.amount, 2) AS line_cost
+FROM customer_order o
+JOIN customer_order_line l ON l.order_id = o.id
+JOIN specification s ON s.product_id = l.product_id
+JOIN specification_component c ON c.specification_id = s.id
+JOIN item i ON i.id = c.item_id
+JOIN price p ON p.item_id = c.item_id
+  AND p.valid_from = (
+    SELECT MAX(p2.valid_from)
+    FROM price p2
+    WHERE p2.item_id = c.item_id
+      AND p2.valid_from <= o.doc_date
+  )
+WHERE o.doc_no = 'V01-01'
+ORDER BY i.kind, i.id;
 ```
 
-Если получилось 15360, строки удвоились из-за соединения. Если получилось 3456 или 4224, в сумму попала только одна часть. Если получилось 7680 без копеек, проверьте, что `ROUND` стоит после `SUM`, а не внутри каждого слагаемого.
+<figure class="diagram">
+<img src="reports/screens/mysql/t3-detail.png" alt="Восемь строк расчёта стоимости V01 с вкладом каждого ресурса">
+<figcaption>Строки расчёта: материалы и операции с нормой, ценой и вкладом. Сумма равна 14 374,28.</figcaption>
+</figure>
 
-### Шаг 4. Проверьте на другом количестве
-
-Измените количество в заказе на `10` и выполните запрос снова. Ожидаемый итог `6400`. Затем верните `12`. Такая проверка показывает, что формула зависит от количества, а не от случайного совпадения.
+Материалы дают `9974.28`, операции `4400.00`, вместе `14374.28`. Если получилось другое число, проверьте восемь строк состава и цену на дату `2026-04-22`, а не подгоняйте запрос.
 
 ## Проверка варианта V01
 
-| Артефакт | Что должно быть |
+| Файл | Что проверить |
 |---|---|
-| `V01_ER.drawio` | двенадцать таблиц, ключи, четырнадцать связей |
-| `V01_ER.pdf` | читаемая диаграмма на одном листе |
+| `V01_ER.drawio` | двенадцать таблиц, поля, первичные и внешние ключи |
+| `V01_ER.pdf` | статичная диаграмма на одном листе |
 | `V01_schema.sql` | двенадцать таблиц, `PRIMARY KEY`, `FOREIGN KEY`, `CHECK` |
-| `V01_import.sql` | загрузка заказчиков, заказа, спецификации и цен |
-| `V01_cost.sql` | запрос стоимости и результат `7680.00` |
+| `V01_import.sql` | заказчики, ресурсы, спецификация, цены и производственный заказ |
+| `V01_cost.sql` | запрос стоимости и результат `14374.28` |
 
-## Варианты V02 и V03
+Перед сдачей пройдите по каждому пункту. Если пункт не выполнен, вернитесь к шагу, а не к началу задания целиком. Так быстрее найти причину.
 
-Повторите три задания на другом наборе. Структура модели не меняется, поэтому диаграмму можно взять за основу и заменить только названия и числа. Сначала прочитайте бриф и файлы, потом переходите к работе.
+После проверки откройте [Задание 2. База данных и импорт](03-task-2-db.html) и [Задание 3. SQL-запрос стоимости](04-task-3-sql.html): там те же действия разобраны подробнее.
 
-### Бриф V02
+## Частые ошибки V01
 
-Пекарня «Колос» выпускает продукцию «Хлеб ржаной 500 г» по спецификациям. Магазин «Колос-1» заказал 40 ед. к 22.03.2027. Менеджер оформляет заказ, технолог задаёт состав, мастер планирует выпуск.
+**Код заказчика стал числом.** `000000004` превратился в `4`. Исправление: `VARCHAR(32)` и кавычки в `INSERT`.
 
-| Что известно | Значение |
-|---|---|
-| Заказ покупателя | `V02-01`, срок 22.03.2027 |
-| Производственный заказ | `V02-P01` |
-| Заказчик | Магазин «Колос-1», код `002000001` |
-| Количество | 40 ед. |
-| Процесс | замес, формование, выпечка, упаковка |
+**В JSON поле `addres`, в таблице `address`.** Имена не совпадают автоматически. Исправление: перечислить поля в `INSERT` явно.
 
-Нормы относятся к одной буханке. Время печи уже распределено на изделие, повторно делить его на партию не нужно. Коды заказчиков начинаются с `002`, поэтому их нельзя хранить целыми числами.
+**В заказе ИП Томилин, а в JSON его нет.** Добавьте его отдельной строкой. Не заменяйте заказчика на первого из JSON.
 
-### Бриф V03
+**Норма материала попала в `time_norm`.** Для материала заполняйте `qty`, для операции `time_norm`. Иначе запрос задания 3 умножит не то поле.
 
-Мастерская «Глина» выпускает продукцию «Кружка 300 мл» по спецификациям. Магазин «Глина-1» заказал 18 ед. к 22.03.2027. Менеджер оформляет заказ, технолог задаёт состав, мастер планирует выпуск.
+**Дата записана как `22.04.2026`.** MySQL ждёт `2026-04-22`.
 
-| Что известно | Значение |
-|---|---|
-| Заказ покупателя | `V03-01`, срок 22.03.2027 |
-| Производственный заказ | `V03-P01` |
-| Заказчик | Магазин «Глина-1», код `003000001` |
-| Количество | 18 ед. |
-| Процесс | формовка, сушка, глазурование, обжиг |
+**Цена взята самая новая.** Добавьте условие `p2.valid_from <= o.doc_date`, иначе будущая цена изменит итог.
 
-Глина и глазурь учитываются в килограммах. Технологическая выдержка без работы не входит в оплачиваемое время. Коды заказчиков начинаются с `003`.
+**В расчёт попала продажная цена.** `sale_price` и `discount` не участвуют в нормативной стоимости.
 
-### Сверьте результат
+## Чек-лист перед сдачей
 
-После расчёта сравните итоги с контрольными значениями. Материалы и операции считаются по тем же правилам, что в брифе V01.
-
-| Вариант | Материалы на единицу | Операции на единицу | Итог |
-|---|---|---|---|
-| V02, 40 единиц | 32.80 | 34.00 | 2672.00 |
-| V03, 18 единиц | 122.50 | 435.00 | 10035.00 |
-
-<details>
-<summary>Проверка расчёта V02</summary>
-
-```text
-Мука: 0,32 × 65 = 20,80
-Закваска: 0,08 × 100 = 8,00
-Пакет: 1 × 4 = 4,00
-Материалы: 32,80
-Замес: 0,04 × 500 = 20,00
-Выпечка: 0,02 × 700 = 14,00
-Операции: 34,00
-Стоимость единицы: 66,80
-Заказ: 66,80 × 40 = 2672,00
-```
-
-</details>
-
-<details>
-<summary>Проверка расчёта V03</summary>
-
-```text
-Глина: 0,45 × 120 = 54,00
-Глазурь: 0,03 × 950 = 28,50
-Коробка: 1 × 40 = 40,00
-Материалы: 122,50
-Формовка: 0,4 × 750 = 300,00
-Глазурование и обжиг: 0,15 × 900 = 135,00
-Операции: 435,00
-Стоимость единицы: 557,50
-Заказ: 557,50 × 18 = 10035,00
-```
-
-</details>
-
-## Чек-лист подготовки
-
-- Диаграмма содержит двенадцать таблиц, а не только шапки документов.
-- У каждой таблицы есть первичный ключ, у связующих таблиц ключ составной.
-- Каждый внешний ключ соединён линией с первичным ключом другой таблицы.
-- У каждой связи подписана кратность, связей многие ко многим без промежуточной таблицы нет.
-- В таблицах нет вычисляемых полей: стоимости, суммы строки и количества изделий.
-- Схема базы создаётся одним скриптом, ограничения `CHECK` и `FOREIGN KEY` включены.
-- Заказчики и документы импортированы, ведущие нули в кодах сохранены.
-- Запрос стоимости использует действующую цену и не удваивает строки.
-- Итог `7680.00` подтверждён ручным расчётом.
-- Исходник `.drawio`, PDF и SQL-скрипты сохранены в папке занятия.
-
-Дальше переходите к методичкам заданий 4, 5 и 6: приложение, API и документация собираются на той же модели данных.
+- База `dkip2027_course` создана в `utf8mb4_unicode_ci`.
+- Все двенадцать таблиц используют `InnoDB`.
+- У каждой таблицы есть первичный ключ.
+- Внешние ключи созданы и проверены запросом.
+- Коды заказчиков хранятся текстом.
+- Загружены шесть записей JSON, ИП Томилин и изготовитель.
+- Заказ, спецификация, состав, цены и производственный заказ загружены.
+- Даты записаны в формате `ГГГГ-ММ-ДД`.
+- Проверка с несуществующим заказчиком даёт ошибку 1452.
+- Выгрузка содержит структуру и данные.
+- База восстановлена в пустую копию.
+- Итог задания 3 равен `14374.28`.
+- Скриншоты показывают источник данных, таблицу и результат запроса.

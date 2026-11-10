@@ -527,6 +527,12 @@ html.modal-open { overflow: hidden; }
 :root[data-theme=dark] .quiz-actions button[data-answer]:hover, :root[data-theme=dark] .quiz-actions button.quiz-answer:hover { background: #262626; background-color: #262626; color: #fff; border-color: #262626; }
 :root[data-theme=dark] .gate-q { background: #1E1E1E; color: #FF6B00; }
 
+/* the whole-variant archive is the main action in a download block */
+.files a.zip { background: #121212; color: #fff; border-color: #121212; font-weight: 700; box-shadow: 4px 4px 0 rgba(0,0,0,.18); }
+.files a.zip::before { color: #fff; }
+.files a.zip:hover { background: #1D1D1D; color: #fff; border-color: #1D1D1D; box-shadow: 5px 5px 0 rgba(0,0,0,.22); }
+.files a.zip:active { transform: translate(2px,2px); box-shadow: 1px 1px 0 rgba(0,0,0,.12); }
+
 /* ---------- practical work checklist ---------- */
 .work-checklist { width: 100%; border-collapse: collapse; margin: 14px 0 4px; }
 .work-checklist th, .work-checklist td { border: 1px solid var(--rule); padding: 9px 10px; vertical-align: top; }
@@ -564,6 +570,24 @@ html.modal-open { overflow: hidden; }
 .variant-body .task-list { margin: 8px 0 0; padding-left: 20px; }
 .variant-body .task-list li { margin: 0 0 8px; }
 @media (max-width: 620px) { .variant-body { overflow-x: auto; } .variant-body table { min-width: 520px; } }
+
+/* ---------- schema slider: all CREATE TABLE examples ---------- */
+.schema-slider { margin: 18px 0 24px; border: 1px solid #d8d5cc; border-radius: 14px; background: #fff; color: #1a1916; overflow: hidden; }
+.schema-slider-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 14px; background: #f5f2ea; border-bottom: 1px solid #d8d5cc; }
+.schema-slider-bar strong { font: 700 14px/1.2 var(--font-display); color: #1a1916; }
+.schema-slider-actions { display: flex; align-items: center; gap: 8px; }
+.schema-slider-counter { min-width: 62px; text-align: center; font: 600 13px/1 var(--font-mono); color: #59544a; }
+.schema-btn { width: 34px; height: 34px; border: 1px solid #c9c4b8; border-radius: 8px; background: #fff; color: #1a1916; font: 700 18px/1 var(--font-mono); cursor: pointer; }
+.schema-btn:hover { background: #ece7dc; }
+.schema-track { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: thin; }
+.schema-slide { flex: 0 0 100%; min-width: 100%; box-sizing: border-box; padding: 16px 18px 18px; scroll-snap-align: start; }
+.schema-slide h4 { margin: 0 0 10px; font: 700 16px/1.3 var(--font-display); color: #1a1916; }
+.schema-slide h4 code, .schema-slide p code { color: #1a1916; background: #f1ede4; padding: 1px 4px; border-radius: 4px; }
+.schema-slide p { margin: 0 0 10px; font-size: 14px; line-height: 1.55; color: #3a372f; }
+.schema-slide pre { margin: 0; padding: 14px 16px; overflow-x: auto; border: 1px solid #ddd8cc; border-radius: 10px; background: #fbfaf6; color: #1a1916; font: 12.5px/1.5 var(--font-mono); }
+.schema-slide code { color: inherit; background: none; padding: 0; }
+.schema-slider:focus-within { outline: 2px solid #b9a97f; outline-offset: 2px; }
+@media (max-width: 620px) { .schema-slide { padding: 12px; } .schema-slider-bar { padding: 8px 10px; } }
 
 /* ---------- print / PDF export ---------- */
 @page { margin: 16mm; }
@@ -906,47 +930,47 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <span class="kn">from</span><span class="w"> </span><span class="nn">flask</span><span class="w"> </span><span class="kn">import</span> <span class="n">Flask</span><span class="p">,</span> <span class="n">jsonify</span><span class="p">,</span> <span class="n">request</span>
 
 <span class="n">app</span> <span class="o">=</span> <span class="n">Flask</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
-<span class="n">DB_PATH</span> <span class="o">=</span> <span class="s2">&quot;data/sklad.db&quot;</span>
+<span class="n">DB_PATH</span> <span class="o">=</span> <span class="s2">"data/sklad.db"</span>
 <span class="n">API_PORT</span> <span class="o">=</span> <span class="mi">8000</span>
-<span class="n">SECRET_KEY</span> <span class="o">=</span> <span class="s2">&quot;dev-secret&quot;</span>
+<span class="n">SECRET_KEY</span> <span class="o">=</span> <span class="s2">"dev-secret"</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">count_positions</span><span class="p">():</span>
     <span class="k">with</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">DB_PATH</span><span class="p">)</span> <span class="k">as</span> <span class="n">conn</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;SELECT COUNT(*) FROM positions&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">fetchone</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">"SELECT COUNT(*) FROM positions"</span><span class="p">)</span><span class="o">.</span><span class="n">fetchone</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
 
-<span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/api/health&quot;</span><span class="p">)</span>
+<span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"/api/health"</span><span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">health</span><span class="p">():</span>
-    <span class="k">return</span> <span class="n">jsonify</span><span class="p">({</span><span class="s2">&quot;status&quot;</span><span class="p">:</span> <span class="s2">&quot;ok&quot;</span><span class="p">,</span> <span class="s2">&quot;db&quot;</span><span class="p">:</span> <span class="n">DB_PATH</span><span class="p">,</span> <span class="s2">&quot;positions&quot;</span><span class="p">:</span> <span class="n">count_positions</span><span class="p">()})</span>
+    <span class="k">return</span> <span class="n">jsonify</span><span class="p">({</span><span class="s2">"status"</span><span class="p">:</span> <span class="s2">"ok"</span><span class="p">,</span> <span class="s2">"db"</span><span class="p">:</span> <span class="n">DB_PATH</span><span class="p">,</span> <span class="s2">"positions"</span><span class="p">:</span> <span class="n">count_positions</span><span class="p">()})</span>
 
-<span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/api/stock&quot;</span><span class="p">)</span>
+<span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"/api/stock"</span><span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">stock</span><span class="p">():</span>
-    <span class="n">limit</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;limit&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+    <span class="n">limit</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"limit"</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
     <span class="k">with</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">DB_PATH</span><span class="p">)</span> <span class="k">as</span> <span class="n">conn</span><span class="p">:</span>
         <span class="n">rows</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
-            <span class="s2">&quot;SELECT sku, qty FROM positions ORDER BY id LIMIT ?&quot;</span><span class="p">,</span> <span class="p">(</span><span class="n">limit</span><span class="p">,)</span>
+            <span class="s2">"SELECT sku, qty FROM positions ORDER BY id LIMIT ?"</span><span class="p">,</span> <span class="p">(</span><span class="n">limit</span><span class="p">,)</span>
         <span class="p">)</span><span class="o">.</span><span class="n">fetchall</span><span class="p">()</span>
-    <span class="k">return</span> <span class="n">jsonify</span><span class="p">({</span><span class="s2">&quot;total&quot;</span><span class="p">:</span> <span class="n">count_positions</span><span class="p">(),</span> <span class="s2">&quot;items&quot;</span><span class="p">:</span> <span class="p">[{</span><span class="s2">&quot;sku&quot;</span><span class="p">:</span> <span class="n">s</span><span class="p">,</span> <span class="s2">&quot;qty&quot;</span><span class="p">:</span> <span class="n">q</span><span class="p">}</span> <span class="k">for</span> <span class="n">s</span><span class="p">,</span> <span class="n">q</span> <span class="ow">in</span> <span class="n">rows</span><span class="p">]})</span>
+    <span class="k">return</span> <span class="n">jsonify</span><span class="p">({</span><span class="s2">"total"</span><span class="p">:</span> <span class="n">count_positions</span><span class="p">(),</span> <span class="s2">"items"</span><span class="p">:</span> <span class="p">[{</span><span class="s2">"sku"</span><span class="p">:</span> <span class="n">s</span><span class="p">,</span> <span class="s2">"qty"</span><span class="p">:</span> <span class="n">q</span><span class="p">}</span> <span class="k">for</span> <span class="n">s</span><span class="p">,</span> <span class="n">q</span> <span class="ow">in</span> <span class="n">rows</span><span class="p">]})</span>
 
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
-    <span class="n">app</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">host</span><span class="o">=</span><span class="s2">&quot;127.0.0.1&quot;</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="n">API_PORT</span><span class="p">)</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
+    <span class="n">app</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">host</span><span class="o">=</span><span class="s2">"127.0.0.1"</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="n">API_PORT</span><span class="p">)</span>
 </code></pre></div>
 
 <p>Создайте таблицу <code>positions</code> и заполните её 4800 строками. Скрипт ниже создаёт базу и не дублирует данные при повторном запуске.</p>
 <div class="codehilite" data-lang="python"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">sqlite3</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
 
-<span class="n">Path</span><span class="p">(</span><span class="s2">&quot;data&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="k">with</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s2">&quot;data/sklad.db&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">conn</span><span class="p">:</span>
-    <span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;CREATE TABLE IF NOT EXISTS positions (id INTEGER PRIMARY KEY, sku TEXT, qty INTEGER)&quot;</span><span class="p">)</span>
-    <span class="n">count</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;SELECT COUNT(*) FROM positions&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">fetchone</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">Path</span><span class="p">(</span><span class="s2">"data"</span><span class="p">)</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">with</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s2">"data/sklad.db"</span><span class="p">)</span> <span class="k">as</span> <span class="n">conn</span><span class="p">:</span>
+    <span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">"CREATE TABLE IF NOT EXISTS positions (id INTEGER PRIMARY KEY, sku TEXT, qty INTEGER)"</span><span class="p">)</span>
+    <span class="n">count</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">"SELECT COUNT(*) FROM positions"</span><span class="p">)</span><span class="o">.</span><span class="n">fetchone</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
     <span class="k">if</span> <span class="n">count</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
         <span class="n">conn</span><span class="o">.</span><span class="n">executemany</span><span class="p">(</span>
-            <span class="s2">&quot;INSERT INTO positions (sku, qty) VALUES (?, ?)&quot;</span><span class="p">,</span>
-            <span class="p">[(</span><span class="sa">f</span><span class="s2">&quot;SKU-</span><span class="si">{</span><span class="n">i</span><span class="si">:</span><span class="s2">05d</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="mi">10</span> <span class="o">+</span> <span class="n">i</span> <span class="o">%</span> <span class="mi">40</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4801</span><span class="p">)],</span>
+            <span class="s2">"INSERT INTO positions (sku, qty) VALUES (?, ?)"</span><span class="p">,</span>
+            <span class="p">[(</span><span class="sa">f</span><span class="s2">"SKU-</span><span class="si">{</span><span class="n">i</span><span class="si">:</span><span class="s2">05d</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span> <span class="mi">10</span> <span class="o">+</span> <span class="n">i</span> <span class="o">%</span> <span class="mi">40</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4801</span><span class="p">)],</span>
         <span class="p">)</span>
     <span class="n">conn</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
-    <span class="n">total</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;SELECT COUNT(*) FROM positions&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">fetchone</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;positions:&quot;</span><span class="p">,</span> <span class="n">total</span><span class="p">)</span>
+    <span class="n">total</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">"SELECT COUNT(*) FROM positions"</span><span class="p">)</span><span class="o">.</span><span class="n">fetchone</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"positions:"</span><span class="p">,</span> <span class="n">total</span><span class="p">)</span>
 </code></pre></div>
 
 <p>Запустите скрипт и убедитесь, что он печатает <code>positions: 4800</code>.</p>
@@ -988,20 +1012,20 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <span class="k">def</span><span class="w"> </span><span class="nf">env</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">default</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
     <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">default</span><span class="p">)</span>
 
-<span class="n">DB_PATH</span> <span class="o">=</span> <span class="n">env</span><span class="p">(</span><span class="s2">&quot;SKLAD_DB_PATH&quot;</span><span class="p">,</span> <span class="s2">&quot;data/sklad.db&quot;</span><span class="p">)</span>
+<span class="n">DB_PATH</span> <span class="o">=</span> <span class="n">env</span><span class="p">(</span><span class="s2">"SKLAD_DB_PATH"</span><span class="p">,</span> <span class="s2">"data/sklad.db"</span><span class="p">)</span>
 </code></pre></div>
 
 <p>Проверьте значение по умолчанию. Перейдите в каталог <code>src</code>, чтобы пакет был виден интерпретатору:</p>
 <div class="codehilite" data-lang="text"><pre><span></span><code>cd src
-python -c &quot;from sklad_plus.config import DB_PATH; print(DB_PATH)&quot;
+python -c "from sklad_plus.config import DB_PATH; print(DB_PATH)"
 </code></pre></div>
 
 <div class="codehilite" data-lang="text"><pre><span></span><code>data/sklad.db
 </code></pre></div>
 
 <p>Теперь задайте переменную окружения и повторите команду. В PowerShell это выглядит так:</p>
-<div class="codehilite" data-lang="text"><pre><span></span><code>$env:SKLAD_DB_PATH = &quot;data/sklad-prod.db&quot;
-python -c &quot;from sklad_plus.config import DB_PATH; print(DB_PATH)&quot;
+<div class="codehilite" data-lang="text"><pre><span></span><code>$env:SKLAD_DB_PATH = "data/sklad-prod.db"
+python -c "from sklad_plus.config import DB_PATH; print(DB_PATH)"
 </code></pre></div>
 
 <div class="codehilite" data-lang="text"><pre><span></span><code>data/sklad-prod.db
@@ -1078,7 +1102,7 @@ dist/
 <div class="codehilite" data-lang="text"><pre><span></span><code>python -m pip wheel . --no-deps -w dist
 </code></pre></div>
 
-<div class="codehilite" data-lang="text"><pre><span></span><code>Building wheel for sklad-plus (pyproject.toml): finished with status &#39;done&#39;
+<div class="codehilite" data-lang="text"><pre><span></span><code>Building wheel for sklad-plus (pyproject.toml): finished with status 'done'
 Created wheel for sklad-plus: filename=sklad_plus-1.0.0-py3-none-any.whl
 Successfully built sklad-plus
 </code></pre></div>
@@ -1148,7 +1172,7 @@ chmod 600 .env
 <div class="codehilite" data-lang="text"><pre><span></span><code>.venv/bin/python -m sklad_plus.api
 </code></pre></div>
 
-<div class="codehilite" data-lang="text"><pre><span></span><code> * Serving Flask app &#39;sklad_plus.api&#39;
+<div class="codehilite" data-lang="text"><pre><span></span><code> * Serving Flask app 'sklad_plus.api'
  * Debug mode: off
  * Running on http://127.0.0.1:8080
 </code></pre></div>
@@ -1171,14 +1195,14 @@ LISTEN 0      128       127.0.0.1:8080       0.0.0.0:*
 Content-Type: application/json
 Content-Length: 54
 
-{&quot;db&quot;:&quot;data/sklad.db&quot;,&quot;positions&quot;:4800,&quot;status&quot;:&quot;ok&quot;}
+{"db":"data/sklad.db","positions":4800,"status":"ok"}
 </code></pre></div>
 
 <p>Проверьте чтение данных:</p>
-<div class="codehilite" data-lang="text"><pre><span></span><code>curl -s &quot;http://127.0.0.1:8080/api/stock?limit=2&quot;
+<div class="codehilite" data-lang="text"><pre><span></span><code>curl -s "http://127.0.0.1:8080/api/stock?limit=2"
 </code></pre></div>
 
-<div class="codehilite" data-lang="text"><pre><span></span><code>{&quot;items&quot;:[{&quot;qty&quot;:11,&quot;sku&quot;:&quot;SKU-00001&quot;},{&quot;qty&quot;:12,&quot;sku&quot;:&quot;SKU-00002&quot;}],&quot;total&quot;:4800}
+<div class="codehilite" data-lang="text"><pre><span></span><code>{"items":[{"qty":11,"sku":"SKU-00001"},{"qty":12,"sku":"SKU-00002"}],"total":4800}
 </code></pre></div>
 
 <p>Заполните таблицу проверок: что проверили, какой результат ждали, что получили. Первая строка дана как образец.</p>
@@ -1398,6 +1422,40 @@ Content-Length: 54
       var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
       window.scrollTo({top: 0, behavior: reduce ? 'auto' : 'smooth'});
     });
+  });
+})();
+
+(function(){
+  document.querySelectorAll('[data-slider]').forEach(function(slider){
+    var track = slider.querySelector('[data-slider-track]');
+    var slides = track ? Array.prototype.slice.call(track.children) : [];
+    var counter = slider.querySelector('[data-slider-counter]');
+    var prev = slider.querySelector('[data-slider-prev]');
+    var next = slider.querySelector('[data-slider-next]');
+    if(!track || slides.length < 2) return;
+    function current(){
+      var best = 0, dist = Infinity;
+      slides.forEach(function(slide, i){
+        var d = Math.abs(slide.offsetLeft - track.scrollLeft);
+        if(d < dist){ dist = d; best = i; }
+      });
+      return best;
+    }
+    function update(){
+      if(counter) counter.textContent = (current() + 1) + ' / ' + slides.length;
+    }
+    function go(delta){
+      var i = Math.max(0, Math.min(slides.length - 1, current() + delta));
+      var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      track.scrollTo({left: slides[i].offsetLeft, behavior: reduce ? 'auto' : 'smooth'});
+    }
+    if(prev) prev.addEventListener('click', function(){ go(-1); });
+    if(next) next.addEventListener('click', function(){ go(1); });
+    track.addEventListener('scroll', function(){
+      clearTimeout(track._sliderTimer);
+      track._sliderTimer = setTimeout(update, 80);
+    }, {passive: true});
+    update();
   });
 })();
 (function(){

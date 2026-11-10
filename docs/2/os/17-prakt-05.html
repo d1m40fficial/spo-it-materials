@@ -527,6 +527,12 @@ html.modal-open { overflow: hidden; }
 :root[data-theme=dark] .quiz-actions button[data-answer]:hover, :root[data-theme=dark] .quiz-actions button.quiz-answer:hover { background: #262626; background-color: #262626; color: #fff; border-color: #262626; }
 :root[data-theme=dark] .gate-q { background: #1E1E1E; color: #FF6B00; }
 
+/* the whole-variant archive is the main action in a download block */
+.files a.zip { background: #121212; color: #fff; border-color: #121212; font-weight: 700; box-shadow: 4px 4px 0 rgba(0,0,0,.18); }
+.files a.zip::before { color: #fff; }
+.files a.zip:hover { background: #1D1D1D; color: #fff; border-color: #1D1D1D; box-shadow: 5px 5px 0 rgba(0,0,0,.22); }
+.files a.zip:active { transform: translate(2px,2px); box-shadow: 1px 1px 0 rgba(0,0,0,.12); }
+
 /* ---------- practical work checklist ---------- */
 .work-checklist { width: 100%; border-collapse: collapse; margin: 14px 0 4px; }
 .work-checklist th, .work-checklist td { border: 1px solid var(--rule); padding: 9px 10px; vertical-align: top; }
@@ -564,6 +570,24 @@ html.modal-open { overflow: hidden; }
 .variant-body .task-list { margin: 8px 0 0; padding-left: 20px; }
 .variant-body .task-list li { margin: 0 0 8px; }
 @media (max-width: 620px) { .variant-body { overflow-x: auto; } .variant-body table { min-width: 520px; } }
+
+/* ---------- schema slider: all CREATE TABLE examples ---------- */
+.schema-slider { margin: 18px 0 24px; border: 1px solid #d8d5cc; border-radius: 14px; background: #fff; color: #1a1916; overflow: hidden; }
+.schema-slider-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 14px; background: #f5f2ea; border-bottom: 1px solid #d8d5cc; }
+.schema-slider-bar strong { font: 700 14px/1.2 var(--font-display); color: #1a1916; }
+.schema-slider-actions { display: flex; align-items: center; gap: 8px; }
+.schema-slider-counter { min-width: 62px; text-align: center; font: 600 13px/1 var(--font-mono); color: #59544a; }
+.schema-btn { width: 34px; height: 34px; border: 1px solid #c9c4b8; border-radius: 8px; background: #fff; color: #1a1916; font: 700 18px/1 var(--font-mono); cursor: pointer; }
+.schema-btn:hover { background: #ece7dc; }
+.schema-track { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: thin; }
+.schema-slide { flex: 0 0 100%; min-width: 100%; box-sizing: border-box; padding: 16px 18px 18px; scroll-snap-align: start; }
+.schema-slide h4 { margin: 0 0 10px; font: 700 16px/1.3 var(--font-display); color: #1a1916; }
+.schema-slide h4 code, .schema-slide p code { color: #1a1916; background: #f1ede4; padding: 1px 4px; border-radius: 4px; }
+.schema-slide p { margin: 0 0 10px; font-size: 14px; line-height: 1.55; color: #3a372f; }
+.schema-slide pre { margin: 0; padding: 14px 16px; overflow-x: auto; border: 1px solid #ddd8cc; border-radius: 10px; background: #fbfaf6; color: #1a1916; font: 12.5px/1.5 var(--font-mono); }
+.schema-slide code { color: inherit; background: none; padding: 0; }
+.schema-slider:focus-within { outline: 2px solid #b9a97f; outline-offset: 2px; }
+@media (max-width: 620px) { .schema-slide { padding: 12px; } .schema-slider-bar { padding: 8px 10px; } }
 
 /* ---------- print / PDF export ---------- */
 @page { margin: 16mm; }
@@ -958,7 +982,7 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <p>Если командлет сообщает, что служба не найдена, запишите это как факт: в разных редакциях Windows набор служб отличается. Не выдумывайте состояние.</p>
 <h3>Шаг 3. Прочитать зависимости и учётную запись</h3>
 <p>Свойства <code>Get-Service</code> не показывают путь и учётную запись. Их даёт объект <code>Win32_Service</code>.</p>
-<div class="codehilite" data-lang="powershell"><pre><span></span><code><span class="nb">Get-CimInstance</span> <span class="n">Win32_Service</span> <span class="n">-Filter</span> <span class="s2">&quot;Name=&#39;Spooler&#39;&quot;</span> <span class="p">|</span>
+<div class="codehilite" data-lang="powershell"><pre><span></span><code><span class="nb">Get-CimInstance</span> <span class="n">Win32_Service</span> <span class="n">-Filter</span> <span class="s2">"Name='Spooler'"</span> <span class="p">|</span>
   <span class="nb">Select-Object</span> <span class="n">Name</span><span class="p">,</span><span class="n">State</span><span class="p">,</span><span class="n">StartMode</span><span class="p">,</span><span class="n">StartName</span><span class="p">,</span><span class="n">PathName</span>
 <span class="nb">Get-Service</span> <span class="n">-Name</span> <span class="n">Spooler</span> <span class="n">-RequiredServices</span>
 <span class="nb">Get-Service</span> <span class="n">-Name</span> <span class="n">Spooler</span> <span class="n">-DependentServices</span>
@@ -1050,48 +1074,48 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <p><code>Location</code> показывает источник записи. Если в списке есть программы, о которых вы не знаете, не удаляйте их сразу: сначала выясните назначение. В учебной машине список короткий, но привычка проверять источник важнее количества записей.</p>
 <p>Дополнительно посмотрите задания с триггером входа.</p>
 <div class="codehilite" data-lang="powershell"><pre><span></span><code><span class="nb">Get-ScheduledTask</span> <span class="p">|</span> <span class="nb">Where-Object</span> <span class="p">{</span>
-  <span class="nv">$_</span><span class="p">.</span><span class="n">Triggers</span><span class="p">.</span><span class="n">CimClass</span><span class="p">.</span><span class="n">CimClassName</span> <span class="o">-contains</span> <span class="s1">&#39;MSFT_TaskLogonTrigger&#39;</span>
+  <span class="nv">$_</span><span class="p">.</span><span class="n">Triggers</span><span class="p">.</span><span class="n">CimClass</span><span class="p">.</span><span class="n">CimClassName</span> <span class="o">-contains</span> <span class="s1">'MSFT_TaskLogonTrigger'</span>
 <span class="p">}</span> <span class="p">|</span> <span class="nb">Select-Object</span> <span class="n">TaskName</span><span class="p">,</span><span class="n">State</span>
 </code></pre></div>
 
 <p><code>Get-ScheduledTask</code> возвращает объекты заданий, <code>Triggers</code> содержит триггеры. Фильтр оставляет только задания, которые срабатывают при входе пользователя. Запишите в отчёт не менее двух найденных источников автозагрузки или объясните, почему список пуст.</p>
 <h3>Шаг 7. Создать сценарий проверки</h3>
 <p>Создайте в домашнем каталоге папки <code>os-lab\bin</code> и <code>os-lab\logs</code>. Сценарий будет проверять состояние службы печати и дописывать строку в журнал.</p>
-<div class="codehilite" data-lang="powershell"><pre><span></span><code><span class="nv">$base</span> <span class="p">=</span> <span class="nb">Join-Path</span> <span class="nv">$env:USERPROFILE</span> <span class="s1">&#39;os-lab&#39;</span>
-<span class="nb">New-Item</span> <span class="n">-ItemType</span> <span class="n">Directory</span> <span class="n">-Force</span> <span class="n">-Path</span> <span class="p">(</span><span class="nb">Join-Path</span> <span class="nv">$base</span> <span class="s1">&#39;bin&#39;</span><span class="p">),(</span><span class="nb">Join-Path</span> <span class="nv">$base</span> <span class="s1">&#39;logs&#39;</span><span class="p">)</span> <span class="p">|</span> <span class="nb">Out-Null</span>
-<span class="nv">$script</span> <span class="p">=</span> <span class="nb">Join-Path</span> <span class="nv">$base</span> <span class="s1">&#39;bin\heartbeat.ps1&#39;</span>
-<span class="sh">@&#39;</span>
-<span class="sh">$logDir = Join-Path $env:USERPROFILE &#39;os-lab\logs&#39;</span>
+<div class="codehilite" data-lang="powershell"><pre><span></span><code><span class="nv">$base</span> <span class="p">=</span> <span class="nb">Join-Path</span> <span class="nv">$env:USERPROFILE</span> <span class="s1">'os-lab'</span>
+<span class="nb">New-Item</span> <span class="n">-ItemType</span> <span class="n">Directory</span> <span class="n">-Force</span> <span class="n">-Path</span> <span class="p">(</span><span class="nb">Join-Path</span> <span class="nv">$base</span> <span class="s1">'bin'</span><span class="p">),(</span><span class="nb">Join-Path</span> <span class="nv">$base</span> <span class="s1">'logs'</span><span class="p">)</span> <span class="p">|</span> <span class="nb">Out-Null</span>
+<span class="nv">$script</span> <span class="p">=</span> <span class="nb">Join-Path</span> <span class="nv">$base</span> <span class="s1">'bin\heartbeat.ps1'</span>
+<span class="sh">@'</span>
+<span class="sh">$logDir = Join-Path $env:USERPROFILE 'os-lab\logs'</span>
 <span class="sh">New-Item -ItemType Directory -Force -Path $logDir | Out-Null</span>
 <span class="sh">$state = (Get-Service -Name Spooler).Status</span>
-<span class="sh">$line = &#39;{0} Spooler: {1}&#39; -f (Get-Date -Format &#39;yyyy-MM-dd HH:mm:ss&#39;), $state</span>
-<span class="sh">Add-Content -Path (Join-Path $logDir &#39;heartbeat.log&#39;) -Value $line -Encoding UTF8</span>
-<span class="sh">&#39;@</span> <span class="p">|</span> <span class="nb">Set-Content</span> <span class="n">-Path</span> <span class="nv">$script</span> <span class="n">-Encoding</span> <span class="n">UTF8</span>
+<span class="sh">$line = '{0} Spooler: {1}' -f (Get-Date -Format 'yyyy-MM-dd HH:mm:ss'), $state</span>
+<span class="sh">Add-Content -Path (Join-Path $logDir 'heartbeat.log') -Value $line -Encoding UTF8</span>
+<span class="sh">'@</span> <span class="p">|</span> <span class="nb">Set-Content</span> <span class="n">-Path</span> <span class="nv">$script</span> <span class="n">-Encoding</span> <span class="n">UTF8</span>
 </code></pre></div>
 
 <p>Разберите сценарий по строкам. <code>Join-Path</code> собирает путь без ручного склеивания, <code>New-Item -Force</code> не считает ошибкой существующий каталог, <code>Get-Service</code> читает состояние, <code>Add-Content</code> дописывает строку. Запустите сценарий вручную и проверьте журнал.</p>
 <div class="codehilite" data-lang="powershell"><pre><span></span><code><span class="p">&amp;</span> <span class="nv">$script</span>
-<span class="nb">Get-Content</span> <span class="p">(</span><span class="nb">Join-Path</span> <span class="nv">$env:USERPROFILE</span> <span class="s1">&#39;os-lab\logs\heartbeat.log&#39;</span><span class="p">)</span>
+<span class="nb">Get-Content</span> <span class="p">(</span><span class="nb">Join-Path</span> <span class="nv">$env:USERPROFILE</span> <span class="s1">'os-lab\logs\heartbeat.log'</span><span class="p">)</span>
 </code></pre></div>
 
 <p>Если в журнале появилась строка с датой и состоянием, сценарий готов к запуску по расписанию. Если появилась ошибка, прочитайте её и исправьте причину до следующего шага.</p>
 <h3>Шаг 8. Создать задание по расписанию</h3>
 <p>Создайте задание, которое запускает сценарий один раз через небольшой интервал. Сначала подготовьте действие и триггер, затем зарегистрируйте задание.</p>
-<div class="codehilite" data-lang="powershell"><pre><span></span><code><span class="nv">$script</span> <span class="p">=</span> <span class="nb">Join-Path</span> <span class="nv">$env:USERPROFILE</span> <span class="s1">&#39;os-lab\bin\heartbeat.ps1&#39;</span>
-<span class="nv">$action</span> <span class="p">=</span> <span class="nb">New-ScheduledTaskAction</span> <span class="n">-Execute</span> <span class="s1">&#39;powershell.exe&#39;</span> <span class="p">`</span>
-  <span class="n">-Argument</span> <span class="s2">&quot;-NoProfile -WindowStyle Hidden -File </span><span class="se">`&quot;</span><span class="s2">$script</span><span class="se">`&quot;</span><span class="s2">&quot;</span>
+<div class="codehilite" data-lang="powershell"><pre><span></span><code><span class="nv">$script</span> <span class="p">=</span> <span class="nb">Join-Path</span> <span class="nv">$env:USERPROFILE</span> <span class="s1">'os-lab\bin\heartbeat.ps1'</span>
+<span class="nv">$action</span> <span class="p">=</span> <span class="nb">New-ScheduledTaskAction</span> <span class="n">-Execute</span> <span class="s1">'powershell.exe'</span> <span class="p">`</span>
+  <span class="n">-Argument</span> <span class="s2">"-NoProfile -WindowStyle Hidden -File </span><span class="se">`"</span><span class="s2">$script</span><span class="se">`"</span><span class="s2">"</span>
 <span class="nv">$trigger</span> <span class="p">=</span> <span class="nb">New-ScheduledTaskTrigger</span> <span class="n">-Once</span> <span class="n">-At</span> <span class="p">(</span><span class="nb">Get-Date</span><span class="p">).</span><span class="n">AddMinutes</span><span class="p">(</span><span class="n">2</span><span class="p">)</span>
-<span class="nb">Register-ScheduledTask</span> <span class="n">-TaskName</span> <span class="s1">&#39;OSLab-Heartbeat&#39;</span> <span class="n">-Action</span> <span class="nv">$action</span> <span class="n">-Trigger</span> <span class="nv">$trigger</span> <span class="p">`</span>
-  <span class="n">-Description</span> <span class="s1">&#39;Проверка службы печати на учебном стенде&#39;</span> <span class="n">-Force</span>
+<span class="nb">Register-ScheduledTask</span> <span class="n">-TaskName</span> <span class="s1">'OSLab-Heartbeat'</span> <span class="n">-Action</span> <span class="nv">$action</span> <span class="n">-Trigger</span> <span class="nv">$trigger</span> <span class="p">`</span>
+  <span class="n">-Description</span> <span class="s1">'Проверка службы печати на учебном стенде'</span> <span class="n">-Force</span>
 </code></pre></div>
 
 <p><code>New-ScheduledTaskAction</code> описывает программу и аргументы. <code>-Execute 'powershell.exe'</code> запускает PowerShell, <code>-File</code> передаёт путь к сценарию. Вложенные кавычки вокруг пути нужны, потому что имя пользователя может содержать пробел. <code>New-ScheduledTaskTrigger -Once -At</code> задаёт однократный запуск.</p>
 <p>Проверьте задание сразу после регистрации.</p>
-<div class="codehilite" data-lang="powershell"><pre><span></span><code><span class="nb">Get-ScheduledTask</span> <span class="n">-TaskName</span> <span class="s1">&#39;OSLab-Heartbeat&#39;</span> <span class="p">|</span> <span class="nb">Select-Object</span> <span class="n">TaskName</span><span class="p">,</span><span class="n">State</span>
-<span class="nb">Get-ScheduledTaskInfo</span> <span class="n">-TaskName</span> <span class="s1">&#39;OSLab-Heartbeat&#39;</span>
-<span class="nb">Start-ScheduledTask</span> <span class="n">-TaskName</span> <span class="s1">&#39;OSLab-Heartbeat&#39;</span>
+<div class="codehilite" data-lang="powershell"><pre><span></span><code><span class="nb">Get-ScheduledTask</span> <span class="n">-TaskName</span> <span class="s1">'OSLab-Heartbeat'</span> <span class="p">|</span> <span class="nb">Select-Object</span> <span class="n">TaskName</span><span class="p">,</span><span class="n">State</span>
+<span class="nb">Get-ScheduledTaskInfo</span> <span class="n">-TaskName</span> <span class="s1">'OSLab-Heartbeat'</span>
+<span class="nb">Start-ScheduledTask</span> <span class="n">-TaskName</span> <span class="s1">'OSLab-Heartbeat'</span>
 <span class="nb">Start-Sleep</span> <span class="n">-Seconds</span> <span class="n">5</span>
-<span class="nb">Get-ScheduledTaskInfo</span> <span class="n">-TaskName</span> <span class="s1">&#39;OSLab-Heartbeat&#39;</span>
+<span class="nb">Get-ScheduledTaskInfo</span> <span class="n">-TaskName</span> <span class="s1">'OSLab-Heartbeat'</span>
 </code></pre></div>
 
 <p><code>Start-ScheduledTask</code> запускает задание немедленно, не дожидаясь триггера. <code>Start-Sleep</code> даёт процессу время завершиться. <code>Get-ScheduledTaskInfo</code> показывает <code>LastRunTime</code>, <code>LastTaskResult</code> и следующее время запуска.</p>
@@ -1128,9 +1152,9 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 </table>
 <h3>Шаг 9. Проверить результат и журнал</h3>
 <p>Проверьте, что сценарий действительно выполнился, а не только что задание зарегистрировано. Сравните число строк в журнале до и после запуска.</p>
-<div class="codehilite" data-lang="powershell"><pre><span></span><code><span class="nv">$log</span> <span class="p">=</span> <span class="nb">Join-Path</span> <span class="nv">$env:USERPROFILE</span> <span class="s1">&#39;os-lab\logs\heartbeat.log&#39;</span>
+<div class="codehilite" data-lang="powershell"><pre><span></span><code><span class="nv">$log</span> <span class="p">=</span> <span class="nb">Join-Path</span> <span class="nv">$env:USERPROFILE</span> <span class="s1">'os-lab\logs\heartbeat.log'</span>
 <span class="p">(</span><span class="nb">Get-Content</span> <span class="nv">$log</span><span class="p">).</span><span class="n">Count</span>
-<span class="nb">Start-ScheduledTask</span> <span class="n">-TaskName</span> <span class="s1">&#39;OSLab-Heartbeat&#39;</span>
+<span class="nb">Start-ScheduledTask</span> <span class="n">-TaskName</span> <span class="s1">'OSLab-Heartbeat'</span>
 <span class="nb">Start-Sleep</span> <span class="n">-Seconds</span> <span class="n">5</span>
 <span class="p">(</span><span class="nb">Get-Content</span> <span class="nv">$log</span><span class="p">).</span><span class="n">Count</span>
 <span class="nb">Get-Content</span> <span class="nv">$log</span> <span class="n">-Tail</span> <span class="n">3</span>
@@ -1138,18 +1162,18 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 
 <p>Число строк должно увеличиться. Если оно не изменилось, проверьте <code>LastTaskResult</code> и аргументы действия. Код <code>0x1</code> обычно означает неверный путь или синтаксическую ошибку сценария. Код <code>0x41301</code> означает, что задание ещё выполняется, и проверку нужно повторить.</p>
 <p>Посмотрите журнал Планировщика, если он включён.</p>
-<div class="codehilite" data-lang="powershell"><pre><span></span><code><span class="nb">Get-WinEvent</span> <span class="n">-LogName</span> <span class="s1">&#39;Microsoft-Windows-TaskScheduler/Operational&#39;</span> <span class="n">-MaxEvents</span> <span class="n">10</span> <span class="n">-ErrorAction</span> <span class="n">SilentlyContinue</span> <span class="p">|</span>
+<div class="codehilite" data-lang="powershell"><pre><span></span><code><span class="nb">Get-WinEvent</span> <span class="n">-LogName</span> <span class="s1">'Microsoft-Windows-TaskScheduler/Operational'</span> <span class="n">-MaxEvents</span> <span class="n">10</span> <span class="n">-ErrorAction</span> <span class="n">SilentlyContinue</span> <span class="p">|</span>
   <span class="nb">Select-Object</span> <span class="n">TimeCreated</span><span class="p">,</span><span class="n">Id</span><span class="p">,</span><span class="n">LevelDisplayName</span><span class="p">,</span><span class="n">Message</span>
 </code></pre></div>
 
 <p>Если журнал отключён, командлет вернёт пустой результат. Это не ошибка работы: основной признак успеха это код результата и новая строка в файле.</p>
 <h3>Шаг 10. Вернуть стенд в исходное состояние</h3>
 <p>Удалите учебное задание и восстановите тип запуска службы, который был до работы. Если до работы <code>Spooler</code> был в состоянии <code>Stopped</code>, оставьте его остановленным.</p>
-<div class="codehilite" data-lang="powershell"><pre><span></span><code><span class="nb">Unregister-ScheduledTask</span> <span class="n">-TaskName</span> <span class="s1">&#39;OSLab-Heartbeat&#39;</span> <span class="n">-Confirm</span><span class="p">:</span><span class="nv">$false</span> <span class="n">-ErrorAction</span> <span class="n">SilentlyContinue</span>
+<div class="codehilite" data-lang="powershell"><pre><span></span><code><span class="nb">Unregister-ScheduledTask</span> <span class="n">-TaskName</span> <span class="s1">'OSLab-Heartbeat'</span> <span class="n">-Confirm</span><span class="p">:</span><span class="nv">$false</span> <span class="n">-ErrorAction</span> <span class="n">SilentlyContinue</span>
 <span class="nb">Set-Service</span> <span class="n">-Name</span> <span class="n">Spooler</span> <span class="n">-StartupType</span> <span class="n">Automatic</span>
 <span class="nb">Start-Service</span> <span class="n">-Name</span> <span class="n">Spooler</span>
 <span class="nb">Get-Service</span> <span class="n">-Name</span> <span class="n">Spooler</span> <span class="p">|</span> <span class="nb">Select-Object</span> <span class="n">Name</span><span class="p">,</span><span class="n">Status</span><span class="p">,</span><span class="n">StartType</span>
-<span class="nb">Get-ScheduledTask</span> <span class="n">-TaskName</span> <span class="s1">&#39;OSLab-Heartbeat&#39;</span> <span class="n">-ErrorAction</span> <span class="n">SilentlyContinue</span>
+<span class="nb">Get-ScheduledTask</span> <span class="n">-TaskName</span> <span class="s1">'OSLab-Heartbeat'</span> <span class="n">-ErrorAction</span> <span class="n">SilentlyContinue</span>
 </code></pre></div>
 
 <p><code>Unregister-ScheduledTask</code> удаляет задание, <code>-Confirm:$false</code> отключает запрос подтверждения. Последняя команда должна вернуть пустой результат: задания с таким именем больше нет.</p>
@@ -1250,6 +1274,40 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
       var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
       window.scrollTo({top: 0, behavior: reduce ? 'auto' : 'smooth'});
     });
+  });
+})();
+
+(function(){
+  document.querySelectorAll('[data-slider]').forEach(function(slider){
+    var track = slider.querySelector('[data-slider-track]');
+    var slides = track ? Array.prototype.slice.call(track.children) : [];
+    var counter = slider.querySelector('[data-slider-counter]');
+    var prev = slider.querySelector('[data-slider-prev]');
+    var next = slider.querySelector('[data-slider-next]');
+    if(!track || slides.length < 2) return;
+    function current(){
+      var best = 0, dist = Infinity;
+      slides.forEach(function(slide, i){
+        var d = Math.abs(slide.offsetLeft - track.scrollLeft);
+        if(d < dist){ dist = d; best = i; }
+      });
+      return best;
+    }
+    function update(){
+      if(counter) counter.textContent = (current() + 1) + ' / ' + slides.length;
+    }
+    function go(delta){
+      var i = Math.max(0, Math.min(slides.length - 1, current() + delta));
+      var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      track.scrollTo({left: slides[i].offsetLeft, behavior: reduce ? 'auto' : 'smooth'});
+    }
+    if(prev) prev.addEventListener('click', function(){ go(-1); });
+    if(next) next.addEventListener('click', function(){ go(1); });
+    track.addEventListener('scroll', function(){
+      clearTimeout(track._sliderTimer);
+      track._sliderTimer = setTimeout(update, 80);
+    }, {passive: true});
+    update();
   });
 })();
 (function(){

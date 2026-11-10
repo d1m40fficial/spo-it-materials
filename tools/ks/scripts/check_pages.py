@@ -27,7 +27,7 @@ except ImportError:  # pragma: no cover
 
 OVERFLOW_JS = """() => { const W = document.documentElement.clientWidth, out = [];
   document.querySelectorAll('main *').forEach(el => {
-    if (el.closest('pre') || el.closest('table') || el.closest('iframe')) return;
+    if (el.closest('pre') || el.closest('table') || el.closest('iframe') || el.closest('[data-slider-track]')) return;
     const r = el.getBoundingClientRect();
     if (r.right > W + 1 && r.width > 0) out.push(el.tagName.toLowerCase() + (typeof el.className === 'string' && el.className ? '.' + el.className.split(' ')[0] : '') + ' "' + (el.textContent || '').trim().slice(0, 40) + '"'); });
   return out.slice(0, 5); }"""

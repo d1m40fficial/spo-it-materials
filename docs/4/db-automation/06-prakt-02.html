@@ -527,6 +527,12 @@ html.modal-open { overflow: hidden; }
 :root[data-theme=dark] .quiz-actions button[data-answer]:hover, :root[data-theme=dark] .quiz-actions button.quiz-answer:hover { background: #262626; background-color: #262626; color: #fff; border-color: #262626; }
 :root[data-theme=dark] .gate-q { background: #1E1E1E; color: #FF6B00; }
 
+/* the whole-variant archive is the main action in a download block */
+.files a.zip { background: #121212; color: #fff; border-color: #121212; font-weight: 700; box-shadow: 4px 4px 0 rgba(0,0,0,.18); }
+.files a.zip::before { color: #fff; }
+.files a.zip:hover { background: #1D1D1D; color: #fff; border-color: #1D1D1D; box-shadow: 5px 5px 0 rgba(0,0,0,.22); }
+.files a.zip:active { transform: translate(2px,2px); box-shadow: 1px 1px 0 rgba(0,0,0,.12); }
+
 /* ---------- practical work checklist ---------- */
 .work-checklist { width: 100%; border-collapse: collapse; margin: 14px 0 4px; }
 .work-checklist th, .work-checklist td { border: 1px solid var(--rule); padding: 9px 10px; vertical-align: top; }
@@ -564,6 +570,24 @@ html.modal-open { overflow: hidden; }
 .variant-body .task-list { margin: 8px 0 0; padding-left: 20px; }
 .variant-body .task-list li { margin: 0 0 8px; }
 @media (max-width: 620px) { .variant-body { overflow-x: auto; } .variant-body table { min-width: 520px; } }
+
+/* ---------- schema slider: all CREATE TABLE examples ---------- */
+.schema-slider { margin: 18px 0 24px; border: 1px solid #d8d5cc; border-radius: 14px; background: #fff; color: #1a1916; overflow: hidden; }
+.schema-slider-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 14px; background: #f5f2ea; border-bottom: 1px solid #d8d5cc; }
+.schema-slider-bar strong { font: 700 14px/1.2 var(--font-display); color: #1a1916; }
+.schema-slider-actions { display: flex; align-items: center; gap: 8px; }
+.schema-slider-counter { min-width: 62px; text-align: center; font: 600 13px/1 var(--font-mono); color: #59544a; }
+.schema-btn { width: 34px; height: 34px; border: 1px solid #c9c4b8; border-radius: 8px; background: #fff; color: #1a1916; font: 700 18px/1 var(--font-mono); cursor: pointer; }
+.schema-btn:hover { background: #ece7dc; }
+.schema-track { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: thin; }
+.schema-slide { flex: 0 0 100%; min-width: 100%; box-sizing: border-box; padding: 16px 18px 18px; scroll-snap-align: start; }
+.schema-slide h4 { margin: 0 0 10px; font: 700 16px/1.3 var(--font-display); color: #1a1916; }
+.schema-slide h4 code, .schema-slide p code { color: #1a1916; background: #f1ede4; padding: 1px 4px; border-radius: 4px; }
+.schema-slide p { margin: 0 0 10px; font-size: 14px; line-height: 1.55; color: #3a372f; }
+.schema-slide pre { margin: 0; padding: 14px 16px; overflow-x: auto; border: 1px solid #ddd8cc; border-radius: 10px; background: #fbfaf6; color: #1a1916; font: 12.5px/1.5 var(--font-mono); }
+.schema-slide code { color: inherit; background: none; padding: 0; }
+.schema-slider:focus-within { outline: 2px solid #b9a97f; outline-offset: 2px; }
+@media (max-width: 620px) { .schema-slide { padding: 12px; } .schema-slider-bar { padding: 8px 10px; } }
 
 /* ---------- print / PDF export ---------- */
 @page { margin: 16mm; }
@@ -862,57 +886,57 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <p><strong>Проверка</strong> идёт от имени проверяемой учётной записи. <code>root</code> обходит проверки привилегий, поэтому его результат ничего не говорит о правах приложения. <code>SHOW GRANTS FOR 'user'@'host'</code> показывает выданное, <code>SHOW GRANTS</code> в сеансе показывает действующее. Право передавать права дальше (<code>WITH GRANT OPTION</code>) не выдают никому: иначе учётная запись расширит доступ сама, и матрица перестанет что-либо доказывать.</p>
 <h2 id="ход-работы"><span class="num">04</span>Ход работы</h2>
 <h3>Шаг 1. Зафиксируйте исходное состояние</h3>
-<div class="codehilite" data-lang="sql"><pre><span></span><code><span class="k">SELECT</span><span class="w"> </span><span class="s1">&#39;Иванов ИС-41&#39;</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">student</span><span class="p">;</span>
+<div class="codehilite" data-lang="sql"><pre><span></span><code><span class="k">SELECT</span><span class="w"> </span><span class="s1">'Иванов ИС-41'</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">student</span><span class="p">;</span>
 <span class="k">SELECT</span><span class="w"> </span><span class="k">CURRENT_USER</span><span class="p">();</span>
 <span class="k">SELECT</span><span class="w"> </span><span class="k">user</span><span class="p">,</span><span class="w"> </span><span class="k">host</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">mysql</span><span class="p">.</span><span class="k">user</span><span class="w"> </span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="k">user</span><span class="p">,</span><span class="w"> </span><span class="k">host</span><span class="p">;</span>
-<span class="k">SHOW</span><span class="w"> </span><span class="n">GRANTS</span><span class="w"> </span><span class="k">FOR</span><span class="w"> </span><span class="s1">&#39;dean_app&#39;</span><span class="o">@</span><span class="s1">&#39;localhost&#39;</span><span class="p">;</span>
+<span class="k">SHOW</span><span class="w"> </span><span class="n">GRANTS</span><span class="w"> </span><span class="k">FOR</span><span class="w"> </span><span class="s1">'dean_app'</span><span class="o">@</span><span class="s1">'localhost'</span><span class="p">;</span>
 </code></pre></div>
 
 <p>Запишите, какие права есть у приложения после <a href="04-prakt-01.html" class="lesson-ref" target="_blank" rel="noopener" title="Откроется в новой вкладке. Прогресс текущего занятия не сбросится.">практики 1</a>: четыре операции на <code>dean.*</code> и ничего на другие базы.</p>
 <h3>Шаг 2. Создайте роли</h3>
-<div class="codehilite" data-lang="sql"><pre><span></span><code><span class="k">CREATE</span><span class="w"> </span><span class="k">ROLE</span><span class="w"> </span><span class="s1">&#39;dean_read&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;dean_write&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;student_read&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;auditor&#39;</span><span class="p">;</span>
-<span class="k">SHOW</span><span class="w"> </span><span class="n">GRANTS</span><span class="w"> </span><span class="k">FOR</span><span class="w"> </span><span class="s1">&#39;dean_read&#39;</span><span class="p">;</span>
+<div class="codehilite" data-lang="sql"><pre><span></span><code><span class="k">CREATE</span><span class="w"> </span><span class="k">ROLE</span><span class="w"> </span><span class="s1">'dean_read'</span><span class="p">,</span><span class="w"> </span><span class="s1">'dean_write'</span><span class="p">,</span><span class="w"> </span><span class="s1">'student_read'</span><span class="p">,</span><span class="w"> </span><span class="s1">'auditor'</span><span class="p">;</span>
+<span class="k">SHOW</span><span class="w"> </span><span class="n">GRANTS</span><span class="w"> </span><span class="k">FOR</span><span class="w"> </span><span class="s1">'dean_read'</span><span class="p">;</span>
 </code></pre></div>
 
 <p>Роль создаётся заблокированной: пароля у неё нет, войти под ней нельзя. Роль это тот же объект <code>mysql.user</code>, поэтому её видно в списке учётных записей, а её права читаются командой <code>SHOW GRANTS</code>.</p>
 <h3>Шаг 3. Выдайте привилегии ролям</h3>
-<div class="codehilite" data-lang="sql"><pre><span></span><code><span class="k">GRANT</span><span class="w"> </span><span class="k">SELECT</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">dean</span><span class="p">.</span><span class="o">*</span><span class="w"> </span><span class="k">TO</span><span class="w"> </span><span class="s1">&#39;dean_read&#39;</span><span class="p">;</span>
-<span class="k">GRANT</span><span class="w"> </span><span class="k">SELECT</span><span class="p">,</span><span class="w"> </span><span class="k">INSERT</span><span class="p">,</span><span class="w"> </span><span class="k">UPDATE</span><span class="p">,</span><span class="w"> </span><span class="k">DELETE</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">dean</span><span class="p">.</span><span class="o">*</span><span class="w"> </span><span class="k">TO</span><span class="w"> </span><span class="s1">&#39;dean_write&#39;</span><span class="p">;</span>
-<span class="k">GRANT</span><span class="w"> </span><span class="k">SELECT</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">dean</span><span class="p">.</span><span class="n">groups</span><span class="w"> </span><span class="k">TO</span><span class="w"> </span><span class="s1">&#39;student_read&#39;</span><span class="p">;</span>
-<span class="k">GRANT</span><span class="w"> </span><span class="k">SELECT</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">dean</span><span class="p">.</span><span class="n">courses</span><span class="w"> </span><span class="k">TO</span><span class="w"> </span><span class="s1">&#39;student_read&#39;</span><span class="p">;</span>
-<span class="k">GRANT</span><span class="w"> </span><span class="k">SELECT</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">dean</span><span class="p">.</span><span class="n">audit_log</span><span class="w"> </span><span class="k">TO</span><span class="w"> </span><span class="s1">&#39;auditor&#39;</span><span class="p">;</span>
-<span class="k">REVOKE</span><span class="w"> </span><span class="k">DELETE</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">dean</span><span class="p">.</span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="s1">&#39;dean_write&#39;</span><span class="p">;</span>
-<span class="k">SHOW</span><span class="w"> </span><span class="n">GRANTS</span><span class="w"> </span><span class="k">FOR</span><span class="w"> </span><span class="s1">&#39;dean_write&#39;</span><span class="p">;</span>
+<div class="codehilite" data-lang="sql"><pre><span></span><code><span class="k">GRANT</span><span class="w"> </span><span class="k">SELECT</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">dean</span><span class="p">.</span><span class="o">*</span><span class="w"> </span><span class="k">TO</span><span class="w"> </span><span class="s1">'dean_read'</span><span class="p">;</span>
+<span class="k">GRANT</span><span class="w"> </span><span class="k">SELECT</span><span class="p">,</span><span class="w"> </span><span class="k">INSERT</span><span class="p">,</span><span class="w"> </span><span class="k">UPDATE</span><span class="p">,</span><span class="w"> </span><span class="k">DELETE</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">dean</span><span class="p">.</span><span class="o">*</span><span class="w"> </span><span class="k">TO</span><span class="w"> </span><span class="s1">'dean_write'</span><span class="p">;</span>
+<span class="k">GRANT</span><span class="w"> </span><span class="k">SELECT</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">dean</span><span class="p">.</span><span class="n">groups</span><span class="w"> </span><span class="k">TO</span><span class="w"> </span><span class="s1">'student_read'</span><span class="p">;</span>
+<span class="k">GRANT</span><span class="w"> </span><span class="k">SELECT</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">dean</span><span class="p">.</span><span class="n">courses</span><span class="w"> </span><span class="k">TO</span><span class="w"> </span><span class="s1">'student_read'</span><span class="p">;</span>
+<span class="k">GRANT</span><span class="w"> </span><span class="k">SELECT</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">dean</span><span class="p">.</span><span class="n">audit_log</span><span class="w"> </span><span class="k">TO</span><span class="w"> </span><span class="s1">'auditor'</span><span class="p">;</span>
+<span class="k">REVOKE</span><span class="w"> </span><span class="k">DELETE</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">dean</span><span class="p">.</span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="s1">'dean_write'</span><span class="p">;</span>
+<span class="k">SHOW</span><span class="w"> </span><span class="n">GRANTS</span><span class="w"> </span><span class="k">FOR</span><span class="w"> </span><span class="s1">'dean_write'</span><span class="p">;</span>
 </code></pre></div>
 
 <p><code>REVOKE</code> стоит после общего <code>GRANT</code>: платежи нельзя удалять даже роли записи, исправление проводят обратной операцией, а не удалением строки. В выводе <code>SHOW GRANTS</code> у <code>dean_write</code> останутся <code>SELECT</code>, <code>INSERT</code> и <code>UPDATE</code>.</p>
 <p>Роль чтения студентов получает две таблицы поимённо. Можно было выдать <code>SELECT</code> на всю базу и отозвать лишнее, но точечная выдача точнее показывает замысел и не открывает новую таблицу сама по себе.</p>
 <h3>Шаг 4. Создайте учётные записи и выдайте роли</h3>
-<div class="codehilite" data-lang="sql"><pre><span></span><code><span class="k">CREATE</span><span class="w"> </span><span class="k">USER</span><span class="w"> </span><span class="s1">&#39;dean_reader&#39;</span><span class="o">@</span><span class="s1">&#39;localhost&#39;</span><span class="w"> </span><span class="n">IDENTIFIED</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="s1">&#39;Reader_2026&#39;</span><span class="p">;</span>
-<span class="k">CREATE</span><span class="w"> </span><span class="k">USER</span><span class="w"> </span><span class="s1">&#39;student_user&#39;</span><span class="o">@</span><span class="s1">&#39;localhost&#39;</span><span class="w"> </span><span class="n">IDENTIFIED</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="s1">&#39;Student_2026&#39;</span><span class="p">;</span>
-<span class="k">CREATE</span><span class="w"> </span><span class="k">USER</span><span class="w"> </span><span class="s1">&#39;audit_user&#39;</span><span class="o">@</span><span class="s1">&#39;localhost&#39;</span><span class="w"> </span><span class="n">IDENTIFIED</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="s1">&#39;Audit_2026&#39;</span><span class="p">;</span>
+<div class="codehilite" data-lang="sql"><pre><span></span><code><span class="k">CREATE</span><span class="w"> </span><span class="k">USER</span><span class="w"> </span><span class="s1">'dean_reader'</span><span class="o">@</span><span class="s1">'localhost'</span><span class="w"> </span><span class="n">IDENTIFIED</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="s1">'Reader_2026'</span><span class="p">;</span>
+<span class="k">CREATE</span><span class="w"> </span><span class="k">USER</span><span class="w"> </span><span class="s1">'student_user'</span><span class="o">@</span><span class="s1">'localhost'</span><span class="w"> </span><span class="n">IDENTIFIED</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="s1">'Student_2026'</span><span class="p">;</span>
+<span class="k">CREATE</span><span class="w"> </span><span class="k">USER</span><span class="w"> </span><span class="s1">'audit_user'</span><span class="o">@</span><span class="s1">'localhost'</span><span class="w"> </span><span class="n">IDENTIFIED</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="s1">'Audit_2026'</span><span class="p">;</span>
 
-<span class="k">REVOKE</span><span class="w"> </span><span class="k">ALL</span><span class="w"> </span><span class="k">PRIVILEGES</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">dean</span><span class="p">.</span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="s1">&#39;dean_app&#39;</span><span class="o">@</span><span class="s1">&#39;localhost&#39;</span><span class="p">;</span>
+<span class="k">REVOKE</span><span class="w"> </span><span class="k">ALL</span><span class="w"> </span><span class="k">PRIVILEGES</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">dean</span><span class="p">.</span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="s1">'dean_app'</span><span class="o">@</span><span class="s1">'localhost'</span><span class="p">;</span>
 
-<span class="k">GRANT</span><span class="w"> </span><span class="s1">&#39;dean_read&#39;</span><span class="w"> </span><span class="k">TO</span><span class="w"> </span><span class="s1">&#39;dean_reader&#39;</span><span class="o">@</span><span class="s1">&#39;localhost&#39;</span><span class="p">;</span>
-<span class="k">GRANT</span><span class="w"> </span><span class="s1">&#39;student_read&#39;</span><span class="w"> </span><span class="k">TO</span><span class="w"> </span><span class="s1">&#39;student_user&#39;</span><span class="o">@</span><span class="s1">&#39;localhost&#39;</span><span class="p">;</span>
-<span class="k">GRANT</span><span class="w"> </span><span class="s1">&#39;auditor&#39;</span><span class="w"> </span><span class="k">TO</span><span class="w"> </span><span class="s1">&#39;audit_user&#39;</span><span class="o">@</span><span class="s1">&#39;localhost&#39;</span><span class="p">;</span>
-<span class="k">GRANT</span><span class="w"> </span><span class="s1">&#39;dean_write&#39;</span><span class="w"> </span><span class="k">TO</span><span class="w"> </span><span class="s1">&#39;dean_app&#39;</span><span class="o">@</span><span class="s1">&#39;localhost&#39;</span><span class="p">;</span>
+<span class="k">GRANT</span><span class="w"> </span><span class="s1">'dean_read'</span><span class="w"> </span><span class="k">TO</span><span class="w"> </span><span class="s1">'dean_reader'</span><span class="o">@</span><span class="s1">'localhost'</span><span class="p">;</span>
+<span class="k">GRANT</span><span class="w"> </span><span class="s1">'student_read'</span><span class="w"> </span><span class="k">TO</span><span class="w"> </span><span class="s1">'student_user'</span><span class="o">@</span><span class="s1">'localhost'</span><span class="p">;</span>
+<span class="k">GRANT</span><span class="w"> </span><span class="s1">'auditor'</span><span class="w"> </span><span class="k">TO</span><span class="w"> </span><span class="s1">'audit_user'</span><span class="o">@</span><span class="s1">'localhost'</span><span class="p">;</span>
+<span class="k">GRANT</span><span class="w"> </span><span class="s1">'dean_write'</span><span class="w"> </span><span class="k">TO</span><span class="w"> </span><span class="s1">'dean_app'</span><span class="o">@</span><span class="s1">'localhost'</span><span class="p">;</span>
 
-<span class="k">SET</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="k">ROLE</span><span class="w"> </span><span class="k">ALL</span><span class="w"> </span><span class="k">TO</span><span class="w"> </span><span class="s1">&#39;dean_reader&#39;</span><span class="o">@</span><span class="s1">&#39;localhost&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;student_user&#39;</span><span class="o">@</span><span class="s1">&#39;localhost&#39;</span><span class="p">,</span>
-<span class="w">  </span><span class="s1">&#39;audit_user&#39;</span><span class="o">@</span><span class="s1">&#39;localhost&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;dean_app&#39;</span><span class="o">@</span><span class="s1">&#39;localhost&#39;</span><span class="p">;</span>
+<span class="k">SET</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="k">ROLE</span><span class="w"> </span><span class="k">ALL</span><span class="w"> </span><span class="k">TO</span><span class="w"> </span><span class="s1">'dean_reader'</span><span class="o">@</span><span class="s1">'localhost'</span><span class="p">,</span><span class="w"> </span><span class="s1">'student_user'</span><span class="o">@</span><span class="s1">'localhost'</span><span class="p">,</span>
+<span class="w">  </span><span class="s1">'audit_user'</span><span class="o">@</span><span class="s1">'localhost'</span><span class="p">,</span><span class="w"> </span><span class="s1">'dean_app'</span><span class="o">@</span><span class="s1">'localhost'</span><span class="p">;</span>
 </code></pre></div>
 
 <p>Прямые права, выданные приложению в <a href="04-prakt-01.html" class="lesson-ref" target="_blank" rel="noopener" title="Откроется в новой вкладке. Прогресс текущего занятия не сбросится.">практике 1</a>, нужно снять. Иначе они останутся в силе вместе с ролью, и отзыв <code>DELETE</code> у роли ничего не изменит: сервер проверит прямое право и разрешит удаление. После этой команды права <code>dean_app</code> берутся только из роли.</p>
 <p>Пароли учебные и лежат в скрипте. На рабочем стенде их генерируют и хранят вне репозитория: скрипт с паролем в системе контроля версий это утечка.</p>
 <h3>Шаг 5. Проверьте роли и выданные права</h3>
-<div class="codehilite" data-lang="sql"><pre><span></span><code><span class="k">SELECT</span><span class="w"> </span><span class="s1">&#39;Иванов ИС-41&#39;</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">student</span><span class="p">;</span>
-<span class="k">SHOW</span><span class="w"> </span><span class="n">GRANTS</span><span class="w"> </span><span class="k">FOR</span><span class="w"> </span><span class="s1">&#39;dean_reader&#39;</span><span class="o">@</span><span class="s1">&#39;localhost&#39;</span><span class="p">;</span>
-<span class="k">SHOW</span><span class="w"> </span><span class="n">GRANTS</span><span class="w"> </span><span class="k">FOR</span><span class="w"> </span><span class="s1">&#39;dean_read&#39;</span><span class="p">;</span>
+<div class="codehilite" data-lang="sql"><pre><span></span><code><span class="k">SELECT</span><span class="w"> </span><span class="s1">'Иванов ИС-41'</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">student</span><span class="p">;</span>
+<span class="k">SHOW</span><span class="w"> </span><span class="n">GRANTS</span><span class="w"> </span><span class="k">FOR</span><span class="w"> </span><span class="s1">'dean_reader'</span><span class="o">@</span><span class="s1">'localhost'</span><span class="p">;</span>
+<span class="k">SHOW</span><span class="w"> </span><span class="n">GRANTS</span><span class="w"> </span><span class="k">FOR</span><span class="w"> </span><span class="s1">'dean_read'</span><span class="p">;</span>
 </code></pre></div>
 
 <p>Первая команда показывает выданную роль, вторая права самой роли. Затем войдите как <code>dean_reader</code>.</p>
-<div class="codehilite" data-lang="powershell"><pre><span></span><code><span class="p">&amp;</span> <span class="s2">&quot;mysql&quot;</span> <span class="n">-u</span> <span class="n">dean_reader</span> <span class="n">-p</span> <span class="n">dean</span>
+<div class="codehilite" data-lang="powershell"><pre><span></span><code><span class="p">&amp;</span> <span class="s2">"mysql"</span> <span class="n">-u</span> <span class="n">dean_reader</span> <span class="n">-p</span> <span class="n">dean</span>
 </code></pre></div>
 
 <div class="codehilite" data-lang="sql"><pre><span></span><code><span class="k">SELECT</span><span class="w"> </span><span class="k">CURRENT_USER</span><span class="p">(),</span><span class="w"> </span><span class="k">CURRENT_ROLE</span><span class="p">();</span>
@@ -922,20 +946,20 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <p>Если <code>CURRENT_ROLE()</code> вернул <code>NONE</code>, роль не активна: выполните <code>SET ROLE 'dean_read';</code> и повторите запрос. Причина в том, что роль по умолчанию не назначена или сервер не включил её при входе.</p>
 <h3>Шаг 6. Пройдите разрешённые и запрещённые запросы</h3>
 <p>Выполняйте пары: сначала разрешённый запрос, потом запрещённый. Ошибка и есть доказательство.</p>
-<div class="codehilite" data-lang="powershell"><pre><span></span><code><span class="p">&amp;</span> <span class="s2">&quot;mysql&quot;</span> <span class="n">-u</span> <span class="n">dean_reader</span> <span class="n">-p</span> <span class="n">dean</span> <span class="n">-e</span> <span class="s2">&quot;SELECT &#39;Иванов ИС-41&#39;; SELECT COUNT(*) FROM students;&quot;</span>
-<span class="p">&amp;</span> <span class="s2">&quot;mysql&quot;</span> <span class="n">-u</span> <span class="n">dean_reader</span> <span class="n">-p</span> <span class="n">dean</span> <span class="n">-e</span> <span class="s2">&quot;INSERT INTO groups (name, specialty) VALUES (&#39;ИС-44&#39;,&#39;09.02.07&#39;);&quot;</span>
+<div class="codehilite" data-lang="powershell"><pre><span></span><code><span class="p">&amp;</span> <span class="s2">"mysql"</span> <span class="n">-u</span> <span class="n">dean_reader</span> <span class="n">-p</span> <span class="n">dean</span> <span class="n">-e</span> <span class="s2">"SELECT 'Иванов ИС-41'; SELECT COUNT(*) FROM students;"</span>
+<span class="p">&amp;</span> <span class="s2">"mysql"</span> <span class="n">-u</span> <span class="n">dean_reader</span> <span class="n">-p</span> <span class="n">dean</span> <span class="n">-e</span> <span class="s2">"INSERT INTO groups (name, specialty) VALUES ('ИС-44','09.02.07');"</span>
 </code></pre></div>
 
 <p>Второй запрос вернёт <code>ERROR 1142 (42000): INSERT command denied to user 'dean_reader'@'localhost' for table 'groups'</code>.</p>
-<div class="codehilite" data-lang="powershell"><pre><span></span><code><span class="p">&amp;</span> <span class="s2">&quot;mysql&quot;</span> <span class="n">-u</span> <span class="n">dean_app</span> <span class="n">-p</span> <span class="n">dean</span> <span class="n">-e</span> <span class="s2">&quot;INSERT INTO payments (student_id, amount) VALUES (4, 9000.00);&quot;</span>
-<span class="p">&amp;</span> <span class="s2">&quot;mysql&quot;</span> <span class="n">-u</span> <span class="n">dean_app</span> <span class="n">-p</span> <span class="n">dean</span> <span class="n">-e</span> <span class="s2">&quot;DELETE FROM payments WHERE id = 1;&quot;</span>
+<div class="codehilite" data-lang="powershell"><pre><span></span><code><span class="p">&amp;</span> <span class="s2">"mysql"</span> <span class="n">-u</span> <span class="n">dean_app</span> <span class="n">-p</span> <span class="n">dean</span> <span class="n">-e</span> <span class="s2">"INSERT INTO payments (student_id, amount) VALUES (4, 9000.00);"</span>
+<span class="p">&amp;</span> <span class="s2">"mysql"</span> <span class="n">-u</span> <span class="n">dean_app</span> <span class="n">-p</span> <span class="n">dean</span> <span class="n">-e</span> <span class="s2">"DELETE FROM payments WHERE id = 1;"</span>
 </code></pre></div>
 
 <p>Первый запрос проходит, второй возвращает <code>ERROR 1142</code> на таблицу <code>payments</code>: приложение получило права <code>dean_write</code>, но не право удаления.</p>
-<div class="codehilite" data-lang="powershell"><pre><span></span><code><span class="p">&amp;</span> <span class="s2">&quot;mysql&quot;</span> <span class="n">-u</span> <span class="n">student_user</span> <span class="n">-p</span> <span class="n">dean</span> <span class="n">-e</span> <span class="s2">&quot;SELECT title FROM courses;&quot;</span>
-<span class="p">&amp;</span> <span class="s2">&quot;mysql&quot;</span> <span class="n">-u</span> <span class="n">student_user</span> <span class="n">-p</span> <span class="n">dean</span> <span class="n">-e</span> <span class="s2">&quot;SELECT full_name FROM students;&quot;</span>
-<span class="p">&amp;</span> <span class="s2">&quot;mysql&quot;</span> <span class="n">-u</span> <span class="n">audit_user</span> <span class="n">-p</span> <span class="n">dean</span> <span class="n">-e</span> <span class="s2">&quot;SELECT COUNT(*) FROM audit_log;&quot;</span>
-<span class="p">&amp;</span> <span class="s2">&quot;mysql&quot;</span> <span class="n">-u</span> <span class="n">audit_user</span> <span class="n">-p</span> <span class="n">dean</span> <span class="n">-e</span> <span class="s2">&quot;INSERT INTO audit_log (db_user, action) VALUES (&#39;audit_user&#39;,&#39;DELETE&#39;);&quot;</span>
+<div class="codehilite" data-lang="powershell"><pre><span></span><code><span class="p">&amp;</span> <span class="s2">"mysql"</span> <span class="n">-u</span> <span class="n">student_user</span> <span class="n">-p</span> <span class="n">dean</span> <span class="n">-e</span> <span class="s2">"SELECT title FROM courses;"</span>
+<span class="p">&amp;</span> <span class="s2">"mysql"</span> <span class="n">-u</span> <span class="n">student_user</span> <span class="n">-p</span> <span class="n">dean</span> <span class="n">-e</span> <span class="s2">"SELECT full_name FROM students;"</span>
+<span class="p">&amp;</span> <span class="s2">"mysql"</span> <span class="n">-u</span> <span class="n">audit_user</span> <span class="n">-p</span> <span class="n">dean</span> <span class="n">-e</span> <span class="s2">"SELECT COUNT(*) FROM audit_log;"</span>
+<span class="p">&amp;</span> <span class="s2">"mysql"</span> <span class="n">-u</span> <span class="n">audit_user</span> <span class="n">-p</span> <span class="n">dean</span> <span class="n">-e</span> <span class="s2">"INSERT INTO audit_log (db_user, action) VALUES ('audit_user','DELETE');"</span>
 </code></pre></div>
 
 <p><code>student_user</code> видит только справочники, <code>audit_user</code> читает журнал и не может в него писать. Сделайте скриншоты успешного и запрещённого запроса: в кадре должны быть команда, имя учётной записи и текст ошибки.</p>
@@ -945,38 +969,38 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <p>Добавьте в <code>DeanAdmin</code> выбор учётной записи и обработку ошибки.</p>
 <div class="codehilite" data-lang="csharp"><pre><span></span><code><span class="k">using</span><span class="w"> </span><span class="nn">MySqlConnector</span><span class="p">;</span>
 
-<span class="kt">string</span><span class="w"> </span><span class="n">user</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">args</span><span class="p">.</span><span class="n">Length</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s">&quot;dean_app&quot;</span><span class="p">;</span>
-<span class="kt">string</span><span class="w"> </span><span class="n">password</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Environment</span><span class="p">.</span><span class="n">GetEnvironmentVariable</span><span class="p">(</span><span class="s">&quot;DEAN_DB_PASSWORD&quot;</span><span class="p">)</span><span class="w"> </span><span class="o">??</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="p">;</span>
+<span class="kt">string</span><span class="w"> </span><span class="n">user</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">args</span><span class="p">.</span><span class="n">Length</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s">"dean_app"</span><span class="p">;</span>
+<span class="kt">string</span><span class="w"> </span><span class="n">password</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Environment</span><span class="p">.</span><span class="n">GetEnvironmentVariable</span><span class="p">(</span><span class="s">"DEAN_DB_PASSWORD"</span><span class="p">)</span><span class="w"> </span><span class="o">??</span><span class="w"> </span><span class="s">""</span><span class="p">;</span>
 
 <span class="kt">var</span><span class="w"> </span><span class="n">builder</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">MySqlConnectionStringBuilder</span>
 <span class="p">{</span>
-<span class="w">    </span><span class="n">Server</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;localhost&quot;</span><span class="p">,</span>
-<span class="w">    </span><span class="n">Database</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;dean&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="n">Server</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"localhost"</span><span class="p">,</span>
+<span class="w">    </span><span class="n">Database</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"dean"</span><span class="p">,</span>
 <span class="w">    </span><span class="n">UserID</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">user</span><span class="p">,</span>
 <span class="w">    </span><span class="n">Password</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">password</span><span class="p">,</span>
-<span class="w">    </span><span class="n">CharacterSet</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;utf8mb4&quot;</span>
+<span class="w">    </span><span class="n">CharacterSet</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"utf8mb4"</span>
 <span class="p">};</span>
 
 <span class="k">await</span><span class="w"> </span><span class="k">using</span><span class="w"> </span><span class="nn">var</span><span class="w"> </span><span class="n">connection</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">MySqlConnection</span><span class="p">(</span><span class="n">builder</span><span class="p">.</span><span class="n">ConnectionString</span><span class="p">);</span>
 <span class="k">await</span><span class="w"> </span><span class="n">connection</span><span class="p">.</span><span class="n">OpenAsync</span><span class="p">();</span>
-<span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">$&quot;Иванов ИС-41, вход: {user}&quot;</span><span class="p">);</span>
+<span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">$"Иванов ИС-41, вход: {user}"</span><span class="p">);</span>
 
 <span class="k">try</span>
 <span class="p">{</span>
 <span class="w">    </span><span class="k">await</span><span class="w"> </span><span class="k">using</span><span class="w"> </span><span class="nn">var</span><span class="w"> </span><span class="n">command</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">MySqlCommand</span><span class="p">(</span>
-<span class="w">        </span><span class="s">&quot;INSERT INTO payments (student_id, amount) VALUES (4, 9000.00)&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">connection</span><span class="p">);</span>
+<span class="w">        </span><span class="s">"INSERT INTO payments (student_id, amount) VALUES (4, 9000.00)"</span><span class="p">,</span><span class="w"> </span><span class="n">connection</span><span class="p">);</span>
 <span class="w">    </span><span class="k">await</span><span class="w"> </span><span class="n">command</span><span class="p">.</span><span class="n">ExecuteNonQueryAsync</span><span class="p">();</span>
-<span class="w">    </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">&quot;Запись добавлена&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">"Запись добавлена"</span><span class="p">);</span>
 <span class="p">}</span>
 <span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="n">MySqlException</span><span class="w"> </span><span class="n">ex</span><span class="p">)</span>
 <span class="p">{</span>
-<span class="w">    </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">$&quot;Отказано: {ex.Number}, {ex.Message}&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">$"Отказано: {ex.Number}, {ex.Message}"</span><span class="p">);</span>
 <span class="p">}</span>
 </code></pre></div>
 
 <p>Запустите приложение под двумя учётными записями.</p>
-<div class="codehilite" data-lang="powershell"><pre><span></span><code><span class="nv">$env:DEAN_DB_PASSWORD</span> <span class="p">=</span> <span class="s2">&quot;DeanApp_2026&quot;</span><span class="p">;</span> <span class="n">dotnet</span> <span class="n">run</span> <span class="p">--</span> <span class="n">dean_app</span>
-<span class="nv">$env:DEAN_DB_PASSWORD</span> <span class="p">=</span> <span class="s2">&quot;Reader_2026&quot;</span><span class="p">;</span> <span class="n">dotnet</span> <span class="n">run</span> <span class="p">--</span> <span class="n">dean_reader</span>
+<div class="codehilite" data-lang="powershell"><pre><span></span><code><span class="nv">$env:DEAN_DB_PASSWORD</span> <span class="p">=</span> <span class="s2">"DeanApp_2026"</span><span class="p">;</span> <span class="n">dotnet</span> <span class="n">run</span> <span class="p">--</span> <span class="n">dean_app</span>
+<span class="nv">$env:DEAN_DB_PASSWORD</span> <span class="p">=</span> <span class="s2">"Reader_2026"</span><span class="p">;</span> <span class="n">dotnet</span> <span class="n">run</span> <span class="p">--</span> <span class="n">dean_reader</span>
 </code></pre></div>
 
 <p>От <code>dean_app</code> приложение печатает «Запись добавлена», от <code>dean_reader</code> печатает код 1142. Код ошибки в отчёте важнее текста: по нему видно, что отказ пришёл от сервера, а не от проверки внутри приложения.</p>
@@ -1217,6 +1241,40 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
       var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
       window.scrollTo({top: 0, behavior: reduce ? 'auto' : 'smooth'});
     });
+  });
+})();
+
+(function(){
+  document.querySelectorAll('[data-slider]').forEach(function(slider){
+    var track = slider.querySelector('[data-slider-track]');
+    var slides = track ? Array.prototype.slice.call(track.children) : [];
+    var counter = slider.querySelector('[data-slider-counter]');
+    var prev = slider.querySelector('[data-slider-prev]');
+    var next = slider.querySelector('[data-slider-next]');
+    if(!track || slides.length < 2) return;
+    function current(){
+      var best = 0, dist = Infinity;
+      slides.forEach(function(slide, i){
+        var d = Math.abs(slide.offsetLeft - track.scrollLeft);
+        if(d < dist){ dist = d; best = i; }
+      });
+      return best;
+    }
+    function update(){
+      if(counter) counter.textContent = (current() + 1) + ' / ' + slides.length;
+    }
+    function go(delta){
+      var i = Math.max(0, Math.min(slides.length - 1, current() + delta));
+      var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      track.scrollTo({left: slides[i].offsetLeft, behavior: reduce ? 'auto' : 'smooth'});
+    }
+    if(prev) prev.addEventListener('click', function(){ go(-1); });
+    if(next) next.addEventListener('click', function(){ go(1); });
+    track.addEventListener('scroll', function(){
+      clearTimeout(track._sliderTimer);
+      track._sliderTimer = setTimeout(update, 80);
+    }, {passive: true});
+    update();
   });
 })();
 (function(){

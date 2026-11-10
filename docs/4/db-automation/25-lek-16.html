@@ -527,6 +527,12 @@ html.modal-open { overflow: hidden; }
 :root[data-theme=dark] .quiz-actions button[data-answer]:hover, :root[data-theme=dark] .quiz-actions button.quiz-answer:hover { background: #262626; background-color: #262626; color: #fff; border-color: #262626; }
 :root[data-theme=dark] .gate-q { background: #1E1E1E; color: #FF6B00; }
 
+/* the whole-variant archive is the main action in a download block */
+.files a.zip { background: #121212; color: #fff; border-color: #121212; font-weight: 700; box-shadow: 4px 4px 0 rgba(0,0,0,.18); }
+.files a.zip::before { color: #fff; }
+.files a.zip:hover { background: #1D1D1D; color: #fff; border-color: #1D1D1D; box-shadow: 5px 5px 0 rgba(0,0,0,.22); }
+.files a.zip:active { transform: translate(2px,2px); box-shadow: 1px 1px 0 rgba(0,0,0,.12); }
+
 /* ---------- practical work checklist ---------- */
 .work-checklist { width: 100%; border-collapse: collapse; margin: 14px 0 4px; }
 .work-checklist th, .work-checklist td { border: 1px solid var(--rule); padding: 9px 10px; vertical-align: top; }
@@ -564,6 +570,24 @@ html.modal-open { overflow: hidden; }
 .variant-body .task-list { margin: 8px 0 0; padding-left: 20px; }
 .variant-body .task-list li { margin: 0 0 8px; }
 @media (max-width: 620px) { .variant-body { overflow-x: auto; } .variant-body table { min-width: 520px; } }
+
+/* ---------- schema slider: all CREATE TABLE examples ---------- */
+.schema-slider { margin: 18px 0 24px; border: 1px solid #d8d5cc; border-radius: 14px; background: #fff; color: #1a1916; overflow: hidden; }
+.schema-slider-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 14px; background: #f5f2ea; border-bottom: 1px solid #d8d5cc; }
+.schema-slider-bar strong { font: 700 14px/1.2 var(--font-display); color: #1a1916; }
+.schema-slider-actions { display: flex; align-items: center; gap: 8px; }
+.schema-slider-counter { min-width: 62px; text-align: center; font: 600 13px/1 var(--font-mono); color: #59544a; }
+.schema-btn { width: 34px; height: 34px; border: 1px solid #c9c4b8; border-radius: 8px; background: #fff; color: #1a1916; font: 700 18px/1 var(--font-mono); cursor: pointer; }
+.schema-btn:hover { background: #ece7dc; }
+.schema-track { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: thin; }
+.schema-slide { flex: 0 0 100%; min-width: 100%; box-sizing: border-box; padding: 16px 18px 18px; scroll-snap-align: start; }
+.schema-slide h4 { margin: 0 0 10px; font: 700 16px/1.3 var(--font-display); color: #1a1916; }
+.schema-slide h4 code, .schema-slide p code { color: #1a1916; background: #f1ede4; padding: 1px 4px; border-radius: 4px; }
+.schema-slide p { margin: 0 0 10px; font-size: 14px; line-height: 1.55; color: #3a372f; }
+.schema-slide pre { margin: 0; padding: 14px 16px; overflow-x: auto; border: 1px solid #ddd8cc; border-radius: 10px; background: #fbfaf6; color: #1a1916; font: 12.5px/1.5 var(--font-mono); }
+.schema-slide code { color: inherit; background: none; padding: 0; }
+.schema-slider:focus-within { outline: 2px solid #b9a97f; outline-offset: 2px; }
+@media (max-width: 620px) { .schema-slide { padding: 12px; } .schema-slider-bar { padding: 8px 10px; } }
 
 /* ---------- print / PDF export ---------- */
 @page { margin: 16mm; }
@@ -887,7 +911,7 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <div class="gate-content" hidden><h2 id="пользователи-и-host"><span class="num">03</span>Пользователи и host</h2>
 <p>В MySQL учётная запись задаётся парой «имя и host». <code>'dean_app'@'localhost'</code> и <code>'dean_app'@'127.0.0.1'</code> это разные пользователи с разными паролями и правами. Host ограничивает, откуда разрешено подключение: <code>localhost</code> для этого компьютера, <code>%</code> для любого адреса.</p>
 <div class="codehilite" data-lang="text"><pre><span></span><code><span class="k">SELECT</span><span class="w"> </span><span class="k">User</span><span class="p">,</span><span class="w"> </span><span class="k">Host</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">mysql</span><span class="p">.</span><span class="k">user</span><span class="w"> </span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="k">User</span><span class="p">,</span><span class="w"> </span><span class="k">Host</span><span class="p">;</span>
-<span class="k">SHOW</span><span class="w"> </span><span class="n">GRANTS</span><span class="w"> </span><span class="k">FOR</span><span class="w"> </span><span class="s1">&#39;dean_app&#39;</span><span class="o">@</span><span class="s1">&#39;localhost&#39;</span><span class="p">;</span>
+<span class="k">SHOW</span><span class="w"> </span><span class="n">GRANTS</span><span class="w"> </span><span class="k">FOR</span><span class="w"> </span><span class="s1">'dean_app'</span><span class="o">@</span><span class="s1">'localhost'</span><span class="p">;</span>
 </code></pre></div>
 
 <p><code>SHOW GRANTS</code> показывает привилегии в виде команд <code>GRANT</code>. Это самый быстрый способ проверить, что приложение получило только <code>SELECT</code>, <code>INSERT</code>, <code>UPDATE</code> и <code>DELETE</code> на базу <code>dean</code>, и ничего больше.</p>
@@ -896,18 +920,18 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <h2 id="root-без-пароля-в-xampp"><span class="num">04</span>root без пароля в XAMPP</h2>
 <p>XAMPP ставит <code>root</code> без пароля, чтобы первый запуск phpMyAdmin прошёл без настройки. Для учебного стенда это допустимо на время занятия, но приложение не должно работать под <code>root</code> ни при каких условиях.</p>
 <p>Порядок действий такой: задать пароль <code>root</code>, обновить его в <code>.../xampp/phpMyAdmin/config.inc.php</code>, создать отдельного пользователя приложения и выдать ему минимальные права.</p>
-<div class="codehilite" data-lang="text"><pre><span></span><code><span class="k">ALTER</span><span class="w"> </span><span class="k">USER</span><span class="w"> </span><span class="s1">&#39;root&#39;</span><span class="o">@</span><span class="s1">&#39;localhost&#39;</span><span class="w"> </span><span class="n">IDENTIFIED</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="s1">&#39;StrongRootPass!&#39;</span><span class="p">;</span>
-<span class="k">CREATE</span><span class="w"> </span><span class="k">USER</span><span class="w"> </span><span class="s1">&#39;dean_app&#39;</span><span class="o">@</span><span class="s1">&#39;localhost&#39;</span><span class="w"> </span><span class="n">IDENTIFIED</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="s1">&#39;AppPass!2026&#39;</span><span class="p">;</span>
-<span class="k">GRANT</span><span class="w"> </span><span class="k">SELECT</span><span class="p">,</span><span class="w"> </span><span class="k">INSERT</span><span class="p">,</span><span class="w"> </span><span class="k">UPDATE</span><span class="p">,</span><span class="w"> </span><span class="k">DELETE</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">dean</span><span class="p">.</span><span class="o">*</span><span class="w"> </span><span class="k">TO</span><span class="w"> </span><span class="s1">&#39;dean_app&#39;</span><span class="o">@</span><span class="s1">&#39;localhost&#39;</span><span class="p">;</span>
+<div class="codehilite" data-lang="text"><pre><span></span><code><span class="k">ALTER</span><span class="w"> </span><span class="k">USER</span><span class="w"> </span><span class="s1">'root'</span><span class="o">@</span><span class="s1">'localhost'</span><span class="w"> </span><span class="n">IDENTIFIED</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="s1">'StrongRootPass!'</span><span class="p">;</span>
+<span class="k">CREATE</span><span class="w"> </span><span class="k">USER</span><span class="w"> </span><span class="s1">'dean_app'</span><span class="o">@</span><span class="s1">'localhost'</span><span class="w"> </span><span class="n">IDENTIFIED</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="s1">'AppPass!2026'</span><span class="p">;</span>
+<span class="k">GRANT</span><span class="w"> </span><span class="k">SELECT</span><span class="p">,</span><span class="w"> </span><span class="k">INSERT</span><span class="p">,</span><span class="w"> </span><span class="k">UPDATE</span><span class="p">,</span><span class="w"> </span><span class="k">DELETE</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">dean</span><span class="p">.</span><span class="o">*</span><span class="w"> </span><span class="k">TO</span><span class="w"> </span><span class="s1">'dean_app'</span><span class="o">@</span><span class="s1">'localhost'</span><span class="p">;</span>
 </code></pre></div>
 
 <p><code>FLUSH PRIVILEGES</code> нужен после ручного изменения таблиц прав, а после <code>GRANT</code> и <code>CREATE USER</code> сервер обновляет кеш сам. Пользователю приложения не нужны <code>DROP</code>, <code>ALTER</code>, <code>CREATE USER</code>, <code>FILE</code> и <code>SUPER</code>: каждое из этих прав расширяет ущерб от ошибки или атаки.</p>
 <h2 id="роли-и-минимальные-права"><span class="num">05</span>Роли и минимальные права</h2>
 <p>Когда пользователей несколько, права удобнее выдавать ролям. Роль это набор привилегий, который выдают пользователю целиком.</p>
-<div class="codehilite" data-lang="text"><pre><span></span><code><span class="k">CREATE</span><span class="w"> </span><span class="k">ROLE</span><span class="w"> </span><span class="s1">&#39;dean_read&#39;</span><span class="p">;</span>
-<span class="k">GRANT</span><span class="w"> </span><span class="k">SELECT</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">dean</span><span class="p">.</span><span class="o">*</span><span class="w"> </span><span class="k">TO</span><span class="w"> </span><span class="s1">&#39;dean_read&#39;</span><span class="p">;</span>
-<span class="k">GRANT</span><span class="w"> </span><span class="s1">&#39;dean_read&#39;</span><span class="w"> </span><span class="k">TO</span><span class="w"> </span><span class="s1">&#39;dean_app&#39;</span><span class="o">@</span><span class="s1">&#39;localhost&#39;</span><span class="p">;</span>
-<span class="k">SET</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="k">ROLE</span><span class="w"> </span><span class="s1">&#39;dean_read&#39;</span><span class="w"> </span><span class="k">TO</span><span class="w"> </span><span class="s1">&#39;dean_app&#39;</span><span class="o">@</span><span class="s1">&#39;localhost&#39;</span><span class="p">;</span>
+<div class="codehilite" data-lang="text"><pre><span></span><code><span class="k">CREATE</span><span class="w"> </span><span class="k">ROLE</span><span class="w"> </span><span class="s1">'dean_read'</span><span class="p">;</span>
+<span class="k">GRANT</span><span class="w"> </span><span class="k">SELECT</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">dean</span><span class="p">.</span><span class="o">*</span><span class="w"> </span><span class="k">TO</span><span class="w"> </span><span class="s1">'dean_read'</span><span class="p">;</span>
+<span class="k">GRANT</span><span class="w"> </span><span class="s1">'dean_read'</span><span class="w"> </span><span class="k">TO</span><span class="w"> </span><span class="s1">'dean_app'</span><span class="o">@</span><span class="s1">'localhost'</span><span class="p">;</span>
+<span class="k">SET</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="k">ROLE</span><span class="w"> </span><span class="s1">'dean_read'</span><span class="w"> </span><span class="k">TO</span><span class="w"> </span><span class="s1">'dean_app'</span><span class="o">@</span><span class="s1">'localhost'</span><span class="p">;</span>
 </code></pre></div>
 
 <p><code>SET DEFAULT ROLE</code> делает роль активной при подключении, иначе пользователь её не получит автоматически. Проверяют результат тем же <code>SHOW GRANTS</code>, а ещё лучше делом: войти под <code>dean_app</code> и попробовать запрещённую операцию. Сообщение <code>Access denied</code> означает, что рубеж работает; успешное выполнение означает, что прав больше, чем нужно.</p></div>
@@ -917,15 +941,15 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <p class="gate-action"><button type="button" class="gate-btn" aria-expanded="false"><span class="gate-q" aria-hidden="true">?</span><span>Как строка подключения и параметры защищают приложение?</span></button></p>
 <div class="gate-content" hidden><h2 id="sql-инъекция"><span class="num">06</span>SQL-инъекция</h2>
 <p>SQL-инъекция возникает, когда приложение склеивает команду из текста и пользовательского ввода. Ввод перестаёт быть данными и становится частью кода.</p>
-<div class="codehilite" data-lang="text"><pre><span></span><code><span class="kt">var</span><span class="w"> </span><span class="n">sql</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;SELECT id, full_name FROM students WHERE email = &#39;&quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">email</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">&quot;&#39;&quot;</span><span class="p">;</span>
+<div class="codehilite" data-lang="text"><pre><span></span><code><span class="kt">var</span><span class="w"> </span><span class="n">sql</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"SELECT id, full_name FROM students WHERE email = '"</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">email</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">"'"</span><span class="p">;</span>
 </code></pre></div>
 
 <p>Если в поле почты ввести <code>x' OR '1'='1</code>, условие станет истинным для всех строк, и запрос вернёт всю таблицу. Если ввести <code>x'; DROP TABLE students; #</code>, к запросу добавится вторая команда. Опасен не сам апостроф, а то, что приложение доверило вводу управлять структурой команды.</p>
 <h2 id="параметры-mysqlconnector"><span class="num">07</span>Параметры MySqlConnector</h2>
 <p>Правильное решение одно: запрос пишут один раз, а значения передают параметрами. Драйвер отправляет текст команды и данные отдельно, поэтому кавычки во вводе остаются кавычками внутри строки.</p>
 <div class="codehilite" data-lang="text"><pre><span></span><code><span class="k">await</span><span class="w"> </span><span class="k">using</span><span class="w"> </span><span class="nn">var</span><span class="w"> </span><span class="n">cmd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">MySqlCommand</span><span class="p">(</span>
-<span class="w">    </span><span class="s">&quot;SELECT id, full_name FROM students WHERE email = @email&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">conn</span><span class="p">);</span>
-<span class="n">cmd</span><span class="p">.</span><span class="n">Parameters</span><span class="p">.</span><span class="n">AddWithValue</span><span class="p">(</span><span class="s">&quot;@email&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">email</span><span class="p">);</span>
+<span class="w">    </span><span class="s">"SELECT id, full_name FROM students WHERE email = @email"</span><span class="p">,</span><span class="w"> </span><span class="n">conn</span><span class="p">);</span>
+<span class="n">cmd</span><span class="p">.</span><span class="n">Parameters</span><span class="p">.</span><span class="n">AddWithValue</span><span class="p">(</span><span class="s">"@email"</span><span class="p">,</span><span class="w"> </span><span class="n">email</span><span class="p">);</span>
 <span class="k">await</span><span class="w"> </span><span class="k">using</span><span class="w"> </span><span class="nn">var</span><span class="w"> </span><span class="n">reader</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="n">cmd</span><span class="p">.</span><span class="n">ExecuteReaderAsync</span><span class="p">();</span>
 </code></pre></div>
 
@@ -935,17 +959,17 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <p>Пароли пользователей приложения это отдельная история. В таблице <code>students</code> не должно быть колонки с паролем в открытом виде: хранят только хеш, посчитанный медленной функцией вроде bcrypt или Argon2, и сравнивают хеши, а не исходные строки. MySQL для своих учётных записей тоже хранит хеш, поэтому восстановить забытый пароль нельзя, его только сбрасывают.</p>
 <h2 id="строка-подключения-и-секреты"><span class="num">09</span>Строка подключения и секреты</h2>
 <p>Пароль в коде это утечка, которая ждёт своего часа: он попадает в репозиторий, в историю git и в резервные копии исходников. Секрет берут из переменной окружения, файла вне репозитория или хранилища секретов.</p>
-<div class="codehilite" data-lang="text"><pre><span></span><code><span class="kt">var</span><span class="w"> </span><span class="n">password</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Environment</span><span class="p">.</span><span class="n">GetEnvironmentVariable</span><span class="p">(</span><span class="s">&quot;DEAN_DB_PASSWORD&quot;</span><span class="p">)</span>
-<span class="w">    </span><span class="o">??</span><span class="w"> </span><span class="k">throw</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">InvalidOperationException</span><span class="p">(</span><span class="s">&quot;Не задан DEAN_DB_PASSWORD&quot;</span><span class="p">);</span>
+<div class="codehilite" data-lang="text"><pre><span></span><code><span class="kt">var</span><span class="w"> </span><span class="n">password</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Environment</span><span class="p">.</span><span class="n">GetEnvironmentVariable</span><span class="p">(</span><span class="s">"DEAN_DB_PASSWORD"</span><span class="p">)</span>
+<span class="w">    </span><span class="o">??</span><span class="w"> </span><span class="k">throw</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">InvalidOperationException</span><span class="p">(</span><span class="s">"Не задан DEAN_DB_PASSWORD"</span><span class="p">);</span>
 
 <span class="kt">var</span><span class="w"> </span><span class="n">cs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">MySqlConnectionStringBuilder</span>
 <span class="p">{</span>
-<span class="w">    </span><span class="n">Server</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;localhost&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="n">Server</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"localhost"</span><span class="p">,</span>
 <span class="w">    </span><span class="n">Port</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3306</span><span class="p">,</span>
-<span class="w">    </span><span class="n">Database</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;dean&quot;</span><span class="p">,</span>
-<span class="w">    </span><span class="n">UserID</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;dean_app&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="n">Database</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"dean"</span><span class="p">,</span>
+<span class="w">    </span><span class="n">UserID</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"dean_app"</span><span class="p">,</span>
 <span class="w">    </span><span class="n">Password</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">password</span><span class="p">,</span>
-<span class="w">    </span><span class="n">CharacterSet</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;utf8mb4&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="n">CharacterSet</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"utf8mb4"</span><span class="p">,</span>
 <span class="w">    </span><span class="n">SslMode</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">MySqlSslMode</span><span class="p">.</span><span class="n">Preferred</span>
 <span class="p">}.</span><span class="n">ConnectionString</span><span class="p">;</span>
 </code></pre></div>
@@ -1058,6 +1082,40 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
       var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
       window.scrollTo({top: 0, behavior: reduce ? 'auto' : 'smooth'});
     });
+  });
+})();
+
+(function(){
+  document.querySelectorAll('[data-slider]').forEach(function(slider){
+    var track = slider.querySelector('[data-slider-track]');
+    var slides = track ? Array.prototype.slice.call(track.children) : [];
+    var counter = slider.querySelector('[data-slider-counter]');
+    var prev = slider.querySelector('[data-slider-prev]');
+    var next = slider.querySelector('[data-slider-next]');
+    if(!track || slides.length < 2) return;
+    function current(){
+      var best = 0, dist = Infinity;
+      slides.forEach(function(slide, i){
+        var d = Math.abs(slide.offsetLeft - track.scrollLeft);
+        if(d < dist){ dist = d; best = i; }
+      });
+      return best;
+    }
+    function update(){
+      if(counter) counter.textContent = (current() + 1) + ' / ' + slides.length;
+    }
+    function go(delta){
+      var i = Math.max(0, Math.min(slides.length - 1, current() + delta));
+      var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      track.scrollTo({left: slides[i].offsetLeft, behavior: reduce ? 'auto' : 'smooth'});
+    }
+    if(prev) prev.addEventListener('click', function(){ go(-1); });
+    if(next) next.addEventListener('click', function(){ go(1); });
+    track.addEventListener('scroll', function(){
+      clearTimeout(track._sliderTimer);
+      track._sliderTimer = setTimeout(update, 80);
+    }, {passive: true});
+    update();
   });
 })();
 (function(){

@@ -527,6 +527,12 @@ html.modal-open { overflow: hidden; }
 :root[data-theme=dark] .quiz-actions button[data-answer]:hover, :root[data-theme=dark] .quiz-actions button.quiz-answer:hover { background: #262626; background-color: #262626; color: #fff; border-color: #262626; }
 :root[data-theme=dark] .gate-q { background: #1E1E1E; color: #FF6B00; }
 
+/* the whole-variant archive is the main action in a download block */
+.files a.zip { background: #121212; color: #fff; border-color: #121212; font-weight: 700; box-shadow: 4px 4px 0 rgba(0,0,0,.18); }
+.files a.zip::before { color: #fff; }
+.files a.zip:hover { background: #1D1D1D; color: #fff; border-color: #1D1D1D; box-shadow: 5px 5px 0 rgba(0,0,0,.22); }
+.files a.zip:active { transform: translate(2px,2px); box-shadow: 1px 1px 0 rgba(0,0,0,.12); }
+
 /* ---------- practical work checklist ---------- */
 .work-checklist { width: 100%; border-collapse: collapse; margin: 14px 0 4px; }
 .work-checklist th, .work-checklist td { border: 1px solid var(--rule); padding: 9px 10px; vertical-align: top; }
@@ -564,6 +570,24 @@ html.modal-open { overflow: hidden; }
 .variant-body .task-list { margin: 8px 0 0; padding-left: 20px; }
 .variant-body .task-list li { margin: 0 0 8px; }
 @media (max-width: 620px) { .variant-body { overflow-x: auto; } .variant-body table { min-width: 520px; } }
+
+/* ---------- schema slider: all CREATE TABLE examples ---------- */
+.schema-slider { margin: 18px 0 24px; border: 1px solid #d8d5cc; border-radius: 14px; background: #fff; color: #1a1916; overflow: hidden; }
+.schema-slider-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 14px; background: #f5f2ea; border-bottom: 1px solid #d8d5cc; }
+.schema-slider-bar strong { font: 700 14px/1.2 var(--font-display); color: #1a1916; }
+.schema-slider-actions { display: flex; align-items: center; gap: 8px; }
+.schema-slider-counter { min-width: 62px; text-align: center; font: 600 13px/1 var(--font-mono); color: #59544a; }
+.schema-btn { width: 34px; height: 34px; border: 1px solid #c9c4b8; border-radius: 8px; background: #fff; color: #1a1916; font: 700 18px/1 var(--font-mono); cursor: pointer; }
+.schema-btn:hover { background: #ece7dc; }
+.schema-track { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: thin; }
+.schema-slide { flex: 0 0 100%; min-width: 100%; box-sizing: border-box; padding: 16px 18px 18px; scroll-snap-align: start; }
+.schema-slide h4 { margin: 0 0 10px; font: 700 16px/1.3 var(--font-display); color: #1a1916; }
+.schema-slide h4 code, .schema-slide p code { color: #1a1916; background: #f1ede4; padding: 1px 4px; border-radius: 4px; }
+.schema-slide p { margin: 0 0 10px; font-size: 14px; line-height: 1.55; color: #3a372f; }
+.schema-slide pre { margin: 0; padding: 14px 16px; overflow-x: auto; border: 1px solid #ddd8cc; border-radius: 10px; background: #fbfaf6; color: #1a1916; font: 12.5px/1.5 var(--font-mono); }
+.schema-slide code { color: inherit; background: none; padding: 0; }
+.schema-slider:focus-within { outline: 2px solid #b9a97f; outline-offset: 2px; }
+@media (max-width: 620px) { .schema-slide { padding: 12px; } .schema-slider-bar { padding: 8px 10px; } }
 
 /* ---------- print / PDF export ---------- */
 @page { margin: 16mm; }
@@ -884,125 +908,125 @@ dotnet --version
 
 <span class="k">foreach</span><span class="w"> </span><span class="p">(</span><span class="kt">string</span><span class="w"> </span><span class="n">arg</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">args</span><span class="p">)</span>
 <span class="p">{</span>
-<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">arg</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="s">&quot;--dry-run&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">arg</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="s">"--dry-run"</span><span class="p">)</span>
 <span class="w">    </span><span class="p">{</span>
-<span class="w">        </span><span class="n">Console</span><span class="p">.</span><span class="n">Error</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">$&quot;Неизвестный аргумент: {arg}&quot;</span><span class="p">);</span>
-<span class="w">        </span><span class="n">Console</span><span class="p">.</span><span class="n">Error</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">&quot;Использование: DeanMaintenance [--dry-run]&quot;</span><span class="p">);</span>
+<span class="w">        </span><span class="n">Console</span><span class="p">.</span><span class="n">Error</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">$"Неизвестный аргумент: {arg}"</span><span class="p">);</span>
+<span class="w">        </span><span class="n">Console</span><span class="p">.</span><span class="n">Error</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">"Использование: DeanMaintenance [--dry-run]"</span><span class="p">);</span>
 <span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="mi">64</span><span class="p">;</span>
 <span class="w">    </span><span class="p">}</span>
 <span class="p">}</span>
 
-<span class="kt">bool</span><span class="w"> </span><span class="n">dryRun</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">args</span><span class="p">.</span><span class="n">Contains</span><span class="p">(</span><span class="s">&quot;--dry-run&quot;</span><span class="p">);</span>
+<span class="kt">bool</span><span class="w"> </span><span class="n">dryRun</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">args</span><span class="p">.</span><span class="n">Contains</span><span class="p">(</span><span class="s">"--dry-run"</span><span class="p">);</span>
 <span class="kt">string</span><span class="w"> </span><span class="n">root</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">AppContext</span><span class="p">.</span><span class="n">BaseDirectory</span><span class="p">;</span>
-<span class="kt">string</span><span class="w"> </span><span class="n">backupDir</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Path</span><span class="p">.</span><span class="n">Combine</span><span class="p">(</span><span class="n">root</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;backups&quot;</span><span class="p">);</span>
-<span class="kt">string</span><span class="w"> </span><span class="n">logFile</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Path</span><span class="p">.</span><span class="n">Combine</span><span class="p">(</span><span class="n">root</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;logs&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;dean-maintenance.log&quot;</span><span class="p">);</span>
+<span class="kt">string</span><span class="w"> </span><span class="n">backupDir</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Path</span><span class="p">.</span><span class="n">Combine</span><span class="p">(</span><span class="n">root</span><span class="p">,</span><span class="w"> </span><span class="s">"backups"</span><span class="p">);</span>
+<span class="kt">string</span><span class="w"> </span><span class="n">logFile</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Path</span><span class="p">.</span><span class="n">Combine</span><span class="p">(</span><span class="n">root</span><span class="p">,</span><span class="w"> </span><span class="s">"logs"</span><span class="p">,</span><span class="w"> </span><span class="s">"dean-maintenance.log"</span><span class="p">);</span>
 <span class="n">Directory</span><span class="p">.</span><span class="n">CreateDirectory</span><span class="p">(</span><span class="n">backupDir</span><span class="p">);</span>
 <span class="n">Directory</span><span class="p">.</span><span class="n">CreateDirectory</span><span class="p">(</span><span class="n">Path</span><span class="p">.</span><span class="n">GetDirectoryName</span><span class="p">(</span><span class="n">logFile</span><span class="p">)</span><span class="o">!</span><span class="p">);</span>
 
 <span class="k">void</span><span class="w"> </span><span class="nf">Log</span><span class="p">(</span><span class="kt">string</span><span class="w"> </span><span class="n">message</span><span class="p">)</span>
 <span class="p">{</span>
-<span class="w">    </span><span class="kt">string</span><span class="w"> </span><span class="n">line</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">$&quot;{DateTime.UtcNow:yyyy-MM-ddTHH:mm:ssZ} {message}&quot;</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">string</span><span class="w"> </span><span class="n">line</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">$"{DateTime.UtcNow:yyyy-MM-ddTHH:mm:ssZ} {message}"</span><span class="p">;</span>
 <span class="w">    </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="n">line</span><span class="p">);</span>
 <span class="w">    </span><span class="n">File</span><span class="p">.</span><span class="n">AppendAllText</span><span class="p">(</span><span class="n">logFile</span><span class="p">,</span><span class="w"> </span><span class="n">line</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">Environment</span><span class="p">.</span><span class="n">NewLine</span><span class="p">,</span><span class="w"> </span><span class="n">Encoding</span><span class="p">.</span><span class="n">UTF8</span><span class="p">);</span>
 <span class="p">}</span>
 
-<span class="kt">string?</span><span class="w"> </span><span class="n">password</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Environment</span><span class="p">.</span><span class="n">GetEnvironmentVariable</span><span class="p">(</span><span class="s">&quot;DEAN_DB_PASSWORD&quot;</span><span class="p">);</span>
+<span class="kt">string?</span><span class="w"> </span><span class="n">password</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Environment</span><span class="p">.</span><span class="n">GetEnvironmentVariable</span><span class="p">(</span><span class="s">"DEAN_DB_PASSWORD"</span><span class="p">);</span>
 <span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="kt">string</span><span class="p">.</span><span class="n">IsNullOrEmpty</span><span class="p">(</span><span class="n">password</span><span class="p">))</span>
 <span class="p">{</span>
-<span class="w">    </span><span class="n">Log</span><span class="p">(</span><span class="s">&quot;ERROR не задана переменная DEAN_DB_PASSWORD&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="n">Log</span><span class="p">(</span><span class="s">"ERROR не задана переменная DEAN_DB_PASSWORD"</span><span class="p">);</span>
 <span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
 <span class="p">}</span>
 
 <span class="kt">var</span><span class="w"> </span><span class="n">csb</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">MySqlConnectionStringBuilder</span>
 <span class="p">{</span>
-<span class="w">    </span><span class="n">Server</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;localhost&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">Port</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3306</span><span class="p">,</span><span class="w"> </span><span class="n">Database</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;dean&quot;</span><span class="p">,</span>
-<span class="w">    </span><span class="n">UserID</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;dean_app&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">Password</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">password</span><span class="p">,</span><span class="w"> </span><span class="n">CharacterSet</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;utf8mb4&quot;</span>
+<span class="w">    </span><span class="n">Server</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"localhost"</span><span class="p">,</span><span class="w"> </span><span class="n">Port</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3306</span><span class="p">,</span><span class="w"> </span><span class="n">Database</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"dean"</span><span class="p">,</span>
+<span class="w">    </span><span class="n">UserID</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"dean_app"</span><span class="p">,</span><span class="w"> </span><span class="n">Password</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">password</span><span class="p">,</span><span class="w"> </span><span class="n">CharacterSet</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"utf8mb4"</span>
 <span class="p">};</span>
 
-<span class="n">Log</span><span class="p">(</span><span class="s">$&quot;START db={csb.Database} user={csb.UserID} dry_run={dryRun}&quot;</span><span class="p">);</span>
+<span class="n">Log</span><span class="p">(</span><span class="s">$"START db={csb.Database} user={csb.UserID} dry_run={dryRun}"</span><span class="p">);</span>
 
 <span class="k">try</span>
 <span class="p">{</span>
 <span class="w">    </span><span class="k">await</span><span class="w"> </span><span class="k">using</span><span class="w"> </span><span class="nn">var</span><span class="w"> </span><span class="n">connection</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">MySqlConnection</span><span class="p">(</span><span class="n">csb</span><span class="p">.</span><span class="n">ConnectionString</span><span class="p">);</span>
 <span class="w">    </span><span class="k">await</span><span class="w"> </span><span class="n">connection</span><span class="p">.</span><span class="n">OpenAsync</span><span class="p">();</span>
-<span class="w">    </span><span class="k">await</span><span class="w"> </span><span class="nf">using</span><span class="w"> </span><span class="p">(</span><span class="kt">var</span><span class="w"> </span><span class="n">cmd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">MySqlCommand</span><span class="p">(</span><span class="s">&quot;SELECT 1&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">connection</span><span class="p">))</span>
+<span class="w">    </span><span class="k">await</span><span class="w"> </span><span class="nf">using</span><span class="w"> </span><span class="p">(</span><span class="kt">var</span><span class="w"> </span><span class="n">cmd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">MySqlCommand</span><span class="p">(</span><span class="s">"SELECT 1"</span><span class="p">,</span><span class="w"> </span><span class="n">connection</span><span class="p">))</span>
 <span class="w">    </span><span class="p">{</span>
 <span class="w">        </span><span class="k">await</span><span class="w"> </span><span class="n">cmd</span><span class="p">.</span><span class="n">ExecuteScalarAsync</span><span class="p">();</span>
 <span class="w">    </span><span class="p">}</span>
-<span class="w">    </span><span class="n">Log</span><span class="p">(</span><span class="s">&quot;CHECK подключение выполнено&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="n">Log</span><span class="p">(</span><span class="s">"CHECK подключение выполнено"</span><span class="p">);</span>
 
-<span class="w">    </span><span class="kt">string</span><span class="w"> </span><span class="n">stamp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">DateTime</span><span class="p">.</span><span class="n">UtcNow</span><span class="p">.</span><span class="n">ToString</span><span class="p">(</span><span class="s">&quot;yyyyMMddTHHmmssZ&quot;</span><span class="p">);</span>
-<span class="w">    </span><span class="kt">string</span><span class="w"> </span><span class="n">dumpFile</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Path</span><span class="p">.</span><span class="n">Combine</span><span class="p">(</span><span class="n">backupDir</span><span class="p">,</span><span class="w"> </span><span class="s">$&quot;dean_{stamp}.sql&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="kt">string</span><span class="w"> </span><span class="n">stamp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">DateTime</span><span class="p">.</span><span class="n">UtcNow</span><span class="p">.</span><span class="n">ToString</span><span class="p">(</span><span class="s">"yyyyMMddTHHmmssZ"</span><span class="p">);</span>
+<span class="w">    </span><span class="kt">string</span><span class="w"> </span><span class="n">dumpFile</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Path</span><span class="p">.</span><span class="n">Combine</span><span class="p">(</span><span class="n">backupDir</span><span class="p">,</span><span class="w"> </span><span class="s">$"dean_{stamp}.sql"</span><span class="p">);</span>
 
 <span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">dryRun</span><span class="p">)</span>
 <span class="w">    </span><span class="p">{</span>
-<span class="w">        </span><span class="n">Log</span><span class="p">(</span><span class="s">$&quot;DRY-RUN mysqldump --result-file={dumpFile}&quot;</span><span class="p">);</span>
-<span class="w">        </span><span class="n">Log</span><span class="p">(</span><span class="s">&quot;DRY-RUN ANALYZE TABLE groups, students, enrollments&quot;</span><span class="p">);</span>
-<span class="w">        </span><span class="n">Log</span><span class="p">(</span><span class="s">&quot;DONE dry-run&quot;</span><span class="p">);</span>
+<span class="w">        </span><span class="n">Log</span><span class="p">(</span><span class="s">$"DRY-RUN mysqldump --result-file={dumpFile}"</span><span class="p">);</span>
+<span class="w">        </span><span class="n">Log</span><span class="p">(</span><span class="s">"DRY-RUN ANALYZE TABLE groups, students, enrollments"</span><span class="p">);</span>
+<span class="w">        </span><span class="n">Log</span><span class="p">(</span><span class="s">"DONE dry-run"</span><span class="p">);</span>
 <span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
 <span class="w">    </span><span class="p">}</span>
 
 <span class="w">    </span><span class="kt">var</span><span class="w"> </span><span class="n">psi</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">ProcessStartInfo</span>
 <span class="w">    </span><span class="p">{</span>
-<span class="w">        </span><span class="n">FileName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">@&quot;mysqldump&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="n">FileName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">@"mysqldump"</span><span class="p">,</span>
 <span class="w">        </span><span class="n">RedirectStandardError</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">true</span><span class="p">,</span>
 <span class="w">        </span><span class="n">UseShellExecute</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">false</span><span class="p">,</span>
 <span class="w">        </span><span class="n">CreateNoWindow</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">true</span>
 <span class="w">    </span><span class="p">};</span>
-<span class="w">    </span><span class="n">psi</span><span class="p">.</span><span class="n">ArgumentList</span><span class="p">.</span><span class="n">Add</span><span class="p">(</span><span class="s">$&quot;--user={csb.UserID}&quot;</span><span class="p">);</span>
-<span class="w">    </span><span class="n">psi</span><span class="p">.</span><span class="n">ArgumentList</span><span class="p">.</span><span class="n">Add</span><span class="p">(</span><span class="s">&quot;--host=localhost&quot;</span><span class="p">);</span>
-<span class="w">    </span><span class="n">psi</span><span class="p">.</span><span class="n">ArgumentList</span><span class="p">.</span><span class="n">Add</span><span class="p">(</span><span class="s">&quot;--port=3306&quot;</span><span class="p">);</span>
-<span class="w">    </span><span class="n">psi</span><span class="p">.</span><span class="n">ArgumentList</span><span class="p">.</span><span class="n">Add</span><span class="p">(</span><span class="s">&quot;--single-transaction&quot;</span><span class="p">);</span>
-<span class="w">    </span><span class="n">psi</span><span class="p">.</span><span class="n">ArgumentList</span><span class="p">.</span><span class="n">Add</span><span class="p">(</span><span class="s">&quot;--routines&quot;</span><span class="p">);</span>
-<span class="w">    </span><span class="n">psi</span><span class="p">.</span><span class="n">ArgumentList</span><span class="p">.</span><span class="n">Add</span><span class="p">(</span><span class="s">&quot;--triggers&quot;</span><span class="p">);</span>
-<span class="w">    </span><span class="n">psi</span><span class="p">.</span><span class="n">ArgumentList</span><span class="p">.</span><span class="n">Add</span><span class="p">(</span><span class="s">&quot;--default-character-set=utf8mb4&quot;</span><span class="p">);</span>
-<span class="w">    </span><span class="n">psi</span><span class="p">.</span><span class="n">ArgumentList</span><span class="p">.</span><span class="n">Add</span><span class="p">(</span><span class="s">$&quot;--result-file={dumpFile}&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="n">psi</span><span class="p">.</span><span class="n">ArgumentList</span><span class="p">.</span><span class="n">Add</span><span class="p">(</span><span class="s">$"--user={csb.UserID}"</span><span class="p">);</span>
+<span class="w">    </span><span class="n">psi</span><span class="p">.</span><span class="n">ArgumentList</span><span class="p">.</span><span class="n">Add</span><span class="p">(</span><span class="s">"--host=localhost"</span><span class="p">);</span>
+<span class="w">    </span><span class="n">psi</span><span class="p">.</span><span class="n">ArgumentList</span><span class="p">.</span><span class="n">Add</span><span class="p">(</span><span class="s">"--port=3306"</span><span class="p">);</span>
+<span class="w">    </span><span class="n">psi</span><span class="p">.</span><span class="n">ArgumentList</span><span class="p">.</span><span class="n">Add</span><span class="p">(</span><span class="s">"--single-transaction"</span><span class="p">);</span>
+<span class="w">    </span><span class="n">psi</span><span class="p">.</span><span class="n">ArgumentList</span><span class="p">.</span><span class="n">Add</span><span class="p">(</span><span class="s">"--routines"</span><span class="p">);</span>
+<span class="w">    </span><span class="n">psi</span><span class="p">.</span><span class="n">ArgumentList</span><span class="p">.</span><span class="n">Add</span><span class="p">(</span><span class="s">"--triggers"</span><span class="p">);</span>
+<span class="w">    </span><span class="n">psi</span><span class="p">.</span><span class="n">ArgumentList</span><span class="p">.</span><span class="n">Add</span><span class="p">(</span><span class="s">"--default-character-set=utf8mb4"</span><span class="p">);</span>
+<span class="w">    </span><span class="n">psi</span><span class="p">.</span><span class="n">ArgumentList</span><span class="p">.</span><span class="n">Add</span><span class="p">(</span><span class="s">$"--result-file={dumpFile}"</span><span class="p">);</span>
 <span class="w">    </span><span class="n">psi</span><span class="p">.</span><span class="n">ArgumentList</span><span class="p">.</span><span class="n">Add</span><span class="p">(</span><span class="n">csb</span><span class="p">.</span><span class="n">Database</span><span class="o">!</span><span class="p">);</span>
-<span class="w">    </span><span class="n">psi</span><span class="p">.</span><span class="n">Environment</span><span class="p">[</span><span class="s">&quot;MYSQL_PWD&quot;</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">password</span><span class="p">;</span>
+<span class="w">    </span><span class="n">psi</span><span class="p">.</span><span class="n">Environment</span><span class="p">[</span><span class="s">"MYSQL_PWD"</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">password</span><span class="p">;</span>
 
 <span class="w">    </span><span class="k">using</span><span class="w"> </span><span class="nn">var</span><span class="w"> </span><span class="n">dump</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Process</span><span class="p">.</span><span class="n">Start</span><span class="p">(</span><span class="n">psi</span><span class="p">)</span><span class="o">!</span><span class="p">;</span>
 <span class="w">    </span><span class="kt">string</span><span class="w"> </span><span class="n">errors</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="n">dump</span><span class="p">.</span><span class="n">StandardError</span><span class="p">.</span><span class="n">ReadToEndAsync</span><span class="p">();</span>
 <span class="w">    </span><span class="k">await</span><span class="w"> </span><span class="n">dump</span><span class="p">.</span><span class="n">WaitForExitAsync</span><span class="p">();</span>
 <span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">dump</span><span class="p">.</span><span class="n">ExitCode</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span>
 <span class="w">    </span><span class="p">{</span>
-<span class="w">        </span><span class="n">Log</span><span class="p">(</span><span class="s">$&quot;ERROR mysqldump код {dump.ExitCode}: {errors.Trim()}&quot;</span><span class="p">);</span>
+<span class="w">        </span><span class="n">Log</span><span class="p">(</span><span class="s">$"ERROR mysqldump код {dump.ExitCode}: {errors.Trim()}"</span><span class="p">);</span>
 <span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
 <span class="w">    </span><span class="p">}</span>
 
 <span class="w">    </span><span class="kt">var</span><span class="w"> </span><span class="n">info</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">FileInfo</span><span class="p">(</span><span class="n">dumpFile</span><span class="p">);</span>
 <span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">info</span><span class="p">.</span><span class="n">Exists</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">info</span><span class="p">.</span><span class="n">Length</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">1024</span><span class="p">)</span>
 <span class="w">    </span><span class="p">{</span>
-<span class="w">        </span><span class="n">Log</span><span class="p">(</span><span class="s">&quot;ERROR дамп пуст или слишком мал&quot;</span><span class="p">);</span>
+<span class="w">        </span><span class="n">Log</span><span class="p">(</span><span class="s">"ERROR дамп пуст или слишком мал"</span><span class="p">);</span>
 <span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
 <span class="w">    </span><span class="p">}</span>
-<span class="w">    </span><span class="n">Log</span><span class="p">(</span><span class="s">$&quot;CHECK дамп {info.Length} байт&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="n">Log</span><span class="p">(</span><span class="s">$"CHECK дамп {info.Length} байт"</span><span class="p">);</span>
 
-<span class="w">    </span><span class="k">await</span><span class="w"> </span><span class="nf">using</span><span class="w"> </span><span class="p">(</span><span class="kt">var</span><span class="w"> </span><span class="n">cmd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">MySqlCommand</span><span class="p">(</span><span class="s">&quot;ANALYZE TABLE groups, students, enrollments&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">connection</span><span class="p">))</span>
+<span class="w">    </span><span class="k">await</span><span class="w"> </span><span class="nf">using</span><span class="w"> </span><span class="p">(</span><span class="kt">var</span><span class="w"> </span><span class="n">cmd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">MySqlCommand</span><span class="p">(</span><span class="s">"ANALYZE TABLE groups, students, enrollments"</span><span class="p">,</span><span class="w"> </span><span class="n">connection</span><span class="p">))</span>
 <span class="w">    </span><span class="k">await</span><span class="w"> </span><span class="nf">using</span><span class="w"> </span><span class="p">(</span><span class="kt">var</span><span class="w"> </span><span class="n">reader</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="n">cmd</span><span class="p">.</span><span class="n">ExecuteReaderAsync</span><span class="p">())</span>
 <span class="w">    </span><span class="p">{</span>
 <span class="w">        </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="k">await</span><span class="w"> </span><span class="n">reader</span><span class="p">.</span><span class="n">ReadAsync</span><span class="p">())</span>
-<span class="w">            </span><span class="n">Log</span><span class="p">(</span><span class="s">$&quot;CHECK {reader.GetString(0)} {reader.GetString(2)}&quot;</span><span class="p">);</span>
+<span class="w">            </span><span class="n">Log</span><span class="p">(</span><span class="s">$"CHECK {reader.GetString(0)} {reader.GetString(2)}"</span><span class="p">);</span>
 <span class="w">    </span><span class="p">}</span>
 
 <span class="w">    </span><span class="k">await</span><span class="w"> </span><span class="nf">using</span><span class="w"> </span><span class="p">(</span><span class="kt">var</span><span class="w"> </span><span class="n">cmd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">MySqlCommand</span><span class="p">(</span>
-<span class="w">        </span><span class="s">&quot;SELECT (SELECT COUNT(*) FROM students), (SELECT COUNT(*) FROM enrollments)&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">connection</span><span class="p">))</span>
+<span class="w">        </span><span class="s">"SELECT (SELECT COUNT(*) FROM students), (SELECT COUNT(*) FROM enrollments)"</span><span class="p">,</span><span class="w"> </span><span class="n">connection</span><span class="p">))</span>
 <span class="w">    </span><span class="k">await</span><span class="w"> </span><span class="nf">using</span><span class="w"> </span><span class="p">(</span><span class="kt">var</span><span class="w"> </span><span class="n">reader</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="n">cmd</span><span class="p">.</span><span class="n">ExecuteReaderAsync</span><span class="p">())</span>
 <span class="w">    </span><span class="p">{</span>
 <span class="w">        </span><span class="k">await</span><span class="w"> </span><span class="n">reader</span><span class="p">.</span><span class="n">ReadAsync</span><span class="p">();</span>
-<span class="w">        </span><span class="n">Log</span><span class="p">(</span><span class="s">$&quot;CHECK students={reader.GetInt64(0)} enrollments={reader.GetInt64(1)}&quot;</span><span class="p">);</span>
+<span class="w">        </span><span class="n">Log</span><span class="p">(</span><span class="s">$"CHECK students={reader.GetInt64(0)} enrollments={reader.GetInt64(1)}"</span><span class="p">);</span>
 <span class="w">    </span><span class="p">}</span>
 
-<span class="w">    </span><span class="n">Log</span><span class="p">(</span><span class="s">&quot;DONE&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="n">Log</span><span class="p">(</span><span class="s">"DONE"</span><span class="p">);</span>
 <span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
 <span class="p">}</span>
 <span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="n">MySqlException</span><span class="w"> </span><span class="n">ex</span><span class="p">)</span>
 <span class="p">{</span>
-<span class="w">    </span><span class="n">Log</span><span class="p">(</span><span class="s">$&quot;ERROR {ex.Number}: {ex.Message}&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="n">Log</span><span class="p">(</span><span class="s">$"ERROR {ex.Number}: {ex.Message}"</span><span class="p">);</span>
 <span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
 <span class="p">}</span>
 <span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="n">Exception</span><span class="w"> </span><span class="n">ex</span><span class="p">)</span>
 <span class="p">{</span>
-<span class="w">    </span><span class="n">Log</span><span class="p">(</span><span class="s">$&quot;ERROR {ex.GetType().Name}: {ex.Message}&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="n">Log</span><span class="p">(</span><span class="s">$"ERROR {ex.GetType().Name}: {ex.Message}"</span><span class="p">);</span>
 <span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
 <span class="p">}</span>
 </code></pre></div>
@@ -1072,17 +1096,17 @@ DeanMaintenance.exe --dry-run
 
 <p>Код возврата 0, в каталоге <code>backups</code> появится файл <code>dean_&lt;метка&gt;.sql</code>, в журнале строки <code>START</code>, <code>CHECK подключение</code>, <code>CHECK дамп</code>, три строки <code>CHECK groups status</code> и <code>CHECK students=</code>. Приложите скриншот запуска, <code>echo %ERRORLEVEL%</code> и хвоста журнала.</p>
 <p>Если <code>mysqldump</code> вернул ошибку доступа, выдайте пользователю <code>dean_app</code> права на чтение и выгрузку.</p>
-<div class="codehilite" data-lang="sql"><pre><span></span><code><span class="k">GRANT</span><span class="w"> </span><span class="k">SELECT</span><span class="p">,</span><span class="w"> </span><span class="k">SHOW</span><span class="w"> </span><span class="k">VIEW</span><span class="p">,</span><span class="w"> </span><span class="k">TRIGGER</span><span class="p">,</span><span class="w"> </span><span class="n">EVENT</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">dean</span><span class="p">.</span><span class="o">*</span><span class="w"> </span><span class="k">TO</span><span class="w"> </span><span class="s1">&#39;dean_app&#39;</span><span class="o">@</span><span class="s1">&#39;localhost&#39;</span><span class="p">;</span>
+<div class="codehilite" data-lang="sql"><pre><span></span><code><span class="k">GRANT</span><span class="w"> </span><span class="k">SELECT</span><span class="p">,</span><span class="w"> </span><span class="k">SHOW</span><span class="w"> </span><span class="k">VIEW</span><span class="p">,</span><span class="w"> </span><span class="k">TRIGGER</span><span class="p">,</span><span class="w"> </span><span class="n">EVENT</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">dean</span><span class="p">.</span><span class="o">*</span><span class="w"> </span><span class="k">TO</span><span class="w"> </span><span class="s1">'dean_app'</span><span class="o">@</span><span class="s1">'localhost'</span><span class="p">;</span>
 <span class="n">FLUSH</span><span class="w"> </span><span class="k">PRIVILEGES</span><span class="p">;</span>
 </code></pre></div>
 
 <h3>Шаг 6. Запустите приложение второй раз</h3>
 <p>Сначала зафиксируйте число строк, затем повторите запуск и сравните.</p>
-<div class="codehilite" data-lang="bat"><pre><span></span><code>mysql -u root dean -e <span class="s2">&quot;SELECT COUNT(*) FROM students; SELECT COUNT(*) FROM enrollments;&quot;</span>
+<div class="codehilite" data-lang="bat"><pre><span></span><code>mysql -u root dean -e <span class="s2">"SELECT COUNT(*) FROM students; SELECT COUNT(*) FROM enrollments;"</span>
 DeanMaintenance.exe
 <span class="k">echo</span> <span class="nv">%ERRORLEVEL%</span>
 <span class="k">dir</span> backups
-mysql -u root dean -e <span class="s2">&quot;SELECT COUNT(*) FROM students; SELECT COUNT(*) FROM enrollments;&quot;</span>
+mysql -u root dean -e <span class="s2">"SELECT COUNT(*) FROM students; SELECT COUNT(*) FROM enrollments;"</span>
 </code></pre></div>
 
 <p>Числа не меняются, а копий становится две. Это и есть идемпотентность обслуживания: повторный запуск создаёт новый снимок, но не трогает данные. Имя копии содержит метку времени до секунды, поэтому два запуска подряд в одну секунду дадут одно имя и перезапишут файл. Между запусками подождите секунду.</p>
@@ -1100,8 +1124,8 @@ DeanMaintenance.exe
 </code></pre></div>
 
 <h3>Шаг 8. Проверьте копию и статистику</h3>
-<div class="codehilite" data-lang="bat"><pre><span></span><code>findstr /C:<span class="s2">&quot;CREATE TABLE&quot;</span> backups\dean_*.sql
-findstr /C:<span class="s2">&quot;CHECK students=&quot;</span> logs\dean-maintenance.log
+<div class="codehilite" data-lang="bat"><pre><span></span><code>findstr /C:<span class="s2">"CREATE TABLE"</span> backups\dean_*.sql
+findstr /C:<span class="s2">"CHECK students="</span> logs\dean-maintenance.log
 </code></pre></div>
 
 <p>Первая команда должна найти определения таблиц, вторая показывает число строк, записанное после обслуживания. Пустой дамп или дамп без <code>CREATE TABLE</code> означает, что копия непригодна, даже если код возврата был нулевым.</p>
@@ -1279,6 +1303,40 @@ findstr /C:<span class="s2">&quot;CHECK students=&quot;</span> logs\dean-mainten
       var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
       window.scrollTo({top: 0, behavior: reduce ? 'auto' : 'smooth'});
     });
+  });
+})();
+
+(function(){
+  document.querySelectorAll('[data-slider]').forEach(function(slider){
+    var track = slider.querySelector('[data-slider-track]');
+    var slides = track ? Array.prototype.slice.call(track.children) : [];
+    var counter = slider.querySelector('[data-slider-counter]');
+    var prev = slider.querySelector('[data-slider-prev]');
+    var next = slider.querySelector('[data-slider-next]');
+    if(!track || slides.length < 2) return;
+    function current(){
+      var best = 0, dist = Infinity;
+      slides.forEach(function(slide, i){
+        var d = Math.abs(slide.offsetLeft - track.scrollLeft);
+        if(d < dist){ dist = d; best = i; }
+      });
+      return best;
+    }
+    function update(){
+      if(counter) counter.textContent = (current() + 1) + ' / ' + slides.length;
+    }
+    function go(delta){
+      var i = Math.max(0, Math.min(slides.length - 1, current() + delta));
+      var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      track.scrollTo({left: slides[i].offsetLeft, behavior: reduce ? 'auto' : 'smooth'});
+    }
+    if(prev) prev.addEventListener('click', function(){ go(-1); });
+    if(next) next.addEventListener('click', function(){ go(1); });
+    track.addEventListener('scroll', function(){
+      clearTimeout(track._sliderTimer);
+      track._sliderTimer = setTimeout(update, 80);
+    }, {passive: true});
+    update();
   });
 })();
 (function(){

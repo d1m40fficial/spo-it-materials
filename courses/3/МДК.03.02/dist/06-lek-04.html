@@ -527,6 +527,12 @@ html.modal-open { overflow: hidden; }
 :root[data-theme=dark] .quiz-actions button[data-answer]:hover, :root[data-theme=dark] .quiz-actions button.quiz-answer:hover { background: #262626; background-color: #262626; color: #fff; border-color: #262626; }
 :root[data-theme=dark] .gate-q { background: #1E1E1E; color: #FF6B00; }
 
+/* the whole-variant archive is the main action in a download block */
+.files a.zip { background: #121212; color: #fff; border-color: #121212; font-weight: 700; box-shadow: 4px 4px 0 rgba(0,0,0,.18); }
+.files a.zip::before { color: #fff; }
+.files a.zip:hover { background: #1D1D1D; color: #fff; border-color: #1D1D1D; box-shadow: 5px 5px 0 rgba(0,0,0,.22); }
+.files a.zip:active { transform: translate(2px,2px); box-shadow: 1px 1px 0 rgba(0,0,0,.12); }
+
 /* ---------- practical work checklist ---------- */
 .work-checklist { width: 100%; border-collapse: collapse; margin: 14px 0 4px; }
 .work-checklist th, .work-checklist td { border: 1px solid var(--rule); padding: 9px 10px; vertical-align: top; }
@@ -564,6 +570,24 @@ html.modal-open { overflow: hidden; }
 .variant-body .task-list { margin: 8px 0 0; padding-left: 20px; }
 .variant-body .task-list li { margin: 0 0 8px; }
 @media (max-width: 620px) { .variant-body { overflow-x: auto; } .variant-body table { min-width: 520px; } }
+
+/* ---------- schema slider: all CREATE TABLE examples ---------- */
+.schema-slider { margin: 18px 0 24px; border: 1px solid #d8d5cc; border-radius: 14px; background: #fff; color: #1a1916; overflow: hidden; }
+.schema-slider-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 14px; background: #f5f2ea; border-bottom: 1px solid #d8d5cc; }
+.schema-slider-bar strong { font: 700 14px/1.2 var(--font-display); color: #1a1916; }
+.schema-slider-actions { display: flex; align-items: center; gap: 8px; }
+.schema-slider-counter { min-width: 62px; text-align: center; font: 600 13px/1 var(--font-mono); color: #59544a; }
+.schema-btn { width: 34px; height: 34px; border: 1px solid #c9c4b8; border-radius: 8px; background: #fff; color: #1a1916; font: 700 18px/1 var(--font-mono); cursor: pointer; }
+.schema-btn:hover { background: #ece7dc; }
+.schema-track { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: thin; }
+.schema-slide { flex: 0 0 100%; min-width: 100%; box-sizing: border-box; padding: 16px 18px 18px; scroll-snap-align: start; }
+.schema-slide h4 { margin: 0 0 10px; font: 700 16px/1.3 var(--font-display); color: #1a1916; }
+.schema-slide h4 code, .schema-slide p code { color: #1a1916; background: #f1ede4; padding: 1px 4px; border-radius: 4px; }
+.schema-slide p { margin: 0 0 10px; font-size: 14px; line-height: 1.55; color: #3a372f; }
+.schema-slide pre { margin: 0; padding: 14px 16px; overflow-x: auto; border: 1px solid #ddd8cc; border-radius: 10px; background: #fbfaf6; color: #1a1916; font: 12.5px/1.5 var(--font-mono); }
+.schema-slide code { color: inherit; background: none; padding: 0; }
+.schema-slider:focus-within { outline: 2px solid #b9a97f; outline-offset: 2px; }
+@media (max-width: 620px) { .schema-slide { padding: 12px; } .schema-slider-bar { padding: 8px 10px; } }
 
 /* ---------- print / PDF export ---------- */
 @page { margin: 16mm; }
@@ -848,7 +872,7 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <p>Проект ИС «Заявки» учебного центра идёт к запуску. Заказчик, начальник учебного отдела, принял демонстрацию и согласовал состав первой версии. Преподаватели записались на обучение, студенты ждут расписания. За неделю до запуска выясняется, что бухгалтерия не примет работу: акт нужен на её бланке, с её кодами затрат, и в акте должна стоять сумма часов, которую система пока не считает. О бухгалтерии вспомнили за неделю.</p>
 <p>Технически проект готов. Он провалился в одном человеке, которого не было в списке сторон. <strong>У проекта нет «пользователей вообще»: есть конкретные люди с властью, интересом и своим представлением об успехе.</strong> Сторона, о которой забыли, возвращается в самый дорогой момент, когда переделка стоит не строки кода, а сдвига запуска и объяснения с директором.</p>
 <p>Посмотрите на карту. По вертикали власть: от 1, где сторона может только высказать мнение, до 5, где одна подпись останавливает запуск. По горизонтали интерес: от 1, где результат почти не меняет работу, до 5, где сторона живёт в системе каждый день. Девять карточек уже разложены по квадрантам. Возьмите карточку бухгалтерии и перетащите её выше: карточка сменит квадрант, справа перепишется стратегия, а табло пересчитает, сколько сторон в каждой зоне. Следите не за перемещением, а за тем, как меняется формулировка стратегии у одной и той же стороны.</p>
-<figure class="figure" data-fig="fig-04-stakeholders" data-one="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"><iframe title="Figure 1: fig-04-stakeholders" scrolling="no"></iframe><figcaption>Перетащите сторону: квадрант сменит стратегию.</figcaption></figure>
+<figure class="figure" data-fig="fig-04-stakeholders" data-one="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"><iframe title="Figure 1: fig-04-stakeholders" scrolling="no"></iframe><figcaption>Перетащите сторону: квадрант сменит стратегию.</figcaption></figure>
 
 <p>Вы увидели девять сторон и четыре зоны. В правом верхнем углу, где власть и интерес высокие, стоят двое: заказчик и спонсор, заместитель директора. В «вовлекать» оказались преподаватели, администратор системы, разработчик и поддержка. В «информировать» двое: директор и бухгалтерия. В «наблюдать» один: студенты. Табло справа держит счёт: 9 сторон, 2 в «управлять», 4 в «вовлекать», 2 в «информировать», 1 в «наблюдать». Сумма всегда девять: карта не теряет людей, а раскладывает их.</p>
 <p>Обратите внимание на бухгалтерию. Власть у неё высокая, интерес низкий. Это самая опасная клетка: сторона может остановить проект, но сама в него не вникает. Когда вы перетащили её карточку вверх, стратегия сменилась с «сообщать по факту» на «согласовывать заранее». В проекте не изменилось ничего, изменился только объём контакта.</p>
@@ -1189,6 +1213,40 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
       var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
       window.scrollTo({top: 0, behavior: reduce ? 'auto' : 'smooth'});
     });
+  });
+})();
+
+(function(){
+  document.querySelectorAll('[data-slider]').forEach(function(slider){
+    var track = slider.querySelector('[data-slider-track]');
+    var slides = track ? Array.prototype.slice.call(track.children) : [];
+    var counter = slider.querySelector('[data-slider-counter]');
+    var prev = slider.querySelector('[data-slider-prev]');
+    var next = slider.querySelector('[data-slider-next]');
+    if(!track || slides.length < 2) return;
+    function current(){
+      var best = 0, dist = Infinity;
+      slides.forEach(function(slide, i){
+        var d = Math.abs(slide.offsetLeft - track.scrollLeft);
+        if(d < dist){ dist = d; best = i; }
+      });
+      return best;
+    }
+    function update(){
+      if(counter) counter.textContent = (current() + 1) + ' / ' + slides.length;
+    }
+    function go(delta){
+      var i = Math.max(0, Math.min(slides.length - 1, current() + delta));
+      var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      track.scrollTo({left: slides[i].offsetLeft, behavior: reduce ? 'auto' : 'smooth'});
+    }
+    if(prev) prev.addEventListener('click', function(){ go(-1); });
+    if(next) next.addEventListener('click', function(){ go(1); });
+    track.addEventListener('scroll', function(){
+      clearTimeout(track._sliderTimer);
+      track._sliderTimer = setTimeout(update, 80);
+    }, {passive: true});
+    update();
   });
 })();
 (function(){

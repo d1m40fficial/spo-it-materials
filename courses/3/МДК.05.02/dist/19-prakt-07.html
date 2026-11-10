@@ -527,6 +527,12 @@ html.modal-open { overflow: hidden; }
 :root[data-theme=dark] .quiz-actions button[data-answer]:hover, :root[data-theme=dark] .quiz-actions button.quiz-answer:hover { background: #262626; background-color: #262626; color: #fff; border-color: #262626; }
 :root[data-theme=dark] .gate-q { background: #1E1E1E; color: #FF6B00; }
 
+/* the whole-variant archive is the main action in a download block */
+.files a.zip { background: #121212; color: #fff; border-color: #121212; font-weight: 700; box-shadow: 4px 4px 0 rgba(0,0,0,.18); }
+.files a.zip::before { color: #fff; }
+.files a.zip:hover { background: #1D1D1D; color: #fff; border-color: #1D1D1D; box-shadow: 5px 5px 0 rgba(0,0,0,.22); }
+.files a.zip:active { transform: translate(2px,2px); box-shadow: 1px 1px 0 rgba(0,0,0,.12); }
+
 /* ---------- practical work checklist ---------- */
 .work-checklist { width: 100%; border-collapse: collapse; margin: 14px 0 4px; }
 .work-checklist th, .work-checklist td { border: 1px solid var(--rule); padding: 9px 10px; vertical-align: top; }
@@ -564,6 +570,24 @@ html.modal-open { overflow: hidden; }
 .variant-body .task-list { margin: 8px 0 0; padding-left: 20px; }
 .variant-body .task-list li { margin: 0 0 8px; }
 @media (max-width: 620px) { .variant-body { overflow-x: auto; } .variant-body table { min-width: 520px; } }
+
+/* ---------- schema slider: all CREATE TABLE examples ---------- */
+.schema-slider { margin: 18px 0 24px; border: 1px solid #d8d5cc; border-radius: 14px; background: #fff; color: #1a1916; overflow: hidden; }
+.schema-slider-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 14px; background: #f5f2ea; border-bottom: 1px solid #d8d5cc; }
+.schema-slider-bar strong { font: 700 14px/1.2 var(--font-display); color: #1a1916; }
+.schema-slider-actions { display: flex; align-items: center; gap: 8px; }
+.schema-slider-counter { min-width: 62px; text-align: center; font: 600 13px/1 var(--font-mono); color: #59544a; }
+.schema-btn { width: 34px; height: 34px; border: 1px solid #c9c4b8; border-radius: 8px; background: #fff; color: #1a1916; font: 700 18px/1 var(--font-mono); cursor: pointer; }
+.schema-btn:hover { background: #ece7dc; }
+.schema-track { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: thin; }
+.schema-slide { flex: 0 0 100%; min-width: 100%; box-sizing: border-box; padding: 16px 18px 18px; scroll-snap-align: start; }
+.schema-slide h4 { margin: 0 0 10px; font: 700 16px/1.3 var(--font-display); color: #1a1916; }
+.schema-slide h4 code, .schema-slide p code { color: #1a1916; background: #f1ede4; padding: 1px 4px; border-radius: 4px; }
+.schema-slide p { margin: 0 0 10px; font-size: 14px; line-height: 1.55; color: #3a372f; }
+.schema-slide pre { margin: 0; padding: 14px 16px; overflow-x: auto; border: 1px solid #ddd8cc; border-radius: 10px; background: #fbfaf6; color: #1a1916; font: 12.5px/1.5 var(--font-mono); }
+.schema-slide code { color: inherit; background: none; padding: 0; }
+.schema-slider:focus-within { outline: 2px solid #b9a97f; outline-offset: 2px; }
+@media (max-width: 620px) { .schema-slide { padding: 12px; } .schema-slider-bar { padding: 8px 10px; } }
 
 /* ---------- print / PDF export ---------- */
 @page { margin: 16mm; }
@@ -876,34 +900,34 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <p>Создайте каталоги <code>.../sklad-plus/data/in</code> и <code>.../sklad-plus/data/out</code>. В первом каталоге разместите два файла с данными ниже. Файл <code>supplies.json</code> сохраните в UTF-8, файл <code>stock.csv</code> тоже в UTF-8. Если CSV сохраняется из Excel, в начале появится BOM, и это нужно учесть при чтении.</p>
 <p><code>.../sklad-plus/data/in/supplies.json</code>:</p>
 <div class="codehilite" data-lang="json"><pre><span></span><code><span class="p">{</span>
-<span class="w">  </span><span class="nt">&quot;supplier&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;ТрансЛогистика&quot;</span><span class="p">,</span>
-<span class="w">  </span><span class="nt">&quot;sent_at&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2026-10-05T08:30:00&quot;</span><span class="p">,</span>
-<span class="w">  </span><span class="nt">&quot;shipments&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">  </span><span class="nt">"supplier"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ТрансЛогистика"</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"sent_at"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2026-10-05T08:30:00"</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"shipments"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
 <span class="w">    </span><span class="p">{</span>
-<span class="w">      </span><span class="nt">&quot;number&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;TR-9001&quot;</span><span class="p">,</span>
-<span class="w">      </span><span class="nt">&quot;warehouse&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Москва&quot;</span><span class="p">,</span>
-<span class="w">      </span><span class="nt">&quot;date&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2026-10-04&quot;</span><span class="p">,</span>
-<span class="w">      </span><span class="nt">&quot;items&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
-<span class="w">        </span><span class="p">{</span><span class="nt">&quot;sku&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;SKU-1042&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;qty&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">48</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;price&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">312.5</span><span class="p">},</span>
-<span class="w">        </span><span class="p">{</span><span class="nt">&quot;sku&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;SKU-2210&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;qty&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">12</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;price&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">890.0</span><span class="p">}</span>
+<span class="w">      </span><span class="nt">"number"</span><span class="p">:</span><span class="w"> </span><span class="s2">"TR-9001"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"warehouse"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Москва"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"date"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2026-10-04"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"items"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="p">{</span><span class="nt">"sku"</span><span class="p">:</span><span class="w"> </span><span class="s2">"SKU-1042"</span><span class="p">,</span><span class="w"> </span><span class="nt">"qty"</span><span class="p">:</span><span class="w"> </span><span class="mi">48</span><span class="p">,</span><span class="w"> </span><span class="nt">"price"</span><span class="p">:</span><span class="w"> </span><span class="mf">312.5</span><span class="p">},</span>
+<span class="w">        </span><span class="p">{</span><span class="nt">"sku"</span><span class="p">:</span><span class="w"> </span><span class="s2">"SKU-2210"</span><span class="p">,</span><span class="w"> </span><span class="nt">"qty"</span><span class="p">:</span><span class="w"> </span><span class="mi">12</span><span class="p">,</span><span class="w"> </span><span class="nt">"price"</span><span class="p">:</span><span class="w"> </span><span class="mf">890.0</span><span class="p">}</span>
 <span class="w">      </span><span class="p">]</span>
 <span class="w">    </span><span class="p">},</span>
 <span class="w">    </span><span class="p">{</span>
-<span class="w">      </span><span class="nt">&quot;number&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;TR-9002&quot;</span><span class="p">,</span>
-<span class="w">      </span><span class="nt">&quot;warehouse&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Тверь&quot;</span><span class="p">,</span>
-<span class="w">      </span><span class="nt">&quot;date&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2026-10-04&quot;</span><span class="p">,</span>
-<span class="w">      </span><span class="nt">&quot;items&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
-<span class="w">        </span><span class="p">{</span><span class="nt">&quot;sku&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;SKU-0871&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;qty&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">96</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;price&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">145.0</span><span class="p">},</span>
-<span class="w">        </span><span class="p">{</span><span class="nt">&quot;sku&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;SKU-1042&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;qty&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">24</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;price&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">312.5</span><span class="p">}</span>
+<span class="w">      </span><span class="nt">"number"</span><span class="p">:</span><span class="w"> </span><span class="s2">"TR-9002"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"warehouse"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Тверь"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"date"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2026-10-04"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"items"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="p">{</span><span class="nt">"sku"</span><span class="p">:</span><span class="w"> </span><span class="s2">"SKU-0871"</span><span class="p">,</span><span class="w"> </span><span class="nt">"qty"</span><span class="p">:</span><span class="w"> </span><span class="mi">96</span><span class="p">,</span><span class="w"> </span><span class="nt">"price"</span><span class="p">:</span><span class="w"> </span><span class="mf">145.0</span><span class="p">},</span>
+<span class="w">        </span><span class="p">{</span><span class="nt">"sku"</span><span class="p">:</span><span class="w"> </span><span class="s2">"SKU-1042"</span><span class="p">,</span><span class="w"> </span><span class="nt">"qty"</span><span class="p">:</span><span class="w"> </span><span class="mi">24</span><span class="p">,</span><span class="w"> </span><span class="nt">"price"</span><span class="p">:</span><span class="w"> </span><span class="mf">312.5</span><span class="p">}</span>
 <span class="w">      </span><span class="p">]</span>
 <span class="w">    </span><span class="p">},</span>
 <span class="w">    </span><span class="p">{</span>
-<span class="w">      </span><span class="nt">&quot;number&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;TR-9003&quot;</span><span class="p">,</span>
-<span class="w">      </span><span class="nt">&quot;warehouse&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Москва&quot;</span><span class="p">,</span>
-<span class="w">      </span><span class="nt">&quot;date&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2026-10-05&quot;</span><span class="p">,</span>
-<span class="w">      </span><span class="nt">&quot;items&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
-<span class="w">        </span><span class="p">{</span><span class="nt">&quot;sku&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;SKU-2210&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;qty&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">30</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;price&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">890.0</span><span class="p">},</span>
-<span class="w">        </span><span class="p">{</span><span class="nt">&quot;sku&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;SKU-5521&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;qty&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;price&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">1200.0</span><span class="p">}</span>
+<span class="w">      </span><span class="nt">"number"</span><span class="p">:</span><span class="w"> </span><span class="s2">"TR-9003"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"warehouse"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Москва"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"date"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2026-10-05"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"items"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="p">{</span><span class="nt">"sku"</span><span class="p">:</span><span class="w"> </span><span class="s2">"SKU-2210"</span><span class="p">,</span><span class="w"> </span><span class="nt">"qty"</span><span class="p">:</span><span class="w"> </span><span class="mi">30</span><span class="p">,</span><span class="w"> </span><span class="nt">"price"</span><span class="p">:</span><span class="w"> </span><span class="mf">890.0</span><span class="p">},</span>
+<span class="w">        </span><span class="p">{</span><span class="nt">"sku"</span><span class="p">:</span><span class="w"> </span><span class="s2">"SKU-5521"</span><span class="p">,</span><span class="w"> </span><span class="nt">"qty"</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="nt">"price"</span><span class="p">:</span><span class="w"> </span><span class="mf">1200.0</span><span class="p">}</span>
 <span class="w">      </span><span class="p">]</span>
 <span class="w">    </span><span class="p">}</span>
 <span class="w">  </span><span class="p">]</span>
@@ -924,20 +948,20 @@ SKU-3305;Изолента;Электрика;0;64,90
 <div class="codehilite" data-lang="python"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
 
-<span class="n">path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">&quot;.../sklad-plus/data/in/supplies.json&quot;</span><span class="p">)</span>
+<span class="n">path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">".../sklad-plus/data/in/supplies.json"</span><span class="p">)</span>
 
-<span class="k">with</span> <span class="n">path</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+<span class="k">with</span> <span class="n">path</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
     <span class="n">document</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">document</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">document</span><span class="p">))</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">document</span><span class="p">[</span><span class="s2">&quot;supplier&quot;</span><span class="p">])</span>
-<span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">document</span><span class="p">[</span><span class="s2">&quot;shipments&quot;</span><span class="p">]))</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">document</span><span class="p">[</span><span class="s2">&quot;shipments&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;items&quot;</span><span class="p">][</span><span class="mi">1</span><span class="p">][</span><span class="s2">&quot;sku&quot;</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">document</span><span class="p">[</span><span class="s2">"supplier"</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">document</span><span class="p">[</span><span class="s2">"shipments"</span><span class="p">]))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">document</span><span class="p">[</span><span class="s2">"shipments"</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s2">"items"</span><span class="p">][</span><span class="mi">1</span><span class="p">][</span><span class="s2">"sku"</span><span class="p">])</span>
 </code></pre></div>
 
 <div class="codehilite" data-lang="text"><pre><span></span><code>dict
-[&#39;supplier&#39;, &#39;sent_at&#39;, &#39;shipments&#39;]
+['supplier', 'sent_at', 'shipments']
 ТрансЛогистика
 3
 SKU-2210
@@ -949,17 +973,17 @@ SKU-2210
 <p>Пример чтения CSV с разделителем <code>;</code>.</p>
 <div class="codehilite" data-lang="python"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">csv</span>
 
-<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;.../sklad-plus/data/in/stock.csv&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8-sig&quot;</span><span class="p">,</span> <span class="n">newline</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
-    <span class="n">reader</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">DictReader</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s2">&quot;;&quot;</span><span class="p">)</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">".../sklad-plus/data/in/stock.csv"</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8-sig"</span><span class="p">,</span> <span class="n">newline</span><span class="o">=</span><span class="s2">""</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+    <span class="n">reader</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">DictReader</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s2">";"</span><span class="p">)</span>
     <span class="n">rows</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">reader</span><span class="p">)</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="n">reader</span><span class="o">.</span><span class="n">fieldnames</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">rows</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-<span class="nb">print</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">rows</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;qty&quot;</span><span class="p">])</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">rows</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">"qty"</span><span class="p">])</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
 </code></pre></div>
 
-<div class="codehilite" data-lang="text"><pre><span></span><code>[&#39;sku&#39;, &#39;title&#39;, &#39;category&#39;, &#39;qty&#39;, &#39;price&#39;]
-{&#39;sku&#39;: &#39;SKU-1042&#39;, &#39;title&#39;: &#39;Перчатки нитриловые&#39;, &#39;category&#39;: &#39;Спецодежда&#39;, &#39;qty&#39;: &#39;48&#39;, &#39;price&#39;: &#39;312,50&#39;}
+<div class="codehilite" data-lang="text"><pre><span></span><code>['sku', 'title', 'category', 'qty', 'price']
+{'sku': 'SKU-1042', 'title': 'Перчатки нитриловые', 'category': 'Спецодежда', 'qty': '48', 'price': '312,50'}
 str
 </code></pre></div>
 
@@ -991,11 +1015,11 @@ str
 <p>Проверьте преобразование на строке с ценой <code>312,50</code>. В объекте должно получиться <code>Decimal("312.5")</code>, а <code>total</code> для количества 48 равно <code>15000.0</code>. Если нужен вид с двумя знаками после запятой, примените <code>quantize(Decimal("0.01"))</code> при выводе, а не при расчёте.</p>
 <h3>Шаг 6. Соедините два источника</h3>
 <p>Соберите все строки поставок в один список. Затем проверьте, что каждый артикул есть в справочнике.</p>
-<div class="codehilite" data-lang="python"><pre><span></span><code><span class="n">lines</span> <span class="o">=</span> <span class="n">read_supplies</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="s2">&quot;.../sklad-plus/data/in/supplies.json&quot;</span><span class="p">))</span>
-<span class="n">stock</span> <span class="o">=</span> <span class="n">read_stock</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="s2">&quot;.../sklad-plus/data/in/stock.csv&quot;</span><span class="p">))</span>
+<div class="codehilite" data-lang="python"><pre><span></span><code><span class="n">lines</span> <span class="o">=</span> <span class="n">read_supplies</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="s2">".../sklad-plus/data/in/supplies.json"</span><span class="p">))</span>
+<span class="n">stock</span> <span class="o">=</span> <span class="n">read_stock</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="s2">".../sklad-plus/data/in/stock.csv"</span><span class="p">))</span>
 
 <span class="n">missing</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">({</span><span class="n">line</span><span class="o">.</span><span class="n">sku</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">lines</span> <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">sku</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">stock</span><span class="p">})</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;нет в справочнике:&quot;</span><span class="p">,</span> <span class="n">missing</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"нет в справочнике:"</span><span class="p">,</span> <span class="n">missing</span><span class="p">)</span>
 </code></pre></div>
 
 <p>Ожидается один отсутствующий артикул. Такие строки нельзя молча выбрасывать: в отчёт попадает артикул и номер поставки. В учебном задании достаточно вывести список, в рабочей системе такую запись сохраняют в отдельный файл ошибок.</p>
@@ -1005,10 +1029,10 @@ str
 <div class="codehilite" data-lang="python"><pre><span></span><code><span class="n">selected</span> <span class="o">=</span> <span class="p">[</span>
     <span class="n">line</span>
     <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">lines</span>
-    <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">sku</span> <span class="ow">in</span> <span class="n">stock</span> <span class="ow">and</span> <span class="n">line</span><span class="o">.</span><span class="n">warehouse</span> <span class="o">==</span> <span class="s2">&quot;Москва&quot;</span> <span class="ow">and</span> <span class="n">line</span><span class="o">.</span><span class="n">qty</span> <span class="o">&gt;=</span> <span class="mi">20</span>
+    <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">sku</span> <span class="ow">in</span> <span class="n">stock</span> <span class="ow">and</span> <span class="n">line</span><span class="o">.</span><span class="n">warehouse</span> <span class="o">==</span> <span class="s2">"Москва"</span> <span class="ow">and</span> <span class="n">line</span><span class="o">.</span><span class="n">qty</span> <span class="o">&gt;=</span> <span class="mi">20</span>
 <span class="p">]</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;после фильтра:&quot;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">selected</span><span class="p">))</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;сумма отбора:&quot;</span><span class="p">,</span> <span class="nb">sum</span><span class="p">((</span><span class="n">line</span><span class="o">.</span><span class="n">total</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">selected</span><span class="p">),</span> <span class="n">Decimal</span><span class="p">(</span><span class="s2">&quot;0&quot;</span><span class="p">)))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"после фильтра:"</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">selected</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"сумма отбора:"</span><span class="p">,</span> <span class="nb">sum</span><span class="p">((</span><span class="n">line</span><span class="o">.</span><span class="n">total</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">selected</span><span class="p">),</span> <span class="n">Decimal</span><span class="p">(</span><span class="s2">"0"</span><span class="p">)))</span>
 </code></pre></div>
 
 <p>Из шести строк должно остаться две. Проверьте это вручную по файлу: одна строка из первой поставки и одна из третьей. Строка с отсутствующим артикулом не проходит по количеству, но её всё равно нужно показать в отчёте об ошибках, поэтому проверка артикула стоит раньше фильтра.</p>
@@ -1018,20 +1042,20 @@ str
 <p>Запись JSON:</p>
 <div class="codehilite" data-lang="python"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
 
-<span class="n">path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">&quot;.../sklad-plus/data/out/moscow_supplies.json&quot;</span><span class="p">)</span>
-<span class="k">with</span> <span class="n">path</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+<span class="n">path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">".../sklad-plus/data/out/moscow_supplies.json"</span><span class="p">)</span>
+<span class="k">with</span> <span class="n">path</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">"w"</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
     <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">file</span><span class="p">,</span> <span class="n">ensure_ascii</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 </code></pre></div>
 
 <p>Запись CSV:</p>
 <div class="codehilite" data-lang="python"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">csv</span>
 
-<span class="n">path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">&quot;.../sklad-plus/data/out/moscow_supplies.csv&quot;</span><span class="p">)</span>
-<span class="k">with</span> <span class="n">path</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8-sig&quot;</span><span class="p">,</span> <span class="n">newline</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+<span class="n">path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">".../sklad-plus/data/out/moscow_supplies.csv"</span><span class="p">)</span>
+<span class="k">with</span> <span class="n">path</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">"w"</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8-sig"</span><span class="p">,</span> <span class="n">newline</span><span class="o">=</span><span class="s2">""</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
     <span class="n">writer</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">DictWriter</span><span class="p">(</span>
         <span class="n">file</span><span class="p">,</span>
-        <span class="n">fieldnames</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;number&quot;</span><span class="p">,</span> <span class="s2">&quot;date&quot;</span><span class="p">,</span> <span class="s2">&quot;sku&quot;</span><span class="p">,</span> <span class="s2">&quot;title&quot;</span><span class="p">,</span> <span class="s2">&quot;qty&quot;</span><span class="p">,</span> <span class="s2">&quot;total&quot;</span><span class="p">],</span>
-        <span class="n">delimiter</span><span class="o">=</span><span class="s2">&quot;;&quot;</span><span class="p">,</span>
+        <span class="n">fieldnames</span><span class="o">=</span><span class="p">[</span><span class="s2">"number"</span><span class="p">,</span> <span class="s2">"date"</span><span class="p">,</span> <span class="s2">"sku"</span><span class="p">,</span> <span class="s2">"title"</span><span class="p">,</span> <span class="s2">"qty"</span><span class="p">,</span> <span class="s2">"total"</span><span class="p">],</span>
+        <span class="n">delimiter</span><span class="o">=</span><span class="s2">";"</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="n">writer</span><span class="o">.</span><span class="n">writeheader</span><span class="p">()</span>
     <span class="n">writer</span><span class="o">.</span><span class="n">writerows</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
@@ -1162,6 +1186,40 @@ str
       var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
       window.scrollTo({top: 0, behavior: reduce ? 'auto' : 'smooth'});
     });
+  });
+})();
+
+(function(){
+  document.querySelectorAll('[data-slider]').forEach(function(slider){
+    var track = slider.querySelector('[data-slider-track]');
+    var slides = track ? Array.prototype.slice.call(track.children) : [];
+    var counter = slider.querySelector('[data-slider-counter]');
+    var prev = slider.querySelector('[data-slider-prev]');
+    var next = slider.querySelector('[data-slider-next]');
+    if(!track || slides.length < 2) return;
+    function current(){
+      var best = 0, dist = Infinity;
+      slides.forEach(function(slide, i){
+        var d = Math.abs(slide.offsetLeft - track.scrollLeft);
+        if(d < dist){ dist = d; best = i; }
+      });
+      return best;
+    }
+    function update(){
+      if(counter) counter.textContent = (current() + 1) + ' / ' + slides.length;
+    }
+    function go(delta){
+      var i = Math.max(0, Math.min(slides.length - 1, current() + delta));
+      var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      track.scrollTo({left: slides[i].offsetLeft, behavior: reduce ? 'auto' : 'smooth'});
+    }
+    if(prev) prev.addEventListener('click', function(){ go(-1); });
+    if(next) next.addEventListener('click', function(){ go(1); });
+    track.addEventListener('scroll', function(){
+      clearTimeout(track._sliderTimer);
+      track._sliderTimer = setTimeout(update, 80);
+    }, {passive: true});
+    update();
   });
 })();
 (function(){

@@ -527,6 +527,12 @@ html.modal-open { overflow: hidden; }
 :root[data-theme=dark] .quiz-actions button[data-answer]:hover, :root[data-theme=dark] .quiz-actions button.quiz-answer:hover { background: #262626; background-color: #262626; color: #fff; border-color: #262626; }
 :root[data-theme=dark] .gate-q { background: #1E1E1E; color: #FF6B00; }
 
+/* the whole-variant archive is the main action in a download block */
+.files a.zip { background: #121212; color: #fff; border-color: #121212; font-weight: 700; box-shadow: 4px 4px 0 rgba(0,0,0,.18); }
+.files a.zip::before { color: #fff; }
+.files a.zip:hover { background: #1D1D1D; color: #fff; border-color: #1D1D1D; box-shadow: 5px 5px 0 rgba(0,0,0,.22); }
+.files a.zip:active { transform: translate(2px,2px); box-shadow: 1px 1px 0 rgba(0,0,0,.12); }
+
 /* ---------- practical work checklist ---------- */
 .work-checklist { width: 100%; border-collapse: collapse; margin: 14px 0 4px; }
 .work-checklist th, .work-checklist td { border: 1px solid var(--rule); padding: 9px 10px; vertical-align: top; }
@@ -564,6 +570,24 @@ html.modal-open { overflow: hidden; }
 .variant-body .task-list { margin: 8px 0 0; padding-left: 20px; }
 .variant-body .task-list li { margin: 0 0 8px; }
 @media (max-width: 620px) { .variant-body { overflow-x: auto; } .variant-body table { min-width: 520px; } }
+
+/* ---------- schema slider: all CREATE TABLE examples ---------- */
+.schema-slider { margin: 18px 0 24px; border: 1px solid #d8d5cc; border-radius: 14px; background: #fff; color: #1a1916; overflow: hidden; }
+.schema-slider-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 14px; background: #f5f2ea; border-bottom: 1px solid #d8d5cc; }
+.schema-slider-bar strong { font: 700 14px/1.2 var(--font-display); color: #1a1916; }
+.schema-slider-actions { display: flex; align-items: center; gap: 8px; }
+.schema-slider-counter { min-width: 62px; text-align: center; font: 600 13px/1 var(--font-mono); color: #59544a; }
+.schema-btn { width: 34px; height: 34px; border: 1px solid #c9c4b8; border-radius: 8px; background: #fff; color: #1a1916; font: 700 18px/1 var(--font-mono); cursor: pointer; }
+.schema-btn:hover { background: #ece7dc; }
+.schema-track { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: thin; }
+.schema-slide { flex: 0 0 100%; min-width: 100%; box-sizing: border-box; padding: 16px 18px 18px; scroll-snap-align: start; }
+.schema-slide h4 { margin: 0 0 10px; font: 700 16px/1.3 var(--font-display); color: #1a1916; }
+.schema-slide h4 code, .schema-slide p code { color: #1a1916; background: #f1ede4; padding: 1px 4px; border-radius: 4px; }
+.schema-slide p { margin: 0 0 10px; font-size: 14px; line-height: 1.55; color: #3a372f; }
+.schema-slide pre { margin: 0; padding: 14px 16px; overflow-x: auto; border: 1px solid #ddd8cc; border-radius: 10px; background: #fbfaf6; color: #1a1916; font: 12.5px/1.5 var(--font-mono); }
+.schema-slide code { color: inherit; background: none; padding: 0; }
+.schema-slider:focus-within { outline: 2px solid #b9a97f; outline-offset: 2px; }
+@media (max-width: 620px) { .schema-slide { padding: 12px; } .schema-slider-bar { padding: 8px 10px; } }
 
 /* ---------- print / PDF export ---------- */
 @page { margin: 16mm; }
@@ -852,7 +876,7 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <h2 id="матрица-на-которой-видно-всё"><span class="num">02</span>Матрица, на которой видно всё</h2>
 <p>Матрица ниже это рабочий стол реестра. По вертикали вероятность от 1 до 5, по горизонтали влияние от 1 до 5, в клетке произведение: чем выше и правее карточка, тем хуже. Цвет задаёт режим работы.</p>
 <p>Найдите шесть карточек: R1 в зелёной клетке внизу слева, R5 выше в той же колонке, R6 справа внизу в жёлтой полосе, R2, R3 и R4 в красной зоне. Панель справа показывает карточку R3 целиком: вероятность 0,6, влияние 120 тысяч, EMV 72 тысячи, стратегия снизить, владелец РП. Нижняя строка табло называет восемь шагов.</p>
-<figure class="figure" data-fig="fig-07-risk" data-one="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"><iframe title="Figure 1: fig-07-risk" scrolling="no"></iframe><figcaption>Проведите по шагам: от списка до триггера и остаточного риска.</figcaption></figure>
+<figure class="figure" data-fig="fig-07-risk" data-one="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"><iframe title="Figure 1: fig-07-risk" scrolling="no"></iframe><figcaption>Проведите по шагам: от списка до триггера и остаточного риска.</figcaption></figure>
 
 <p>Перед вами матрица 5 на 5: 25 клеток, произведение от 1 до 25, шесть карточек, и стоят они не там, где говорят громче. Слева частые и мелкие события, справа редкие и дорогие: первые лечатся расписанием, вторые резервом и планом.</p>
 <p>Зоны читаются по произведению. <strong>Зелёная</strong> это 1, 2, 3 и 4: событие переживём в рабочем порядке. <strong>Жёлтая</strong> от 5 до 9: нужен владелец и наблюдение. <strong>Красная</strong> 10 и больше: план готовят до начала работ, а не после первого сигнала. Нижний край красной зоны (10 и 12) в фигуре светлее верхнего, но правило одно.</p>
@@ -1137,6 +1161,40 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
       var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
       window.scrollTo({top: 0, behavior: reduce ? 'auto' : 'smooth'});
     });
+  });
+})();
+
+(function(){
+  document.querySelectorAll('[data-slider]').forEach(function(slider){
+    var track = slider.querySelector('[data-slider-track]');
+    var slides = track ? Array.prototype.slice.call(track.children) : [];
+    var counter = slider.querySelector('[data-slider-counter]');
+    var prev = slider.querySelector('[data-slider-prev]');
+    var next = slider.querySelector('[data-slider-next]');
+    if(!track || slides.length < 2) return;
+    function current(){
+      var best = 0, dist = Infinity;
+      slides.forEach(function(slide, i){
+        var d = Math.abs(slide.offsetLeft - track.scrollLeft);
+        if(d < dist){ dist = d; best = i; }
+      });
+      return best;
+    }
+    function update(){
+      if(counter) counter.textContent = (current() + 1) + ' / ' + slides.length;
+    }
+    function go(delta){
+      var i = Math.max(0, Math.min(slides.length - 1, current() + delta));
+      var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      track.scrollTo({left: slides[i].offsetLeft, behavior: reduce ? 'auto' : 'smooth'});
+    }
+    if(prev) prev.addEventListener('click', function(){ go(-1); });
+    if(next) next.addEventListener('click', function(){ go(1); });
+    track.addEventListener('scroll', function(){
+      clearTimeout(track._sliderTimer);
+      track._sliderTimer = setTimeout(update, 80);
+    }, {passive: true});
+    update();
   });
 })();
 (function(){

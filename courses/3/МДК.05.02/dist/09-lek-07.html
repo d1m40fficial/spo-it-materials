@@ -527,6 +527,12 @@ html.modal-open { overflow: hidden; }
 :root[data-theme=dark] .quiz-actions button[data-answer]:hover, :root[data-theme=dark] .quiz-actions button.quiz-answer:hover { background: #262626; background-color: #262626; color: #fff; border-color: #262626; }
 :root[data-theme=dark] .gate-q { background: #1E1E1E; color: #FF6B00; }
 
+/* the whole-variant archive is the main action in a download block */
+.files a.zip { background: #121212; color: #fff; border-color: #121212; font-weight: 700; box-shadow: 4px 4px 0 rgba(0,0,0,.18); }
+.files a.zip::before { color: #fff; }
+.files a.zip:hover { background: #1D1D1D; color: #fff; border-color: #1D1D1D; box-shadow: 5px 5px 0 rgba(0,0,0,.22); }
+.files a.zip:active { transform: translate(2px,2px); box-shadow: 1px 1px 0 rgba(0,0,0,.12); }
+
 /* ---------- practical work checklist ---------- */
 .work-checklist { width: 100%; border-collapse: collapse; margin: 14px 0 4px; }
 .work-checklist th, .work-checklist td { border: 1px solid var(--rule); padding: 9px 10px; vertical-align: top; }
@@ -564,6 +570,24 @@ html.modal-open { overflow: hidden; }
 .variant-body .task-list { margin: 8px 0 0; padding-left: 20px; }
 .variant-body .task-list li { margin: 0 0 8px; }
 @media (max-width: 620px) { .variant-body { overflow-x: auto; } .variant-body table { min-width: 520px; } }
+
+/* ---------- schema slider: all CREATE TABLE examples ---------- */
+.schema-slider { margin: 18px 0 24px; border: 1px solid #d8d5cc; border-radius: 14px; background: #fff; color: #1a1916; overflow: hidden; }
+.schema-slider-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 14px; background: #f5f2ea; border-bottom: 1px solid #d8d5cc; }
+.schema-slider-bar strong { font: 700 14px/1.2 var(--font-display); color: #1a1916; }
+.schema-slider-actions { display: flex; align-items: center; gap: 8px; }
+.schema-slider-counter { min-width: 62px; text-align: center; font: 600 13px/1 var(--font-mono); color: #59544a; }
+.schema-btn { width: 34px; height: 34px; border: 1px solid #c9c4b8; border-radius: 8px; background: #fff; color: #1a1916; font: 700 18px/1 var(--font-mono); cursor: pointer; }
+.schema-btn:hover { background: #ece7dc; }
+.schema-track { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: thin; }
+.schema-slide { flex: 0 0 100%; min-width: 100%; box-sizing: border-box; padding: 16px 18px 18px; scroll-snap-align: start; }
+.schema-slide h4 { margin: 0 0 10px; font: 700 16px/1.3 var(--font-display); color: #1a1916; }
+.schema-slide h4 code, .schema-slide p code { color: #1a1916; background: #f1ede4; padding: 1px 4px; border-radius: 4px; }
+.schema-slide p { margin: 0 0 10px; font-size: 14px; line-height: 1.55; color: #3a372f; }
+.schema-slide pre { margin: 0; padding: 14px 16px; overflow-x: auto; border: 1px solid #ddd8cc; border-radius: 10px; background: #fbfaf6; color: #1a1916; font: 12.5px/1.5 var(--font-mono); }
+.schema-slide code { color: inherit; background: none; padding: 0; }
+.schema-slider:focus-within { outline: 2px solid #b9a97f; outline-offset: 2px; }
+@media (max-width: 620px) { .schema-slide { padding: 12px; } .schema-slider-bar { padding: 8px 10px; } }
 
 /* ---------- print / PDF export ---------- */
 @page { margin: 16mm; }
@@ -855,9 +879,9 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <div class="codehilite" data-lang="python"><pre><span></span><code><span class="n">quantity</span> <span class="o">=</span> <span class="mi">12</span>
 <span class="n">min_quantity</span> <span class="o">=</span> <span class="mi">40</span>
 <span class="k">if</span> <span class="n">quantity</span> <span class="o">&lt;</span> <span class="n">min_quantity</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;заказать&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"заказать"</span><span class="p">)</span>
 <span class="k">else</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;не заказывать&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"не заказывать"</span><span class="p">)</span>
 </code></pre></div>
 
 <p>На C# то же решение выглядит почти так же, но с фигурными скобками и обязательными круглыми скобками вокруг условия:</p>
@@ -865,24 +889,24 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <span class="kt">int</span><span class="w"> </span><span class="n">minQuantity</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">40</span><span class="p">;</span>
 <span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">quantity</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">minQuantity</span><span class="p">)</span>
 <span class="p">{</span>
-<span class="w">    </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">&quot;заказать&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">"заказать"</span><span class="p">);</span>
 <span class="p">}</span>
 <span class="k">else</span>
 <span class="p">{</span>
-<span class="w">    </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">&quot;не заказывать&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">"не заказывать"</span><span class="p">);</span>
 <span class="p">}</span>
 </code></pre></div>
 
 <p>Разница в записи не меняет смысла. В обоих языках условие вычисляется один раз, и выполняется ровно одна ветка. Как только ветка выбрана, вторая не выполняется вообще, даже если её условие тоже оказалось бы истинным.</p>
 <p>Когда условий несколько, порядок становится частью алгоритма. Для склада их три: позиция активна, остаток ниже минимума, категория не исключена из автозаказа. Запись с <code>elif</code> в Python и <code>else if</code> в C# читается сверху вниз, и первая истинная ветка забирает управление.</p>
-<div class="codehilite" data-lang="python"><pre><span></span><code><span class="k">if</span> <span class="ow">not</span> <span class="n">position</span><span class="p">[</span><span class="s2">&quot;active&quot;</span><span class="p">]:</span>
-    <span class="n">decision</span> <span class="o">=</span> <span class="s2">&quot;архив&quot;</span>
-<span class="k">elif</span> <span class="n">position</span><span class="p">[</span><span class="s2">&quot;category&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Спецтехника&quot;</span><span class="p">:</span>
-    <span class="n">decision</span> <span class="o">=</span> <span class="s2">&quot;заказ вручную&quot;</span>
-<span class="k">elif</span> <span class="n">position</span><span class="p">[</span><span class="s2">&quot;qty&quot;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">position</span><span class="p">[</span><span class="s2">&quot;min_qty&quot;</span><span class="p">]:</span>
-    <span class="n">decision</span> <span class="o">=</span> <span class="s2">&quot;в заказ&quot;</span>
+<div class="codehilite" data-lang="python"><pre><span></span><code><span class="k">if</span> <span class="ow">not</span> <span class="n">position</span><span class="p">[</span><span class="s2">"active"</span><span class="p">]:</span>
+    <span class="n">decision</span> <span class="o">=</span> <span class="s2">"архив"</span>
+<span class="k">elif</span> <span class="n">position</span><span class="p">[</span><span class="s2">"category"</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"Спецтехника"</span><span class="p">:</span>
+    <span class="n">decision</span> <span class="o">=</span> <span class="s2">"заказ вручную"</span>
+<span class="k">elif</span> <span class="n">position</span><span class="p">[</span><span class="s2">"qty"</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">position</span><span class="p">[</span><span class="s2">"min_qty"</span><span class="p">]:</span>
+    <span class="n">decision</span> <span class="o">=</span> <span class="s2">"в заказ"</span>
 <span class="k">else</span><span class="p">:</span>
-    <span class="n">decision</span> <span class="o">=</span> <span class="s2">&quot;достаточно&quot;</span>
+    <span class="n">decision</span> <span class="o">=</span> <span class="s2">"достаточно"</span>
 </code></pre></div>
 
 <p>Порядок здесь не случаен. Если поставить проверку остатка первой, архивная позиция с нулевым остатком попадёт в заказ, хотя её сняли с продажи. Проверка активности должна стоять раньше, потому что она отсекает строку независимо от чисел.</p>
@@ -906,12 +930,12 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <div class="gate-content" hidden><h2 id="цикл-один-и-тот-же-обход-в-двух-языках"><span class="num">03</span>Цикл: один и тот же обход в двух языках</h2>
 <p>Одна строка обрабатывается ветвлением. 4800 строк обрабатываются циклом. В Python самый короткий способ пройти по списку словарей выглядит так:</p>
 <div class="codehilite" data-lang="text"><pre><span></span><code><span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">positions</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;sku&quot;</span><span class="p">])</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">"sku"</span><span class="p">])</span>
 </code></pre></div>
 
 <p>Здесь нет счётчика и нет условия выхода: Python сам берёт следующий элемент, пока список не закончится. Если нужен номер строки, добавляют <code>enumerate</code>:</p>
 <div class="codehilite" data-lang="text"><pre><span></span><code><span class="k">for</span> <span class="n">number</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">positions</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">number</span><span class="p">,</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;sku&quot;</span><span class="p">])</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">number</span><span class="p">,</span> <span class="n">row</span><span class="p">[</span><span class="s2">"sku"</span><span class="p">])</span>
 </code></pre></div>
 
 <p>В C# обход коллекции без счётчика делают через <code>foreach</code>:</p>
@@ -984,27 +1008,27 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <p>Последняя строка таблицы объясняет половину ошибок перевода. <code>range(0, 5)</code> в Python даёт 0, 1, 2, 3, 4, то есть пять значений без пятёрки. В C# условие <code>i &lt; 5</code> даёт те же пять значений, а <code>i &lt;= 5</code> уже шесть. При переносе кода нужно переводить не символы, а количество повторений.</p>
 <p>Соберём рабочий расчёт для пяти позиций. В Python данные удобно держать списком словарей:</p>
 <div class="codehilite" data-lang="text"><pre><span></span><code><span class="n">positions</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="p">{</span><span class="s2">&quot;sku&quot;</span><span class="p">:</span> <span class="s2">&quot;SKU-1042&quot;</span><span class="p">,</span> <span class="s2">&quot;category&quot;</span><span class="p">:</span> <span class="s2">&quot;Крепёж&quot;</span><span class="p">,</span> <span class="s2">&quot;qty&quot;</span><span class="p">:</span> <span class="mi">12</span><span class="p">,</span> <span class="s2">&quot;min_qty&quot;</span><span class="p">:</span> <span class="mi">40</span><span class="p">,</span> <span class="s2">&quot;pack&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">},</span>
-    <span class="p">{</span><span class="s2">&quot;sku&quot;</span><span class="p">:</span> <span class="s2">&quot;SKU-2087&quot;</span><span class="p">,</span> <span class="s2">&quot;category&quot;</span><span class="p">:</span> <span class="s2">&quot;Электрика&quot;</span><span class="p">,</span> <span class="s2">&quot;qty&quot;</span><span class="p">:</span> <span class="mi">96</span><span class="p">,</span> <span class="s2">&quot;min_qty&quot;</span><span class="p">:</span> <span class="mi">60</span><span class="p">,</span> <span class="s2">&quot;pack&quot;</span><span class="p">:</span> <span class="mi">12</span><span class="p">},</span>
-    <span class="p">{</span><span class="s2">&quot;sku&quot;</span><span class="p">:</span> <span class="s2">&quot;SKU-3310&quot;</span><span class="p">,</span> <span class="s2">&quot;category&quot;</span><span class="p">:</span> <span class="s2">&quot;Крепёж&quot;</span><span class="p">,</span> <span class="s2">&quot;qty&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;min_qty&quot;</span><span class="p">:</span> <span class="mi">25</span><span class="p">,</span> <span class="s2">&quot;pack&quot;</span><span class="p">:</span> <span class="mi">5</span><span class="p">},</span>
-    <span class="p">{</span><span class="s2">&quot;sku&quot;</span><span class="p">:</span> <span class="s2">&quot;SKU-4155&quot;</span><span class="p">,</span> <span class="s2">&quot;category&quot;</span><span class="p">:</span> <span class="s2">&quot;Инструмент&quot;</span><span class="p">,</span> <span class="s2">&quot;qty&quot;</span><span class="p">:</span> <span class="mi">7</span><span class="p">,</span> <span class="s2">&quot;min_qty&quot;</span><span class="p">:</span> <span class="mi">7</span><span class="p">,</span> <span class="s2">&quot;pack&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">},</span>
-    <span class="p">{</span><span class="s2">&quot;sku&quot;</span><span class="p">:</span> <span class="s2">&quot;SKU-5201&quot;</span><span class="p">,</span> <span class="s2">&quot;category&quot;</span><span class="p">:</span> <span class="s2">&quot;Электрика&quot;</span><span class="p">,</span> <span class="s2">&quot;qty&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s2">&quot;min_qty&quot;</span><span class="p">:</span> <span class="mi">30</span><span class="p">,</span> <span class="s2">&quot;pack&quot;</span><span class="p">:</span> <span class="mi">6</span><span class="p">},</span>
+    <span class="p">{</span><span class="s2">"sku"</span><span class="p">:</span> <span class="s2">"SKU-1042"</span><span class="p">,</span> <span class="s2">"category"</span><span class="p">:</span> <span class="s2">"Крепёж"</span><span class="p">,</span> <span class="s2">"qty"</span><span class="p">:</span> <span class="mi">12</span><span class="p">,</span> <span class="s2">"min_qty"</span><span class="p">:</span> <span class="mi">40</span><span class="p">,</span> <span class="s2">"pack"</span><span class="p">:</span> <span class="mi">10</span><span class="p">},</span>
+    <span class="p">{</span><span class="s2">"sku"</span><span class="p">:</span> <span class="s2">"SKU-2087"</span><span class="p">,</span> <span class="s2">"category"</span><span class="p">:</span> <span class="s2">"Электрика"</span><span class="p">,</span> <span class="s2">"qty"</span><span class="p">:</span> <span class="mi">96</span><span class="p">,</span> <span class="s2">"min_qty"</span><span class="p">:</span> <span class="mi">60</span><span class="p">,</span> <span class="s2">"pack"</span><span class="p">:</span> <span class="mi">12</span><span class="p">},</span>
+    <span class="p">{</span><span class="s2">"sku"</span><span class="p">:</span> <span class="s2">"SKU-3310"</span><span class="p">,</span> <span class="s2">"category"</span><span class="p">:</span> <span class="s2">"Крепёж"</span><span class="p">,</span> <span class="s2">"qty"</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">"min_qty"</span><span class="p">:</span> <span class="mi">25</span><span class="p">,</span> <span class="s2">"pack"</span><span class="p">:</span> <span class="mi">5</span><span class="p">},</span>
+    <span class="p">{</span><span class="s2">"sku"</span><span class="p">:</span> <span class="s2">"SKU-4155"</span><span class="p">,</span> <span class="s2">"category"</span><span class="p">:</span> <span class="s2">"Инструмент"</span><span class="p">,</span> <span class="s2">"qty"</span><span class="p">:</span> <span class="mi">7</span><span class="p">,</span> <span class="s2">"min_qty"</span><span class="p">:</span> <span class="mi">7</span><span class="p">,</span> <span class="s2">"pack"</span><span class="p">:</span> <span class="mi">1</span><span class="p">},</span>
+    <span class="p">{</span><span class="s2">"sku"</span><span class="p">:</span> <span class="s2">"SKU-5201"</span><span class="p">,</span> <span class="s2">"category"</span><span class="p">:</span> <span class="s2">"Электрика"</span><span class="p">,</span> <span class="s2">"qty"</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s2">"min_qty"</span><span class="p">:</span> <span class="mi">30</span><span class="p">,</span> <span class="s2">"pack"</span><span class="p">:</span> <span class="mi">6</span><span class="p">},</span>
 <span class="p">]</span>
 
 <span class="n">total</span> <span class="o">=</span> <span class="mi">0</span>
 <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
 <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">positions</span><span class="p">:</span>
-    <span class="k">if</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;qty&quot;</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;min_qty&quot;</span><span class="p">]:</span>
+    <span class="k">if</span> <span class="n">row</span><span class="p">[</span><span class="s2">"qty"</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">row</span><span class="p">[</span><span class="s2">"min_qty"</span><span class="p">]:</span>
         <span class="k">continue</span>
-    <span class="n">missing</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;min_qty&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;qty&quot;</span><span class="p">]</span>
-    <span class="n">packs</span> <span class="o">=</span> <span class="p">(</span><span class="n">missing</span> <span class="o">+</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;pack&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">//</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;pack&quot;</span><span class="p">]</span>
-    <span class="n">order</span> <span class="o">=</span> <span class="n">packs</span> <span class="o">*</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;pack&quot;</span><span class="p">]</span>
+    <span class="n">missing</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="s2">"min_qty"</span><span class="p">]</span> <span class="o">-</span> <span class="n">row</span><span class="p">[</span><span class="s2">"qty"</span><span class="p">]</span>
+    <span class="n">packs</span> <span class="o">=</span> <span class="p">(</span><span class="n">missing</span> <span class="o">+</span> <span class="n">row</span><span class="p">[</span><span class="s2">"pack"</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">//</span> <span class="n">row</span><span class="p">[</span><span class="s2">"pack"</span><span class="p">]</span>
+    <span class="n">order</span> <span class="o">=</span> <span class="n">packs</span> <span class="o">*</span> <span class="n">row</span><span class="p">[</span><span class="s2">"pack"</span><span class="p">]</span>
     <span class="n">total</span> <span class="o">+=</span> <span class="n">order</span>
     <span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;sku&quot;</span><span class="p">],</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;qty&quot;</span><span class="p">],</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;min_qty&quot;</span><span class="p">],</span> <span class="s2">&quot;-&gt;&quot;</span><span class="p">,</span> <span class="n">order</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">"sku"</span><span class="p">],</span> <span class="n">row</span><span class="p">[</span><span class="s2">"qty"</span><span class="p">],</span> <span class="n">row</span><span class="p">[</span><span class="s2">"min_qty"</span><span class="p">],</span> <span class="s2">"-&gt;"</span><span class="p">,</span> <span class="n">order</span><span class="p">)</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Позиций к заказу:&quot;</span><span class="p">,</span> <span class="n">count</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Всего единиц:&quot;</span><span class="p">,</span> <span class="n">total</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Позиций к заказу:"</span><span class="p">,</span> <span class="n">count</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Всего единиц:"</span><span class="p">,</span> <span class="n">total</span><span class="p">)</span>
 </code></pre></div>
 
 <p>Запуск даёт:</p>
@@ -1074,8 +1098,8 @@ SKU-5201 3 30 -&gt; 30
 <p>Сумма заказов равна 85, и это число совпадает с выводом программы. Такая таблица полезна не только для проверки: она показывает, что формула работает на всех пяти строках, включая нулевой остаток и остаток ровно по минимуму.</p>
 <p>Иногда цикл нужен не для полного обхода, а для поиска первой подходящей строки. Тогда после находки работу прекращают через <code>break</code>:</p>
 <div class="codehilite" data-lang="text"><pre><span></span><code><span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">positions</span><span class="p">:</span>
-    <span class="k">if</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;qty&quot;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;min_qty&quot;</span><span class="p">]:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Первая позиция к заказу:&quot;</span><span class="p">,</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;sku&quot;</span><span class="p">])</span>
+    <span class="k">if</span> <span class="n">row</span><span class="p">[</span><span class="s2">"qty"</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">row</span><span class="p">[</span><span class="s2">"min_qty"</span><span class="p">]:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"Первая позиция к заказу:"</span><span class="p">,</span> <span class="n">row</span><span class="p">[</span><span class="s2">"sku"</span><span class="p">])</span>
         <span class="k">break</span>
 </code></pre></div>
 
@@ -1091,7 +1115,7 @@ SKU-5201 3 30 -&gt; 30
 <span class="w">    </span><span class="k">static</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">Main</span><span class="p">()</span>
 <span class="w">    </span><span class="p">{</span>
 <span class="w">        </span><span class="n">Console</span><span class="p">.</span><span class="n">OutputEncoding</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Encoding</span><span class="p">.</span><span class="n">UTF8</span><span class="p">;</span>
-<span class="w">        </span><span class="kt">string</span><span class="p">[]</span><span class="w"> </span><span class="n">skus</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="s">&quot;SKU-1042&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;SKU-2087&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;SKU-3310&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;SKU-4155&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;SKU-5201&quot;</span><span class="w"> </span><span class="p">};</span>
+<span class="w">        </span><span class="kt">string</span><span class="p">[]</span><span class="w"> </span><span class="n">skus</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="s">"SKU-1042"</span><span class="p">,</span><span class="w"> </span><span class="s">"SKU-2087"</span><span class="p">,</span><span class="w"> </span><span class="s">"SKU-3310"</span><span class="p">,</span><span class="w"> </span><span class="s">"SKU-4155"</span><span class="p">,</span><span class="w"> </span><span class="s">"SKU-5201"</span><span class="w"> </span><span class="p">};</span>
 <span class="w">        </span><span class="kt">int</span><span class="p">[]</span><span class="w"> </span><span class="n">quantities</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="mi">12</span><span class="p">,</span><span class="w"> </span><span class="mi">96</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">7</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="w"> </span><span class="p">};</span>
 <span class="w">        </span><span class="kt">int</span><span class="p">[]</span><span class="w"> </span><span class="n">minimums</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="mi">40</span><span class="p">,</span><span class="w"> </span><span class="mi">60</span><span class="p">,</span><span class="w"> </span><span class="mi">25</span><span class="p">,</span><span class="w"> </span><span class="mi">7</span><span class="p">,</span><span class="w"> </span><span class="mi">30</span><span class="w"> </span><span class="p">};</span>
 <span class="w">        </span><span class="kt">int</span><span class="p">[]</span><span class="w"> </span><span class="n">packs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">12</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">6</span><span class="w"> </span><span class="p">};</span>
@@ -1109,10 +1133,10 @@ SKU-5201 3 30 -&gt; 30
 <span class="w">            </span><span class="kt">int</span><span class="w"> </span><span class="n">order</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">packCount</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">packs</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
 <span class="w">            </span><span class="n">total</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">order</span><span class="p">;</span>
 <span class="w">            </span><span class="n">count</span><span class="o">++</span><span class="p">;</span>
-<span class="w">            </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="n">skus</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">&quot; &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">quantities</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">&quot; &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">minimums</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">&quot; -&gt; &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">order</span><span class="p">);</span>
+<span class="w">            </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="n">skus</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">" "</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">quantities</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">" "</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">minimums</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">" -&gt; "</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">order</span><span class="p">);</span>
 <span class="w">        </span><span class="p">}</span>
-<span class="w">        </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">&quot;Позиций к заказу: &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">count</span><span class="p">);</span>
-<span class="w">        </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">&quot;Всего единиц: &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">total</span><span class="p">);</span>
+<span class="w">        </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">"Позиций к заказу: "</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">count</span><span class="p">);</span>
+<span class="w">        </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">"Всего единиц: "</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">total</span><span class="p">);</span>
 <span class="w">    </span><span class="p">}</span>
 <span class="p">}</span>
 </code></pre></div>
@@ -1184,7 +1208,7 @@ SKU-5201 3 30 -&gt; 30
 <p>Первый случай: пустая коллекция. В Python <code>for row in []</code> не выполнится ни разу, и итог останется нулевым. В C# <code>for (int i = 0; i &lt; skus.Length; i++)</code> при длине 0 тоже не выполнится. Это правильное поведение, но только если переменные <code>total</code> и <code>count</code> объявлены до цикла. Если объявить их внутри тела, после цикла их просто не будет, и программа не соберётся.</p>
 <p>Второй случай: значение ровно на пороге. Позиция <code>SKU-4155</code> имеет остаток 7 при минимуме 7. Условие <code>qty &lt; min_qty</code> ложно, заказ равен нулю. Если заменить его на <code>qty &lt;= min_qty</code>, позиция попадёт в заказ и склад начнёт закупать товар, которого и так достаточно. Порог это самая частая причина лишних заказов.</p>
 <p>Третий случай: последний элемент. Здесь появляется ошибка на единицу. Такой цикл в файле <code>offby.py</code>:</p>
-<div class="codehilite" data-lang="text"><pre><span></span><code><span class="n">positions</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;SKU-1042&quot;</span><span class="p">,</span> <span class="s2">&quot;SKU-2087&quot;</span><span class="p">,</span> <span class="s2">&quot;SKU-3310&quot;</span><span class="p">]</span>
+<div class="codehilite" data-lang="text"><pre><span></span><code><span class="n">positions</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"SKU-1042"</span><span class="p">,</span> <span class="s2">"SKU-2087"</span><span class="p">,</span> <span class="s2">"SKU-3310"</span><span class="p">]</span>
 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">positions</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">positions</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
 </code></pre></div>
@@ -1194,16 +1218,16 @@ SKU-5201 3 30 -&gt; 30
 SKU-2087
 SKU-3310
 Traceback (most recent call last):
-  File &quot;offby.py&quot;, line 3, in &lt;module&gt;
+  File "offby.py", line 3, in &lt;module&gt;
     print(positions[i])
 IndexError: list index out of range
 </code></pre></div>
 
 <p>В C# та же ошибка выглядит как <code>IndexOutOfRangeException</code> и возникает при <code>i &lt;= skus.Length</code>. Причина одна: условие продолжения пропускает индекс, которого в массиве нет. Лечение тоже одно: граница это длина, а не длина плюс один.</p>
 <p>Четвёртый случай: изменение коллекции во время обхода. Кладовщик хочет убрать из списка позиции, которых достаточно. В Python такой код:</p>
-<div class="codehilite" data-lang="text"><pre><span></span><code><span class="n">skus</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;SKU-1&quot;</span><span class="p">,</span> <span class="s2">&quot;SKU-2&quot;</span><span class="p">,</span> <span class="s2">&quot;SKU-3&quot;</span><span class="p">,</span> <span class="s2">&quot;SKU-4&quot;</span><span class="p">]</span>
+<div class="codehilite" data-lang="text"><pre><span></span><code><span class="n">skus</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"SKU-1"</span><span class="p">,</span> <span class="s2">"SKU-2"</span><span class="p">,</span> <span class="s2">"SKU-3"</span><span class="p">,</span> <span class="s2">"SKU-4"</span><span class="p">]</span>
 <span class="k">for</span> <span class="n">sku</span> <span class="ow">in</span> <span class="n">skus</span><span class="p">:</span>
-    <span class="k">if</span> <span class="n">sku</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;SKU-2&quot;</span><span class="p">,</span> <span class="s2">&quot;SKU-3&quot;</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">sku</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">"SKU-2"</span><span class="p">,</span> <span class="s2">"SKU-3"</span><span class="p">):</span>
         <span class="n">skus</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">sku</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">skus</span><span class="p">)</span>
 </code></pre></div>
@@ -1391,6 +1415,40 @@ IndexError: list index out of range
       var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
       window.scrollTo({top: 0, behavior: reduce ? 'auto' : 'smooth'});
     });
+  });
+})();
+
+(function(){
+  document.querySelectorAll('[data-slider]').forEach(function(slider){
+    var track = slider.querySelector('[data-slider-track]');
+    var slides = track ? Array.prototype.slice.call(track.children) : [];
+    var counter = slider.querySelector('[data-slider-counter]');
+    var prev = slider.querySelector('[data-slider-prev]');
+    var next = slider.querySelector('[data-slider-next]');
+    if(!track || slides.length < 2) return;
+    function current(){
+      var best = 0, dist = Infinity;
+      slides.forEach(function(slide, i){
+        var d = Math.abs(slide.offsetLeft - track.scrollLeft);
+        if(d < dist){ dist = d; best = i; }
+      });
+      return best;
+    }
+    function update(){
+      if(counter) counter.textContent = (current() + 1) + ' / ' + slides.length;
+    }
+    function go(delta){
+      var i = Math.max(0, Math.min(slides.length - 1, current() + delta));
+      var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      track.scrollTo({left: slides[i].offsetLeft, behavior: reduce ? 'auto' : 'smooth'});
+    }
+    if(prev) prev.addEventListener('click', function(){ go(-1); });
+    if(next) next.addEventListener('click', function(){ go(1); });
+    track.addEventListener('scroll', function(){
+      clearTimeout(track._sliderTimer);
+      track._sliderTimer = setTimeout(update, 80);
+    }, {passive: true});
+    update();
   });
 })();
 (function(){

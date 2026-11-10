@@ -527,6 +527,12 @@ html.modal-open { overflow: hidden; }
 :root[data-theme=dark] .quiz-actions button[data-answer]:hover, :root[data-theme=dark] .quiz-actions button.quiz-answer:hover { background: #262626; background-color: #262626; color: #fff; border-color: #262626; }
 :root[data-theme=dark] .gate-q { background: #1E1E1E; color: #FF6B00; }
 
+/* the whole-variant archive is the main action in a download block */
+.files a.zip { background: #121212; color: #fff; border-color: #121212; font-weight: 700; box-shadow: 4px 4px 0 rgba(0,0,0,.18); }
+.files a.zip::before { color: #fff; }
+.files a.zip:hover { background: #1D1D1D; color: #fff; border-color: #1D1D1D; box-shadow: 5px 5px 0 rgba(0,0,0,.22); }
+.files a.zip:active { transform: translate(2px,2px); box-shadow: 1px 1px 0 rgba(0,0,0,.12); }
+
 /* ---------- practical work checklist ---------- */
 .work-checklist { width: 100%; border-collapse: collapse; margin: 14px 0 4px; }
 .work-checklist th, .work-checklist td { border: 1px solid var(--rule); padding: 9px 10px; vertical-align: top; }
@@ -564,6 +570,24 @@ html.modal-open { overflow: hidden; }
 .variant-body .task-list { margin: 8px 0 0; padding-left: 20px; }
 .variant-body .task-list li { margin: 0 0 8px; }
 @media (max-width: 620px) { .variant-body { overflow-x: auto; } .variant-body table { min-width: 520px; } }
+
+/* ---------- schema slider: all CREATE TABLE examples ---------- */
+.schema-slider { margin: 18px 0 24px; border: 1px solid #d8d5cc; border-radius: 14px; background: #fff; color: #1a1916; overflow: hidden; }
+.schema-slider-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 14px; background: #f5f2ea; border-bottom: 1px solid #d8d5cc; }
+.schema-slider-bar strong { font: 700 14px/1.2 var(--font-display); color: #1a1916; }
+.schema-slider-actions { display: flex; align-items: center; gap: 8px; }
+.schema-slider-counter { min-width: 62px; text-align: center; font: 600 13px/1 var(--font-mono); color: #59544a; }
+.schema-btn { width: 34px; height: 34px; border: 1px solid #c9c4b8; border-radius: 8px; background: #fff; color: #1a1916; font: 700 18px/1 var(--font-mono); cursor: pointer; }
+.schema-btn:hover { background: #ece7dc; }
+.schema-track { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: thin; }
+.schema-slide { flex: 0 0 100%; min-width: 100%; box-sizing: border-box; padding: 16px 18px 18px; scroll-snap-align: start; }
+.schema-slide h4 { margin: 0 0 10px; font: 700 16px/1.3 var(--font-display); color: #1a1916; }
+.schema-slide h4 code, .schema-slide p code { color: #1a1916; background: #f1ede4; padding: 1px 4px; border-radius: 4px; }
+.schema-slide p { margin: 0 0 10px; font-size: 14px; line-height: 1.55; color: #3a372f; }
+.schema-slide pre { margin: 0; padding: 14px 16px; overflow-x: auto; border: 1px solid #ddd8cc; border-radius: 10px; background: #fbfaf6; color: #1a1916; font: 12.5px/1.5 var(--font-mono); }
+.schema-slide code { color: inherit; background: none; padding: 0; }
+.schema-slider:focus-within { outline: 2px solid #b9a97f; outline-offset: 2px; }
+@media (max-width: 620px) { .schema-slide { padding: 12px; } .schema-slider-bar { padding: 8px 10px; } }
 
 /* ---------- print / PDF export ---------- */
 @page { margin: 16mm; }
@@ -903,17 +927,17 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <p>Создайте папку <code>.../backup</code> и внутри неё папку со своей фамилией, например <code>.../backup/ivanov</code>. Все копии складывайте туда.</p>
 <h3>Шаг 2. Снимите полную копию</h3>
 <p>Откройте PowerShell и выполните команду, подставив свой логин вместо <code>root</code>.</p>
-<div class="codehilite" data-lang="powershell"><pre><span></span><code><span class="p">&amp;</span> <span class="s2">&quot;mysqldump&quot;</span> <span class="n">-u</span> <span class="n">root</span> <span class="n">-p</span> <span class="p">`</span>
+<div class="codehilite" data-lang="powershell"><pre><span></span><code><span class="p">&amp;</span> <span class="s2">"mysqldump"</span> <span class="n">-u</span> <span class="n">root</span> <span class="n">-p</span> <span class="p">`</span>
   <span class="p">-</span><span class="n">-single-transaction</span> <span class="p">-</span><span class="n">-routines</span> <span class="p">-</span><span class="n">-triggers</span> <span class="p">-</span><span class="n">-events</span> <span class="p">`</span>
   <span class="n">sklad</span> <span class="p">`</span>
-  <span class="p">-</span><span class="n">-result</span><span class="o">-file</span><span class="p">=</span><span class="s2">&quot;.../backup/ivanov\sklad_full.sql&quot;</span>
+  <span class="p">-</span><span class="n">-result</span><span class="o">-file</span><span class="p">=</span><span class="s2">".../backup/ivanov\sklad_full.sql"</span>
 </code></pre></div>
 
 <p>Ключ <code>--single-transaction</code> снимает согласованный снимок таблиц InnoDB, не блокируя работу. Ключи <code>--routines</code> и <code>--triggers</code> сохраняют процедуры и триггеры, без них после восстановления часть логики пропадёт. Ключ <code>--databases</code> здесь не нужен: он добавляет в файл создание и выбор базы <code>sklad</code>, и копия попадёт в рабочую базу вместо <code>sklad_restore</code>.</p>
 <p>Посмотрите свойства файла и посчитайте контрольную сумму.</p>
-<div class="codehilite" data-lang="powershell"><pre><span></span><code><span class="nb">Get-Item</span> <span class="s2">&quot;.../backup/ivanov\sklad_full.sql&quot;</span> <span class="p">|</span> <span class="nb">Select-Object</span> <span class="n">Name</span><span class="p">,</span> <span class="n">Length</span><span class="p">,</span> <span class="n">LastWriteTime</span>
-<span class="nb">Get-FileHash</span> <span class="s2">&quot;.../backup/ivanov\sklad_full.sql&quot;</span> <span class="n">-Algorithm</span> <span class="n">SHA256</span>
-<span class="nb">Get-Content</span> <span class="s2">&quot;.../backup/ivanov\sklad_full.sql&quot;</span> <span class="n">-Tail</span> <span class="n">3</span>
+<div class="codehilite" data-lang="powershell"><pre><span></span><code><span class="nb">Get-Item</span> <span class="s2">".../backup/ivanov\sklad_full.sql"</span> <span class="p">|</span> <span class="nb">Select-Object</span> <span class="n">Name</span><span class="p">,</span> <span class="n">Length</span><span class="p">,</span> <span class="n">LastWriteTime</span>
+<span class="nb">Get-FileHash</span> <span class="s2">".../backup/ivanov\sklad_full.sql"</span> <span class="n">-Algorithm</span> <span class="n">SHA256</span>
+<span class="nb">Get-Content</span> <span class="s2">".../backup/ivanov\sklad_full.sql"</span> <span class="n">-Tail</span> <span class="n">3</span>
 </code></pre></div>
 
 <p>Последняя строка файла должна содержать сообщение <code>Dump completed</code>. Если его нет, выгрузка прервалась.</p>
@@ -1011,28 +1035,28 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <h3>Шаг 4. Смоделируйте рабочий день</h3>
 <p>После полной копии склад отработал несколько часов. Добавьте три заказа, строки к ним и одно движение остатка. Идентификаторы берите из своих таблиц: если такого товара нет, замените его на существующий.</p>
 <div class="codehilite" data-lang="sql"><pre><span></span><code><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">orders</span><span class="w"> </span><span class="p">(</span><span class="nb">number</span><span class="p">,</span><span class="w"> </span><span class="n">customer_id</span><span class="p">,</span><span class="w"> </span><span class="n">warehouse_id</span><span class="p">,</span><span class="w"> </span><span class="n">status</span><span class="p">,</span><span class="w"> </span><span class="n">total</span><span class="p">,</span><span class="w"> </span><span class="n">created_at</span><span class="p">,</span><span class="w"> </span><span class="n">updated_at</span><span class="p">)</span>
-<span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="s1">&#39;ORD-2026-0901&#39;</span><span class="p">,</span><span class="w"> </span><span class="mi">14</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;new&#39;</span><span class="p">,</span><span class="w"> </span><span class="mi">18450</span><span class="p">.</span><span class="mi">00</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;2026-03-02 09:10:00&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;2026-03-02 09:10:00&#39;</span><span class="p">),</span>
-<span class="w">       </span><span class="p">(</span><span class="s1">&#39;ORD-2026-0902&#39;</span><span class="p">,</span><span class="w"> </span><span class="mi">27</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;new&#39;</span><span class="p">,</span><span class="w"> </span><span class="mi">6300</span><span class="p">.</span><span class="mi">00</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;2026-03-02 10:25:00&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;2026-03-02 10:25:00&#39;</span><span class="p">),</span>
-<span class="w">       </span><span class="p">(</span><span class="s1">&#39;ORD-2026-0903&#39;</span><span class="p">,</span><span class="w"> </span><span class="mi">31</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;reserved&#39;</span><span class="p">,</span><span class="w"> </span><span class="mi">12990</span><span class="p">.</span><span class="mi">00</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;2026-03-02 11:40:00&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;2026-03-02 11:40:00&#39;</span><span class="p">);</span>
+<span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="s1">'ORD-2026-0901'</span><span class="p">,</span><span class="w"> </span><span class="mi">14</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="s1">'new'</span><span class="p">,</span><span class="w"> </span><span class="mi">18450</span><span class="p">.</span><span class="mi">00</span><span class="p">,</span><span class="w"> </span><span class="s1">'2026-03-02 09:10:00'</span><span class="p">,</span><span class="w"> </span><span class="s1">'2026-03-02 09:10:00'</span><span class="p">),</span>
+<span class="w">       </span><span class="p">(</span><span class="s1">'ORD-2026-0902'</span><span class="p">,</span><span class="w"> </span><span class="mi">27</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="s1">'new'</span><span class="p">,</span><span class="w"> </span><span class="mi">6300</span><span class="p">.</span><span class="mi">00</span><span class="p">,</span><span class="w"> </span><span class="s1">'2026-03-02 10:25:00'</span><span class="p">,</span><span class="w"> </span><span class="s1">'2026-03-02 10:25:00'</span><span class="p">),</span>
+<span class="w">       </span><span class="p">(</span><span class="s1">'ORD-2026-0903'</span><span class="p">,</span><span class="w"> </span><span class="mi">31</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="s1">'reserved'</span><span class="p">,</span><span class="w"> </span><span class="mi">12990</span><span class="p">.</span><span class="mi">00</span><span class="p">,</span><span class="w"> </span><span class="s1">'2026-03-02 11:40:00'</span><span class="p">,</span><span class="w"> </span><span class="s1">'2026-03-02 11:40:00'</span><span class="p">);</span>
 
 <span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">order_lines</span><span class="w"> </span><span class="p">(</span><span class="n">order_id</span><span class="p">,</span><span class="w"> </span><span class="n">product_id</span><span class="p">,</span><span class="w"> </span><span class="n">qty</span><span class="p">,</span><span class="w"> </span><span class="n">price</span><span class="p">,</span><span class="w"> </span><span class="n">updated_at</span><span class="p">)</span>
-<span class="k">VALUES</span><span class="w"> </span><span class="p">((</span><span class="k">SELECT</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">orders</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="nb">number</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;ORD-2026-0901&#39;</span><span class="p">),</span><span class="w"> </span><span class="mi">8</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">1200</span><span class="p">.</span><span class="mi">00</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;2026-03-02 09:10:00&#39;</span><span class="p">),</span>
-<span class="w">       </span><span class="p">((</span><span class="k">SELECT</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">orders</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="nb">number</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;ORD-2026-0901&#39;</span><span class="p">),</span><span class="w"> </span><span class="mi">15</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">2150</span><span class="p">.</span><span class="mi">00</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;2026-03-02 09:10:00&#39;</span><span class="p">),</span>
-<span class="w">       </span><span class="p">((</span><span class="k">SELECT</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">orders</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="nb">number</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;ORD-2026-0902&#39;</span><span class="p">),</span><span class="w"> </span><span class="mi">21</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="mi">1260</span><span class="p">.</span><span class="mi">00</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;2026-03-02 10:25:00&#39;</span><span class="p">),</span>
-<span class="w">       </span><span class="p">((</span><span class="k">SELECT</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">orders</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="nb">number</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;ORD-2026-0903&#39;</span><span class="p">),</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="mi">20</span><span class="p">,</span><span class="w"> </span><span class="mi">649</span><span class="p">.</span><span class="mi">50</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;2026-03-02 11:40:00&#39;</span><span class="p">);</span>
+<span class="k">VALUES</span><span class="w"> </span><span class="p">((</span><span class="k">SELECT</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">orders</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="nb">number</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'ORD-2026-0901'</span><span class="p">),</span><span class="w"> </span><span class="mi">8</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">1200</span><span class="p">.</span><span class="mi">00</span><span class="p">,</span><span class="w"> </span><span class="s1">'2026-03-02 09:10:00'</span><span class="p">),</span>
+<span class="w">       </span><span class="p">((</span><span class="k">SELECT</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">orders</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="nb">number</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'ORD-2026-0901'</span><span class="p">),</span><span class="w"> </span><span class="mi">15</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">2150</span><span class="p">.</span><span class="mi">00</span><span class="p">,</span><span class="w"> </span><span class="s1">'2026-03-02 09:10:00'</span><span class="p">),</span>
+<span class="w">       </span><span class="p">((</span><span class="k">SELECT</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">orders</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="nb">number</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'ORD-2026-0902'</span><span class="p">),</span><span class="w"> </span><span class="mi">21</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="mi">1260</span><span class="p">.</span><span class="mi">00</span><span class="p">,</span><span class="w"> </span><span class="s1">'2026-03-02 10:25:00'</span><span class="p">),</span>
+<span class="w">       </span><span class="p">((</span><span class="k">SELECT</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">orders</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="nb">number</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'ORD-2026-0903'</span><span class="p">),</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="mi">20</span><span class="p">,</span><span class="w"> </span><span class="mi">649</span><span class="p">.</span><span class="mi">50</span><span class="p">,</span><span class="w"> </span><span class="s1">'2026-03-02 11:40:00'</span><span class="p">);</span>
 
-<span class="k">UPDATE</span><span class="w"> </span><span class="n">stock</span><span class="w"> </span><span class="k">SET</span><span class="w"> </span><span class="n">qty</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">qty</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="n">updated_at</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;2026-03-02 09:10:00&#39;</span>
+<span class="k">UPDATE</span><span class="w"> </span><span class="n">stock</span><span class="w"> </span><span class="k">SET</span><span class="w"> </span><span class="n">qty</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">qty</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="n">updated_at</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'2026-03-02 09:10:00'</span>
 <span class="k">WHERE</span><span class="w"> </span><span class="n">product_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">8</span><span class="w"> </span><span class="k">AND</span><span class="w"> </span><span class="n">warehouse_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
 </code></pre></div>
 
 <p>Запомните время последнего изменения (<code>2026-03-02 11:40:00</code>): оно задаёт границу разностной копии. Повторите контрольные запросы из шага 3 и заполните столбец «После изменений».</p>
 <h3>Шаг 5. Снимите разностную копию</h3>
 <p>Снимите только изменившиеся строки. Ключ <code>--no-create-info</code> оставляет структуру из полной копии, а <code>--replace</code> перезаписывает строки с теми же ключами, поэтому повторный запуск не даёт дублей.</p>
-<div class="codehilite" data-lang="powershell"><pre><span></span><code><span class="p">&amp;</span> <span class="s2">&quot;mysqldump&quot;</span> <span class="n">-u</span> <span class="n">root</span> <span class="n">-p</span> <span class="p">`</span>
+<div class="codehilite" data-lang="powershell"><pre><span></span><code><span class="p">&amp;</span> <span class="s2">"mysqldump"</span> <span class="n">-u</span> <span class="n">root</span> <span class="n">-p</span> <span class="p">`</span>
   <span class="p">-</span><span class="n">-no-create-info</span> <span class="p">-</span><span class="o">-replace</span> <span class="p">`</span>
   <span class="n">sklad</span> <span class="n">orders</span> <span class="n">order_lines</span> <span class="n">stock</span> <span class="p">`</span>
-  <span class="p">-</span><span class="n">-where</span><span class="p">=</span><span class="s2">&quot;updated_at &gt;= &#39;2026-03-02 09:00:00&#39;&quot;</span> <span class="p">`</span>
-  <span class="p">-</span><span class="n">-result</span><span class="o">-file</span><span class="p">=</span><span class="s2">&quot;.../backup/ivanov\sklad_diff.sql&quot;</span>
+  <span class="p">-</span><span class="n">-where</span><span class="p">=</span><span class="s2">"updated_at &gt;= '2026-03-02 09:00:00'"</span> <span class="p">`</span>
+  <span class="p">-</span><span class="n">-result</span><span class="o">-file</span><span class="p">=</span><span class="s2">".../backup/ivanov\sklad_diff.sql"</span>
 </code></pre></div>
 
 <p>Проверьте, что в файле только строки после указанного времени: откройте его в блокноте и найдите <code>REPLACE</code>. Время в условии берут с запасом, раньше последнего изменения: строки до границы не менялись, а <code>--replace</code> перезапишет их без дублей.</p>
@@ -1070,7 +1094,7 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <p>Сравните размеры: разностная копия должна быть заметно меньше полной. Если она больше, проверьте условие <code>--where</code>.</p>
 <h3>Шаг 6. Проверьте целостность</h3>
 <p>Сначала проверьте файл: контрольная сумма совпадает с записанной, последняя строка содержит <code>Dump completed</code>. Затем проверьте таблицы рабочей базы.</p>
-<div class="codehilite" data-lang="powershell"><pre><span></span><code><span class="p">&amp;</span> <span class="s2">&quot;mysqlcheck&quot;</span> <span class="n">-u</span> <span class="n">root</span> <span class="n">-p</span> <span class="p">-</span><span class="n">-check</span> <span class="n">sklad</span>
+<div class="codehilite" data-lang="powershell"><pre><span></span><code><span class="p">&amp;</span> <span class="s2">"mysqlcheck"</span> <span class="n">-u</span> <span class="n">root</span> <span class="n">-p</span> <span class="p">-</span><span class="n">-check</span> <span class="n">sklad</span>
 </code></pre></div>
 
 <p>Команда вернёт <code>OK</code> для каждой таблицы. Строка <code>Table is marked as crashed</code> означает повреждение: копировать такую базу нельзя. Сейчас убедитесь, что структура копии полная: в файле есть <code>CREATE TABLE</code> для каждой таблицы базы.</p>
@@ -1107,14 +1131,14 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 </table>
 <h3>Шаг 7. Выполните пробное восстановление</h3>
 <p>Создайте пустую базу, восстановите полную копию, затем разностную. Засеките время от начала импорта до успешного контрольного запроса.</p>
-<div class="codehilite" data-lang="powershell"><pre><span></span><code><span class="p">&amp;</span> <span class="s2">&quot;mysql&quot;</span> <span class="n">-u</span> <span class="n">root</span> <span class="n">-p</span> <span class="n">-e</span> <span class="s2">&quot;DROP DATABASE IF EXISTS sklad_restore; CREATE DATABASE sklad_restore CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;&quot;</span>
+<div class="codehilite" data-lang="powershell"><pre><span></span><code><span class="p">&amp;</span> <span class="s2">"mysql"</span> <span class="n">-u</span> <span class="n">root</span> <span class="n">-p</span> <span class="n">-e</span> <span class="s2">"DROP DATABASE IF EXISTS sklad_restore; CREATE DATABASE sklad_restore CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"</span>
 </code></pre></div>
 
 <p>Импортируйте <code>sklad_full.sql</code>, затем <code>sklad_diff.sql</code> через phpMyAdmin. В командной строке используйте <code>cmd /c</code> с перенаправлением ввода: PowerShell не поддерживает знак <code>&lt;</code>.</p>
 <p>Проверьте результат теми же запросами на базе <code>sklad_restore</code>.</p>
 <div class="codehilite" data-lang="sql"><pre><span></span><code><span class="k">SELECT</span><span class="w"> </span><span class="k">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">orders_cnt</span><span class="p">,</span><span class="w"> </span><span class="n">ROUND</span><span class="p">(</span><span class="k">SUM</span><span class="p">(</span><span class="n">total</span><span class="p">),</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">orders_sum</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">orders</span><span class="p">;</span>
 <span class="k">SELECT</span><span class="w"> </span><span class="k">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">lines_cnt</span><span class="p">,</span><span class="w"> </span><span class="k">SUM</span><span class="p">(</span><span class="n">qty</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">lines_qty</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">order_lines</span><span class="p">;</span>
-<span class="k">SELECT</span><span class="w"> </span><span class="nb">number</span><span class="p">,</span><span class="w"> </span><span class="n">total</span><span class="p">,</span><span class="w"> </span><span class="n">status</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">orders</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="nb">number</span><span class="w"> </span><span class="k">LIKE</span><span class="w"> </span><span class="s1">&#39;ORD-2026-090%&#39;</span><span class="p">;</span>
+<span class="k">SELECT</span><span class="w"> </span><span class="nb">number</span><span class="p">,</span><span class="w"> </span><span class="n">total</span><span class="p">,</span><span class="w"> </span><span class="n">status</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">orders</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="nb">number</span><span class="w"> </span><span class="k">LIKE</span><span class="w"> </span><span class="s1">'ORD-2026-090%'</span><span class="p">;</span>
 <span class="k">SELECT</span><span class="w"> </span><span class="n">qty</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">stock</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">product_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">8</span><span class="w"> </span><span class="k">AND</span><span class="w"> </span><span class="n">warehouse_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
 </code></pre></div>
 
@@ -1329,6 +1353,40 @@ NAS в Твери: 2 ТБ, доступен по сети, стоит в дру�
       var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
       window.scrollTo({top: 0, behavior: reduce ? 'auto' : 'smooth'});
     });
+  });
+})();
+
+(function(){
+  document.querySelectorAll('[data-slider]').forEach(function(slider){
+    var track = slider.querySelector('[data-slider-track]');
+    var slides = track ? Array.prototype.slice.call(track.children) : [];
+    var counter = slider.querySelector('[data-slider-counter]');
+    var prev = slider.querySelector('[data-slider-prev]');
+    var next = slider.querySelector('[data-slider-next]');
+    if(!track || slides.length < 2) return;
+    function current(){
+      var best = 0, dist = Infinity;
+      slides.forEach(function(slide, i){
+        var d = Math.abs(slide.offsetLeft - track.scrollLeft);
+        if(d < dist){ dist = d; best = i; }
+      });
+      return best;
+    }
+    function update(){
+      if(counter) counter.textContent = (current() + 1) + ' / ' + slides.length;
+    }
+    function go(delta){
+      var i = Math.max(0, Math.min(slides.length - 1, current() + delta));
+      var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      track.scrollTo({left: slides[i].offsetLeft, behavior: reduce ? 'auto' : 'smooth'});
+    }
+    if(prev) prev.addEventListener('click', function(){ go(-1); });
+    if(next) next.addEventListener('click', function(){ go(1); });
+    track.addEventListener('scroll', function(){
+      clearTimeout(track._sliderTimer);
+      track._sliderTimer = setTimeout(update, 80);
+    }, {passive: true});
+    update();
   });
 })();
 (function(){

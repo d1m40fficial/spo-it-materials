@@ -527,6 +527,12 @@ html.modal-open { overflow: hidden; }
 :root[data-theme=dark] .quiz-actions button[data-answer]:hover, :root[data-theme=dark] .quiz-actions button.quiz-answer:hover { background: #262626; background-color: #262626; color: #fff; border-color: #262626; }
 :root[data-theme=dark] .gate-q { background: #1E1E1E; color: #FF6B00; }
 
+/* the whole-variant archive is the main action in a download block */
+.files a.zip { background: #121212; color: #fff; border-color: #121212; font-weight: 700; box-shadow: 4px 4px 0 rgba(0,0,0,.18); }
+.files a.zip::before { color: #fff; }
+.files a.zip:hover { background: #1D1D1D; color: #fff; border-color: #1D1D1D; box-shadow: 5px 5px 0 rgba(0,0,0,.22); }
+.files a.zip:active { transform: translate(2px,2px); box-shadow: 1px 1px 0 rgba(0,0,0,.12); }
+
 /* ---------- practical work checklist ---------- */
 .work-checklist { width: 100%; border-collapse: collapse; margin: 14px 0 4px; }
 .work-checklist th, .work-checklist td { border: 1px solid var(--rule); padding: 9px 10px; vertical-align: top; }
@@ -564,6 +570,24 @@ html.modal-open { overflow: hidden; }
 .variant-body .task-list { margin: 8px 0 0; padding-left: 20px; }
 .variant-body .task-list li { margin: 0 0 8px; }
 @media (max-width: 620px) { .variant-body { overflow-x: auto; } .variant-body table { min-width: 520px; } }
+
+/* ---------- schema slider: all CREATE TABLE examples ---------- */
+.schema-slider { margin: 18px 0 24px; border: 1px solid #d8d5cc; border-radius: 14px; background: #fff; color: #1a1916; overflow: hidden; }
+.schema-slider-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 14px; background: #f5f2ea; border-bottom: 1px solid #d8d5cc; }
+.schema-slider-bar strong { font: 700 14px/1.2 var(--font-display); color: #1a1916; }
+.schema-slider-actions { display: flex; align-items: center; gap: 8px; }
+.schema-slider-counter { min-width: 62px; text-align: center; font: 600 13px/1 var(--font-mono); color: #59544a; }
+.schema-btn { width: 34px; height: 34px; border: 1px solid #c9c4b8; border-radius: 8px; background: #fff; color: #1a1916; font: 700 18px/1 var(--font-mono); cursor: pointer; }
+.schema-btn:hover { background: #ece7dc; }
+.schema-track { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: thin; }
+.schema-slide { flex: 0 0 100%; min-width: 100%; box-sizing: border-box; padding: 16px 18px 18px; scroll-snap-align: start; }
+.schema-slide h4 { margin: 0 0 10px; font: 700 16px/1.3 var(--font-display); color: #1a1916; }
+.schema-slide h4 code, .schema-slide p code { color: #1a1916; background: #f1ede4; padding: 1px 4px; border-radius: 4px; }
+.schema-slide p { margin: 0 0 10px; font-size: 14px; line-height: 1.55; color: #3a372f; }
+.schema-slide pre { margin: 0; padding: 14px 16px; overflow-x: auto; border: 1px solid #ddd8cc; border-radius: 10px; background: #fbfaf6; color: #1a1916; font: 12.5px/1.5 var(--font-mono); }
+.schema-slide code { color: inherit; background: none; padding: 0; }
+.schema-slider:focus-within { outline: 2px solid #b9a97f; outline-offset: 2px; }
+@media (max-width: 620px) { .schema-slide { padding: 12px; } .schema-slider-bar { padding: 8px 10px; } }
 
 /* ---------- print / PDF export ---------- */
 @page { margin: 16mm; }
@@ -851,7 +875,7 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <p>Отклонение видно по освоенному объёму раньше, чем по отчёту: отчёт отвечает, сколько заплатили, а освоенный объём, сколько сделали и приняли.</p>
 <h2 id="пульт-три-кривые-и-табло"><span class="num">02</span>Пульт: три кривые и табло</h2>
 <p>Смотрите на пульт. Слева экран с тремя кривыми: одна идёт от нуля к 1,2 млн по плану, две другие рисуют фактическую историю. Под экраном панель с четырьмя числами, справа табло с восемью строками. Проведите по месяцам и найдите место, где кривые расходятся: до третьего месяца они идут близко, после него плановая уходит вверх, а фактическая выползает под ней.</p>
-<figure class="figure" data-fig="fig-06-evm" data-one="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"><iframe title="Figure 1: fig-06-evm" scrolling="no"></iframe><figcaption>Проведите по месяцам: три кривые расходятся, индексы объясняют почему.</figcaption></figure>
+<figure class="figure" data-fig="fig-06-evm" data-one="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"><iframe title="Figure 1: fig-06-evm" scrolling="no"></iframe><figcaption>Проведите по месяцам: три кривые расходятся, индексы объясняют почему.</figcaption></figure>
 
 <p>Три кривые это PV, EV и AC. <strong>PV</strong> это плановая стоимость работ, которые должны быть готовы к этой дате. <strong>EV</strong> это плановая стоимость работ, которые выполнены и приняты. <strong>AC</strong> это начисленная стоимость того, что сделано, независимо от того, оплачен счёт или нет. Панель держит CPI, SPI, BAC и EAC. Табло показывает шаги ровно так:</p>
 <ol>
@@ -1199,6 +1223,40 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
       var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
       window.scrollTo({top: 0, behavior: reduce ? 'auto' : 'smooth'});
     });
+  });
+})();
+
+(function(){
+  document.querySelectorAll('[data-slider]').forEach(function(slider){
+    var track = slider.querySelector('[data-slider-track]');
+    var slides = track ? Array.prototype.slice.call(track.children) : [];
+    var counter = slider.querySelector('[data-slider-counter]');
+    var prev = slider.querySelector('[data-slider-prev]');
+    var next = slider.querySelector('[data-slider-next]');
+    if(!track || slides.length < 2) return;
+    function current(){
+      var best = 0, dist = Infinity;
+      slides.forEach(function(slide, i){
+        var d = Math.abs(slide.offsetLeft - track.scrollLeft);
+        if(d < dist){ dist = d; best = i; }
+      });
+      return best;
+    }
+    function update(){
+      if(counter) counter.textContent = (current() + 1) + ' / ' + slides.length;
+    }
+    function go(delta){
+      var i = Math.max(0, Math.min(slides.length - 1, current() + delta));
+      var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      track.scrollTo({left: slides[i].offsetLeft, behavior: reduce ? 'auto' : 'smooth'});
+    }
+    if(prev) prev.addEventListener('click', function(){ go(-1); });
+    if(next) next.addEventListener('click', function(){ go(1); });
+    track.addEventListener('scroll', function(){
+      clearTimeout(track._sliderTimer);
+      track._sliderTimer = setTimeout(update, 80);
+    }, {passive: true});
+    update();
   });
 })();
 (function(){

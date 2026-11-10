@@ -527,6 +527,12 @@ html.modal-open { overflow: hidden; }
 :root[data-theme=dark] .quiz-actions button[data-answer]:hover, :root[data-theme=dark] .quiz-actions button.quiz-answer:hover { background: #262626; background-color: #262626; color: #fff; border-color: #262626; }
 :root[data-theme=dark] .gate-q { background: #1E1E1E; color: #FF6B00; }
 
+/* the whole-variant archive is the main action in a download block */
+.files a.zip { background: #121212; color: #fff; border-color: #121212; font-weight: 700; box-shadow: 4px 4px 0 rgba(0,0,0,.18); }
+.files a.zip::before { color: #fff; }
+.files a.zip:hover { background: #1D1D1D; color: #fff; border-color: #1D1D1D; box-shadow: 5px 5px 0 rgba(0,0,0,.22); }
+.files a.zip:active { transform: translate(2px,2px); box-shadow: 1px 1px 0 rgba(0,0,0,.12); }
+
 /* ---------- practical work checklist ---------- */
 .work-checklist { width: 100%; border-collapse: collapse; margin: 14px 0 4px; }
 .work-checklist th, .work-checklist td { border: 1px solid var(--rule); padding: 9px 10px; vertical-align: top; }
@@ -564,6 +570,24 @@ html.modal-open { overflow: hidden; }
 .variant-body .task-list { margin: 8px 0 0; padding-left: 20px; }
 .variant-body .task-list li { margin: 0 0 8px; }
 @media (max-width: 620px) { .variant-body { overflow-x: auto; } .variant-body table { min-width: 520px; } }
+
+/* ---------- schema slider: all CREATE TABLE examples ---------- */
+.schema-slider { margin: 18px 0 24px; border: 1px solid #d8d5cc; border-radius: 14px; background: #fff; color: #1a1916; overflow: hidden; }
+.schema-slider-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 14px; background: #f5f2ea; border-bottom: 1px solid #d8d5cc; }
+.schema-slider-bar strong { font: 700 14px/1.2 var(--font-display); color: #1a1916; }
+.schema-slider-actions { display: flex; align-items: center; gap: 8px; }
+.schema-slider-counter { min-width: 62px; text-align: center; font: 600 13px/1 var(--font-mono); color: #59544a; }
+.schema-btn { width: 34px; height: 34px; border: 1px solid #c9c4b8; border-radius: 8px; background: #fff; color: #1a1916; font: 700 18px/1 var(--font-mono); cursor: pointer; }
+.schema-btn:hover { background: #ece7dc; }
+.schema-track { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: thin; }
+.schema-slide { flex: 0 0 100%; min-width: 100%; box-sizing: border-box; padding: 16px 18px 18px; scroll-snap-align: start; }
+.schema-slide h4 { margin: 0 0 10px; font: 700 16px/1.3 var(--font-display); color: #1a1916; }
+.schema-slide h4 code, .schema-slide p code { color: #1a1916; background: #f1ede4; padding: 1px 4px; border-radius: 4px; }
+.schema-slide p { margin: 0 0 10px; font-size: 14px; line-height: 1.55; color: #3a372f; }
+.schema-slide pre { margin: 0; padding: 14px 16px; overflow-x: auto; border: 1px solid #ddd8cc; border-radius: 10px; background: #fbfaf6; color: #1a1916; font: 12.5px/1.5 var(--font-mono); }
+.schema-slide code { color: inherit; background: none; padding: 0; }
+.schema-slider:focus-within { outline: 2px solid #b9a97f; outline-offset: 2px; }
+@media (max-width: 620px) { .schema-slide { padding: 12px; } .schema-slider-bar { padding: 8px 10px; } }
 
 /* ---------- print / PDF export ---------- */
 @page { margin: 16mm; }
@@ -969,9 +993,9 @@ GET /api/products/id  карточка, 200 или 404
 
 <span class="nd">@pytest</span><span class="o">.</span><span class="n">fixture</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">con</span><span class="p">():</span>
-    <span class="n">connection</span> <span class="o">=</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s2">&quot;:memory:&quot;</span><span class="p">)</span>
+    <span class="n">connection</span> <span class="o">=</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s2">":memory:"</span><span class="p">)</span>
     <span class="n">connection</span><span class="o">.</span><span class="n">row_factory</span> <span class="o">=</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">Row</span>
-    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;schema.sql&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">"schema.sql"</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
         <span class="n">connection</span><span class="o">.</span><span class="n">executescript</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
     <span class="k">yield</span> <span class="n">connection</span>
     <span class="n">connection</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
@@ -979,10 +1003,10 @@ GET /api/products/id  карточка, 200 или 404
 
 <span class="nd">@pytest</span><span class="o">.</span><span class="n">fixture</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">client</span><span class="p">(</span><span class="n">tmp_path</span><span class="p">):</span>
-    <span class="n">db_path</span> <span class="o">=</span> <span class="n">tmp_path</span> <span class="o">/</span> <span class="s2">&quot;test.db&quot;</span>
+    <span class="n">db_path</span> <span class="o">=</span> <span class="n">tmp_path</span> <span class="o">/</span> <span class="s2">"test.db"</span>
     <span class="n">app</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">DATABASE</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">db_path</span><span class="p">),</span> <span class="n">TESTING</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="n">connection</span> <span class="o">=</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">db_path</span><span class="p">)</span>
-    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;schema.sql&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">"schema.sql"</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
         <span class="n">connection</span><span class="o">.</span><span class="n">executescript</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
     <span class="n">connection</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
     <span class="k">with</span> <span class="n">app</span><span class="o">.</span><span class="n">test_client</span><span class="p">()</span> <span class="k">as</span> <span class="n">test_client</span><span class="p">:</span>
@@ -1004,12 +1028,12 @@ GET /api/products/id  карточка, 200 или 404
 <span class="kn">from</span><span class="w"> </span><span class="nn">validation</span><span class="w"> </span><span class="kn">import</span> <span class="n">validate_product</span>
 
 <span class="n">VALID</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s2">&quot;sku&quot;</span><span class="p">:</span> <span class="s2">&quot;SKU-1001&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Перфоратор Bosch GSB 13 RE&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;category&quot;</span><span class="p">:</span> <span class="s2">&quot;Инструмент&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;price&quot;</span><span class="p">:</span> <span class="mi">8990</span><span class="p">,</span>
-    <span class="s2">&quot;stock&quot;</span><span class="p">:</span> <span class="mi">12</span><span class="p">,</span>
-    <span class="s2">&quot;site&quot;</span><span class="p">:</span> <span class="s2">&quot;Москва&quot;</span><span class="p">,</span>
+    <span class="s2">"sku"</span><span class="p">:</span> <span class="s2">"SKU-1001"</span><span class="p">,</span>
+    <span class="s2">"title"</span><span class="p">:</span> <span class="s2">"Перфоратор Bosch GSB 13 RE"</span><span class="p">,</span>
+    <span class="s2">"category"</span><span class="p">:</span> <span class="s2">"Инструмент"</span><span class="p">,</span>
+    <span class="s2">"price"</span><span class="p">:</span> <span class="mi">8990</span><span class="p">,</span>
+    <span class="s2">"stock"</span><span class="p">:</span> <span class="mi">12</span><span class="p">,</span>
+    <span class="s2">"site"</span><span class="p">:</span> <span class="s2">"Москва"</span><span class="p">,</span>
 <span class="p">}</span>
 
 
@@ -1018,16 +1042,16 @@ GET /api/products/id  карточка, 200 или 404
 
 
 <span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">parametrize</span><span class="p">(</span>
-    <span class="s2">&quot;field,value,code&quot;</span><span class="p">,</span>
+    <span class="s2">"field,value,code"</span><span class="p">,</span>
     <span class="p">[</span>
-        <span class="p">(</span><span class="s2">&quot;sku&quot;</span><span class="p">,</span> <span class="s2">&quot;1001&quot;</span><span class="p">,</span> <span class="s2">&quot;format&quot;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s2">&quot;price&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;range&quot;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">"sku"</span><span class="p">,</span> <span class="s2">"1001"</span><span class="p">,</span> <span class="s2">"format"</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">"price"</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">"range"</span><span class="p">),</span>
     <span class="p">],</span>
 <span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">test_invalid_field_returns_code</span><span class="p">(</span><span class="n">field</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">code</span><span class="p">):</span>
     <span class="n">errors</span> <span class="o">=</span> <span class="n">validate_product</span><span class="p">({</span><span class="o">**</span><span class="n">VALID</span><span class="p">,</span> <span class="n">field</span><span class="p">:</span> <span class="n">value</span><span class="p">})</span>
-    <span class="n">pairs</span> <span class="o">=</span> <span class="p">[{</span><span class="s2">&quot;field&quot;</span><span class="p">:</span> <span class="n">item</span><span class="p">[</span><span class="s2">&quot;field&quot;</span><span class="p">],</span> <span class="s2">&quot;code&quot;</span><span class="p">:</span> <span class="n">item</span><span class="p">[</span><span class="s2">&quot;code&quot;</span><span class="p">]}</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">errors</span><span class="p">]</span>
-    <span class="k">assert</span> <span class="p">{</span><span class="s2">&quot;field&quot;</span><span class="p">:</span> <span class="n">field</span><span class="p">,</span> <span class="s2">&quot;code&quot;</span><span class="p">:</span> <span class="n">code</span><span class="p">}</span> <span class="ow">in</span> <span class="n">pairs</span>
+    <span class="n">pairs</span> <span class="o">=</span> <span class="p">[{</span><span class="s2">"field"</span><span class="p">:</span> <span class="n">item</span><span class="p">[</span><span class="s2">"field"</span><span class="p">],</span> <span class="s2">"code"</span><span class="p">:</span> <span class="n">item</span><span class="p">[</span><span class="s2">"code"</span><span class="p">]}</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">errors</span><span class="p">]</span>
+    <span class="k">assert</span> <span class="p">{</span><span class="s2">"field"</span><span class="p">:</span> <span class="n">field</span><span class="p">,</span> <span class="s2">"code"</span><span class="p">:</span> <span class="n">code</span><span class="p">}</span> <span class="ow">in</span> <span class="n">pairs</span>
 </code></pre></div>
 
 <p>Дополните таблицу случаев до девяти строк: пустой артикул, короткое наименование, неизвестная категория, отрицательная цена, цена выше верхней границы, отрицательное количество, количество строкой, неизвестная площадка. Для каждого укажите поле, значение и ожидаемый код.</p>
@@ -1045,19 +1069,19 @@ GET /api/products/id  карточка, 200 или 404
 <div class="codehilite" data-lang="python"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">products</span><span class="w"> </span><span class="kn">import</span> <span class="n">create_product</span><span class="p">,</span> <span class="n">delete_product</span><span class="p">,</span> <span class="n">get_product</span><span class="p">,</span> <span class="n">list_products</span><span class="p">,</span> <span class="n">update_product</span>
 
 <span class="n">ROW</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s2">&quot;sku&quot;</span><span class="p">:</span> <span class="s2">&quot;SKU-1001&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Перфоратор Bosch GSB 13 RE&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;category&quot;</span><span class="p">:</span> <span class="s2">&quot;Инструмент&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;price&quot;</span><span class="p">:</span> <span class="mi">8990</span><span class="p">,</span>
-    <span class="s2">&quot;stock&quot;</span><span class="p">:</span> <span class="mi">12</span><span class="p">,</span>
-    <span class="s2">&quot;site&quot;</span><span class="p">:</span> <span class="s2">&quot;Москва&quot;</span><span class="p">,</span>
+    <span class="s2">"sku"</span><span class="p">:</span> <span class="s2">"SKU-1001"</span><span class="p">,</span>
+    <span class="s2">"title"</span><span class="p">:</span> <span class="s2">"Перфоратор Bosch GSB 13 RE"</span><span class="p">,</span>
+    <span class="s2">"category"</span><span class="p">:</span> <span class="s2">"Инструмент"</span><span class="p">,</span>
+    <span class="s2">"price"</span><span class="p">:</span> <span class="mi">8990</span><span class="p">,</span>
+    <span class="s2">"stock"</span><span class="p">:</span> <span class="mi">12</span><span class="p">,</span>
+    <span class="s2">"site"</span><span class="p">:</span> <span class="s2">"Москва"</span><span class="p">,</span>
 <span class="p">}</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">test_create_and_read</span><span class="p">(</span><span class="n">con</span><span class="p">):</span>
     <span class="n">new_id</span> <span class="o">=</span> <span class="n">create_product</span><span class="p">(</span><span class="n">con</span><span class="p">,</span> <span class="n">ROW</span><span class="p">)</span>
     <span class="k">assert</span> <span class="n">new_id</span> <span class="o">&gt;</span> <span class="mi">0</span>
-    <span class="k">assert</span> <span class="n">get_product</span><span class="p">(</span><span class="n">con</span><span class="p">,</span> <span class="s2">&quot;SKU-1001&quot;</span><span class="p">)[</span><span class="s2">&quot;title&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">ROW</span><span class="p">[</span><span class="s2">&quot;title&quot;</span><span class="p">]</span>
+    <span class="k">assert</span> <span class="n">get_product</span><span class="p">(</span><span class="n">con</span><span class="p">,</span> <span class="s2">"SKU-1001"</span><span class="p">)[</span><span class="s2">"title"</span><span class="p">]</span> <span class="o">==</span> <span class="n">ROW</span><span class="p">[</span><span class="s2">"title"</span><span class="p">]</span>
 </code></pre></div>
 
 <p>Заполните таблицу проверок слоя данных. Первая строка дана как образец.</p>
@@ -1108,27 +1132,27 @@ GET /api/products/id  карточка, 200 или 404
 <h3>Шаг 5. Напишите тесты API</h3>
 <p>Создайте <code>.../sklad-plus/tests/test_api.py</code>. Тестовый клиент Flask вызывает приложение в памяти, поэтому сервер и порт не нужны. Ниже проверка пустого списка и проверка неверной цены.</p>
 <div class="codehilite" data-lang="python"><pre><span></span><code><span class="n">ROW</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s2">&quot;sku&quot;</span><span class="p">:</span> <span class="s2">&quot;SKU-1001&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Перфоратор Bosch GSB 13 RE&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;category&quot;</span><span class="p">:</span> <span class="s2">&quot;Инструмент&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;price&quot;</span><span class="p">:</span> <span class="mi">8990</span><span class="p">,</span>
-    <span class="s2">&quot;stock&quot;</span><span class="p">:</span> <span class="mi">12</span><span class="p">,</span>
-    <span class="s2">&quot;site&quot;</span><span class="p">:</span> <span class="s2">&quot;Москва&quot;</span><span class="p">,</span>
+    <span class="s2">"sku"</span><span class="p">:</span> <span class="s2">"SKU-1001"</span><span class="p">,</span>
+    <span class="s2">"title"</span><span class="p">:</span> <span class="s2">"Перфоратор Bosch GSB 13 RE"</span><span class="p">,</span>
+    <span class="s2">"category"</span><span class="p">:</span> <span class="s2">"Инструмент"</span><span class="p">,</span>
+    <span class="s2">"price"</span><span class="p">:</span> <span class="mi">8990</span><span class="p">,</span>
+    <span class="s2">"stock"</span><span class="p">:</span> <span class="mi">12</span><span class="p">,</span>
+    <span class="s2">"site"</span><span class="p">:</span> <span class="s2">"Москва"</span><span class="p">,</span>
 <span class="p">}</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">test_list_returns_200</span><span class="p">(</span><span class="n">client</span><span class="p">):</span>
-    <span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/api/products&quot;</span><span class="p">)</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"/api/products"</span><span class="p">)</span>
     <span class="k">assert</span> <span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">200</span>
-    <span class="k">assert</span> <span class="n">response</span><span class="o">.</span><span class="n">get_json</span><span class="p">()[</span><span class="s2">&quot;count&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span>
+    <span class="k">assert</span> <span class="n">response</span><span class="o">.</span><span class="n">get_json</span><span class="p">()[</span><span class="s2">"count"</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">test_invalid_fields_return_400</span><span class="p">(</span><span class="n">client</span><span class="p">):</span>
-    <span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;/api/products&quot;</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="p">{</span><span class="o">**</span><span class="n">ROW</span><span class="p">,</span> <span class="s2">&quot;price&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">})</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">"/api/products"</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="p">{</span><span class="o">**</span><span class="n">ROW</span><span class="p">,</span> <span class="s2">"price"</span><span class="p">:</span> <span class="mi">0</span><span class="p">})</span>
     <span class="n">body</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">get_json</span><span class="p">()</span>
     <span class="k">assert</span> <span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">400</span>
-    <span class="k">assert</span> <span class="n">body</span><span class="p">[</span><span class="s2">&quot;error&quot;</span><span class="p">][</span><span class="s2">&quot;code&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;validation_failed&quot;</span>
-    <span class="k">assert</span> <span class="n">body</span><span class="p">[</span><span class="s2">&quot;error&quot;</span><span class="p">][</span><span class="s2">&quot;fields&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;field&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;price&quot;</span>
+    <span class="k">assert</span> <span class="n">body</span><span class="p">[</span><span class="s2">"error"</span><span class="p">][</span><span class="s2">"code"</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"validation_failed"</span>
+    <span class="k">assert</span> <span class="n">body</span><span class="p">[</span><span class="s2">"error"</span><span class="p">][</span><span class="s2">"fields"</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s2">"field"</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"price"</span>
 </code></pre></div>
 
 <p>Клиент берёт настройку <code>DATABASE</code> из фикстуры, поэтому не трогает рабочую базу. Если тест изменил настройку и не вернул её, следующие тесты могут писать в чужой файл. Фикстура обновляет конфигурацию перед каждым тестом, а <code>TESTING=True</code> помогает увидеть настоящую ошибку в трассировке.</p>
@@ -1203,23 +1227,23 @@ TOTAL                        245     23     50      5    88%
 <p>Покрытие не заменяет проверку значений. Если тест вызывает маршрут и не смотрит на тело, строка считается выполненной, а поведение остаётся непроверенным. Поэтому в отчёте рядом с процентом укажите, какие утверждения стоят в тестах.</p>
 <h3>Шаг 7. Добавьте проверки в коллекцию Postman</h3>
 <p>Откройте коллекцию <code>sklad-plus API</code> с предыдущего занятия. В каждом запросе перейдите на вкладку Tests и добавьте проверки. Ниже образец для успешного списка и для ошибки полей.</p>
-<div class="codehilite" data-lang="javascript"><pre><span></span><code><span class="nx">pm</span><span class="p">.</span><span class="nx">test</span><span class="p">(</span><span class="s2">&quot;код 200&quot;</span><span class="p">,</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<div class="codehilite" data-lang="javascript"><pre><span></span><code><span class="nx">pm</span><span class="p">.</span><span class="nx">test</span><span class="p">(</span><span class="s2">"код 200"</span><span class="p">,</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="nx">pm</span><span class="p">.</span><span class="nx">response</span><span class="p">.</span><span class="nx">to</span><span class="p">.</span><span class="nx">have</span><span class="p">.</span><span class="nx">status</span><span class="p">(</span><span class="mf">200</span><span class="p">);</span>
 <span class="p">});</span>
-<span class="nx">pm</span><span class="p">.</span><span class="nx">test</span><span class="p">(</span><span class="s2">&quot;есть массив items&quot;</span><span class="p">,</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="nx">pm</span><span class="p">.</span><span class="nx">expect</span><span class="p">(</span><span class="nx">pm</span><span class="p">.</span><span class="nx">response</span><span class="p">.</span><span class="nx">json</span><span class="p">().</span><span class="nx">items</span><span class="p">).</span><span class="nx">to</span><span class="p">.</span><span class="nx">be</span><span class="p">.</span><span class="nx">an</span><span class="p">(</span><span class="s2">&quot;array&quot;</span><span class="p">);</span>
+<span class="nx">pm</span><span class="p">.</span><span class="nx">test</span><span class="p">(</span><span class="s2">"есть массив items"</span><span class="p">,</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">pm</span><span class="p">.</span><span class="nx">expect</span><span class="p">(</span><span class="nx">pm</span><span class="p">.</span><span class="nx">response</span><span class="p">.</span><span class="nx">json</span><span class="p">().</span><span class="nx">items</span><span class="p">).</span><span class="nx">to</span><span class="p">.</span><span class="nx">be</span><span class="p">.</span><span class="nx">an</span><span class="p">(</span><span class="s2">"array"</span><span class="p">);</span>
 <span class="p">});</span>
 </code></pre></div>
 
-<div class="codehilite" data-lang="javascript"><pre><span></span><code><span class="nx">pm</span><span class="p">.</span><span class="nx">test</span><span class="p">(</span><span class="s2">&quot;код 400&quot;</span><span class="p">,</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<div class="codehilite" data-lang="javascript"><pre><span></span><code><span class="nx">pm</span><span class="p">.</span><span class="nx">test</span><span class="p">(</span><span class="s2">"код 400"</span><span class="p">,</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="nx">pm</span><span class="p">.</span><span class="nx">response</span><span class="p">.</span><span class="nx">to</span><span class="p">.</span><span class="nx">have</span><span class="p">.</span><span class="nx">status</span><span class="p">(</span><span class="mf">400</span><span class="p">);</span>
 <span class="p">});</span>
-<span class="nx">pm</span><span class="p">.</span><span class="nx">test</span><span class="p">(</span><span class="s2">&quot;код ошибки validation_failed&quot;</span><span class="p">,</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="nx">pm</span><span class="p">.</span><span class="nx">expect</span><span class="p">(</span><span class="nx">pm</span><span class="p">.</span><span class="nx">response</span><span class="p">.</span><span class="nx">json</span><span class="p">().</span><span class="nx">error</span><span class="p">.</span><span class="nx">code</span><span class="p">).</span><span class="nx">to</span><span class="p">.</span><span class="nx">eql</span><span class="p">(</span><span class="s2">&quot;validation_failed&quot;</span><span class="p">);</span>
+<span class="nx">pm</span><span class="p">.</span><span class="nx">test</span><span class="p">(</span><span class="s2">"код ошибки validation_failed"</span><span class="p">,</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">pm</span><span class="p">.</span><span class="nx">expect</span><span class="p">(</span><span class="nx">pm</span><span class="p">.</span><span class="nx">response</span><span class="p">.</span><span class="nx">json</span><span class="p">().</span><span class="nx">error</span><span class="p">.</span><span class="nx">code</span><span class="p">).</span><span class="nx">to</span><span class="p">.</span><span class="nx">eql</span><span class="p">(</span><span class="s2">"validation_failed"</span><span class="p">);</span>
 <span class="p">});</span>
-<span class="nx">pm</span><span class="p">.</span><span class="nx">test</span><span class="p">(</span><span class="s2">&quot;поле price указано&quot;</span><span class="p">,</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="nx">pm</span><span class="p">.</span><span class="nx">test</span><span class="p">(</span><span class="s2">"поле price указано"</span><span class="p">,</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="kd">const</span><span class="w"> </span><span class="nx">fields</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">pm</span><span class="p">.</span><span class="nx">response</span><span class="p">.</span><span class="nx">json</span><span class="p">().</span><span class="nx">error</span><span class="p">.</span><span class="nx">fields</span><span class="p">;</span>
-<span class="w">    </span><span class="nx">pm</span><span class="p">.</span><span class="nx">expect</span><span class="p">(</span><span class="nx">fields</span><span class="p">.</span><span class="nx">some</span><span class="p">((</span><span class="nx">item</span><span class="p">)</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="nx">item</span><span class="p">.</span><span class="nx">field</span><span class="w"> </span><span class="o">===</span><span class="w"> </span><span class="s2">&quot;price&quot;</span><span class="p">)).</span><span class="nx">to</span><span class="p">.</span><span class="nx">be</span><span class="p">.</span><span class="kc">true</span><span class="p">;</span>
+<span class="w">    </span><span class="nx">pm</span><span class="p">.</span><span class="nx">expect</span><span class="p">(</span><span class="nx">fields</span><span class="p">.</span><span class="nx">some</span><span class="p">((</span><span class="nx">item</span><span class="p">)</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="nx">item</span><span class="p">.</span><span class="nx">field</span><span class="w"> </span><span class="o">===</span><span class="w"> </span><span class="s2">"price"</span><span class="p">)).</span><span class="nx">to</span><span class="p">.</span><span class="nx">be</span><span class="p">.</span><span class="kc">true</span><span class="p">;</span>
 <span class="p">});</span>
 </code></pre></div>
 
@@ -1386,6 +1410,40 @@ TOTAL                        245     23     50      5    88%
       var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
       window.scrollTo({top: 0, behavior: reduce ? 'auto' : 'smooth'});
     });
+  });
+})();
+
+(function(){
+  document.querySelectorAll('[data-slider]').forEach(function(slider){
+    var track = slider.querySelector('[data-slider-track]');
+    var slides = track ? Array.prototype.slice.call(track.children) : [];
+    var counter = slider.querySelector('[data-slider-counter]');
+    var prev = slider.querySelector('[data-slider-prev]');
+    var next = slider.querySelector('[data-slider-next]');
+    if(!track || slides.length < 2) return;
+    function current(){
+      var best = 0, dist = Infinity;
+      slides.forEach(function(slide, i){
+        var d = Math.abs(slide.offsetLeft - track.scrollLeft);
+        if(d < dist){ dist = d; best = i; }
+      });
+      return best;
+    }
+    function update(){
+      if(counter) counter.textContent = (current() + 1) + ' / ' + slides.length;
+    }
+    function go(delta){
+      var i = Math.max(0, Math.min(slides.length - 1, current() + delta));
+      var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      track.scrollTo({left: slides[i].offsetLeft, behavior: reduce ? 'auto' : 'smooth'});
+    }
+    if(prev) prev.addEventListener('click', function(){ go(-1); });
+    if(next) next.addEventListener('click', function(){ go(1); });
+    track.addEventListener('scroll', function(){
+      clearTimeout(track._sliderTimer);
+      track._sliderTimer = setTimeout(update, 80);
+    }, {passive: true});
+    update();
   });
 })();
 (function(){

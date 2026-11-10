@@ -527,6 +527,12 @@ html.modal-open { overflow: hidden; }
 :root[data-theme=dark] .quiz-actions button[data-answer]:hover, :root[data-theme=dark] .quiz-actions button.quiz-answer:hover { background: #262626; background-color: #262626; color: #fff; border-color: #262626; }
 :root[data-theme=dark] .gate-q { background: #1E1E1E; color: #FF6B00; }
 
+/* the whole-variant archive is the main action in a download block */
+.files a.zip { background: #121212; color: #fff; border-color: #121212; font-weight: 700; box-shadow: 4px 4px 0 rgba(0,0,0,.18); }
+.files a.zip::before { color: #fff; }
+.files a.zip:hover { background: #1D1D1D; color: #fff; border-color: #1D1D1D; box-shadow: 5px 5px 0 rgba(0,0,0,.22); }
+.files a.zip:active { transform: translate(2px,2px); box-shadow: 1px 1px 0 rgba(0,0,0,.12); }
+
 /* ---------- practical work checklist ---------- */
 .work-checklist { width: 100%; border-collapse: collapse; margin: 14px 0 4px; }
 .work-checklist th, .work-checklist td { border: 1px solid var(--rule); padding: 9px 10px; vertical-align: top; }
@@ -564,6 +570,24 @@ html.modal-open { overflow: hidden; }
 .variant-body .task-list { margin: 8px 0 0; padding-left: 20px; }
 .variant-body .task-list li { margin: 0 0 8px; }
 @media (max-width: 620px) { .variant-body { overflow-x: auto; } .variant-body table { min-width: 520px; } }
+
+/* ---------- schema slider: all CREATE TABLE examples ---------- */
+.schema-slider { margin: 18px 0 24px; border: 1px solid #d8d5cc; border-radius: 14px; background: #fff; color: #1a1916; overflow: hidden; }
+.schema-slider-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 14px; background: #f5f2ea; border-bottom: 1px solid #d8d5cc; }
+.schema-slider-bar strong { font: 700 14px/1.2 var(--font-display); color: #1a1916; }
+.schema-slider-actions { display: flex; align-items: center; gap: 8px; }
+.schema-slider-counter { min-width: 62px; text-align: center; font: 600 13px/1 var(--font-mono); color: #59544a; }
+.schema-btn { width: 34px; height: 34px; border: 1px solid #c9c4b8; border-radius: 8px; background: #fff; color: #1a1916; font: 700 18px/1 var(--font-mono); cursor: pointer; }
+.schema-btn:hover { background: #ece7dc; }
+.schema-track { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: thin; }
+.schema-slide { flex: 0 0 100%; min-width: 100%; box-sizing: border-box; padding: 16px 18px 18px; scroll-snap-align: start; }
+.schema-slide h4 { margin: 0 0 10px; font: 700 16px/1.3 var(--font-display); color: #1a1916; }
+.schema-slide h4 code, .schema-slide p code { color: #1a1916; background: #f1ede4; padding: 1px 4px; border-radius: 4px; }
+.schema-slide p { margin: 0 0 10px; font-size: 14px; line-height: 1.55; color: #3a372f; }
+.schema-slide pre { margin: 0; padding: 14px 16px; overflow-x: auto; border: 1px solid #ddd8cc; border-radius: 10px; background: #fbfaf6; color: #1a1916; font: 12.5px/1.5 var(--font-mono); }
+.schema-slide code { color: inherit; background: none; padding: 0; }
+.schema-slider:focus-within { outline: 2px solid #b9a97f; outline-offset: 2px; }
+@media (max-width: 620px) { .schema-slide { padding: 12px; } .schema-slider-bar { padding: 8px 10px; } }
 
 /* ---------- print / PDF export ---------- */
 @page { margin: 16mm; }
@@ -883,9 +907,9 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <div class="gate-content" hidden><h2 id="счётчики-сервера"><span class="num">03</span>Счётчики сервера</h2>
 <p><code>SHOW GLOBAL STATUS</code> возвращает несколько сотен строк «имя, значение». Это счётчики с момента запуска, поэтому смысл имеет прирост за интервал.</p>
 <div class="codehilite" data-lang="text"><pre><span></span><code><span class="k">SHOW</span><span class="w"> </span><span class="k">GLOBAL</span><span class="w"> </span><span class="n">STATUS</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">Variable_name</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span>
-<span class="w">  </span><span class="s1">&#39;Uptime&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Threads_connected&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Threads_running&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Max_used_connections&#39;</span><span class="p">,</span>
-<span class="w">  </span><span class="s1">&#39;Questions&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Slow_queries&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Aborted_connects&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Created_tmp_disk_tables&#39;</span><span class="p">,</span>
-<span class="w">  </span><span class="s1">&#39;Innodb_buffer_pool_reads&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Innodb_buffer_pool_read_requests&#39;</span>
+<span class="w">  </span><span class="s1">'Uptime'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Threads_connected'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Threads_running'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Max_used_connections'</span><span class="p">,</span>
+<span class="w">  </span><span class="s1">'Questions'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Slow_queries'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Aborted_connects'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Created_tmp_disk_tables'</span><span class="p">,</span>
+<span class="w">  </span><span class="s1">'Innodb_buffer_pool_reads'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Innodb_buffer_pool_read_requests'</span>
 <span class="p">);</span>
 </code></pre></div>
 
@@ -940,7 +964,7 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <p>Список сессий даёт <code>SHOW FULL PROCESSLIST</code> или представление <code>information_schema.PROCESSLIST</code>: второе удобнее, к нему добавляют условие и сортировку.</p>
 <div class="codehilite" data-lang="text"><pre><span></span><code><span class="k">SELECT</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="k">user</span><span class="p">,</span><span class="w"> </span><span class="k">host</span><span class="p">,</span><span class="w"> </span><span class="n">db</span><span class="p">,</span><span class="w"> </span><span class="n">command</span><span class="p">,</span><span class="w"> </span><span class="k">time</span><span class="p">,</span><span class="w"> </span><span class="k">state</span><span class="p">,</span><span class="w"> </span><span class="k">LEFT</span><span class="p">(</span><span class="n">info</span><span class="p">,</span><span class="w"> </span><span class="mi">80</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">query</span>
 <span class="k">FROM</span><span class="w"> </span><span class="n">information_schema</span><span class="p">.</span><span class="n">PROCESSLIST</span>
-<span class="k">WHERE</span><span class="w"> </span><span class="n">command</span><span class="w"> </span><span class="o">&lt;&gt;</span><span class="w"> </span><span class="s1">&#39;Sleep&#39;</span><span class="w"> </span><span class="k">AND</span><span class="w"> </span><span class="k">time</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">5</span>
+<span class="k">WHERE</span><span class="w"> </span><span class="n">command</span><span class="w"> </span><span class="o">&lt;&gt;</span><span class="w"> </span><span class="s1">'Sleep'</span><span class="w"> </span><span class="k">AND</span><span class="w"> </span><span class="k">time</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">5</span>
 <span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="k">time</span><span class="w"> </span><span class="k">DESC</span><span class="p">;</span>
 </code></pre></div>
 
@@ -968,17 +992,17 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <p class="gate-action"><button type="button" class="gate-btn" aria-expanded="false"><span class="gate-q" aria-hidden="true">?</span><span>Куда уходит место и почему приложение не успевает?</span></button></p>
 <div class="gate-content" hidden><h2 id="диск-и-binary-log"><span class="num">07</span>Диск и binary log</h2>
 <p>Место кончается с постоянной скоростью, поэтому вопрос «что будет через неделю» здесь практичный.</p>
-<div class="codehilite" data-lang="text"><pre><span></span><code><span class="k">SHOW</span><span class="w"> </span><span class="n">VARIABLES</span><span class="w"> </span><span class="k">LIKE</span><span class="w"> </span><span class="s1">&#39;datadir&#39;</span><span class="p">;</span>
-<span class="k">SHOW</span><span class="w"> </span><span class="n">VARIABLES</span><span class="w"> </span><span class="k">LIKE</span><span class="w"> </span><span class="s1">&#39;log_bin&#39;</span><span class="p">;</span>
+<div class="codehilite" data-lang="text"><pre><span></span><code><span class="k">SHOW</span><span class="w"> </span><span class="n">VARIABLES</span><span class="w"> </span><span class="k">LIKE</span><span class="w"> </span><span class="s1">'datadir'</span><span class="p">;</span>
+<span class="k">SHOW</span><span class="w"> </span><span class="n">VARIABLES</span><span class="w"> </span><span class="k">LIKE</span><span class="w"> </span><span class="s1">'log_bin'</span><span class="p">;</span>
 <span class="k">SHOW</span><span class="w"> </span><span class="nb">BINARY</span><span class="w"> </span><span class="n">LOGS</span><span class="p">;</span>
 </code></pre></div>
 
 <p>В XAMPP файлы лежат в <code>.../xampp/mysql/data\</code> и называются <code>mysql-bin.000001</code>, <code>mysql-bin.000002</code>. Чистят журнал командой <code>PURGE BINARY LOGS BEFORE DATE_SUB(NOW(), INTERVAL 7 DAY);</code> или настройкой <code>binlog_expire_logs_seconds</code>. Перед очисткой проверяют свежую копию: без binary log базу между дампами не восстановить.</p>
 <h2 id="buffer-pool"><span class="num">08</span>Buffer pool</h2>
 <p>InnoDB держит страницы таблиц и индексов в буферном пуле. Доля попаданий считается по двум счётчикам: <code>Innodb_buffer_pool_read_requests</code> это обращения к странице, <code>Innodb_buffer_pool_reads</code> это обращения, ушедшие на диск.</p>
-<div class="codehilite" data-lang="text"><pre><span></span><code><span class="k">SHOW</span><span class="w"> </span><span class="n">STATUS</span><span class="w"> </span><span class="k">LIKE</span><span class="w"> </span><span class="s1">&#39;Innodb_buffer_pool_read%&#39;</span><span class="p">;</span>
-<span class="k">SHOW</span><span class="w"> </span><span class="n">STATUS</span><span class="w"> </span><span class="k">LIKE</span><span class="w"> </span><span class="s1">&#39;Innodb_buffer_pool_pages%&#39;</span><span class="p">;</span>
-<span class="k">SHOW</span><span class="w"> </span><span class="n">VARIABLES</span><span class="w"> </span><span class="k">LIKE</span><span class="w"> </span><span class="s1">&#39;innodb_buffer_pool_size&#39;</span><span class="p">;</span>
+<div class="codehilite" data-lang="text"><pre><span></span><code><span class="k">SHOW</span><span class="w"> </span><span class="n">STATUS</span><span class="w"> </span><span class="k">LIKE</span><span class="w"> </span><span class="s1">'Innodb_buffer_pool_read%'</span><span class="p">;</span>
+<span class="k">SHOW</span><span class="w"> </span><span class="n">STATUS</span><span class="w"> </span><span class="k">LIKE</span><span class="w"> </span><span class="s1">'Innodb_buffer_pool_pages%'</span><span class="p">;</span>
+<span class="k">SHOW</span><span class="w"> </span><span class="n">VARIABLES</span><span class="w"> </span><span class="k">LIKE</span><span class="w"> </span><span class="s1">'innodb_buffer_pool_size'</span><span class="p">;</span>
 </code></pre></div>
 
 <p>Отношение числа обращений, обслуженных памятью, к общему числу обращений даёт коэффициент попаданий. Значение около <code>0.99</code> означает, что почти все чтения обслужены памятью, но высокий коэффициент не гарантирует быстрых ответов: промахи могут приходиться на частые запросы.</p>
@@ -1027,7 +1051,7 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <span class="w">    </span><span class="kt">var</span><span class="w"> </span><span class="n">raw</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Dictionary</span><span class="o">&lt;</span><span class="kt">string</span><span class="p">,</span><span class="w"> </span><span class="kt">long</span><span class="o">&gt;</span><span class="p">();</span>
 <span class="w">    </span><span class="k">await</span><span class="w"> </span><span class="k">using</span><span class="w"> </span><span class="nn">var</span><span class="w"> </span><span class="n">conn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">MySqlConnection</span><span class="p">(</span><span class="n">cs</span><span class="p">);</span>
 <span class="w">    </span><span class="k">await</span><span class="w"> </span><span class="n">conn</span><span class="p">.</span><span class="n">OpenAsync</span><span class="p">();</span>
-<span class="w">    </span><span class="k">await</span><span class="w"> </span><span class="k">using</span><span class="w"> </span><span class="nn">var</span><span class="w"> </span><span class="n">cmd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">MySqlCommand</span><span class="p">(</span><span class="s">&quot;SHOW GLOBAL STATUS&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">conn</span><span class="p">);</span>
+<span class="w">    </span><span class="k">await</span><span class="w"> </span><span class="k">using</span><span class="w"> </span><span class="nn">var</span><span class="w"> </span><span class="n">cmd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">MySqlCommand</span><span class="p">(</span><span class="s">"SHOW GLOBAL STATUS"</span><span class="p">,</span><span class="w"> </span><span class="n">conn</span><span class="p">);</span>
 <span class="w">    </span><span class="k">await</span><span class="w"> </span><span class="k">using</span><span class="w"> </span><span class="nn">var</span><span class="w"> </span><span class="n">reader</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="n">cmd</span><span class="p">.</span><span class="n">ExecuteReaderAsync</span><span class="p">();</span>
 <span class="w">    </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="k">await</span><span class="w"> </span><span class="n">reader</span><span class="p">.</span><span class="n">ReadAsync</span><span class="p">())</span>
 <span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="kt">long</span><span class="p">.</span><span class="n">TryParse</span><span class="p">(</span><span class="n">reader</span><span class="p">.</span><span class="n">GetString</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span><span class="w"> </span><span class="k">out</span><span class="w"> </span><span class="kt">var</span><span class="w"> </span><span class="k">value</span><span class="p">))</span>
@@ -1052,9 +1076,9 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <span class="w">            </span><span class="o">?</span><span class="w"> </span><span class="p">(</span><span class="n">raw</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">was</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">seconds</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
 
 <span class="w">        </span><span class="n">_rows</span><span class="p">.</span><span class="n">Clear</span><span class="p">();</span>
-<span class="w">        </span><span class="n">_rows</span><span class="p">.</span><span class="n">Add</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="n">MetricRow</span><span class="p">(</span><span class="s">&quot;Запросов в секунду&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">Rate</span><span class="p">(</span><span class="s">&quot;Questions&quot;</span><span class="p">)));</span>
-<span class="w">        </span><span class="n">_rows</span><span class="p">.</span><span class="n">Add</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="n">MetricRow</span><span class="p">(</span><span class="s">&quot;Активных сессий&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">raw</span><span class="p">[</span><span class="s">&quot;Threads_running&quot;</span><span class="p">]));</span>
-<span class="w">        </span><span class="n">_rows</span><span class="p">.</span><span class="n">Add</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="n">MetricRow</span><span class="p">(</span><span class="s">&quot;Медленных запросов&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">raw</span><span class="p">[</span><span class="s">&quot;Slow_queries&quot;</span><span class="p">]));</span>
+<span class="w">        </span><span class="n">_rows</span><span class="p">.</span><span class="n">Add</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="n">MetricRow</span><span class="p">(</span><span class="s">"Запросов в секунду"</span><span class="p">,</span><span class="w"> </span><span class="n">Rate</span><span class="p">(</span><span class="s">"Questions"</span><span class="p">)));</span>
+<span class="w">        </span><span class="n">_rows</span><span class="p">.</span><span class="n">Add</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="n">MetricRow</span><span class="p">(</span><span class="s">"Активных сессий"</span><span class="p">,</span><span class="w"> </span><span class="n">raw</span><span class="p">[</span><span class="s">"Threads_running"</span><span class="p">]));</span>
+<span class="w">        </span><span class="n">_rows</span><span class="p">.</span><span class="n">Add</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="n">MetricRow</span><span class="p">(</span><span class="s">"Медленных запросов"</span><span class="p">,</span><span class="w"> </span><span class="n">raw</span><span class="p">[</span><span class="s">"Slow_queries"</span><span class="p">]));</span>
 <span class="w">        </span><span class="n">_prev</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">raw</span><span class="p">;</span>
 <span class="w">        </span><span class="n">_prevAt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">DateTime</span><span class="p">.</span><span class="n">UtcNow</span><span class="p">;</span>
 <span class="w">    </span><span class="p">}</span>
@@ -1210,6 +1234,40 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
       var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
       window.scrollTo({top: 0, behavior: reduce ? 'auto' : 'smooth'});
     });
+  });
+})();
+
+(function(){
+  document.querySelectorAll('[data-slider]').forEach(function(slider){
+    var track = slider.querySelector('[data-slider-track]');
+    var slides = track ? Array.prototype.slice.call(track.children) : [];
+    var counter = slider.querySelector('[data-slider-counter]');
+    var prev = slider.querySelector('[data-slider-prev]');
+    var next = slider.querySelector('[data-slider-next]');
+    if(!track || slides.length < 2) return;
+    function current(){
+      var best = 0, dist = Infinity;
+      slides.forEach(function(slide, i){
+        var d = Math.abs(slide.offsetLeft - track.scrollLeft);
+        if(d < dist){ dist = d; best = i; }
+      });
+      return best;
+    }
+    function update(){
+      if(counter) counter.textContent = (current() + 1) + ' / ' + slides.length;
+    }
+    function go(delta){
+      var i = Math.max(0, Math.min(slides.length - 1, current() + delta));
+      var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      track.scrollTo({left: slides[i].offsetLeft, behavior: reduce ? 'auto' : 'smooth'});
+    }
+    if(prev) prev.addEventListener('click', function(){ go(-1); });
+    if(next) next.addEventListener('click', function(){ go(1); });
+    track.addEventListener('scroll', function(){
+      clearTimeout(track._sliderTimer);
+      track._sliderTimer = setTimeout(update, 80);
+    }, {passive: true});
+    update();
   });
 })();
 (function(){

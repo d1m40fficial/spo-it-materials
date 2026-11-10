@@ -527,6 +527,12 @@ html.modal-open { overflow: hidden; }
 :root[data-theme=dark] .quiz-actions button[data-answer]:hover, :root[data-theme=dark] .quiz-actions button.quiz-answer:hover { background: #262626; background-color: #262626; color: #fff; border-color: #262626; }
 :root[data-theme=dark] .gate-q { background: #1E1E1E; color: #FF6B00; }
 
+/* the whole-variant archive is the main action in a download block */
+.files a.zip { background: #121212; color: #fff; border-color: #121212; font-weight: 700; box-shadow: 4px 4px 0 rgba(0,0,0,.18); }
+.files a.zip::before { color: #fff; }
+.files a.zip:hover { background: #1D1D1D; color: #fff; border-color: #1D1D1D; box-shadow: 5px 5px 0 rgba(0,0,0,.22); }
+.files a.zip:active { transform: translate(2px,2px); box-shadow: 1px 1px 0 rgba(0,0,0,.12); }
+
 /* ---------- practical work checklist ---------- */
 .work-checklist { width: 100%; border-collapse: collapse; margin: 14px 0 4px; }
 .work-checklist th, .work-checklist td { border: 1px solid var(--rule); padding: 9px 10px; vertical-align: top; }
@@ -564,6 +570,24 @@ html.modal-open { overflow: hidden; }
 .variant-body .task-list { margin: 8px 0 0; padding-left: 20px; }
 .variant-body .task-list li { margin: 0 0 8px; }
 @media (max-width: 620px) { .variant-body { overflow-x: auto; } .variant-body table { min-width: 520px; } }
+
+/* ---------- schema slider: all CREATE TABLE examples ---------- */
+.schema-slider { margin: 18px 0 24px; border: 1px solid #d8d5cc; border-radius: 14px; background: #fff; color: #1a1916; overflow: hidden; }
+.schema-slider-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 14px; background: #f5f2ea; border-bottom: 1px solid #d8d5cc; }
+.schema-slider-bar strong { font: 700 14px/1.2 var(--font-display); color: #1a1916; }
+.schema-slider-actions { display: flex; align-items: center; gap: 8px; }
+.schema-slider-counter { min-width: 62px; text-align: center; font: 600 13px/1 var(--font-mono); color: #59544a; }
+.schema-btn { width: 34px; height: 34px; border: 1px solid #c9c4b8; border-radius: 8px; background: #fff; color: #1a1916; font: 700 18px/1 var(--font-mono); cursor: pointer; }
+.schema-btn:hover { background: #ece7dc; }
+.schema-track { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: thin; }
+.schema-slide { flex: 0 0 100%; min-width: 100%; box-sizing: border-box; padding: 16px 18px 18px; scroll-snap-align: start; }
+.schema-slide h4 { margin: 0 0 10px; font: 700 16px/1.3 var(--font-display); color: #1a1916; }
+.schema-slide h4 code, .schema-slide p code { color: #1a1916; background: #f1ede4; padding: 1px 4px; border-radius: 4px; }
+.schema-slide p { margin: 0 0 10px; font-size: 14px; line-height: 1.55; color: #3a372f; }
+.schema-slide pre { margin: 0; padding: 14px 16px; overflow-x: auto; border: 1px solid #ddd8cc; border-radius: 10px; background: #fbfaf6; color: #1a1916; font: 12.5px/1.5 var(--font-mono); }
+.schema-slide code { color: inherit; background: none; padding: 0; }
+.schema-slider:focus-within { outline: 2px solid #b9a97f; outline-offset: 2px; }
+@media (max-width: 620px) { .schema-slide { padding: 12px; } .schema-slider-bar { padding: 8px 10px; } }
 
 /* ---------- print / PDF export ---------- */
 @page { margin: 16mm; }
@@ -852,41 +876,41 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <h2 id="что-на-самом-деле-хранит-json"><span class="num">02</span>Что на самом деле хранит JSON</h2>
 <p>JSON строится из шести видов значений: объект, массив, строка, число, логическое значение и <code>null</code>. Объект это набор пар «ключ и значение» в фигурных скобках. Массив это упорядоченный список в квадратных скобках. Всё остальное это скалярные значения.</p>
 <div class="codehilite" data-lang="json"><pre><span></span><code><span class="p">{</span>
-<span class="w">  </span><span class="nt">&quot;number&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;НК-2026-0417&quot;</span><span class="p">,</span>
-<span class="w">  </span><span class="nt">&quot;warehouse&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Москва&quot;</span><span class="p">,</span>
-<span class="w">  </span><span class="nt">&quot;date&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2026-10-05&quot;</span><span class="p">,</span>
-<span class="w">  </span><span class="nt">&quot;items&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
-<span class="w">    </span><span class="p">{</span><span class="nt">&quot;sku&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;SKU-1042&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Перчатки нитриловые&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;qty&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">48</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;price&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">312.50</span><span class="p">},</span>
-<span class="w">    </span><span class="p">{</span><span class="nt">&quot;sku&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;SKU-2210&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Стрейч-плёнка&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;qty&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">12</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;price&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">890.00</span><span class="p">}</span>
+<span class="w">  </span><span class="nt">"number"</span><span class="p">:</span><span class="w"> </span><span class="s2">"НК-2026-0417"</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"warehouse"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Москва"</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"date"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2026-10-05"</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"items"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span><span class="nt">"sku"</span><span class="p">:</span><span class="w"> </span><span class="s2">"SKU-1042"</span><span class="p">,</span><span class="w"> </span><span class="nt">"title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Перчатки нитриловые"</span><span class="p">,</span><span class="w"> </span><span class="nt">"qty"</span><span class="p">:</span><span class="w"> </span><span class="mi">48</span><span class="p">,</span><span class="w"> </span><span class="nt">"price"</span><span class="p">:</span><span class="w"> </span><span class="mf">312.50</span><span class="p">},</span>
+<span class="w">    </span><span class="p">{</span><span class="nt">"sku"</span><span class="p">:</span><span class="w"> </span><span class="s2">"SKU-2210"</span><span class="p">,</span><span class="w"> </span><span class="nt">"title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Стрейч-плёнка"</span><span class="p">,</span><span class="w"> </span><span class="nt">"qty"</span><span class="p">:</span><span class="w"> </span><span class="mi">12</span><span class="p">,</span><span class="w"> </span><span class="nt">"price"</span><span class="p">:</span><span class="w"> </span><span class="mf">890.00</span><span class="p">}</span>
 <span class="w">  </span><span class="p">],</span>
-<span class="w">  </span><span class="nt">&quot;closed&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span>
+<span class="w">  </span><span class="nt">"closed"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span>
 <span class="p">}</span>
 </code></pre></div>
 
 <p>Разберём этот документ в Python и посмотрим на типы.</p>
 <div class="codehilite" data-lang="python"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
 
-<span class="n">raw</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;{</span>
-<span class="s2">  &quot;number&quot;: &quot;НК-2026-0417&quot;,</span>
-<span class="s2">  &quot;warehouse&quot;: &quot;Москва&quot;,</span>
-<span class="s2">  &quot;date&quot;: &quot;2026-10-05&quot;,</span>
-<span class="s2">  &quot;items&quot;: [</span>
-<span class="s2">    {&quot;sku&quot;: &quot;SKU-1042&quot;, &quot;title&quot;: &quot;Перчатки нитриловые&quot;, &quot;qty&quot;: 48, &quot;price&quot;: 312.50},</span>
-<span class="s2">    {&quot;sku&quot;: &quot;SKU-2210&quot;, &quot;title&quot;: &quot;Стрейч-плёнка&quot;, &quot;qty&quot;: 12, &quot;price&quot;: 890.00}</span>
+<span class="n">raw</span> <span class="o">=</span> <span class="s2">"""{</span>
+<span class="s2">  "number": "НК-2026-0417",</span>
+<span class="s2">  "warehouse": "Москва",</span>
+<span class="s2">  "date": "2026-10-05",</span>
+<span class="s2">  "items": [</span>
+<span class="s2">    {"sku": "SKU-1042", "title": "Перчатки нитриловые", "qty": 48, "price": 312.50},</span>
+<span class="s2">    {"sku": "SKU-2210", "title": "Стрейч-плёнка", "qty": 12, "price": 890.00}</span>
 <span class="s2">  ],</span>
-<span class="s2">  &quot;closed&quot;: false</span>
-<span class="s2">}&quot;&quot;&quot;</span>
+<span class="s2">  "closed": false</span>
+<span class="s2">}"""</span>
 
 <span class="n">doc</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">raw</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">doc</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="n">doc</span><span class="p">))</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">doc</span><span class="p">[</span><span class="s2">&quot;items&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;qty&quot;</span><span class="p">],</span> <span class="nb">type</span><span class="p">(</span><span class="n">doc</span><span class="p">[</span><span class="s2">&quot;items&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;qty&quot;</span><span class="p">])</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">doc</span><span class="p">[</span><span class="s2">&quot;date&quot;</span><span class="p">],</span> <span class="nb">type</span><span class="p">(</span><span class="n">doc</span><span class="p">[</span><span class="s2">&quot;date&quot;</span><span class="p">])</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">doc</span><span class="p">[</span><span class="s2">&quot;closed&quot;</span><span class="p">],</span> <span class="nb">type</span><span class="p">(</span><span class="n">doc</span><span class="p">[</span><span class="s2">&quot;closed&quot;</span><span class="p">])</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">item</span><span class="p">[</span><span class="s2">&quot;qty&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="n">item</span><span class="p">[</span><span class="s2">&quot;price&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">doc</span><span class="p">[</span><span class="s2">&quot;items&quot;</span><span class="p">]))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">doc</span><span class="p">[</span><span class="s2">"items"</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s2">"qty"</span><span class="p">],</span> <span class="nb">type</span><span class="p">(</span><span class="n">doc</span><span class="p">[</span><span class="s2">"items"</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s2">"qty"</span><span class="p">])</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">doc</span><span class="p">[</span><span class="s2">"date"</span><span class="p">],</span> <span class="nb">type</span><span class="p">(</span><span class="n">doc</span><span class="p">[</span><span class="s2">"date"</span><span class="p">])</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">doc</span><span class="p">[</span><span class="s2">"closed"</span><span class="p">],</span> <span class="nb">type</span><span class="p">(</span><span class="n">doc</span><span class="p">[</span><span class="s2">"closed"</span><span class="p">])</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">item</span><span class="p">[</span><span class="s2">"qty"</span><span class="p">]</span> <span class="o">*</span> <span class="n">item</span><span class="p">[</span><span class="s2">"price"</span><span class="p">]</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">doc</span><span class="p">[</span><span class="s2">"items"</span><span class="p">]))</span>
 </code></pre></div>
 
 <p>Вывод:</p>
-<div class="codehilite" data-lang="text"><pre><span></span><code>dict [&#39;number&#39;, &#39;warehouse&#39;, &#39;date&#39;, &#39;items&#39;, &#39;closed&#39;]
+<div class="codehilite" data-lang="text"><pre><span></span><code>dict ['number', 'warehouse', 'date', 'items', 'closed']
 48 int
 2026-10-05 str
 False bool
@@ -902,8 +926,8 @@ False bool
 <h2 id="вложенность-сила-и-цена"><span class="num">03</span>Вложенность: сила и цена</h2>
 <p>Главное преимущество JSON в том, что он хранит структуру, а не только значения. Накладная содержит список строк, и этот список лежит внутри объекта накладной. Никакой отдельной таблицы связей для этого не нужно.</p>
 <p>К вложенному значению ведёт путь из ключей и индексов.</p>
-<div class="codehilite" data-lang="python"><pre><span></span><code><span class="nb">print</span><span class="p">(</span><span class="n">doc</span><span class="p">[</span><span class="s2">&quot;items&quot;</span><span class="p">][</span><span class="mi">1</span><span class="p">][</span><span class="s2">&quot;sku&quot;</span><span class="p">])</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">doc</span><span class="p">[</span><span class="s2">&quot;warehouse&quot;</span><span class="p">])</span>
+<div class="codehilite" data-lang="python"><pre><span></span><code><span class="nb">print</span><span class="p">(</span><span class="n">doc</span><span class="p">[</span><span class="s2">"items"</span><span class="p">][</span><span class="mi">1</span><span class="p">][</span><span class="s2">"sku"</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">doc</span><span class="p">[</span><span class="s2">"warehouse"</span><span class="p">])</span>
 </code></pre></div>
 
 <div class="codehilite" data-lang="text"><pre><span></span><code>SKU-2210
@@ -912,7 +936,7 @@ False bool
 
 <p>Путь читается слева направо: взять ключ <code>items</code>, затем второй элемент списка, затем ключ <code>sku</code>. Если на любом шаге ключа нет, Python выбросит <code>KeyError</code>, а если индекс вышел за границы списка, то <code>IndexError</code>. Это не недостаток формата, а сигнал, что документ не соответствует договору.</p>
 <p>Для необязательных полей используют <code>get</code>.</p>
-<div class="codehilite" data-lang="python"><pre><span></span><code><span class="n">discount</span> <span class="o">=</span> <span class="n">doc</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;discount&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<div class="codehilite" data-lang="python"><pre><span></span><code><span class="n">discount</span> <span class="o">=</span> <span class="n">doc</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"discount"</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">discount</span><span class="p">)</span>
 </code></pre></div>
 
@@ -934,18 +958,18 @@ SKU-2210;Стрейч-плёнка;12;890,00
 <span class="kn">import</span><span class="w"> </span><span class="nn">io</span>
 
 <span class="n">text</span> <span class="o">=</span> <span class="p">(</span>
-    <span class="s2">&quot;sku;title;qty;price</span><span class="se">\n</span><span class="s2">&quot;</span>
-    <span class="s2">&quot;SKU-1042;Перчатки нитриловые;48;312,50</span><span class="se">\n</span><span class="s2">&quot;</span>
-    <span class="s2">&quot;SKU-2210;Стрейч-плёнка;12;890,00</span><span class="se">\n</span><span class="s2">&quot;</span>
+    <span class="s2">"sku;title;qty;price</span><span class="se">\n</span><span class="s2">"</span>
+    <span class="s2">"SKU-1042;Перчатки нитриловые;48;312,50</span><span class="se">\n</span><span class="s2">"</span>
+    <span class="s2">"SKU-2210;Стрейч-плёнка;12;890,00</span><span class="se">\n</span><span class="s2">"</span>
 <span class="p">)</span>
 
-<span class="n">rows</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">csv</span><span class="o">.</span><span class="n">DictReader</span><span class="p">(</span><span class="n">io</span><span class="o">.</span><span class="n">StringIO</span><span class="p">(</span><span class="n">text</span><span class="p">),</span> <span class="n">delimiter</span><span class="o">=</span><span class="s2">&quot;;&quot;</span><span class="p">))</span>
+<span class="n">rows</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">csv</span><span class="o">.</span><span class="n">DictReader</span><span class="p">(</span><span class="n">io</span><span class="o">.</span><span class="n">StringIO</span><span class="p">(</span><span class="n">text</span><span class="p">),</span> <span class="n">delimiter</span><span class="o">=</span><span class="s2">";"</span><span class="p">))</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">rows</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-<span class="nb">print</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">rows</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;qty&quot;</span><span class="p">])</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">rows</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;price&quot;</span><span class="p">])</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">rows</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">"qty"</span><span class="p">])</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">rows</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">"price"</span><span class="p">])</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
 </code></pre></div>
 
-<div class="codehilite" data-lang="text"><pre><span></span><code>{&#39;sku&#39;: &#39;SKU-1042&#39;, &#39;title&#39;: &#39;Перчатки нитриловые&#39;, &#39;qty&#39;: &#39;48&#39;, &#39;price&#39;: &#39;312,50&#39;}
+<div class="codehilite" data-lang="text"><pre><span></span><code>{'sku': 'SKU-1042', 'title': 'Перчатки нитриловые', 'qty': '48', 'price': '312,50'}
 str
 str
 </code></pre></div>
@@ -955,20 +979,20 @@ str
 <p>Третья особенность это BOM. Excel при сохранении в UTF-8 может поставить в начало файла невидимый символ <code>\ufeff</code>. Если открыть файл с кодировкой <code>utf-8</code>, этот символ попадёт в имя первого столбца.</p>
 <div class="codehilite" data-lang="python"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
 
-<span class="n">path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">&quot;bom.csv&quot;</span><span class="p">)</span>
-<span class="n">path</span><span class="o">.</span><span class="n">write_text</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\ufeff</span><span class="s2">sku;qty</span><span class="se">\n</span><span class="s2">SKU-1042;48</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span>
+<span class="n">path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">"bom.csv"</span><span class="p">)</span>
+<span class="n">path</span><span class="o">.</span><span class="n">write_text</span><span class="p">(</span><span class="s2">"</span><span class="se">\ufeff</span><span class="s2">sku;qty</span><span class="se">\n</span><span class="s2">SKU-1042;48</span><span class="se">\n</span><span class="s2">"</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span>
 
-<span class="k">with</span> <span class="n">path</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">,</span> <span class="n">newline</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
-    <span class="n">reader</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">DictReader</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s2">&quot;;&quot;</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;поля:&quot;</span><span class="p">,</span> <span class="n">reader</span><span class="o">.</span><span class="n">fieldnames</span><span class="p">)</span>
+<span class="k">with</span> <span class="n">path</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">,</span> <span class="n">newline</span><span class="o">=</span><span class="s2">""</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+    <span class="n">reader</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">DictReader</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s2">";"</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"поля:"</span><span class="p">,</span> <span class="n">reader</span><span class="o">.</span><span class="n">fieldnames</span><span class="p">)</span>
 
-<span class="k">with</span> <span class="n">path</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8-sig&quot;</span><span class="p">,</span> <span class="n">newline</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
-    <span class="n">reader</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">DictReader</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s2">&quot;;&quot;</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;поля с sig:&quot;</span><span class="p">,</span> <span class="n">reader</span><span class="o">.</span><span class="n">fieldnames</span><span class="p">)</span>
+<span class="k">with</span> <span class="n">path</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8-sig"</span><span class="p">,</span> <span class="n">newline</span><span class="o">=</span><span class="s2">""</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+    <span class="n">reader</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">DictReader</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s2">";"</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"поля с sig:"</span><span class="p">,</span> <span class="n">reader</span><span class="o">.</span><span class="n">fieldnames</span><span class="p">)</span>
 </code></pre></div>
 
-<div class="codehilite" data-lang="text"><pre><span></span><code>поля: [&#39;\ufeffsku&#39;, &#39;qty&#39;]
-поля с sig: [&#39;sku&#39;, &#39;qty&#39;]
+<div class="codehilite" data-lang="text"><pre><span></span><code>поля: ['\ufeffsku', 'qty']
+поля с sig: ['sku', 'qty']
 </code></pre></div>
 
 <p>Кодировка <code>utf-8-sig</code> читает BOM и отбрасывает его. Если этого не сделать, код <code>row["sku"]</code> выбросит <code>KeyError</code>, хотя столбец <code>sku</code> в файле есть. Симптом коварный: глазами файл выглядит правильным.</p>
@@ -1028,10 +1052,10 @@ str
 <p>Цена сложнее. Даже если заменить запятую на точку и вызвать <code>float</code>, для денег получится неточное значение. Проверка <code>0.1 + 0.2 == 0.3</code> возвращает <code>False</code>, потому что двоичная дробь не представляет десятичные доли точно. В учебном проекте для цен и сумм используют <code>Decimal</code>, а в базу записывают целое число копеек или тип <code>NUMERIC</code> с фиксированной точностью.</p>
 <div class="codehilite" data-lang="text"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">decimal</span><span class="w"> </span><span class="kn">import</span> <span class="n">Decimal</span>
 
-<span class="n">price</span> <span class="o">=</span> <span class="n">Decimal</span><span class="p">(</span><span class="s2">&quot;312.50&quot;</span><span class="p">)</span>
+<span class="n">price</span> <span class="o">=</span> <span class="n">Decimal</span><span class="p">(</span><span class="s2">"312.50"</span><span class="p">)</span>
 <span class="n">qty</span> <span class="o">=</span> <span class="mi">48</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">price</span> <span class="o">*</span> <span class="n">qty</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">Decimal</span><span class="p">(</span><span class="s2">&quot;0.1&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="n">Decimal</span><span class="p">(</span><span class="s2">&quot;0.2&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="n">Decimal</span><span class="p">(</span><span class="s2">&quot;0.3&quot;</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">Decimal</span><span class="p">(</span><span class="s2">"0.1"</span><span class="p">)</span> <span class="o">+</span> <span class="n">Decimal</span><span class="p">(</span><span class="s2">"0.2"</span><span class="p">)</span> <span class="o">==</span> <span class="n">Decimal</span><span class="p">(</span><span class="s2">"0.3"</span><span class="p">))</span>
 </code></pre></div>
 
 <div class="codehilite" data-lang="text"><pre><span></span><code>15000.00
@@ -1117,25 +1141,25 @@ True
 <p>Начнём с JSON. Чтение из файла выполняет <code>json.load</code>, разбор строки выполняет <code>json.loads</code>. Запись в файл выполняет <code>json.dump</code>, преобразование в строку выполняет <code>json.dumps</code>.</p>
 <div class="codehilite" data-lang="text"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
 
-<span class="n">record</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;sku&quot;</span><span class="p">:</span> <span class="s2">&quot;SKU-1042&quot;</span><span class="p">,</span> <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Перчатки нитриловые&quot;</span><span class="p">}</span>
+<span class="n">record</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"sku"</span><span class="p">:</span> <span class="s2">"SKU-1042"</span><span class="p">,</span> <span class="s2">"title"</span><span class="p">:</span> <span class="s2">"Перчатки нитриловые"</span><span class="p">}</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">record</span><span class="p">,</span> <span class="n">ensure_ascii</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">))</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">record</span><span class="p">))</span>
 </code></pre></div>
 
 <div class="codehilite" data-lang="text"><pre><span></span><code>{
-  &quot;sku&quot;: &quot;SKU-1042&quot;,
-  &quot;title&quot;: &quot;Перчатки нитриловые&quot;
+  "sku": "SKU-1042",
+  "title": "Перчатки нитриловые"
 }
-{&quot;sku&quot;: &quot;SKU-1042&quot;, &quot;title&quot;: &quot;\u041f\u0435\u0440\u0447\u0430\u0442\u043a\u0438 \u043d\u0438\u0442\u0440\u0438\u043b\u043e\u0432\u044b\u0435&quot;}
+{"sku": "SKU-1042", "title": "\u041f\u0435\u0440\u0447\u0430\u0442\u043a\u0438 \u043d\u0438\u0442\u0440\u0438\u043b\u043e\u0432\u044b\u0435"}
 </code></pre></div>
 
 <p>Параметр <code>ensure_ascii=False</code> оставляет кириллицу читаемой. Без него каждый русский символ превращается в последовательность <code>\uXXXX</code>. Оба варианта корректны с точки зрения JSON, но первый удобнее для чтения и меньше по размеру. Параметр <code>indent=2</code> добавляет отступы: файл становится длиннее, зато его можно сравнивать глазами и в системе контроля версий.</p>
 <p>Для записи в файл удобно использовать контекстный менеджер.</p>
 <div class="codehilite" data-lang="text"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
 
-<span class="n">path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">&quot;supplies.json&quot;</span><span class="p">)</span>
-<span class="k">with</span> <span class="n">path</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+<span class="n">path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">"supplies.json"</span><span class="p">)</span>
+<span class="k">with</span> <span class="n">path</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">"w"</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
     <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">record</span><span class="p">,</span> <span class="n">file</span><span class="p">,</span> <span class="n">ensure_ascii</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 </code></pre></div>
 
@@ -1143,12 +1167,12 @@ True
 <div class="codehilite" data-lang="text"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">csv</span>
 
 <span class="n">rows</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="p">{</span><span class="s2">&quot;sku&quot;</span><span class="p">:</span> <span class="s2">&quot;SKU-1042&quot;</span><span class="p">,</span> <span class="s2">&quot;qty&quot;</span><span class="p">:</span> <span class="mi">48</span><span class="p">},</span>
-    <span class="p">{</span><span class="s2">&quot;sku&quot;</span><span class="p">:</span> <span class="s2">&quot;SKU-2210&quot;</span><span class="p">,</span> <span class="s2">&quot;qty&quot;</span><span class="p">:</span> <span class="mi">12</span><span class="p">},</span>
+    <span class="p">{</span><span class="s2">"sku"</span><span class="p">:</span> <span class="s2">"SKU-1042"</span><span class="p">,</span> <span class="s2">"qty"</span><span class="p">:</span> <span class="mi">48</span><span class="p">},</span>
+    <span class="p">{</span><span class="s2">"sku"</span><span class="p">:</span> <span class="s2">"SKU-2210"</span><span class="p">,</span> <span class="s2">"qty"</span><span class="p">:</span> <span class="mi">12</span><span class="p">},</span>
 <span class="p">]</span>
 
-<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;stock.csv&quot;</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8-sig&quot;</span><span class="p">,</span> <span class="n">newline</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
-    <span class="n">writer</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">DictWriter</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">fieldnames</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;sku&quot;</span><span class="p">,</span> <span class="s2">&quot;qty&quot;</span><span class="p">],</span> <span class="n">delimiter</span><span class="o">=</span><span class="s2">&quot;;&quot;</span><span class="p">)</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">"stock.csv"</span><span class="p">,</span> <span class="s2">"w"</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8-sig"</span><span class="p">,</span> <span class="n">newline</span><span class="o">=</span><span class="s2">""</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+    <span class="n">writer</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">DictWriter</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">fieldnames</span><span class="o">=</span><span class="p">[</span><span class="s2">"sku"</span><span class="p">,</span> <span class="s2">"qty"</span><span class="p">],</span> <span class="n">delimiter</span><span class="o">=</span><span class="s2">";"</span><span class="p">)</span>
     <span class="n">writer</span><span class="o">.</span><span class="n">writeheader</span><span class="p">()</span>
     <span class="n">writer</span><span class="o">.</span><span class="n">writerows</span><span class="p">(</span><span class="n">rows</span><span class="p">)</span>
 </code></pre></div>
@@ -1160,20 +1184,20 @@ True
 <div class="codehilite" data-lang="text"><pre><span></span><code><span class="k">using</span><span class="w"> </span><span class="nn">System.IO</span><span class="p">;</span>
 <span class="k">using</span><span class="w"> </span><span class="nn">System.Text.Json</span><span class="p">;</span>
 
-<span class="kt">string</span><span class="w"> </span><span class="n">json</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">File</span><span class="p">.</span><span class="n">ReadAllText</span><span class="p">(</span><span class="s">&quot;.../sklad-plus/data/supplies.json&quot;</span><span class="p">);</span>
+<span class="kt">string</span><span class="w"> </span><span class="n">json</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">File</span><span class="p">.</span><span class="n">ReadAllText</span><span class="p">(</span><span class="s">".../sklad-plus/data/supplies.json"</span><span class="p">);</span>
 <span class="k">using</span><span class="w"> </span><span class="nn">JsonDocument</span><span class="w"> </span><span class="n">doc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">JsonDocument</span><span class="p">.</span><span class="n">Parse</span><span class="p">(</span><span class="n">json</span><span class="p">);</span>
 
 <span class="n">JsonElement</span><span class="w"> </span><span class="n">root</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">doc</span><span class="p">.</span><span class="n">RootElement</span><span class="p">;</span>
-<span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="n">root</span><span class="p">.</span><span class="n">GetProperty</span><span class="p">(</span><span class="s">&quot;supplier&quot;</span><span class="p">).</span><span class="n">GetString</span><span class="p">());</span>
+<span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="n">root</span><span class="p">.</span><span class="n">GetProperty</span><span class="p">(</span><span class="s">"supplier"</span><span class="p">).</span><span class="n">GetString</span><span class="p">());</span>
 
-<span class="k">foreach</span><span class="w"> </span><span class="p">(</span><span class="n">JsonElement</span><span class="w"> </span><span class="n">shipment</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">root</span><span class="p">.</span><span class="n">GetProperty</span><span class="p">(</span><span class="s">&quot;shipments&quot;</span><span class="p">).</span><span class="n">EnumerateArray</span><span class="p">())</span>
+<span class="k">foreach</span><span class="w"> </span><span class="p">(</span><span class="n">JsonElement</span><span class="w"> </span><span class="n">shipment</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">root</span><span class="p">.</span><span class="n">GetProperty</span><span class="p">(</span><span class="s">"shipments"</span><span class="p">).</span><span class="n">EnumerateArray</span><span class="p">())</span>
 <span class="p">{</span>
-<span class="w">    </span><span class="kt">string</span><span class="w"> </span><span class="n">number</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">shipment</span><span class="p">.</span><span class="n">GetProperty</span><span class="p">(</span><span class="s">&quot;number&quot;</span><span class="p">).</span><span class="n">GetString</span><span class="p">()</span><span class="o">!</span><span class="p">;</span>
-<span class="w">    </span><span class="k">foreach</span><span class="w"> </span><span class="p">(</span><span class="n">JsonElement</span><span class="w"> </span><span class="n">item</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">shipment</span><span class="p">.</span><span class="n">GetProperty</span><span class="p">(</span><span class="s">&quot;items&quot;</span><span class="p">).</span><span class="n">EnumerateArray</span><span class="p">())</span>
+<span class="w">    </span><span class="kt">string</span><span class="w"> </span><span class="n">number</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">shipment</span><span class="p">.</span><span class="n">GetProperty</span><span class="p">(</span><span class="s">"number"</span><span class="p">).</span><span class="n">GetString</span><span class="p">()</span><span class="o">!</span><span class="p">;</span>
+<span class="w">    </span><span class="k">foreach</span><span class="w"> </span><span class="p">(</span><span class="n">JsonElement</span><span class="w"> </span><span class="n">item</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">shipment</span><span class="p">.</span><span class="n">GetProperty</span><span class="p">(</span><span class="s">"items"</span><span class="p">).</span><span class="n">EnumerateArray</span><span class="p">())</span>
 <span class="w">    </span><span class="p">{</span>
-<span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">qty</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">item</span><span class="p">.</span><span class="n">GetProperty</span><span class="p">(</span><span class="s">&quot;qty&quot;</span><span class="p">).</span><span class="n">GetInt32</span><span class="p">();</span>
-<span class="w">        </span><span class="kt">decimal</span><span class="w"> </span><span class="n">price</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">item</span><span class="p">.</span><span class="n">GetProperty</span><span class="p">(</span><span class="s">&quot;price&quot;</span><span class="p">).</span><span class="n">GetDecimal</span><span class="p">();</span>
-<span class="w">        </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">$&quot;{number} {item.GetProperty(&quot;</span><span class="n">sku</span><span class="s">&quot;).GetString()} {qty * price}&quot;</span><span class="p">);</span>
+<span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">qty</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">item</span><span class="p">.</span><span class="n">GetProperty</span><span class="p">(</span><span class="s">"qty"</span><span class="p">).</span><span class="n">GetInt32</span><span class="p">();</span>
+<span class="w">        </span><span class="kt">decimal</span><span class="w"> </span><span class="n">price</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">item</span><span class="p">.</span><span class="n">GetProperty</span><span class="p">(</span><span class="s">"price"</span><span class="p">).</span><span class="n">GetDecimal</span><span class="p">();</span>
+<span class="w">        </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">$"{number} {item.GetProperty("</span><span class="n">sku</span><span class="s">").GetString()} {qty * price}"</span><span class="p">);</span>
 <span class="w">    </span><span class="p">}</span>
 <span class="p">}</span>
 </code></pre></div>
@@ -1330,6 +1354,40 @@ True
       var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
       window.scrollTo({top: 0, behavior: reduce ? 'auto' : 'smooth'});
     });
+  });
+})();
+
+(function(){
+  document.querySelectorAll('[data-slider]').forEach(function(slider){
+    var track = slider.querySelector('[data-slider-track]');
+    var slides = track ? Array.prototype.slice.call(track.children) : [];
+    var counter = slider.querySelector('[data-slider-counter]');
+    var prev = slider.querySelector('[data-slider-prev]');
+    var next = slider.querySelector('[data-slider-next]');
+    if(!track || slides.length < 2) return;
+    function current(){
+      var best = 0, dist = Infinity;
+      slides.forEach(function(slide, i){
+        var d = Math.abs(slide.offsetLeft - track.scrollLeft);
+        if(d < dist){ dist = d; best = i; }
+      });
+      return best;
+    }
+    function update(){
+      if(counter) counter.textContent = (current() + 1) + ' / ' + slides.length;
+    }
+    function go(delta){
+      var i = Math.max(0, Math.min(slides.length - 1, current() + delta));
+      var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      track.scrollTo({left: slides[i].offsetLeft, behavior: reduce ? 'auto' : 'smooth'});
+    }
+    if(prev) prev.addEventListener('click', function(){ go(-1); });
+    if(next) next.addEventListener('click', function(){ go(1); });
+    track.addEventListener('scroll', function(){
+      clearTimeout(track._sliderTimer);
+      track._sliderTimer = setTimeout(update, 80);
+    }, {passive: true});
+    update();
   });
 })();
 (function(){

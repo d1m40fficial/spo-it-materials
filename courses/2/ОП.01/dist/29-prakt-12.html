@@ -527,6 +527,12 @@ html.modal-open { overflow: hidden; }
 :root[data-theme=dark] .quiz-actions button[data-answer]:hover, :root[data-theme=dark] .quiz-actions button.quiz-answer:hover { background: #262626; background-color: #262626; color: #fff; border-color: #262626; }
 :root[data-theme=dark] .gate-q { background: #1E1E1E; color: #FF6B00; }
 
+/* the whole-variant archive is the main action in a download block */
+.files a.zip { background: #121212; color: #fff; border-color: #121212; font-weight: 700; box-shadow: 4px 4px 0 rgba(0,0,0,.18); }
+.files a.zip::before { color: #fff; }
+.files a.zip:hover { background: #1D1D1D; color: #fff; border-color: #1D1D1D; box-shadow: 5px 5px 0 rgba(0,0,0,.22); }
+.files a.zip:active { transform: translate(2px,2px); box-shadow: 1px 1px 0 rgba(0,0,0,.12); }
+
 /* ---------- practical work checklist ---------- */
 .work-checklist { width: 100%; border-collapse: collapse; margin: 14px 0 4px; }
 .work-checklist th, .work-checklist td { border: 1px solid var(--rule); padding: 9px 10px; vertical-align: top; }
@@ -564,6 +570,24 @@ html.modal-open { overflow: hidden; }
 .variant-body .task-list { margin: 8px 0 0; padding-left: 20px; }
 .variant-body .task-list li { margin: 0 0 8px; }
 @media (max-width: 620px) { .variant-body { overflow-x: auto; } .variant-body table { min-width: 520px; } }
+
+/* ---------- schema slider: all CREATE TABLE examples ---------- */
+.schema-slider { margin: 18px 0 24px; border: 1px solid #d8d5cc; border-radius: 14px; background: #fff; color: #1a1916; overflow: hidden; }
+.schema-slider-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 14px; background: #f5f2ea; border-bottom: 1px solid #d8d5cc; }
+.schema-slider-bar strong { font: 700 14px/1.2 var(--font-display); color: #1a1916; }
+.schema-slider-actions { display: flex; align-items: center; gap: 8px; }
+.schema-slider-counter { min-width: 62px; text-align: center; font: 600 13px/1 var(--font-mono); color: #59544a; }
+.schema-btn { width: 34px; height: 34px; border: 1px solid #c9c4b8; border-radius: 8px; background: #fff; color: #1a1916; font: 700 18px/1 var(--font-mono); cursor: pointer; }
+.schema-btn:hover { background: #ece7dc; }
+.schema-track { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: thin; }
+.schema-slide { flex: 0 0 100%; min-width: 100%; box-sizing: border-box; padding: 16px 18px 18px; scroll-snap-align: start; }
+.schema-slide h4 { margin: 0 0 10px; font: 700 16px/1.3 var(--font-display); color: #1a1916; }
+.schema-slide h4 code, .schema-slide p code { color: #1a1916; background: #f1ede4; padding: 1px 4px; border-radius: 4px; }
+.schema-slide p { margin: 0 0 10px; font-size: 14px; line-height: 1.55; color: #3a372f; }
+.schema-slide pre { margin: 0; padding: 14px 16px; overflow-x: auto; border: 1px solid #ddd8cc; border-radius: 10px; background: #fbfaf6; color: #1a1916; font: 12.5px/1.5 var(--font-mono); }
+.schema-slide code { color: inherit; background: none; padding: 0; }
+.schema-slider:focus-within { outline: 2px solid #b9a97f; outline-offset: 2px; }
+@media (max-width: 620px) { .schema-slide { padding: 12px; } .schema-slider-bar { padding: 8px 10px; } }
 
 /* ---------- print / PDF export ---------- */
 @page { margin: 16mm; }
@@ -874,8 +898,8 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <h3>Шаг 1. Составьте паспорт стенда</h3>
 <p>Соберите сведения о машинах. На хосте в терминале VirtualBox выполните:</p>
 <div class="codehilite" data-lang="text"><pre><span></span><code>VBoxManage list vms
-VBoxManage showvminfo &quot;ubuntu-lab&quot; --machinereadable
-VBoxManage showvminfo &quot;win-lab&quot; --machinereadable
+VBoxManage showvminfo "ubuntu-lab" --machinereadable
+VBoxManage showvminfo "win-lab" --machinereadable
 </code></pre></div>
 
 <p>В выводе найдите память, число процессоров, режим сети и правила проброса. В гостевой Linux проверьте систему:</p>
@@ -951,7 +975,7 @@ uptime<span class="w"> </span>-p
 <p>В <code>win-lab</code> откройте PowerShell и проверьте память, диск и систему:</p>
 <div class="codehilite" data-lang="powershell"><pre><span></span><code><span class="nb">Get-CimInstance</span> <span class="n">Win32_ComputerSystem</span> <span class="p">|</span> <span class="nb">Select-Object</span> <span class="n">TotalPhysicalMemory</span><span class="p">,</span> <span class="n">NumberOfLogicalProcessors</span>
 <span class="nb">Get-PSDrive</span> <span class="n">-PSProvider</span> <span class="n">FileSystem</span>
-<span class="nb">Get-Service</span> <span class="p">|</span> <span class="nb">Where-Object</span> <span class="p">{</span><span class="nv">$_</span><span class="p">.</span><span class="n">Status</span> <span class="o">-eq</span> <span class="s1">&#39;Stopped&#39;</span> <span class="o">-and</span> <span class="nv">$_</span><span class="p">.</span><span class="n">StartType</span> <span class="o">-eq</span> <span class="s1">&#39;Automatic&#39;</span><span class="p">}</span> <span class="p">|</span> <span class="nb">Select-Object</span> <span class="n">Name</span><span class="p">,</span> <span class="n">DisplayName</span>
+<span class="nb">Get-Service</span> <span class="p">|</span> <span class="nb">Where-Object</span> <span class="p">{</span><span class="nv">$_</span><span class="p">.</span><span class="n">Status</span> <span class="o">-eq</span> <span class="s1">'Stopped'</span> <span class="o">-and</span> <span class="nv">$_</span><span class="p">.</span><span class="n">StartType</span> <span class="o">-eq</span> <span class="s1">'Automatic'</span><span class="p">}</span> <span class="p">|</span> <span class="nb">Select-Object</span> <span class="n">Name</span><span class="p">,</span> <span class="n">DisplayName</span>
 </code></pre></div>
 
 <p>Последняя команда показывает службы, которые должны работать автоматически, но остановлены. Пустой список это норма, одна-две записи требуют объяснения. Запишите результат в карту проверок.</p>
@@ -984,14 +1008,14 @@ systemctl<span class="w"> </span>is-active<span class="w"> </span>ssh
 <p>В <code>ubuntu-lab</code> убедитесь, что папка подключена:</p>
 <div class="codehilite" data-lang="bash"><pre><span></span><code>mount<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>vboxsf
 ls<span class="w"> </span>-la<span class="w"> </span>/media/sf_share
-<span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;test from ubuntu&quot;</span><span class="w"> </span>&gt;<span class="w"> </span>/media/sf_share/ubuntu-check.txt
+<span class="nb">echo</span><span class="w"> </span><span class="s2">"test from ubuntu"</span><span class="w"> </span>&gt;<span class="w"> </span>/media/sf_share/ubuntu-check.txt
 cat<span class="w"> </span>/media/sf_share/ubuntu-check.txt
 </code></pre></div>
 
 <p>Если каталога нет, проверьте, что общая папка включена в настройках машины и что пользователь входит в группу <code>vboxsf</code>. После добавления в группу нужен повторный вход. В <code>win-lab</code> откройте папку и прочитайте файл:</p>
 <div class="codehilite" data-lang="powershell"><pre><span></span><code><span class="nb">Get-ChildItem</span> <span class="p">\\</span><span class="n">VBOXSVR</span><span class="p">\</span><span class="n">share</span>
 <span class="nb">Get-Content</span> <span class="p">\\</span><span class="n">VBOXSVR</span><span class="p">\</span><span class="n">share</span><span class="p">\</span><span class="n">ubuntu-check</span><span class="p">.</span><span class="n">txt</span>
-<span class="s2">&quot;test from windows&quot;</span> <span class="p">|</span> <span class="nb">Set-Content</span> <span class="p">\\</span><span class="n">VBOXSVR</span><span class="p">\</span><span class="n">share</span><span class="p">\</span><span class="n">windows-check</span><span class="p">.</span><span class="n">txt</span>
+<span class="s2">"test from windows"</span> <span class="p">|</span> <span class="nb">Set-Content</span> <span class="p">\\</span><span class="n">VBOXSVR</span><span class="p">\</span><span class="n">share</span><span class="p">\</span><span class="n">windows-check</span><span class="p">.</span><span class="n">txt</span>
 </code></pre></div>
 
 <p>Вернитесь в Linux и прочитайте встречный файл. Обмен должен работать в обе стороны. Запишите имена файлов и результат.</p>
@@ -999,10 +1023,10 @@ cat<span class="w"> </span>/media/sf_share/ubuntu-check.txt
 <h3>Шаг 5. Настройте службу и автозагрузку</h3>
 <p>Создайте службу, которая подтверждает, что стенд жив после перезагрузки. В <code>ubuntu-lab</code>:</p>
 <div class="codehilite" data-lang="bash"><pre><span></span><code>mkdir<span class="w"> </span>-p<span class="w"> </span>~/lab/bin
-cat<span class="w"> </span>&gt;<span class="w"> </span>~/lab/bin/stand-heartbeat.sh<span class="w"> </span><span class="s">&lt;&lt;&#39;EOF&#39;</span>
+cat<span class="w"> </span>&gt;<span class="w"> </span>~/lab/bin/stand-heartbeat.sh<span class="w"> </span><span class="s">&lt;&lt;'EOF'</span>
 <span class="s">#!/bin/sh</span>
 <span class="s">while true; do</span>
-<span class="s">  echo &quot;$(date &#39;+%F %T&#39;) stand alive&quot; &gt;&gt; /home/student/lab/stand.log</span>
+<span class="s">  echo "$(date '+%F %T') stand alive" &gt;&gt; /home/student/lab/stand.log</span>
 <span class="s">  sleep 60</span>
 <span class="s">done</span>
 <span class="s">EOF</span>
@@ -1051,7 +1075,7 @@ getent<span class="w"> </span>group<span class="w"> </span>sudo
 
 <p>В Windows проверьте членство в администраторах и отсутствие лишних тестовых учётных записей:</p>
 <div class="codehilite" data-lang="powershell"><pre><span></span><code><span class="nb">Get-LocalUser</span>
-<span class="nb">Get-LocalGroup</span> <span class="p">|</span> <span class="nb">Where-Object</span> <span class="p">{</span><span class="nv">$_</span><span class="p">.</span><span class="n">SID</span> <span class="o">-like</span> <span class="s1">&#39;S-1-5-32-544&#39;</span><span class="p">}</span> <span class="p">|</span> <span class="nb">Get-LocalGroupMember</span>
+<span class="nb">Get-LocalGroup</span> <span class="p">|</span> <span class="nb">Where-Object</span> <span class="p">{</span><span class="nv">$_</span><span class="p">.</span><span class="n">SID</span> <span class="o">-like</span> <span class="s1">'S-1-5-32-544'</span><span class="p">}</span> <span class="p">|</span> <span class="nb">Get-LocalGroupMember</span>
 </code></pre></div>
 
 <p>Запишите в паспорт, какие учётные записи используются людьми, а какие являются служебными. Если остались <code>labuser</code> или <code>labaudit</code> с прошлой работы, удалите их и отметьте это как отклонение.</p>
@@ -1066,8 +1090,8 @@ tar<span class="w"> </span>-tzf<span class="w"> </span>/media/sf_share/os-prakt-
 </code></pre></div>
 
 <p>Для снимка выключите машину, затем на хосте создайте точку:</p>
-<div class="codehilite" data-lang="text"><pre><span></span><code>VBoxManage snapshot &quot;ubuntu-lab&quot; take &quot;stand-ready&quot; --description &quot;Итоговый стенд после проверки&quot;
-VBoxManage snapshot &quot;ubuntu-lab&quot; list
+<div class="codehilite" data-lang="text"><pre><span></span><code>VBoxManage snapshot "ubuntu-lab" take "stand-ready" --description "Итоговый стенд после проверки"
+VBoxManage snapshot "ubuntu-lab" list
 </code></pre></div>
 
 <p>Включите машину и убедитесь, что служба и общая папка работают. Снимок нужен как точка возврата перед следующей настройкой, а архив как копия конфигурации на хосте. Одно другое не заменяет.</p>
@@ -1081,7 +1105,7 @@ VBoxManage snapshot &quot;ubuntu-lab&quot; list
 <div class="codehilite" data-lang="bash"><pre><span></span><code>systemctl<span class="w"> </span>is-active<span class="w"> </span>stand-heartbeat
 systemctl<span class="w"> </span>is-enabled<span class="w"> </span>stand-heartbeat
 tail<span class="w"> </span>-n<span class="w"> </span><span class="m">3</span><span class="w"> </span>~/lab/stand.log
-ss<span class="w"> </span>-tlnp<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span><span class="s1">&#39;:22&#39;</span>
+ss<span class="w"> </span>-tlnp<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span><span class="s1">':22'</span>
 ls<span class="w"> </span>/media/sf_share
 </code></pre></div>
 
@@ -1286,6 +1310,40 @@ ls<span class="w"> </span>/media/sf_share
       var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
       window.scrollTo({top: 0, behavior: reduce ? 'auto' : 'smooth'});
     });
+  });
+})();
+
+(function(){
+  document.querySelectorAll('[data-slider]').forEach(function(slider){
+    var track = slider.querySelector('[data-slider-track]');
+    var slides = track ? Array.prototype.slice.call(track.children) : [];
+    var counter = slider.querySelector('[data-slider-counter]');
+    var prev = slider.querySelector('[data-slider-prev]');
+    var next = slider.querySelector('[data-slider-next]');
+    if(!track || slides.length < 2) return;
+    function current(){
+      var best = 0, dist = Infinity;
+      slides.forEach(function(slide, i){
+        var d = Math.abs(slide.offsetLeft - track.scrollLeft);
+        if(d < dist){ dist = d; best = i; }
+      });
+      return best;
+    }
+    function update(){
+      if(counter) counter.textContent = (current() + 1) + ' / ' + slides.length;
+    }
+    function go(delta){
+      var i = Math.max(0, Math.min(slides.length - 1, current() + delta));
+      var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      track.scrollTo({left: slides[i].offsetLeft, behavior: reduce ? 'auto' : 'smooth'});
+    }
+    if(prev) prev.addEventListener('click', function(){ go(-1); });
+    if(next) next.addEventListener('click', function(){ go(1); });
+    track.addEventListener('scroll', function(){
+      clearTimeout(track._sliderTimer);
+      track._sliderTimer = setTimeout(update, 80);
+    }, {passive: true});
+    update();
   });
 })();
 (function(){

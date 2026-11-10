@@ -527,6 +527,12 @@ html.modal-open { overflow: hidden; }
 :root[data-theme=dark] .quiz-actions button[data-answer]:hover, :root[data-theme=dark] .quiz-actions button.quiz-answer:hover { background: #262626; background-color: #262626; color: #fff; border-color: #262626; }
 :root[data-theme=dark] .gate-q { background: #1E1E1E; color: #FF6B00; }
 
+/* the whole-variant archive is the main action in a download block */
+.files a.zip { background: #121212; color: #fff; border-color: #121212; font-weight: 700; box-shadow: 4px 4px 0 rgba(0,0,0,.18); }
+.files a.zip::before { color: #fff; }
+.files a.zip:hover { background: #1D1D1D; color: #fff; border-color: #1D1D1D; box-shadow: 5px 5px 0 rgba(0,0,0,.22); }
+.files a.zip:active { transform: translate(2px,2px); box-shadow: 1px 1px 0 rgba(0,0,0,.12); }
+
 /* ---------- practical work checklist ---------- */
 .work-checklist { width: 100%; border-collapse: collapse; margin: 14px 0 4px; }
 .work-checklist th, .work-checklist td { border: 1px solid var(--rule); padding: 9px 10px; vertical-align: top; }
@@ -564,6 +570,24 @@ html.modal-open { overflow: hidden; }
 .variant-body .task-list { margin: 8px 0 0; padding-left: 20px; }
 .variant-body .task-list li { margin: 0 0 8px; }
 @media (max-width: 620px) { .variant-body { overflow-x: auto; } .variant-body table { min-width: 520px; } }
+
+/* ---------- schema slider: all CREATE TABLE examples ---------- */
+.schema-slider { margin: 18px 0 24px; border: 1px solid #d8d5cc; border-radius: 14px; background: #fff; color: #1a1916; overflow: hidden; }
+.schema-slider-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 14px; background: #f5f2ea; border-bottom: 1px solid #d8d5cc; }
+.schema-slider-bar strong { font: 700 14px/1.2 var(--font-display); color: #1a1916; }
+.schema-slider-actions { display: flex; align-items: center; gap: 8px; }
+.schema-slider-counter { min-width: 62px; text-align: center; font: 600 13px/1 var(--font-mono); color: #59544a; }
+.schema-btn { width: 34px; height: 34px; border: 1px solid #c9c4b8; border-radius: 8px; background: #fff; color: #1a1916; font: 700 18px/1 var(--font-mono); cursor: pointer; }
+.schema-btn:hover { background: #ece7dc; }
+.schema-track { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: thin; }
+.schema-slide { flex: 0 0 100%; min-width: 100%; box-sizing: border-box; padding: 16px 18px 18px; scroll-snap-align: start; }
+.schema-slide h4 { margin: 0 0 10px; font: 700 16px/1.3 var(--font-display); color: #1a1916; }
+.schema-slide h4 code, .schema-slide p code { color: #1a1916; background: #f1ede4; padding: 1px 4px; border-radius: 4px; }
+.schema-slide p { margin: 0 0 10px; font-size: 14px; line-height: 1.55; color: #3a372f; }
+.schema-slide pre { margin: 0; padding: 14px 16px; overflow-x: auto; border: 1px solid #ddd8cc; border-radius: 10px; background: #fbfaf6; color: #1a1916; font: 12.5px/1.5 var(--font-mono); }
+.schema-slide code { color: inherit; background: none; padding: 0; }
+.schema-slider:focus-within { outline: 2px solid #b9a97f; outline-offset: 2px; }
+@media (max-width: 620px) { .schema-slide { padding: 12px; } .schema-slider-bar { padding: 8px 10px; } }
 
 /* ---------- print / PDF export ---------- */
 @page { margin: 16mm; }
@@ -1101,35 +1125,35 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <div class="codehilite" data-lang="text"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">jsonschema</span>
 
 <span class="n">schema</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;items&quot;</span><span class="p">,</span> <span class="s2">&quot;total&quot;</span><span class="p">],</span>
-    <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
-        <span class="s2">&quot;items&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;array&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;items&quot;</span><span class="p">:</span> <span class="p">{</span>
-                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;sku&quot;</span><span class="p">,</span> <span class="s2">&quot;title&quot;</span><span class="p">,</span> <span class="s2">&quot;stock&quot;</span><span class="p">],</span>
-                <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
-                    <span class="s2">&quot;sku&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span> <span class="s2">&quot;pattern&quot;</span><span class="p">:</span> <span class="s2">&quot;^SKU-</span><span class="se">\\</span><span class="s2">d</span><span class="si">{4}</span><span class="s2">$&quot;</span><span class="p">},</span>
-                    <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span> <span class="s2">&quot;minLength&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">},</span>
-                    <span class="s2">&quot;stock&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;integer&quot;</span><span class="p">,</span> <span class="s2">&quot;minimum&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">},</span>
+    <span class="s2">"type"</span><span class="p">:</span> <span class="s2">"object"</span><span class="p">,</span>
+    <span class="s2">"required"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"items"</span><span class="p">,</span> <span class="s2">"total"</span><span class="p">],</span>
+    <span class="s2">"properties"</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">"items"</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">"type"</span><span class="p">:</span> <span class="s2">"array"</span><span class="p">,</span>
+            <span class="s2">"items"</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">"type"</span><span class="p">:</span> <span class="s2">"object"</span><span class="p">,</span>
+                <span class="s2">"required"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"sku"</span><span class="p">,</span> <span class="s2">"title"</span><span class="p">,</span> <span class="s2">"stock"</span><span class="p">],</span>
+                <span class="s2">"properties"</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">"sku"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"type"</span><span class="p">:</span> <span class="s2">"string"</span><span class="p">,</span> <span class="s2">"pattern"</span><span class="p">:</span> <span class="s2">"^SKU-</span><span class="se">\\</span><span class="s2">d</span><span class="si">{4}</span><span class="s2">$"</span><span class="p">},</span>
+                    <span class="s2">"title"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"type"</span><span class="p">:</span> <span class="s2">"string"</span><span class="p">,</span> <span class="s2">"minLength"</span><span class="p">:</span> <span class="mi">1</span><span class="p">},</span>
+                    <span class="s2">"stock"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"type"</span><span class="p">:</span> <span class="s2">"integer"</span><span class="p">,</span> <span class="s2">"minimum"</span><span class="p">:</span> <span class="mi">0</span><span class="p">},</span>
                 <span class="p">},</span>
-                <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+                <span class="s2">"additionalProperties"</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
             <span class="p">},</span>
         <span class="p">},</span>
-        <span class="s2">&quot;total&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;integer&quot;</span><span class="p">,</span> <span class="s2">&quot;minimum&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">},</span>
+        <span class="s2">"total"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"type"</span><span class="p">:</span> <span class="s2">"integer"</span><span class="p">,</span> <span class="s2">"minimum"</span><span class="p">:</span> <span class="mi">0</span><span class="p">},</span>
     <span class="p">},</span>
-    <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="s2">"additionalProperties"</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
 <span class="p">}</span>
 
-<span class="n">bad</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;items&quot;</span><span class="p">:</span> <span class="p">[{</span><span class="s2">&quot;sku&quot;</span><span class="p">:</span> <span class="s2">&quot;SKU-1001&quot;</span><span class="p">,</span> <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Кабель UTP&quot;</span><span class="p">,</span> <span class="s2">&quot;stock&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mi">3</span><span class="p">}],</span> <span class="s2">&quot;total&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">}</span>
+<span class="n">bad</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"items"</span><span class="p">:</span> <span class="p">[{</span><span class="s2">"sku"</span><span class="p">:</span> <span class="s2">"SKU-1001"</span><span class="p">,</span> <span class="s2">"title"</span><span class="p">:</span> <span class="s2">"Кабель UTP"</span><span class="p">,</span> <span class="s2">"stock"</span><span class="p">:</span> <span class="o">-</span><span class="mi">3</span><span class="p">}],</span> <span class="s2">"total"</span><span class="p">:</span> <span class="mi">1</span><span class="p">}</span>
 <span class="n">errors</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">jsonschema</span><span class="o">.</span><span class="n">Draft202012Validator</span><span class="p">(</span><span class="n">schema</span><span class="p">)</span><span class="o">.</span><span class="n">iter_errors</span><span class="p">(</span><span class="n">bad</span><span class="p">),</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">e</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">path</span><span class="p">))</span>
 <span class="k">for</span> <span class="n">error</span> <span class="ow">in</span> <span class="n">errors</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;путь:&quot;</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="n">error</span><span class="o">.</span><span class="n">path</span><span class="p">),</span> <span class="s2">&quot;|&quot;</span><span class="p">,</span> <span class="n">error</span><span class="o">.</span><span class="n">message</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"путь:"</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="n">error</span><span class="o">.</span><span class="n">path</span><span class="p">),</span> <span class="s2">"|"</span><span class="p">,</span> <span class="n">error</span><span class="o">.</span><span class="n">message</span><span class="p">)</span>
 </code></pre></div>
 
 <p>Проверка отрицательного остатка даёт конкретное сообщение с путём до поля.</p>
-<div class="codehilite" data-lang="text"><pre><span></span><code>путь: [&#39;items&#39;, 0, &#39;stock&#39;] | -3 is less than the minimum of 0
+<div class="codehilite" data-lang="text"><pre><span></span><code>путь: ['items', 0, 'stock'] | -3 is less than the minimum of 0
 </code></pre></div>
 
 <p>Схема не заменяет тест-кейс. Она отвечает на вопрос «похож ли ответ на обещанный», но не на вопрос «правильные ли данные». Если API вернёт <code>total: 0</code> при 1240 позициях, схема пройдёт, а бизнес-проверка упадёт. Поэтому в наборе есть и проверка формы, и проверка значения.</p>
@@ -1140,87 +1164,87 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <span class="n">app</span> <span class="o">=</span> <span class="n">Flask</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 <span class="n">app</span><span class="o">.</span><span class="n">json</span><span class="o">.</span><span class="n">ensure_ascii</span> <span class="o">=</span> <span class="kc">False</span>
 
-<span class="n">SUPPLIES</span> <span class="o">=</span> <span class="p">{</span><span class="mi">505</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="mi">505</span><span class="p">,</span> <span class="s2">&quot;warehouse&quot;</span><span class="p">:</span> <span class="s2">&quot;Москва&quot;</span><span class="p">,</span> <span class="s2">&quot;status&quot;</span><span class="p">:</span> <span class="s2">&quot;ожидает&quot;</span><span class="p">}}</span>
+<span class="n">SUPPLIES</span> <span class="o">=</span> <span class="p">{</span><span class="mi">505</span><span class="p">:</span> <span class="p">{</span><span class="s2">"id"</span><span class="p">:</span> <span class="mi">505</span><span class="p">,</span> <span class="s2">"warehouse"</span><span class="p">:</span> <span class="s2">"Москва"</span><span class="p">,</span> <span class="s2">"status"</span><span class="p">:</span> <span class="s2">"ожидает"</span><span class="p">}}</span>
 <span class="n">ACCEPTANCES</span> <span class="o">=</span> <span class="p">{}</span>
-<span class="n">TOKENS</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;manager-token&quot;</span><span class="p">:</span> <span class="s2">&quot;manager&quot;</span><span class="p">,</span> <span class="s2">&quot;store-token&quot;</span><span class="p">:</span> <span class="s2">&quot;storekeeper&quot;</span><span class="p">}</span>
+<span class="n">TOKENS</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"manager-token"</span><span class="p">:</span> <span class="s2">"manager"</span><span class="p">,</span> <span class="s2">"store-token"</span><span class="p">:</span> <span class="s2">"storekeeper"</span><span class="p">}</span>
 
 
-<span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/api/products&quot;</span><span class="p">)</span>
+<span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"/api/products"</span><span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">products</span><span class="p">():</span>
-    <span class="n">site</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;site&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">site</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">{</span><span class="s2">&quot;Москва&quot;</span><span class="p">,</span> <span class="s2">&quot;Тверь&quot;</span><span class="p">,</span> <span class="s2">&quot;Тула&quot;</span><span class="p">,</span> <span class="s2">&quot;Калуга&quot;</span><span class="p">}:</span>
-        <span class="k">return</span> <span class="n">jsonify</span><span class="p">({</span><span class="s2">&quot;code&quot;</span><span class="p">:</span> <span class="s2">&quot;bad_site&quot;</span><span class="p">,</span> <span class="s2">&quot;message&quot;</span><span class="p">:</span> <span class="s2">&quot;неизвестная площадка&quot;</span><span class="p">}),</span> <span class="mi">400</span>
-    <span class="k">return</span> <span class="n">jsonify</span><span class="p">({</span><span class="s2">&quot;items&quot;</span><span class="p">:</span> <span class="p">[{</span><span class="s2">&quot;sku&quot;</span><span class="p">:</span> <span class="s2">&quot;SKU-1001&quot;</span><span class="p">,</span> <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Кабель UTP&quot;</span><span class="p">,</span> <span class="s2">&quot;stock&quot;</span><span class="p">:</span> <span class="mi">42</span><span class="p">}],</span> <span class="s2">&quot;total&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">})</span>
+    <span class="n">site</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"site"</span><span class="p">,</span> <span class="s2">""</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">site</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">{</span><span class="s2">"Москва"</span><span class="p">,</span> <span class="s2">"Тверь"</span><span class="p">,</span> <span class="s2">"Тула"</span><span class="p">,</span> <span class="s2">"Калуга"</span><span class="p">}:</span>
+        <span class="k">return</span> <span class="n">jsonify</span><span class="p">({</span><span class="s2">"code"</span><span class="p">:</span> <span class="s2">"bad_site"</span><span class="p">,</span> <span class="s2">"message"</span><span class="p">:</span> <span class="s2">"неизвестная площадка"</span><span class="p">}),</span> <span class="mi">400</span>
+    <span class="k">return</span> <span class="n">jsonify</span><span class="p">({</span><span class="s2">"items"</span><span class="p">:</span> <span class="p">[{</span><span class="s2">"sku"</span><span class="p">:</span> <span class="s2">"SKU-1001"</span><span class="p">,</span> <span class="s2">"title"</span><span class="p">:</span> <span class="s2">"Кабель UTP"</span><span class="p">,</span> <span class="s2">"stock"</span><span class="p">:</span> <span class="mi">42</span><span class="p">}],</span> <span class="s2">"total"</span><span class="p">:</span> <span class="mi">1</span><span class="p">})</span>
 
 
-<span class="nd">@app</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;/api/acceptance&quot;</span><span class="p">)</span>
+<span class="nd">@app</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">"/api/acceptance"</span><span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">acceptance</span><span class="p">():</span>
     <span class="n">data</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">get_json</span><span class="p">(</span><span class="n">silent</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">jsonify</span><span class="p">({</span><span class="s2">&quot;code&quot;</span><span class="p">:</span> <span class="s2">&quot;validation_error&quot;</span><span class="p">,</span> <span class="s2">&quot;fields&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;body&quot;</span><span class="p">:</span> <span class="s2">&quot;ожидается JSON&quot;</span><span class="p">}}),</span> <span class="mi">400</span>
-    <span class="n">supply_id</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;supply_id&quot;</span><span class="p">)</span>
-    <span class="n">qty</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;qty&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">jsonify</span><span class="p">({</span><span class="s2">"code"</span><span class="p">:</span> <span class="s2">"validation_error"</span><span class="p">,</span> <span class="s2">"fields"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"body"</span><span class="p">:</span> <span class="s2">"ожидается JSON"</span><span class="p">}}),</span> <span class="mi">400</span>
+    <span class="n">supply_id</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"supply_id"</span><span class="p">)</span>
+    <span class="n">qty</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"qty"</span><span class="p">)</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">supply_id</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span> <span class="ow">or</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">qty</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span> <span class="ow">or</span> <span class="n">qty</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">jsonify</span><span class="p">({</span><span class="s2">&quot;code&quot;</span><span class="p">:</span> <span class="s2">&quot;validation_error&quot;</span><span class="p">,</span> <span class="s2">&quot;fields&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;qty&quot;</span><span class="p">:</span> <span class="s2">&quot;ожидается целое число больше нуля&quot;</span><span class="p">}}),</span> <span class="mi">400</span>
+        <span class="k">return</span> <span class="n">jsonify</span><span class="p">({</span><span class="s2">"code"</span><span class="p">:</span> <span class="s2">"validation_error"</span><span class="p">,</span> <span class="s2">"fields"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"qty"</span><span class="p">:</span> <span class="s2">"ожидается целое число больше нуля"</span><span class="p">}}),</span> <span class="mi">400</span>
     <span class="k">if</span> <span class="n">supply_id</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">SUPPLIES</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">jsonify</span><span class="p">({</span><span class="s2">&quot;code&quot;</span><span class="p">:</span> <span class="s2">&quot;not_found&quot;</span><span class="p">,</span> <span class="s2">&quot;message&quot;</span><span class="p">:</span> <span class="s2">&quot;поставка не найдена&quot;</span><span class="p">}),</span> <span class="mi">404</span>
+        <span class="k">return</span> <span class="n">jsonify</span><span class="p">({</span><span class="s2">"code"</span><span class="p">:</span> <span class="s2">"not_found"</span><span class="p">,</span> <span class="s2">"message"</span><span class="p">:</span> <span class="s2">"поставка не найдена"</span><span class="p">}),</span> <span class="mi">404</span>
     <span class="k">if</span> <span class="n">supply_id</span> <span class="ow">in</span> <span class="n">ACCEPTANCES</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">jsonify</span><span class="p">({</span><span class="s2">&quot;code&quot;</span><span class="p">:</span> <span class="s2">&quot;duplicate&quot;</span><span class="p">,</span> <span class="s2">&quot;message&quot;</span><span class="p">:</span> <span class="s2">&quot;приёмка уже создана&quot;</span><span class="p">}),</span> <span class="mi">409</span>
-    <span class="n">ACCEPTANCES</span><span class="p">[</span><span class="n">supply_id</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="mi">9001</span><span class="p">,</span> <span class="s2">&quot;supply_id&quot;</span><span class="p">:</span> <span class="n">supply_id</span><span class="p">,</span> <span class="s2">&quot;qty&quot;</span><span class="p">:</span> <span class="n">qty</span><span class="p">}</span>
-    <span class="k">return</span> <span class="n">jsonify</span><span class="p">({</span><span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="mi">9001</span><span class="p">,</span> <span class="s2">&quot;status&quot;</span><span class="p">:</span> <span class="s2">&quot;создана&quot;</span><span class="p">}),</span> <span class="mi">201</span>
+        <span class="k">return</span> <span class="n">jsonify</span><span class="p">({</span><span class="s2">"code"</span><span class="p">:</span> <span class="s2">"duplicate"</span><span class="p">,</span> <span class="s2">"message"</span><span class="p">:</span> <span class="s2">"приёмка уже создана"</span><span class="p">}),</span> <span class="mi">409</span>
+    <span class="n">ACCEPTANCES</span><span class="p">[</span><span class="n">supply_id</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"id"</span><span class="p">:</span> <span class="mi">9001</span><span class="p">,</span> <span class="s2">"supply_id"</span><span class="p">:</span> <span class="n">supply_id</span><span class="p">,</span> <span class="s2">"qty"</span><span class="p">:</span> <span class="n">qty</span><span class="p">}</span>
+    <span class="k">return</span> <span class="n">jsonify</span><span class="p">({</span><span class="s2">"id"</span><span class="p">:</span> <span class="mi">9001</span><span class="p">,</span> <span class="s2">"status"</span><span class="p">:</span> <span class="s2">"создана"</span><span class="p">}),</span> <span class="mi">201</span>
 
 
-<span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/api/report&quot;</span><span class="p">)</span>
+<span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"/api/report"</span><span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">report</span><span class="p">():</span>
-    <span class="n">header</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;Authorization&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
-    <span class="n">token</span> <span class="o">=</span> <span class="n">header</span><span class="o">.</span><span class="n">removeprefix</span><span class="p">(</span><span class="s2">&quot;Bearer &quot;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+    <span class="n">header</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"Authorization"</span><span class="p">,</span> <span class="s2">""</span><span class="p">)</span>
+    <span class="n">token</span> <span class="o">=</span> <span class="n">header</span><span class="o">.</span><span class="n">removeprefix</span><span class="p">(</span><span class="s2">"Bearer "</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
     <span class="n">role</span> <span class="o">=</span> <span class="n">TOKENS</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">token</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">role</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">jsonify</span><span class="p">({</span><span class="s2">&quot;code&quot;</span><span class="p">:</span> <span class="s2">&quot;unauthorized&quot;</span><span class="p">,</span> <span class="s2">&quot;message&quot;</span><span class="p">:</span> <span class="s2">&quot;нужен токен&quot;</span><span class="p">}),</span> <span class="mi">401</span>
-    <span class="k">if</span> <span class="n">role</span> <span class="o">!=</span> <span class="s2">&quot;manager&quot;</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">jsonify</span><span class="p">({</span><span class="s2">&quot;code&quot;</span><span class="p">:</span> <span class="s2">&quot;forbidden&quot;</span><span class="p">,</span> <span class="s2">&quot;message&quot;</span><span class="p">:</span> <span class="s2">&quot;нет прав на отчёт&quot;</span><span class="p">}),</span> <span class="mi">403</span>
-    <span class="k">return</span> <span class="n">jsonify</span><span class="p">({</span><span class="s2">&quot;rows&quot;</span><span class="p">:</span> <span class="mi">312</span><span class="p">,</span> <span class="s2">&quot;file&quot;</span><span class="p">:</span> <span class="s2">&quot;report.xlsx&quot;</span><span class="p">})</span>
+        <span class="k">return</span> <span class="n">jsonify</span><span class="p">({</span><span class="s2">"code"</span><span class="p">:</span> <span class="s2">"unauthorized"</span><span class="p">,</span> <span class="s2">"message"</span><span class="p">:</span> <span class="s2">"нужен токен"</span><span class="p">}),</span> <span class="mi">401</span>
+    <span class="k">if</span> <span class="n">role</span> <span class="o">!=</span> <span class="s2">"manager"</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">jsonify</span><span class="p">({</span><span class="s2">"code"</span><span class="p">:</span> <span class="s2">"forbidden"</span><span class="p">,</span> <span class="s2">"message"</span><span class="p">:</span> <span class="s2">"нет прав на отчёт"</span><span class="p">}),</span> <span class="mi">403</span>
+    <span class="k">return</span> <span class="n">jsonify</span><span class="p">({</span><span class="s2">"rows"</span><span class="p">:</span> <span class="mi">312</span><span class="p">,</span> <span class="s2">"file"</span><span class="p">:</span> <span class="s2">"report.xlsx"</span><span class="p">})</span>
 
 
 <span class="n">client</span> <span class="o">=</span> <span class="n">app</span><span class="o">.</span><span class="n">test_client</span><span class="p">()</span>
 <span class="n">cases</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="p">(</span><span class="s2">&quot;GET&quot;</span><span class="p">,</span> <span class="s2">&quot;/api/products?site=Москва&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="p">{}),</span>
-    <span class="p">(</span><span class="s2">&quot;GET&quot;</span><span class="p">,</span> <span class="s2">&quot;/api/products?site=Саратов&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="p">{}),</span>
-    <span class="p">(</span><span class="s2">&quot;POST&quot;</span><span class="p">,</span> <span class="s2">&quot;/api/acceptance&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;supply_id&quot;</span><span class="p">:</span> <span class="mi">505</span><span class="p">,</span> <span class="s2">&quot;qty&quot;</span><span class="p">:</span> <span class="mi">12</span><span class="p">},</span> <span class="p">{}),</span>
-    <span class="p">(</span><span class="s2">&quot;POST&quot;</span><span class="p">,</span> <span class="s2">&quot;/api/acceptance&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;supply_id&quot;</span><span class="p">:</span> <span class="mi">505</span><span class="p">,</span> <span class="s2">&quot;qty&quot;</span><span class="p">:</span> <span class="s2">&quot;12&quot;</span><span class="p">},</span> <span class="p">{}),</span>
-    <span class="p">(</span><span class="s2">&quot;POST&quot;</span><span class="p">,</span> <span class="s2">&quot;/api/acceptance&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;supply_id&quot;</span><span class="p">:</span> <span class="mi">505</span><span class="p">,</span> <span class="s2">&quot;qty&quot;</span><span class="p">:</span> <span class="mi">12</span><span class="p">},</span> <span class="p">{}),</span>
-    <span class="p">(</span><span class="s2">&quot;POST&quot;</span><span class="p">,</span> <span class="s2">&quot;/api/acceptance&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;supply_id&quot;</span><span class="p">:</span> <span class="mi">999</span><span class="p">,</span> <span class="s2">&quot;qty&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">},</span> <span class="p">{}),</span>
-    <span class="p">(</span><span class="s2">&quot;GET&quot;</span><span class="p">,</span> <span class="s2">&quot;/api/acceptance&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="p">{}),</span>
-    <span class="p">(</span><span class="s2">&quot;GET&quot;</span><span class="p">,</span> <span class="s2">&quot;/api/report&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="p">{}),</span>
-    <span class="p">(</span><span class="s2">&quot;GET&quot;</span><span class="p">,</span> <span class="s2">&quot;/api/report&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;Authorization&quot;</span><span class="p">:</span> <span class="s2">&quot;Bearer store-token&quot;</span><span class="p">}),</span>
-    <span class="p">(</span><span class="s2">&quot;GET&quot;</span><span class="p">,</span> <span class="s2">&quot;/api/report&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;Authorization&quot;</span><span class="p">:</span> <span class="s2">&quot;Bearer manager-token&quot;</span><span class="p">}),</span>
+    <span class="p">(</span><span class="s2">"GET"</span><span class="p">,</span> <span class="s2">"/api/products?site=Москва"</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="p">{}),</span>
+    <span class="p">(</span><span class="s2">"GET"</span><span class="p">,</span> <span class="s2">"/api/products?site=Саратов"</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="p">{}),</span>
+    <span class="p">(</span><span class="s2">"POST"</span><span class="p">,</span> <span class="s2">"/api/acceptance"</span><span class="p">,</span> <span class="p">{</span><span class="s2">"supply_id"</span><span class="p">:</span> <span class="mi">505</span><span class="p">,</span> <span class="s2">"qty"</span><span class="p">:</span> <span class="mi">12</span><span class="p">},</span> <span class="p">{}),</span>
+    <span class="p">(</span><span class="s2">"POST"</span><span class="p">,</span> <span class="s2">"/api/acceptance"</span><span class="p">,</span> <span class="p">{</span><span class="s2">"supply_id"</span><span class="p">:</span> <span class="mi">505</span><span class="p">,</span> <span class="s2">"qty"</span><span class="p">:</span> <span class="s2">"12"</span><span class="p">},</span> <span class="p">{}),</span>
+    <span class="p">(</span><span class="s2">"POST"</span><span class="p">,</span> <span class="s2">"/api/acceptance"</span><span class="p">,</span> <span class="p">{</span><span class="s2">"supply_id"</span><span class="p">:</span> <span class="mi">505</span><span class="p">,</span> <span class="s2">"qty"</span><span class="p">:</span> <span class="mi">12</span><span class="p">},</span> <span class="p">{}),</span>
+    <span class="p">(</span><span class="s2">"POST"</span><span class="p">,</span> <span class="s2">"/api/acceptance"</span><span class="p">,</span> <span class="p">{</span><span class="s2">"supply_id"</span><span class="p">:</span> <span class="mi">999</span><span class="p">,</span> <span class="s2">"qty"</span><span class="p">:</span> <span class="mi">3</span><span class="p">},</span> <span class="p">{}),</span>
+    <span class="p">(</span><span class="s2">"GET"</span><span class="p">,</span> <span class="s2">"/api/acceptance"</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="p">{}),</span>
+    <span class="p">(</span><span class="s2">"GET"</span><span class="p">,</span> <span class="s2">"/api/report"</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="p">{}),</span>
+    <span class="p">(</span><span class="s2">"GET"</span><span class="p">,</span> <span class="s2">"/api/report"</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="p">{</span><span class="s2">"Authorization"</span><span class="p">:</span> <span class="s2">"Bearer store-token"</span><span class="p">}),</span>
+    <span class="p">(</span><span class="s2">"GET"</span><span class="p">,</span> <span class="s2">"/api/report"</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="p">{</span><span class="s2">"Authorization"</span><span class="p">:</span> <span class="s2">"Bearer manager-token"</span><span class="p">}),</span>
 <span class="p">]</span>
 <span class="k">for</span> <span class="n">method</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">payload</span><span class="p">,</span> <span class="n">headers</span> <span class="ow">in</span> <span class="n">cases</span><span class="p">:</span>
     <span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="n">payload</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">method</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">headers</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;Authorization&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">))</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  статус:&quot;</span><span class="p">,</span> <span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span> <span class="s2">&quot;| тип:&quot;</span><span class="p">,</span> <span class="n">response</span><span class="o">.</span><span class="n">content_type</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  тело:&quot;</span><span class="p">,</span> <span class="n">response</span><span class="o">.</span><span class="n">get_data</span><span class="p">(</span><span class="n">as_text</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">method</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">headers</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"Authorization"</span><span class="p">,</span> <span class="s2">""</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"  статус:"</span><span class="p">,</span> <span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span> <span class="s2">"| тип:"</span><span class="p">,</span> <span class="n">response</span><span class="o">.</span><span class="n">content_type</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"  тело:"</span><span class="p">,</span> <span class="n">response</span><span class="o">.</span><span class="n">get_data</span><span class="p">(</span><span class="n">as_text</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
 </code></pre></div>
 
 <p>Прогон показывает разные исходы одного API.</p>
 <div class="codehilite" data-lang="text"><pre><span></span><code>GET /api/products?site=Москва
   статус: 200 | тип: application/json
-  тело: {&quot;items&quot;:[{&quot;sku&quot;:&quot;SKU-1001&quot;,&quot;stock&quot;:42,&quot;title&quot;:&quot;Кабель UTP&quot;}],&quot;total&quot;:1}
+  тело: {"items":[{"sku":"SKU-1001","stock":42,"title":"Кабель UTP"}],"total":1}
 GET /api/products?site=Саратов
   статус: 400 | тип: application/json
-  тело: {&quot;code&quot;:&quot;bad_site&quot;,&quot;message&quot;:&quot;неизвестная площадка&quot;}
+  тело: {"code":"bad_site","message":"неизвестная площадка"}
 POST /api/acceptance
   статус: 201 | тип: application/json
-  тело: {&quot;id&quot;:9001,&quot;status&quot;:&quot;создана&quot;}
+  тело: {"id":9001,"status":"создана"}
 POST /api/acceptance
   статус: 400 | тип: application/json
-  тело: {&quot;code&quot;:&quot;validation_error&quot;,&quot;fields&quot;:{&quot;qty&quot;:&quot;ожидается целое число больше нуля&quot;}}
+  тело: {"code":"validation_error","fields":{"qty":"ожидается целое число больше нуля"}}
 POST /api/acceptance
   статус: 409 | тип: application/json
-  тело: {&quot;code&quot;:&quot;duplicate&quot;,&quot;message&quot;:&quot;приёмка уже создана&quot;}
+  тело: {"code":"duplicate","message":"приёмка уже создана"}
 POST /api/acceptance
   статус: 404 | тип: application/json
-  тело: {&quot;code&quot;:&quot;not_found&quot;,&quot;message&quot;:&quot;поставка не найдена&quot;}
+  тело: {"code":"not_found","message":"поставка не найдена"}
 GET /api/acceptance
   статус: 405 | тип: text/html; charset=utf-8
   тело: &lt;!doctype html&gt;
@@ -1230,13 +1254,13 @@ GET /api/acceptance
 &lt;p&gt;The method is not allowed for the requested URL.&lt;/p&gt;
 GET /api/report
   статус: 401 | тип: application/json
-  тело: {&quot;code&quot;:&quot;unauthorized&quot;,&quot;message&quot;:&quot;нужен токен&quot;}
+  тело: {"code":"unauthorized","message":"нужен токен"}
 GET /api/report Bearer store-token
   статус: 403 | тип: application/json
-  тело: {&quot;code&quot;:&quot;forbidden&quot;,&quot;message&quot;:&quot;нет прав на отчёт&quot;}
+  тело: {"code":"forbidden","message":"нет прав на отчёт"}
 GET /api/report Bearer manager-token
   статус: 200 | тип: application/json
-  тело: {&quot;file&quot;:&quot;report.xlsx&quot;,&quot;rows&quot;:312}
+  тело: {"file":"report.xlsx","rows":312}
 </code></pre></div>
 
 <p>Разбор этого прогона даёт несколько выводов.</p>
@@ -1640,6 +1664,40 @@ GET /api/report Bearer manager-token
       var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
       window.scrollTo({top: 0, behavior: reduce ? 'auto' : 'smooth'});
     });
+  });
+})();
+
+(function(){
+  document.querySelectorAll('[data-slider]').forEach(function(slider){
+    var track = slider.querySelector('[data-slider-track]');
+    var slides = track ? Array.prototype.slice.call(track.children) : [];
+    var counter = slider.querySelector('[data-slider-counter]');
+    var prev = slider.querySelector('[data-slider-prev]');
+    var next = slider.querySelector('[data-slider-next]');
+    if(!track || slides.length < 2) return;
+    function current(){
+      var best = 0, dist = Infinity;
+      slides.forEach(function(slide, i){
+        var d = Math.abs(slide.offsetLeft - track.scrollLeft);
+        if(d < dist){ dist = d; best = i; }
+      });
+      return best;
+    }
+    function update(){
+      if(counter) counter.textContent = (current() + 1) + ' / ' + slides.length;
+    }
+    function go(delta){
+      var i = Math.max(0, Math.min(slides.length - 1, current() + delta));
+      var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      track.scrollTo({left: slides[i].offsetLeft, behavior: reduce ? 'auto' : 'smooth'});
+    }
+    if(prev) prev.addEventListener('click', function(){ go(-1); });
+    if(next) next.addEventListener('click', function(){ go(1); });
+    track.addEventListener('scroll', function(){
+      clearTimeout(track._sliderTimer);
+      track._sliderTimer = setTimeout(update, 80);
+    }, {passive: true});
+    update();
   });
 })();
 (function(){

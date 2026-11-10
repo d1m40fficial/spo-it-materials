@@ -527,6 +527,12 @@ html.modal-open { overflow: hidden; }
 :root[data-theme=dark] .quiz-actions button[data-answer]:hover, :root[data-theme=dark] .quiz-actions button.quiz-answer:hover { background: #262626; background-color: #262626; color: #fff; border-color: #262626; }
 :root[data-theme=dark] .gate-q { background: #1E1E1E; color: #FF6B00; }
 
+/* the whole-variant archive is the main action in a download block */
+.files a.zip { background: #121212; color: #fff; border-color: #121212; font-weight: 700; box-shadow: 4px 4px 0 rgba(0,0,0,.18); }
+.files a.zip::before { color: #fff; }
+.files a.zip:hover { background: #1D1D1D; color: #fff; border-color: #1D1D1D; box-shadow: 5px 5px 0 rgba(0,0,0,.22); }
+.files a.zip:active { transform: translate(2px,2px); box-shadow: 1px 1px 0 rgba(0,0,0,.12); }
+
 /* ---------- practical work checklist ---------- */
 .work-checklist { width: 100%; border-collapse: collapse; margin: 14px 0 4px; }
 .work-checklist th, .work-checklist td { border: 1px solid var(--rule); padding: 9px 10px; vertical-align: top; }
@@ -564,6 +570,24 @@ html.modal-open { overflow: hidden; }
 .variant-body .task-list { margin: 8px 0 0; padding-left: 20px; }
 .variant-body .task-list li { margin: 0 0 8px; }
 @media (max-width: 620px) { .variant-body { overflow-x: auto; } .variant-body table { min-width: 520px; } }
+
+/* ---------- schema slider: all CREATE TABLE examples ---------- */
+.schema-slider { margin: 18px 0 24px; border: 1px solid #d8d5cc; border-radius: 14px; background: #fff; color: #1a1916; overflow: hidden; }
+.schema-slider-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 14px; background: #f5f2ea; border-bottom: 1px solid #d8d5cc; }
+.schema-slider-bar strong { font: 700 14px/1.2 var(--font-display); color: #1a1916; }
+.schema-slider-actions { display: flex; align-items: center; gap: 8px; }
+.schema-slider-counter { min-width: 62px; text-align: center; font: 600 13px/1 var(--font-mono); color: #59544a; }
+.schema-btn { width: 34px; height: 34px; border: 1px solid #c9c4b8; border-radius: 8px; background: #fff; color: #1a1916; font: 700 18px/1 var(--font-mono); cursor: pointer; }
+.schema-btn:hover { background: #ece7dc; }
+.schema-track { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: thin; }
+.schema-slide { flex: 0 0 100%; min-width: 100%; box-sizing: border-box; padding: 16px 18px 18px; scroll-snap-align: start; }
+.schema-slide h4 { margin: 0 0 10px; font: 700 16px/1.3 var(--font-display); color: #1a1916; }
+.schema-slide h4 code, .schema-slide p code { color: #1a1916; background: #f1ede4; padding: 1px 4px; border-radius: 4px; }
+.schema-slide p { margin: 0 0 10px; font-size: 14px; line-height: 1.55; color: #3a372f; }
+.schema-slide pre { margin: 0; padding: 14px 16px; overflow-x: auto; border: 1px solid #ddd8cc; border-radius: 10px; background: #fbfaf6; color: #1a1916; font: 12.5px/1.5 var(--font-mono); }
+.schema-slide code { color: inherit; background: none; padding: 0; }
+.schema-slider:focus-within { outline: 2px solid #b9a97f; outline-offset: 2px; }
+@media (max-width: 620px) { .schema-slide { padding: 12px; } .schema-slider-bar { padding: 8px 10px; } }
 
 /* ---------- print / PDF export ---------- */
 @page { margin: 16mm; }
@@ -852,7 +876,7 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <h2 id="стенд-дерево-и-сеть"><span class="num">02</span>Стенд: дерево и сеть</h2>
 <p>Смотрите на левую часть стола. На четырёх стойках висит дерево: в корне лоток «ИС Заявки», от него четыре ветви со съёмными лотками-пакетами. Рядом весы: они показывают, совпадает ли вес детей с весом родителя. Правее сеть: шесть бегунков на направляющих, сцепки между ними и красная нить по цепочке из четырёх.</p>
 <p>Ведите взгляд по порядку. Корень: что обещано заказчику. Ветви: на какие крупные результаты распадается обещание. Лотки: каждый лист должен быть пакетом с результатом, а не глаголом. Весы: не дадут потерять функцию или посчитать её дважды. И только потом вправо, где из пакетов собирается сеть и появляется дата.</p>
-<figure class="figure" data-fig="fig-05-wbs" data-one="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"><iframe title="Figure 1: fig-05-wbs" scrolling="no"></iframe><figcaption>Разверните ветви: лист дерева становится пакетом с результатом.</figcaption></figure>
+<figure class="figure" data-fig="fig-05-wbs" data-one="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"><iframe title="Figure 1: fig-05-wbs" scrolling="no"></iframe><figcaption>Разверните ветви: лист дерева становится пакетом с результатом.</figcaption></figure>
 
 <p>Вы увидели главное: корень один, ветвей четыре, уровней три, пакетов четырнадцать. Слева дерево отвечает, из чего состоит результат, справа сеть отвечает, в каком порядке это делается. Сцепки показывают связи FS: пока предшественник не встал, последователь не начинает. Красная нить через четыре бегунка даёт 34 дня, у ветки уведомлений остаётся зазор 5 дней.</p>
 <p>Порядок на табло:</p>
@@ -1142,6 +1166,40 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
       var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
       window.scrollTo({top: 0, behavior: reduce ? 'auto' : 'smooth'});
     });
+  });
+})();
+
+(function(){
+  document.querySelectorAll('[data-slider]').forEach(function(slider){
+    var track = slider.querySelector('[data-slider-track]');
+    var slides = track ? Array.prototype.slice.call(track.children) : [];
+    var counter = slider.querySelector('[data-slider-counter]');
+    var prev = slider.querySelector('[data-slider-prev]');
+    var next = slider.querySelector('[data-slider-next]');
+    if(!track || slides.length < 2) return;
+    function current(){
+      var best = 0, dist = Infinity;
+      slides.forEach(function(slide, i){
+        var d = Math.abs(slide.offsetLeft - track.scrollLeft);
+        if(d < dist){ dist = d; best = i; }
+      });
+      return best;
+    }
+    function update(){
+      if(counter) counter.textContent = (current() + 1) + ' / ' + slides.length;
+    }
+    function go(delta){
+      var i = Math.max(0, Math.min(slides.length - 1, current() + delta));
+      var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      track.scrollTo({left: slides[i].offsetLeft, behavior: reduce ? 'auto' : 'smooth'});
+    }
+    if(prev) prev.addEventListener('click', function(){ go(-1); });
+    if(next) next.addEventListener('click', function(){ go(1); });
+    track.addEventListener('scroll', function(){
+      clearTimeout(track._sliderTimer);
+      track._sliderTimer = setTimeout(update, 80);
+    }, {passive: true});
+    update();
   });
 })();
 (function(){

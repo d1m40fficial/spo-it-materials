@@ -527,6 +527,12 @@ html.modal-open { overflow: hidden; }
 :root[data-theme=dark] .quiz-actions button[data-answer]:hover, :root[data-theme=dark] .quiz-actions button.quiz-answer:hover { background: #262626; background-color: #262626; color: #fff; border-color: #262626; }
 :root[data-theme=dark] .gate-q { background: #1E1E1E; color: #FF6B00; }
 
+/* the whole-variant archive is the main action in a download block */
+.files a.zip { background: #121212; color: #fff; border-color: #121212; font-weight: 700; box-shadow: 4px 4px 0 rgba(0,0,0,.18); }
+.files a.zip::before { color: #fff; }
+.files a.zip:hover { background: #1D1D1D; color: #fff; border-color: #1D1D1D; box-shadow: 5px 5px 0 rgba(0,0,0,.22); }
+.files a.zip:active { transform: translate(2px,2px); box-shadow: 1px 1px 0 rgba(0,0,0,.12); }
+
 /* ---------- practical work checklist ---------- */
 .work-checklist { width: 100%; border-collapse: collapse; margin: 14px 0 4px; }
 .work-checklist th, .work-checklist td { border: 1px solid var(--rule); padding: 9px 10px; vertical-align: top; }
@@ -564,6 +570,24 @@ html.modal-open { overflow: hidden; }
 .variant-body .task-list { margin: 8px 0 0; padding-left: 20px; }
 .variant-body .task-list li { margin: 0 0 8px; }
 @media (max-width: 620px) { .variant-body { overflow-x: auto; } .variant-body table { min-width: 520px; } }
+
+/* ---------- schema slider: all CREATE TABLE examples ---------- */
+.schema-slider { margin: 18px 0 24px; border: 1px solid #d8d5cc; border-radius: 14px; background: #fff; color: #1a1916; overflow: hidden; }
+.schema-slider-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 14px; background: #f5f2ea; border-bottom: 1px solid #d8d5cc; }
+.schema-slider-bar strong { font: 700 14px/1.2 var(--font-display); color: #1a1916; }
+.schema-slider-actions { display: flex; align-items: center; gap: 8px; }
+.schema-slider-counter { min-width: 62px; text-align: center; font: 600 13px/1 var(--font-mono); color: #59544a; }
+.schema-btn { width: 34px; height: 34px; border: 1px solid #c9c4b8; border-radius: 8px; background: #fff; color: #1a1916; font: 700 18px/1 var(--font-mono); cursor: pointer; }
+.schema-btn:hover { background: #ece7dc; }
+.schema-track { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: thin; }
+.schema-slide { flex: 0 0 100%; min-width: 100%; box-sizing: border-box; padding: 16px 18px 18px; scroll-snap-align: start; }
+.schema-slide h4 { margin: 0 0 10px; font: 700 16px/1.3 var(--font-display); color: #1a1916; }
+.schema-slide h4 code, .schema-slide p code { color: #1a1916; background: #f1ede4; padding: 1px 4px; border-radius: 4px; }
+.schema-slide p { margin: 0 0 10px; font-size: 14px; line-height: 1.55; color: #3a372f; }
+.schema-slide pre { margin: 0; padding: 14px 16px; overflow-x: auto; border: 1px solid #ddd8cc; border-radius: 10px; background: #fbfaf6; color: #1a1916; font: 12.5px/1.5 var(--font-mono); }
+.schema-slide code { color: inherit; background: none; padding: 0; }
+.schema-slider:focus-within { outline: 2px solid #b9a97f; outline-offset: 2px; }
+@media (max-width: 620px) { .schema-slide { padding: 12px; } .schema-slider-bar { padding: 8px 10px; } }
 
 /* ---------- print / PDF export ---------- */
 @page { margin: 16mm; }
@@ -934,7 +958,7 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 </code></pre></div>
 
 <p>Дальше файл читает клиент <code>mysql</code>. Команда <code>source</code> выполняет его построчно и останавливается на первой ошибке, если не указан <code>--force</code>:</p>
-<div class="codehilite" data-lang="text"><pre><span></span><code><span class="n">mysql</span> <span class="n">-u</span> <span class="n">root</span> <span class="p">-</span><span class="n">-default-character-set</span><span class="p">=</span><span class="n">utf8mb4</span> <span class="n">dean_restore</span> <span class="n">-e</span> <span class="s2">&quot;source .../backup/dean_2026-10-26.sql&quot;</span>
+<div class="codehilite" data-lang="text"><pre><span></span><code><span class="n">mysql</span> <span class="n">-u</span> <span class="n">root</span> <span class="p">-</span><span class="n">-default-character-set</span><span class="p">=</span><span class="n">utf8mb4</span> <span class="n">dean_restore</span> <span class="n">-e</span> <span class="s2">"source .../backup/dean_2026-10-26.sql"</span>
 </code></pre></div>
 
 <p>Перед импортом полезно посмотреть первые строки файла:</p>
@@ -954,21 +978,21 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 
 <p><code>server-id</code> нужен для репликации, <code>binlog_format=ROW</code> пишет изменения строками, а <code>binlog_expire_logs_seconds</code> держит журнал две недели. В MariaDB срок задают параметром <code>expire_logs_days=14</code>. Включить журнал задним числом нельзя: события за прошлые сутки не сохранились.</p>
 <p>Проверка после перезапуска:</p>
-<div class="codehilite" data-lang="text"><pre><span></span><code><span class="k">SHOW</span><span class="w"> </span><span class="n">VARIABLES</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">Variable_name</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span><span class="s1">&#39;log_bin&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;binlog_format&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;server_id&#39;</span><span class="p">);</span>
+<div class="codehilite" data-lang="text"><pre><span></span><code><span class="k">SHOW</span><span class="w"> </span><span class="n">VARIABLES</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">Variable_name</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span><span class="s1">'log_bin'</span><span class="p">,</span><span class="w"> </span><span class="s1">'binlog_format'</span><span class="p">,</span><span class="w"> </span><span class="s1">'server_id'</span><span class="p">);</span>
 <span class="k">SHOW</span><span class="w"> </span><span class="nb">BINARY</span><span class="w"> </span><span class="n">LOGS</span><span class="p">;</span>
 </code></pre></div>
 
 <p>Первая команда должна показать <code>ON</code>, <code>ROW</code> и ненулевой номер, вторая выдаёт список файлов и их размеры. В каталоге <code>.../xampp/mysql/data</code> эти файлы лежат рядом с папками баз.</p>
 <p>Чтобы найти границу, журнал читают в окне вокруг аварии. <code>mysqlbinlog</code> показывает события строками и подписывает позиции:</p>
-<div class="codehilite" data-lang="text"><pre><span></span><code><span class="p">.../</span><span class="n">xampp</span><span class="p">/</span><span class="n">mysql</span><span class="p">/</span><span class="n">bin</span><span class="p">/</span><span class="n">mysqlbinlog</span><span class="p">.</span><span class="n">exe</span> <span class="p">-</span><span class="n">-base64-output</span><span class="p">=</span><span class="n">DECODE-ROWS</span> <span class="n">-v</span> <span class="p">-</span><span class="n">-start-datetime</span><span class="p">=</span><span class="s2">&quot;2026-10-26 11:30:00&quot;</span> <span class="p">-</span><span class="n">-stop-datetime</span><span class="p">=</span><span class="s2">&quot;2026-10-26 11:45:00&quot;</span> <span class="p">-</span><span class="n">-result</span><span class="o">-file</span><span class="p">=.../</span><span class="n">backup</span><span class="p">/</span><span class="n">window</span><span class="p">.</span><span class="n">sql</span> <span class="p">.../</span><span class="n">xampp</span><span class="p">/</span><span class="n">mysql</span><span class="p">/</span><span class="n">data</span><span class="p">/</span><span class="n">mysql-bin</span><span class="p">.</span><span class="n">000007</span>
+<div class="codehilite" data-lang="text"><pre><span></span><code><span class="p">.../</span><span class="n">xampp</span><span class="p">/</span><span class="n">mysql</span><span class="p">/</span><span class="n">bin</span><span class="p">/</span><span class="n">mysqlbinlog</span><span class="p">.</span><span class="n">exe</span> <span class="p">-</span><span class="n">-base64-output</span><span class="p">=</span><span class="n">DECODE-ROWS</span> <span class="n">-v</span> <span class="p">-</span><span class="n">-start-datetime</span><span class="p">=</span><span class="s2">"2026-10-26 11:30:00"</span> <span class="p">-</span><span class="n">-stop-datetime</span><span class="p">=</span><span class="s2">"2026-10-26 11:45:00"</span> <span class="p">-</span><span class="n">-result</span><span class="o">-file</span><span class="p">=.../</span><span class="n">backup</span><span class="p">/</span><span class="n">window</span><span class="p">.</span><span class="n">sql</span> <span class="p">.../</span><span class="n">xampp</span><span class="p">/</span><span class="n">mysql</span><span class="p">/</span><span class="n">data</span><span class="p">/</span><span class="n">mysql-bin</span><span class="p">.</span><span class="n">000007</span>
 </code></pre></div>
 
 <p>В файле видно событие <code>UPDATE dean.enrollments</code>, время <code>SET TIMESTAMP</code> и позицию <code>end_log_pos</code>. Номер <code># at 1720</code> перед этим событием и есть граница: всё, что раньше, применяем, всё, что позже, отбрасываем. Время и позиция дают две независимые координаты одной и той же точки.</p>
 <h2 id="восстановление-на-момент-времени"><span class="num">05</span>Восстановление на момент времени</h2>
 <p>Проигрывание начинают не от начала журнала, а от позиции из заголовка дампа. Иначе события, уже попавшие в снимок, применятся второй раз и дадут ошибку дублирующего ключа.</p>
 <p>Журнал адресован базе <code>dean</code>: события содержат <code>USE dean</code>. Репетиция идёт на экземпляре на порту 3307, где база снова называется <code>dean</code>.</p>
-<div class="codehilite" data-lang="text"><pre><span></span><code><span class="p">.../</span><span class="n">xampp</span><span class="p">/</span><span class="n">mysql</span><span class="p">/</span><span class="n">bin</span><span class="p">/</span><span class="n">mysqlbinlog</span><span class="p">.</span><span class="n">exe</span> <span class="p">-</span><span class="n">-start-position</span><span class="p">=</span><span class="n">154</span> <span class="p">-</span><span class="n">-stop-datetime</span><span class="p">=</span><span class="s2">&quot;2026-10-26 11:40:00&quot;</span> <span class="p">-</span><span class="n">-result</span><span class="o">-file</span><span class="p">=.../</span><span class="n">backup</span><span class="p">/</span><span class="n">pitr</span><span class="p">.</span><span class="n">sql</span> <span class="p">.../</span><span class="n">xampp</span><span class="p">/</span><span class="n">mysql</span><span class="p">/</span><span class="n">data</span><span class="p">/</span><span class="n">mysql-bin</span><span class="p">.</span><span class="n">000006</span> <span class="p">.../</span><span class="n">xampp</span><span class="p">/</span><span class="n">mysql</span><span class="p">/</span><span class="n">data</span><span class="p">/</span><span class="n">mysql-bin</span><span class="p">.</span><span class="n">000007</span>
-<span class="n">mysql</span> <span class="n">-u</span> <span class="n">root</span> <span class="n">-h</span> <span class="n">127</span><span class="p">.</span><span class="n">0</span><span class="p">.</span><span class="n">0</span><span class="p">.</span><span class="n">1</span> <span class="n">-P</span> <span class="n">3307</span> <span class="p">-</span><span class="n">-default-character-set</span><span class="p">=</span><span class="n">utf8mb4</span> <span class="n">-e</span> <span class="s2">&quot;source .../backup/pitr.sql&quot;</span> <span class="n">dean</span>
+<div class="codehilite" data-lang="text"><pre><span></span><code><span class="p">.../</span><span class="n">xampp</span><span class="p">/</span><span class="n">mysql</span><span class="p">/</span><span class="n">bin</span><span class="p">/</span><span class="n">mysqlbinlog</span><span class="p">.</span><span class="n">exe</span> <span class="p">-</span><span class="n">-start-position</span><span class="p">=</span><span class="n">154</span> <span class="p">-</span><span class="n">-stop-datetime</span><span class="p">=</span><span class="s2">"2026-10-26 11:40:00"</span> <span class="p">-</span><span class="n">-result</span><span class="o">-file</span><span class="p">=.../</span><span class="n">backup</span><span class="p">/</span><span class="n">pitr</span><span class="p">.</span><span class="n">sql</span> <span class="p">.../</span><span class="n">xampp</span><span class="p">/</span><span class="n">mysql</span><span class="p">/</span><span class="n">data</span><span class="p">/</span><span class="n">mysql-bin</span><span class="p">.</span><span class="n">000006</span> <span class="p">.../</span><span class="n">xampp</span><span class="p">/</span><span class="n">mysql</span><span class="p">/</span><span class="n">data</span><span class="p">/</span><span class="n">mysql-bin</span><span class="p">.</span><span class="n">000007</span>
+<span class="n">mysql</span> <span class="n">-u</span> <span class="n">root</span> <span class="n">-h</span> <span class="n">127</span><span class="p">.</span><span class="n">0</span><span class="p">.</span><span class="n">0</span><span class="p">.</span><span class="n">1</span> <span class="n">-P</span> <span class="n">3307</span> <span class="p">-</span><span class="n">-default-character-set</span><span class="p">=</span><span class="n">utf8mb4</span> <span class="n">-e</span> <span class="s2">"source .../backup/pitr.sql"</span> <span class="n">dean</span>
 </code></pre></div>
 
 <p><code>--start-position</code> задаёт первое событие, <code>--stop-datetime</code> обрывает чтение на первом событии с указанным временем или позже, поэтому событие 11:40:00 в файл не попадает. Файлы журнала перечисляют по порядку номеров: если авария попала в следующий файл, одного имени мало.</p>
@@ -995,11 +1019,11 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <p>Шаг с отдельным экземпляром отделяет репетицию от рабочей системы: если копия испортится, рабочая не пострадает.</p>
 <h2 id="проверка-после-восстановления"><span class="num">07</span>Проверка после восстановления</h2>
 <p>Восстановление закончено не тогда, когда команда прошла без ошибок, а когда данные совпали с ожиданием. Начинают со счётчиков:</p>
-<div class="codehilite" data-lang="text"><pre><span></span><code><span class="k">SELECT</span><span class="w"> </span><span class="s1">&#39;groups&#39;</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">tbl</span><span class="p">,</span><span class="w"> </span><span class="k">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">groups</span>
-<span class="k">UNION</span><span class="w"> </span><span class="k">ALL</span><span class="w"> </span><span class="k">SELECT</span><span class="w"> </span><span class="s1">&#39;students&#39;</span><span class="p">,</span><span class="w"> </span><span class="k">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">students</span>
-<span class="k">UNION</span><span class="w"> </span><span class="k">ALL</span><span class="w"> </span><span class="k">SELECT</span><span class="w"> </span><span class="s1">&#39;courses&#39;</span><span class="p">,</span><span class="w"> </span><span class="k">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">courses</span>
-<span class="k">UNION</span><span class="w"> </span><span class="k">ALL</span><span class="w"> </span><span class="k">SELECT</span><span class="w"> </span><span class="s1">&#39;enrollments&#39;</span><span class="p">,</span><span class="w"> </span><span class="k">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">enrollments</span>
-<span class="k">UNION</span><span class="w"> </span><span class="k">ALL</span><span class="w"> </span><span class="k">SELECT</span><span class="w"> </span><span class="s1">&#39;payments&#39;</span><span class="p">,</span><span class="w"> </span><span class="k">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">payments</span><span class="p">;</span>
+<div class="codehilite" data-lang="text"><pre><span></span><code><span class="k">SELECT</span><span class="w"> </span><span class="s1">'groups'</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">tbl</span><span class="p">,</span><span class="w"> </span><span class="k">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">groups</span>
+<span class="k">UNION</span><span class="w"> </span><span class="k">ALL</span><span class="w"> </span><span class="k">SELECT</span><span class="w"> </span><span class="s1">'students'</span><span class="p">,</span><span class="w"> </span><span class="k">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">students</span>
+<span class="k">UNION</span><span class="w"> </span><span class="k">ALL</span><span class="w"> </span><span class="k">SELECT</span><span class="w"> </span><span class="s1">'courses'</span><span class="p">,</span><span class="w"> </span><span class="k">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">courses</span>
+<span class="k">UNION</span><span class="w"> </span><span class="k">ALL</span><span class="w"> </span><span class="k">SELECT</span><span class="w"> </span><span class="s1">'enrollments'</span><span class="p">,</span><span class="w"> </span><span class="k">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">enrollments</span>
+<span class="k">UNION</span><span class="w"> </span><span class="k">ALL</span><span class="w"> </span><span class="k">SELECT</span><span class="w"> </span><span class="s1">'payments'</span><span class="p">,</span><span class="w"> </span><span class="k">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">payments</span><span class="p">;</span>
 </code></pre></div>
 
 <p>Для учебной базы ожидание известно: 3, 10, 5, 20 и 10. Если <code>enrollments</code> даёт 19, значит журнал оборвался на событии раньше цели или одно удаление попало в снимок. Счётчик не доказывает правильность строк, но сразу показывает грубый промах.</p>
@@ -1118,6 +1142,40 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
       var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
       window.scrollTo({top: 0, behavior: reduce ? 'auto' : 'smooth'});
     });
+  });
+})();
+
+(function(){
+  document.querySelectorAll('[data-slider]').forEach(function(slider){
+    var track = slider.querySelector('[data-slider-track]');
+    var slides = track ? Array.prototype.slice.call(track.children) : [];
+    var counter = slider.querySelector('[data-slider-counter]');
+    var prev = slider.querySelector('[data-slider-prev]');
+    var next = slider.querySelector('[data-slider-next]');
+    if(!track || slides.length < 2) return;
+    function current(){
+      var best = 0, dist = Infinity;
+      slides.forEach(function(slide, i){
+        var d = Math.abs(slide.offsetLeft - track.scrollLeft);
+        if(d < dist){ dist = d; best = i; }
+      });
+      return best;
+    }
+    function update(){
+      if(counter) counter.textContent = (current() + 1) + ' / ' + slides.length;
+    }
+    function go(delta){
+      var i = Math.max(0, Math.min(slides.length - 1, current() + delta));
+      var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      track.scrollTo({left: slides[i].offsetLeft, behavior: reduce ? 'auto' : 'smooth'});
+    }
+    if(prev) prev.addEventListener('click', function(){ go(-1); });
+    if(next) next.addEventListener('click', function(){ go(1); });
+    track.addEventListener('scroll', function(){
+      clearTimeout(track._sliderTimer);
+      track._sliderTimer = setTimeout(update, 80);
+    }, {passive: true});
+    update();
   });
 })();
 (function(){

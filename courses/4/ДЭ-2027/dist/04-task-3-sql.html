@@ -571,6 +571,24 @@ html.modal-open { overflow: hidden; }
 .variant-body .task-list li { margin: 0 0 8px; }
 @media (max-width: 620px) { .variant-body { overflow-x: auto; } .variant-body table { min-width: 520px; } }
 
+/* ---------- schema slider: all CREATE TABLE examples ---------- */
+.schema-slider { margin: 18px 0 24px; border: 1px solid #d8d5cc; border-radius: 14px; background: #fff; color: #1a1916; overflow: hidden; }
+.schema-slider-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 14px; background: #f5f2ea; border-bottom: 1px solid #d8d5cc; }
+.schema-slider-bar strong { font: 700 14px/1.2 var(--font-display); color: #1a1916; }
+.schema-slider-actions { display: flex; align-items: center; gap: 8px; }
+.schema-slider-counter { min-width: 62px; text-align: center; font: 600 13px/1 var(--font-mono); color: #59544a; }
+.schema-btn { width: 34px; height: 34px; border: 1px solid #c9c4b8; border-radius: 8px; background: #fff; color: #1a1916; font: 700 18px/1 var(--font-mono); cursor: pointer; }
+.schema-btn:hover { background: #ece7dc; }
+.schema-track { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: thin; }
+.schema-slide { flex: 0 0 100%; min-width: 100%; box-sizing: border-box; padding: 16px 18px 18px; scroll-snap-align: start; }
+.schema-slide h4 { margin: 0 0 10px; font: 700 16px/1.3 var(--font-display); color: #1a1916; }
+.schema-slide h4 code, .schema-slide p code { color: #1a1916; background: #f1ede4; padding: 1px 4px; border-radius: 4px; }
+.schema-slide p { margin: 0 0 10px; font-size: 14px; line-height: 1.55; color: #3a372f; }
+.schema-slide pre { margin: 0; padding: 14px 16px; overflow-x: auto; border: 1px solid #ddd8cc; border-radius: 10px; background: #fbfaf6; color: #1a1916; font: 12.5px/1.5 var(--font-mono); }
+.schema-slide code { color: inherit; background: none; padding: 0; }
+.schema-slider:focus-within { outline: 2px solid #b9a97f; outline-offset: 2px; }
+@media (max-width: 620px) { .schema-slide { padding: 12px; } .schema-slider-bar { padding: 8px 10px; } }
+
 /* ---------- print / PDF export ---------- */
 @page { margin: 16mm; }
 @media print {
@@ -850,18 +868,18 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <canvas class="shader-bg" width="820" height="300" aria-hidden="true" style="background:linear-gradient(135deg,#08090D,#C0392B 58%,#08090D)"></canvas>
 <div class="badges"><span class="pill dark">Задание 3</span><span class="pill">Подготовка к демо-экзамену</span></div>
 <div class="hero-panel"><h1>Задание 3. SQL-запрос стоимости</h1><p class="dek">Один запрос собирает количество изделий, нормы расхода, часы операций и цены, а проверка числа строк доказывает, что сумма не удвоилась.</p></div>
-<div class="glyph" aria-hidden="true">04</div></header><section class="outcomes"><b>Что вы разберёте в этом разделе</b><ul><li>Писать запрос с JOIN, GROUP BY и SUM по данным заказа</li><li>Выбирать цену, действовавшую на дату заказа, и считать в DECIMAL</li><li>Проверять результат на контрольном примере 7680,00 и объяснять допущения</li></ul></section><nav class="toc"><b>Содержание раздела</b><ol><li><a href="#что-требуется">Что требуется</a></li><li><a href="#что-понадобится">Что понадобится</a></li><li><a href="#как-устроено-задание">Как устроено задание</a></li><li><a href="#пошаговая-инструкция">Пошаговая инструкция</a></li><li><a href="#команды-и-приёмы-которые-нужны-чаще-всего">Команды и приёмы, которые нужны чаще всего</a></li><li><a href="#частые-ошибки">Частые ошибки</a></li><li><a href="#чек-лист-перед-сдачей">Чек-лист перед сдачей</a></li></ol></nav><article class="prose"><h2 id="что-требуется"><span class="num">01</span>Что требуется</h2>
-<p>В варианте V01 ателье «Стежок» выпускает «Фартук поварской», а магазин «Стежок-1» заказал 12 единиц к 22 марта 2027 года. Нужно посчитать нормативную стоимость заказа V01-01: сколько стоят материалы и технологические операции, если считать по нормам спецификации и ценам, которые действуют с 1 марта 2027 года.</p>
+<div class="glyph" aria-hidden="true">04</div></header><section class="outcomes"><b>Что вы разберёте в этом разделе</b><ul><li>Писать запрос с JOIN, GROUP BY и SUM по данным заказа</li><li>Выбирать цену, действовавшую на дату заказа, и считать в DECIMAL</li><li>Проверять результат на контрольном примере 14374,28 и объяснять допущения</li></ul></section><nav class="toc"><b>Содержание раздела</b><ol><li><a href="#что-требуется">Что требуется</a></li><li><a href="#что-понадобится">Что понадобится</a></li><li><a href="#как-устроено-задание">Как устроено задание</a></li><li><a href="#пошаговая-инструкция">Пошаговая инструкция</a></li><li><a href="#команды-и-приёмы-которые-нужны-чаще-всего">Команды и приёмы, которые нужны чаще всего</a></li><li><a href="#частые-ошибки">Частые ошибки</a></li><li><a href="#чек-лист-перед-сдачей">Чек-лист перед сдачей</a></li></ol></nav><article class="prose"><h2 id="что-требуется"><span class="num">01</span>Что требуется</h2>
+<p>В варианте V01 ООО ТД «Вершина» выпускает стол кухонный «Самобранка», а ИП Томилин заказал 2 стола к 29 апреля 2026 года. Нужно посчитать нормативную стоимость заказа V01-01: сколько стоят материалы и технологические операции, если считать по нормам спецификации и ценам, которые действуют с 1 апреля 2026 года.</p>
 <p>Слово «нормативная» здесь главное. Стоимость не берут из продажной суммы заказа и не придумывают по ощущениям. Её выводят из четырёх величин: количество изделий в заказе, норма расхода материала или норма времени операции, цена ресурса и размер партии, на которую заданы нормы. Продажная цена, скидка, наценка и доставка в расчёт не входят.</p>
 <p>Сдаётся текстовый файл с запросом и результат его выполнения. В отчёте или отдельной записке нужно показать:</p>
 <ul>
 <li>полный текст запроса, который считает стоимость заказа V01-01;</li>
 <li>таблицу строк расчёта: ресурс, вид, норма, цена, вклад строки;</li>
-<li>общий итог <code>7680.00</code>;</li>
+<li>общий итог <code>14374.28</code>;</li>
 <li>пояснение, почему итог не равен продажной сумме заказа;</li>
 <li>доказательство, что запрос не удвоил и не потерял строки.</li>
 </ul>
-<p>Контрольное число для V01: материалы стоят <code>3456.00</code>, операции <code>4224.00</code>, вместе <code>7680.00</code>. Если ваш запрос вернул другое число, сначала найдите причину расхождения, а потом оформляйте работу. Подгонять запрос под <code>7680.00</code> нельзя: преподаватель попросит объяснить каждое слагаемое.</p>
+<p>Контрольное число для V01: материалы стоят <code>9974.28</code>, операции <code>4400.00</code>, вместе <code>14374.28</code>. Если ваш запрос вернул другое число, сначала найдите причину расхождения, а потом оформляйте работу. Подгонять запрос под <code>14374.28</code> нельзя: преподаватель попросит объяснить каждое слагаемое.</p>
 <p>Задание опирается на базу, собранную во втором задании. Если база ещё не готова, сначала восстановите её из выгрузки: запросу нужны таблицы заказа, спецификации, состава и цен.</p>
 <h2 id="что-понадобится"><span class="num">02</span>Что понадобится</h2>
 <table>
@@ -927,24 +945,26 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 </table>
 <p>Скачать все файлы варианта: <a href="reports/variants/V01/V01_исходные_данные.zip">V01_исходные_данные.zip</a>.</p>
 <figure class="diagram">
-<img src="reports/screens/prep/V01_calc_xlsx.png" alt="Расчет стоимости V01: ресурсы, нормы, цены и пустые ячейки для проверки">
-<figcaption>Книга `Расчет стоимости.xlsx`: ресурсы, нормы, цены и пустые ячейки для ручной проверки. Итог удобно сверить с результатом SQL.</figcaption>
+<img src="reports/screens/prep/V01_calc_xlsx.png" alt="Расчет стоимости V01: ресурсы, количество и итог 14 374,28">
+<figcaption>Книга `Расчет стоимости.xlsx`: ресурсы, количество и итог после пересчёта по спецификации и ценам. Итог удобно сверить с результатом SQL.</figcaption>
 </figure>
 
 <p>Проверьте, что MySQL запущен. В XAMPP Control Panel строка MySQL должна показывать статус <code>Running</code>. Если статус другой, нажмите <code>Start</code> и дождитесь зелёной отметки. Браузер откройте заново после запуска, иначе phpMyAdmin покажет ошибку соединения.</p>
 <p>База должна содержать таблицы <code>customer_order</code>, <code>customer_order_line</code>, <code>specification</code>, <code>specification_component</code>, <code>item</code> и <code>price</code>. В левой панели phpMyAdmin нажмите на имя базы и посмотрите список таблиц. Если таблиц нет, вернитесь ко второму заданию: запрос без них не выполнится.</p>
 <h2 id="как-устроено-задание"><span class="num">03</span>Как устроено задание</h2>
 <p>Данные о заказе разложены по таблицам не случайно. Каждая таблица отвечает на свой вопрос, и запрос собирает ответы в одну картину.</p>
-<p><code>customer_order</code> хранит шапку заказа: номер <code>V01-01</code>, дату <code>2027-03-15</code>, заказчика и исполнителя. <code>customer_order_line</code> хранит строки заказа: какое изделие, сколько единиц, по какой продажной цене и с какой скидкой. В V01 одна строка: «Фартук поварской», количество <code>12</code>.</p>
-<p><code>specification</code> связывает изделие с составом и хранит <code>output_qty</code>, то есть количество изделий, на которое даны нормы. В учебном варианте <code>output_qty</code> равно <code>1</code>, поэтому нормы относятся к одному фартуку. Если бы спецификация описывала партию из десяти фартуков, нормы пришлось бы делить на десять.</p>
-<p><code>specification_component</code> перечисляет ресурсы изделия. У каждой строки есть <code>item_id</code>, количество <code>qty</code> и норма времени <code>time_norm</code>. Для материала <code>qty</code> означает норму расхода, а <code>time_norm</code> равна единице. Для операции <code>qty</code> равна единице, а <code>time_norm</code> содержит норму времени в часах. Такое соглашение позволяет хранить материалы и операции в одной таблице и считать их одной формулой.</p>
-<p><code>item</code> даёт название, код, единицу измерения и вид ресурса: <code>product</code>, <code>material</code> или <code>operation</code>. Вид нужен для отчёта и для проверок, но не для отдельного соединения. Это важная мысль: материалы и операции уже лежат в одном списке состава, и различать их соединениями не требуется.</p>
-<p><code>price</code> хранит историю цен. Ключ <code>(item_id, valid_from)</code> означает, что у ресурса может быть несколько цен с разными датами начала действия. Для заказа от 15 марта 2027 года нужна цена, которая уже действовала в этот день, а не самая новая цена вообще.</p>
+<p><code>customer_order</code> хранит шапку заказа: номер <code>V01-01</code>, дату <code>2026-04-22</code>, заказчика и исполнителя. <code>customer_order_line</code> хранит строки заказа: какое изделие, сколько единиц, по какой продажной цене и с какой скидкой. В V01 одна строка: «Стол кухонный «Самобранка»», количество <code>2</code>.</p>
+<p><code>specification</code> связывает изделие с составом и хранит <code>output_qty</code>, то есть количество изделий, на которое даны нормы. В учебном варианте <code>output_qty</code> равно <code>1</code>, поэтому нормы относятся к одному столу. Если бы спецификация описывала партию из десяти столов, нормы пришлось бы делить на десять.</p>
+<p><code>specification_component</code> перечисляет ресурсы изделия. У каждой строки есть <code>item_id</code>, количество <code>qty</code> и норма времени <code>time_norm</code>. Для материала <code>qty</code> означает норму расхода, а <code>time_norm</code> равна нулю. Для операции <code>qty</code> равна нулю, а <code>time_norm</code> содержит норму времени в часах. Такое соглашение позволяет хранить материалы и операции в одной таблице и считать их одной формулой с <code>CASE</code>.</p>
+<p><code>item</code> даёт название, код, единицу измерения и вид ресурса: <code>product</code>, <code>material</code> или <code>operation</code>. Вид нужен, чтобы выбрать, какое поле состава умножать на цену: для материала <code>c.qty</code>, для операции <code>c.time_norm</code>.</p>
+<p><code>price</code> хранит историю цен. Ключ <code>(item_id, valid_from)</code> означает, что у ресурса может быть несколько цен с разными датами начала действия. Для заказа от 22 апреля 2026 года нужна цена, которая уже действовала в этот день, а не самая новая цена вообще.</p>
 <p>Стоимость одной строки состава считается так:</p>
-<div class="codehilite" data-lang="text"><pre><span></span><code>количество изделий / output_qty × qty × time_norm × цена
+<div class="codehilite" data-lang="text"><pre><span></span><code>количество изделий / output_qty
+× (для материала qty, для операции time_norm)
+× цена
 </code></pre></div>
 
-<p>Для материала <code>time_norm</code> равна единице, поэтому остаётся количество изделий × норма расхода × цена. Для операции <code>qty</code> равна единице, поэтому остаётся количество изделий × норма времени × тариф за час. Общая стоимость заказа это сумма всех строк состава.</p>
+<p>Для материала остаётся количество изделий × норма расхода × цена. Для операции остаётся количество изделий × норма времени × тариф за час. Общая стоимость заказа это сумма всех строк состава.</p>
 <p>Посчитаем V01 по одной единице продукции. Нормы и цены возьмём из файлов варианта.</p>
 <table>
 <thead>
@@ -959,62 +979,114 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 </thead>
 <tbody>
 <tr>
-<td>Бязь</td>
+<td>Столешница круглая</td>
 <td>материал</td>
-<td>0.800</td>
-<td>1</td>
-<td>280.00</td>
-<td>224.00</td>
+<td>1.000</td>
+<td>0</td>
+<td>3250.00</td>
+<td>3250.00</td>
 </tr>
 <tr>
-<td>Тесьма</td>
+<td>Мебельная деталь 500х800</td>
 <td>материал</td>
 <td>2.000</td>
-<td>1</td>
-<td>25.00</td>
-<td>50.00</td>
+<td>0</td>
+<td>95.00</td>
+<td>190.00</td>
 </tr>
 <tr>
-<td>Нить</td>
+<td>Мебельная деталь 600х800</td>
 <td>материал</td>
-<td>35.000</td>
-<td>1</td>
-<td>0.40</td>
-<td>14.00</td>
+<td>4.000</td>
+<td>0</td>
+<td>140.00</td>
+<td>560.00</td>
 </tr>
 <tr>
-<td>Раскрой</td>
-<td>операция</td>
-<td>1</td>
-<td>0.120</td>
-<td>600.00</td>
-<td>72.00</td>
+<td>Евровинт 6,5х5</td>
+<td>материал</td>
+<td>0.012</td>
+<td>0</td>
+<td>595.00</td>
+<td>7.14</td>
 </tr>
 <tr>
-<td>Пошив</td>
+<td>Опора</td>
+<td>материал</td>
+<td>4.000</td>
+<td>0</td>
+<td>245.00</td>
+<td>980.00</td>
+</tr>
+<tr>
+<td>Сборка модулей</td>
 <td>операция</td>
-<td>1</td>
-<td>0.350</td>
-<td>800.00</td>
-<td>280.00</td>
+<td>0</td>
+<td>0.750</td>
+<td>1400.00</td>
+<td>1050.00</td>
+</tr>
+<tr>
+<td>Распил ДСП, МДФ и листового материала</td>
+<td>операция</td>
+<td>0</td>
+<td>1.500</td>
+<td>450.00</td>
+<td>675.00</td>
+</tr>
+<tr>
+<td>Упаковка</td>
+<td>операция</td>
+<td>0</td>
+<td>0.500</td>
+<td>950.00</td>
+<td>475.00</td>
 </tr>
 </tbody>
 </table>
-<p>Материалы дают <code>288.00</code>, операции <code>352.00</code>, вместе <code>640.00</code> на один фартук. Для двенадцати изделий сумма умножается: <code>640.00 × 12 = 7680.00</code>. Именно это число должен вернуть запрос.</p>
-<p>Обратите внимание на нить. Норма <code>35</code> при цене <code>0.40</code> даёт <code>14.00</code>, то есть сорок копеек за единицу нормы. Поэтому в запросе каждое поле стоит на своём месте: так видно, что именно умножается, и проверка единиц не превращается в угадывание.</p>
-<p>Теперь о главной опасности. Соблазн соединить материалы и операции двумя отдельными ветками выглядит логично: «материалы с материалами, операции с операциями». Но если обе ветки растут от одной строки состава, каждая материальная строка соединится с каждой операционной. При трёх материалах и двух операциях получится шесть строк вместо пяти. Материалы посчитаются два раза, операции три раза: <code>3456 × 2 + 4224 × 3 = 19584</code>. Это число выглядит правдоподобно, но оно неверно.</p>
+<p>Материалы дают <code>4987.14</code>, операции <code>2200.00</code>, вместе <code>7187.14</code> на один стол. Для двух изделий сумма умножается: <code>7187.14 × 2 = 14374.28</code>. Именно это число должен вернуть запрос.</p>
+<p>Обратите внимание на евровинт. Норма <code>0.012</code> при цене <code>595.00</code> даёт <code>7.14</code>, то есть семь рублей четырнадцать копеек на один стол. Поэтому в запросе каждое поле стоит на своём месте: так видно, что именно умножается, и проверка единиц не превращается в угадывание.</p>
+<p>Теперь о главной опасности. Соблазн соединить материалы и операции двумя отдельными ветками выглядит логично: «материалы с материалами, операции с операциями». Но если обе ветки растут от одной строки состава, каждая материальная строка соединится с каждой операционной. При пяти материалах и трёх операциях получится пятнадцать строк вместо восьми. Материалы посчитаются три раза, операции пять раз: <code>9974.28 × 3 + 4400 × 5 = 51922.84</code>. Это число выглядит правдоподобно, но оно неверно.</p>
 <p>Правильный путь один: читать <code>specification_component</code> как единый список ресурсов, а вид брать из <code>item.kind</code>. Одна строка состава даёт одну строку результата. Тогда <code>SUM</code> складывает ровно то, что нужно.</p>
 <p>Второй источник удвоения это цена. Если соединить <code>price</code> только по <code>item_id</code>, а у ресурса две цены, каждая строка состава размножится на два периода. Сумма вырастет, хотя состав не менялся. Поэтому соединение с ценой обязательно содержит условие по дате.</p>
 <p>Третий источник ошибки это неполные данные. Если у ресурса нет цены на дату заказа, соединение не найдёт строку, и <code>SUM</code> молча занизит итог. Запрос вернёт число, и его легко принять за правильное. Поэтому до расчёта выполняют проверку <code>NOT EXISTS</code>, а не после.</p>
-<p>Деньги считают в <code>DECIMAL</code>, а не в <code>FLOAT</code>. Двоичная дробь не хранит 0,1 точно, и сумма из многих строк может дать <code>7679.999999</code>. В схеме варианта цена хранится в <code>DECIMAL(14,2)</code>, количество и нормы в <code>DECIMAL(14,3)</code>. Итог округляют один раз, после суммирования, функцией <code>ROUND(..., 2)</code>.</p>
+<p>Деньги считают в <code>DECIMAL</code>, а не в <code>FLOAT</code>. Двоичная дробь не хранит 0,1 точно, и сумма из многих строк может дать <code>14374.279999</code>. В схеме варианта цена хранится в <code>DECIMAL(14,2)</code>, количество и нормы в <code>DECIMAL(14,3)</code>. Итог округляют один раз, после суммирования, функцией <code>ROUND(..., 2)</code>.</p>
 <h2 id="пошаговая-инструкция"><span class="num">04</span>Пошаговая инструкция</h2>
+<p>Перед запросами откройте общую шпаргалку.</p>
+<details class="hint">
+<summary>Шпаргалка: SELECT, JOIN и группировка</summary>
+
+
+<div class="codehilite" data-lang="sql"><pre><span></span><code><span class="k">SELECT</span><span class="w"> </span><span class="err">столбцы</span>
+<span class="k">FROM</span><span class="w"> </span><span class="err">таблица</span>
+<span class="k">JOIN</span><span class="w"> </span><span class="err">другая</span><span class="n">_таблица</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="err">другая</span><span class="n">_таблица</span><span class="p">.</span><span class="err">ключ</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="err">таблица</span><span class="p">.</span><span class="err">ключ</span>
+<span class="k">WHERE</span><span class="w"> </span><span class="err">условие</span>
+<span class="k">GROUP</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="err">столбец</span><span class="n">_группы</span>
+<span class="k">HAVING</span><span class="w"> </span><span class="err">условие</span><span class="n">_для_группы</span>
+<span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="err">столбец</span><span class="p">;</span>
+</code></pre></div>
+
+
+
+- `SELECT` перечисляет столбцы результата. Звёздочку `*` используют только для проверки, в отчёт её не ставят.
+- `FROM` задаёт первую таблицу.
+- `JOIN ... ON` соединяет строки по ключу. Без `ON` получится соединение каждой строки с каждой.
+- `WHERE` отбирает строки до группировки.
+- `GROUP BY` собирает строки в группы, например по номеру заказа.
+- `SUM` складывает значения внутри группы.
+- `ROUND(SUM(...), 2)` округляет итог один раз, после суммы.
+- `HAVING` фильтрует уже собранные группы.
+- `ORDER BY` сортирует готовый результат.
+
+</details>
+
 <h3>Шаг 1. Откройте базу в phpMyAdmin</h3>
 <p>Запустите XAMPP Control Panel и убедитесь, что MySQL работает. Откройте браузер и введите <code>http://localhost:4433/phpmyadmin</code>. Если появился экран входа, введите пользователя <code>root</code> и оставьте поле пароля пустым.</p>
 <p>В левой панели найдите базу <code>dkip2027_course</code> и нажмите на её название. Справа появится список таблиц. Вверху видна строка вкладок: <code>Структура</code>, <code>SQL</code>, <code>Поиск</code>, <code>Вставка</code>, <code>Экспорт</code>, <code>Импорт</code> и другие. Нажмите вкладку <code>SQL</code>. Откроется большое текстовое поле, а под ним кнопка <code>Выполнить</code> справа внизу.</p>
 <p>С этого момента все запросы выполняйте именно здесь: выбранная база определяет, где искать таблицы. Если случайно выбрать другую базу, MySQL сообщит, что таблица не найдена.</p>
 <figure class="diagram">
-<img src="reports/screens/mysql/cost-tables.png" alt="Список таблиц базы dkip2027_course в phpMyAdmin">
-<figcaption>База dkip2027_course открыта: видны таблицы заказа, спецификации, состава и цен. С них начинается расчёт.</figcaption>
+<img src="reports/screens/mysql/t2-tables.png" alt="Список таблиц базы dkip2027_course в phpMyAdmin">
+<figcaption>База dkip2027_course открыта: видны двенадцать таблиц заказа, спецификации, состава и цен. С них начинается расчёт.</figcaption>
 </figure>
 
 <h3>Шаг 2. Посмотрите заказ и состав</h3>
@@ -1024,10 +1096,10 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <span class="k">WHERE</span><span class="w"> </span><span class="n">doc_no</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'V01-01'</span><span class="p">;</span>
 </code></pre></div>
 
-<p>В результате должна быть одна строка с номером <code>V01-01</code> и датой <code>2027-03-15</code>. Запомните <code>id</code>: он понадобится, если вы будете фильтровать по номеру заказа в других запросах. Фильтр по <code>doc_no</code> удобнее, потому что номер понятен человеку, а <code>id</code> зависит от порядка загрузки.</p>
+<p>В результате должна быть одна строка с номером <code>V01-01</code> и датой <code>2026-04-22</code>. Запомните <code>id</code>: он понадобится, если вы будете фильтровать по номеру заказа в других запросах. Фильтр по <code>doc_no</code> удобнее, потому что номер понятен человеку, а <code>id</code> зависит от порядка загрузки.</p>
 <figure class="diagram">
 <img src="reports/screens/mysql/t3-order.png" alt="Результат запроса к customer_order: заказ V01-01 и его дата">
-<figcaption>Проверка шапки: одна строка V01-01, дата 15.03.2027, заказчик 001000001 и исполнитель M-001.</figcaption>
+<figcaption>Проверка шапки: одна строка V01-01, дата 22.04.2026, заказчик 000000004 и исполнитель M-001.</figcaption>
 </figure>
 
 <p>Теперь посмотрите строки заказа:</p>
@@ -1038,10 +1110,10 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <span class="k">WHERE</span><span class="w"> </span><span class="n">o</span><span class="p">.</span><span class="n">doc_no</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'V01-01'</span><span class="p">;</span>
 </code></pre></div>
 
-<p>Вы увидите изделие «Фартук поварской», количество <code>12</code>, продажную цену и скидку. Эти величины пригодятся для пояснения, но в сумму стоимости они не войдут. Скидка меняет цену продажи, а не затраты на материалы и операции.</p>
+<p>Вы увидите изделие «Стол кухонный «Самобранка»», количество <code>2</code>, продажную цену и скидку. Эти величины пригодятся для пояснения, но в сумму стоимости они не войдут. Скидка меняет цену продажи, а не затраты на материалы и операции.</p>
 <figure class="diagram">
 <img src="reports/screens/mysql/t3-lines.png" alt="Строки заказа V01-01: изделие, количество и продажная цена">
-<figcaption>Строка заказа: изделие, количество 12, продажная цена и скидка. Эти поля не участвуют в нормативной стоимости.</figcaption>
+<figcaption>Строка заказа: изделие, количество 2, продажная цена и скидка. Эти поля не участвуют в нормативной стоимости.</figcaption>
 </figure>
 
 <p>Теперь посмотрите состав спецификации:</p>
@@ -1057,27 +1129,44 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <span class="p">);</span>
 </code></pre></div>
 
-<p>Должно быть пять строк: три материала и две операции. Если строк меньше, спецификация загружена не полностью. Если больше, в состав попали лишние ресурсы или у изделия несколько спецификаций.</p>
+<p>Должно быть восемь строк: пять материалов и три операции. Если строк меньше, спецификация загружена не полностью. Если больше, в состав попали лишние ресурсы или у изделия несколько спецификаций.</p>
 <figure class="diagram">
 <img src="reports/screens/mysql/t3-components.png" alt="Состав спецификации V01: материалы и операции с нормами">
-<figcaption>Пять строк состава: три материала и две операции. У материалов заполнена норма, у операций видно время.</figcaption>
+<figcaption>Восемь строк состава: пять материалов и три операции. У материалов заполнена норма, у операций видно время.</figcaption>
 </figure>
 
 <h3>Шаг 3. Посчитайте одну строку вручную</h3>
-<p>Прежде чем писать большой запрос, проверьте формулу на одной строке. Возьмите бязь: количество <code>12</code>, норма <code>0.8</code>, цена <code>280.00</code>.</p>
-<div class="codehilite" data-lang="sql"><pre><span></span><code><span class="k">SELECT</span><span class="w"> </span><span class="mi">12</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">0</span><span class="p">.</span><span class="mi">8</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">280</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">byaz</span><span class="p">,</span>
-<span class="w">       </span><span class="mi">12</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">25</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">tesma</span><span class="p">,</span>
-<span class="w">       </span><span class="mi">12</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">35</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">0</span><span class="p">.</span><span class="mi">4</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">nit</span><span class="p">;</span>
+<p>Прежде чем писать большой запрос, проверьте формулу на одной строке. Возьмите столешницу: количество <code>2</code>, норма <code>1</code>, цена <code>3250.00</code>.</p>
+<div class="codehilite" data-lang="sql"><pre><span></span><code><span class="k">SELECT</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">3250</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">stoleshnitsa</span><span class="p">,</span>
+<span class="w">       </span><span class="mi">2</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">95</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">detali500</span><span class="p">,</span>
+<span class="w">       </span><span class="mi">2</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">4</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">140</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">detali600</span><span class="p">,</span>
+<span class="w">       </span><span class="mi">2</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">0</span><span class="p">.</span><span class="mi">012</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">595</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">evrovint</span><span class="p">,</span>
+<span class="w">       </span><span class="mi">2</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">4</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">245</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">opora</span><span class="p">;</span>
 </code></pre></div>
 
-<p>Результат: <code>2688.00</code>, <code>600.00</code>, <code>168.00</code>. Для операции раскроя: <code>12 * 1 * 0.12 * 600 = 864.00</code>. Для пошива: <code>12 * 1 * 0.35 * 800 = 3360.00</code>.</p>
+<p>Результат: <code>6500.00</code>, <code>380.00</code>, <code>1120.00</code>, <code>14.28</code>, <code>1960.00</code>. Для операции сборки: <code>2 * 0.75 * 1400 = 2100.00</code>. Для распила: <code>2 * 1.5 * 450 = 1350.00</code>. Для упаковки: <code>2 * 0.5 * 950 = 950.00</code>.</p>
 <figure class="diagram">
 <img src="reports/screens/mysql/cost-lines.png" alt="Проверка стоимости отдельных строк запросом">
-<figcaption>Построчный расчёт в phpMyAdmin: три материала и две операции, у каждой строки видны количество, норма, цена и вклад.</figcaption>
+<figcaption>Построчный расчёт в phpMyAdmin: пять материалов и три операции, у каждой строки видны количество, норма, цена и вклад.</figcaption>
 </figure>
 
-<p>Сложите пять чисел: <code>2688 + 600 + 168 + 864 + 3360 = 7680</code>. Это контрольный итог. Если ручная сумма не совпала с ним, проверьте нормы и цены по файлам варианта, не меняя запрос.</p>
+<p>Сложите восемь чисел: <code>6500 + 380 + 1120 + 14.28 + 1960 + 2100 + 1350 + 950 = 14374.28</code>. Это контрольный итог. Если ручная сумма не совпала с ним, проверьте нормы и цены по файлам варианта, не меняя запрос.</p>
 <h3>Шаг 4. Соберите запрос по ключам</h3>
+<details class="hint">
+<summary>Шпаргалка: JOIN</summary>
+
+
+<div class="codehilite" data-lang="sql"><pre><span></span><code><span class="k">SELECT</span><span class="w"> </span><span class="p">...</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">customer_order</span><span class="w"> </span><span class="n">o</span>
+<span class="k">JOIN</span><span class="w"> </span><span class="n">customer_order_line</span><span class="w"> </span><span class="n">l</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">l</span><span class="p">.</span><span class="n">order_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">o</span><span class="p">.</span><span class="n">id</span><span class="p">;</span>
+</code></pre></div>
+
+
+
+`JOIN` добавляет таблицу, `ON` задаёт условие соединения. Условие всегда связывает внешний ключ дочерней таблицы с первичным ключом родительской. Псевдонимы `o` и `l` сокращают запись.
+
+</details>
+
 <p>Начните с заказа и идите вниз по связям. Каждый переход должен быть по ключу, а не по названию или коду.</p>
 <div class="codehilite" data-lang="sql"><pre><span></span><code><span class="k">SELECT</span>
 <span class="w">  </span><span class="n">o</span><span class="p">.</span><span class="n">doc_no</span><span class="p">,</span>
@@ -1096,25 +1185,26 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 </code></pre></div>
 
 <p>Прочитайте соединения по одному. <code>customer_order_line.order_id</code> ссылается на заказ. <code>specification.product_id</code> ссылается на изделие из строки заказа. <code>specification_component.specification_id</code> ссылается на спецификацию. <code>price.item_id</code> ссылается на ресурс. Если убрать любое соединение, часть данных исчезнет.</p>
-<p>Этот запрос ещё не считает стоимость и не выбирает цену по дате. Он показывает, что связь между таблицами работает. Если строк получилось больше пяти, значит, какое-то соединение размножило состав. Например, у ресурса несколько цен, и соединение без условия по дате вернуло все периоды.</p>
+<p>Этот запрос ещё не считает стоимость и не выбирает цену по дате. Он показывает, что связь между таблицами работает. Если строк получилось больше восьми, значит, какое-то соединение размножило состав. Например, у ресурса несколько цен, и соединение без условия по дате вернуло все периоды.</p>
 <figure class="diagram">
 <img src="reports/screens/mysql/cost-query.png" alt="Запрос стоимости заказа во вкладке SQL">
 <figcaption>Запрос с соединениями по ключам: заказ, строки, спецификация, состав и цена.</figcaption>
 </figure>
 
 <h3>Шаг 5. Выберите цену на дату заказа</h3>
-<p>В V01 цена действует с 1 марта 2027 года, заказ оформлен 15 марта. Подходит последняя цена, которая уже начала действовать к дате заказа.</p>
-<div class="codehilite" data-lang="sql"><pre><span></span><code><span class="k">SELECT</span><span class="w"> </span><span class="n">p</span><span class="p">.</span><span class="n">item_id</span><span class="p">,</span><span class="w"> </span><span class="n">p</span><span class="p">.</span><span class="n">valid_from</span><span class="p">,</span><span class="w"> </span><span class="n">p</span><span class="p">.</span><span class="n">amount</span>
+<p>В V01 цена действует с 1 апреля 2026 года, заказ оформлен 22 апреля. Подходит последняя цена, которая уже начала действовать к дате заказа.</p>
+<div class="codehilite" data-lang="sql"><pre><span></span><code><span class="k">SELECT</span><span class="w"> </span><span class="n">p</span><span class="p">.</span><span class="n">item_id</span><span class="p">,</span><span class="w"> </span><span class="n">i</span><span class="p">.</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">p</span><span class="p">.</span><span class="n">valid_from</span><span class="p">,</span><span class="w"> </span><span class="n">p</span><span class="p">.</span><span class="n">amount</span>
 <span class="k">FROM</span><span class="w"> </span><span class="n">price</span><span class="w"> </span><span class="n">p</span>
-<span class="k">WHERE</span><span class="w"> </span><span class="n">p</span><span class="p">.</span><span class="n">item_id</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p">)</span>
-<span class="w">  </span><span class="k">AND</span><span class="w"> </span><span class="n">p</span><span class="p">.</span><span class="n">valid_from</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="s1">'2027-03-15'</span>
+<span class="k">JOIN</span><span class="w"> </span><span class="n">item</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">i</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">p</span><span class="p">.</span><span class="n">item_id</span>
+<span class="k">WHERE</span><span class="w"> </span><span class="n">p</span><span class="p">.</span><span class="n">item_id</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="mi">6</span><span class="p">,</span><span class="w"> </span><span class="mi">7</span><span class="p">,</span><span class="w"> </span><span class="mi">8</span><span class="p">,</span><span class="w"> </span><span class="mi">9</span><span class="p">)</span>
+<span class="w">  </span><span class="k">AND</span><span class="w"> </span><span class="n">p</span><span class="p">.</span><span class="n">valid_from</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="s1">'2026-04-22'</span>
 <span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">p</span><span class="p">.</span><span class="n">item_id</span><span class="p">,</span><span class="w"> </span><span class="n">p</span><span class="p">.</span><span class="n">valid_from</span><span class="p">;</span>
 </code></pre></div>
 
 <p>Номера ресурсов подставьте свои: они зависят от порядка загрузки. Посмотреть их можно запросом <code>SELECT id, name, kind FROM item ORDER BY id;</code>. В результате вы увидите по одной или нескольким ценам на ресурс. Запрос стоимости должен взять последнюю из тех, что не позже даты заказа.</p>
 <figure class="diagram">
 <img src="reports/screens/mysql/t3-prices.png" alt="Цены ресурсов, действующие на дату заказа">
-<figcaption>Выбор цены: для каждого ресурса показана дата начала действия. На дату 15.03.2027 подходит цена от 01.03.2027.</figcaption>
+<figcaption>Выбор цены: для каждого ресурса показана дата начала действия. На дату 22.04.2026 подходит цена от 01.04.2026.</figcaption>
 </figure>
 
 <p>Условие выбора выглядит так:</p>
@@ -1128,14 +1218,35 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 
 <p>Подзапрос коррелированный: для каждой строки состава он ищет свой ресурс и свою дату. Первичный ключ <code>(item_id, valid_from)</code> обслуживает этот поиск. Если написать <code>MAX(valid_from)</code> без условия <code>&lt;= o.doc_date</code>, для старого заказа подставится будущая цена, и итог изменится без всякого предупреждения.</p>
 <h3>Шаг 6. Сверните строки в итог</h3>
+<details class="hint">
+<summary>Шпаргалка: GROUP BY, SUM и ROUND</summary>
+
+
+<div class="codehilite" data-lang="sql"><pre><span></span><code><span class="k">SELECT</span><span class="w"> </span><span class="n">o</span><span class="p">.</span><span class="n">doc_no</span><span class="p">,</span>
+<span class="w">       </span><span class="n">ROUND</span><span class="p">(</span><span class="k">SUM</span><span class="p">(</span><span class="n">l</span><span class="p">.</span><span class="n">qty</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">p</span><span class="p">.</span><span class="n">amount</span><span class="p">),</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">total_cost</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">customer_order</span><span class="w"> </span><span class="n">o</span>
+<span class="k">JOIN</span><span class="w"> </span><span class="n">customer_order_line</span><span class="w"> </span><span class="n">l</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">l</span><span class="p">.</span><span class="n">order_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">o</span><span class="p">.</span><span class="n">id</span>
+<span class="k">JOIN</span><span class="w"> </span><span class="n">price</span><span class="w"> </span><span class="n">p</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">p</span><span class="p">.</span><span class="n">item_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">l</span><span class="p">.</span><span class="n">product_id</span>
+<span class="k">GROUP</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">o</span><span class="p">.</span><span class="n">doc_no</span><span class="p">;</span>
+</code></pre></div>
+
+
+
+`GROUP BY` собирает строки в одну на заказ. `SUM` складывает значения внутри группы. `AS` задаёт имя столбца результата. `ROUND` ставится вокруг `SUM`, а не внутри: иначе копейки округлятся в каждой строке.
+
+</details>
+
 <p>Добавьте вычисление вклада строки, <code>SUM</code> и <code>GROUP BY</code>. Полный запрос для V01:</p>
 <div class="codehilite" data-lang="sql"><pre><span></span><code><span class="k">SELECT</span>
 <span class="w">  </span><span class="n">o</span><span class="p">.</span><span class="n">doc_no</span><span class="p">,</span>
-<span class="w">  </span><span class="n">ROUND</span><span class="p">(</span><span class="k">SUM</span><span class="p">(</span><span class="n">l</span><span class="p">.</span><span class="n">qty</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="n">output_qty</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">c</span><span class="p">.</span><span class="n">qty</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">c</span><span class="p">.</span><span class="n">time_norm</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">p</span><span class="p">.</span><span class="n">amount</span><span class="p">),</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">total_cost</span>
+<span class="w">  </span><span class="n">ROUND</span><span class="p">(</span><span class="k">SUM</span><span class="p">(</span><span class="n">l</span><span class="p">.</span><span class="n">qty</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="n">output_qty</span>
+<span class="w">    </span><span class="o">*</span><span class="w"> </span><span class="k">CASE</span><span class="w"> </span><span class="k">WHEN</span><span class="w"> </span><span class="n">i</span><span class="p">.</span><span class="n">kind</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'operation'</span><span class="w"> </span><span class="k">THEN</span><span class="w"> </span><span class="k">c</span><span class="p">.</span><span class="n">time_norm</span><span class="w"> </span><span class="k">ELSE</span><span class="w"> </span><span class="k">c</span><span class="p">.</span><span class="n">qty</span><span class="w"> </span><span class="k">END</span>
+<span class="w">    </span><span class="o">*</span><span class="w"> </span><span class="n">p</span><span class="p">.</span><span class="n">amount</span><span class="p">),</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">total_cost</span>
 <span class="k">FROM</span><span class="w"> </span><span class="n">customer_order</span><span class="w"> </span><span class="n">o</span>
 <span class="k">JOIN</span><span class="w"> </span><span class="n">customer_order_line</span><span class="w"> </span><span class="n">l</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">l</span><span class="p">.</span><span class="n">order_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">o</span><span class="p">.</span><span class="n">id</span>
 <span class="k">JOIN</span><span class="w"> </span><span class="n">specification</span><span class="w"> </span><span class="n">s</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="n">product_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">l</span><span class="p">.</span><span class="n">product_id</span>
 <span class="k">JOIN</span><span class="w"> </span><span class="n">specification_component</span><span class="w"> </span><span class="k">c</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="k">c</span><span class="p">.</span><span class="n">specification_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="n">id</span>
+<span class="k">JOIN</span><span class="w"> </span><span class="n">item</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">i</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">c</span><span class="p">.</span><span class="n">item_id</span>
 <span class="k">JOIN</span><span class="w"> </span><span class="n">price</span><span class="w"> </span><span class="n">p</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">p</span><span class="p">.</span><span class="n">item_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">c</span><span class="p">.</span><span class="n">item_id</span>
 <span class="w">  </span><span class="k">AND</span><span class="w"> </span><span class="n">p</span><span class="p">.</span><span class="n">valid_from</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span>
 <span class="w">    </span><span class="k">SELECT</span><span class="w"> </span><span class="k">MAX</span><span class="p">(</span><span class="n">p2</span><span class="p">.</span><span class="n">valid_from</span><span class="p">)</span>
@@ -1147,11 +1258,11 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <span class="k">GROUP</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">o</span><span class="p">.</span><span class="n">doc_no</span><span class="p">;</span>
 </code></pre></div>
 
-<p>Разберём по частям. <code>l.qty</code> даёт количество изделий, <code>s.output_qty</code> приводит нормы к одному изделию, <code>c.qty</code> и <code>c.time_norm</code> задают норму, <code>p.amount</code> даёт цену. <code>SUM</code> складывает пять строк, <code>GROUP BY o.doc_no</code> собирает их в одну строку отчёта, <code>ROUND(..., 2)</code> округляет итог до копеек.</p>
-<p>Результат должен быть <code>7680.00</code>. Если появилось несколько строк, проверьте, не попали ли в выборку другие заказы: номер должен быть ровно <code>V01-01</code>. Если итог другой, сравните его с ожидаемыми значениями: <code>3456.00</code> для материалов и <code>4224.00</code> для операций.</p>
+<p>Разберём по частям. <code>l.qty</code> даёт количество изделий, <code>s.output_qty</code> приводит нормы к одному изделию, <code>CASE</code> выбирает норму материала или время операции, <code>p.amount</code> даёт цену. <code>SUM</code> складывает восемь строк, <code>GROUP BY o.doc_no</code> собирает их в одну строку отчёта, <code>ROUND(..., 2)</code> округляет итог до копеек.</p>
+<p>Результат должен быть <code>14374.28</code>. Если появилось несколько строк, проверьте, не попали ли в выборку другие заказы: номер должен быть ровно <code>V01-01</code>. Если итог другой, сравните его с ожидаемыми значениями: <code>9974.28</code> для материалов и <code>4400.00</code> для операций.</p>
 <figure class="diagram">
 <img src="reports/screens/mysql/t3-total.png" alt="Результат запроса стоимости заказа V01">
-<figcaption>Контрольный результат V01: номер заказа и нормативная стоимость 7680.00.</figcaption>
+<figcaption>Контрольный результат V01: номер заказа и нормативная стоимость 14374.28.</figcaption>
 </figure>
 
 <p>Полезно увидеть строки, из которых сложился итог. Выполните запрос без <code>GROUP BY</code>:</p>
@@ -1161,7 +1272,9 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <span class="w">  </span><span class="k">c</span><span class="p">.</span><span class="n">qty</span><span class="p">,</span>
 <span class="w">  </span><span class="k">c</span><span class="p">.</span><span class="n">time_norm</span><span class="p">,</span>
 <span class="w">  </span><span class="n">p</span><span class="p">.</span><span class="n">amount</span><span class="p">,</span>
-<span class="w">  </span><span class="n">ROUND</span><span class="p">(</span><span class="n">l</span><span class="p">.</span><span class="n">qty</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="n">output_qty</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">c</span><span class="p">.</span><span class="n">qty</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">c</span><span class="p">.</span><span class="n">time_norm</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">p</span><span class="p">.</span><span class="n">amount</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">line_cost</span>
+<span class="w">  </span><span class="n">ROUND</span><span class="p">(</span><span class="n">l</span><span class="p">.</span><span class="n">qty</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="n">output_qty</span>
+<span class="w">    </span><span class="o">*</span><span class="w"> </span><span class="k">CASE</span><span class="w"> </span><span class="k">WHEN</span><span class="w"> </span><span class="n">i</span><span class="p">.</span><span class="n">kind</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'operation'</span><span class="w"> </span><span class="k">THEN</span><span class="w"> </span><span class="k">c</span><span class="p">.</span><span class="n">time_norm</span><span class="w"> </span><span class="k">ELSE</span><span class="w"> </span><span class="k">c</span><span class="p">.</span><span class="n">qty</span><span class="w"> </span><span class="k">END</span>
+<span class="w">    </span><span class="o">*</span><span class="w"> </span><span class="n">p</span><span class="p">.</span><span class="n">amount</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">line_cost</span>
 <span class="k">FROM</span><span class="w"> </span><span class="n">customer_order</span><span class="w"> </span><span class="n">o</span>
 <span class="k">JOIN</span><span class="w"> </span><span class="n">customer_order_line</span><span class="w"> </span><span class="n">l</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">l</span><span class="p">.</span><span class="n">order_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">o</span><span class="p">.</span><span class="n">id</span>
 <span class="k">JOIN</span><span class="w"> </span><span class="n">specification</span><span class="w"> </span><span class="n">s</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="n">product_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">l</span><span class="p">.</span><span class="n">product_id</span>
@@ -1178,45 +1291,38 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">i</span><span class="p">.</span><span class="n">kind</span><span class="p">,</span><span class="w"> </span><span class="n">i</span><span class="p">.</span><span class="n">id</span><span class="p">;</span>
 </code></pre></div>
 
-<p>Пять строк этого запроса в сумме дают <code>7680.00</code>. Материалы: <code>2688.00</code>, <code>600.00</code>, <code>168.00</code>. Операции: <code>864.00</code>, <code>3360.00</code>. Такой результат удобно перенести в таблицу отчёта: видно не только итог, но и вклад каждого ресурса.</p>
+<p>Восемь строк этого запроса в сумме дают <code>14374.28</code>. Материалы: <code>6500.00</code>, <code>380.00</code>, <code>1120.00</code>, <code>14.28</code>, <code>1960.00</code>. Операции: <code>2100.00</code>, <code>1350.00</code>, <code>950.00</code>. Такой результат удобно перенести в таблицу отчёта: видно не только итог, но и вклад каждого ресурса.</p>
 <figure class="diagram">
-<img src="reports/screens/mysql/t3-detail.png" alt="Пять строк расчёта стоимости V01 с вкладом каждого ресурса">
-<figcaption>Строки расчёта: у каждого ресурса видны норма, время, цена и вклад. Сумма последнего столбца равна 7680.00.</figcaption>
+<img src="reports/screens/mysql/t3-detail.png" alt="Восемь строк расчёта стоимости V01 с вкладом каждого ресурса">
+<figcaption>Строки расчёта: у каждого ресурса видны норма, время, цена и вклад. Сумма последнего столбца равна 14374.28.</figcaption>
 </figure>
 
 <h3>Шаг 7. Проверьте число строк до и после</h3>
 <p>Главное доказательство отсутствия удвоения это два числа. Первое: сколько строк в составе. Второе: сколько строк вернуло соединение до <code>GROUP BY</code>.</p>
-<div class="codehilite" data-lang="sql"><pre><span></span><code><span class="k">SELECT</span><span class="w"> </span><span class="k">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">components</span>
-<span class="k">FROM</span><span class="w"> </span><span class="n">specification</span><span class="w"> </span><span class="n">s</span>
-<span class="k">JOIN</span><span class="w"> </span><span class="n">specification_component</span><span class="w"> </span><span class="k">c</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="k">c</span><span class="p">.</span><span class="n">specification_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="n">id</span>
-<span class="k">WHERE</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="n">product_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span>
-<span class="w">  </span><span class="k">SELECT</span><span class="w"> </span><span class="n">product_id</span>
-<span class="w">  </span><span class="k">FROM</span><span class="w"> </span><span class="n">customer_order_line</span><span class="w"> </span><span class="n">l</span>
-<span class="w">  </span><span class="k">JOIN</span><span class="w"> </span><span class="n">customer_order</span><span class="w"> </span><span class="n">o</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">o</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">l</span><span class="p">.</span><span class="n">order_id</span>
-<span class="w">  </span><span class="k">WHERE</span><span class="w"> </span><span class="n">o</span><span class="p">.</span><span class="n">doc_no</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'V01-01'</span>
-<span class="p">);</span>
+<div class="codehilite" data-lang="sql"><pre><span></span><code><span class="k">SELECT</span>
+<span class="w">  </span><span class="p">(</span><span class="k">SELECT</span><span class="w"> </span><span class="k">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span>
+<span class="w">   </span><span class="k">FROM</span><span class="w"> </span><span class="n">specification</span><span class="w"> </span><span class="n">s</span>
+<span class="w">   </span><span class="k">JOIN</span><span class="w"> </span><span class="n">specification_component</span><span class="w"> </span><span class="k">c</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="k">c</span><span class="p">.</span><span class="n">specification_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="n">id</span>
+<span class="w">   </span><span class="k">WHERE</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="n">product_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">components</span><span class="p">,</span>
+<span class="w">  </span><span class="p">(</span><span class="k">SELECT</span><span class="w"> </span><span class="k">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span>
+<span class="w">   </span><span class="k">FROM</span><span class="w"> </span><span class="n">customer_order</span><span class="w"> </span><span class="n">o</span>
+<span class="w">   </span><span class="k">JOIN</span><span class="w"> </span><span class="n">customer_order_line</span><span class="w"> </span><span class="n">l</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">l</span><span class="p">.</span><span class="n">order_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">o</span><span class="p">.</span><span class="n">id</span>
+<span class="w">   </span><span class="k">JOIN</span><span class="w"> </span><span class="n">specification</span><span class="w"> </span><span class="n">s</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="n">product_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">l</span><span class="p">.</span><span class="n">product_id</span>
+<span class="w">   </span><span class="k">JOIN</span><span class="w"> </span><span class="n">specification_component</span><span class="w"> </span><span class="k">c</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="k">c</span><span class="p">.</span><span class="n">specification_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="n">id</span>
+<span class="w">   </span><span class="k">JOIN</span><span class="w"> </span><span class="n">price</span><span class="w"> </span><span class="n">p</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">p</span><span class="p">.</span><span class="n">item_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">c</span><span class="p">.</span><span class="n">item_id</span>
+<span class="w">     </span><span class="k">AND</span><span class="w"> </span><span class="n">p</span><span class="p">.</span><span class="n">valid_from</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span>
+<span class="w">       </span><span class="k">SELECT</span><span class="w"> </span><span class="k">MAX</span><span class="p">(</span><span class="n">p2</span><span class="p">.</span><span class="n">valid_from</span><span class="p">)</span>
+<span class="w">       </span><span class="k">FROM</span><span class="w"> </span><span class="n">price</span><span class="w"> </span><span class="n">p2</span>
+<span class="w">       </span><span class="k">WHERE</span><span class="w"> </span><span class="n">p2</span><span class="p">.</span><span class="n">item_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">c</span><span class="p">.</span><span class="n">item_id</span>
+<span class="w">         </span><span class="k">AND</span><span class="w"> </span><span class="n">p2</span><span class="p">.</span><span class="n">valid_from</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">o</span><span class="p">.</span><span class="n">doc_date</span>
+<span class="w">     </span><span class="p">)</span>
+<span class="w">   </span><span class="k">WHERE</span><span class="w"> </span><span class="n">o</span><span class="p">.</span><span class="n">doc_no</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'V01-01'</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">joined_rows</span><span class="p">;</span>
 </code></pre></div>
 
-<p>Ожидается <code>5</code>. Теперь посчитайте строки полного соединения с ценой:</p>
-<div class="codehilite" data-lang="sql"><pre><span></span><code><span class="k">SELECT</span><span class="w"> </span><span class="k">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">joined_rows</span>
-<span class="k">FROM</span><span class="w"> </span><span class="n">customer_order</span><span class="w"> </span><span class="n">o</span>
-<span class="k">JOIN</span><span class="w"> </span><span class="n">customer_order_line</span><span class="w"> </span><span class="n">l</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">l</span><span class="p">.</span><span class="n">order_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">o</span><span class="p">.</span><span class="n">id</span>
-<span class="k">JOIN</span><span class="w"> </span><span class="n">specification</span><span class="w"> </span><span class="n">s</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="n">product_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">l</span><span class="p">.</span><span class="n">product_id</span>
-<span class="k">JOIN</span><span class="w"> </span><span class="n">specification_component</span><span class="w"> </span><span class="k">c</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="k">c</span><span class="p">.</span><span class="n">specification_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="n">id</span>
-<span class="k">JOIN</span><span class="w"> </span><span class="n">price</span><span class="w"> </span><span class="n">p</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">p</span><span class="p">.</span><span class="n">item_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">c</span><span class="p">.</span><span class="n">item_id</span>
-<span class="w">  </span><span class="k">AND</span><span class="w"> </span><span class="n">p</span><span class="p">.</span><span class="n">valid_from</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span>
-<span class="w">    </span><span class="k">SELECT</span><span class="w"> </span><span class="k">MAX</span><span class="p">(</span><span class="n">p2</span><span class="p">.</span><span class="n">valid_from</span><span class="p">)</span>
-<span class="w">    </span><span class="k">FROM</span><span class="w"> </span><span class="n">price</span><span class="w"> </span><span class="n">p2</span>
-<span class="w">    </span><span class="k">WHERE</span><span class="w"> </span><span class="n">p2</span><span class="p">.</span><span class="n">item_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">c</span><span class="p">.</span><span class="n">item_id</span>
-<span class="w">      </span><span class="k">AND</span><span class="w"> </span><span class="n">p2</span><span class="p">.</span><span class="n">valid_from</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">o</span><span class="p">.</span><span class="n">doc_date</span>
-<span class="w">  </span><span class="p">)</span>
-<span class="k">WHERE</span><span class="w"> </span><span class="n">o</span><span class="p">.</span><span class="n">doc_no</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'V01-01'</span><span class="p">;</span>
-</code></pre></div>
-
-<p>Тоже <code>5</code>. Числа совпали, значит, соединение не размножило строки и не потеряло ресурс. Если второе число больше, ищите лишнее соединение или несколько цен на одну дату. Если меньше, ищите ресурс без подходящей цены.</p>
+<p>Ожидается <code>8</code> и <code>8</code>. Числа совпали, значит, соединение не размножило строки и не потеряло ресурс. Если второе число больше, ищите лишнее соединение или несколько цен на одну дату. Если меньше, ищите ресурс без подходящей цены.</p>
 <figure class="diagram">
-<img src="reports/screens/mysql/t3-count.png" alt="Проверка числа строк: в составе 5 строк и после соединения тоже 5">
-<figcaption>Доказательство отсутствия удвоения: `in_spec` и `after_join` равны 5.</figcaption>
+<img src="reports/screens/mysql/t3-count.png" alt="Проверка числа строк: в составе 8 строк и после соединения тоже 8">
+<figcaption>Доказательство отсутствия удвоения: `components` и `joined_rows` равны 8.</figcaption>
 </figure>
 
 <p>Проверку повторите после каждого изменения запроса. Это быстрее, чем искать ошибку в сумме: число строк показывает проблему сразу, а сумма проявляет её только как странную цифру.</p>
@@ -1226,17 +1332,12 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <span class="k">FROM</span><span class="w"> </span><span class="n">specification</span><span class="w"> </span><span class="n">s</span>
 <span class="k">JOIN</span><span class="w"> </span><span class="n">specification_component</span><span class="w"> </span><span class="k">c</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="k">c</span><span class="p">.</span><span class="n">specification_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="n">id</span>
 <span class="k">JOIN</span><span class="w"> </span><span class="n">item</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">i</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">c</span><span class="p">.</span><span class="n">item_id</span>
-<span class="k">WHERE</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="n">product_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span>
-<span class="w">  </span><span class="k">SELECT</span><span class="w"> </span><span class="n">product_id</span>
-<span class="w">  </span><span class="k">FROM</span><span class="w"> </span><span class="n">customer_order_line</span><span class="w"> </span><span class="n">l</span>
-<span class="w">  </span><span class="k">JOIN</span><span class="w"> </span><span class="n">customer_order</span><span class="w"> </span><span class="n">o</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">o</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">l</span><span class="p">.</span><span class="n">order_id</span>
-<span class="w">  </span><span class="k">WHERE</span><span class="w"> </span><span class="n">o</span><span class="p">.</span><span class="n">doc_no</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'V01-01'</span>
-<span class="p">)</span>
+<span class="k">WHERE</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="n">product_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span>
 <span class="k">AND</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">EXISTS</span><span class="w"> </span><span class="p">(</span>
 <span class="w">  </span><span class="k">SELECT</span><span class="w"> </span><span class="mi">1</span>
 <span class="w">  </span><span class="k">FROM</span><span class="w"> </span><span class="n">price</span><span class="w"> </span><span class="n">p</span>
 <span class="w">  </span><span class="k">WHERE</span><span class="w"> </span><span class="n">p</span><span class="p">.</span><span class="n">item_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">c</span><span class="p">.</span><span class="n">item_id</span>
-<span class="w">    </span><span class="k">AND</span><span class="w"> </span><span class="n">p</span><span class="p">.</span><span class="n">valid_from</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="s1">'2027-03-15'</span>
+<span class="w">    </span><span class="k">AND</span><span class="w"> </span><span class="n">p</span><span class="p">.</span><span class="n">valid_from</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="s1">'2026-04-22'</span>
 <span class="p">);</span>
 </code></pre></div>
 
@@ -1261,6 +1362,24 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 </figure>
 
 <h3>Шаг 9. Перепишите запрос через CTE</h3>
+<details class="hint">
+<summary>Шпаргалка: WITH</summary>
+
+
+<div class="codehilite" data-lang="sql"><pre><span></span><code><span class="k">WITH</span><span class="w"> </span><span class="n">price_on_date</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span>
+<span class="w">  </span><span class="k">SELECT</span><span class="w"> </span><span class="n">item_id</span><span class="p">,</span><span class="w"> </span><span class="n">amount</span>
+<span class="w">  </span><span class="k">FROM</span><span class="w"> </span><span class="n">price</span>
+<span class="w">  </span><span class="k">WHERE</span><span class="w"> </span><span class="n">valid_from</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="s1">'2026-04-22'</span>
+<span class="p">)</span>
+<span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">price_on_date</span><span class="p">;</span>
+</code></pre></div>
+
+
+
+`WITH` задаёт временный набор строк с именем. Он помогает вынести выбор цены отдельно и делает запрос читаемым. `WITH` не заменяет проверку строк и не ускоряет запрос сам по себе.
+
+</details>
+
 <p>Если преподаватель просит читаемый вариант, вынесите выбор цены в общее табличное выражение. Смысл запроса не меняется, но он легче читается сверху вниз.</p>
 <div class="codehilite" data-lang="sql"><pre><span></span><code><span class="k">WITH</span><span class="w"> </span><span class="n">price_on_date</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span>
 <span class="w">  </span><span class="k">SELECT</span><span class="w"> </span><span class="n">p</span><span class="p">.</span><span class="n">item_id</span><span class="p">,</span><span class="w"> </span><span class="n">p</span><span class="p">.</span><span class="n">amount</span>
@@ -1269,25 +1388,28 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <span class="w">    </span><span class="k">SELECT</span><span class="w"> </span><span class="k">MAX</span><span class="p">(</span><span class="n">p2</span><span class="p">.</span><span class="n">valid_from</span><span class="p">)</span>
 <span class="w">    </span><span class="k">FROM</span><span class="w"> </span><span class="n">price</span><span class="w"> </span><span class="n">p2</span>
 <span class="w">    </span><span class="k">WHERE</span><span class="w"> </span><span class="n">p2</span><span class="p">.</span><span class="n">item_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">p</span><span class="p">.</span><span class="n">item_id</span>
-<span class="w">      </span><span class="k">AND</span><span class="w"> </span><span class="n">p2</span><span class="p">.</span><span class="n">valid_from</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="s1">'2027-03-15'</span>
+<span class="w">      </span><span class="k">AND</span><span class="w"> </span><span class="n">p2</span><span class="p">.</span><span class="n">valid_from</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="s1">'2026-04-22'</span>
 <span class="w">  </span><span class="p">)</span>
 <span class="p">)</span>
 <span class="k">SELECT</span>
 <span class="w">  </span><span class="n">o</span><span class="p">.</span><span class="n">doc_no</span><span class="p">,</span>
-<span class="w">  </span><span class="n">ROUND</span><span class="p">(</span><span class="k">SUM</span><span class="p">(</span><span class="n">l</span><span class="p">.</span><span class="n">qty</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="n">output_qty</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">c</span><span class="p">.</span><span class="n">qty</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">c</span><span class="p">.</span><span class="n">time_norm</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">pd</span><span class="p">.</span><span class="n">amount</span><span class="p">),</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">total_cost</span>
+<span class="w">  </span><span class="n">ROUND</span><span class="p">(</span><span class="k">SUM</span><span class="p">(</span><span class="n">l</span><span class="p">.</span><span class="n">qty</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="n">output_qty</span>
+<span class="w">    </span><span class="o">*</span><span class="w"> </span><span class="k">CASE</span><span class="w"> </span><span class="k">WHEN</span><span class="w"> </span><span class="n">i</span><span class="p">.</span><span class="n">kind</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'operation'</span><span class="w"> </span><span class="k">THEN</span><span class="w"> </span><span class="k">c</span><span class="p">.</span><span class="n">time_norm</span><span class="w"> </span><span class="k">ELSE</span><span class="w"> </span><span class="k">c</span><span class="p">.</span><span class="n">qty</span><span class="w"> </span><span class="k">END</span>
+<span class="w">    </span><span class="o">*</span><span class="w"> </span><span class="n">pd</span><span class="p">.</span><span class="n">amount</span><span class="p">),</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">total_cost</span>
 <span class="k">FROM</span><span class="w"> </span><span class="n">customer_order</span><span class="w"> </span><span class="n">o</span>
 <span class="k">JOIN</span><span class="w"> </span><span class="n">customer_order_line</span><span class="w"> </span><span class="n">l</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">l</span><span class="p">.</span><span class="n">order_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">o</span><span class="p">.</span><span class="n">id</span>
 <span class="k">JOIN</span><span class="w"> </span><span class="n">specification</span><span class="w"> </span><span class="n">s</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="n">product_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">l</span><span class="p">.</span><span class="n">product_id</span>
 <span class="k">JOIN</span><span class="w"> </span><span class="n">specification_component</span><span class="w"> </span><span class="k">c</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="k">c</span><span class="p">.</span><span class="n">specification_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="n">id</span>
+<span class="k">JOIN</span><span class="w"> </span><span class="n">item</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">i</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">c</span><span class="p">.</span><span class="n">item_id</span>
 <span class="k">JOIN</span><span class="w"> </span><span class="n">price_on_date</span><span class="w"> </span><span class="n">pd</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">pd</span><span class="p">.</span><span class="n">item_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">c</span><span class="p">.</span><span class="n">item_id</span>
 <span class="k">WHERE</span><span class="w"> </span><span class="n">o</span><span class="p">.</span><span class="n">doc_no</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'V01-01'</span>
 <span class="k">GROUP</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">o</span><span class="p">.</span><span class="n">doc_no</span><span class="p">;</span>
 </code></pre></div>
 
-<p>Здесь дата <code>2027-03-15</code> записана один раз, а не берётся из каждой строки заказа. Для одного заказа это удобно. Для отчёта по нескольким заказам с разными датами оставьте коррелированный подзапрос из шага 6: он учитывает дату каждой шапки.</p>
+<p>Здесь дата <code>2026-04-22</code> записана один раз, а не берётся из каждой строки заказа. Для одного заказа это удобно. Для отчёта по нескольким заказам с разными датами оставьте коррелированный подзапрос из шага 6: он учитывает дату каждой шапки.</p>
 <figure class="diagram">
-<img src="reports/screens/mysql/t3-cte.png" alt="Результат запроса через CTE: стоимость 7680.00">
-<figcaption>Вариант с `WITH`: тот же итог 7680.00, но выбор цены вынесен в начало запроса и читается отдельно.</figcaption>
+<img src="reports/screens/mysql/t3-cte.png" alt="Результат запроса через CTE: стоимость 14374.28">
+<figcaption>Вариант с `WITH`: тот же итог 14374.28, но выбор цены вынесен в начало запроса и читается отдельно.</figcaption>
 </figure>
 
 <p>CTE не ускоряет запрос сам по себе и не заменяет проверку строк. Это способ оформления. Выбирайте тот вариант, который сможете объяснить: на защите спросят, где именно выбирается цена и почему она не будущая.</p>
@@ -1304,7 +1426,7 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <tbody>
 <tr>
 <td>Единицы материалов</td>
-<td>метры</td>
+<td>штуки и тысячи штук</td>
 <td>так указано в спецификации</td>
 </tr>
 <tr>
@@ -1319,8 +1441,8 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 </tr>
 <tr>
 <td>Дата цены</td>
-<td>2027-03-01</td>
-<td>действует на дату заказа 2027-03-15</td>
+<td>2026-04-01</td>
+<td>действует на дату заказа 2026-04-22</td>
 </tr>
 <tr>
 <td>НДС и наценка</td>
@@ -1334,7 +1456,7 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 </tr>
 </tbody>
 </table>
-<p>Отдельно объясните, почему продажная сумма заказа не равна <code>7680.00</code>. Продажная цена включает скидку и коммерческую наценку, а нормативная стоимость описывает расход материалов и часов по спецификации. Это разные величины, и их совпадение не требуется.</p>
+<p>Отдельно объясните, почему продажная сумма заказа не равна <code>14374.28</code>. Продажная цена включает скидку и коммерческую наценку, а нормативная стоимость описывает расход материалов и часов по спецификации. Это разные величины, и их совпадение не требуется.</p>
 <p>Если в отчёте есть скриншот, он должен доказывать шаг: текст запроса, строки расчёта или итог. Скриншот пустого экрана phpMyAdmin ничего не доказывает.</p>
 <h2 id="команды-и-приёмы-которые-нужны-чаще-всего"><span class="num">05</span>Команды и приёмы, которые нужны чаще всего</h2>
 <table>
@@ -1411,11 +1533,14 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <p><code>EXPLAIN</code> ставят перед запросом:</p>
 <div class="codehilite" data-lang="sql"><pre><span></span><code><span class="k">EXPLAIN</span>
 <span class="k">SELECT</span><span class="w"> </span><span class="n">o</span><span class="p">.</span><span class="n">doc_no</span><span class="p">,</span>
-<span class="w">       </span><span class="n">ROUND</span><span class="p">(</span><span class="k">SUM</span><span class="p">(</span><span class="n">l</span><span class="p">.</span><span class="n">qty</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="n">output_qty</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">c</span><span class="p">.</span><span class="n">qty</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">c</span><span class="p">.</span><span class="n">time_norm</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">p</span><span class="p">.</span><span class="n">amount</span><span class="p">),</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">total_cost</span>
+<span class="w">       </span><span class="n">ROUND</span><span class="p">(</span><span class="k">SUM</span><span class="p">(</span><span class="n">l</span><span class="p">.</span><span class="n">qty</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="n">output_qty</span>
+<span class="w">         </span><span class="o">*</span><span class="w"> </span><span class="k">CASE</span><span class="w"> </span><span class="k">WHEN</span><span class="w"> </span><span class="n">i</span><span class="p">.</span><span class="n">kind</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'operation'</span><span class="w"> </span><span class="k">THEN</span><span class="w"> </span><span class="k">c</span><span class="p">.</span><span class="n">time_norm</span><span class="w"> </span><span class="k">ELSE</span><span class="w"> </span><span class="k">c</span><span class="p">.</span><span class="n">qty</span><span class="w"> </span><span class="k">END</span>
+<span class="w">         </span><span class="o">*</span><span class="w"> </span><span class="n">p</span><span class="p">.</span><span class="n">amount</span><span class="p">),</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">total_cost</span>
 <span class="k">FROM</span><span class="w"> </span><span class="n">customer_order</span><span class="w"> </span><span class="n">o</span>
 <span class="k">JOIN</span><span class="w"> </span><span class="n">customer_order_line</span><span class="w"> </span><span class="n">l</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">l</span><span class="p">.</span><span class="n">order_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">o</span><span class="p">.</span><span class="n">id</span>
 <span class="k">JOIN</span><span class="w"> </span><span class="n">specification</span><span class="w"> </span><span class="n">s</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="n">product_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">l</span><span class="p">.</span><span class="n">product_id</span>
 <span class="k">JOIN</span><span class="w"> </span><span class="n">specification_component</span><span class="w"> </span><span class="k">c</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="k">c</span><span class="p">.</span><span class="n">specification_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="n">id</span>
+<span class="k">JOIN</span><span class="w"> </span><span class="n">item</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">i</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">c</span><span class="p">.</span><span class="n">item_id</span>
 <span class="k">JOIN</span><span class="w"> </span><span class="n">price</span><span class="w"> </span><span class="n">p</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">p</span><span class="p">.</span><span class="n">item_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">c</span><span class="p">.</span><span class="n">item_id</span>
 <span class="w">  </span><span class="k">AND</span><span class="w"> </span><span class="n">p</span><span class="p">.</span><span class="n">valid_from</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span>
 <span class="w">    </span><span class="k">SELECT</span><span class="w"> </span><span class="k">MAX</span><span class="p">(</span><span class="n">p2</span><span class="p">.</span><span class="n">valid_from</span><span class="p">)</span>
@@ -1438,7 +1563,7 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <p><strong>Неверная группа.</strong> <code>GROUP BY</code> по изделию вместо заказа даёт несколько строк там, где ожидается одна. Исправление: группировать по номеру заказа, а не по названию изделия.</p>
 <p><strong>Забытый <code>output_qty</code>.</strong> Нормы, заданные на партию, применяются как нормы на единицу. Исправление: делить на <code>s.output_qty</code>, даже если сейчас оно равно единице.</p>
 <p><strong>Отсутствующая цена или спецификация.</strong> Соединение теряет строку, и <code>SUM</code> занижает итог без ошибки. Исправление: проверки <code>NOT EXISTS</code> до расчёта.</p>
-<p><strong>Проверка только по итогу.</strong> Видно только <code>7680.00</code>, а число строк остаётся непроверенным. Исправление: сравнивать <code>COUNT(*)</code> состава и соединения, показывать обе цифры в отчёте.</p>
+<p><strong>Проверка только по итогу.</strong> Видно только <code>14374.28</code>, а число строк остаётся непроверенным. Исправление: сравнивать <code>COUNT(*)</code> состава и соединения, показывать обе цифры в отчёте.</p>
 <p><strong>Фильтр по <code>id</code>, который угадали.</strong> Номер заказа в базе может отличаться от ожидаемого. Исправление: фильтровать по <code>doc_no = 'V01-01'</code> или сначала посмотреть <code>id</code> запросом.</p>
 <h2 id="чек-лист-перед-сдачей"><span class="num">07</span>Чек-лист перед сдачей</h2>
 <ul>
@@ -1447,9 +1572,9 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <li>Соединения идут по ключам, а не по названиям.</li>
 <li>Материалы и операции читаются из одного списка состава.</li>
 <li>Цена выбирается на дату заказа, а не самая новая.</li>
-<li><code>SUM</code> складывает пять строк, <code>ROUND</code> округляет итог один раз.</li>
-<li>Итог равен <code>7680.00</code>, материалы <code>3456.00</code>, операции <code>4224.00</code>.</li>
-<li>Число строк состава и соединения совпадает: <code>5</code> и <code>5</code>.</li>
+<li><code>SUM</code> складывает восемь строк, <code>ROUND</code> округляет итог один раз.</li>
+<li>Итог равен <code>14374.28</code>, материалы <code>9974.28</code>, операции <code>4400.00</code>.</li>
+<li>Число строк состава и соединения совпадает: <code>8</code> и <code>8</code>.</li>
 <li>Проверки <code>NOT EXISTS</code> возвращают ноль строк.</li>
 <li>В отчёте есть текст запроса, таблица строк и пояснение допущений.</li>
 <li>Скриншоты показывают запрос, строки расчёта и результат.</li>
@@ -1512,6 +1637,40 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
       var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
       window.scrollTo({top: 0, behavior: reduce ? 'auto' : 'smooth'});
     });
+  });
+})();
+
+(function(){
+  document.querySelectorAll('[data-slider]').forEach(function(slider){
+    var track = slider.querySelector('[data-slider-track]');
+    var slides = track ? Array.prototype.slice.call(track.children) : [];
+    var counter = slider.querySelector('[data-slider-counter]');
+    var prev = slider.querySelector('[data-slider-prev]');
+    var next = slider.querySelector('[data-slider-next]');
+    if(!track || slides.length < 2) return;
+    function current(){
+      var best = 0, dist = Infinity;
+      slides.forEach(function(slide, i){
+        var d = Math.abs(slide.offsetLeft - track.scrollLeft);
+        if(d < dist){ dist = d; best = i; }
+      });
+      return best;
+    }
+    function update(){
+      if(counter) counter.textContent = (current() + 1) + ' / ' + slides.length;
+    }
+    function go(delta){
+      var i = Math.max(0, Math.min(slides.length - 1, current() + delta));
+      var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      track.scrollTo({left: slides[i].offsetLeft, behavior: reduce ? 'auto' : 'smooth'});
+    }
+    if(prev) prev.addEventListener('click', function(){ go(-1); });
+    if(next) next.addEventListener('click', function(){ go(1); });
+    track.addEventListener('scroll', function(){
+      clearTimeout(track._sliderTimer);
+      track._sliderTimer = setTimeout(update, 80);
+    }, {passive: true});
+    update();
   });
 })();
 (function(){

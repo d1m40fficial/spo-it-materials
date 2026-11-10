@@ -571,6 +571,24 @@ html.modal-open { overflow: hidden; }
 .variant-body .task-list li { margin: 0 0 8px; }
 @media (max-width: 620px) { .variant-body { overflow-x: auto; } .variant-body table { min-width: 520px; } }
 
+/* ---------- schema slider: all CREATE TABLE examples ---------- */
+.schema-slider { margin: 18px 0 24px; border: 1px solid #d8d5cc; border-radius: 14px; background: #fff; color: #1a1916; overflow: hidden; }
+.schema-slider-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 14px; background: #f5f2ea; border-bottom: 1px solid #d8d5cc; }
+.schema-slider-bar strong { font: 700 14px/1.2 var(--font-display); color: #1a1916; }
+.schema-slider-actions { display: flex; align-items: center; gap: 8px; }
+.schema-slider-counter { min-width: 62px; text-align: center; font: 600 13px/1 var(--font-mono); color: #59544a; }
+.schema-btn { width: 34px; height: 34px; border: 1px solid #c9c4b8; border-radius: 8px; background: #fff; color: #1a1916; font: 700 18px/1 var(--font-mono); cursor: pointer; }
+.schema-btn:hover { background: #ece7dc; }
+.schema-track { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: thin; }
+.schema-slide { flex: 0 0 100%; min-width: 100%; box-sizing: border-box; padding: 16px 18px 18px; scroll-snap-align: start; }
+.schema-slide h4 { margin: 0 0 10px; font: 700 16px/1.3 var(--font-display); color: #1a1916; }
+.schema-slide h4 code, .schema-slide p code { color: #1a1916; background: #f1ede4; padding: 1px 4px; border-radius: 4px; }
+.schema-slide p { margin: 0 0 10px; font-size: 14px; line-height: 1.55; color: #3a372f; }
+.schema-slide pre { margin: 0; padding: 14px 16px; overflow-x: auto; border: 1px solid #ddd8cc; border-radius: 10px; background: #fbfaf6; color: #1a1916; font: 12.5px/1.5 var(--font-mono); }
+.schema-slide code { color: inherit; background: none; padding: 0; }
+.schema-slider:focus-within { outline: 2px solid #b9a97f; outline-offset: 2px; }
+@media (max-width: 620px) { .schema-slide { padding: 12px; } .schema-slider-bar { padding: 8px 10px; } }
+
 /* ---------- print / PDF export ---------- */
 @page { margin: 16mm; }
 @media print {
@@ -870,30 +888,30 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <table class="variants-index">
 <thead><tr><th>Вариант</th><th>Отрасль</th><th>Предприятие</th><th>Продукция</th><th>Количество</th></tr></thead>
 <tbody>
-<tr><td><a href="#v01">V01</a></td><td>Швейное производство</td><td>Ателье «Стежок»</td><td>Фартук поварской</td><td>12</td></tr><tr><td><a href="#v02">V02</a></td><td>Пекарня</td><td>Пекарня «Колос»</td><td>Хлеб ржаной 500 г</td><td>40</td></tr><tr><td><a href="#v03">V03</a></td><td>Керамическая мастерская</td><td>Мастерская «Глина»</td><td>Кружка 300 мл</td><td>18</td></tr><tr><td><a href="#v04">V04</a></td><td>Полиграфия</td><td>Типография «Лист»</td><td>Блокнот А5 48 листов</td><td>100</td></tr><tr><td><a href="#v05">V05</a></td><td>Кожгалантерея</td><td>Мастерская «Кожа»</td><td>Кардхолдер</td><td>25</td></tr><tr><td><a href="#v06">V06</a></td><td>Свечное производство</td><td>Студия «Огонёк»</td><td>Свеча в банке 180 г</td><td>30</td></tr><tr><td><a href="#v07">V07</a></td><td>Мыловарение</td><td>Мастерская «Пена»</td><td>Мыло лавандовое 100 г</td><td>12</td></tr><tr><td><a href="#v08">V08</a></td><td>Обувная мастерская</td><td>Мастерская «Шаг»</td><td>Домашние тапочки, пара</td><td>40</td></tr><tr><td><a href="#v09">V09</a></td><td>Кондитерская</td><td>Кондитерская «Какао»</td><td>Набор трюфелей 12 шт</td><td>18</td></tr><tr><td><a href="#v10">V10</a></td><td>Производство деревянных игрушек</td><td>Мастерская «Кубик»</td><td>Набор кубиков 9 шт</td><td>100</td></tr><tr><td><a href="#v11">V11</a></td><td>Электронная сборка</td><td>Лаборатория «Импульс»</td><td>Датчик температуры</td><td>25</td></tr><tr><td><a href="#v12">V12</a></td><td>Металлообработка</td><td>Цех «Металл»</td><td>Кронштейн настенный</td><td>30</td></tr><tr><td><a href="#v13">V13</a></td><td>Производство упаковки</td><td>Цех «Короб»</td><td>Подарочная коробка</td><td>12</td></tr><tr><td><a href="#v14">V14</a></td><td>Рекламное производство</td><td>Студия «Вывеска»</td><td>Настольная табличка</td><td>40</td></tr><tr><td><a href="#v15">V15</a></td><td>Флористическая мастерская</td><td>Студия «Бутон»</td><td>Композиция из сухоцветов</td><td>18</td></tr><tr><td><a href="#v16">V16</a></td><td>Ювелирная мастерская</td><td>Мастерская «Серебро»</td><td>Подвеска серебряная</td><td>100</td></tr><tr><td><a href="#v17">V17</a></td><td>Стекольная мастерская</td><td>Студия «Витраж»</td><td>Витражная подвеска</td><td>25</td></tr><tr><td><a href="#v18">V18</a></td><td>Текстиль для дома</td><td>Студия «Уют»</td><td>Декоративная подушка</td><td>30</td></tr><tr><td><a href="#v19">V19</a></td><td>Спортивный инвентарь</td><td>Цех «Тонус»</td><td>Эспандер с ручками</td><td>12</td></tr><tr><td><a href="#v20">V20</a></td><td>Производство сумок</td><td>Мастерская «Путь»</td><td>Сумка шоппер</td><td>40</td></tr><tr><td><a href="#v21">V21</a></td><td>Производство зоотоваров</td><td>Цех «Лапа»</td><td>Лежанка для кошки</td><td>18</td></tr><tr><td><a href="#v22">V22</a></td><td>Декоративный бетон</td><td>Мастерская «Форма»</td><td>Бетонное кашпо</td><td>100</td></tr><tr><td><a href="#v23">V23</a></td><td>Производство настольных игр</td><td>Студия «Ход»</td><td>Игра «Маршрут»</td><td>25</td></tr><tr><td><a href="#v24">V24</a></td><td>Багетная мастерская</td><td>Мастерская «Рамка»</td><td>Рамка 30×40 см</td><td>30</td></tr><tr><td><a href="#v25">V25</a></td><td>Сборка светильников</td><td>Цех «Луч»</td><td>Настольный светильник</td><td>12</td></tr><tr><td><a href="#v26">V26</a></td><td>Производство сувениров</td><td>Мастерская «Память»</td><td>Сувенирный магнит</td><td>40</td></tr><tr><td><a href="#v27">V27</a></td><td>Мастерская музыкальных инструментов</td><td>Мастерская «Звук»</td><td>Калимба 8 язычков</td><td>18</td></tr><tr><td><a href="#v28">V28</a></td><td>Производство папок</td><td>Цех «Архив»</td><td>Папка для документов</td><td>100</td></tr><tr><td><a href="#v29">V29</a></td><td>3D-печать</td><td>Студия «Слой»</td><td>Корпус для датчика</td><td>25</td></tr><tr><td><a href="#v30">V30</a></td><td>Производство чайных наборов</td><td>Мастерская «Листок»</td><td>Подарочный набор чая</td><td>30</td></tr>
+<tr><td><a href="#v01">V01</a></td><td>Мебельное производство</td><td>ООО ТД «Вершина»</td><td>Стол кухонный «Самобранка»</td><td>2</td></tr><tr><td><a href="#v02">V02</a></td><td>Пекарня</td><td>Пекарня «Колос»</td><td>Хлеб ржаной 500 г</td><td>40</td></tr><tr><td><a href="#v03">V03</a></td><td>Керамическая мастерская</td><td>Мастерская «Глина»</td><td>Кружка 300 мл</td><td>18</td></tr><tr><td><a href="#v04">V04</a></td><td>Полиграфия</td><td>Типография «Лист»</td><td>Блокнот А5 48 листов</td><td>100</td></tr><tr><td><a href="#v05">V05</a></td><td>Кожгалантерея</td><td>Мастерская «Кожа»</td><td>Кардхолдер</td><td>25</td></tr><tr><td><a href="#v06">V06</a></td><td>Свечное производство</td><td>Студия «Огонёк»</td><td>Свеча в банке 180 г</td><td>30</td></tr><tr><td><a href="#v07">V07</a></td><td>Мыловарение</td><td>Мастерская «Пена»</td><td>Мыло лавандовое 100 г</td><td>12</td></tr><tr><td><a href="#v08">V08</a></td><td>Обувная мастерская</td><td>Мастерская «Шаг»</td><td>Домашние тапочки, пара</td><td>40</td></tr><tr><td><a href="#v09">V09</a></td><td>Кондитерская</td><td>Кондитерская «Какао»</td><td>Набор трюфелей 12 шт</td><td>18</td></tr><tr><td><a href="#v10">V10</a></td><td>Производство деревянных игрушек</td><td>Мастерская «Кубик»</td><td>Набор кубиков 9 шт</td><td>100</td></tr><tr><td><a href="#v11">V11</a></td><td>Электронная сборка</td><td>Лаборатория «Импульс»</td><td>Датчик температуры</td><td>25</td></tr><tr><td><a href="#v12">V12</a></td><td>Металлообработка</td><td>Цех «Металл»</td><td>Кронштейн настенный</td><td>30</td></tr><tr><td><a href="#v13">V13</a></td><td>Производство упаковки</td><td>Цех «Короб»</td><td>Подарочная коробка</td><td>12</td></tr><tr><td><a href="#v14">V14</a></td><td>Рекламное производство</td><td>Студия «Вывеска»</td><td>Настольная табличка</td><td>40</td></tr><tr><td><a href="#v15">V15</a></td><td>Флористическая мастерская</td><td>Студия «Бутон»</td><td>Композиция из сухоцветов</td><td>18</td></tr><tr><td><a href="#v16">V16</a></td><td>Ювелирная мастерская</td><td>Мастерская «Серебро»</td><td>Подвеска серебряная</td><td>100</td></tr><tr><td><a href="#v17">V17</a></td><td>Стекольная мастерская</td><td>Студия «Витраж»</td><td>Витражная подвеска</td><td>25</td></tr><tr><td><a href="#v18">V18</a></td><td>Текстиль для дома</td><td>Студия «Уют»</td><td>Декоративная подушка</td><td>30</td></tr><tr><td><a href="#v19">V19</a></td><td>Спортивный инвентарь</td><td>Цех «Тонус»</td><td>Эспандер с ручками</td><td>12</td></tr><tr><td><a href="#v20">V20</a></td><td>Производство сумок</td><td>Мастерская «Путь»</td><td>Сумка шоппер</td><td>40</td></tr><tr><td><a href="#v21">V21</a></td><td>Производство зоотоваров</td><td>Цех «Лапа»</td><td>Лежанка для кошки</td><td>18</td></tr><tr><td><a href="#v22">V22</a></td><td>Декоративный бетон</td><td>Мастерская «Форма»</td><td>Бетонное кашпо</td><td>100</td></tr><tr><td><a href="#v23">V23</a></td><td>Производство настольных игр</td><td>Студия «Ход»</td><td>Игра «Маршрут»</td><td>25</td></tr><tr><td><a href="#v24">V24</a></td><td>Багетная мастерская</td><td>Мастерская «Рамка»</td><td>Рамка 30×40 см</td><td>30</td></tr><tr><td><a href="#v25">V25</a></td><td>Сборка светильников</td><td>Цех «Луч»</td><td>Настольный светильник</td><td>12</td></tr><tr><td><a href="#v26">V26</a></td><td>Производство сувениров</td><td>Мастерская «Память»</td><td>Сувенирный магнит</td><td>40</td></tr><tr><td><a href="#v27">V27</a></td><td>Мастерская музыкальных инструментов</td><td>Мастерская «Звук»</td><td>Калимба 8 язычков</td><td>18</td></tr><tr><td><a href="#v28">V28</a></td><td>Производство папок</td><td>Цех «Архив»</td><td>Папка для документов</td><td>100</td></tr><tr><td><a href="#v29">V29</a></td><td>3D-печать</td><td>Студия «Слой»</td><td>Корпус для датчика</td><td>25</td></tr><tr><td><a href="#v30">V30</a></td><td>Производство чайных наборов</td><td>Мастерская «Листок»</td><td>Подарочный набор чая</td><td>30</td></tr>
 </tbody>
 </table>
 
 <h2 id="карточки-вариантов"><span class="num">03</span>Карточки вариантов</h2>
 <p>Откройте нужную карточку. Внутри есть документы, ресурсы, заказчики, заметки, шесть заданий и ссылки на файлы.</p>
 <details class="variant" id="v01">
-<summary><span class="variant-no">V01</span> Швейное производство · Ателье «Стежок» · Фартук поварской</summary>
+<summary><span class="variant-no">V01</span> Мебельное производство · ООО ТД «Вершина» · Стол кухонный «Самобранка»</summary>
 <div class="variant-body">
-<p>Ателье «Стежок» выпускает продукцию «Фартук поварской» по спецификациям. Магазин «Стежок-1» заказал 12 ед. к 22.03.2027. Менеджер оформляет заказ, технолог задаёт состав, мастер планирует выпуск. Требуется связать документы в одной информационной системе и рассчитать нормативную стоимость заказа.</p>
-<p><b>Производственный процесс:</b> Раскрой ткани → обработка края → пошив и упаковка.</p>
-<p><b>Правила учёта:</b> Ткань учитывается в метрах, тесьма отдельно; остатки раскроя уже включены в норму. Нормы заданы на одну единицу готовой продукции. Материалы: количество выпуска × норма × цена. Операции: количество выпуска × часы × тариф за час. Цены действуют с 01.03.2027, НДС, наценка, доставка и дополнительные накладные расходы не учитываются. Промежуточные суммы не округлять, итог округлить до копеек.</p>
+<p>ООО ТД «Вершина» выпускает кухонную мебель. ИП Томилин заказал 2 стола «Самобранка» к 29.04.2026. Менеджер оформляет заказ, технолог задаёт состав, мастер планирует выпуск. Требуется связать документы в одной информационной системе и рассчитать нормативную стоимость заказа.</p>
+<p><b>Производственный процесс:</b> Раскрой ДСП → сборка модулей → упаковка.</p>
+<p><b>Правила учёта:</b> Нормы даны на один стол. Материалы: количество выпуска × норма × цена. Операции: количество выпуска × часы × тариф за час. Цены действуют с 01.04.2026, НДС, наценка и доставка не учитываются. Промежуточные суммы не округлять, итог округлить до копеек.</p>
 <h4>Ресурсы и цены</h4>
-<table><thead><tr><th>Ресурс</th><th>Вид</th><th>Ед.</th><th>Норма</th><th>Часы на единицу</th><th>Цена</th></tr></thead><tbody><tr><td>Бязь</td><td>material</td><td>м</td><td>0,8</td><td>не задано</td><td>280</td></tr><tr><td>Тесьма</td><td>material</td><td>м</td><td>2</td><td>не задано</td><td>25</td></tr><tr><td>Нить</td><td>material</td><td>м</td><td>35</td><td>не задано</td><td>0,4</td></tr><tr><td>Раскрой</td><td>operation</td><td>ч</td><td>1</td><td>0,12</td><td>600</td></tr><tr><td>Пошив</td><td>operation</td><td>ч</td><td>1</td><td>0,35</td><td>800</td></tr></tbody></table>
+<table><thead><tr><th>Ресурс</th><th>Вид</th><th>Ед.</th><th>Норма</th><th>Часы на единицу</th><th>Цена</th></tr></thead><tbody><tr><td>Столешница круглая</td><td>material</td><td>шт</td><td>1</td><td>не задано</td><td>3250</td></tr><tr><td>Мебельная деталь 500х800</td><td>material</td><td>шт</td><td>2</td><td>не задано</td><td>95</td></tr><tr><td>Мебельная деталь 600х800</td><td>material</td><td>шт</td><td>4</td><td>не задано</td><td>140</td></tr><tr><td>Евровинт 6,5х5</td><td>material</td><td>тыс. шт</td><td>0,012</td><td>не задано</td><td>595</td></tr><tr><td>Опора</td><td>material</td><td>шт</td><td>4</td><td>не задано</td><td>245</td></tr><tr><td>Сборка модулей</td><td>operation</td><td>ч</td><td>1</td><td>0,75</td><td>1400</td></tr><tr><td>Распил ДСП, МДФ и листового материала</td><td>operation</td><td>ч</td><td>1</td><td>1,5</td><td>450</td></tr><tr><td>Упаковка</td><td>operation</td><td>ч</td><td>1</td><td>0,5</td><td>950</td></tr></tbody></table>
 <h4>Заказчики</h4>
-<table><thead><tr><th>Код</th><th>Наименование</th><th>ИНН</th><th>Адрес</th><th>Телефон</th><th>Тип</th></tr></thead><tbody><tr><td>001000001</td><td>Магазин «Стежок-1»</td><td>нет</td><td>Учебный город, улица Производственная, 1, офис 1</td><td>+79990010001</td><td>Покупатель</td></tr><tr><td>001000002</td><td>Торговый дом «Стежок-2»</td><td>нет</td><td>Учебный город, улица Производственная, 1, офис 2</td><td>+79990010002</td><td>Покупатель</td></tr><tr><td>001000003</td><td>Студия «Стежок-3»</td><td>нет</td><td>Учебный город, улица Производственная, 1, офис 3</td><td>+79990010003</td><td>Покупатель</td></tr><tr><td>001000004</td><td>Магазин подарков «Стежок-4»</td><td>нет</td><td>Учебный город, улица Производственная, 1, офис 4</td><td>+79990010004</td><td>Покупатель</td></tr><tr><td>001000005</td><td>Мастерская «Стежок-5»</td><td>нет</td><td>Учебный город, улица Производственная, 1, офис 5</td><td>+79990010005</td><td>Покупатель</td></tr><tr><td>001000006</td><td>Оптовый склад «Стежок-6»</td><td>нет</td><td>Учебный город, улица Производственная, 1, офис 6</td><td>+79990010006</td><td>Покупатель</td></tr></tbody></table>
+<table><thead><tr><th>Код</th><th>Наименование</th><th>ИНН</th><th>Адрес</th><th>Телефон</th><th>Тип</th></tr></thead><tbody><tr><td>000000001</td><td>ООО &quot;Поставка&quot;</td><td>нет</td><td>г. Пятигорск</td><td>+79198634592</td><td>Поставщик</td></tr><tr><td>000000002</td><td>ООО &quot;Кинотеатр Квант&quot;</td><td>26320045123</td><td>г. Железноводск, ул. Мира, 123</td><td>+79884581555</td><td>Покупатель</td></tr><tr><td>000000008</td><td>ООО &quot;Новый JDTO&quot;</td><td>26320045111</td><td>г. Железноводск</td><td>+79884581555</td><td>Покупатель</td></tr><tr><td>000000003</td><td>ООО &quot;Ромашка&quot;</td><td>4140784214</td><td>г. Омск, ул. Строителей, 294</td><td>+79882584546</td><td>Поставщик</td></tr><tr><td>000000009</td><td>ООО &quot;Ипподром&quot;</td><td>5874045632</td><td>г. Уфа, ул. Набережная, 37</td><td>+79627486389</td><td>Поставщик</td></tr><tr><td>000000010</td><td>ООО &quot;Ассоль&quot;</td><td>2629011278</td><td>г. Калуга, ул. Пушкина, 94</td><td>+79184572398</td><td>Покупатель</td></tr></tbody></table>
 <h4>Заметки сотрудников</h4>
-<table><thead><tr><th>Заголовок</th><th>Логин</th><th>Содержание</th><th>Дата</th></tr></thead><tbody><tr><td>Заказ принят</td><td>manager</td><td>Заказ V01-01: Фартук поварской, 12 ед.; срок 22.03.2027.</td><td>2027-03-16</td></tr><tr><td>Спецификация согласована</td><td>technologist</td><td>Ткань учитывается в метрах, тесьма отдельно; остатки раскроя уже включены в норму.</td><td>2027-03-16</td></tr><tr><td>Материалы проверены</td><td>master</td><td>Подготовить: Бязь, Тесьма, Нить.</td><td>2027-03-16</td></tr><tr><td>Порядок производства</td><td>master</td><td>Раскрой ткани → обработка края → пошив и упаковка.</td><td>2027-03-16</td></tr><tr><td>Расчёт заказа</td><td>manager</td><td>Использовать цены от 01.03.2027. Итог округлить до копеек.</td><td>2027-03-16</td></tr></tbody></table>
+<table><thead><tr><th>Заголовок</th><th>Логин</th><th>Содержание</th><th>Дата</th></tr></thead><tbody><tr><td>Заказ принят</td><td>manager</td><td>Заказ V01-01: Стол кухонный «Самобранка», 2 ед.; срок 29.04.2026.</td><td>2026-04-22</td></tr><tr><td>Спецификация согласована</td><td>technologist</td><td>Нормы даны на один стол; материалы считаются в штуках и тысячах штук.</td><td>2026-04-22</td></tr><tr><td>Материалы проверены</td><td>master</td><td>Подготовить: столешницу, детали 500х800 и 600х800, евровинты, опоры.</td><td>2026-04-22</td></tr><tr><td>Порядок производства</td><td>master</td><td>Раскрой ДСП, сборка модулей, упаковка.</td><td>2026-04-22</td></tr><tr><td>Расчёт заказа</td><td>manager</td><td>Использовать цены от 01.04.2026. Итог округлить до копеек.</td><td>2026-04-22</td></tr></tbody></table>
 <h4>Шесть заданий</h4>
-<ol class="task-list"><li>По документам Ателье «Стежок» спроектируйте ER-диаграмму в 3НФ. Отразите заказчиков, продукцию «Фартук поварской», спецификации с материалами и операциями, цены и производственный заказ. Для каждого документа определите реквизиты и повторяющиеся строки. Укажите PK, FK, кратности; сохраните PDF.</li><li>Создайте базу для Ателье «Стежок» в выбранной СУБД по вашей схеме. Импортируйте все 6 записей Заказчики.json, сохранив ведущие нули кодов. Загрузите заказ V01-01, спецификацию и цены из Excel. Проверьте внешние ключи, сделайте выгрузку и восстановите её в пустую базу.</li><li>Создайте SQL-запрос нормативной стоимости заказа V01-01 предприятия Ателье «Стежок»: 12 ед. продукции «Фартук поварской». Ткань учитывается в метрах, тесьма отдельно; остатки раскроя уже включены в норму. Нормы заданы на одну единицу готовой продукции. Материалы: количество выпуска × норма × цена. Операции: количество выпуска × часы × тариф за час. Цены действуют с 01.03.2027, НДС, наценка, доставка и дополнительные накладные расходы не учитываются. Промежуточные суммы не округлять, итог округлить до копеек. Покажите материалы и операции отдельными строками и общую сумму.</li><li>Создайте приложение Ателье «Стежок»: Windows Forms + MySQL либо WPF + PostgreSQL. Реализуйте вход по логину, паролю и пазлу, роли Администратор и Пользователь; третья подряд ошибка пароля или пазла блокирует запись. Администратор добавляет и изменяет пользователей, снимает блокировку. Проверьте пустые поля, дубли логинов и обработку ошибок. Используйте изображения и требования приложения к заданию 4.</li><li>Реализуйте API заметок сотрудников Ателье «Стежок». Создайте users и notes со связью автора, внесите 5 записей из Заметки.json, сопоставив логины существующим пользователям. GET /notes или /api/notes возвращает id, title_user («title - login»), content без изменений, formatted_date (ДД.ММ.ГГГГ). Проверьте 200, пустой массив, 400 для неверного запроса и 500 при сбое БД. Сохраните коллекцию с исполняемыми проверками HTTP-кодов и JSON.</li><li>Документируйте API заметок Ателье «Стежок» в исходном шаблоне DOCX из приложения к заданию 6. Через Swagger UI выполните реальный запрос и перенесите его ответ в документ. В OpenAPI проверьте пути, параметры, поля и типы ответа. Укажите URL, реализованные методы, форматы, примеры 200, пустого результата, 400 и 500. Сохраните DOCX, OpenAPI JSON и тестовую коллекцию.</li></ol>
+<ol class="task-list"><li>По документам ООО ТД «Вершина» спроектируйте ER-диаграмму в 3НФ. Отразите заказчиков, продукцию «Стол кухонный «Самобранка»», спецификации с материалами и операциями, цены и производственный заказ. Для каждого документа определите реквизиты и повторяющиеся строки. Укажите PK, FK, кратности; сохраните PDF.</li><li>Создайте базу для ООО ТД «Вершина» в MySQL. Импортируйте все 6 записей Заказчики.json, сохранив ведущие нули кодов. Добавьте ИП Томилина из заказа и изготовителя ООО ТД «Вершина». Загрузите заказ V01-01, спецификацию, цены и производственный заказ из Excel через SQL. Проверьте внешние ключи, сделайте выгрузку и восстановите её в пустую базу.</li><li>Создайте SQL-запрос нормативной стоимости заказа V01-01 предприятия ООО ТД «Вершина»: 2 ед. продукции «Стол кухонный «Самобранка»». Материалы: количество выпуска × норма × цена. Операции: количество выпуска × часы × тариф за час. Цены действуют с 01.04.2026, НДС и наценка не учитываются. Промежуточные суммы не округлять, итог округлить до копеек. Покажите материалы и операции отдельными строками и общую сумму.</li><li>Создайте приложение ООО ТД «Вершина»: Windows Forms + MySQL либо WPF + PostgreSQL. Реализуйте вход по логину, паролю и пазлу, роли Администратор и Пользователь; третья подряд ошибка пароля или пазла блокирует запись. Администратор добавляет и изменяет пользователей, снимает блокировку.</li><li>Реализуйте API заметок сотрудников ООО ТД «Вершина». Создайте users и notes со связью автора, внесите 5 записей из Заметки.json, сопоставив логины существующим пользователям. GET /notes или /api/notes возвращает id, title_user, content, formatted_date. Проверьте 200, пустой массив, 400 и 500.</li><li>Оформите документацию API по шаблону DOCX, добавьте файл openapi.json и примеры ответов.</li></ol>
 <h4>Исходные данные</h4>
 <p><a href="reports/variants/V01/V01_исходные_данные.zip">Скачать архив варианта · ZIP</a></p>
 <h4>Файлы варианта</h4>
-<p class="files"><a href="reports/variants/V01/Заказ покупателя.xlsx">Заказ покупателя.xlsx</a><a href="reports/variants/V01/Заказ на производство.xlsx">Заказ на производство.xlsx</a><a href="reports/variants/V01/Спецификация.xlsx">Спецификация.xlsx</a><a href="reports/variants/V01/Цены.xlsx">Цены.xlsx</a><a href="reports/variants/V01/Расчет стоимости.xlsx">Расчет стоимости.xlsx</a><a href="reports/variants/V01/Заказчики.json">Заказчики.json</a><a href="reports/variants/V01/Заметки.json">Заметки.json</a><a href="reports/variants/V01/Задание.md">Задание.md</a><a href="reports/variants/V01/V01_исходные_данные.zip">V01_исходные_данные.zip</a></p>
+<p class="files"><a href="reports/variants/V01/Заказ покупателя.xlsx" download>Заказ покупателя.xlsx</a><a href="reports/variants/V01/Заказ на производство.xlsx" download>Заказ на производство.xlsx</a><a href="reports/variants/V01/Спецификация.xlsx" download>Спецификация.xlsx</a><a href="reports/variants/V01/Цены.xlsx" download>Цены.xlsx</a><a href="reports/variants/V01/Расчет стоимости.xlsx" download>Расчет стоимости.xlsx</a><a href="reports/variants/V01/Заказчики.json" download>Заказчики.json</a><a href="reports/variants/V01/Заметки.json" download>Заметки.json</a><a href="reports/variants/V01/Задание.md" download>Задание.md</a></p>
 </div>
 </details>
 <details class="variant" id="v02">
@@ -913,7 +931,7 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <h4>Исходные данные</h4>
 <p><a href="reports/variants/V02/V02_исходные_данные.zip">Скачать архив варианта · ZIP</a></p>
 <h4>Файлы варианта</h4>
-<p class="files"><a href="reports/variants/V02/Заказ покупателя.xlsx">Заказ покупателя.xlsx</a><a href="reports/variants/V02/Заказ на производство.xlsx">Заказ на производство.xlsx</a><a href="reports/variants/V02/Спецификация.xlsx">Спецификация.xlsx</a><a href="reports/variants/V02/Цены.xlsx">Цены.xlsx</a><a href="reports/variants/V02/Расчет стоимости.xlsx">Расчет стоимости.xlsx</a><a href="reports/variants/V02/Заказчики.json">Заказчики.json</a><a href="reports/variants/V02/Заметки.json">Заметки.json</a><a href="reports/variants/V02/Задание.md">Задание.md</a><a href="reports/variants/V02/V02_исходные_данные.zip">V02_исходные_данные.zip</a></p>
+<p class="files"><a href="reports/variants/V02/Заказ покупателя.xlsx" download>Заказ покупателя.xlsx</a><a href="reports/variants/V02/Заказ на производство.xlsx" download>Заказ на производство.xlsx</a><a href="reports/variants/V02/Спецификация.xlsx" download>Спецификация.xlsx</a><a href="reports/variants/V02/Цены.xlsx" download>Цены.xlsx</a><a href="reports/variants/V02/Расчет стоимости.xlsx" download>Расчет стоимости.xlsx</a><a href="reports/variants/V02/Заказчики.json" download>Заказчики.json</a><a href="reports/variants/V02/Заметки.json" download>Заметки.json</a><a href="reports/variants/V02/Задание.md" download>Задание.md</a></p>
 </div>
 </details>
 <details class="variant" id="v03">
@@ -933,7 +951,7 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <h4>Исходные данные</h4>
 <p><a href="reports/variants/V03/V03_исходные_данные.zip">Скачать архив варианта · ZIP</a></p>
 <h4>Файлы варианта</h4>
-<p class="files"><a href="reports/variants/V03/Заказ покупателя.xlsx">Заказ покупателя.xlsx</a><a href="reports/variants/V03/Заказ на производство.xlsx">Заказ на производство.xlsx</a><a href="reports/variants/V03/Спецификация.xlsx">Спецификация.xlsx</a><a href="reports/variants/V03/Цены.xlsx">Цены.xlsx</a><a href="reports/variants/V03/Расчет стоимости.xlsx">Расчет стоимости.xlsx</a><a href="reports/variants/V03/Заказчики.json">Заказчики.json</a><a href="reports/variants/V03/Заметки.json">Заметки.json</a><a href="reports/variants/V03/Задание.md">Задание.md</a><a href="reports/variants/V03/V03_исходные_данные.zip">V03_исходные_данные.zip</a></p>
+<p class="files"><a href="reports/variants/V03/Заказ покупателя.xlsx" download>Заказ покупателя.xlsx</a><a href="reports/variants/V03/Заказ на производство.xlsx" download>Заказ на производство.xlsx</a><a href="reports/variants/V03/Спецификация.xlsx" download>Спецификация.xlsx</a><a href="reports/variants/V03/Цены.xlsx" download>Цены.xlsx</a><a href="reports/variants/V03/Расчет стоимости.xlsx" download>Расчет стоимости.xlsx</a><a href="reports/variants/V03/Заказчики.json" download>Заказчики.json</a><a href="reports/variants/V03/Заметки.json" download>Заметки.json</a><a href="reports/variants/V03/Задание.md" download>Задание.md</a></p>
 </div>
 </details>
 <details class="variant" id="v04">
@@ -953,7 +971,7 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <h4>Исходные данные</h4>
 <p><a href="reports/variants/V04/V04_исходные_данные.zip">Скачать архив варианта · ZIP</a></p>
 <h4>Файлы варианта</h4>
-<p class="files"><a href="reports/variants/V04/Заказ покупателя.xlsx">Заказ покупателя.xlsx</a><a href="reports/variants/V04/Заказ на производство.xlsx">Заказ на производство.xlsx</a><a href="reports/variants/V04/Спецификация.xlsx">Спецификация.xlsx</a><a href="reports/variants/V04/Цены.xlsx">Цены.xlsx</a><a href="reports/variants/V04/Расчет стоимости.xlsx">Расчет стоимости.xlsx</a><a href="reports/variants/V04/Заказчики.json">Заказчики.json</a><a href="reports/variants/V04/Заметки.json">Заметки.json</a><a href="reports/variants/V04/Задание.md">Задание.md</a><a href="reports/variants/V04/V04_исходные_данные.zip">V04_исходные_данные.zip</a></p>
+<p class="files"><a href="reports/variants/V04/Заказ покупателя.xlsx" download>Заказ покупателя.xlsx</a><a href="reports/variants/V04/Заказ на производство.xlsx" download>Заказ на производство.xlsx</a><a href="reports/variants/V04/Спецификация.xlsx" download>Спецификация.xlsx</a><a href="reports/variants/V04/Цены.xlsx" download>Цены.xlsx</a><a href="reports/variants/V04/Расчет стоимости.xlsx" download>Расчет стоимости.xlsx</a><a href="reports/variants/V04/Заказчики.json" download>Заказчики.json</a><a href="reports/variants/V04/Заметки.json" download>Заметки.json</a><a href="reports/variants/V04/Задание.md" download>Задание.md</a></p>
 </div>
 </details>
 <details class="variant" id="v05">
@@ -973,7 +991,7 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <h4>Исходные данные</h4>
 <p><a href="reports/variants/V05/V05_исходные_данные.zip">Скачать архив варианта · ZIP</a></p>
 <h4>Файлы варианта</h4>
-<p class="files"><a href="reports/variants/V05/Заказ покупателя.xlsx">Заказ покупателя.xlsx</a><a href="reports/variants/V05/Заказ на производство.xlsx">Заказ на производство.xlsx</a><a href="reports/variants/V05/Спецификация.xlsx">Спецификация.xlsx</a><a href="reports/variants/V05/Цены.xlsx">Цены.xlsx</a><a href="reports/variants/V05/Расчет стоимости.xlsx">Расчет стоимости.xlsx</a><a href="reports/variants/V05/Заказчики.json">Заказчики.json</a><a href="reports/variants/V05/Заметки.json">Заметки.json</a><a href="reports/variants/V05/Задание.md">Задание.md</a><a href="reports/variants/V05/V05_исходные_данные.zip">V05_исходные_данные.zip</a></p>
+<p class="files"><a href="reports/variants/V05/Заказ покупателя.xlsx" download>Заказ покупателя.xlsx</a><a href="reports/variants/V05/Заказ на производство.xlsx" download>Заказ на производство.xlsx</a><a href="reports/variants/V05/Спецификация.xlsx" download>Спецификация.xlsx</a><a href="reports/variants/V05/Цены.xlsx" download>Цены.xlsx</a><a href="reports/variants/V05/Расчет стоимости.xlsx" download>Расчет стоимости.xlsx</a><a href="reports/variants/V05/Заказчики.json" download>Заказчики.json</a><a href="reports/variants/V05/Заметки.json" download>Заметки.json</a><a href="reports/variants/V05/Задание.md" download>Задание.md</a></p>
 </div>
 </details>
 <details class="variant" id="v06">
@@ -993,7 +1011,7 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <h4>Исходные данные</h4>
 <p><a href="reports/variants/V06/V06_исходные_данные.zip">Скачать архив варианта · ZIP</a></p>
 <h4>Файлы варианта</h4>
-<p class="files"><a href="reports/variants/V06/Заказ покупателя.xlsx">Заказ покупателя.xlsx</a><a href="reports/variants/V06/Заказ на производство.xlsx">Заказ на производство.xlsx</a><a href="reports/variants/V06/Спецификация.xlsx">Спецификация.xlsx</a><a href="reports/variants/V06/Цены.xlsx">Цены.xlsx</a><a href="reports/variants/V06/Расчет стоимости.xlsx">Расчет стоимости.xlsx</a><a href="reports/variants/V06/Заказчики.json">Заказчики.json</a><a href="reports/variants/V06/Заметки.json">Заметки.json</a><a href="reports/variants/V06/Задание.md">Задание.md</a><a href="reports/variants/V06/V06_исходные_данные.zip">V06_исходные_данные.zip</a></p>
+<p class="files"><a href="reports/variants/V06/Заказ покупателя.xlsx" download>Заказ покупателя.xlsx</a><a href="reports/variants/V06/Заказ на производство.xlsx" download>Заказ на производство.xlsx</a><a href="reports/variants/V06/Спецификация.xlsx" download>Спецификация.xlsx</a><a href="reports/variants/V06/Цены.xlsx" download>Цены.xlsx</a><a href="reports/variants/V06/Расчет стоимости.xlsx" download>Расчет стоимости.xlsx</a><a href="reports/variants/V06/Заказчики.json" download>Заказчики.json</a><a href="reports/variants/V06/Заметки.json" download>Заметки.json</a><a href="reports/variants/V06/Задание.md" download>Задание.md</a></p>
 </div>
 </details>
 <details class="variant" id="v07">
@@ -1013,7 +1031,7 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <h4>Исходные данные</h4>
 <p><a href="reports/variants/V07/V07_исходные_данные.zip">Скачать архив варианта · ZIP</a></p>
 <h4>Файлы варианта</h4>
-<p class="files"><a href="reports/variants/V07/Заказ покупателя.xlsx">Заказ покупателя.xlsx</a><a href="reports/variants/V07/Заказ на производство.xlsx">Заказ на производство.xlsx</a><a href="reports/variants/V07/Спецификация.xlsx">Спецификация.xlsx</a><a href="reports/variants/V07/Цены.xlsx">Цены.xlsx</a><a href="reports/variants/V07/Расчет стоимости.xlsx">Расчет стоимости.xlsx</a><a href="reports/variants/V07/Заказчики.json">Заказчики.json</a><a href="reports/variants/V07/Заметки.json">Заметки.json</a><a href="reports/variants/V07/Задание.md">Задание.md</a><a href="reports/variants/V07/V07_исходные_данные.zip">V07_исходные_данные.zip</a></p>
+<p class="files"><a href="reports/variants/V07/Заказ покупателя.xlsx" download>Заказ покупателя.xlsx</a><a href="reports/variants/V07/Заказ на производство.xlsx" download>Заказ на производство.xlsx</a><a href="reports/variants/V07/Спецификация.xlsx" download>Спецификация.xlsx</a><a href="reports/variants/V07/Цены.xlsx" download>Цены.xlsx</a><a href="reports/variants/V07/Расчет стоимости.xlsx" download>Расчет стоимости.xlsx</a><a href="reports/variants/V07/Заказчики.json" download>Заказчики.json</a><a href="reports/variants/V07/Заметки.json" download>Заметки.json</a><a href="reports/variants/V07/Задание.md" download>Задание.md</a></p>
 </div>
 </details>
 <details class="variant" id="v08">
@@ -1033,7 +1051,7 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <h4>Исходные данные</h4>
 <p><a href="reports/variants/V08/V08_исходные_данные.zip">Скачать архив варианта · ZIP</a></p>
 <h4>Файлы варианта</h4>
-<p class="files"><a href="reports/variants/V08/Заказ покупателя.xlsx">Заказ покупателя.xlsx</a><a href="reports/variants/V08/Заказ на производство.xlsx">Заказ на производство.xlsx</a><a href="reports/variants/V08/Спецификация.xlsx">Спецификация.xlsx</a><a href="reports/variants/V08/Цены.xlsx">Цены.xlsx</a><a href="reports/variants/V08/Расчет стоимости.xlsx">Расчет стоимости.xlsx</a><a href="reports/variants/V08/Заказчики.json">Заказчики.json</a><a href="reports/variants/V08/Заметки.json">Заметки.json</a><a href="reports/variants/V08/Задание.md">Задание.md</a><a href="reports/variants/V08/V08_исходные_данные.zip">V08_исходные_данные.zip</a></p>
+<p class="files"><a href="reports/variants/V08/Заказ покупателя.xlsx" download>Заказ покупателя.xlsx</a><a href="reports/variants/V08/Заказ на производство.xlsx" download>Заказ на производство.xlsx</a><a href="reports/variants/V08/Спецификация.xlsx" download>Спецификация.xlsx</a><a href="reports/variants/V08/Цены.xlsx" download>Цены.xlsx</a><a href="reports/variants/V08/Расчет стоимости.xlsx" download>Расчет стоимости.xlsx</a><a href="reports/variants/V08/Заказчики.json" download>Заказчики.json</a><a href="reports/variants/V08/Заметки.json" download>Заметки.json</a><a href="reports/variants/V08/Задание.md" download>Задание.md</a></p>
 </div>
 </details>
 <details class="variant" id="v09">
@@ -1053,7 +1071,7 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <h4>Исходные данные</h4>
 <p><a href="reports/variants/V09/V09_исходные_данные.zip">Скачать архив варианта · ZIP</a></p>
 <h4>Файлы варианта</h4>
-<p class="files"><a href="reports/variants/V09/Заказ покупателя.xlsx">Заказ покупателя.xlsx</a><a href="reports/variants/V09/Заказ на производство.xlsx">Заказ на производство.xlsx</a><a href="reports/variants/V09/Спецификация.xlsx">Спецификация.xlsx</a><a href="reports/variants/V09/Цены.xlsx">Цены.xlsx</a><a href="reports/variants/V09/Расчет стоимости.xlsx">Расчет стоимости.xlsx</a><a href="reports/variants/V09/Заказчики.json">Заказчики.json</a><a href="reports/variants/V09/Заметки.json">Заметки.json</a><a href="reports/variants/V09/Задание.md">Задание.md</a><a href="reports/variants/V09/V09_исходные_данные.zip">V09_исходные_данные.zip</a></p>
+<p class="files"><a href="reports/variants/V09/Заказ покупателя.xlsx" download>Заказ покупателя.xlsx</a><a href="reports/variants/V09/Заказ на производство.xlsx" download>Заказ на производство.xlsx</a><a href="reports/variants/V09/Спецификация.xlsx" download>Спецификация.xlsx</a><a href="reports/variants/V09/Цены.xlsx" download>Цены.xlsx</a><a href="reports/variants/V09/Расчет стоимости.xlsx" download>Расчет стоимости.xlsx</a><a href="reports/variants/V09/Заказчики.json" download>Заказчики.json</a><a href="reports/variants/V09/Заметки.json" download>Заметки.json</a><a href="reports/variants/V09/Задание.md" download>Задание.md</a></p>
 </div>
 </details>
 <details class="variant" id="v10">
@@ -1073,7 +1091,7 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <h4>Исходные данные</h4>
 <p><a href="reports/variants/V10/V10_исходные_данные.zip">Скачать архив варианта · ZIP</a></p>
 <h4>Файлы варианта</h4>
-<p class="files"><a href="reports/variants/V10/Заказ покупателя.xlsx">Заказ покупателя.xlsx</a><a href="reports/variants/V10/Заказ на производство.xlsx">Заказ на производство.xlsx</a><a href="reports/variants/V10/Спецификация.xlsx">Спецификация.xlsx</a><a href="reports/variants/V10/Цены.xlsx">Цены.xlsx</a><a href="reports/variants/V10/Расчет стоимости.xlsx">Расчет стоимости.xlsx</a><a href="reports/variants/V10/Заказчики.json">Заказчики.json</a><a href="reports/variants/V10/Заметки.json">Заметки.json</a><a href="reports/variants/V10/Задание.md">Задание.md</a><a href="reports/variants/V10/V10_исходные_данные.zip">V10_исходные_данные.zip</a></p>
+<p class="files"><a href="reports/variants/V10/Заказ покупателя.xlsx" download>Заказ покупателя.xlsx</a><a href="reports/variants/V10/Заказ на производство.xlsx" download>Заказ на производство.xlsx</a><a href="reports/variants/V10/Спецификация.xlsx" download>Спецификация.xlsx</a><a href="reports/variants/V10/Цены.xlsx" download>Цены.xlsx</a><a href="reports/variants/V10/Расчет стоимости.xlsx" download>Расчет стоимости.xlsx</a><a href="reports/variants/V10/Заказчики.json" download>Заказчики.json</a><a href="reports/variants/V10/Заметки.json" download>Заметки.json</a><a href="reports/variants/V10/Задание.md" download>Задание.md</a></p>
 </div>
 </details>
 <details class="variant" id="v11">
@@ -1093,7 +1111,7 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <h4>Исходные данные</h4>
 <p><a href="reports/variants/V11/V11_исходные_данные.zip">Скачать архив варианта · ZIP</a></p>
 <h4>Файлы варианта</h4>
-<p class="files"><a href="reports/variants/V11/Заказ покупателя.xlsx">Заказ покупателя.xlsx</a><a href="reports/variants/V11/Заказ на производство.xlsx">Заказ на производство.xlsx</a><a href="reports/variants/V11/Спецификация.xlsx">Спецификация.xlsx</a><a href="reports/variants/V11/Цены.xlsx">Цены.xlsx</a><a href="reports/variants/V11/Расчет стоимости.xlsx">Расчет стоимости.xlsx</a><a href="reports/variants/V11/Заказчики.json">Заказчики.json</a><a href="reports/variants/V11/Заметки.json">Заметки.json</a><a href="reports/variants/V11/Задание.md">Задание.md</a><a href="reports/variants/V11/V11_исходные_данные.zip">V11_исходные_данные.zip</a></p>
+<p class="files"><a href="reports/variants/V11/Заказ покупателя.xlsx" download>Заказ покупателя.xlsx</a><a href="reports/variants/V11/Заказ на производство.xlsx" download>Заказ на производство.xlsx</a><a href="reports/variants/V11/Спецификация.xlsx" download>Спецификация.xlsx</a><a href="reports/variants/V11/Цены.xlsx" download>Цены.xlsx</a><a href="reports/variants/V11/Расчет стоимости.xlsx" download>Расчет стоимости.xlsx</a><a href="reports/variants/V11/Заказчики.json" download>Заказчики.json</a><a href="reports/variants/V11/Заметки.json" download>Заметки.json</a><a href="reports/variants/V11/Задание.md" download>Задание.md</a></p>
 </div>
 </details>
 <details class="variant" id="v12">
@@ -1113,7 +1131,7 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <h4>Исходные данные</h4>
 <p><a href="reports/variants/V12/V12_исходные_данные.zip">Скачать архив варианта · ZIP</a></p>
 <h4>Файлы варианта</h4>
-<p class="files"><a href="reports/variants/V12/Заказ покупателя.xlsx">Заказ покупателя.xlsx</a><a href="reports/variants/V12/Заказ на производство.xlsx">Заказ на производство.xlsx</a><a href="reports/variants/V12/Спецификация.xlsx">Спецификация.xlsx</a><a href="reports/variants/V12/Цены.xlsx">Цены.xlsx</a><a href="reports/variants/V12/Расчет стоимости.xlsx">Расчет стоимости.xlsx</a><a href="reports/variants/V12/Заказчики.json">Заказчики.json</a><a href="reports/variants/V12/Заметки.json">Заметки.json</a><a href="reports/variants/V12/Задание.md">Задание.md</a><a href="reports/variants/V12/V12_исходные_данные.zip">V12_исходные_данные.zip</a></p>
+<p class="files"><a href="reports/variants/V12/Заказ покупателя.xlsx" download>Заказ покупателя.xlsx</a><a href="reports/variants/V12/Заказ на производство.xlsx" download>Заказ на производство.xlsx</a><a href="reports/variants/V12/Спецификация.xlsx" download>Спецификация.xlsx</a><a href="reports/variants/V12/Цены.xlsx" download>Цены.xlsx</a><a href="reports/variants/V12/Расчет стоимости.xlsx" download>Расчет стоимости.xlsx</a><a href="reports/variants/V12/Заказчики.json" download>Заказчики.json</a><a href="reports/variants/V12/Заметки.json" download>Заметки.json</a><a href="reports/variants/V12/Задание.md" download>Задание.md</a></p>
 </div>
 </details>
 <details class="variant" id="v13">
@@ -1133,7 +1151,7 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <h4>Исходные данные</h4>
 <p><a href="reports/variants/V13/V13_исходные_данные.zip">Скачать архив варианта · ZIP</a></p>
 <h4>Файлы варианта</h4>
-<p class="files"><a href="reports/variants/V13/Заказ покупателя.xlsx">Заказ покупателя.xlsx</a><a href="reports/variants/V13/Заказ на производство.xlsx">Заказ на производство.xlsx</a><a href="reports/variants/V13/Спецификация.xlsx">Спецификация.xlsx</a><a href="reports/variants/V13/Цены.xlsx">Цены.xlsx</a><a href="reports/variants/V13/Расчет стоимости.xlsx">Расчет стоимости.xlsx</a><a href="reports/variants/V13/Заказчики.json">Заказчики.json</a><a href="reports/variants/V13/Заметки.json">Заметки.json</a><a href="reports/variants/V13/Задание.md">Задание.md</a><a href="reports/variants/V13/V13_исходные_данные.zip">V13_исходные_данные.zip</a></p>
+<p class="files"><a href="reports/variants/V13/Заказ покупателя.xlsx" download>Заказ покупателя.xlsx</a><a href="reports/variants/V13/Заказ на производство.xlsx" download>Заказ на производство.xlsx</a><a href="reports/variants/V13/Спецификация.xlsx" download>Спецификация.xlsx</a><a href="reports/variants/V13/Цены.xlsx" download>Цены.xlsx</a><a href="reports/variants/V13/Расчет стоимости.xlsx" download>Расчет стоимости.xlsx</a><a href="reports/variants/V13/Заказчики.json" download>Заказчики.json</a><a href="reports/variants/V13/Заметки.json" download>Заметки.json</a><a href="reports/variants/V13/Задание.md" download>Задание.md</a></p>
 </div>
 </details>
 <details class="variant" id="v14">
@@ -1153,7 +1171,7 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <h4>Исходные данные</h4>
 <p><a href="reports/variants/V14/V14_исходные_данные.zip">Скачать архив варианта · ZIP</a></p>
 <h4>Файлы варианта</h4>
-<p class="files"><a href="reports/variants/V14/Заказ покупателя.xlsx">Заказ покупателя.xlsx</a><a href="reports/variants/V14/Заказ на производство.xlsx">Заказ на производство.xlsx</a><a href="reports/variants/V14/Спецификация.xlsx">Спецификация.xlsx</a><a href="reports/variants/V14/Цены.xlsx">Цены.xlsx</a><a href="reports/variants/V14/Расчет стоимости.xlsx">Расчет стоимости.xlsx</a><a href="reports/variants/V14/Заказчики.json">Заказчики.json</a><a href="reports/variants/V14/Заметки.json">Заметки.json</a><a href="reports/variants/V14/Задание.md">Задание.md</a><a href="reports/variants/V14/V14_исходные_данные.zip">V14_исходные_данные.zip</a></p>
+<p class="files"><a href="reports/variants/V14/Заказ покупателя.xlsx" download>Заказ покупателя.xlsx</a><a href="reports/variants/V14/Заказ на производство.xlsx" download>Заказ на производство.xlsx</a><a href="reports/variants/V14/Спецификация.xlsx" download>Спецификация.xlsx</a><a href="reports/variants/V14/Цены.xlsx" download>Цены.xlsx</a><a href="reports/variants/V14/Расчет стоимости.xlsx" download>Расчет стоимости.xlsx</a><a href="reports/variants/V14/Заказчики.json" download>Заказчики.json</a><a href="reports/variants/V14/Заметки.json" download>Заметки.json</a><a href="reports/variants/V14/Задание.md" download>Задание.md</a></p>
 </div>
 </details>
 <details class="variant" id="v15">
@@ -1173,7 +1191,7 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <h4>Исходные данные</h4>
 <p><a href="reports/variants/V15/V15_исходные_данные.zip">Скачать архив варианта · ZIP</a></p>
 <h4>Файлы варианта</h4>
-<p class="files"><a href="reports/variants/V15/Заказ покупателя.xlsx">Заказ покупателя.xlsx</a><a href="reports/variants/V15/Заказ на производство.xlsx">Заказ на производство.xlsx</a><a href="reports/variants/V15/Спецификация.xlsx">Спецификация.xlsx</a><a href="reports/variants/V15/Цены.xlsx">Цены.xlsx</a><a href="reports/variants/V15/Расчет стоимости.xlsx">Расчет стоимости.xlsx</a><a href="reports/variants/V15/Заказчики.json">Заказчики.json</a><a href="reports/variants/V15/Заметки.json">Заметки.json</a><a href="reports/variants/V15/Задание.md">Задание.md</a><a href="reports/variants/V15/V15_исходные_данные.zip">V15_исходные_данные.zip</a></p>
+<p class="files"><a href="reports/variants/V15/Заказ покупателя.xlsx" download>Заказ покупателя.xlsx</a><a href="reports/variants/V15/Заказ на производство.xlsx" download>Заказ на производство.xlsx</a><a href="reports/variants/V15/Спецификация.xlsx" download>Спецификация.xlsx</a><a href="reports/variants/V15/Цены.xlsx" download>Цены.xlsx</a><a href="reports/variants/V15/Расчет стоимости.xlsx" download>Расчет стоимости.xlsx</a><a href="reports/variants/V15/Заказчики.json" download>Заказчики.json</a><a href="reports/variants/V15/Заметки.json" download>Заметки.json</a><a href="reports/variants/V15/Задание.md" download>Задание.md</a></p>
 </div>
 </details>
 <details class="variant" id="v16">
@@ -1193,7 +1211,7 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <h4>Исходные данные</h4>
 <p><a href="reports/variants/V16/V16_исходные_данные.zip">Скачать архив варианта · ZIP</a></p>
 <h4>Файлы варианта</h4>
-<p class="files"><a href="reports/variants/V16/Заказ покупателя.xlsx">Заказ покупателя.xlsx</a><a href="reports/variants/V16/Заказ на производство.xlsx">Заказ на производство.xlsx</a><a href="reports/variants/V16/Спецификация.xlsx">Спецификация.xlsx</a><a href="reports/variants/V16/Цены.xlsx">Цены.xlsx</a><a href="reports/variants/V16/Расчет стоимости.xlsx">Расчет стоимости.xlsx</a><a href="reports/variants/V16/Заказчики.json">Заказчики.json</a><a href="reports/variants/V16/Заметки.json">Заметки.json</a><a href="reports/variants/V16/Задание.md">Задание.md</a><a href="reports/variants/V16/V16_исходные_данные.zip">V16_исходные_данные.zip</a></p>
+<p class="files"><a href="reports/variants/V16/Заказ покупателя.xlsx" download>Заказ покупателя.xlsx</a><a href="reports/variants/V16/Заказ на производство.xlsx" download>Заказ на производство.xlsx</a><a href="reports/variants/V16/Спецификация.xlsx" download>Спецификация.xlsx</a><a href="reports/variants/V16/Цены.xlsx" download>Цены.xlsx</a><a href="reports/variants/V16/Расчет стоимости.xlsx" download>Расчет стоимости.xlsx</a><a href="reports/variants/V16/Заказчики.json" download>Заказчики.json</a><a href="reports/variants/V16/Заметки.json" download>Заметки.json</a><a href="reports/variants/V16/Задание.md" download>Задание.md</a></p>
 </div>
 </details>
 <details class="variant" id="v17">
@@ -1213,7 +1231,7 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <h4>Исходные данные</h4>
 <p><a href="reports/variants/V17/V17_исходные_данные.zip">Скачать архив варианта · ZIP</a></p>
 <h4>Файлы варианта</h4>
-<p class="files"><a href="reports/variants/V17/Заказ покупателя.xlsx">Заказ покупателя.xlsx</a><a href="reports/variants/V17/Заказ на производство.xlsx">Заказ на производство.xlsx</a><a href="reports/variants/V17/Спецификация.xlsx">Спецификация.xlsx</a><a href="reports/variants/V17/Цены.xlsx">Цены.xlsx</a><a href="reports/variants/V17/Расчет стоимости.xlsx">Расчет стоимости.xlsx</a><a href="reports/variants/V17/Заказчики.json">Заказчики.json</a><a href="reports/variants/V17/Заметки.json">Заметки.json</a><a href="reports/variants/V17/Задание.md">Задание.md</a><a href="reports/variants/V17/V17_исходные_данные.zip">V17_исходные_данные.zip</a></p>
+<p class="files"><a href="reports/variants/V17/Заказ покупателя.xlsx" download>Заказ покупателя.xlsx</a><a href="reports/variants/V17/Заказ на производство.xlsx" download>Заказ на производство.xlsx</a><a href="reports/variants/V17/Спецификация.xlsx" download>Спецификация.xlsx</a><a href="reports/variants/V17/Цены.xlsx" download>Цены.xlsx</a><a href="reports/variants/V17/Расчет стоимости.xlsx" download>Расчет стоимости.xlsx</a><a href="reports/variants/V17/Заказчики.json" download>Заказчики.json</a><a href="reports/variants/V17/Заметки.json" download>Заметки.json</a><a href="reports/variants/V17/Задание.md" download>Задание.md</a></p>
 </div>
 </details>
 <details class="variant" id="v18">
@@ -1233,7 +1251,7 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <h4>Исходные данные</h4>
 <p><a href="reports/variants/V18/V18_исходные_данные.zip">Скачать архив варианта · ZIP</a></p>
 <h4>Файлы варианта</h4>
-<p class="files"><a href="reports/variants/V18/Заказ покупателя.xlsx">Заказ покупателя.xlsx</a><a href="reports/variants/V18/Заказ на производство.xlsx">Заказ на производство.xlsx</a><a href="reports/variants/V18/Спецификация.xlsx">Спецификация.xlsx</a><a href="reports/variants/V18/Цены.xlsx">Цены.xlsx</a><a href="reports/variants/V18/Расчет стоимости.xlsx">Расчет стоимости.xlsx</a><a href="reports/variants/V18/Заказчики.json">Заказчики.json</a><a href="reports/variants/V18/Заметки.json">Заметки.json</a><a href="reports/variants/V18/Задание.md">Задание.md</a><a href="reports/variants/V18/V18_исходные_данные.zip">V18_исходные_данные.zip</a></p>
+<p class="files"><a href="reports/variants/V18/Заказ покупателя.xlsx" download>Заказ покупателя.xlsx</a><a href="reports/variants/V18/Заказ на производство.xlsx" download>Заказ на производство.xlsx</a><a href="reports/variants/V18/Спецификация.xlsx" download>Спецификация.xlsx</a><a href="reports/variants/V18/Цены.xlsx" download>Цены.xlsx</a><a href="reports/variants/V18/Расчет стоимости.xlsx" download>Расчет стоимости.xlsx</a><a href="reports/variants/V18/Заказчики.json" download>Заказчики.json</a><a href="reports/variants/V18/Заметки.json" download>Заметки.json</a><a href="reports/variants/V18/Задание.md" download>Задание.md</a></p>
 </div>
 </details>
 <details class="variant" id="v19">
@@ -1253,7 +1271,7 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <h4>Исходные данные</h4>
 <p><a href="reports/variants/V19/V19_исходные_данные.zip">Скачать архив варианта · ZIP</a></p>
 <h4>Файлы варианта</h4>
-<p class="files"><a href="reports/variants/V19/Заказ покупателя.xlsx">Заказ покупателя.xlsx</a><a href="reports/variants/V19/Заказ на производство.xlsx">Заказ на производство.xlsx</a><a href="reports/variants/V19/Спецификация.xlsx">Спецификация.xlsx</a><a href="reports/variants/V19/Цены.xlsx">Цены.xlsx</a><a href="reports/variants/V19/Расчет стоимости.xlsx">Расчет стоимости.xlsx</a><a href="reports/variants/V19/Заказчики.json">Заказчики.json</a><a href="reports/variants/V19/Заметки.json">Заметки.json</a><a href="reports/variants/V19/Задание.md">Задание.md</a><a href="reports/variants/V19/V19_исходные_данные.zip">V19_исходные_данные.zip</a></p>
+<p class="files"><a href="reports/variants/V19/Заказ покупателя.xlsx" download>Заказ покупателя.xlsx</a><a href="reports/variants/V19/Заказ на производство.xlsx" download>Заказ на производство.xlsx</a><a href="reports/variants/V19/Спецификация.xlsx" download>Спецификация.xlsx</a><a href="reports/variants/V19/Цены.xlsx" download>Цены.xlsx</a><a href="reports/variants/V19/Расчет стоимости.xlsx" download>Расчет стоимости.xlsx</a><a href="reports/variants/V19/Заказчики.json" download>Заказчики.json</a><a href="reports/variants/V19/Заметки.json" download>Заметки.json</a><a href="reports/variants/V19/Задание.md" download>Задание.md</a></p>
 </div>
 </details>
 <details class="variant" id="v20">
@@ -1273,7 +1291,7 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <h4>Исходные данные</h4>
 <p><a href="reports/variants/V20/V20_исходные_данные.zip">Скачать архив варианта · ZIP</a></p>
 <h4>Файлы варианта</h4>
-<p class="files"><a href="reports/variants/V20/Заказ покупателя.xlsx">Заказ покупателя.xlsx</a><a href="reports/variants/V20/Заказ на производство.xlsx">Заказ на производство.xlsx</a><a href="reports/variants/V20/Спецификация.xlsx">Спецификация.xlsx</a><a href="reports/variants/V20/Цены.xlsx">Цены.xlsx</a><a href="reports/variants/V20/Расчет стоимости.xlsx">Расчет стоимости.xlsx</a><a href="reports/variants/V20/Заказчики.json">Заказчики.json</a><a href="reports/variants/V20/Заметки.json">Заметки.json</a><a href="reports/variants/V20/Задание.md">Задание.md</a><a href="reports/variants/V20/V20_исходные_данные.zip">V20_исходные_данные.zip</a></p>
+<p class="files"><a href="reports/variants/V20/Заказ покупателя.xlsx" download>Заказ покупателя.xlsx</a><a href="reports/variants/V20/Заказ на производство.xlsx" download>Заказ на производство.xlsx</a><a href="reports/variants/V20/Спецификация.xlsx" download>Спецификация.xlsx</a><a href="reports/variants/V20/Цены.xlsx" download>Цены.xlsx</a><a href="reports/variants/V20/Расчет стоимости.xlsx" download>Расчет стоимости.xlsx</a><a href="reports/variants/V20/Заказчики.json" download>Заказчики.json</a><a href="reports/variants/V20/Заметки.json" download>Заметки.json</a><a href="reports/variants/V20/Задание.md" download>Задание.md</a></p>
 </div>
 </details>
 <details class="variant" id="v21">
@@ -1293,7 +1311,7 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <h4>Исходные данные</h4>
 <p><a href="reports/variants/V21/V21_исходные_данные.zip">Скачать архив варианта · ZIP</a></p>
 <h4>Файлы варианта</h4>
-<p class="files"><a href="reports/variants/V21/Заказ покупателя.xlsx">Заказ покупателя.xlsx</a><a href="reports/variants/V21/Заказ на производство.xlsx">Заказ на производство.xlsx</a><a href="reports/variants/V21/Спецификация.xlsx">Спецификация.xlsx</a><a href="reports/variants/V21/Цены.xlsx">Цены.xlsx</a><a href="reports/variants/V21/Расчет стоимости.xlsx">Расчет стоимости.xlsx</a><a href="reports/variants/V21/Заказчики.json">Заказчики.json</a><a href="reports/variants/V21/Заметки.json">Заметки.json</a><a href="reports/variants/V21/Задание.md">Задание.md</a><a href="reports/variants/V21/V21_исходные_данные.zip">V21_исходные_данные.zip</a></p>
+<p class="files"><a href="reports/variants/V21/Заказ покупателя.xlsx" download>Заказ покупателя.xlsx</a><a href="reports/variants/V21/Заказ на производство.xlsx" download>Заказ на производство.xlsx</a><a href="reports/variants/V21/Спецификация.xlsx" download>Спецификация.xlsx</a><a href="reports/variants/V21/Цены.xlsx" download>Цены.xlsx</a><a href="reports/variants/V21/Расчет стоимости.xlsx" download>Расчет стоимости.xlsx</a><a href="reports/variants/V21/Заказчики.json" download>Заказчики.json</a><a href="reports/variants/V21/Заметки.json" download>Заметки.json</a><a href="reports/variants/V21/Задание.md" download>Задание.md</a></p>
 </div>
 </details>
 <details class="variant" id="v22">
@@ -1313,7 +1331,7 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <h4>Исходные данные</h4>
 <p><a href="reports/variants/V22/V22_исходные_данные.zip">Скачать архив варианта · ZIP</a></p>
 <h4>Файлы варианта</h4>
-<p class="files"><a href="reports/variants/V22/Заказ покупателя.xlsx">Заказ покупателя.xlsx</a><a href="reports/variants/V22/Заказ на производство.xlsx">Заказ на производство.xlsx</a><a href="reports/variants/V22/Спецификация.xlsx">Спецификация.xlsx</a><a href="reports/variants/V22/Цены.xlsx">Цены.xlsx</a><a href="reports/variants/V22/Расчет стоимости.xlsx">Расчет стоимости.xlsx</a><a href="reports/variants/V22/Заказчики.json">Заказчики.json</a><a href="reports/variants/V22/Заметки.json">Заметки.json</a><a href="reports/variants/V22/Задание.md">Задание.md</a><a href="reports/variants/V22/V22_исходные_данные.zip">V22_исходные_данные.zip</a></p>
+<p class="files"><a href="reports/variants/V22/Заказ покупателя.xlsx" download>Заказ покупателя.xlsx</a><a href="reports/variants/V22/Заказ на производство.xlsx" download>Заказ на производство.xlsx</a><a href="reports/variants/V22/Спецификация.xlsx" download>Спецификация.xlsx</a><a href="reports/variants/V22/Цены.xlsx" download>Цены.xlsx</a><a href="reports/variants/V22/Расчет стоимости.xlsx" download>Расчет стоимости.xlsx</a><a href="reports/variants/V22/Заказчики.json" download>Заказчики.json</a><a href="reports/variants/V22/Заметки.json" download>Заметки.json</a><a href="reports/variants/V22/Задание.md" download>Задание.md</a></p>
 </div>
 </details>
 <details class="variant" id="v23">
@@ -1333,7 +1351,7 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <h4>Исходные данные</h4>
 <p><a href="reports/variants/V23/V23_исходные_данные.zip">Скачать архив варианта · ZIP</a></p>
 <h4>Файлы варианта</h4>
-<p class="files"><a href="reports/variants/V23/Заказ покупателя.xlsx">Заказ покупателя.xlsx</a><a href="reports/variants/V23/Заказ на производство.xlsx">Заказ на производство.xlsx</a><a href="reports/variants/V23/Спецификация.xlsx">Спецификация.xlsx</a><a href="reports/variants/V23/Цены.xlsx">Цены.xlsx</a><a href="reports/variants/V23/Расчет стоимости.xlsx">Расчет стоимости.xlsx</a><a href="reports/variants/V23/Заказчики.json">Заказчики.json</a><a href="reports/variants/V23/Заметки.json">Заметки.json</a><a href="reports/variants/V23/Задание.md">Задание.md</a><a href="reports/variants/V23/V23_исходные_данные.zip">V23_исходные_данные.zip</a></p>
+<p class="files"><a href="reports/variants/V23/Заказ покупателя.xlsx" download>Заказ покупателя.xlsx</a><a href="reports/variants/V23/Заказ на производство.xlsx" download>Заказ на производство.xlsx</a><a href="reports/variants/V23/Спецификация.xlsx" download>Спецификация.xlsx</a><a href="reports/variants/V23/Цены.xlsx" download>Цены.xlsx</a><a href="reports/variants/V23/Расчет стоимости.xlsx" download>Расчет стоимости.xlsx</a><a href="reports/variants/V23/Заказчики.json" download>Заказчики.json</a><a href="reports/variants/V23/Заметки.json" download>Заметки.json</a><a href="reports/variants/V23/Задание.md" download>Задание.md</a></p>
 </div>
 </details>
 <details class="variant" id="v24">
@@ -1353,7 +1371,7 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <h4>Исходные данные</h4>
 <p><a href="reports/variants/V24/V24_исходные_данные.zip">Скачать архив варианта · ZIP</a></p>
 <h4>Файлы варианта</h4>
-<p class="files"><a href="reports/variants/V24/Заказ покупателя.xlsx">Заказ покупателя.xlsx</a><a href="reports/variants/V24/Заказ на производство.xlsx">Заказ на производство.xlsx</a><a href="reports/variants/V24/Спецификация.xlsx">Спецификация.xlsx</a><a href="reports/variants/V24/Цены.xlsx">Цены.xlsx</a><a href="reports/variants/V24/Расчет стоимости.xlsx">Расчет стоимости.xlsx</a><a href="reports/variants/V24/Заказчики.json">Заказчики.json</a><a href="reports/variants/V24/Заметки.json">Заметки.json</a><a href="reports/variants/V24/Задание.md">Задание.md</a><a href="reports/variants/V24/V24_исходные_данные.zip">V24_исходные_данные.zip</a></p>
+<p class="files"><a href="reports/variants/V24/Заказ покупателя.xlsx" download>Заказ покупателя.xlsx</a><a href="reports/variants/V24/Заказ на производство.xlsx" download>Заказ на производство.xlsx</a><a href="reports/variants/V24/Спецификация.xlsx" download>Спецификация.xlsx</a><a href="reports/variants/V24/Цены.xlsx" download>Цены.xlsx</a><a href="reports/variants/V24/Расчет стоимости.xlsx" download>Расчет стоимости.xlsx</a><a href="reports/variants/V24/Заказчики.json" download>Заказчики.json</a><a href="reports/variants/V24/Заметки.json" download>Заметки.json</a><a href="reports/variants/V24/Задание.md" download>Задание.md</a></p>
 </div>
 </details>
 <details class="variant" id="v25">
@@ -1373,7 +1391,7 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <h4>Исходные данные</h4>
 <p><a href="reports/variants/V25/V25_исходные_данные.zip">Скачать архив варианта · ZIP</a></p>
 <h4>Файлы варианта</h4>
-<p class="files"><a href="reports/variants/V25/Заказ покупателя.xlsx">Заказ покупателя.xlsx</a><a href="reports/variants/V25/Заказ на производство.xlsx">Заказ на производство.xlsx</a><a href="reports/variants/V25/Спецификация.xlsx">Спецификация.xlsx</a><a href="reports/variants/V25/Цены.xlsx">Цены.xlsx</a><a href="reports/variants/V25/Расчет стоимости.xlsx">Расчет стоимости.xlsx</a><a href="reports/variants/V25/Заказчики.json">Заказчики.json</a><a href="reports/variants/V25/Заметки.json">Заметки.json</a><a href="reports/variants/V25/Задание.md">Задание.md</a><a href="reports/variants/V25/V25_исходные_данные.zip">V25_исходные_данные.zip</a></p>
+<p class="files"><a href="reports/variants/V25/Заказ покупателя.xlsx" download>Заказ покупателя.xlsx</a><a href="reports/variants/V25/Заказ на производство.xlsx" download>Заказ на производство.xlsx</a><a href="reports/variants/V25/Спецификация.xlsx" download>Спецификация.xlsx</a><a href="reports/variants/V25/Цены.xlsx" download>Цены.xlsx</a><a href="reports/variants/V25/Расчет стоимости.xlsx" download>Расчет стоимости.xlsx</a><a href="reports/variants/V25/Заказчики.json" download>Заказчики.json</a><a href="reports/variants/V25/Заметки.json" download>Заметки.json</a><a href="reports/variants/V25/Задание.md" download>Задание.md</a></p>
 </div>
 </details>
 <details class="variant" id="v26">
@@ -1393,7 +1411,7 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <h4>Исходные данные</h4>
 <p><a href="reports/variants/V26/V26_исходные_данные.zip">Скачать архив варианта · ZIP</a></p>
 <h4>Файлы варианта</h4>
-<p class="files"><a href="reports/variants/V26/Заказ покупателя.xlsx">Заказ покупателя.xlsx</a><a href="reports/variants/V26/Заказ на производство.xlsx">Заказ на производство.xlsx</a><a href="reports/variants/V26/Спецификация.xlsx">Спецификация.xlsx</a><a href="reports/variants/V26/Цены.xlsx">Цены.xlsx</a><a href="reports/variants/V26/Расчет стоимости.xlsx">Расчет стоимости.xlsx</a><a href="reports/variants/V26/Заказчики.json">Заказчики.json</a><a href="reports/variants/V26/Заметки.json">Заметки.json</a><a href="reports/variants/V26/Задание.md">Задание.md</a><a href="reports/variants/V26/V26_исходные_данные.zip">V26_исходные_данные.zip</a></p>
+<p class="files"><a href="reports/variants/V26/Заказ покупателя.xlsx" download>Заказ покупателя.xlsx</a><a href="reports/variants/V26/Заказ на производство.xlsx" download>Заказ на производство.xlsx</a><a href="reports/variants/V26/Спецификация.xlsx" download>Спецификация.xlsx</a><a href="reports/variants/V26/Цены.xlsx" download>Цены.xlsx</a><a href="reports/variants/V26/Расчет стоимости.xlsx" download>Расчет стоимости.xlsx</a><a href="reports/variants/V26/Заказчики.json" download>Заказчики.json</a><a href="reports/variants/V26/Заметки.json" download>Заметки.json</a><a href="reports/variants/V26/Задание.md" download>Задание.md</a></p>
 </div>
 </details>
 <details class="variant" id="v27">
@@ -1413,7 +1431,7 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <h4>Исходные данные</h4>
 <p><a href="reports/variants/V27/V27_исходные_данные.zip">Скачать архив варианта · ZIP</a></p>
 <h4>Файлы варианта</h4>
-<p class="files"><a href="reports/variants/V27/Заказ покупателя.xlsx">Заказ покупателя.xlsx</a><a href="reports/variants/V27/Заказ на производство.xlsx">Заказ на производство.xlsx</a><a href="reports/variants/V27/Спецификация.xlsx">Спецификация.xlsx</a><a href="reports/variants/V27/Цены.xlsx">Цены.xlsx</a><a href="reports/variants/V27/Расчет стоимости.xlsx">Расчет стоимости.xlsx</a><a href="reports/variants/V27/Заказчики.json">Заказчики.json</a><a href="reports/variants/V27/Заметки.json">Заметки.json</a><a href="reports/variants/V27/Задание.md">Задание.md</a><a href="reports/variants/V27/V27_исходные_данные.zip">V27_исходные_данные.zip</a></p>
+<p class="files"><a href="reports/variants/V27/Заказ покупателя.xlsx" download>Заказ покупателя.xlsx</a><a href="reports/variants/V27/Заказ на производство.xlsx" download>Заказ на производство.xlsx</a><a href="reports/variants/V27/Спецификация.xlsx" download>Спецификация.xlsx</a><a href="reports/variants/V27/Цены.xlsx" download>Цены.xlsx</a><a href="reports/variants/V27/Расчет стоимости.xlsx" download>Расчет стоимости.xlsx</a><a href="reports/variants/V27/Заказчики.json" download>Заказчики.json</a><a href="reports/variants/V27/Заметки.json" download>Заметки.json</a><a href="reports/variants/V27/Задание.md" download>Задание.md</a></p>
 </div>
 </details>
 <details class="variant" id="v28">
@@ -1433,7 +1451,7 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <h4>Исходные данные</h4>
 <p><a href="reports/variants/V28/V28_исходные_данные.zip">Скачать архив варианта · ZIP</a></p>
 <h4>Файлы варианта</h4>
-<p class="files"><a href="reports/variants/V28/Заказ покупателя.xlsx">Заказ покупателя.xlsx</a><a href="reports/variants/V28/Заказ на производство.xlsx">Заказ на производство.xlsx</a><a href="reports/variants/V28/Спецификация.xlsx">Спецификация.xlsx</a><a href="reports/variants/V28/Цены.xlsx">Цены.xlsx</a><a href="reports/variants/V28/Расчет стоимости.xlsx">Расчет стоимости.xlsx</a><a href="reports/variants/V28/Заказчики.json">Заказчики.json</a><a href="reports/variants/V28/Заметки.json">Заметки.json</a><a href="reports/variants/V28/Задание.md">Задание.md</a><a href="reports/variants/V28/V28_исходные_данные.zip">V28_исходные_данные.zip</a></p>
+<p class="files"><a href="reports/variants/V28/Заказ покупателя.xlsx" download>Заказ покупателя.xlsx</a><a href="reports/variants/V28/Заказ на производство.xlsx" download>Заказ на производство.xlsx</a><a href="reports/variants/V28/Спецификация.xlsx" download>Спецификация.xlsx</a><a href="reports/variants/V28/Цены.xlsx" download>Цены.xlsx</a><a href="reports/variants/V28/Расчет стоимости.xlsx" download>Расчет стоимости.xlsx</a><a href="reports/variants/V28/Заказчики.json" download>Заказчики.json</a><a href="reports/variants/V28/Заметки.json" download>Заметки.json</a><a href="reports/variants/V28/Задание.md" download>Задание.md</a></p>
 </div>
 </details>
 <details class="variant" id="v29">
@@ -1453,7 +1471,7 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <h4>Исходные данные</h4>
 <p><a href="reports/variants/V29/V29_исходные_данные.zip">Скачать архив варианта · ZIP</a></p>
 <h4>Файлы варианта</h4>
-<p class="files"><a href="reports/variants/V29/Заказ покупателя.xlsx">Заказ покупателя.xlsx</a><a href="reports/variants/V29/Заказ на производство.xlsx">Заказ на производство.xlsx</a><a href="reports/variants/V29/Спецификация.xlsx">Спецификация.xlsx</a><a href="reports/variants/V29/Цены.xlsx">Цены.xlsx</a><a href="reports/variants/V29/Расчет стоимости.xlsx">Расчет стоимости.xlsx</a><a href="reports/variants/V29/Заказчики.json">Заказчики.json</a><a href="reports/variants/V29/Заметки.json">Заметки.json</a><a href="reports/variants/V29/Задание.md">Задание.md</a><a href="reports/variants/V29/V29_исходные_данные.zip">V29_исходные_данные.zip</a></p>
+<p class="files"><a href="reports/variants/V29/Заказ покупателя.xlsx" download>Заказ покупателя.xlsx</a><a href="reports/variants/V29/Заказ на производство.xlsx" download>Заказ на производство.xlsx</a><a href="reports/variants/V29/Спецификация.xlsx" download>Спецификация.xlsx</a><a href="reports/variants/V29/Цены.xlsx" download>Цены.xlsx</a><a href="reports/variants/V29/Расчет стоимости.xlsx" download>Расчет стоимости.xlsx</a><a href="reports/variants/V29/Заказчики.json" download>Заказчики.json</a><a href="reports/variants/V29/Заметки.json" download>Заметки.json</a><a href="reports/variants/V29/Задание.md" download>Задание.md</a></p>
 </div>
 </details>
 <details class="variant" id="v30">
@@ -1473,7 +1491,7 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <h4>Исходные данные</h4>
 <p><a href="reports/variants/V30/V30_исходные_данные.zip">Скачать архив варианта · ZIP</a></p>
 <h4>Файлы варианта</h4>
-<p class="files"><a href="reports/variants/V30/Заказ покупателя.xlsx">Заказ покупателя.xlsx</a><a href="reports/variants/V30/Заказ на производство.xlsx">Заказ на производство.xlsx</a><a href="reports/variants/V30/Спецификация.xlsx">Спецификация.xlsx</a><a href="reports/variants/V30/Цены.xlsx">Цены.xlsx</a><a href="reports/variants/V30/Расчет стоимости.xlsx">Расчет стоимости.xlsx</a><a href="reports/variants/V30/Заказчики.json">Заказчики.json</a><a href="reports/variants/V30/Заметки.json">Заметки.json</a><a href="reports/variants/V30/Задание.md">Задание.md</a><a href="reports/variants/V30/V30_исходные_данные.zip">V30_исходные_данные.zip</a></p>
+<p class="files"><a href="reports/variants/V30/Заказ покупателя.xlsx" download>Заказ покупателя.xlsx</a><a href="reports/variants/V30/Заказ на производство.xlsx" download>Заказ на производство.xlsx</a><a href="reports/variants/V30/Спецификация.xlsx" download>Спецификация.xlsx</a><a href="reports/variants/V30/Цены.xlsx" download>Цены.xlsx</a><a href="reports/variants/V30/Расчет стоимости.xlsx" download>Расчет стоимости.xlsx</a><a href="reports/variants/V30/Заказчики.json" download>Заказчики.json</a><a href="reports/variants/V30/Заметки.json" download>Заметки.json</a><a href="reports/variants/V30/Задание.md" download>Задание.md</a></p>
 </div>
 </details>
 
@@ -1579,6 +1597,40 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
       var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
       window.scrollTo({top: 0, behavior: reduce ? 'auto' : 'smooth'});
     });
+  });
+})();
+
+(function(){
+  document.querySelectorAll('[data-slider]').forEach(function(slider){
+    var track = slider.querySelector('[data-slider-track]');
+    var slides = track ? Array.prototype.slice.call(track.children) : [];
+    var counter = slider.querySelector('[data-slider-counter]');
+    var prev = slider.querySelector('[data-slider-prev]');
+    var next = slider.querySelector('[data-slider-next]');
+    if(!track || slides.length < 2) return;
+    function current(){
+      var best = 0, dist = Infinity;
+      slides.forEach(function(slide, i){
+        var d = Math.abs(slide.offsetLeft - track.scrollLeft);
+        if(d < dist){ dist = d; best = i; }
+      });
+      return best;
+    }
+    function update(){
+      if(counter) counter.textContent = (current() + 1) + ' / ' + slides.length;
+    }
+    function go(delta){
+      var i = Math.max(0, Math.min(slides.length - 1, current() + delta));
+      var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      track.scrollTo({left: slides[i].offsetLeft, behavior: reduce ? 'auto' : 'smooth'});
+    }
+    if(prev) prev.addEventListener('click', function(){ go(-1); });
+    if(next) next.addEventListener('click', function(){ go(1); });
+    track.addEventListener('scroll', function(){
+      clearTimeout(track._sliderTimer);
+      track._sliderTimer = setTimeout(update, 80);
+    }, {passive: true});
+    update();
   });
 })();
 (function(){

@@ -527,6 +527,12 @@ html.modal-open { overflow: hidden; }
 :root[data-theme=dark] .quiz-actions button[data-answer]:hover, :root[data-theme=dark] .quiz-actions button.quiz-answer:hover { background: #262626; background-color: #262626; color: #fff; border-color: #262626; }
 :root[data-theme=dark] .gate-q { background: #1E1E1E; color: #FF6B00; }
 
+/* the whole-variant archive is the main action in a download block */
+.files a.zip { background: #121212; color: #fff; border-color: #121212; font-weight: 700; box-shadow: 4px 4px 0 rgba(0,0,0,.18); }
+.files a.zip::before { color: #fff; }
+.files a.zip:hover { background: #1D1D1D; color: #fff; border-color: #1D1D1D; box-shadow: 5px 5px 0 rgba(0,0,0,.22); }
+.files a.zip:active { transform: translate(2px,2px); box-shadow: 1px 1px 0 rgba(0,0,0,.12); }
+
 /* ---------- practical work checklist ---------- */
 .work-checklist { width: 100%; border-collapse: collapse; margin: 14px 0 4px; }
 .work-checklist th, .work-checklist td { border: 1px solid var(--rule); padding: 9px 10px; vertical-align: top; }
@@ -564,6 +570,24 @@ html.modal-open { overflow: hidden; }
 .variant-body .task-list { margin: 8px 0 0; padding-left: 20px; }
 .variant-body .task-list li { margin: 0 0 8px; }
 @media (max-width: 620px) { .variant-body { overflow-x: auto; } .variant-body table { min-width: 520px; } }
+
+/* ---------- schema slider: all CREATE TABLE examples ---------- */
+.schema-slider { margin: 18px 0 24px; border: 1px solid #d8d5cc; border-radius: 14px; background: #fff; color: #1a1916; overflow: hidden; }
+.schema-slider-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 14px; background: #f5f2ea; border-bottom: 1px solid #d8d5cc; }
+.schema-slider-bar strong { font: 700 14px/1.2 var(--font-display); color: #1a1916; }
+.schema-slider-actions { display: flex; align-items: center; gap: 8px; }
+.schema-slider-counter { min-width: 62px; text-align: center; font: 600 13px/1 var(--font-mono); color: #59544a; }
+.schema-btn { width: 34px; height: 34px; border: 1px solid #c9c4b8; border-radius: 8px; background: #fff; color: #1a1916; font: 700 18px/1 var(--font-mono); cursor: pointer; }
+.schema-btn:hover { background: #ece7dc; }
+.schema-track { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: thin; }
+.schema-slide { flex: 0 0 100%; min-width: 100%; box-sizing: border-box; padding: 16px 18px 18px; scroll-snap-align: start; }
+.schema-slide h4 { margin: 0 0 10px; font: 700 16px/1.3 var(--font-display); color: #1a1916; }
+.schema-slide h4 code, .schema-slide p code { color: #1a1916; background: #f1ede4; padding: 1px 4px; border-radius: 4px; }
+.schema-slide p { margin: 0 0 10px; font-size: 14px; line-height: 1.55; color: #3a372f; }
+.schema-slide pre { margin: 0; padding: 14px 16px; overflow-x: auto; border: 1px solid #ddd8cc; border-radius: 10px; background: #fbfaf6; color: #1a1916; font: 12.5px/1.5 var(--font-mono); }
+.schema-slide code { color: inherit; background: none; padding: 0; }
+.schema-slider:focus-within { outline: 2px solid #b9a97f; outline-offset: 2px; }
+@media (max-width: 620px) { .schema-slide { padding: 12px; } .schema-slider-bar { padding: 8px 10px; } }
 
 /* ---------- print / PDF export ---------- */
 @page { margin: 16mm; }
@@ -1117,36 +1141,36 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <p>Часть дефектов ловится статической проверкой разметки. Ниже скрипт на Python, который разбирает HTML экрана приёмки и ищет типовые нарушения: поле без подписи, кнопку без типа, картинку без <code>alt</code>, кликабельный <code>div</code>, положительный <code>tabindex</code>, повтор <code>id</code> и ссылку на несуществующий текст ошибки.</p>
 <div class="codehilite" data-lang="text"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">html.parser</span><span class="w"> </span><span class="kn">import</span> <span class="n">HTMLParser</span>
 
-<span class="n">SCREEN</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;&lt;!doctype html&gt;</span>
-<span class="s2">&lt;html lang=&quot;ru&quot;&gt;</span>
+<span class="n">SCREEN</span> <span class="o">=</span> <span class="s2">"""&lt;!doctype html&gt;</span>
+<span class="s2">&lt;html lang="ru"&gt;</span>
 <span class="s2">&lt;body&gt;</span>
 <span class="s2">&lt;h1&gt;Приёмка товара&lt;/h1&gt;</span>
-<span class="s2">&lt;form action=&quot;/acceptance&quot; method=&quot;post&quot;&gt;</span>
-<span class="s2">  &lt;div class=&quot;row&quot;&gt;</span>
+<span class="s2">&lt;form action="/acceptance" method="post"&gt;</span>
+<span class="s2">  &lt;div class="row"&gt;</span>
 <span class="s2">    &lt;span&gt;Поставка&lt;/span&gt;</span>
-<span class="s2">    &lt;input name=&quot;supply_id&quot; value=&quot;505&quot;&gt;</span>
+<span class="s2">    &lt;input name="supply_id" value="505"&gt;</span>
 <span class="s2">  &lt;/div&gt;</span>
-<span class="s2">  &lt;div class=&quot;row&quot;&gt;</span>
-<span class="s2">    &lt;label for=&quot;qty&quot;&gt;Количество&lt;/label&gt;</span>
-<span class="s2">    &lt;input id=&quot;qty&quot; name=&quot;qty&quot; required aria-describedby=&quot;qty-error&quot;&gt;</span>
-<span class="s2">    &lt;p class=&quot;error&quot; id=&quot;qty-error&quot;&gt;Введите целое число больше нуля&lt;/p&gt;</span>
+<span class="s2">  &lt;div class="row"&gt;</span>
+<span class="s2">    &lt;label for="qty"&gt;Количество&lt;/label&gt;</span>
+<span class="s2">    &lt;input id="qty" name="qty" required aria-describedby="qty-error"&gt;</span>
+<span class="s2">    &lt;p class="error" id="qty-error"&gt;Введите целое число больше нуля&lt;/p&gt;</span>
 <span class="s2">  &lt;/div&gt;</span>
-<span class="s2">  &lt;div class=&quot;row&quot;&gt;</span>
-<span class="s2">    &lt;label for=&quot;cell&quot;&gt;Ячейка&lt;/label&gt;</span>
-<span class="s2">    &lt;input id=&quot;cell&quot; name=&quot;cell&quot; aria-describedby=&quot;cell-hint&quot;&gt;</span>
+<span class="s2">  &lt;div class="row"&gt;</span>
+<span class="s2">    &lt;label for="cell"&gt;Ячейка&lt;/label&gt;</span>
+<span class="s2">    &lt;input id="cell" name="cell" aria-describedby="cell-hint"&gt;</span>
 <span class="s2">  &lt;/div&gt;</span>
-<span class="s2">  &lt;div class=&quot;row&quot;&gt;</span>
-<span class="s2">    &lt;label for=&quot;cell&quot;&gt;Комментарий&lt;/label&gt;</span>
-<span class="s2">    &lt;input id=&quot;cell&quot; name=&quot;comment&quot;&gt;</span>
+<span class="s2">  &lt;div class="row"&gt;</span>
+<span class="s2">    &lt;label for="cell"&gt;Комментарий&lt;/label&gt;</span>
+<span class="s2">    &lt;input id="cell" name="comment"&gt;</span>
 <span class="s2">  &lt;/div&gt;</span>
-<span class="s2">  &lt;div class=&quot;row&quot; onclick=&quot;submitForm()&quot;&gt;Провести приёмку&lt;/div&gt;</span>
+<span class="s2">  &lt;div class="row" onclick="submitForm()"&gt;Провести приёмку&lt;/div&gt;</span>
 <span class="s2">  &lt;button&gt;Отмена&lt;/button&gt;</span>
-<span class="s2">  &lt;img src=&quot;hint.png&quot;&gt;</span>
-<span class="s2">  &lt;a href=&quot;#&quot; tabindex=&quot;3&quot;&gt;Помощь&lt;/a&gt;</span>
+<span class="s2">  &lt;img src="hint.png"&gt;</span>
+<span class="s2">  &lt;a href="#" tabindex="3"&gt;Помощь&lt;/a&gt;</span>
 <span class="s2">&lt;/form&gt;</span>
 <span class="s2">&lt;/body&gt;</span>
 <span class="s2">&lt;/html&gt;</span>
-<span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">"""</span>
 
 
 <span class="k">class</span><span class="w"> </span><span class="nc">Screen</span><span class="p">(</span><span class="n">HTMLParser</span><span class="p">):</span>
@@ -1157,55 +1181,55 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 
     <span class="k">def</span><span class="w"> </span><span class="nf">handle_starttag</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tag</span><span class="p">,</span> <span class="n">attrs</span><span class="p">):</span>
         <span class="n">a</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">attrs</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">tag</span> <span class="o">==</span> <span class="s2">&quot;input&quot;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">tag</span> <span class="o">==</span> <span class="s2">"input"</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="n">tag</span> <span class="o">==</span> <span class="s2">&quot;label&quot;</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="n">tag</span> <span class="o">==</span> <span class="s2">"label"</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">labels</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="n">tag</span> <span class="o">==</span> <span class="s2">&quot;button&quot;</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="n">tag</span> <span class="o">==</span> <span class="s2">"button"</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">buttons</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="n">tag</span> <span class="o">==</span> <span class="s2">&quot;img&quot;</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="n">tag</span> <span class="o">==</span> <span class="s2">"img"</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">images</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
-        <span class="k">if</span> <span class="s2">&quot;id&quot;</span> <span class="ow">in</span> <span class="n">a</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">ids</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">])</span>
-        <span class="k">if</span> <span class="s2">&quot;tabindex&quot;</span> <span class="ow">in</span> <span class="n">a</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">tabindex</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">tag</span><span class="p">,</span> <span class="n">a</span><span class="p">[</span><span class="s2">&quot;tabindex&quot;</span><span class="p">]))</span>
-        <span class="k">if</span> <span class="n">tag</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;div&quot;</span><span class="p">,</span> <span class="s2">&quot;span&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="s2">&quot;onclick&quot;</span> <span class="ow">in</span> <span class="n">a</span><span class="p">:</span>
+        <span class="k">if</span> <span class="s2">"id"</span> <span class="ow">in</span> <span class="n">a</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ids</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="s2">"id"</span><span class="p">])</span>
+        <span class="k">if</span> <span class="s2">"tabindex"</span> <span class="ow">in</span> <span class="n">a</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">tabindex</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">tag</span><span class="p">,</span> <span class="n">a</span><span class="p">[</span><span class="s2">"tabindex"</span><span class="p">]))</span>
+        <span class="k">if</span> <span class="n">tag</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">"div"</span><span class="p">,</span> <span class="s2">"span"</span><span class="p">)</span> <span class="ow">and</span> <span class="s2">"onclick"</span> <span class="ow">in</span> <span class="n">a</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">clickable</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">tag</span><span class="p">,</span> <span class="n">a</span><span class="p">))</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">check</span><span class="p">(</span><span class="n">src</span><span class="p">):</span>
     <span class="n">s</span> <span class="o">=</span> <span class="n">Screen</span><span class="p">()</span>
     <span class="n">s</span><span class="o">.</span><span class="n">feed</span><span class="p">(</span><span class="n">src</span><span class="p">)</span>
-    <span class="n">labelled</span> <span class="o">=</span> <span class="p">{</span><span class="n">lab</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;for&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">lab</span> <span class="ow">in</span> <span class="n">s</span><span class="o">.</span><span class="n">labels</span> <span class="k">if</span> <span class="n">lab</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;for&quot;</span><span class="p">)}</span>
+    <span class="n">labelled</span> <span class="o">=</span> <span class="p">{</span><span class="n">lab</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"for"</span><span class="p">)</span> <span class="k">for</span> <span class="n">lab</span> <span class="ow">in</span> <span class="n">s</span><span class="o">.</span><span class="n">labels</span> <span class="k">if</span> <span class="n">lab</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"for"</span><span class="p">)}</span>
     <span class="n">known_ids</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">ids</span><span class="p">)</span>
     <span class="n">problems</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">inp</span> <span class="ow">in</span> <span class="n">s</span><span class="o">.</span><span class="n">inputs</span><span class="p">:</span>
-        <span class="n">name</span> <span class="o">=</span> <span class="n">inp</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="s2">&quot;?&quot;</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">inp</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;id&quot;</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">labelled</span><span class="p">:</span>
-            <span class="n">problems</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;поле </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">: нет label, связанного через for&quot;</span><span class="p">)</span>
-        <span class="n">target</span> <span class="o">=</span> <span class="n">inp</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;aria-describedby&quot;</span><span class="p">)</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="n">inp</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"name"</span><span class="p">,</span> <span class="s2">"?"</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">inp</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"id"</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">labelled</span><span class="p">:</span>
+            <span class="n">problems</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">"поле </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">: нет label, связанного через for"</span><span class="p">)</span>
+        <span class="n">target</span> <span class="o">=</span> <span class="n">inp</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"aria-describedby"</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">target</span> <span class="ow">and</span> <span class="n">target</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">known_ids</span><span class="p">:</span>
-            <span class="n">problems</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;поле </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">: aria-describedby указывает на несуществующий id </span><span class="si">{</span><span class="n">target</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">problems</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">"поле </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">: aria-describedby указывает на несуществующий id </span><span class="si">{</span><span class="n">target</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">btn</span> <span class="ow">in</span> <span class="n">s</span><span class="o">.</span><span class="n">buttons</span><span class="p">:</span>
-        <span class="k">if</span> <span class="s2">&quot;type&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">btn</span><span class="p">:</span>
-            <span class="n">problems</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;кнопка без type: в форме сработает отправка по умолчанию&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s2">"type"</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">btn</span><span class="p">:</span>
+            <span class="n">problems</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">"кнопка без type: в форме сработает отправка по умолчанию"</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">img</span> <span class="ow">in</span> <span class="n">s</span><span class="o">.</span><span class="n">images</span><span class="p">:</span>
-        <span class="k">if</span> <span class="s2">&quot;alt&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">img</span><span class="p">:</span>
-            <span class="n">problems</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;изображение </span><span class="si">{</span><span class="n">img</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;src&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">: нет alt&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s2">"alt"</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">img</span><span class="p">:</span>
+            <span class="n">problems</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">"изображение </span><span class="si">{</span><span class="n">img</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">'src'</span><span class="p">)</span><span class="si">}</span><span class="s2">: нет alt"</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">tag</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">s</span><span class="o">.</span><span class="n">clickable</span><span class="p">:</span>
-        <span class="n">problems</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&lt;</span><span class="si">{</span><span class="n">tag</span><span class="si">}</span><span class="s2"> onclick&gt; вместо button: нет роли, фокуса и реакции на Enter&quot;</span><span class="p">)</span>
+        <span class="n">problems</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">"&lt;</span><span class="si">{</span><span class="n">tag</span><span class="si">}</span><span class="s2"> onclick&gt; вместо button: нет роли, фокуса и реакции на Enter"</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">tag</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">s</span><span class="o">.</span><span class="n">tabindex</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">value</span><span class="o">.</span><span class="n">isdigit</span><span class="p">()</span> <span class="ow">and</span> <span class="nb">int</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">problems</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&lt;</span><span class="si">{</span><span class="n">tag</span><span class="si">}</span><span class="s2"> tabindex=</span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="s2">&gt;: положительный tabindex ломает порядок обхода&quot;</span><span class="p">)</span>
+            <span class="n">problems</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">"&lt;</span><span class="si">{</span><span class="n">tag</span><span class="si">}</span><span class="s2"> tabindex=</span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="s2">&gt;: положительный tabindex ломает порядок обхода"</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">dup</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">({</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">s</span><span class="o">.</span><span class="n">ids</span> <span class="k">if</span> <span class="n">s</span><span class="o">.</span><span class="n">ids</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">}):</span>
-        <span class="n">problems</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;id </span><span class="si">{</span><span class="n">dup</span><span class="si">}</span><span class="s2"> встречается </span><span class="si">{</span><span class="n">s</span><span class="o">.</span><span class="n">ids</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="n">dup</span><span class="p">)</span><span class="si">}</span><span class="s2"> раза: label свяжется не с тем полем&quot;</span><span class="p">)</span>
+        <span class="n">problems</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">"id </span><span class="si">{</span><span class="n">dup</span><span class="si">}</span><span class="s2"> встречается </span><span class="si">{</span><span class="n">s</span><span class="o">.</span><span class="n">ids</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="n">dup</span><span class="p">)</span><span class="si">}</span><span class="s2"> раза: label свяжется не с тем полем"</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">problems</span>
 
 
 <span class="n">problems</span> <span class="o">=</span> <span class="n">check</span><span class="p">(</span><span class="n">SCREEN</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;найдено проблем:&quot;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">problems</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"найдено проблем:"</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">problems</span><span class="p">))</span>
 <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">p</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">problems</span><span class="p">,</span> <span class="mi">1</span><span class="p">):</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">. </span><span class="si">{</span><span class="n">p</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">. </span><span class="si">{</span><span class="n">p</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 </code></pre></div>
 
 <p>Скрипт находит нарушения в разметке и печатает их списком.</p>
@@ -1487,6 +1511,40 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
       var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
       window.scrollTo({top: 0, behavior: reduce ? 'auto' : 'smooth'});
     });
+  });
+})();
+
+(function(){
+  document.querySelectorAll('[data-slider]').forEach(function(slider){
+    var track = slider.querySelector('[data-slider-track]');
+    var slides = track ? Array.prototype.slice.call(track.children) : [];
+    var counter = slider.querySelector('[data-slider-counter]');
+    var prev = slider.querySelector('[data-slider-prev]');
+    var next = slider.querySelector('[data-slider-next]');
+    if(!track || slides.length < 2) return;
+    function current(){
+      var best = 0, dist = Infinity;
+      slides.forEach(function(slide, i){
+        var d = Math.abs(slide.offsetLeft - track.scrollLeft);
+        if(d < dist){ dist = d; best = i; }
+      });
+      return best;
+    }
+    function update(){
+      if(counter) counter.textContent = (current() + 1) + ' / ' + slides.length;
+    }
+    function go(delta){
+      var i = Math.max(0, Math.min(slides.length - 1, current() + delta));
+      var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      track.scrollTo({left: slides[i].offsetLeft, behavior: reduce ? 'auto' : 'smooth'});
+    }
+    if(prev) prev.addEventListener('click', function(){ go(-1); });
+    if(next) next.addEventListener('click', function(){ go(1); });
+    track.addEventListener('scroll', function(){
+      clearTimeout(track._sliderTimer);
+      track._sliderTimer = setTimeout(update, 80);
+    }, {passive: true});
+    update();
   });
 })();
 (function(){

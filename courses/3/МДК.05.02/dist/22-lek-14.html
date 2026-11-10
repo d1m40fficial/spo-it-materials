@@ -527,6 +527,12 @@ html.modal-open { overflow: hidden; }
 :root[data-theme=dark] .quiz-actions button[data-answer]:hover, :root[data-theme=dark] .quiz-actions button.quiz-answer:hover { background: #262626; background-color: #262626; color: #fff; border-color: #262626; }
 :root[data-theme=dark] .gate-q { background: #1E1E1E; color: #FF6B00; }
 
+/* the whole-variant archive is the main action in a download block */
+.files a.zip { background: #121212; color: #fff; border-color: #121212; font-weight: 700; box-shadow: 4px 4px 0 rgba(0,0,0,.18); }
+.files a.zip::before { color: #fff; }
+.files a.zip:hover { background: #1D1D1D; color: #fff; border-color: #1D1D1D; box-shadow: 5px 5px 0 rgba(0,0,0,.22); }
+.files a.zip:active { transform: translate(2px,2px); box-shadow: 1px 1px 0 rgba(0,0,0,.12); }
+
 /* ---------- practical work checklist ---------- */
 .work-checklist { width: 100%; border-collapse: collapse; margin: 14px 0 4px; }
 .work-checklist th, .work-checklist td { border: 1px solid var(--rule); padding: 9px 10px; vertical-align: top; }
@@ -564,6 +570,24 @@ html.modal-open { overflow: hidden; }
 .variant-body .task-list { margin: 8px 0 0; padding-left: 20px; }
 .variant-body .task-list li { margin: 0 0 8px; }
 @media (max-width: 620px) { .variant-body { overflow-x: auto; } .variant-body table { min-width: 520px; } }
+
+/* ---------- schema slider: all CREATE TABLE examples ---------- */
+.schema-slider { margin: 18px 0 24px; border: 1px solid #d8d5cc; border-radius: 14px; background: #fff; color: #1a1916; overflow: hidden; }
+.schema-slider-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 14px; background: #f5f2ea; border-bottom: 1px solid #d8d5cc; }
+.schema-slider-bar strong { font: 700 14px/1.2 var(--font-display); color: #1a1916; }
+.schema-slider-actions { display: flex; align-items: center; gap: 8px; }
+.schema-slider-counter { min-width: 62px; text-align: center; font: 600 13px/1 var(--font-mono); color: #59544a; }
+.schema-btn { width: 34px; height: 34px; border: 1px solid #c9c4b8; border-radius: 8px; background: #fff; color: #1a1916; font: 700 18px/1 var(--font-mono); cursor: pointer; }
+.schema-btn:hover { background: #ece7dc; }
+.schema-track { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: thin; }
+.schema-slide { flex: 0 0 100%; min-width: 100%; box-sizing: border-box; padding: 16px 18px 18px; scroll-snap-align: start; }
+.schema-slide h4 { margin: 0 0 10px; font: 700 16px/1.3 var(--font-display); color: #1a1916; }
+.schema-slide h4 code, .schema-slide p code { color: #1a1916; background: #f1ede4; padding: 1px 4px; border-radius: 4px; }
+.schema-slide p { margin: 0 0 10px; font-size: 14px; line-height: 1.55; color: #3a372f; }
+.schema-slide pre { margin: 0; padding: 14px 16px; overflow-x: auto; border: 1px solid #ddd8cc; border-radius: 10px; background: #fbfaf6; color: #1a1916; font: 12.5px/1.5 var(--font-mono); }
+.schema-slide code { color: inherit; background: none; padding: 0; }
+.schema-slider:focus-within { outline: 2px solid #b9a97f; outline-offset: 2px; }
+@media (max-width: 620px) { .schema-slide { padding: 12px; } .schema-slider-bar { padding: 8px 10px; } }
 
 /* ---------- print / PDF export ---------- */
 @page { margin: 16mm; }
@@ -853,17 +877,17 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <p>Посмотрим на учебный проект <code>sklad-plus</code>. В нём есть таблица <code>products</code> с колонками <code>id</code>, <code>sku</code>, <code>title</code>, <code>category_id</code> и <code>price</code>. Отчёт по остаткам ищет товар по части названия. Первая версия кода выглядит естественно и работает, пока пользователь вводит обычные слова.</p>
 <div class="codehilite" data-lang="python"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">sqlite3</span>
 
-<span class="n">con</span> <span class="o">=</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s2">&quot;sklad.db&quot;</span><span class="p">)</span>
+<span class="n">con</span> <span class="o">=</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s2">"sklad.db"</span><span class="p">)</span>
 <span class="n">cur</span> <span class="o">=</span> <span class="n">con</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
 
-<span class="n">term</span> <span class="o">=</span> <span class="s2">&quot;&#39; OR 1=1 --&quot;</span>
-<span class="n">sql</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;SELECT id, title, price FROM products WHERE title LIKE &#39;%</span><span class="si">{</span><span class="n">term</span><span class="si">}</span><span class="s2">%&#39;&quot;</span>
+<span class="n">term</span> <span class="o">=</span> <span class="s2">"' OR 1=1 --"</span>
+<span class="n">sql</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"SELECT id, title, price FROM products WHERE title LIKE '%</span><span class="si">{</span><span class="n">term</span><span class="si">}</span><span class="s2">%'"</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">sql</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">cur</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">sql</span><span class="p">)</span><span class="o">.</span><span class="n">fetchall</span><span class="p">()),</span> <span class="s2">&quot;строк&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">cur</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">sql</span><span class="p">)</span><span class="o">.</span><span class="n">fetchall</span><span class="p">()),</span> <span class="s2">"строк"</span><span class="p">)</span>
 </code></pre></div>
 
 <p>Вывод на учебной базе:</p>
-<div class="codehilite" data-lang="text"><pre><span></span><code>SELECT id, title, price FROM products WHERE title LIKE &#39;%&#39; OR 1=1 --%&#39;
+<div class="codehilite" data-lang="text"><pre><span></span><code>SELECT id, title, price FROM products WHERE title LIKE '%' OR 1=1 --%'
 8 строк
 </code></pre></div>
 
@@ -892,10 +916,10 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 </table>
 <h2 id="параметр-вместо-подстановки"><span class="num">03</span>Параметр вместо подстановки</h2>
 <p>Параметризованный запрос устроен иначе. В шаблоне остаётся знак <code>?</code>, а значение передаётся вторым аргументом метода <code>execute</code>. Драйвер отправляет базе шаблон и значения раздельно, и база подставляет значение уже после разбора команды.</p>
-<div class="codehilite" data-lang="python"><pre><span></span><code><span class="n">term</span> <span class="o">=</span> <span class="s2">&quot;&#39; OR 1=1 --&quot;</span>
-<span class="n">sql</span> <span class="o">=</span> <span class="s2">&quot;SELECT id, title, price FROM products WHERE title LIKE ?&quot;</span>
+<div class="codehilite" data-lang="python"><pre><span></span><code><span class="n">term</span> <span class="o">=</span> <span class="s2">"' OR 1=1 --"</span>
+<span class="n">sql</span> <span class="o">=</span> <span class="s2">"SELECT id, title, price FROM products WHERE title LIKE ?"</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">sql</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">cur</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">sql</span><span class="p">,</span> <span class="p">(</span><span class="sa">f</span><span class="s2">&quot;%</span><span class="si">{</span><span class="n">term</span><span class="si">}</span><span class="s2">%&quot;</span><span class="p">,))</span><span class="o">.</span><span class="n">fetchall</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">cur</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">sql</span><span class="p">,</span> <span class="p">(</span><span class="sa">f</span><span class="s2">"%</span><span class="si">{</span><span class="n">term</span><span class="si">}</span><span class="s2">%"</span><span class="p">,))</span><span class="o">.</span><span class="n">fetchall</span><span class="p">())</span>
 </code></pre></div>
 
 <p>Вывод:</p>
@@ -916,13 +940,13 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <div class="codehilite" data-lang="text"><pre><span></span><code><span class="n">con</span><span class="o">.</span><span class="n">row_factory</span> <span class="o">=</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">Row</span>
 <span class="n">cur</span> <span class="o">=</span> <span class="n">con</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
 <span class="n">row</span> <span class="o">=</span> <span class="n">cur</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
-    <span class="s2">&quot;SELECT id, sku, title, price FROM products WHERE sku = ?&quot;</span><span class="p">,</span> <span class="p">(</span><span class="s2">&quot;SKU-1005&quot;</span><span class="p">,)</span>
+    <span class="s2">"SELECT id, sku, title, price FROM products WHERE sku = ?"</span><span class="p">,</span> <span class="p">(</span><span class="s2">"SKU-1005"</span><span class="p">,)</span>
 <span class="p">)</span><span class="o">.</span><span class="n">fetchone</span><span class="p">()</span>
 <span class="nb">print</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="n">row</span><span class="p">))</span>
 </code></pre></div>
 
 <p>Вывод:</p>
-<div class="codehilite" data-lang="text"><pre><span></span><code>{&#39;id&#39;: 5, &#39;sku&#39;: &#39;SKU-1005&#39;, &#39;title&#39;: &#39;Кабель ВВГнг 3x2,5&#39;, &#39;price&#39;: 12800}
+<div class="codehilite" data-lang="text"><pre><span></span><code>{'id': 5, 'sku': 'SKU-1005', 'title': 'Кабель ВВГнг 3x2,5', 'price': 12800}
 </code></pre></div>
 
 <p>Теперь строку можно превратить в объект предметной области. В проекте <code>sklad-plus</code> для товара есть датакласс <code>Product</code>. Функция <code>to_product</code> принимает строку выборки и возвращает объект. Дальше отчёт работает с полями объекта, а не с индексами кортежа.</p>
@@ -936,7 +960,7 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
     <span class="n">price</span><span class="p">:</span> <span class="nb">int</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">to_product</span><span class="p">(</span><span class="n">r</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">Product</span><span class="p">(</span><span class="n">r</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">],</span> <span class="n">r</span><span class="p">[</span><span class="s2">&quot;sku&quot;</span><span class="p">],</span> <span class="n">r</span><span class="p">[</span><span class="s2">&quot;title&quot;</span><span class="p">],</span> <span class="n">r</span><span class="p">[</span><span class="s2">&quot;price&quot;</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">Product</span><span class="p">(</span><span class="n">r</span><span class="p">[</span><span class="s2">"id"</span><span class="p">],</span> <span class="n">r</span><span class="p">[</span><span class="s2">"sku"</span><span class="p">],</span> <span class="n">r</span><span class="p">[</span><span class="s2">"title"</span><span class="p">],</span> <span class="n">r</span><span class="p">[</span><span class="s2">"price"</span><span class="p">])</span>
 
 <span class="n">product</span> <span class="o">=</span> <span class="n">to_product</span><span class="p">(</span><span class="n">row</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">product</span><span class="o">.</span><span class="n">title</span><span class="p">,</span> <span class="n">product</span><span class="o">.</span><span class="n">price</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span>
@@ -989,7 +1013,7 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <h2 id="пустой-результат-это-не-ошибка"><span class="num">05</span>Пустой результат это не ошибка</h2>
 <p>Запрос, который ничего не нашёл, не является сбоем. Это нормальная ситуация: товар сняли с продажи, площадка ещё не загрузила остатки, пользователь ошибся в артикуле. Ошибка начинается там, где код считает, что строка всегда есть.</p>
 <div class="codehilite" data-lang="text"><pre><span></span><code><span class="n">row</span> <span class="o">=</span> <span class="n">cur</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
-    <span class="s2">&quot;SELECT id, sku, title, price FROM products WHERE sku = ?&quot;</span><span class="p">,</span> <span class="p">(</span><span class="s2">&quot;SKU-9999&quot;</span><span class="p">,)</span>
+    <span class="s2">"SELECT id, sku, title, price FROM products WHERE sku = ?"</span><span class="p">,</span> <span class="p">(</span><span class="s2">"SKU-9999"</span><span class="p">,)</span>
 <span class="p">)</span><span class="o">.</span><span class="n">fetchone</span><span class="p">()</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">row</span><span class="p">)</span>
 </code></pre></div>
@@ -1010,10 +1034,10 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <p>Чтение не меняет файл базы. Запись меняет, и здесь важна транзакция. Транзакция это набор изменений, который база применяет целиком или не применяет вовсе. В <code>sqlite3</code> по умолчанию изменения начинают транзакцию и ждут <code>commit()</code>. Если соединение закрыть без фиксации, изменения откатятся.</p>
 <div class="codehilite" data-lang="text"><pre><span></span><code><span class="k">with</span> <span class="n">con</span><span class="p">:</span>
     <span class="n">cur</span> <span class="o">=</span> <span class="n">con</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
-        <span class="s2">&quot;INSERT INTO products (sku, title, category_id, price) VALUES (?, ?, ?, ?)&quot;</span><span class="p">,</span>
-        <span class="p">(</span><span class="s2">&quot;SKU-1009&quot;</span><span class="p">,</span> <span class="s2">&quot;Каска защитная&quot;</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">85000</span><span class="p">),</span>
+        <span class="s2">"INSERT INTO products (sku, title, category_id, price) VALUES (?, ?, ?, ?)"</span><span class="p">,</span>
+        <span class="p">(</span><span class="s2">"SKU-1009"</span><span class="p">,</span> <span class="s2">"Каска защитная"</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">85000</span><span class="p">),</span>
     <span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;id новой строки:&quot;</span><span class="p">,</span> <span class="n">cur</span><span class="o">.</span><span class="n">lastrowid</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"id новой строки:"</span><span class="p">,</span> <span class="n">cur</span><span class="o">.</span><span class="n">lastrowid</span><span class="p">)</span>
 </code></pre></div>
 
 <p>Вывод:</p>
@@ -1024,9 +1048,9 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <p>Курсор после вставки хранит <code>lastrowid</code>, то есть идентификатор добавленной строки. Он нужен, когда следом добавляется связанная запись: например, остаток товара ссылается на <code>products.id</code>, и этот идентификатор только что получен от базы. После обновления курсор хранит <code>rowcount</code>, число изменённых строк. Ноль означает, что условие никого не нашло, и это повод вывести сообщение, а не считать, что всё прошло успешно.</p>
 <div class="codehilite" data-lang="text"><pre><span></span><code><span class="k">with</span> <span class="n">con</span><span class="p">:</span>
     <span class="n">cur</span> <span class="o">=</span> <span class="n">con</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
-        <span class="s2">&quot;UPDATE products SET price = ? WHERE category_id = ?&quot;</span><span class="p">,</span> <span class="p">(</span><span class="mi">1999000</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="s2">"UPDATE products SET price = ? WHERE category_id = ?"</span><span class="p">,</span> <span class="p">(</span><span class="mi">1999000</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
     <span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;обновлено строк:&quot;</span><span class="p">,</span> <span class="n">cur</span><span class="o">.</span><span class="n">rowcount</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"обновлено строк:"</span><span class="p">,</span> <span class="n">cur</span><span class="o">.</span><span class="n">rowcount</span><span class="p">)</span>
 </code></pre></div>
 
 <p>Вывод:</p>
@@ -1035,15 +1059,15 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 
 <p>Для пакетной вставки есть <code>executemany</code>. Он принимает шаблон и список кортежей и выполняет одну подготовленную команду много раз. Это быстрее, чем собирать один огромный <code>INSERT</code> из сотен значений, и безопаснее, потому что значения по-прежнему идут параметрами.</p>
 <div class="codehilite" data-lang="text"><pre><span></span><code><span class="n">rows</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="p">(</span><span class="s2">&quot;SKU-1010&quot;</span><span class="p">,</span> <span class="s2">&quot;Стрейч-плёнка 500 мм&quot;</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">54000</span><span class="p">),</span>
-    <span class="p">(</span><span class="s2">&quot;SKU-1011&quot;</span><span class="p">,</span> <span class="s2">&quot;Ведро пластиковое 12 л&quot;</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">32000</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"SKU-1010"</span><span class="p">,</span> <span class="s2">"Стрейч-плёнка 500 мм"</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">54000</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"SKU-1011"</span><span class="p">,</span> <span class="s2">"Ведро пластиковое 12 л"</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">32000</span><span class="p">),</span>
 <span class="p">]</span>
 <span class="k">with</span> <span class="n">con</span><span class="p">:</span>
     <span class="n">cur</span> <span class="o">=</span> <span class="n">con</span><span class="o">.</span><span class="n">executemany</span><span class="p">(</span>
-        <span class="s2">&quot;INSERT INTO products (sku, title, category_id, price) VALUES (?, ?, ?, ?)&quot;</span><span class="p">,</span>
+        <span class="s2">"INSERT INTO products (sku, title, category_id, price) VALUES (?, ?, ?, ?)"</span><span class="p">,</span>
         <span class="n">rows</span><span class="p">,</span>
     <span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;добавлено строк:&quot;</span><span class="p">,</span> <span class="n">cur</span><span class="o">.</span><span class="n">rowcount</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"добавлено строк:"</span><span class="p">,</span> <span class="n">cur</span><span class="o">.</span><span class="n">rowcount</span><span class="p">)</span>
 </code></pre></div>
 
 <p>Вывод:</p>
@@ -1053,41 +1077,41 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <p>Транзакция особенно важна при переносе остатка между площадками. Списание в Москве и начисление в Твери это две команды. Если между ними произойдёт сбой, склад потеряет товар или получит его дважды. Обе команды должны идти в одной транзакции, а при нехватке остатка код обязан сделать откат и вернуть понятную ошибку.</p>
 <h2 id="где-параметр-не-работает"><span class="num">07</span>Где параметр не работает</h2>
 <p>Параметр заменяет значение, а не часть синтаксиса. Имя таблицы, имя колонки, направление сортировки и ключевое слово <code>ASC</code> или <code>DESC</code> это идентификаторы и служебные слова. База разбирает их до подстановки значений, поэтому <code>ORDER BY ?</code> не сортирует по колонке.</p>
-<div class="codehilite" data-lang="text"><pre><span></span><code><span class="nb">print</span><span class="p">([</span><span class="n">r</span><span class="p">[</span><span class="s2">&quot;title&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">cur</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;SELECT title FROM products ORDER BY ? LIMIT 3&quot;</span><span class="p">,</span> <span class="p">(</span><span class="s2">&quot;price&quot;</span><span class="p">,))])</span>
+<div class="codehilite" data-lang="text"><pre><span></span><code><span class="nb">print</span><span class="p">([</span><span class="n">r</span><span class="p">[</span><span class="s2">"title"</span><span class="p">]</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">cur</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">"SELECT title FROM products ORDER BY ? LIMIT 3"</span><span class="p">,</span> <span class="p">(</span><span class="s2">"price"</span><span class="p">,))])</span>
 </code></pre></div>
 
 <p>Вывод:</p>
-<div class="codehilite" data-lang="text"><pre><span></span><code>[&#39;Перфоратор Makita HR2470&#39;, &#39;Молоток слесарный 500 г&#39;, &#39;Саморез 4,2x75, 100 шт&#39;]
+<div class="codehilite" data-lang="text"><pre><span></span><code>['Перфоратор Makita HR2470', 'Молоток слесарный 500 г', 'Саморез 4,2x75, 100 шт']
 </code></pre></div>
 
 <p>Запрос выполнился без ошибки, но порядок остался тем, в котором строки лежат в таблице. База восприняла параметр как константу и не стала по ней сортировать. Это опасный класс ошибок: исключения нет, отчёт формируется, а данные идут не в том порядке, который ждал пользователь.</p>
 <p>Для сортировки применяют белый список. Программа хранит словарь допустимых значений и подставляет в шаблон только то, что в нём есть. Всё остальное отклоняется до обращения к базе.</p>
-<div class="codehilite" data-lang="text"><pre><span></span><code><span class="n">sort</span> <span class="o">=</span> <span class="s2">&quot;price&quot;</span>
-<span class="n">allowed</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;price&quot;</span><span class="p">:</span> <span class="s2">&quot;price DESC&quot;</span><span class="p">,</span> <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;title ASC&quot;</span><span class="p">}</span>
+<div class="codehilite" data-lang="text"><pre><span></span><code><span class="n">sort</span> <span class="o">=</span> <span class="s2">"price"</span>
+<span class="n">allowed</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"price"</span><span class="p">:</span> <span class="s2">"price DESC"</span><span class="p">,</span> <span class="s2">"title"</span><span class="p">:</span> <span class="s2">"title ASC"</span><span class="p">}</span>
 <span class="k">if</span> <span class="n">sort</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">allowed</span><span class="p">:</span>
-    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Недопустимое поле сортировки&quot;</span><span class="p">)</span>
-<span class="n">sql</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;SELECT title, price FROM products ORDER BY </span><span class="si">{</span><span class="n">allowed</span><span class="p">[</span><span class="n">sort</span><span class="p">]</span><span class="si">}</span><span class="s2"> LIMIT 3&quot;</span>
+    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"Недопустимое поле сортировки"</span><span class="p">)</span>
+<span class="n">sql</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"SELECT title, price FROM products ORDER BY </span><span class="si">{</span><span class="n">allowed</span><span class="p">[</span><span class="n">sort</span><span class="p">]</span><span class="si">}</span><span class="s2"> LIMIT 3"</span>
 <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">cur</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">sql</span><span class="p">):</span>
     <span class="nb">print</span><span class="p">(</span><span class="nb">tuple</span><span class="p">(</span><span class="n">r</span><span class="p">))</span>
 </code></pre></div>
 
 <p>Вывод:</p>
-<div class="codehilite" data-lang="text"><pre><span></span><code>(&#39;Перфоратор Makita HR2470&#39;, 1999000)
-(&#39;Костюм рабочий&#39;, 420000)
-(&#39;Смеситель для мойки&#39;, 345000)
+<div class="codehilite" data-lang="text"><pre><span></span><code>('Перфоратор Makita HR2470', 1999000)
+('Костюм рабочий', 420000)
+('Смеситель для мойки', 345000)
 </code></pre></div>
 
 <p>Вторая тонкость касается списков. Если в запросе <code>IN (?)</code> передать список из трёх элементов, драйвер увидит один знак вопроса и три значения. Получится ошибка <code>ProgrammingError: Incorrect number of bindings supplied. The current statement uses 1, and there are 3 supplied.</code> Количество знаков вопроса должно совпадать с количеством значений.</p>
 <div class="codehilite" data-lang="text"><pre><span></span><code><span class="n">ids</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">]</span>
-<span class="n">placeholders</span> <span class="o">=</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;?&quot;</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">ids</span><span class="p">)</span>
-<span class="n">sql</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;SELECT title FROM products WHERE id IN (</span><span class="si">{</span><span class="n">placeholders</span><span class="si">}</span><span class="s2">)&quot;</span>
+<span class="n">placeholders</span> <span class="o">=</span> <span class="s2">", "</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">"?"</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">ids</span><span class="p">)</span>
+<span class="n">sql</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"SELECT title FROM products WHERE id IN (</span><span class="si">{</span><span class="n">placeholders</span><span class="si">}</span><span class="s2">)"</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">sql</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">([</span><span class="n">r</span><span class="p">[</span><span class="s2">&quot;title&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">cur</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">sql</span><span class="p">,</span> <span class="n">ids</span><span class="p">)])</span>
+<span class="nb">print</span><span class="p">([</span><span class="n">r</span><span class="p">[</span><span class="s2">"title"</span><span class="p">]</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">cur</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">sql</span><span class="p">,</span> <span class="n">ids</span><span class="p">)])</span>
 </code></pre></div>
 
 <p>Вывод:</p>
 <div class="codehilite" data-lang="text"><pre><span></span><code>SELECT title FROM products WHERE id IN (?, ?, ?)
-[&#39;Перфоратор Makita HR2470&#39;, &#39;Саморез 4,2x75, 100 шт&#39;, &#39;Кабель ВВГнг 3x2,5&#39;]
+['Перфоратор Makita HR2470', 'Саморез 4,2x75, 100 шт', 'Кабель ВВГнг 3x2,5']
 </code></pre></div>
 
 <p>Знаки вопроса здесь строятся по длине списка, а сами значения по-прежнему передаются отдельно. Если список приходит от пользователя, его длину нужно ограничить: запрос с тысячей параметров база может не принять, а соединение потратит время на разбор.</p>
@@ -1224,6 +1248,40 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
       var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
       window.scrollTo({top: 0, behavior: reduce ? 'auto' : 'smooth'});
     });
+  });
+})();
+
+(function(){
+  document.querySelectorAll('[data-slider]').forEach(function(slider){
+    var track = slider.querySelector('[data-slider-track]');
+    var slides = track ? Array.prototype.slice.call(track.children) : [];
+    var counter = slider.querySelector('[data-slider-counter]');
+    var prev = slider.querySelector('[data-slider-prev]');
+    var next = slider.querySelector('[data-slider-next]');
+    if(!track || slides.length < 2) return;
+    function current(){
+      var best = 0, dist = Infinity;
+      slides.forEach(function(slide, i){
+        var d = Math.abs(slide.offsetLeft - track.scrollLeft);
+        if(d < dist){ dist = d; best = i; }
+      });
+      return best;
+    }
+    function update(){
+      if(counter) counter.textContent = (current() + 1) + ' / ' + slides.length;
+    }
+    function go(delta){
+      var i = Math.max(0, Math.min(slides.length - 1, current() + delta));
+      var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      track.scrollTo({left: slides[i].offsetLeft, behavior: reduce ? 'auto' : 'smooth'});
+    }
+    if(prev) prev.addEventListener('click', function(){ go(-1); });
+    if(next) next.addEventListener('click', function(){ go(1); });
+    track.addEventListener('scroll', function(){
+      clearTimeout(track._sliderTimer);
+      track._sliderTimer = setTimeout(update, 80);
+    }, {passive: true});
+    update();
   });
 })();
 (function(){

@@ -527,6 +527,12 @@ html.modal-open { overflow: hidden; }
 :root[data-theme=dark] .quiz-actions button[data-answer]:hover, :root[data-theme=dark] .quiz-actions button.quiz-answer:hover { background: #262626; background-color: #262626; color: #fff; border-color: #262626; }
 :root[data-theme=dark] .gate-q { background: #1E1E1E; color: #FF6B00; }
 
+/* the whole-variant archive is the main action in a download block */
+.files a.zip { background: #121212; color: #fff; border-color: #121212; font-weight: 700; box-shadow: 4px 4px 0 rgba(0,0,0,.18); }
+.files a.zip::before { color: #fff; }
+.files a.zip:hover { background: #1D1D1D; color: #fff; border-color: #1D1D1D; box-shadow: 5px 5px 0 rgba(0,0,0,.22); }
+.files a.zip:active { transform: translate(2px,2px); box-shadow: 1px 1px 0 rgba(0,0,0,.12); }
+
 /* ---------- practical work checklist ---------- */
 .work-checklist { width: 100%; border-collapse: collapse; margin: 14px 0 4px; }
 .work-checklist th, .work-checklist td { border: 1px solid var(--rule); padding: 9px 10px; vertical-align: top; }
@@ -564,6 +570,24 @@ html.modal-open { overflow: hidden; }
 .variant-body .task-list { margin: 8px 0 0; padding-left: 20px; }
 .variant-body .task-list li { margin: 0 0 8px; }
 @media (max-width: 620px) { .variant-body { overflow-x: auto; } .variant-body table { min-width: 520px; } }
+
+/* ---------- schema slider: all CREATE TABLE examples ---------- */
+.schema-slider { margin: 18px 0 24px; border: 1px solid #d8d5cc; border-radius: 14px; background: #fff; color: #1a1916; overflow: hidden; }
+.schema-slider-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 14px; background: #f5f2ea; border-bottom: 1px solid #d8d5cc; }
+.schema-slider-bar strong { font: 700 14px/1.2 var(--font-display); color: #1a1916; }
+.schema-slider-actions { display: flex; align-items: center; gap: 8px; }
+.schema-slider-counter { min-width: 62px; text-align: center; font: 600 13px/1 var(--font-mono); color: #59544a; }
+.schema-btn { width: 34px; height: 34px; border: 1px solid #c9c4b8; border-radius: 8px; background: #fff; color: #1a1916; font: 700 18px/1 var(--font-mono); cursor: pointer; }
+.schema-btn:hover { background: #ece7dc; }
+.schema-track { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: thin; }
+.schema-slide { flex: 0 0 100%; min-width: 100%; box-sizing: border-box; padding: 16px 18px 18px; scroll-snap-align: start; }
+.schema-slide h4 { margin: 0 0 10px; font: 700 16px/1.3 var(--font-display); color: #1a1916; }
+.schema-slide h4 code, .schema-slide p code { color: #1a1916; background: #f1ede4; padding: 1px 4px; border-radius: 4px; }
+.schema-slide p { margin: 0 0 10px; font-size: 14px; line-height: 1.55; color: #3a372f; }
+.schema-slide pre { margin: 0; padding: 14px 16px; overflow-x: auto; border: 1px solid #ddd8cc; border-radius: 10px; background: #fbfaf6; color: #1a1916; font: 12.5px/1.5 var(--font-mono); }
+.schema-slide code { color: inherit; background: none; padding: 0; }
+.schema-slider:focus-within { outline: 2px solid #b9a97f; outline-offset: 2px; }
+@media (max-width: 620px) { .schema-slide { padding: 12px; } .schema-slider-bar { padding: 8px 10px; } }
 
 /* ---------- print / PDF export ---------- */
 @page { margin: 16mm; }
@@ -931,8 +955,8 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 </code></pre></div>
 
 <div class="codehilite" data-lang="powershell"><pre><span></span><code><span class="nb">New-Item</span> <span class="n">-ItemType</span> <span class="n">Directory</span> <span class="n">-Force</span> <span class="p">.../</span><span class="n">dean</span><span class="p">/</span><span class="n">log</span><span class="p">,</span> <span class="p">.../</span><span class="n">dean</span><span class="p">/</span><span class="n">src</span><span class="p">,</span> <span class="p">.../</span><span class="n">dean</span><span class="p">/</span><span class="n">secret</span> <span class="p">|</span> <span class="nb">Out-Null</span>
-<span class="no">[System.IO.File]</span><span class="p">::</span><span class="n">WriteAllText</span><span class="p">(</span><span class="s2">&quot;.../dean/secret/db_password.txt&quot;</span><span class="p">,</span> <span class="s2">&quot;пароль_пользователя_dean_app&quot;</span><span class="p">)</span>
-<span class="n">icacls</span> <span class="p">.../</span><span class="n">dean</span><span class="p">/</span><span class="n">secret</span><span class="p">/</span><span class="n">db_password</span><span class="p">.</span><span class="n">txt</span> <span class="p">/</span><span class="n">inheritance</span><span class="p">:</span><span class="nb">r </span><span class="p">/</span><span class="n">grant</span><span class="p">:</span><span class="nb">r </span><span class="s2">&quot;</span><span class="p">$(</span><span class="nv">$env:USERNAME</span><span class="p">)</span><span class="s2">:(R)&quot;</span>
+<span class="no">[System.IO.File]</span><span class="p">::</span><span class="n">WriteAllText</span><span class="p">(</span><span class="s2">".../dean/secret/db_password.txt"</span><span class="p">,</span> <span class="s2">"пароль_пользователя_dean_app"</span><span class="p">)</span>
+<span class="n">icacls</span> <span class="p">.../</span><span class="n">dean</span><span class="p">/</span><span class="n">secret</span><span class="p">/</span><span class="n">db_password</span><span class="p">.</span><span class="n">txt</span> <span class="p">/</span><span class="n">inheritance</span><span class="p">:</span><span class="nb">r </span><span class="p">/</span><span class="n">grant</span><span class="p">:</span><span class="nb">r </span><span class="s2">"</span><span class="p">$(</span><span class="nv">$env:USERNAME</span><span class="p">)</span><span class="s2">:(R)"</span>
 </code></pre></div>
 
 <p>Пароль приложение читает из файла, а не из кода. Доступ к файлу оставьте только своей учётной записи: тогда задание в планировщике работает без переменных окружения и без пароля в командной строке.</p>
@@ -947,47 +971,47 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <p>Замените содержимое <code>Program.cs</code>. Приложение выполняет <code>ANALYZE TABLE</code> по трём таблицам, пишет журнал и возвращает ноль при успехе или единицу при ошибке.</p>
 <div class="codehilite" data-lang="csharp"><pre><span></span><code><span class="k">using</span><span class="w"> </span><span class="nn">MySqlConnector</span><span class="p">;</span>
 
-<span class="kt">var</span><span class="w"> </span><span class="n">secret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">@&quot;.../dean/secret/db_password.txt&quot;</span><span class="p">;</span>
-<span class="kt">var</span><span class="w"> </span><span class="n">password</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">File</span><span class="p">.</span><span class="n">Exists</span><span class="p">(</span><span class="n">secret</span><span class="p">)</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="n">File</span><span class="p">.</span><span class="n">ReadAllText</span><span class="p">(</span><span class="n">secret</span><span class="p">).</span><span class="n">Trim</span><span class="p">()</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="p">;</span>
+<span class="kt">var</span><span class="w"> </span><span class="n">secret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">@".../dean/secret/db_password.txt"</span><span class="p">;</span>
+<span class="kt">var</span><span class="w"> </span><span class="n">password</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">File</span><span class="p">.</span><span class="n">Exists</span><span class="p">(</span><span class="n">secret</span><span class="p">)</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="n">File</span><span class="p">.</span><span class="n">ReadAllText</span><span class="p">(</span><span class="n">secret</span><span class="p">).</span><span class="n">Trim</span><span class="p">()</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s">""</span><span class="p">;</span>
 
 <span class="kt">var</span><span class="w"> </span><span class="n">cs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">MySqlConnectionStringBuilder</span>
 <span class="p">{</span>
-<span class="w">    </span><span class="n">Server</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;localhost&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="n">Server</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"localhost"</span><span class="p">,</span>
 <span class="w">    </span><span class="n">Port</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3306</span><span class="p">,</span>
-<span class="w">    </span><span class="n">Database</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;dean&quot;</span><span class="p">,</span>
-<span class="w">    </span><span class="n">UserID</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;dean_app&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="n">Database</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"dean"</span><span class="p">,</span>
+<span class="w">    </span><span class="n">UserID</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"dean_app"</span><span class="p">,</span>
 <span class="w">    </span><span class="n">Password</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">password</span><span class="p">,</span>
-<span class="w">    </span><span class="n">CharacterSet</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;utf8mb4&quot;</span>
+<span class="w">    </span><span class="n">CharacterSet</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"utf8mb4"</span>
 <span class="p">}.</span><span class="n">ConnectionString</span><span class="p">;</span>
 
-<span class="kt">var</span><span class="w"> </span><span class="n">log</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">@&quot;.../dean/log/maintenance.log&quot;</span><span class="p">;</span>
+<span class="kt">var</span><span class="w"> </span><span class="n">log</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">@".../dean/log/maintenance.log"</span><span class="p">;</span>
 
 <span class="k">void</span><span class="w"> </span><span class="nf">Write</span><span class="p">(</span><span class="kt">string</span><span class="w"> </span><span class="n">line</span><span class="p">)</span><span class="w"> </span><span class="o">=&gt;</span>
-<span class="w">    </span><span class="n">File</span><span class="p">.</span><span class="n">AppendAllText</span><span class="p">(</span><span class="n">log</span><span class="p">,</span><span class="w"> </span><span class="s">$&quot;{DateTime.Now:yyyy-MM-dd HH:mm:ss} {line}{Environment.NewLine}&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="n">File</span><span class="p">.</span><span class="n">AppendAllText</span><span class="p">(</span><span class="n">log</span><span class="p">,</span><span class="w"> </span><span class="s">$"{DateTime.Now:yyyy-MM-dd HH:mm:ss} {line}{Environment.NewLine}"</span><span class="p">);</span>
 
-<span class="n">Write</span><span class="p">(</span><span class="s">&quot;start DeanMaintenance&quot;</span><span class="p">);</span>
+<span class="n">Write</span><span class="p">(</span><span class="s">"start DeanMaintenance"</span><span class="p">);</span>
 
 <span class="k">try</span>
 <span class="p">{</span>
 <span class="w">    </span><span class="k">await</span><span class="w"> </span><span class="k">using</span><span class="w"> </span><span class="nn">var</span><span class="w"> </span><span class="n">conn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">MySqlConnection</span><span class="p">(</span><span class="n">cs</span><span class="p">);</span>
 <span class="w">    </span><span class="k">await</span><span class="w"> </span><span class="n">conn</span><span class="p">.</span><span class="n">OpenAsync</span><span class="p">();</span>
 
-<span class="w">    </span><span class="k">foreach</span><span class="w"> </span><span class="p">(</span><span class="kt">var</span><span class="w"> </span><span class="n">table</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="k">new</span><span class="p">[]</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="s">&quot;students&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;enrollments&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;payments&quot;</span><span class="w"> </span><span class="p">})</span>
+<span class="w">    </span><span class="k">foreach</span><span class="w"> </span><span class="p">(</span><span class="kt">var</span><span class="w"> </span><span class="n">table</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="k">new</span><span class="p">[]</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="s">"students"</span><span class="p">,</span><span class="w"> </span><span class="s">"enrollments"</span><span class="p">,</span><span class="w"> </span><span class="s">"payments"</span><span class="w"> </span><span class="p">})</span>
 <span class="w">    </span><span class="p">{</span>
-<span class="w">        </span><span class="k">await</span><span class="w"> </span><span class="k">using</span><span class="w"> </span><span class="nn">var</span><span class="w"> </span><span class="n">analyze</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">MySqlCommand</span><span class="p">(</span><span class="s">$&quot;ANALYZE TABLE {table}&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">conn</span><span class="p">);</span>
+<span class="w">        </span><span class="k">await</span><span class="w"> </span><span class="k">using</span><span class="w"> </span><span class="nn">var</span><span class="w"> </span><span class="n">analyze</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">MySqlCommand</span><span class="p">(</span><span class="s">$"ANALYZE TABLE {table}"</span><span class="p">,</span><span class="w"> </span><span class="n">conn</span><span class="p">);</span>
 <span class="w">        </span><span class="k">await</span><span class="w"> </span><span class="n">analyze</span><span class="p">.</span><span class="n">ExecuteNonQueryAsync</span><span class="p">();</span>
 <span class="w">    </span><span class="p">}</span>
 
 <span class="w">    </span><span class="k">await</span><span class="w"> </span><span class="k">using</span><span class="w"> </span><span class="nn">var</span><span class="w"> </span><span class="n">mark</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">MySqlCommand</span><span class="p">(</span>
-<span class="w">        </span><span class="s">&quot;INSERT INTO maintenance_runs(script, status) VALUES (&#39;DeanMaintenance&#39;, &#39;ok&#39;)&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">conn</span><span class="p">);</span>
+<span class="w">        </span><span class="s">"INSERT INTO maintenance_runs(script, status) VALUES ('DeanMaintenance', 'ok')"</span><span class="p">,</span><span class="w"> </span><span class="n">conn</span><span class="p">);</span>
 <span class="w">    </span><span class="k">await</span><span class="w"> </span><span class="n">mark</span><span class="p">.</span><span class="n">ExecuteNonQueryAsync</span><span class="p">();</span>
 
-<span class="w">    </span><span class="n">Write</span><span class="p">(</span><span class="s">&quot;finish ok&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="n">Write</span><span class="p">(</span><span class="s">"finish ok"</span><span class="p">);</span>
 <span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
 <span class="p">}</span>
 <span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="n">Exception</span><span class="w"> </span><span class="n">ex</span><span class="p">)</span>
 <span class="p">{</span>
-<span class="w">    </span><span class="n">Write</span><span class="p">(</span><span class="s">$&quot;finish failed: {ex.Message}&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="n">Write</span><span class="p">(</span><span class="s">$"finish failed: {ex.Message}"</span><span class="p">);</span>
 <span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
 <span class="p">}</span>
 </code></pre></div>
@@ -999,7 +1023,7 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <h3>Шаг 3. Проверьте ручной запуск</h3>
 <p>Запустите приложение, посмотрите код возврата, журнал и строку в таблице. Нулевой код и запись <code>ok</code> означают, что задание готово к расписанию.</p>
 <div class="codehilite" data-lang="powershell"><pre><span></span><code><span class="n">dotnet</span> <span class="n">run</span> <span class="n">-c</span> <span class="n">Release</span>
-<span class="nb">Write-Host</span> <span class="s2">&quot;exit code: $LASTEXITCODE&quot;</span>
+<span class="nb">Write-Host</span> <span class="s2">"exit code: $LASTEXITCODE"</span>
 <span class="nb">Get-Content</span> <span class="p">.../</span><span class="n">dean</span><span class="p">/</span><span class="n">log</span><span class="p">/</span><span class="n">maintenance</span><span class="p">.</span><span class="n">log</span> <span class="n">-Tail</span> <span class="n">4</span>
 </code></pre></div>
 
@@ -1009,8 +1033,8 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <h3>Шаг 4. Поставьте задание в Планировщик Windows</h3>
 <p>Опубликуйте приложение в отдельный каталог и создайте задание. Для проверки поставьте повторение каждую минуту, потом вернёте суточное расписание.</p>
 <div class="codehilite" data-lang="powershell"><pre><span></span><code><span class="n">dotnet</span> <span class="n">publish</span> <span class="p">.../</span><span class="n">dean</span><span class="p">/</span><span class="n">src</span><span class="p">/</span><span class="n">DeanMaintenance</span> <span class="n">-c</span> <span class="n">Release</span> <span class="n">-o</span> <span class="p">.../</span><span class="n">dean</span><span class="p">/</span><span class="n">bin</span>
-<span class="n">schtasks</span> <span class="p">/</span><span class="n">Create</span> <span class="p">/</span><span class="n">TN</span> <span class="s2">&quot;DeanMaintenance&quot;</span> <span class="p">/</span><span class="nb">SC </span><span class="n">MINUTE</span> <span class="p">/</span><span class="n">MO</span> <span class="n">1</span> <span class="p">/</span><span class="n">TR</span> <span class="s2">&quot;.../dean/bin/DeanMaintenance.exe&quot;</span> <span class="p">/</span><span class="n">F</span>
-<span class="n">schtasks</span> <span class="p">/</span><span class="n">Query</span> <span class="p">/</span><span class="n">TN</span> <span class="s2">&quot;DeanMaintenance&quot;</span> <span class="p">/</span><span class="n">V</span> <span class="p">/</span><span class="n">FO</span> <span class="n">LIST</span>
+<span class="n">schtasks</span> <span class="p">/</span><span class="n">Create</span> <span class="p">/</span><span class="n">TN</span> <span class="s2">"DeanMaintenance"</span> <span class="p">/</span><span class="nb">SC </span><span class="n">MINUTE</span> <span class="p">/</span><span class="n">MO</span> <span class="n">1</span> <span class="p">/</span><span class="n">TR</span> <span class="s2">".../dean/bin/DeanMaintenance.exe"</span> <span class="p">/</span><span class="n">F</span>
+<span class="n">schtasks</span> <span class="p">/</span><span class="n">Query</span> <span class="p">/</span><span class="n">TN</span> <span class="s2">"DeanMaintenance"</span> <span class="p">/</span><span class="n">V</span> <span class="p">/</span><span class="n">FO</span> <span class="n">LIST</span>
 </code></pre></div>
 
 <p>В окне <code>taskschd.msc</code> откройте свойства задания и проверьте вкладки. На вкладке «Триггеры» видно расписание и повторение, на вкладке «Действия» указана программа <code>.../dean/bin/DeanMaintenance.exe</code>. Рабочую папку задайте как <code>.../dean/bin</code> без кавычек, иначе планировщик воспримет кавычки как часть пути.</p>
@@ -1019,12 +1043,12 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <p>Ручной запуск не доказывает, что работает триггер. Дождитесь двух запусков по повторению и сверьте время в журнале с временем последнего запуска задания.</p>
 <div class="codehilite" data-lang="powershell"><pre><span></span><code><span class="nb">Start-Sleep</span> <span class="n">-Seconds</span> <span class="n">130</span>
 <span class="nb">Get-Content</span> <span class="p">.../</span><span class="n">dean</span><span class="p">/</span><span class="n">log</span><span class="p">/</span><span class="n">maintenance</span><span class="p">.</span><span class="n">log</span> <span class="n">-Tail</span> <span class="n">8</span>
-<span class="n">schtasks</span> <span class="p">/</span><span class="n">Query</span> <span class="p">/</span><span class="n">TN</span> <span class="s2">&quot;DeanMaintenance&quot;</span> <span class="p">/</span><span class="n">V</span> <span class="p">/</span><span class="n">FO</span> <span class="n">LIST</span>
+<span class="n">schtasks</span> <span class="p">/</span><span class="n">Query</span> <span class="p">/</span><span class="n">TN</span> <span class="s2">"DeanMaintenance"</span> <span class="p">/</span><span class="n">V</span> <span class="p">/</span><span class="n">FO</span> <span class="n">LIST</span>
 </code></pre></div>
 
 <p>Код <code>0</code> в поле результата означает успех, <code>1</code> означает ошибку приложения. Найдите в выводе время последнего запуска и результат. Приложите скриншот журнала: две строки <code>start</code> с разными минутами доказывают, что задание сработало само. После проверки верните суточное расписание.</p>
-<div class="codehilite" data-lang="powershell"><pre><span></span><code><span class="n">schtasks</span> <span class="p">/</span><span class="n">Change</span> <span class="p">/</span><span class="n">TN</span> <span class="s2">&quot;DeanMaintenance&quot;</span> <span class="p">/</span><span class="nb">SC </span><span class="n">DAILY</span> <span class="p">/</span><span class="n">ST</span> <span class="n">03</span><span class="p">:</span><span class="n">30</span>
-<span class="n">schtasks</span> <span class="p">/</span><span class="n">Query</span> <span class="p">/</span><span class="n">TN</span> <span class="s2">&quot;DeanMaintenance&quot;</span> <span class="p">/</span><span class="n">V</span> <span class="p">/</span><span class="n">FO</span> <span class="n">LIST</span>
+<div class="codehilite" data-lang="powershell"><pre><span></span><code><span class="n">schtasks</span> <span class="p">/</span><span class="n">Change</span> <span class="p">/</span><span class="n">TN</span> <span class="s2">"DeanMaintenance"</span> <span class="p">/</span><span class="nb">SC </span><span class="n">DAILY</span> <span class="p">/</span><span class="n">ST</span> <span class="n">03</span><span class="p">:</span><span class="n">30</span>
+<span class="n">schtasks</span> <span class="p">/</span><span class="n">Query</span> <span class="p">/</span><span class="n">TN</span> <span class="s2">"DeanMaintenance"</span> <span class="p">/</span><span class="n">V</span> <span class="p">/</span><span class="n">FO</span> <span class="n">LIST</span>
 </code></pre></div>
 
 <h3>Шаг 6. Снимите метрики MySQL</h3>
@@ -1039,14 +1063,14 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">monitor_snapshots</span><span class="p">(</span><span class="n">metric</span><span class="p">,</span><span class="w"> </span><span class="n">value</span><span class="p">)</span>
 <span class="k">SELECT</span><span class="w"> </span><span class="k">LOWER</span><span class="p">(</span><span class="n">VARIABLE_NAME</span><span class="p">),</span><span class="w"> </span><span class="k">CAST</span><span class="p">(</span><span class="n">VARIABLE_VALUE</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">UNSIGNED</span><span class="p">)</span>
 <span class="k">FROM</span><span class="w"> </span><span class="n">information_schema</span><span class="p">.</span><span class="n">GLOBAL_STATUS</span>
-<span class="k">WHERE</span><span class="w"> </span><span class="n">VARIABLE_NAME</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span><span class="s1">&#39;THREADS_CONNECTED&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;QUESTIONS&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;UPTIME&#39;</span><span class="p">,</span>
-<span class="w">                        </span><span class="s1">&#39;INNODB_BUFFER_POOL_READ_REQUESTS&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;INNODB_BUFFER_POOL_READS&#39;</span><span class="p">);</span>
+<span class="k">WHERE</span><span class="w"> </span><span class="n">VARIABLE_NAME</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span><span class="s1">'THREADS_CONNECTED'</span><span class="p">,</span><span class="w"> </span><span class="s1">'QUESTIONS'</span><span class="p">,</span><span class="w"> </span><span class="s1">'UPTIME'</span><span class="p">,</span>
+<span class="w">                        </span><span class="s1">'INNODB_BUFFER_POOL_READ_REQUESTS'</span><span class="p">,</span><span class="w"> </span><span class="s1">'INNODB_BUFFER_POOL_READS'</span><span class="p">);</span>
 </code></pre></div>
 
 <p>Выполните несколько запросов к базе, подождите минуту и повторите вставку. Затем посмотрите текущее состояние сервера.</p>
 <div class="codehilite" data-lang="sql"><pre><span></span><code><span class="k">SHOW</span><span class="w"> </span><span class="k">GLOBAL</span><span class="w"> </span><span class="n">STATUS</span>
-<span class="k">WHERE</span><span class="w"> </span><span class="n">Variable_name</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span><span class="s1">&#39;Threads_connected&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Questions&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Uptime&#39;</span><span class="p">,</span>
-<span class="w">                        </span><span class="s1">&#39;Innodb_buffer_pool_read_requests&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Innodb_buffer_pool_reads&#39;</span><span class="p">);</span>
+<span class="k">WHERE</span><span class="w"> </span><span class="n">Variable_name</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span><span class="s1">'Threads_connected'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Questions'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Uptime'</span><span class="p">,</span>
+<span class="w">                        </span><span class="s1">'Innodb_buffer_pool_read_requests'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Innodb_buffer_pool_reads'</span><span class="p">);</span>
 
 <span class="k">SHOW</span><span class="w"> </span><span class="n">PROCESSLIST</span><span class="p">;</span>
 
@@ -1092,21 +1116,21 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <span class="w">    </span><span class="p">{</span>
 <span class="w">        </span><span class="n">cs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">MySqlConnectionStringBuilder</span>
 <span class="w">        </span><span class="p">{</span>
-<span class="w">            </span><span class="n">Server</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;localhost&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="n">Server</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"localhost"</span><span class="p">,</span>
 <span class="w">            </span><span class="n">Port</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3306</span><span class="p">,</span>
-<span class="w">            </span><span class="n">Database</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;dean&quot;</span><span class="p">,</span>
-<span class="w">            </span><span class="n">UserID</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;dean_app&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="n">Database</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"dean"</span><span class="p">,</span>
+<span class="w">            </span><span class="n">UserID</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"dean_app"</span><span class="p">,</span>
 <span class="w">            </span><span class="n">Password</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ReadPassword</span><span class="p">(),</span>
-<span class="w">            </span><span class="n">CharacterSet</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;utf8mb4&quot;</span>
+<span class="w">            </span><span class="n">CharacterSet</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"utf8mb4"</span>
 <span class="w">        </span><span class="p">}.</span><span class="n">ConnectionString</span><span class="p">;</span>
 
-<span class="w">        </span><span class="n">Text</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;DeanDashboard&quot;</span><span class="p">;</span>
+<span class="w">        </span><span class="n">Text</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"DeanDashboard"</span><span class="p">;</span>
 <span class="w">        </span><span class="n">Width</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">760</span><span class="p">;</span>
 <span class="w">        </span><span class="n">Height</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">260</span><span class="p">;</span>
-<span class="w">        </span><span class="n">grid</span><span class="p">.</span><span class="n">Columns</span><span class="p">.</span><span class="n">Add</span><span class="p">(</span><span class="s">&quot;metric&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Показатель&quot;</span><span class="p">);</span>
-<span class="w">        </span><span class="n">grid</span><span class="p">.</span><span class="n">Columns</span><span class="p">.</span><span class="n">Add</span><span class="p">(</span><span class="s">&quot;value&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Значение&quot;</span><span class="p">);</span>
-<span class="w">        </span><span class="n">grid</span><span class="p">.</span><span class="n">Columns</span><span class="p">.</span><span class="n">Add</span><span class="p">(</span><span class="s">&quot;limit&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Порог&quot;</span><span class="p">);</span>
-<span class="w">        </span><span class="n">grid</span><span class="p">.</span><span class="n">Columns</span><span class="p">.</span><span class="n">Add</span><span class="p">(</span><span class="s">&quot;state&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Статус&quot;</span><span class="p">);</span>
+<span class="w">        </span><span class="n">grid</span><span class="p">.</span><span class="n">Columns</span><span class="p">.</span><span class="n">Add</span><span class="p">(</span><span class="s">"metric"</span><span class="p">,</span><span class="w"> </span><span class="s">"Показатель"</span><span class="p">);</span>
+<span class="w">        </span><span class="n">grid</span><span class="p">.</span><span class="n">Columns</span><span class="p">.</span><span class="n">Add</span><span class="p">(</span><span class="s">"value"</span><span class="p">,</span><span class="w"> </span><span class="s">"Значение"</span><span class="p">);</span>
+<span class="w">        </span><span class="n">grid</span><span class="p">.</span><span class="n">Columns</span><span class="p">.</span><span class="n">Add</span><span class="p">(</span><span class="s">"limit"</span><span class="p">,</span><span class="w"> </span><span class="s">"Порог"</span><span class="p">);</span>
+<span class="w">        </span><span class="n">grid</span><span class="p">.</span><span class="n">Columns</span><span class="p">.</span><span class="n">Add</span><span class="p">(</span><span class="s">"state"</span><span class="p">,</span><span class="w"> </span><span class="s">"Статус"</span><span class="p">);</span>
 <span class="w">        </span><span class="n">Controls</span><span class="p">.</span><span class="n">Add</span><span class="p">(</span><span class="n">grid</span><span class="p">);</span>
 
 <span class="w">        </span><span class="n">Load</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="k">async</span><span class="w"> </span><span class="p">(</span><span class="n">_</span><span class="p">,</span><span class="w"> </span><span class="n">_</span><span class="p">)</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">timer</span><span class="p">.</span><span class="n">Start</span><span class="p">();</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="n">RefreshAsync</span><span class="p">();</span><span class="w"> </span><span class="p">};</span>
@@ -1121,7 +1145,7 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <span class="w">            </span><span class="k">await</span><span class="w"> </span><span class="n">conn</span><span class="p">.</span><span class="n">OpenAsync</span><span class="p">();</span>
 
 <span class="w">            </span><span class="kt">var</span><span class="w"> </span><span class="n">values</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Dictionary</span><span class="o">&lt;</span><span class="kt">string</span><span class="p">,</span><span class="w"> </span><span class="kt">long</span><span class="o">&gt;</span><span class="p">(</span><span class="n">StringComparer</span><span class="p">.</span><span class="n">OrdinalIgnoreCase</span><span class="p">);</span>
-<span class="w">            </span><span class="k">await</span><span class="w"> </span><span class="k">using</span><span class="w"> </span><span class="nn">var</span><span class="w"> </span><span class="n">cmd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">MySqlCommand</span><span class="p">(</span><span class="s">&quot;SHOW GLOBAL STATUS&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">conn</span><span class="p">);</span>
+<span class="w">            </span><span class="k">await</span><span class="w"> </span><span class="k">using</span><span class="w"> </span><span class="nn">var</span><span class="w"> </span><span class="n">cmd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">MySqlCommand</span><span class="p">(</span><span class="s">"SHOW GLOBAL STATUS"</span><span class="p">,</span><span class="w"> </span><span class="n">conn</span><span class="p">);</span>
 <span class="w">            </span><span class="k">await</span><span class="w"> </span><span class="k">using</span><span class="w"> </span><span class="nn">var</span><span class="w"> </span><span class="n">reader</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="n">cmd</span><span class="p">.</span><span class="n">ExecuteReaderAsync</span><span class="p">();</span>
 <span class="w">            </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="k">await</span><span class="w"> </span><span class="n">reader</span><span class="p">.</span><span class="n">ReadAsync</span><span class="p">())</span>
 <span class="w">            </span><span class="p">{</span>
@@ -1129,29 +1153,29 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <span class="w">            </span><span class="p">}</span>
 
 <span class="w">            </span><span class="n">grid</span><span class="p">.</span><span class="n">Rows</span><span class="p">.</span><span class="n">Clear</span><span class="p">();</span>
-<span class="w">            </span><span class="n">Add</span><span class="p">(</span><span class="s">&quot;Threads_connected&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">values</span><span class="p">.</span><span class="n">GetValueOrDefault</span><span class="p">(</span><span class="s">&quot;Threads_connected&quot;</span><span class="p">),</span><span class="w"> </span><span class="mi">20</span><span class="p">);</span>
-<span class="w">            </span><span class="n">Add</span><span class="p">(</span><span class="s">&quot;Questions&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">values</span><span class="p">.</span><span class="n">GetValueOrDefault</span><span class="p">(</span><span class="s">&quot;Questions&quot;</span><span class="p">),</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span>
-<span class="w">            </span><span class="n">Add</span><span class="p">(</span><span class="s">&quot;Uptime, ч&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">values</span><span class="p">.</span><span class="n">GetValueOrDefault</span><span class="p">(</span><span class="s">&quot;Uptime&quot;</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">3600</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span>
-<span class="w">            </span><span class="n">Add</span><span class="p">(</span><span class="s">&quot;Buffer read requests&quot;</span><span class="p">,</span>
-<span class="w">                </span><span class="n">values</span><span class="p">.</span><span class="n">GetValueOrDefault</span><span class="p">(</span><span class="s">&quot;Innodb_buffer_pool_read_requests&quot;</span><span class="p">),</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span>
+<span class="w">            </span><span class="n">Add</span><span class="p">(</span><span class="s">"Threads_connected"</span><span class="p">,</span><span class="w"> </span><span class="n">values</span><span class="p">.</span><span class="n">GetValueOrDefault</span><span class="p">(</span><span class="s">"Threads_connected"</span><span class="p">),</span><span class="w"> </span><span class="mi">20</span><span class="p">);</span>
+<span class="w">            </span><span class="n">Add</span><span class="p">(</span><span class="s">"Questions"</span><span class="p">,</span><span class="w"> </span><span class="n">values</span><span class="p">.</span><span class="n">GetValueOrDefault</span><span class="p">(</span><span class="s">"Questions"</span><span class="p">),</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span>
+<span class="w">            </span><span class="n">Add</span><span class="p">(</span><span class="s">"Uptime, ч"</span><span class="p">,</span><span class="w"> </span><span class="n">values</span><span class="p">.</span><span class="n">GetValueOrDefault</span><span class="p">(</span><span class="s">"Uptime"</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">3600</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span>
+<span class="w">            </span><span class="n">Add</span><span class="p">(</span><span class="s">"Buffer read requests"</span><span class="p">,</span>
+<span class="w">                </span><span class="n">values</span><span class="p">.</span><span class="n">GetValueOrDefault</span><span class="p">(</span><span class="s">"Innodb_buffer_pool_read_requests"</span><span class="p">),</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span>
 <span class="w">        </span><span class="p">}</span>
 <span class="w">        </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="n">Exception</span><span class="w"> </span><span class="n">ex</span><span class="p">)</span>
 <span class="w">        </span><span class="p">{</span>
 <span class="w">            </span><span class="n">grid</span><span class="p">.</span><span class="n">Rows</span><span class="p">.</span><span class="n">Clear</span><span class="p">();</span>
-<span class="w">            </span><span class="n">grid</span><span class="p">.</span><span class="n">Rows</span><span class="p">.</span><span class="n">Add</span><span class="p">(</span><span class="s">&quot;Ошибка&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">ex</span><span class="p">.</span><span class="n">Message</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="p">);</span>
+<span class="w">            </span><span class="n">grid</span><span class="p">.</span><span class="n">Rows</span><span class="p">.</span><span class="n">Add</span><span class="p">(</span><span class="s">"Ошибка"</span><span class="p">,</span><span class="w"> </span><span class="n">ex</span><span class="p">.</span><span class="n">Message</span><span class="p">,</span><span class="w"> </span><span class="s">""</span><span class="p">,</span><span class="w"> </span><span class="s">""</span><span class="p">);</span>
 <span class="w">        </span><span class="p">}</span>
 <span class="w">    </span><span class="p">}</span>
 
 <span class="w">    </span><span class="k">private</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">Add</span><span class="p">(</span><span class="kt">string</span><span class="w"> </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="kt">long</span><span class="w"> </span><span class="k">value</span><span class="p">,</span><span class="w"> </span><span class="kt">long</span><span class="w"> </span><span class="n">limit</span><span class="p">)</span>
 <span class="w">    </span><span class="p">{</span>
-<span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">state</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">limit</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="k">value</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">limit</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="s">&quot;порог нарушен&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s">&quot;в норме&quot;</span><span class="p">;</span>
-<span class="w">        </span><span class="n">grid</span><span class="p">.</span><span class="n">Rows</span><span class="p">.</span><span class="n">Add</span><span class="p">(</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="k">value</span><span class="p">.</span><span class="n">ToString</span><span class="p">(</span><span class="s">&quot;N0&quot;</span><span class="p">),</span><span class="w"> </span><span class="n">limit</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="n">limit</span><span class="p">.</span><span class="n">ToString</span><span class="p">(</span><span class="s">&quot;N0&quot;</span><span class="p">)</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s">&quot;нет&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">state</span><span class="p">);</span>
+<span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">state</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">limit</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="k">value</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">limit</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="s">"порог нарушен"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s">"в норме"</span><span class="p">;</span>
+<span class="w">        </span><span class="n">grid</span><span class="p">.</span><span class="n">Rows</span><span class="p">.</span><span class="n">Add</span><span class="p">(</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="k">value</span><span class="p">.</span><span class="n">ToString</span><span class="p">(</span><span class="s">"N0"</span><span class="p">),</span><span class="w"> </span><span class="n">limit</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="n">limit</span><span class="p">.</span><span class="n">ToString</span><span class="p">(</span><span class="s">"N0"</span><span class="p">)</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s">"нет"</span><span class="p">,</span><span class="w"> </span><span class="n">state</span><span class="p">);</span>
 <span class="w">    </span><span class="p">}</span>
 
 <span class="w">    </span><span class="k">private</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="nf">ReadPassword</span><span class="p">()</span>
 <span class="w">    </span><span class="p">{</span>
-<span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">file</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">@&quot;.../dean/secret/db_password.txt&quot;</span><span class="p">;</span>
-<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">File</span><span class="p">.</span><span class="n">Exists</span><span class="p">(</span><span class="n">file</span><span class="p">)</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="n">File</span><span class="p">.</span><span class="n">ReadAllText</span><span class="p">(</span><span class="n">file</span><span class="p">).</span><span class="n">Trim</span><span class="p">()</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="p">;</span>
+<span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">file</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">@".../dean/secret/db_password.txt"</span><span class="p">;</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">File</span><span class="p">.</span><span class="n">Exists</span><span class="p">(</span><span class="n">file</span><span class="p">)</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="n">File</span><span class="p">.</span><span class="n">ReadAllText</span><span class="p">(</span><span class="n">file</span><span class="p">).</span><span class="n">Trim</span><span class="p">()</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s">""</span><span class="p">;</span>
 <span class="w">    </span><span class="p">}</span>
 <span class="p">}</span>
 </code></pre></div>
@@ -1386,6 +1410,40 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
       var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
       window.scrollTo({top: 0, behavior: reduce ? 'auto' : 'smooth'});
     });
+  });
+})();
+
+(function(){
+  document.querySelectorAll('[data-slider]').forEach(function(slider){
+    var track = slider.querySelector('[data-slider-track]');
+    var slides = track ? Array.prototype.slice.call(track.children) : [];
+    var counter = slider.querySelector('[data-slider-counter]');
+    var prev = slider.querySelector('[data-slider-prev]');
+    var next = slider.querySelector('[data-slider-next]');
+    if(!track || slides.length < 2) return;
+    function current(){
+      var best = 0, dist = Infinity;
+      slides.forEach(function(slide, i){
+        var d = Math.abs(slide.offsetLeft - track.scrollLeft);
+        if(d < dist){ dist = d; best = i; }
+      });
+      return best;
+    }
+    function update(){
+      if(counter) counter.textContent = (current() + 1) + ' / ' + slides.length;
+    }
+    function go(delta){
+      var i = Math.max(0, Math.min(slides.length - 1, current() + delta));
+      var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      track.scrollTo({left: slides[i].offsetLeft, behavior: reduce ? 'auto' : 'smooth'});
+    }
+    if(prev) prev.addEventListener('click', function(){ go(-1); });
+    if(next) next.addEventListener('click', function(){ go(1); });
+    track.addEventListener('scroll', function(){
+      clearTimeout(track._sliderTimer);
+      track._sliderTimer = setTimeout(update, 80);
+    }, {passive: true});
+    update();
   });
 })();
 (function(){
