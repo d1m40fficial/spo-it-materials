@@ -26,24 +26,25 @@ DUE_DATE = date(2027, 3, 22)
 LAUNCH_DATE = date(2027, 3, 16)
 PRICE_DATE = date(2027, 3, 1)
 
-TITLE_FILL = PatternFill("solid", fgColor="1F3864")
-SUBTITLE_FILL = PatternFill("solid", fgColor="D9E2F3")
-SECTION_FILL = PatternFill("solid", fgColor="DDEBF7")
-HEADER_FILL = PatternFill("solid", fgColor="2F5597")
-LABEL_FILL = PatternFill("solid", fgColor="F2F2F2")
-INPUT_FILL = PatternFill("solid", fgColor="FFF2CC")
-WHITE = "FFFFFF"
-thin = Side(style="thin", color="7F7F7F")
-medium = Side(style="medium", color="1F3864")
+TITLE_FILL = PatternFill("solid", fgColor="FFFFFF")
+SUBTITLE_FILL = PatternFill("solid", fgColor="FFFFFF")
+SECTION_FILL = PatternFill("solid", fgColor="FFFFFF")
+HEADER_FILL = PatternFill("solid", fgColor="FFFFFF")
+LABEL_FILL = PatternFill("solid", fgColor="FFFFFF")
+INPUT_FILL = PatternFill("solid", fgColor="FFFFFF")
+WHITE = "000000"
+thin = Side(style="thin", color="404040")
+medium = Side(style="medium", color="000000")
 BORDER = Border(left=thin, right=thin, top=thin, bottom=thin)
 OUTER = Border(left=medium, right=medium, top=medium, bottom=medium)
 
-TITLE_FONT = Font(name="Arial", size=14, bold=True, color=WHITE)
-SUBTITLE_FONT = Font(name="Arial", size=10, italic=True, color="1F3864")
-SECTION_FONT = Font(name="Arial", size=11, bold=True, color="1F3864")
-HEADER_FONT = Font(name="Arial", size=10, bold=True, color=WHITE)
-BODY_FONT = Font(name="Arial", size=10)
-LABEL_FONT = Font(name="Arial", size=10, bold=True)
+TITLE_FONT = Font(name="Arial", size=14, bold=True, color="000000")
+SUBTITLE_FONT = Font(name="Arial", size=9, italic=True, color="404040")
+SECTION_FONT = Font(name="Arial", size=9, bold=True, color="000000")
+HEADER_FONT = Font(name="Arial", size=9, bold=True, color="000000")
+BODY_FONT = Font(name="Arial", size=8)
+VALUE_FONT = Font(name="Arial", size=9, bold=True)
+LABEL_FONT = Font(name="Arial", size=9)
 
 
 def merge_title(ws, row: int, last_col: int, text: str) -> None:
@@ -51,8 +52,8 @@ def merge_title(ws, row: int, last_col: int, text: str) -> None:
     cell = ws.cell(row=row, column=1, value=text)
     cell.fill = TITLE_FILL
     cell.font = TITLE_FONT
-    cell.alignment = Alignment(horizontal="center", vertical="center")
-    ws.row_dimensions[row].height = 30
+    cell.alignment = Alignment(horizontal="left", vertical="center")
+    ws.row_dimensions[row].height = 44
 
 
 def merge_subtitle(ws, row: int, last_col: int, text: str) -> None:
@@ -61,7 +62,7 @@ def merge_subtitle(ws, row: int, last_col: int, text: str) -> None:
     cell.fill = SUBTITLE_FILL
     cell.font = SUBTITLE_FONT
     cell.alignment = Alignment(horizontal="left", vertical="center")
-    ws.row_dimensions[row].height = 22
+    ws.row_dimensions[row].height = 13
 
 
 def section(ws, row: int, last_col: int, text: str) -> None:
@@ -70,8 +71,8 @@ def section(ws, row: int, last_col: int, text: str) -> None:
     cell.fill = SECTION_FILL
     cell.font = SECTION_FONT
     cell.alignment = Alignment(horizontal="left", vertical="center")
-    cell.border = Border(bottom=Side(style="medium", color="2F5597"))
-    ws.row_dimensions[row].height = 22
+    cell.border = Border(bottom=Side(style="medium", color="000000"))
+    ws.row_dimensions[row].height = 16
 
 
 def label_value(ws, row: int, pairs: list[tuple[str, object]], last_col: int) -> None:
@@ -87,14 +88,14 @@ def label_value(ws, row: int, pairs: list[tuple[str, object]], last_col: int) ->
         if col > last_col:
             break
         v = ws.cell(row=row, column=col, value=value)
-        v.font = BODY_FONT
+        v.font = VALUE_FONT
         v.border = BORDER
         v.alignment = Alignment(vertical="center", wrap_text=True)
         col += 1
     for c in range(col, last_col + 1):
         cell = ws.cell(row=row, column=c)
         cell.border = BORDER
-    ws.row_dimensions[row].height = 30
+    ws.row_dimensions[row].height = 36
 
 
 def table(ws, start_row: int, headers: list[str], rows: list[list[object]],
@@ -106,7 +107,7 @@ def table(ws, start_row: int, headers: list[str], rows: list[list[object]],
         cell.alignment = Alignment(horizontal="center", vertical="center", wrap_text=True)
         cell.border = BORDER
         ws.column_dimensions[get_column_letter(i)].width = widths[i - 1]
-    ws.row_dimensions[start_row].height = 34
+    ws.row_dimensions[start_row].height = 30
 
     for r, values in enumerate(rows, start_row + 1):
         for i, value in enumerate(values, 1):
@@ -117,7 +118,7 @@ def table(ws, start_row: int, headers: list[str], rows: list[list[object]],
             fmt = formats[i - 1]
             if fmt:
                 cell.number_format = fmt
-        ws.row_dimensions[r].height = 24
+        ws.row_dimensions[r].height = 15
 
     last_row = start_row + len(rows)
     for c in range(1, len(headers) + 1):
@@ -193,7 +194,7 @@ def build_production(v: dict, path: Path) -> None:
         plan = v["qty"] * (r["norm"] if r["kind"] == "material" else r["time"])
         rows.append([r["name"], "материал" if r["kind"] == "material" else "операция", plan, r["unit"]])
     table(ws, 12, ["Ресурс", "Вид", "Плановый расход", "Единица"],
-          rows, [None, None, "0.###", None], [36, 16, 18, 12])
+          rows, [None, None, "0.###", None], [36, 16, 18, 30])
     ws.freeze_panes = "A4"
     save(wb, path)
 
