@@ -39,8 +39,6 @@ CREATE TABLE price (
   valid_from DATE NOT NULL,
   amount DECIMAL(14,2) NOT NULL,
   PRIMARY KEY (item_id, valid_from),
-  CONSTRAINT fk_price_item
-    FOREIGN KEY (item_id) REFERENCES item (id),
   CONSTRAINT ck_price_amount CHECK (amount >= 0)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -53,10 +51,6 @@ CREATE TABLE specification (
   PRIMARY KEY (id),
   UNIQUE KEY uq_spec_product (product_id),
   KEY ix_spec_maker (manufacturer_id),
-  CONSTRAINT fk_spec_product
-    FOREIGN KEY (product_id) REFERENCES item (id),
-  CONSTRAINT fk_spec_maker
-    FOREIGN KEY (manufacturer_id) REFERENCES counterparty (id),
   CONSTRAINT ck_spec_output CHECK (output_qty > 0)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -67,10 +61,6 @@ CREATE TABLE specification_component (
   time_norm DECIMAL(14,3) NOT NULL,
   PRIMARY KEY (specification_id, item_id),
   KEY ix_comp_item (item_id),
-  CONSTRAINT fk_comp_spec
-    FOREIGN KEY (specification_id) REFERENCES specification (id),
-  CONSTRAINT fk_comp_item
-    FOREIGN KEY (item_id) REFERENCES item (id),
   CONSTRAINT ck_comp_qty CHECK (qty >= 0),
   CONSTRAINT ck_comp_time CHECK (time_norm >= 0)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -84,11 +74,7 @@ CREATE TABLE customer_order (
   PRIMARY KEY (id),
   UNIQUE KEY uq_order_doc (doc_no),
   KEY ix_order_customer (customer_id),
-  KEY ix_order_executor (executor_id),
-  CONSTRAINT fk_order_customer
-    FOREIGN KEY (customer_id) REFERENCES counterparty (id),
-  CONSTRAINT fk_order_executor
-    FOREIGN KEY (executor_id) REFERENCES counterparty (id)
+  KEY ix_order_executor (executor_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE customer_order_line (
@@ -101,10 +87,6 @@ CREATE TABLE customer_order_line (
   PRIMARY KEY (id),
   KEY ix_line_order (order_id),
   KEY ix_line_product (product_id),
-  CONSTRAINT fk_line_order
-    FOREIGN KEY (order_id) REFERENCES customer_order (id),
-  CONSTRAINT fk_line_product
-    FOREIGN KEY (product_id) REFERENCES item (id),
   CONSTRAINT ck_line_qty CHECK (qty > 0),
   CONSTRAINT ck_line_price CHECK (sale_price >= 0),
   CONSTRAINT ck_line_discount CHECK (discount >= 0)
@@ -126,10 +108,6 @@ CREATE TABLE production_product (
   qty INT NOT NULL,
   PRIMARY KEY (production_id, product_id),
   KEY ix_prod_product (product_id),
-  CONSTRAINT fk_pp_order
-    FOREIGN KEY (production_id) REFERENCES production_order (id),
-  CONSTRAINT fk_pp_item
-    FOREIGN KEY (product_id) REFERENCES item (id),
   CONSTRAINT ck_pp_qty CHECK (qty > 0)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -140,10 +118,6 @@ CREATE TABLE production_resource (
   time_norm DECIMAL(14,3) NOT NULL,
   PRIMARY KEY (production_id, item_id),
   KEY ix_prod_resource (item_id),
-  CONSTRAINT fk_pr_order
-    FOREIGN KEY (production_id) REFERENCES production_order (id),
-  CONSTRAINT fk_pr_item
-    FOREIGN KEY (item_id) REFERENCES item (id),
   CONSTRAINT ck_pr_qty CHECK (qty >= 0),
   CONSTRAINT ck_pr_time CHECK (time_norm >= 0)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -167,7 +141,5 @@ CREATE TABLE notes (
   id_user INT NOT NULL,
   created_at DATE NOT NULL,
   PRIMARY KEY (id),
-  KEY ix_notes_user (id_user),
-  CONSTRAINT fk_notes_user
-    FOREIGN KEY (id_user) REFERENCES users (id)
+  KEY ix_notes_user (id_user)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

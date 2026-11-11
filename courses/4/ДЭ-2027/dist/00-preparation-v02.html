@@ -1,0 +1,2274 @@
+<!doctype html>
+<html lang="ru" style="--course-accent:#C0392B;--course-tint:#F5E0DC;--course-accent-dark:#F2685A;--course-tint-dark:#3A1E1A;">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Предварительная подготовка: вариант V02</title>
+<script>(function(){try{var t=localStorage.getItem("mdk-theme");if(t==="dark"||t==="light")document.documentElement.dataset.theme=t;}catch(e){}})();</script>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Inter+Tight:wght@700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* course-studio: chapter, notes and course pages.
+   Course-catalog look: warm paper, heavy grotesk display type,
+   mono metadata, one accent per course. Anatomy figures sit in their own
+   frames and keep their own monochrome craft styling. */
+
+:root {
+  --paper: #F0EBE3; --card: #F9F7F2; --ink: #1A1916; --ink-2: #4A4740; --ink-3: #8A857B;
+  --rule: #DDD6CA; --rule-2: #E8E2D8; --code-bg: #F3EFE7;
+  --ok: #2E8B57; --bad: #C0392B; --warn: #B07A00;
+  --accent: var(--course-accent, #D04A28); --tint: var(--course-tint, #F4E1D8);
+  --quiz-card: #FFFFFF; --quiz-line: #EAEAEA; --quiz-ink: #1E1E1E;
+  --quiz-num-bg: #F0F0F0; --quiz-num-ink: #666666; --quiz-hover: #F7F7F7;
+  --quiz-ok: #22C55E; --quiz-ok-bg: #F4FBF7; --quiz-bad: #EF4444; --quiz-bad-bg: #FEF5F5;
+  --quiz-accent: #FF6B00;
+  --font-display: "Inter Tight", "Inter", system-ui, sans-serif;
+  --font-body: "Inter", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  --radius: 18px;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #1E1E1E; --card: #2A2A2A; --ink: #E0E0E0; --ink-2: #A0A0A0; --ink-3: #7A7A7A;
+    --rule: #3A3A3A; --rule-2: #333333; --code-bg: #252525; --ok: #4CC38A; --bad: #F2685A; --warn: #E0A93A;
+    --accent: #FF6B00; --tint: #2A2A2A;
+    --quiz-card: #2A2A2A; --quiz-line: #3A3A3A; --quiz-ink: #E0E0E0;
+    --quiz-num-bg: #363636; --quiz-num-ink: #A0A0A0; --quiz-hover: #333333;
+    --quiz-ok: #22C55E; --quiz-ok-bg: #1F3528; --quiz-bad: #EF4444; --quiz-bad-bg: #3A2323;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #1E1E1E; --card: #2A2A2A; --ink: #E0E0E0; --ink-2: #A0A0A0; --ink-3: #7A7A7A;
+  --rule: #3A3A3A; --rule-2: #333333; --code-bg: #252525; --ok: #4CC38A; --bad: #F2685A; --warn: #E0A93A;
+  --accent: #FF6B00; --tint: #2A2A2A;
+  --quiz-card: #2A2A2A; --quiz-line: #3A3A3A; --quiz-ink: #E0E0E0;
+  --quiz-num-bg: #363636; --quiz-num-ink: #A0A0A0; --quiz-hover: #333333;
+  --quiz-ok: #22C55E; --quiz-ok-bg: #1F3528; --quiz-bad: #EF4444; --quiz-bad-bg: #3A2323;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+body { margin: 0; background: var(--paper); color: var(--ink); font: 16.5px/1.7 var(--font-body); -webkit-font-smoothing: antialiased; }
+a { color: var(--accent); text-underline-offset: 3px; }
+
+/* ---------- scrollbars ---------- */
+/* Chrome, Safari, Edge */
+::-webkit-scrollbar-button { display: none; width: 0; height: 0; }
+::-webkit-scrollbar { width: 4px; height: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0);
+  border-radius: 999px;
+  transition: background-color .2s ease;
+}
+/* the thumb appears as soon as the pointer is anywhere on the page */
+:root:hover::-webkit-scrollbar-thumb,
+:root:hover ::-webkit-scrollbar-thumb { background-color: rgba(0, 0, 0, 0.34); }
+:root:hover::-webkit-scrollbar-thumb:hover,
+:root:hover ::-webkit-scrollbar-thumb:hover { background-color: rgba(0, 0, 0, 0.58); }
+/* Firefox: same behaviour through scrollbar-color */
+* { scrollbar-width: thin; scrollbar-color: transparent transparent; }
+:root:hover,
+:root:hover * { scrollbar-color: rgba(0, 0, 0, 0.34) transparent; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]):hover::-webkit-scrollbar-thumb,
+  :root:not([data-theme="light"]):hover ::-webkit-scrollbar-thumb { background-color: rgba(255, 255, 255, 0.38); }
+  :root:not([data-theme="light"]):hover::-webkit-scrollbar-thumb:hover,
+  :root:not([data-theme="light"]):hover ::-webkit-scrollbar-thumb:hover { background-color: rgba(255, 255, 255, 0.62); }
+  :root:not([data-theme="light"]):hover,
+  :root:not([data-theme="light"]):hover * { scrollbar-color: rgba(255, 255, 255, 0.38) transparent; }
+}
+:root[data-theme="dark"]:hover::-webkit-scrollbar-thumb,
+:root[data-theme="dark"]:hover ::-webkit-scrollbar-thumb { background-color: rgba(255, 255, 255, 0.38); }
+:root[data-theme="dark"]:hover::-webkit-scrollbar-thumb:hover,
+:root[data-theme="dark"]:hover ::-webkit-scrollbar-thumb:hover { background-color: rgba(255, 255, 255, 0.62); }
+:root[data-theme="dark"]:hover,
+:root[data-theme="dark"]:hover * { scrollbar-color: rgba(255, 255, 255, 0.38) transparent; }
+
+/* ---------- chapter page ---------- */
+.page { max-width: 820px; margin: 0 auto; padding: 28px 16px 96px; }
+.crumbs { font: 12px var(--font-mono); color: var(--ink-3); margin-bottom: 14px; display: flex; gap: 8px; flex-wrap: wrap; }
+.crumbs a { color: var(--ink-3); text-decoration: none; } .crumbs a:hover { color: var(--accent); }
+
+/* ---------- lesson reading aids ---------- */
+.read-progress { position: fixed; inset: 0 0 auto 0; height: 3px; z-index: 100; pointer-events: none; background: var(--rule-2); }
+.read-progress > span { display: block; height: 100%; width: 0; background: var(--accent); will-change: width; }
+.lesson-tools { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; margin: 0 0 10px; }
+.lesson-tools-right { display: flex; align-items: center; gap: 8px; margin-left: auto; flex-wrap: wrap; }
+.nav-btn { font: 600 12px var(--font-mono); letter-spacing: .04em; padding: 8px 13px; border-radius: 10px; border: 1px solid var(--rule); background: var(--card); color: var(--ink); text-decoration: none; }
+.nav-btn::before { content: "←"; margin-right: 6px; color: var(--accent); }
+.nav-btn:hover { border-color: var(--accent); color: var(--accent); }
+.nav-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.pdf-btn { font: 600 12px var(--font-mono); letter-spacing: .04em; padding: 8px 13px; border-radius: 10px; border: 1px solid var(--rule); background: var(--card); color: var(--ink); cursor: pointer; }
+.pdf-btn:hover { border-color: var(--accent); color: var(--accent); }
+.pdf-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.theme-btn { font: 600 12px var(--font-mono); letter-spacing: .04em; padding: 8px 13px; border-radius: 10px; border: 1px solid var(--rule); background: var(--card); color: var(--ink); cursor: pointer; }
+.theme-btn:hover { border-color: var(--accent); color: var(--accent); }
+.theme-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+@media (max-width: 640px) { .lesson-tools-right { width: 100%; justify-content: flex-end; } }
+
+/* ---------- left-edge navigation rail ---------- */
+.edge-rail {
+  position: fixed; left: 6px; top: 50%;
+  transform: translateY(-50%); z-index: 90;
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+}
+.rail-btn {
+  position: relative; display: grid; place-items: center;
+  width: 40px; height: 40px; padding: 0; border-radius: 50%;
+  -webkit-appearance: none; appearance: none;
+  border: 1px solid var(--rule); background: color-mix(in srgb, var(--card) 84%, transparent);
+  color: var(--ink); text-decoration: none; cursor: pointer;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, .12);
+  backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+  transition: transform .15s, border-color .15s, color .15s, background .15s;
+}
+.rail-btn svg { display: block; }
+.rail-btn:hover, .rail-btn:focus-visible { border-color: var(--accent); color: var(--accent); transform: scale(1.06); }
+.rail-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.rail-warn { color: var(--bad); }
+.rail-warn:hover, .rail-warn:focus-visible { border-color: var(--bad); color: var(--bad); }
+.rail-grow { flex: 1 1 auto; }
+
+/* hover tooltips on the rail icons */
+[data-tip]::before {
+  content: ""; position: absolute; left: calc(100% + 6px); top: 50%; transform: translateY(-50%);
+  border: 6px solid transparent; border-right-color: var(--ink); opacity: 0;
+  pointer-events: none; transition: opacity .15s; z-index: 121;
+}
+[data-tip]::after {
+  content: attr(data-tip); position: absolute; left: calc(100% + 16px); top: 50%;
+  transform: translateY(-50%); white-space: nowrap;
+  background: var(--ink); color: var(--paper); padding: 6px 10px; border-radius: 8px;
+  font: 600 12px/1.35 var(--font-body); letter-spacing: .01em;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, .18); opacity: 0; pointer-events: none;
+  transition: opacity .15s; z-index: 122;
+}
+[data-tip]:hover::before, [data-tip]:focus-visible::before,
+[data-tip]:hover::after, [data-tip]:focus-visible::after { opacity: 1; }
+@media (hover: none) { [data-tip]::before, [data-tip]::after { display: none; } }
+
+/* icon theme button in the rail: moon in light, sun in dark */
+.theme-ico { display: grid; place-items: center; transform-origin: center; }
+.theme-ico.is-spinning { animation: theme-spin .5s cubic-bezier(.16, 1, .3, 1); }
+@keyframes theme-spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .theme-ico.is-spinning { animation: none; } }
+.theme-ico .ico-sun { display: none; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme=light]) .theme-ico .ico-sun { display: block; }
+  :root:not([data-theme=light]) .theme-ico .ico-moon { display: none; }
+}
+:root[data-theme=dark] .theme-ico .ico-sun { display: block; }
+:root[data-theme=dark] .theme-ico .ico-moon { display: none; }
+@media (max-width: 920px) {
+  .page { padding-left: 56px; }
+}
+@media (max-width: 640px) {
+  .edge-rail { left: 4px; gap: 6px; }
+  .rail-btn { width: 34px; height: 34px; }
+  .page { padding-left: 48px; }
+}
+.syllabus > li.locked { opacity: .6; }
+.syllabus > li.locked h3 { color: var(--ink-3); }
+.syllabus > li.locked .mins { color: var(--bad); }
+
+
+.hero {
+  position: relative; overflow: hidden; border-radius: var(--radius); background: var(--tint);
+  border: 1px solid var(--rule); padding: 22px 24px 0; min-height: 230px; margin-bottom: 36px;
+}
+.hero .badges { display: flex; gap: 8px; flex-wrap: wrap; position: relative; z-index: 1; }
+.pill { font: 600 11px/1 var(--font-mono); letter-spacing: .08em; text-transform: uppercase; padding: 7px 10px; border-radius: 999px; background: var(--card); color: var(--ink); }
+.pill.dark { background: var(--ink); color: var(--paper); }
+.hero .meta { position: absolute; top: 24px; right: 24px; font: 12px var(--font-mono); color: var(--ink-2); z-index: 1; }
+.hero h1 { font: 800 clamp(30px, 5vw, 46px)/1.05 var(--font-display); letter-spacing: -.02em; margin: 26px 0 8px; max-width: 64%; position: relative; z-index: 1; }
+.hero .dek { color: var(--ink-2); max-width: 54%; margin: 0 0 28px; position: relative; z-index: 1; }
+.hero .glyph { position: absolute; right: -8px; bottom: -.2em; font: 900 clamp(110px, 17vw, 180px)/.8 var(--font-display); letter-spacing: -.06em; color: var(--accent); pointer-events: none; user-select: none; }
+.hero .glyph.code-md { font-size: clamp(80px, 12vw, 130px); }
+.hero .glyph.code-lg { font-size: clamp(48px, 7.5vw, 88px); right: 4px; bottom: 0; letter-spacing: -.04em; }
+.hero .glyph.code-xl { font-size: clamp(36px, 5.5vw, 64px); right: 6px; bottom: 2px; letter-spacing: -.03em; }
+@media (max-width: 640px) { .hero h1, .hero .dek { max-width: 100%; } .hero .glyph { opacity: .2; } .hero .meta { position: relative; top: auto; right: auto; margin-top: 10px; z-index: 1; } }
+
+/* shader hero on course and lesson pages */
+.hero[data-shader] { background: #08090D; color: #fff; border-color: rgba(255,255,255,.16); isolation: isolate; padding: 22px 24px 26px; }
+.hero[data-shader] .shader-bg { position: absolute; inset: 0; z-index: 0; display: block; width: 100%; height: 100%; pointer-events: none; background: linear-gradient(135deg,#08090D,var(--accent) 58%,#08090D); }
+.hero[data-shader] .badges { position: relative; z-index: 2; }
+.hero[data-shader] .hero-panel { position: relative; z-index: 2; display: block; width: 100%; max-width: none; margin-top: 18px; padding: 18px 20px; border: 1px solid rgba(255,255,255,.2); border-radius: 18px; background: rgba(8,9,13,.46); backdrop-filter: blur(18px) saturate(140%); -webkit-backdrop-filter: blur(18px) saturate(140%); box-shadow: 0 20px 50px -30px rgba(0,0,0,.85); }
+.hero[data-shader] .hero-panel h1 { margin: 0 0 8px; }
+.hero[data-shader] h1 { color: #fff; max-width: 100%; text-shadow: 0 2px 18px rgba(0,0,0,.55); }
+.hero[data-shader] .dek { color: rgba(255,255,255,.8); max-width: 100%; text-shadow: 0 1px 12px rgba(0,0,0,.6); }
+.hero[data-shader] .pill { background: rgba(8,9,13,.55); color: #fff; border: 1px solid rgba(255,255,255,.2); backdrop-filter: blur(10px); }
+.hero[data-shader] .pill.dark { background: color-mix(in srgb,var(--accent) 72%,#08090D); border-color: color-mix(in srgb,var(--accent) 55%,#fff); color: #fff; }
+.hero[data-shader] .glyph { z-index: 0; color: var(--accent); opacity: .34; text-shadow: 0 2px 20px rgba(0,0,0,.7); }
+.hero.hero-course h1 { margin: 26px 0 8px; }
+.hero.hero-course .dek { margin: 0; max-width: 76%; }
+.hero.hero-course .meta { position: absolute; top: 24px; right: 24px; color: rgba(255,255,255,.86); background: none; border: 0; padding: 0; backdrop-filter: none; -webkit-backdrop-filter: none; }
+.hero.hero-lesson .glyph { top: 6px; right: 16px; bottom: auto; font-size: clamp(40px, 6vw, 72px); line-height: 1; letter-spacing: -.03em; color: rgba(255,255,255,.4); opacity: 1; }
+@media (max-width: 760px) {
+  .hero.hero-course .meta { position: relative; top: auto; right: auto; display: block; margin-top: 10px; color: rgba(255,255,255,.8); }
+  .hero.hero-course .dek { max-width: 100%; }
+  .hero.hero-lesson .glyph { top: 8px; right: 12px; font-size: 40px; color: rgba(255,255,255,.34); }
+}
+
+/* apple liquid glass hero on the landing */
+.hero.hero-glass { min-height: 236px; display: grid; place-items: center; text-align: center; background: linear-gradient(135deg,rgba(255,255,255,.62),rgba(255,255,255,.2)); backdrop-filter: blur(40px) saturate(160%); -webkit-backdrop-filter: blur(40px) saturate(160%); border: 1px solid rgba(255,255,255,.7); border-radius: 28px; box-shadow: 0 26px 70px -42px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.85); }
+.hero.hero-glass::before { content: ""; position: absolute; inset: -2px; border-radius: 30px; padding: 2px; background: conic-gradient(from 210deg,#ff6b6b,#ffd93d,#4ecdc4,#6c5ce7,#ff6b6b); -webkit-mask: linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0); -webkit-mask-composite: xor; mask-composite: exclude; opacity: .55; pointer-events: none; }
+.hero.hero-glass h1 { max-width: 100%; margin: 0; font-size: clamp(46px,8vw,86px); letter-spacing: -.045em; background: linear-gradient(110deg,var(--ink),var(--accent) 52%,var(--ink)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme=light]) .hero.hero-glass { background: linear-gradient(135deg,rgba(42,42,42,.66),rgba(42,42,42,.3)); border-color: rgba(255,255,255,.14); box-shadow: 0 26px 70px -42px rgba(0,0,0,.9), inset 0 1px 0 rgba(255,255,255,.12); }
+  :root:not([data-theme=light]) .hero.hero-glass h1 { background: linear-gradient(110deg,#E0E0E0,var(--accent) 52%,#E0E0E0); -webkit-background-clip: text; background-clip: text; }
+}
+:root[data-theme=dark] .hero.hero-glass { background: linear-gradient(135deg,rgba(42,42,42,.66),rgba(42,42,42,.3)); border-color: rgba(255,255,255,.14); box-shadow: 0 26px 70px -42px rgba(0,0,0,.9), inset 0 1px 0 rgba(255,255,255,.12); }
+:root[data-theme=dark] .hero.hero-glass h1 { background: linear-gradient(110deg,#E0E0E0,var(--accent) 52%,#E0E0E0); -webkit-background-clip: text; background-clip: text; }
+@media (max-width: 640px) { .hero.hero-glass { min-height: 170px; } }
+
+.outcomes { background: var(--card); border: 1px solid var(--rule); border-radius: 14px; padding: 14px 18px; margin-bottom: 28px; }
+.outcomes b, .toc b { font: 600 11px var(--font-mono); letter-spacing: .08em; text-transform: uppercase; color: var(--ink-3); }
+.outcomes ul { margin: 6px 0 0; padding-left: 20px; }
+.toc { border: 1px solid var(--rule); border-radius: 14px; padding: 14px 18px; margin-bottom: 8px; }
+.toc ol { margin: 6px 0 0; padding-left: 20px; columns: 2; column-gap: 32px; font-size: 14px; }
+.toc li { break-inside: avoid; }
+@media (max-width: 640px) { .toc ol { columns: 1; } }
+
+.prose h2 { font: 800 28px/1.15 var(--font-display); letter-spacing: -.015em; margin: 56px 0 14px; scroll-margin-top: 16px; }
+.prose h2 .num { font: 600 13px var(--font-mono); color: var(--accent); margin-right: 12px; vertical-align: 4px; }
+.prose h3 { font: 700 19px/1.3 var(--font-display); margin: 32px 0 8px; }
+.prose p.lede, .prose .lede { font-size: 18.5px; color: var(--ink-2); }
+.prose a.lesson-ref { color: var(--accent); font-weight: 600; text-decoration: underline; text-decoration-thickness: 1.5px; text-underline-offset: 3px; border-radius: 3px; padding: 0 1px; }
+.prose a.lesson-ref:hover { animation: lesson-ref-blink .8s steps(2, end) infinite; background: var(--tint); }
+.prose a.lesson-ref:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+@keyframes lesson-ref-blink { 50% { opacity: .3; } }
+@media (prefers-reduced-motion: reduce) { .prose a.lesson-ref:hover { animation: none; } }
+.prose p, .prose li { text-align: justify; hyphens: auto; -webkit-hyphens: auto; }
+.prose strong { font-weight: 650; }
+.prose hr { border: 0; border-top: 1px solid var(--rule); margin: 40px 0; }
+.prose img { max-width: 100%; border-radius: 12px; }
+.prose li { margin: 3px 0; }
+.prose :not(pre) > code { font: .87em var(--font-mono); background: var(--code-bg); border: 1px solid var(--rule-2); padding: .1em .35em; border-radius: 6px; overflow-wrap: anywhere; }
+.prose pre { font: 13.5px/1.6 var(--font-mono); background: var(--code-bg); border: 1px solid var(--rule); border-radius: 12px; padding: 16px 18px; overflow-x: auto; }
+.prose .codehilite { background: transparent; }
+.prose .codehilite[data-lang] { position: relative; }
+.prose .codehilite[data-lang]::before {
+  content: attr(data-lang); position: absolute; top: 8px; right: 10px;
+  font: 600 10px/1 var(--font-mono); letter-spacing: .08em; text-transform: uppercase;
+  color: var(--ink-3); background: var(--card); border: 1px solid var(--rule);
+  border-radius: 6px; padding: 3px 6px; pointer-events: none;
+}
+.prose .codehilite[data-lang] pre { padding-top: 34px; }
+
+/* self-check questions without answers: visible, but not copyable by selection */
+.selfcheck { border: 1px solid var(--rule); background: var(--card); border-radius: 14px; padding: 16px 20px; margin: 18px 0; }
+.selfcheck ol { margin: 0; padding-left: 22px; }
+.selfcheck li { margin: 8px 0; }
+.no-copy, .no-copy * { -webkit-user-select: none; user-select: none; }
+
+.prose table { width: 100%; border-collapse: collapse; font-size: 14.5px; margin: 18px 0; display: block; overflow-x: auto; }
+.prose th { font: 600 11px var(--font-mono); letter-spacing: .06em; text-transform: uppercase; color: var(--ink-3); text-align: left; }
+.prose th, .prose td { padding: 10px 12px; border-bottom: 1px solid var(--rule); vertical-align: top; }
+
+/* callouts: > [!INTUITION] etc. */
+.callout { border: 1px solid var(--rule); background: var(--card); border-radius: 14px; padding: 14px 18px; margin: 22px 0; border-left: 4px solid var(--accent); }
+.callout > .label { display: block; font: 600 11px var(--font-mono); letter-spacing: .08em; text-transform: uppercase; color: var(--accent); margin-bottom: 4px; }
+.callout > :nth-child(2) { margin-top: 0; } .callout > :last-child { margin-bottom: 0; }
+.callout.pitfall { border-left-color: var(--bad); } .callout.pitfall > .label { color: var(--bad); }
+.callout.interview { border-left-color: var(--ink); } .callout.interview > .label { color: var(--ink); }
+.callout.intuition { border-left-color: var(--ok); } .callout.intuition > .label { color: var(--ok); }
+.callout.tradeoff { border-left-color: var(--warn); } .callout.tradeoff > .label { color: var(--warn); }
+
+/* self-checks: > [!CHECK] question */
+.check { border: 1px solid var(--rule); border-radius: 14px; background: var(--card); margin: 10px 0; }
+.check summary { cursor: pointer; padding: 12px 16px; font-weight: 600; list-style: none; display: flex; gap: 10px; }
+.check summary::-webkit-details-marker { display: none; }
+.check summary::before { content: "Q"; font: 700 12px var(--font-mono); color: var(--accent); padding-top: 4px; }
+.check[open] summary { border-bottom: 1px solid var(--rule-2); }
+.check > div { padding: 12px 16px 14px; color: var(--ink-2); }
+.check > div > :first-child { margin-top: 0; } .check > div > :last-child { margin-bottom: 0; }
+
+/* recap: > [!RECAP] */
+.recap { background: var(--ink); color: var(--paper); border-radius: var(--radius); padding: 22px 24px; margin-top: 48px; }
+.recap > .label { font: 800 24px var(--font-display); display: block; margin-bottom: 6px; }
+.recap li, .recap p { color: var(--paper); } .recap code { background: transparent !important; border-color: var(--ink-2) !important; color: var(--paper); }
+
+/* anatomy figure slot */
+.figure { margin: 30px -8px; }
+.figure iframe { display: block; width: 100%; border: 0; background: transparent; color-scheme: normal; min-height: 200px; }
+.figure figcaption { font-size: 14px; color: var(--ink-2); padding: 8px 12px 0; }
+.figure figcaption .fig-no { font: 600 11px var(--font-mono); color: var(--accent); letter-spacing: .06em; text-transform: uppercase; margin-right: 8px; }
+.figure.pending { border: 1.5px dashed var(--rule); border-radius: var(--radius); padding: 18px 20px; background: var(--card); margin: 30px 0; }
+.figure.pending .fig-no { font: 600 11px var(--font-mono); color: var(--accent); letter-spacing: .06em; text-transform: uppercase; }
+.figure.pending p { margin: 6px 0 0; color: var(--ink-2); font-size: 14.5px; }
+
+.pager { display: flex; justify-content: space-between; gap: 12px; margin-top: 48px; padding-top: 18px; border-top: 1px solid var(--rule); font-size: 14px; }
+.pager a { text-decoration: none; color: var(--ink); max-width: 48%; }
+.pager span { display: block; font: 11px var(--font-mono); color: var(--ink-3); text-transform: uppercase; letter-spacing: .06em; }
+/* while a lecture is split by gates, the visible page ends at the next-part button:
+   the lesson pager would be read as another part, so it waits until every gate is open */
+html.gated .pager { display: none; }
+/* on a lecture with a test, the pager also waits until the result card appears */
+html.quiz-pending .pager { display: none; }
+
+/* ---------- course catalog + syllabus ---------- */
+.catalog { max-width: 1240px; margin: 0 auto; padding: 32px 16px 80px; }
+/* the rail sits at the viewport edge, so keep catalog content clear of it */
+@media (max-width: 1320px) { main.catalog { padding-left: 56px; } }
+@media (max-width: 640px) { main.catalog { padding-left: 48px; } }
+.catalog-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 22px; gap: 12px; flex-wrap: wrap; }
+.filters { display: flex; gap: 8px; flex-wrap: wrap; }
+.filters button { font: 500 13px var(--font-body); padding: 8px 14px; border-radius: 999px; border: 1px solid var(--rule); background: var(--card); color: var(--ink); cursor: pointer; }
+.filters button[aria-pressed="true"] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.count { font: 12px var(--font-mono); color: var(--ink-2); }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 20px; }
+.course-card { background: var(--card); border: 1px solid var(--rule); border-radius: var(--radius); overflow: hidden; display: flex; flex-direction: column; text-decoration: none; color: var(--ink); transition: transform .22s cubic-bezier(.16,1,.3,1), box-shadow .22s cubic-bezier(.16,1,.3,1), opacity .22s; }
+.course-card:hover { transform: translateY(-5px) scale(1.018); box-shadow: 0 26px 58px -32px rgba(0,0,0,.55); }
+.course-card .art { position: relative; height: 205px; background: var(--c-tint); overflow: hidden; }
+.course-card .art .glyph { position: absolute; right: -6px; bottom: -22px; font: 900 128px/1 var(--font-display); letter-spacing: -.06em; color: var(--c-accent); }
+.course-card .art .pill { position: absolute; top: 16px; left: 16px; }
+.course-card .art .ch { position: absolute; top: 18px; right: 16px; font: 12px var(--font-mono); color: var(--ink-2); }
+.course-card .body { padding: 18px 22px 20px; display: flex; flex-direction: column; flex: 1; }
+.course-card h3 { font: 700 22px/1.2 var(--font-display); margin: 0 0 8px; }
+.course-card p { margin: 0 0 10px; color: var(--ink-2); font-size: 15px; }
+.course-card .spec { font: 12px/1.6 var(--font-mono); color: var(--ink-2); }
+.course-card .foot { margin-top: auto; padding-top: 14px; border-top: 1px solid var(--rule); display: flex; justify-content: space-between; align-items: center; }
+.course-card .price { font: 700 19px var(--font-display); }
+.btn { font: 600 13px var(--font-body); padding: 9px 14px; border-radius: 10px; border: 1px solid var(--rule); background: var(--paper); color: var(--ink); }
+.btn.primary { background: var(--c-accent, var(--accent)); color: #fff; border-color: transparent; }
+
+.syllabus { list-style: none; padding: 0; margin: 0; counter-reset: ch; }
+.syllabus > li { background: var(--card); border: 1px solid var(--rule); border-radius: 14px; margin-bottom: 12px; padding: 0; overflow: hidden; transition: transform .2s cubic-bezier(.16,1,.3,1), box-shadow .2s cubic-bezier(.16,1,.3,1); }
+.syllabus > li:hover { transform: scale(1.012); box-shadow: 0 16px 34px -26px rgba(0,0,0,.45); z-index: 1; position: relative; }
+.syllabus > li.pinned { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent) inset; }
+.syllabus > li.pinned .n { color: var(--accent); }
+.syllabus .lesson-card { display: grid; grid-template-columns: 48px minmax(0, 1fr) 66px; grid-template-rows: auto auto 1fr; gap: 4px 14px; padding: 16px 20px; color: inherit; text-decoration: none; border-radius: inherit; }
+.syllabus .lesson-card-static { cursor: default; }
+.syllabus .lesson-card:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.syllabus .n { font: 800 26px/1 var(--font-display); color: var(--accent); grid-row: 1 / span 3; padding-top: 2px; }
+.syllabus h3 { grid-column: 2; grid-row: 1; min-width: 0; margin: 0; font: 700 18px var(--font-display); overflow-wrap: anywhere; }
+.syllabus h3 a { color: var(--ink); text-decoration: none; } .syllabus h3 a:hover { color: var(--accent); }
+.syllabus .mins { grid-column: 2; grid-row: 2; font: 12px var(--font-mono); color: var(--ink-3); white-space: nowrap; }
+.syllabus p { grid-column: 2; grid-row: 3; margin: 0; color: var(--ink-2); font-size: 14.5px; }
+.syllabus .card-art { grid-column: 3; grid-row: 1 / span 3; align-self: start; aspect-ratio: 1 / 1; display: flex; align-items: center; justify-content: center; overflow: hidden; border-radius: 10px; background: var(--tint); background: linear-gradient(145deg, color-mix(in srgb, var(--course-accent, var(--accent)) 13%, transparent), transparent 72%); }
+.syllabus .card-art svg { width: 100%; height: auto; max-height: 56px; display: block; }
+@media (max-width: 700px) {
+  .syllabus .lesson-card { grid-template-columns: 36px minmax(0, 1fr) 44px; gap: 4px 10px; padding: 14px; }
+}
+@media (max-width: 520px) {
+  .syllabus .lesson-card { grid-template-columns: 32px minmax(0, 1fr) 32px; }
+  .syllabus .card-art svg { max-height: 28px; }
+}
+
+/* ---------- lecture reveal gates (::gate) ---------- */
+.gate-step { margin: 34px 0 0; }
+.gate-step[hidden] { display: none; }
+.gate-action { display: flex; justify-content: center; margin: 30px 0 0; }
+.gate-btn { display: inline-flex; align-items: center; gap: 11px; max-width: min(680px, 100%); padding: 14px 21px; border: 1px solid var(--accent); border-radius: 14px; background: var(--card); color: var(--ink); font: 600 16px/1.45 var(--font-body); text-align: left; cursor: pointer; box-shadow: 0 14px 34px -26px color-mix(in srgb, var(--accent) 70%, transparent); }
+.gate-btn[hidden] { display: none; }
+.gate-btn:hover { background: color-mix(in srgb, var(--accent) 7%, var(--card)); }
+.gate-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+.gate-q { display: grid; place-items: center; flex: none; width: 27px; height: 27px; border-radius: 50%; background: var(--accent); color: #fff; font: 800 15px/1 var(--font-mono); }
+.gate-content { margin-top: 28px; animation: gate-in .28s ease both; }
+@keyframes gate-in { from { opacity: 0; transform: translateY(7px); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) { .gate-content { animation: none; } }
+@media (max-width: 560px) { .gate-btn { width: 100%; } }
+
+/* ---------- interactive test (::quiz) ---------- */
+.quiz { margin: 24px 0; }
+.quiz-q {
+  background-color: var(--quiz-card);
+  border-radius: 12px;
+  padding: 24px 32px;
+  border: 1px solid var(--quiz-line);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, .02);
+  margin: 0 0 24px;
+  color: var(--quiz-ink);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+.quiz-q[hidden] { display: none; }
+.quiz-p { font-size: 18px; font-weight: 600; color: var(--quiz-ink); margin: 0 0 20px; display: flex; align-items: flex-start; gap: 12px; overflow-wrap: anywhere; }
+.quiz-no { flex: none; background-color: var(--quiz-num-bg); color: var(--quiz-num-ink); font-size: 12px; font-weight: bold; padding: 2px 8px; border-radius: 10px; margin-top: 2px; font-family: var(--font-mono); }
+.quiz .opts { display: flex; flex-direction: column; gap: 8px; }
+.quiz .opt {
+  display: flex; align-items: center; padding: 12px 16px; border-radius: 8px;
+  background-color: transparent; border: 1px solid transparent; cursor: pointer;
+  transition: background-color .2s, border-color .2s; font-size: 16px; color: var(--quiz-ink);
+}
+.quiz .opt:hover { background-color: var(--quiz-hover); }
+.quiz .opt span { overflow-wrap: anywhere; min-width: 0; }
+.quiz .opt input[type="radio"], .quiz .opt input[type="checkbox"] {
+  margin-right: 12px; width: 20px; height: 20px; accent-color: var(--quiz-accent); cursor: pointer; flex: none;
+}
+.quiz .opt.correct { border-left: 4px solid var(--quiz-ok); border-radius: 4px 8px 8px 4px; padding-left: 12px; }
+.quiz-q.ok .opt.correct, .quiz-q.bad .opt.picked.correct { background-color: var(--quiz-ok-bg); }
+.quiz-q.bad .opt.correct:not(.picked) { background-color: transparent; }
+.quiz-q.bad .opt.picked:not(.correct) { background-color: var(--quiz-bad-bg); border-left: 4px solid var(--quiz-bad); border-radius: 4px 8px 8px 4px; padding-left: 12px; }
+.quiz-why { margin: 12px 0 2px; padding: 9px 13px; border-left: 3px solid var(--quiz-bad); border-radius: 0 9px 9px 0; background: var(--quiz-bad-bg); color: var(--ink-2); font-size: 13.5px; line-height: 1.5; text-align: left; }
+.quiz-why[hidden] { display: none; }
+.quiz-why::before { content: "Почему неверно: "; font-weight: 700; color: var(--quiz-bad); }
+.quiz-q.ok .quiz-why { border-left-color: var(--quiz-ok); background: var(--quiz-ok-bg); }
+.quiz-q.ok .quiz-why::before { content: "Почему верно: "; color: var(--quiz-ok); }
+.quiz-actions { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-top: 10px; }
+.quiz-actions button { -webkit-appearance: none; appearance: none; font: 600 13px var(--font-body); padding: 9px 15px; border-radius: 10px; border: 1px solid var(--rule); background: var(--paper); background-color: var(--paper); color: var(--ink); cursor: pointer; }
+.quiz-actions button[data-answer], .quiz-actions button.quiz-answer { background: #121212; background-color: #121212; color: #fff; border-color: transparent; }
+.quiz-actions button:hover { filter: brightness(.96); }
+.quiz-actions button:focus-visible { outline: 2px solid var(--quiz-accent); outline-offset: 2px; }
+.quiz-note { font-size: 13px; color: var(--bad); }
+.quiz .short-answer { width: 100%; font: 16px var(--font-body); padding: 12px 16px; border: 1px solid var(--quiz-line); border-radius: 8px; background: transparent; color: var(--quiz-ink); }
+.quiz .short-answer:focus { outline: 2px solid var(--quiz-accent); outline-offset: 1px; border-color: transparent; }
+.quiz-q.ok .short-answer { border-color: var(--quiz-ok); background: var(--quiz-ok-bg); }
+.quiz-q.bad .short-answer { border-color: var(--quiz-bad); background: var(--quiz-bad-bg); }
+.quiz-result { margin-top: 22px; padding: 20px 22px; border: 1px solid var(--quiz-line); border-radius: 12px; background: var(--quiz-card); box-shadow: 0 2px 8px rgba(0,0,0,.02); color: var(--quiz-ink); }
+.quiz-result[hidden] { display: none; }
+.quiz-result > .label { display: block; font: 600 11px var(--font-mono); letter-spacing: .08em; text-transform: uppercase; color: var(--accent); margin-bottom: 6px; }
+.quiz-result h3 { margin: 0 0 14px; font: 800 24px/1.2 var(--font-display); }
+.quiz-result .modal-result { margin: 0 0 14px; }
+.quiz-result .modal-times { margin-bottom: 0; }
+@media (max-width: 560px) {
+  .quiz-q { padding: 18px 16px; }
+  .quiz-p { font-size: 16px; gap: 10px; }
+  .quiz .opt { padding: 10px 12px; font-size: 15px; }
+  .quiz .opt.correct, .quiz-q.bad .opt.picked:not(.correct) { padding-left: 9px; }
+  .quiz-no { font-size: 11px; padding: 2px 7px; }
+  .quiz-result { padding: 16px 16px; }
+  .quiz-result h3 { font-size: 20px; }
+}
+
+/* ---------- test submission and warnings ---------- */
+.warn-btn { width: 32px; height: 32px; border: 0; border-radius: 50%; background: var(--bad); color: #fff; font: 900 19px/1 var(--font-body); cursor: pointer; display: grid; place-items: center; padding: 0; }
+.warn-btn:hover { filter: brightness(.92); }
+.warn-btn:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+html.modal-open { overflow: hidden; }
+.modal[hidden] { display: none; }
+.modal { position: fixed; inset: 0; z-index: 200; display: grid; place-items: center; padding: 20px; background: rgba(12, 11, 9, .58); }
+.modal-card { position: relative; width: min(460px, 100%); background: var(--card); color: var(--ink); border: 1px solid var(--rule); border-radius: var(--radius); padding: 24px 24px 20px; box-shadow: 0 24px 80px -24px rgba(0, 0, 0, .5); }
+.modal-card h2 { font: 800 24px/1.2 var(--font-display); margin: 0 0 12px; padding-right: 30px; }
+.modal-card p { margin: 0 0 14px; color: var(--ink-2); }
+.modal-close { position: absolute; top: 10px; right: 10px; width: 30px; height: 30px; border: 1px solid var(--rule); border-radius: 8px; background: var(--paper); color: var(--ink); font: 700 20px/1 var(--font-body); cursor: pointer; }
+.modal-name { display: block; margin: 0 0 14px; }
+.modal-name[hidden] { display: none; }
+.modal-name span { display: block; font: 600 11px var(--font-mono); letter-spacing: .06em; text-transform: uppercase; color: var(--ink-3); margin-bottom: 6px; }
+.modal-name input { width: 100%; font: 15px var(--font-body); padding: 10px 12px; border: 1px solid var(--rule); border-radius: 9px; background: var(--paper); color: var(--ink); }
+.modal-name input:focus { outline: 2px solid var(--accent); outline-offset: 1px; border-color: transparent; }
+.modal-student { font-weight: 600; }
+.modal-result { font: 700 18px/1.3 var(--font-display); color: var(--accent); }
+.modal-times { display: grid; gap: 8px; margin: 0 0 18px; padding: 12px 14px; border: 1px solid var(--rule); border-radius: 10px; background: var(--paper); }
+.modal-times div { display: flex; justify-content: space-between; gap: 12px; }
+.modal-times dt { font-size: 13px; color: var(--ink-2); }
+.modal-times dd { margin: 0; font: 600 13px var(--font-mono); color: var(--ink); }
+.modal-ok { width: 100%; font: 600 14px var(--font-body); padding: 11px 16px; border: 0; border-radius: 10px; background: var(--accent); color: #fff; cursor: pointer; }
+@media print { .modal { display: none !important; } }
+
+/* ---------- practicals: figures, screenshot slots, steps ---------- */
+.diagram { margin: 24px 0; padding: 18px; border: 1px solid var(--rule); border-radius: 14px; background: var(--card); text-align: center; overflow-x: auto; }
+.diagram svg { display: block; margin: 0 auto; max-width: 100%; height: auto; }
+@media (max-width: 640px) { .diagram svg { min-width: 540px; } }
+.diagram img { max-width: 100%; height: auto; border-radius: 10px; display: block; margin: 0 auto; }
+.diagram { --paper: #F0EBE3; --card: #F9F7F2; --ink: #1A1916; --ink-2: #4A4740; --ink-3: #8A857B; --rule: #DDD6CA; --rule-2: #E8E2D8; --ok: #2E8B57; --bad: #C0392B; --warn: #B07A00; --accent: var(--course-accent, #3A5BBF); --tint: var(--course-tint, #DDE3F4); color-scheme: light; }
+.diagram figcaption { font-size: 13.5px; color: var(--ink-2); margin-top: 10px; text-align: left; }
+.shot { border: 1.5px dashed var(--accent); border-radius: 12px; padding: 16px 18px; background: color-mix(in srgb, var(--accent) 6%, var(--card)); margin: 14px 0; color: var(--ink-2); font-size: 14.5px; }
+.shot b { color: var(--accent); font-family: var(--font-mono); font-size: 12px; letter-spacing: .05em; text-transform: uppercase; display: block; margin-bottom: 4px; }
+.k-v { font: 12px var(--font-mono); color: var(--ink-2); }
+.prose h3 .lead { color: var(--accent); font: 600 12px var(--font-mono); margin-right: 8px; vertical-align: 2px; }
+
+/* ---------- downloadable materials attached to a work ---------- */
+.files { border: 1px solid var(--rule); border-radius: 14px; background: var(--card); padding: 16px 18px 12px; margin: 20px 0; }
+.files b.label { display: block; font: 600 11px var(--font-mono); letter-spacing: .08em; text-transform: uppercase; color: var(--accent); margin-bottom: 10px; }
+.files a { display: inline-flex; align-items: center; gap: 8px; padding: 10px 15px; margin: 0 8px 8px 0; border: 1px solid var(--rule); border-radius: 10px; background: var(--paper); color: var(--ink); text-decoration: none; font-weight: 600; font-size: 14px; }
+.files a:hover { border-color: var(--accent); color: var(--accent); }
+.files a::before { content: "\2193"; font-family: var(--font-mono); color: var(--accent); }
+.files p { margin: 4px 0 0; font-size: 13px; color: var(--ink-3); }
+
+/* ---------- paper-craft buttons ---------- */
+.nav-btn, .pager a { background: #121212; color: #fff; border: 2px solid #121212; border-radius: 12px; box-shadow: 4px 4px 0 rgba(0,0,0,.18); transition: transform .18s cubic-bezier(.16,1,.3,1), box-shadow .18s cubic-bezier(.16,1,.3,1), background .18s; }
+.nav-btn { padding: 9px 15px; }
+.pager a { display: block; padding: 10px 14px; }
+.nav-btn:hover, .pager a:hover { color: #fff; background: #1d1d1d; border-color: #1d1d1d; transform: translate(-1px,-1px) rotate(-.35deg); box-shadow: 6px 6px 0 rgba(0,0,0,.22); }
+.nav-btn:active, .pager a:active { transform: translate(2px,2px); box-shadow: 1px 1px 0 rgba(0,0,0,.12); }
+.nav-btn::before { color: #fff; opacity: .7; }
+.pager span { color: rgba(255,255,255,.6); }
+.pager .pager-off { display: block; max-width: 48%; padding: 10px 14px; border: 2px dashed var(--rule); border-radius: 12px; color: var(--ink-3); opacity: .58; cursor: not-allowed; font: 14px var(--font-body); text-transform: none; letter-spacing: normal; }
+.pager .pager-off > span { color: var(--ink-3); font: 11px var(--font-mono); text-transform: uppercase; letter-spacing: .06em; }
+.gate-btn { background: #121212; color: #fff; border: 2px solid #121212; box-shadow: 4px 4px 0 rgba(0,0,0,.2); transition: transform .18s cubic-bezier(.16,1,.3,1), box-shadow .18s cubic-bezier(.16,1,.3,1), background .18s; }
+.gate-btn:hover { background: #1d1d1d; color: #fff; border-color: #1d1d1d; transform: translate(-1px,-1px) rotate(-.3deg); box-shadow: 6px 6px 0 rgba(0,0,0,.24); }
+.gate-btn:active { transform: translate(2px,2px); box-shadow: 1px 1px 0 rgba(0,0,0,.12); }
+.gate-q { background: #fff; color: #121212; }
+.pdf-btn, .theme-btn, .quiz-actions button, .modal-ok, .modal-close, .filters button, .files a { background: #fdf6ee; color: #2d2d2d; border: 2px solid #e0d8cc; border-radius: 12px; box-shadow: 3px 3px 0 rgba(0,0,0,.1); transition: transform .18s cubic-bezier(.16,1,.3,1), box-shadow .18s cubic-bezier(.16,1,.3,1), border-color .18s, background .18s; }
+.pdf-btn:hover, .theme-btn:hover, .quiz-actions button:hover, .modal-ok:hover, .modal-close:hover, .filters button:hover, .files a:hover { color: #2d2d2d; border-color: #d3c7b6; background: #fffaf2; transform: translate(-1px,-1px) rotate(-.3deg); box-shadow: 5px 5px 0 rgba(0,0,0,.14); }
+.pdf-btn:active, .theme-btn:active, .quiz-actions button:active, .modal-ok:active, .modal-close:active, .filters button:active, .files a:active { transform: translate(2px,2px); box-shadow: 1px 1px 0 rgba(0,0,0,.08); }
+.quiz-actions button[data-answer], .quiz-actions button.quiz-answer { background: #121212; background-color: #121212; color: #fff; border-color: #121212; box-shadow: 4px 4px 0 rgba(0,0,0,.18); }
+.quiz-actions button[data-answer]:hover, .quiz-actions button.quiz-answer:hover { background: #1D1D1D; background-color: #1D1D1D; color: #fff; border-color: #1D1D1D; }
+.filters button[aria-pressed="true"] { background: #121212; color: #fff; border-color: #121212; }
+.warn-btn { box-shadow: 3px 3px 0 rgba(0,0,0,.18); transition: transform .18s, box-shadow .18s; }
+.warn-btn:hover { transform: translate(-1px,-1px); box-shadow: 4px 4px 0 rgba(0,0,0,.22); filter: none; }
+
+/* dark theme: neutral panels instead of bright cream */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme=light]) .pdf-btn, :root:not([data-theme=light]) .theme-btn,
+  :root:not([data-theme=light]) .quiz-actions button, :root:not([data-theme=light]) .modal-ok,
+  :root:not([data-theme=light]) .modal-close, :root:not([data-theme=light]) .filters button,
+  :root:not([data-theme=light]) .files a { background: #2A2A2A; color: #E0E0E0; border-color: #3A3A3A; box-shadow: 3px 3px 0 rgba(0,0,0,.3); }
+  :root:not([data-theme=light]) .pdf-btn:hover, :root:not([data-theme=light]) .theme-btn:hover,
+  :root:not([data-theme=light]) .quiz-actions button:hover, :root:not([data-theme=light]) .modal-ok:hover,
+  :root:not([data-theme=light]) .modal-close:hover, :root:not([data-theme=light]) .filters button:hover,
+  :root:not([data-theme=light]) .files a:hover { background: #333333; color: #FFFFFF; border-color: #4A4A4A; }
+  :root:not([data-theme=light]) .quiz-actions button[data-answer], :root:not([data-theme=light]) .quiz-actions button.quiz-answer { background: #121212; background-color: #121212; color: #fff; border-color: #121212; box-shadow: none; }
+  :root:not([data-theme=light]) .quiz-actions button[data-answer]:hover, :root:not([data-theme=light]) .quiz-actions button.quiz-answer:hover { background: #262626; background-color: #262626; color: #fff; border-color: #262626; }
+  :root:not([data-theme=light]) .gate-q { background: #1E1E1E; color: #FF6B00; }
+}
+:root[data-theme=dark] .pdf-btn, :root[data-theme=dark] .theme-btn,
+:root[data-theme=dark] .quiz-actions button, :root[data-theme=dark] .modal-ok,
+:root[data-theme=dark] .modal-close, :root[data-theme=dark] .filters button,
+:root[data-theme=dark] .files a { background: #2A2A2A; color: #E0E0E0; border-color: #3A3A3A; box-shadow: 3px 3px 0 rgba(0,0,0,.3); }
+:root[data-theme=dark] .pdf-btn:hover, :root[data-theme=dark] .theme-btn:hover,
+:root[data-theme=dark] .quiz-actions button:hover, :root[data-theme=dark] .modal-ok:hover,
+:root[data-theme=dark] .modal-close:hover, :root[data-theme=dark] .filters button:hover,
+:root[data-theme=dark] .files a:hover { background: #333333; color: #FFFFFF; border-color: #4A4A4A; }
+:root[data-theme=dark] .quiz-actions button[data-answer], :root[data-theme=dark] .quiz-actions button.quiz-answer { background: #121212; background-color: #121212; color: #fff; border-color: #121212; box-shadow: none; }
+:root[data-theme=dark] .quiz-actions button[data-answer]:hover, :root[data-theme=dark] .quiz-actions button.quiz-answer:hover { background: #262626; background-color: #262626; color: #fff; border-color: #262626; }
+:root[data-theme=dark] .gate-q { background: #1E1E1E; color: #FF6B00; }
+
+/* the whole-variant archive is the main action in a download block */
+.files a.zip { background: #121212; color: #fff; border-color: #121212; font-weight: 700; box-shadow: 4px 4px 0 rgba(0,0,0,.18); }
+.files a.zip::before { color: #fff; }
+.files a.zip:hover { background: #1D1D1D; color: #fff; border-color: #1D1D1D; box-shadow: 5px 5px 0 rgba(0,0,0,.22); }
+.files a.zip:active { transform: translate(2px,2px); box-shadow: 1px 1px 0 rgba(0,0,0,.12); }
+
+/* ---------- practical work checklist ---------- */
+.work-checklist { width: 100%; border-collapse: collapse; margin: 14px 0 4px; }
+.work-checklist th, .work-checklist td { border: 1px solid var(--rule); padding: 9px 10px; vertical-align: top; }
+.work-checklist th { background: var(--paper); font: 600 12px var(--font-mono); letter-spacing: .04em; text-transform: uppercase; color: var(--ink-3); }
+.work-checklist td:nth-child(2), .work-checklist td:nth-child(3) { width: 104px; text-align: center; }
+.work-checklist input[type="checkbox"] { width: 18px; height: 18px; accent-color: var(--accent); cursor: pointer; }
+@media (max-width: 560px) {
+  .work-checklist th, .work-checklist td { padding: 7px 6px; }
+  .work-checklist th { font-size: 10px; letter-spacing: 0; }
+  .work-checklist td:nth-child(2), .work-checklist td:nth-child(3) { width: 62px; }
+  .work-checklist input[type="checkbox"] { width: 16px; height: 16px; }
+}
+
+/* ---------- scroll reveal in lessons ---------- */
+.reveal { opacity: 0; transform: translateY(26px); transition: opacity .7s cubic-bezier(.16,1,.3,1), transform .7s cubic-bezier(.16,1,.3,1); }
+.reveal.in { opacity: 1; transform: none; }
+@media (prefers-reduced-motion: reduce) { .reveal { opacity: 1 !important; transform: none !important; transition: none !important; } }
+.quiz-q { animation: quiz-in .32s cubic-bezier(.16,1,.3,1) both; }
+@keyframes quiz-in { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) { .quiz-q { animation: none; } }
+
+/* ---------- variant cards on the practice page ---------- */
+.variant { border: 1px solid var(--rule); border-radius: 14px; background: var(--card); margin: 0 0 12px; overflow: hidden; }
+.variant > summary { list-style: none; cursor: pointer; display: flex; align-items: baseline; gap: 10px; padding: 14px 18px; font: 700 17px/1.35 var(--font-display); }
+.variant > summary::-webkit-details-marker { display: none; }
+.variant > summary::after { content: '+'; margin-left: auto; font: 600 20px/1 var(--font-mono); color: var(--accent); }
+.variant[open] > summary::after { content: '−'; }
+.variant > summary .variant-no { font: 700 13px/1 var(--font-mono); color: var(--accent); background: var(--paper); border: 1px solid var(--rule-2); border-radius: 6px; padding: 4px 7px; }
+.variant-body { padding: 0 18px 18px; }
+.variant-body h4 { margin: 18px 0 8px; font: 700 15px/1.3 var(--font-display); }
+.variant-body table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+.variant-body th, .variant-body td { border: 1px solid var(--rule-2); padding: 6px 8px; text-align: left; vertical-align: top; }
+.variant-body th { background: var(--paper); font-weight: 600; }
+.variant-body .files { margin-top: 14px; }
+.variant-body .task-list { margin: 8px 0 0; padding-left: 20px; }
+.variant-body .task-list li { margin: 0 0 8px; }
+@media (max-width: 620px) { .variant-body { overflow-x: auto; } .variant-body table { min-width: 520px; } }
+
+/* ---------- schema slider: all CREATE TABLE examples ---------- */
+.schema-slider { margin: 18px 0 24px; border: 1px solid #d8d5cc; border-radius: 14px; background: #fff; color: #1a1916; overflow: hidden; }
+.schema-slider-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 14px; background: #f5f2ea; border-bottom: 1px solid #d8d5cc; }
+.schema-slider-bar strong { font: 700 14px/1.2 var(--font-display); color: #1a1916; }
+.schema-slider-actions { display: flex; align-items: center; gap: 8px; }
+.schema-slider-counter { min-width: 62px; text-align: center; font: 600 13px/1 var(--font-mono); color: #59544a; }
+.schema-btn { width: 34px; height: 34px; border: 1px solid #c9c4b8; border-radius: 8px; background: #fff; color: #1a1916; font: 700 18px/1 var(--font-mono); cursor: pointer; }
+.schema-btn:hover { background: #ece7dc; }
+.schema-track { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: thin; }
+.schema-slide { flex: 0 0 100%; min-width: 100%; box-sizing: border-box; padding: 16px 18px 18px; scroll-snap-align: start; }
+.schema-slide h4 { margin: 0 0 10px; font: 700 16px/1.3 var(--font-display); color: #1a1916; }
+.schema-slide h4 code, .schema-slide p code { color: #1a1916; background: #f1ede4; padding: 1px 4px; border-radius: 4px; }
+.schema-slide p { margin: 0 0 10px; font-size: 14px; line-height: 1.55; color: #3a372f; }
+.schema-slide pre { margin: 0; padding: 14px 16px; overflow-x: auto; border: 1px solid #ddd8cc; border-radius: 10px; background: #fbfaf6; color: #1a1916; font: 12.5px/1.5 var(--font-mono); }
+.schema-slide code { color: inherit; background: none; padding: 0; }
+.schema-lines { width: 100%; border-collapse: collapse; margin: 8px 0 14px; font-size: 13px; line-height: 1.45; color: #1a1916; }
+.schema-lines th, .schema-lines td { border: 1px solid #ddd8cc; padding: 6px 8px; vertical-align: top; text-align: left; }
+.schema-lines th { background: #f5f2ea; font-weight: 600; }
+.schema-lines td code { white-space: nowrap; color: #1a1916; background: #f1ede4; padding: 1px 4px; border-radius: 4px; }
+@media (max-width: 620px) { .schema-lines { font-size: 12px; } .schema-lines td code { white-space: normal; } }
+.schema-slider:focus-within { outline: 2px solid #b9a97f; outline-offset: 2px; }
+@media (max-width: 620px) { .schema-slide { padding: 12px; } .schema-slider-bar { padding: 8px 10px; } }
+
+/* ---------- print / PDF export ---------- */
+@page { margin: 16mm; }
+@media print {
+  body { background: #fff; color: #000; font-size: 11.5pt; }
+  .read-progress, .lesson-tools, .edge-rail, .crumbs, .toc, .pager, .hero .glyph, .hero .meta { display: none !important; }
+  .page { max-width: none; padding: 0; }
+  .hero { padding: 0; border: 0; background: none; }
+  .hero h1, .hero .dek { max-width: 100%; }
+  .prose p, .prose li { text-align: left; hyphens: none; }
+  a { color: #000; text-decoration: none; }
+  .callout, .check, .recap, .quiz-q, .quiz-result, .figure, .outcomes { border-color: #999; }
+  .gate-step[hidden], .gate-content[hidden], .quiz-q[hidden] { display: block !important; }
+  .gate-action, .quiz-actions { display: none !important; }
+  .reveal { opacity: 1 !important; transform: none !important; transition: none !important; }
+  .recap { background: #fff; color: #000; }
+  .recap li, .recap p { color: #000; }
+  .figure { break-inside: avoid; }
+  .figure iframe { min-height: 0; }
+  .diagram { break-inside: avoid; overflow: visible; }
+  .diagram svg { min-width: 0 !important; max-width: 100% !important; }
+}
+
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.codehilite .hll { background-color: #ffffcc }
+.codehilite { background: #f8f8f8; }
+.codehilite .c { color: #3D7B7B; font-style: italic } /* Comment */
+.codehilite .err { border: 1px solid #F00 } /* Error */
+.codehilite .k { color: #008000; font-weight: bold } /* Keyword */
+.codehilite .o { color: #666 } /* Operator */
+.codehilite .ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.codehilite .cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.codehilite .cp { color: #9C6500 } /* Comment.Preproc */
+.codehilite .cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.codehilite .c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.codehilite .cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.codehilite .gd { color: #A00000 } /* Generic.Deleted */
+.codehilite .ge { font-style: italic } /* Generic.Emph */
+.codehilite .ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.codehilite .gr { color: #E40000 } /* Generic.Error */
+.codehilite .gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.codehilite .gi { color: #008400 } /* Generic.Inserted */
+.codehilite .go { color: #717171 } /* Generic.Output */
+.codehilite .gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.codehilite .gs { font-weight: bold } /* Generic.Strong */
+.codehilite .gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.codehilite .gt { color: #04D } /* Generic.Traceback */
+.codehilite .kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.codehilite .kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.codehilite .kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.codehilite .kp { color: #008000 } /* Keyword.Pseudo */
+.codehilite .kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.codehilite .kt { color: #B00040 } /* Keyword.Type */
+.codehilite .m { color: #666 } /* Literal.Number */
+.codehilite .s { color: #BA2121 } /* Literal.String */
+.codehilite .na { color: #687822 } /* Name.Attribute */
+.codehilite .nb { color: #008000 } /* Name.Builtin */
+.codehilite .nc { color: #00F; font-weight: bold } /* Name.Class */
+.codehilite .no { color: #800 } /* Name.Constant */
+.codehilite .nd { color: #A2F } /* Name.Decorator */
+.codehilite .ni { color: #717171; font-weight: bold } /* Name.Entity */
+.codehilite .ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.codehilite .nf { color: #00F } /* Name.Function */
+.codehilite .nl { color: #767600 } /* Name.Label */
+.codehilite .nn { color: #00F; font-weight: bold } /* Name.Namespace */
+.codehilite .nt { color: #008000; font-weight: bold } /* Name.Tag */
+.codehilite .nv { color: #19177C } /* Name.Variable */
+.codehilite .ow { color: #A2F; font-weight: bold } /* Operator.Word */
+.codehilite .w { color: #BBB } /* Text.Whitespace */
+.codehilite .mb { color: #666 } /* Literal.Number.Bin */
+.codehilite .mf { color: #666 } /* Literal.Number.Float */
+.codehilite .mh { color: #666 } /* Literal.Number.Hex */
+.codehilite .mi { color: #666 } /* Literal.Number.Integer */
+.codehilite .mo { color: #666 } /* Literal.Number.Oct */
+.codehilite .sa { color: #BA2121 } /* Literal.String.Affix */
+.codehilite .sb { color: #BA2121 } /* Literal.String.Backtick */
+.codehilite .sc { color: #BA2121 } /* Literal.String.Char */
+.codehilite .dl { color: #BA2121 } /* Literal.String.Delimiter */
+.codehilite .sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.codehilite .s2 { color: #BA2121 } /* Literal.String.Double */
+.codehilite .se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.codehilite .sh { color: #BA2121 } /* Literal.String.Heredoc */
+.codehilite .si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.codehilite .sx { color: #008000 } /* Literal.String.Other */
+.codehilite .sr { color: #A45A77 } /* Literal.String.Regex */
+.codehilite .s1 { color: #BA2121 } /* Literal.String.Single */
+.codehilite .ss { color: #19177C } /* Literal.String.Symbol */
+.codehilite .bp { color: #008000 } /* Name.Builtin.Pseudo */
+.codehilite .fm { color: #00F } /* Name.Function.Magic */
+.codehilite .vc { color: #19177C } /* Name.Variable.Class */
+.codehilite .vg { color: #19177C } /* Name.Variable.Global */
+.codehilite .vi { color: #19177C } /* Name.Variable.Instance */
+.codehilite .vm { color: #19177C } /* Name.Variable.Magic */
+.codehilite .il { color: #666 } /* Literal.Number.Integer.Long */
+pre { line-height: 125%; }
+td.linenos .normal { color: #6e7681; background-color: #0d1117; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: #6e7681; background-color: #0d1117; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #e6edf3; background-color: #6e7681; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 5px; padding-right: 5px; }
+:root[data-theme=dark] .codehilite .hll { background-color: #6e7681 }
+:root[data-theme=dark] .codehilite { background: #0d1117; color: #E6EDF3 }
+:root[data-theme=dark] .codehilite .c { color: #8B949E; font-style: italic } /* Comment */
+:root[data-theme=dark] .codehilite .err { color: #F85149 } /* Error */
+:root[data-theme=dark] .codehilite .esc { color: #E6EDF3 } /* Escape */
+:root[data-theme=dark] .codehilite .g { color: #E6EDF3 } /* Generic */
+:root[data-theme=dark] .codehilite .k { color: #FF7B72 } /* Keyword */
+:root[data-theme=dark] .codehilite .l { color: #A5D6FF } /* Literal */
+:root[data-theme=dark] .codehilite .n { color: #E6EDF3 } /* Name */
+:root[data-theme=dark] .codehilite .o { color: #FF7B72; font-weight: bold } /* Operator */
+:root[data-theme=dark] .codehilite .x { color: #E6EDF3 } /* Other */
+:root[data-theme=dark] .codehilite .p { color: #E6EDF3 } /* Punctuation */
+:root[data-theme=dark] .codehilite .ch { color: #8B949E; font-style: italic } /* Comment.Hashbang */
+:root[data-theme=dark] .codehilite .cm { color: #8B949E; font-style: italic } /* Comment.Multiline */
+:root[data-theme=dark] .codehilite .cp { color: #8B949E; font-weight: bold; font-style: italic } /* Comment.Preproc */
+:root[data-theme=dark] .codehilite .cpf { color: #8B949E; font-style: italic } /* Comment.PreprocFile */
+:root[data-theme=dark] .codehilite .c1 { color: #8B949E; font-style: italic } /* Comment.Single */
+:root[data-theme=dark] .codehilite .cs { color: #8B949E; font-weight: bold; font-style: italic } /* Comment.Special */
+:root[data-theme=dark] .codehilite .gd { color: #FFA198; background-color: #490202 } /* Generic.Deleted */
+:root[data-theme=dark] .codehilite .ge { color: #E6EDF3; font-style: italic } /* Generic.Emph */
+:root[data-theme=dark] .codehilite .ges { color: #E6EDF3; font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+:root[data-theme=dark] .codehilite .gr { color: #FFA198 } /* Generic.Error */
+:root[data-theme=dark] .codehilite .gh { color: #79C0FF; font-weight: bold } /* Generic.Heading */
+:root[data-theme=dark] .codehilite .gi { color: #56D364; background-color: #0F5323 } /* Generic.Inserted */
+:root[data-theme=dark] .codehilite .go { color: #8B949E } /* Generic.Output */
+:root[data-theme=dark] .codehilite .gp { color: #8B949E } /* Generic.Prompt */
+:root[data-theme=dark] .codehilite .gs { color: #E6EDF3; font-weight: bold } /* Generic.Strong */
+:root[data-theme=dark] .codehilite .gu { color: #79C0FF } /* Generic.Subheading */
+:root[data-theme=dark] .codehilite .gt { color: #FF7B72 } /* Generic.Traceback */
+:root[data-theme=dark] .codehilite .g-Underline { color: #E6EDF3; text-decoration: underline } /* Generic.Underline */
+:root[data-theme=dark] .codehilite .kc { color: #79C0FF } /* Keyword.Constant */
+:root[data-theme=dark] .codehilite .kd { color: #FF7B72 } /* Keyword.Declaration */
+:root[data-theme=dark] .codehilite .kn { color: #FF7B72 } /* Keyword.Namespace */
+:root[data-theme=dark] .codehilite .kp { color: #79C0FF } /* Keyword.Pseudo */
+:root[data-theme=dark] .codehilite .kr { color: #FF7B72 } /* Keyword.Reserved */
+:root[data-theme=dark] .codehilite .kt { color: #FF7B72 } /* Keyword.Type */
+:root[data-theme=dark] .codehilite .ld { color: #79C0FF } /* Literal.Date */
+:root[data-theme=dark] .codehilite .m { color: #A5D6FF } /* Literal.Number */
+:root[data-theme=dark] .codehilite .s { color: #A5D6FF } /* Literal.String */
+:root[data-theme=dark] .codehilite .na { color: #E6EDF3 } /* Name.Attribute */
+:root[data-theme=dark] .codehilite .nb { color: #E6EDF3 } /* Name.Builtin */
+:root[data-theme=dark] .codehilite .nc { color: #F0883E; font-weight: bold } /* Name.Class */
+:root[data-theme=dark] .codehilite .no { color: #79C0FF; font-weight: bold } /* Name.Constant */
+:root[data-theme=dark] .codehilite .nd { color: #D2A8FF; font-weight: bold } /* Name.Decorator */
+:root[data-theme=dark] .codehilite .ni { color: #FFA657 } /* Name.Entity */
+:root[data-theme=dark] .codehilite .ne { color: #F0883E; font-weight: bold } /* Name.Exception */
+:root[data-theme=dark] .codehilite .nf { color: #D2A8FF; font-weight: bold } /* Name.Function */
+:root[data-theme=dark] .codehilite .nl { color: #79C0FF; font-weight: bold } /* Name.Label */
+:root[data-theme=dark] .codehilite .nn { color: #FF7B72 } /* Name.Namespace */
+:root[data-theme=dark] .codehilite .nx { color: #E6EDF3 } /* Name.Other */
+:root[data-theme=dark] .codehilite .py { color: #79C0FF } /* Name.Property */
+:root[data-theme=dark] .codehilite .nt { color: #7EE787 } /* Name.Tag */
+:root[data-theme=dark] .codehilite .nv { color: #79C0FF } /* Name.Variable */
+:root[data-theme=dark] .codehilite .ow { color: #FF7B72; font-weight: bold } /* Operator.Word */
+:root[data-theme=dark] .codehilite .pm { color: #E6EDF3 } /* Punctuation.Marker */
+:root[data-theme=dark] .codehilite .w { color: #6E7681 } /* Text.Whitespace */
+:root[data-theme=dark] .codehilite .mb { color: #A5D6FF } /* Literal.Number.Bin */
+:root[data-theme=dark] .codehilite .mf { color: #A5D6FF } /* Literal.Number.Float */
+:root[data-theme=dark] .codehilite .mh { color: #A5D6FF } /* Literal.Number.Hex */
+:root[data-theme=dark] .codehilite .mi { color: #A5D6FF } /* Literal.Number.Integer */
+:root[data-theme=dark] .codehilite .mo { color: #A5D6FF } /* Literal.Number.Oct */
+:root[data-theme=dark] .codehilite .sa { color: #79C0FF } /* Literal.String.Affix */
+:root[data-theme=dark] .codehilite .sb { color: #A5D6FF } /* Literal.String.Backtick */
+:root[data-theme=dark] .codehilite .sc { color: #A5D6FF } /* Literal.String.Char */
+:root[data-theme=dark] .codehilite .dl { color: #79C0FF } /* Literal.String.Delimiter */
+:root[data-theme=dark] .codehilite .sd { color: #A5D6FF } /* Literal.String.Doc */
+:root[data-theme=dark] .codehilite .s2 { color: #A5D6FF } /* Literal.String.Double */
+:root[data-theme=dark] .codehilite .se { color: #79C0FF } /* Literal.String.Escape */
+:root[data-theme=dark] .codehilite .sh { color: #79C0FF } /* Literal.String.Heredoc */
+:root[data-theme=dark] .codehilite .si { color: #A5D6FF } /* Literal.String.Interpol */
+:root[data-theme=dark] .codehilite .sx { color: #A5D6FF } /* Literal.String.Other */
+:root[data-theme=dark] .codehilite .sr { color: #79C0FF } /* Literal.String.Regex */
+:root[data-theme=dark] .codehilite .s1 { color: #A5D6FF } /* Literal.String.Single */
+:root[data-theme=dark] .codehilite .ss { color: #A5D6FF } /* Literal.String.Symbol */
+:root[data-theme=dark] .codehilite .bp { color: #E6EDF3 } /* Name.Builtin.Pseudo */
+:root[data-theme=dark] .codehilite .fm { color: #D2A8FF; font-weight: bold } /* Name.Function.Magic */
+:root[data-theme=dark] .codehilite .vc { color: #79C0FF } /* Name.Variable.Class */
+:root[data-theme=dark] .codehilite .vg { color: #79C0FF } /* Name.Variable.Global */
+:root[data-theme=dark] .codehilite .vi { color: #79C0FF } /* Name.Variable.Instance */
+:root[data-theme=dark] .codehilite .vm { color: #79C0FF } /* Name.Variable.Magic */
+:root[data-theme=dark] .codehilite .il { color: #A5D6FF } /* Literal.Number.Integer.Long */
+@media (prefers-color-scheme: dark){
+pre { line-height: 125%; }
+td.linenos .normal { color: #6e7681; background-color: #0d1117; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: #6e7681; background-color: #0d1117; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #e6edf3; background-color: #6e7681; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 5px; padding-right: 5px; }
+:root:not([data-theme=light]) .codehilite .hll { background-color: #6e7681 }
+:root:not([data-theme=light]) .codehilite { background: #0d1117; color: #E6EDF3 }
+:root:not([data-theme=light]) .codehilite .c { color: #8B949E; font-style: italic } /* Comment */
+:root:not([data-theme=light]) .codehilite .err { color: #F85149 } /* Error */
+:root:not([data-theme=light]) .codehilite .esc { color: #E6EDF3 } /* Escape */
+:root:not([data-theme=light]) .codehilite .g { color: #E6EDF3 } /* Generic */
+:root:not([data-theme=light]) .codehilite .k { color: #FF7B72 } /* Keyword */
+:root:not([data-theme=light]) .codehilite .l { color: #A5D6FF } /* Literal */
+:root:not([data-theme=light]) .codehilite .n { color: #E6EDF3 } /* Name */
+:root:not([data-theme=light]) .codehilite .o { color: #FF7B72; font-weight: bold } /* Operator */
+:root:not([data-theme=light]) .codehilite .x { color: #E6EDF3 } /* Other */
+:root:not([data-theme=light]) .codehilite .p { color: #E6EDF3 } /* Punctuation */
+:root:not([data-theme=light]) .codehilite .ch { color: #8B949E; font-style: italic } /* Comment.Hashbang */
+:root:not([data-theme=light]) .codehilite .cm { color: #8B949E; font-style: italic } /* Comment.Multiline */
+:root:not([data-theme=light]) .codehilite .cp { color: #8B949E; font-weight: bold; font-style: italic } /* Comment.Preproc */
+:root:not([data-theme=light]) .codehilite .cpf { color: #8B949E; font-style: italic } /* Comment.PreprocFile */
+:root:not([data-theme=light]) .codehilite .c1 { color: #8B949E; font-style: italic } /* Comment.Single */
+:root:not([data-theme=light]) .codehilite .cs { color: #8B949E; font-weight: bold; font-style: italic } /* Comment.Special */
+:root:not([data-theme=light]) .codehilite .gd { color: #FFA198; background-color: #490202 } /* Generic.Deleted */
+:root:not([data-theme=light]) .codehilite .ge { color: #E6EDF3; font-style: italic } /* Generic.Emph */
+:root:not([data-theme=light]) .codehilite .ges { color: #E6EDF3; font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+:root:not([data-theme=light]) .codehilite .gr { color: #FFA198 } /* Generic.Error */
+:root:not([data-theme=light]) .codehilite .gh { color: #79C0FF; font-weight: bold } /* Generic.Heading */
+:root:not([data-theme=light]) .codehilite .gi { color: #56D364; background-color: #0F5323 } /* Generic.Inserted */
+:root:not([data-theme=light]) .codehilite .go { color: #8B949E } /* Generic.Output */
+:root:not([data-theme=light]) .codehilite .gp { color: #8B949E } /* Generic.Prompt */
+:root:not([data-theme=light]) .codehilite .gs { color: #E6EDF3; font-weight: bold } /* Generic.Strong */
+:root:not([data-theme=light]) .codehilite .gu { color: #79C0FF } /* Generic.Subheading */
+:root:not([data-theme=light]) .codehilite .gt { color: #FF7B72 } /* Generic.Traceback */
+:root:not([data-theme=light]) .codehilite .g-Underline { color: #E6EDF3; text-decoration: underline } /* Generic.Underline */
+:root:not([data-theme=light]) .codehilite .kc { color: #79C0FF } /* Keyword.Constant */
+:root:not([data-theme=light]) .codehilite .kd { color: #FF7B72 } /* Keyword.Declaration */
+:root:not([data-theme=light]) .codehilite .kn { color: #FF7B72 } /* Keyword.Namespace */
+:root:not([data-theme=light]) .codehilite .kp { color: #79C0FF } /* Keyword.Pseudo */
+:root:not([data-theme=light]) .codehilite .kr { color: #FF7B72 } /* Keyword.Reserved */
+:root:not([data-theme=light]) .codehilite .kt { color: #FF7B72 } /* Keyword.Type */
+:root:not([data-theme=light]) .codehilite .ld { color: #79C0FF } /* Literal.Date */
+:root:not([data-theme=light]) .codehilite .m { color: #A5D6FF } /* Literal.Number */
+:root:not([data-theme=light]) .codehilite .s { color: #A5D6FF } /* Literal.String */
+:root:not([data-theme=light]) .codehilite .na { color: #E6EDF3 } /* Name.Attribute */
+:root:not([data-theme=light]) .codehilite .nb { color: #E6EDF3 } /* Name.Builtin */
+:root:not([data-theme=light]) .codehilite .nc { color: #F0883E; font-weight: bold } /* Name.Class */
+:root:not([data-theme=light]) .codehilite .no { color: #79C0FF; font-weight: bold } /* Name.Constant */
+:root:not([data-theme=light]) .codehilite .nd { color: #D2A8FF; font-weight: bold } /* Name.Decorator */
+:root:not([data-theme=light]) .codehilite .ni { color: #FFA657 } /* Name.Entity */
+:root:not([data-theme=light]) .codehilite .ne { color: #F0883E; font-weight: bold } /* Name.Exception */
+:root:not([data-theme=light]) .codehilite .nf { color: #D2A8FF; font-weight: bold } /* Name.Function */
+:root:not([data-theme=light]) .codehilite .nl { color: #79C0FF; font-weight: bold } /* Name.Label */
+:root:not([data-theme=light]) .codehilite .nn { color: #FF7B72 } /* Name.Namespace */
+:root:not([data-theme=light]) .codehilite .nx { color: #E6EDF3 } /* Name.Other */
+:root:not([data-theme=light]) .codehilite .py { color: #79C0FF } /* Name.Property */
+:root:not([data-theme=light]) .codehilite .nt { color: #7EE787 } /* Name.Tag */
+:root:not([data-theme=light]) .codehilite .nv { color: #79C0FF } /* Name.Variable */
+:root:not([data-theme=light]) .codehilite .ow { color: #FF7B72; font-weight: bold } /* Operator.Word */
+:root:not([data-theme=light]) .codehilite .pm { color: #E6EDF3 } /* Punctuation.Marker */
+:root:not([data-theme=light]) .codehilite .w { color: #6E7681 } /* Text.Whitespace */
+:root:not([data-theme=light]) .codehilite .mb { color: #A5D6FF } /* Literal.Number.Bin */
+:root:not([data-theme=light]) .codehilite .mf { color: #A5D6FF } /* Literal.Number.Float */
+:root:not([data-theme=light]) .codehilite .mh { color: #A5D6FF } /* Literal.Number.Hex */
+:root:not([data-theme=light]) .codehilite .mi { color: #A5D6FF } /* Literal.Number.Integer */
+:root:not([data-theme=light]) .codehilite .mo { color: #A5D6FF } /* Literal.Number.Oct */
+:root:not([data-theme=light]) .codehilite .sa { color: #79C0FF } /* Literal.String.Affix */
+:root:not([data-theme=light]) .codehilite .sb { color: #A5D6FF } /* Literal.String.Backtick */
+:root:not([data-theme=light]) .codehilite .sc { color: #A5D6FF } /* Literal.String.Char */
+:root:not([data-theme=light]) .codehilite .dl { color: #79C0FF } /* Literal.String.Delimiter */
+:root:not([data-theme=light]) .codehilite .sd { color: #A5D6FF } /* Literal.String.Doc */
+:root:not([data-theme=light]) .codehilite .s2 { color: #A5D6FF } /* Literal.String.Double */
+:root:not([data-theme=light]) .codehilite .se { color: #79C0FF } /* Literal.String.Escape */
+:root:not([data-theme=light]) .codehilite .sh { color: #79C0FF } /* Literal.String.Heredoc */
+:root:not([data-theme=light]) .codehilite .si { color: #A5D6FF } /* Literal.String.Interpol */
+:root:not([data-theme=light]) .codehilite .sx { color: #A5D6FF } /* Literal.String.Other */
+:root:not([data-theme=light]) .codehilite .sr { color: #79C0FF } /* Literal.String.Regex */
+:root:not([data-theme=light]) .codehilite .s1 { color: #A5D6FF } /* Literal.String.Single */
+:root:not([data-theme=light]) .codehilite .ss { color: #A5D6FF } /* Literal.String.Symbol */
+:root:not([data-theme=light]) .codehilite .bp { color: #E6EDF3 } /* Name.Builtin.Pseudo */
+:root:not([data-theme=light]) .codehilite .fm { color: #D2A8FF; font-weight: bold } /* Name.Function.Magic */
+:root:not([data-theme=light]) .codehilite .vc { color: #79C0FF } /* Name.Variable.Class */
+:root:not([data-theme=light]) .codehilite .vg { color: #79C0FF } /* Name.Variable.Global */
+:root:not([data-theme=light]) .codehilite .vi { color: #79C0FF } /* Name.Variable.Instance */
+:root:not([data-theme=light]) .codehilite .vm { color: #79C0FF } /* Name.Variable.Magic */
+:root:not([data-theme=light]) .codehilite .il { color: #A5D6FF } /* Literal.Number.Integer.Long */
+}
+.codehilite,.codehilite pre{background:var(--code-bg)!important}
+</style>
+</head>
+<body>
+<div class="read-progress" role="progressbar" aria-label="Прогресс чтения" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span></span></div><main class="page"><nav class="crumbs"><a href="index.html">Подготовка к демо-экзамену</a><span>/</span><span>Предварительная подготовка: вариант V02</span></nav><nav class="edge-rail" aria-label="Навигация по странице"><a class="rail-btn" href="index.html" data-tip="Вернуться обратно" aria-label="Вернуться обратно"><svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg></a><span class="rail-grow" aria-hidden="true"></span><button type="button" class="rail-btn" data-pdf data-tip="Экспорт в PDF" aria-label="Экспорт в PDF, откроется окно печати"><svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><path d="M4 20h16"/></svg></button><button type="button" class="rail-btn rail-top" data-to-top data-tip="К началу страницы" aria-label="К началу страницы"><svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5"/><path d="M5 12l7-7 7 7"/></svg></button><button type="button" class="rail-btn" data-theme-toggle aria-pressed="false" data-tip="Смена темы" aria-label="Смена темы"><span class="theme-ico" aria-hidden="true"><svg class="ico-moon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg><svg class="ico-sun" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></span></button></nav><header class="hero hero-lesson" data-shader data-accent="#C0392B" data-seed="0.763">
+<canvas class="shader-bg" width="820" height="300" aria-hidden="true" style="background:linear-gradient(135deg,#08090D,#C0392B 58%,#08090D)"></canvas>
+<div class="badges"><span class="pill dark">Подготовка V02</span><span class="pill">Подготовка к демо-экзамену</span></div>
+<div class="hero-panel"><h1>Предварительная подготовка: вариант V02</h1><p class="dek">Разбор V02 на данных пекарни «Колос»: откуда берутся таблицы, как создать их запросами, добавить связи и вставить строки.</p></div>
+<div class="glyph" aria-hidden="true">00B</div></header><section class="outcomes"><b>Что вы разберёте в этом разделе</b><ul><li>Объяснять, из каких файлов и полей получается каждая таблица</li><li>Создавать таблицы запросами и добавлять связи через ALTER TABLE</li><li>Загружать данные V02 и считать стоимость заказа запросом</li></ul></section><nav class="toc"><b>Содержание раздела</b><ol><li><a href="#чем-v02-отличается-от-v01">Чем V02 отличается от V01</a></li><li><a href="#задание-1-er-диаграмма">Задание 1. ER-диаграмма</a></li><li><a href="#задание-2-база-данных-и-импорт">Задание 2. База данных и импорт</a></li><li><a href="#задание-3-sql-запрос-стоимости">Задание 3. SQL-запрос стоимости</a></li><li><a href="#файлы-решения-v02">Файлы решения V02</a></li><li><a href="#чек-лист-v02">Чек-лист V02</a></li></ol></nav><article class="prose"><h2 id="чем-v02-отличается-от-v01"><span class="num">01</span>Чем V02 отличается от V01</h2>
+<p>Первый разбор построен на мебельном производстве. Здесь то же устройство базы, но другие предприятие, продукция, ресурсы и числа. Схема таблиц не меняется: меняются строки данных. Разбор V01 находится на странице <a href="00-preparation.html">Предварительная подготовка: вариант V01</a>.</p>
+<table>
+<thead>
+<tr>
+<th>Что</th>
+<th>V01</th>
+<th>V02</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Предприятие</td>
+<td>ООО ТД «Вершина»</td>
+<td>Пекарня «Колос»</td>
+</tr>
+<tr>
+<td>Продукция</td>
+<td>Стол кухонный «Самобранка»</td>
+<td>Хлеб ржаной 500 г</td>
+</tr>
+<tr>
+<td>Количество</td>
+<td>2</td>
+<td>40</td>
+</tr>
+<tr>
+<td>Заказ</td>
+<td>V01-01 от 22.04.2026</td>
+<td>V02-01 от 15.03.2027</td>
+</tr>
+<tr>
+<td>Цены</td>
+<td>с 01.04.2026</td>
+<td>с 01.03.2027</td>
+</tr>
+<tr>
+<td>Материалы</td>
+<td>столешница, детали, евровинты, опоры</td>
+<td>мука, закваска, пакет</td>
+</tr>
+<tr>
+<td>Операции</td>
+<td>сборка, распил, упаковка</td>
+<td>замес и формование, выпечка</td>
+</tr>
+</tbody>
+</table>
+<p>Скачать файлы варианта: <a href="reports/variants/V02/V02_исходные_данные.zip">V02_исходные_данные.zip</a>.</p>
+<figure class="diagram">
+<img src="reports/screens/prep/V02_order_xlsx.png" alt="Заказ покупателя V02: номер, дата, заказчик и продукция">
+<figcaption>Заказ V02-01: заказчик Магазин «Колос-1», изделие «Хлеб ржаной 500 г», количество 40.</figcaption>
+</figure>
+
+<figure class="diagram">
+<img src="reports/screens/prep/V02_spec_xlsx.png" alt="Спецификация V02: материалы, операции и нормы">
+<figcaption>Спецификация: три материала и две операции с нормами на одну буханку.</figcaption>
+</figure>
+
+<figure class="diagram">
+<img src="reports/screens/prep/V02_prices_xlsx.png" alt="Цены V02: ресурс, цена и дата">
+<figcaption>Цены: у каждого ресурса указана цена и дата начала действия 01.03.2027.</figcaption>
+</figure>
+
+<h2 id="задание-1-er-диаграмма"><span class="num">02</span>Задание 1. ER-диаграмма</h2>
+<p>Для V02 меняются предприятие, продукция и ресурсы, но набор из двенадцати таблиц и четырнадцати связей остаётся тем же. Пошаговая сборка диаграммы в draw.io находится в методичке <a href="02-task-1-er.html">Задание 1. ER-диаграмма</a>. Подставляйте данные V02: изделие «Хлеб ржаной 500 г», материалы «Мука ржаная», «Закваска», «Пакет», операции «Замес и формование» и «Выпечка».</p>
+<h2 id="задание-2-база-данных-и-импорт"><span class="num">03</span>Задание 2. База данных и импорт</h2>
+<p>Запустите Apache и MySQL в XAMPP. В phpMyAdmin создайте базу <code>dkip2027_v02</code> в кодировке <code>utf8mb4</code> и сравнении <code>utf8mb4_unicode_ci</code>. Дальше все запросы выполняйте в этой базе.</p>
+<div class="codehilite" data-lang="sql"><pre><span></span><code><span class="k">CREATE</span><span class="w"> </span><span class="k">DATABASE</span><span class="w"> </span><span class="n">dkip2027_v02</span>
+<span class="w">  </span><span class="nb">CHARACTER</span><span class="w"> </span><span class="k">SET</span><span class="w"> </span><span class="n">utf8mb4</span>
+<span class="w">  </span><span class="k">COLLATE</span><span class="w"> </span><span class="n">utf8mb4_unicode_ci</span><span class="p">;</span>
+</code></pre></div>
+
+<h3>Как из файлов получаются таблицы</h3>
+<p>Первый слайдер показывает, откуда взялась каждая таблица: какой файл или документ её породил, какие поля в неё попадают и почему. Листайте стрелками.</p>
+<div class="schema-slider" data-slider>
+<div class="schema-slider-bar">
+<strong>Откуда берутся таблицы: V02, 12 слайдов</strong>
+<div class="schema-slider-actions">
+<button type="button" class="schema-btn" data-slider-prev aria-label="Предыдущий слайд">←</button>
+<span class="schema-slider-counter" data-slider-counter>1 / 12</span>
+<button type="button" class="schema-btn" data-slider-next aria-label="Следующий слайд">→</button>
+</div>
+</div>
+<div class="schema-track" data-slider-track>
+<article class="schema-slide" aria-label="counterparty">
+<h4>1. <code>counterparty</code></h4>
+<p>Кто участвует в системе: покупатели, поставщики и изготовители. Одна таблица вместо трёх справочников, роль хранится в поле party_type.</p>
+<p><b>Откуда берём:</b> Заказчики.json: шесть записей. Заказ покупателя.xlsx: блоки «Заказчик» и «Исполнитель». Для V02 добавляется изготовитель Пекарня «Колос». Заказчик Магазин «Колос-1» уже есть в JSON.</p>
+<table class="schema-lines"><thead><tr><th>Поле</th><th>Откуда значение и почему</th></tr></thead><tbody><tr><td><code>id</code></td><td>JSON id 002000001...002000006; для изготовителя M-001.</td></tr><tr><td><code>name</code></td><td>JSON name; из заказа название заказчика и исполнителя.</td></tr><tr><td><code>inn</code></td><td>JSON inn; пустая строка, если ИНН нет.</td></tr><tr><td><code>address</code></td><td>JSON addres; в таблице address.</td></tr><tr><td><code>phone</code></td><td>JSON phone.</td></tr><tr><td><code>party_type</code></td><td>JSON type: Покупатель, Поставщик или Изготовитель.</td></tr></tbody></table>
+</article>
+<article class="schema-slide" aria-label="item">
+<h4>2. <code>item</code></h4>
+<p>Один справочник ресурсов: продукция, материалы и операции. Поле kind говорит, как ресурс участвует в расчёте.</p>
+<p><b>Откуда берём:</b> Заказ покупателя.xlsx: строка продукции. Спецификация.xlsx и Цены.xlsx: материалы, операции, единицы. Заказ на производство.xlsx: коды и плановые наименования.</p>
+<table class="schema-lines"><thead><tr><th>Поле</th><th>Откуда значение и почему</th></tr></thead><tbody><tr><td><code>id</code></td><td>Номер по порядку: 1 продукция, далее материалы и операции.</td></tr><tr><td><code>code</code></td><td>Код из заказа и производства: P-01, M-01...M-03, O-01, O-02.</td></tr><tr><td><code>name</code></td><td>Название из строки продукции и таблиц спецификации.</td></tr><tr><td><code>kind</code></td><td>product для изделия, material для материалов, operation для операций.</td></tr><tr><td><code>unit</code></td><td>Единица из спецификации и цен.</td></tr></tbody></table>
+</article>
+<article class="schema-slide" aria-label="price">
+<h4>3. <code>price</code></h4>
+<p>История цен. Цена не хранится в item, потому что со временем меняется.</p>
+<p><b>Откуда берём:</b> Цены.xlsx: столбцы «Номенклатура» и «Цена». Дата начала действия задана условием варианта.</p>
+<table class="schema-lines"><thead><tr><th>Поле</th><th>Откуда значение и почему</th></tr></thead><tbody><tr><td><code>item_id</code></td><td>Код ресурса из item, а не название. Название может измениться.</td></tr><tr><td><code>valid_from</code></td><td>2027-03-01 для V02.</td></tr><tr><td><code>amount</code></td><td>Цена из строки ресурса в Цены.xlsx.</td></tr></tbody></table>
+</article>
+<article class="schema-slide" aria-label="specification">
+<h4>4. <code>specification</code></h4>
+<p>Шапка спецификации: какое изделие и на какое количество выпуска описано.</p>
+<p><b>Откуда берём:</b> Спецификация.xlsx: шапка «Изделие», «Изготовитель», нормы на одну единицу.</p>
+<table class="schema-lines"><thead><tr><th>Поле</th><th>Откуда значение и почему</th></tr></thead><tbody><tr><td><code>id</code></td><td>1, потому что в варианте одна спецификация.</td></tr><tr><td><code>product_id</code></td><td>1, ссылка на изделие в item.</td></tr><tr><td><code>name</code></td><td>Название изделия из шапки.</td></tr><tr><td><code>output_qty</code></td><td>1, нормы даны на одну единицу.</td></tr><tr><td><code>manufacturer_id</code></td><td>M-001, изготовитель из шапки.</td></tr></tbody></table>
+</article>
+<article class="schema-slide" aria-label="specification_component">
+<h4>5. <code>specification_component</code></h4>
+<p>Строки состава: сколько материала нужно на единицу и сколько часов занимает операция.</p>
+<p><b>Откуда берём:</b> Спецификация.xlsx: таблицы «Состав» и «Технологические операции».</p>
+<table class="schema-lines"><thead><tr><th>Поле</th><th>Откуда значение и почему</th></tr></thead><tbody><tr><td><code>specification_id</code></td><td>1, ссылка на шапку.</td></tr><tr><td><code>item_id</code></td><td>Код материала или операции из item.</td></tr><tr><td><code>qty</code></td><td>Норма расхода материала из столбца «Норма расхода».</td></tr><tr><td><code>time_norm</code></td><td>Норма времени операции из столбца «Норма времени».</td></tr></tbody></table>
+</article>
+<article class="schema-slide" aria-label="customer_order">
+<h4>6. <code>customer_order</code></h4>
+<p>Шапка заказа покупателя: номер, дата, заказчик и исполнитель.</p>
+<p><b>Откуда берём:</b> Заказ покупателя.xlsx: шапка заказа.</p>
+<table class="schema-lines"><thead><tr><th>Поле</th><th>Откуда значение и почему</th></tr></thead><tbody><tr><td><code>id</code></td><td>1, внутренний номер.</td></tr><tr><td><code>doc_no</code></td><td>V02-01.</td></tr><tr><td><code>doc_date</code></td><td>15.03.2027.</td></tr><tr><td><code>customer_id</code></td><td>002000001, Магазин «Колос-1».</td></tr><tr><td><code>executor_id</code></td><td>M-001, Пекарня «Колос».</td></tr></tbody></table>
+</article>
+<article class="schema-slide" aria-label="customer_order_line">
+<h4>7. <code>customer_order_line</code></h4>
+<p>Строки заказа: какое изделие, сколько, по какой продажной цене и со скидкой.</p>
+<p><b>Откуда берём:</b> Заказ покупателя.xlsx: строка «Товары (работы, услуги)».</p>
+<table class="schema-lines"><thead><tr><th>Поле</th><th>Откуда значение и почему</th></tr></thead><tbody><tr><td><code>id</code></td><td>1, одна строка заказа.</td></tr><tr><td><code>order_id</code></td><td>1, ссылка на шапку.</td></tr><tr><td><code>product_id</code></td><td>1, ссылка на изделие.</td></tr><tr><td><code>qty</code></td><td>40.</td></tr><tr><td><code>sale_price</code></td><td>700.00.</td></tr><tr><td><code>discount</code></td><td>0.00.</td></tr></tbody></table>
+</article>
+<article class="schema-slide" aria-label="production_order">
+<h4>8. <code>production_order</code></h4>
+<p>Шапка производственного заказа: номер, дата, дата запуска и подразделение.</p>
+<p><b>Откуда берём:</b> Заказ на производство.xlsx: шапка.</p>
+<table class="schema-lines"><thead><tr><th>Поле</th><th>Откуда значение и почему</th></tr></thead><tbody><tr><td><code>id</code></td><td>1, внутренний номер.</td></tr><tr><td><code>doc_no</code></td><td>V02-P01.</td></tr><tr><td><code>doc_date</code></td><td>15.03.2027, дата заказа.</td></tr><tr><td><code>launch_date</code></td><td>16.03.2027.</td></tr><tr><td><code>department</code></td><td>Основное производство.</td></tr></tbody></table>
+</article>
+<article class="schema-slide" aria-label="production_product">
+<h4>9. <code>production_product</code></h4>
+<p>Что выпускаем по производственному заказу и в каком количестве.</p>
+<p><b>Откуда берём:</b> Заказ на производство.xlsx: «Продукция к выпуску».</p>
+<table class="schema-lines"><thead><tr><th>Поле</th><th>Откуда значение и почему</th></tr></thead><tbody><tr><td><code>production_id</code></td><td>1, ссылка на производственный заказ.</td></tr><tr><td><code>product_id</code></td><td>1, ссылка на изделие.</td></tr><tr><td><code>qty</code></td><td>40.</td></tr></tbody></table>
+</article>
+<article class="schema-slide" aria-label="production_resource">
+<h4>10. <code>production_resource</code></h4>
+<p>Плановый расход материалов и времени по производственному заказу.</p>
+<p><b>Откуда берём:</b> Заказ на производство.xlsx: «Потребность в материалах» и «Технологические операции».</p>
+<table class="schema-lines"><thead><tr><th>Поле</th><th>Откуда значение и почему</th></tr></thead><tbody><tr><td><code>production_id</code></td><td>1, ссылка на заказ.</td></tr><tr><td><code>item_id</code></td><td>Код материала или операции.</td></tr><tr><td><code>qty</code></td><td>Плановое количество материала.</td></tr><tr><td><code>time_norm</code></td><td>Плановые часы операции.</td></tr></tbody></table>
+</article>
+<article class="schema-slide" aria-label="users">
+<h4>11. <code>users</code></h4>
+<p>Учётные записи приложения: логин, хеш пароля, роль и блокировка.</p>
+<p><b>Откуда берём:</b> Требования задания 4. В Excel и JSON этих данных нет.</p>
+<table class="schema-lines"><thead><tr><th>Поле</th><th>Откуда значение и почему</th></tr></thead><tbody><tr><td><code>id</code></td><td>AUTO_INCREMENT, сервер сам выдаёт номер.</td></tr><tr><td><code>login</code></td><td>Логин пользователя.</td></tr><tr><td><code>password_hash</code></td><td>Хеш пароля.</td></tr><tr><td><code>salt</code></td><td>Соль.</td></tr><tr><td><code>role</code></td><td>admin или user.</td></tr><tr><td><code>failed_attempts</code></td><td>Счётчик ошибок.</td></tr><tr><td><code>is_locked</code></td><td>Блокировка.</td></tr></tbody></table>
+</article>
+<article class="schema-slide" aria-label="notes">
+<h4>12. <code>notes</code></h4>
+<p>Заметки сотрудников. Автор хранится ссылкой на users.</p>
+<p><b>Откуда берём:</b> Заметки.json: пять записей.</p>
+<table class="schema-lines"><thead><tr><th>Поле</th><th>Откуда значение и почему</th></tr></thead><tbody><tr><td><code>id</code></td><td>AUTO_INCREMENT.</td></tr><tr><td><code>title</code></td><td>Поле title.</td></tr><tr><td><code>content</code></td><td>Поле content.</td></tr><tr><td><code>id_user</code></td><td>Пользователь по login: manager 2, technologist 3, master 4.</td></tr><tr><td><code>created_at</code></td><td>Поле created_date.</td></tr></tbody></table>
+</article>
+</div>
+</div>
+
+<h3>Создание таблиц построчно</h3>
+<p>Перед запросами откройте шпаргалку.</p>
+<details class="hint">
+<summary>Шпаргалка: CREATE TABLE</summary>
+
+
+<div class="codehilite" data-lang="sql"><pre><span></span><code><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="err">имя</span><span class="n">_таблицы</span><span class="w"> </span><span class="p">(</span>
+<span class="w">  </span><span class="err">имя</span><span class="n">_поля</span><span class="w"> </span><span class="err">ТИП</span><span class="w"> </span><span class="err">ОГРАНИЧЕНИЕ</span><span class="p">,</span>
+<span class="w">  </span><span class="err">имя</span><span class="n">_поля</span><span class="w"> </span><span class="err">ТИП</span><span class="w"> </span><span class="err">ОГРАНИЧЕНИЕ</span><span class="p">,</span>
+<span class="w">  </span><span class="k">PRIMARY</span><span class="w"> </span><span class="k">KEY</span><span class="w"> </span><span class="p">(</span><span class="err">имя</span><span class="n">_поля</span><span class="p">)</span>
+<span class="p">)</span><span class="w"> </span><span class="n">ENGINE</span><span class="o">=</span><span class="n">InnoDB</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="n">CHARSET</span><span class="o">=</span><span class="n">utf8mb4</span><span class="p">;</span>
+</code></pre></div>
+
+
+
+`CREATE TABLE` создаёт таблицу. В скобках перечисляются поля, затем ключи и проверки. Каждое поле описывается тремя частями: имя, тип и ограничение. Запятая разделяет описания, после последнего запятая не ставится.
+
+</details>
+
+<p>Второй слайдер разбирает создание таблиц построчно. В конце каждого слайда есть полный скрипт для проверки.</p>
+<div class="schema-slider" data-slider>
+<div class="schema-slider-bar">
+<strong>Создание всех таблиц построчно: 12 слайдов</strong>
+<div class="schema-slider-actions">
+<button type="button" class="schema-btn" data-slider-prev aria-label="Предыдущий слайд">←</button>
+<span class="schema-slider-counter" data-slider-counter>1 / 12</span>
+<button type="button" class="schema-btn" data-slider-next aria-label="Следующий слайд">→</button>
+</div>
+</div>
+<div class="schema-track" data-slider-track>
+<article class="schema-slide" aria-label="counterparty">
+<h4>1. <code>counterparty</code></h4>
+<p>Кто участвует в системе: покупатели, поставщики и изготовители. Одна таблица вместо трёх справочников, роль хранится в поле party_type.</p>
+<table class="schema-lines"><thead><tr><th>Строка</th><th>Что означает и почему</th></tr></thead><tbody><tr><td><code>id VARCHAR(32) NOT NULL,</code></td><td>Код контрагента. В JSON это id, для изготовителя код назначается вручную. Ведущие нули сохраняются, поэтому тип VARCHAR.</td></tr><tr><td><code>name VARCHAR(255) NOT NULL,</code></td><td>Название из name JSON или из блока «Заказчик»/«Исполнитель» заказа.</td></tr><tr><td><code>inn VARCHAR(20) NOT NULL DEFAULT &#x27;&#x27;,</code></td><td>ИНН из inn. Если его нет, DEFAULT &#x27;&#x27; подставляет пустую строку.</td></tr><tr><td><code>address VARCHAR(500) NOT NULL,</code></td><td>Адрес из addres. В таблице поле называется address.</td></tr><tr><td><code>phone VARCHAR(64) NOT NULL,</code></td><td>Телефон из phone.</td></tr><tr><td><code>party_type VARCHAR(24) NOT NULL,</code></td><td>Тип из type: Покупатель, Поставщик или Изготовитель.</td></tr><tr><td><code>PRIMARY KEY (id),</code></td><td>Первичный ключ делает строку узнаваемой и запрещает пустое значение.</td></tr><tr><td><code>CONSTRAINT ck_party_type</code></td><td>Проверка разрешает только три роли контрагента.</td></tr><tr><td><code>CHECK (party_type IN (&#x27;Покупатель&#x27;, &#x27;Поставщик&#x27;, &#x27;Изготовитель&#x27;))</code></td><td>Список допустимых ролей: покупатель, поставщик, изготовитель.</td></tr></tbody></table>
+<p><b>Полный скрипт для проверки</b></p>
+<pre><code>CREATE TABLE counterparty (
+  id VARCHAR(32) NOT NULL,
+  name VARCHAR(255) NOT NULL,
+  inn VARCHAR(20) NOT NULL DEFAULT &#x27;&#x27;,
+  address VARCHAR(500) NOT NULL,
+  phone VARCHAR(64) NOT NULL,
+  party_type VARCHAR(24) NOT NULL,
+  PRIMARY KEY (id),
+  CONSTRAINT ck_party_type
+    CHECK (party_type IN (&#x27;Покупатель&#x27;, &#x27;Поставщик&#x27;, &#x27;Изготовитель&#x27;))
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;</code></pre>
+</article>
+<article class="schema-slide" aria-label="item">
+<h4>2. <code>item</code></h4>
+<p>Один справочник ресурсов: продукция, материалы и операции. Поле kind говорит, как ресурс участвует в расчёте.</p>
+<table class="schema-lines"><thead><tr><th>Строка</th><th>Что означает и почему</th></tr></thead><tbody><tr><td><code>id INT NOT NULL,</code></td><td>Внутренний номер ресурса. Назначаем по порядку: 1 продукция, затем материалы и операции.</td></tr><tr><td><code>code VARCHAR(64) DEFAULT NULL,</code></td><td>Код из документа: ФР-00000034 у стола, ФР-00000009 у столешницы и так далее. UNIQUE не даёт повторять код.</td></tr><tr><td><code>name VARCHAR(255) NOT NULL,</code></td><td>Название из заказа, спецификации или цен.</td></tr><tr><td><code>kind VARCHAR(16) NOT NULL,</code></td><td>product, material или operation. По этому полю запрос понимает, что считать.</td></tr><tr><td><code>unit VARCHAR(16) NOT NULL,</code></td><td>Единица из спецификации или цен: шт, тыс. шт, ч.</td></tr><tr><td><code>PRIMARY KEY (id),</code></td><td>Первичный ключ делает строку узнаваемой и запрещает пустое значение.</td></tr><tr><td><code>UNIQUE KEY uq_item_code (code),</code></td><td>Уникальный индекс не даёт двум строкам получить одинаковое значение.</td></tr><tr><td><code>CONSTRAINT ck_item_kind</code></td><td>Проверка разрешает только три вида ресурса.</td></tr><tr><td><code>CHECK (kind IN (&#x27;product&#x27;, &#x27;material&#x27;, &#x27;operation&#x27;))</code></td><td>Список допустимых видов: product, material, operation.</td></tr></tbody></table>
+<p><b>Полный скрипт для проверки</b></p>
+<pre><code>CREATE TABLE item (
+  id INT NOT NULL,
+  code VARCHAR(64) DEFAULT NULL,
+  name VARCHAR(255) NOT NULL,
+  kind VARCHAR(16) NOT NULL,
+  unit VARCHAR(16) NOT NULL,
+  PRIMARY KEY (id),
+  UNIQUE KEY uq_item_code (code),
+  CONSTRAINT ck_item_kind
+    CHECK (kind IN (&#x27;product&#x27;, &#x27;material&#x27;, &#x27;operation&#x27;))
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;</code></pre>
+</article>
+<article class="schema-slide" aria-label="price">
+<h4>3. <code>price</code></h4>
+<p>История цен. Цена не хранится в item, потому что со временем меняется.</p>
+<table class="schema-lines"><thead><tr><th>Строка</th><th>Что означает и почему</th></tr></thead><tbody><tr><td><code>item_id INT NOT NULL,</code></td><td>Ссылка на ресурс в item.</td></tr><tr><td><code>valid_from DATE NOT NULL,</code></td><td>Дата начала действия цены.</td></tr><tr><td><code>amount DECIMAL(14,2) NOT NULL,</code></td><td>Цена из файла Цены.xlsx.</td></tr><tr><td><code>PRIMARY KEY (item_id, valid_from),</code></td><td>Первичный ключ делает строку узнаваемой и запрещает пустое значение.</td></tr><tr><td><code>CONSTRAINT ck_price_amount CHECK (amount &gt;= 0)</code></td><td>Цена не может быть отрицательной.</td></tr></tbody></table>
+<p><b>Полный скрипт для проверки</b></p>
+<pre><code>CREATE TABLE price (
+  item_id INT NOT NULL,
+  valid_from DATE NOT NULL,
+  amount DECIMAL(14,2) NOT NULL,
+  PRIMARY KEY (item_id, valid_from),
+  CONSTRAINT ck_price_amount CHECK (amount &gt;= 0)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;</code></pre>
+</article>
+<article class="schema-slide" aria-label="specification">
+<h4>4. <code>specification</code></h4>
+<p>Шапка спецификации: какое изделие и на какое количество выпуска описано.</p>
+<table class="schema-lines"><thead><tr><th>Строка</th><th>Что означает и почему</th></tr></thead><tbody><tr><td><code>id INT NOT NULL,</code></td><td>Номер спецификации.</td></tr><tr><td><code>product_id INT NOT NULL,</code></td><td>Ссылка на изделие в item.</td></tr><tr><td><code>name VARCHAR(255) NOT NULL,</code></td><td>Название изделия из шапки спецификации.</td></tr><tr><td><code>output_qty DECIMAL(14,3) NOT NULL,</code></td><td>На какое количество изделий даны нормы.</td></tr><tr><td><code>manufacturer_id VARCHAR(32) NOT NULL,</code></td><td>Код изготовителя из блока «Исполнитель».</td></tr><tr><td><code>PRIMARY KEY (id),</code></td><td>Первичный ключ делает строку узнаваемой и запрещает пустое значение.</td></tr><tr><td><code>UNIQUE KEY uq_spec_product (product_id),</code></td><td>Уникальный индекс не даёт двум строкам получить одинаковое значение.</td></tr><tr><td><code>KEY ix_spec_maker (manufacturer_id),</code></td><td>Обычный индекс ускоряет поиск по внешнему ключу.</td></tr><tr><td><code>CONSTRAINT ck_spec_output CHECK (output_qty &gt; 0)</code></td><td>Количество выпуска должно быть больше нуля.</td></tr></tbody></table>
+<p><b>Полный скрипт для проверки</b></p>
+<pre><code>CREATE TABLE specification (
+  id INT NOT NULL,
+  product_id INT NOT NULL,
+  name VARCHAR(255) NOT NULL,
+  output_qty DECIMAL(14,3) NOT NULL,
+  manufacturer_id VARCHAR(32) NOT NULL,
+  PRIMARY KEY (id),
+  UNIQUE KEY uq_spec_product (product_id),
+  KEY ix_spec_maker (manufacturer_id),
+  CONSTRAINT ck_spec_output CHECK (output_qty &gt; 0)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;</code></pre>
+</article>
+<article class="schema-slide" aria-label="specification_component">
+<h4>5. <code>specification_component</code></h4>
+<p>Строки состава: сколько материала нужно на единицу и сколько часов занимает операция.</p>
+<table class="schema-lines"><thead><tr><th>Строка</th><th>Что означает и почему</th></tr></thead><tbody><tr><td><code>specification_id INT NOT NULL,</code></td><td>Ссылка на шапку спецификации.</td></tr><tr><td><code>item_id INT NOT NULL,</code></td><td>Ссылка на материал или операцию в item.</td></tr><tr><td><code>qty DECIMAL(14,3) NOT NULL,</code></td><td>Норма расхода материала. Для операции ставим 0.</td></tr><tr><td><code>time_norm DECIMAL(14,3) NOT NULL,</code></td><td>Часы операции. Для материала ставим 0.</td></tr><tr><td><code>PRIMARY KEY (specification_id, item_id),</code></td><td>Первичный ключ делает строку узнаваемой и запрещает пустое значение.</td></tr><tr><td><code>KEY ix_comp_item (item_id),</code></td><td>Обычный индекс ускоряет поиск по внешнему ключу.</td></tr><tr><td><code>CONSTRAINT ck_comp_qty CHECK (qty &gt;= 0),</code></td><td>Норма расхода не может быть отрицательной.</td></tr><tr><td><code>CONSTRAINT ck_comp_time CHECK (time_norm &gt;= 0)</code></td><td>Время операции не может быть отрицательным.</td></tr></tbody></table>
+<p><b>Полный скрипт для проверки</b></p>
+<pre><code>CREATE TABLE specification_component (
+  specification_id INT NOT NULL,
+  item_id INT NOT NULL,
+  qty DECIMAL(14,3) NOT NULL,
+  time_norm DECIMAL(14,3) NOT NULL,
+  PRIMARY KEY (specification_id, item_id),
+  KEY ix_comp_item (item_id),
+  CONSTRAINT ck_comp_qty CHECK (qty &gt;= 0),
+  CONSTRAINT ck_comp_time CHECK (time_norm &gt;= 0)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;</code></pre>
+</article>
+<article class="schema-slide" aria-label="customer_order">
+<h4>6. <code>customer_order</code></h4>
+<p>Шапка заказа покупателя: номер, дата, заказчик и исполнитель.</p>
+<table class="schema-lines"><thead><tr><th>Строка</th><th>Что означает и почему</th></tr></thead><tbody><tr><td><code>id INT NOT NULL,</code></td><td>Внутренний номер заказа.</td></tr><tr><td><code>doc_no VARCHAR(64) NOT NULL,</code></td><td>Номер документа из шапки заказа.</td></tr><tr><td><code>doc_date DATE NOT NULL,</code></td><td>Дата заказа из шапки Excel.</td></tr><tr><td><code>customer_id VARCHAR(32) NOT NULL,</code></td><td>Код заказчика из блока «Заказчик».</td></tr><tr><td><code>executor_id VARCHAR(32) NOT NULL,</code></td><td>Код изготовителя из блока «Исполнитель».</td></tr><tr><td><code>PRIMARY KEY (id),</code></td><td>Первичный ключ делает строку узнаваемой и запрещает пустое значение.</td></tr><tr><td><code>UNIQUE KEY uq_order_doc (doc_no),</code></td><td>Уникальный индекс не даёт двум строкам получить одинаковое значение.</td></tr><tr><td><code>KEY ix_order_customer (customer_id),</code></td><td>Обычный индекс ускоряет поиск по внешнему ключу.</td></tr><tr><td><code>KEY ix_order_executor (executor_id)</code></td><td>Обычный индекс ускоряет поиск по внешнему ключу.</td></tr></tbody></table>
+<p><b>Полный скрипт для проверки</b></p>
+<pre><code>CREATE TABLE customer_order (
+  id INT NOT NULL,
+  doc_no VARCHAR(64) NOT NULL,
+  doc_date DATE NOT NULL,
+  customer_id VARCHAR(32) NOT NULL,
+  executor_id VARCHAR(32) NOT NULL,
+  PRIMARY KEY (id),
+  UNIQUE KEY uq_order_doc (doc_no),
+  KEY ix_order_customer (customer_id),
+  KEY ix_order_executor (executor_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;</code></pre>
+</article>
+<article class="schema-slide" aria-label="customer_order_line">
+<h4>7. <code>customer_order_line</code></h4>
+<p>Строки заказа: какое изделие, сколько, по какой продажной цене и со скидкой.</p>
+<table class="schema-lines"><thead><tr><th>Строка</th><th>Что означает и почему</th></tr></thead><tbody><tr><td><code>id INT NOT NULL,</code></td><td>Номер строки заказа.</td></tr><tr><td><code>order_id INT NOT NULL,</code></td><td>Ссылка на шапку customer_order.</td></tr><tr><td><code>product_id INT NOT NULL,</code></td><td>Ссылка на изделие в item.</td></tr><tr><td><code>qty INT NOT NULL,</code></td><td>Количество изделий из строки продукции.</td></tr><tr><td><code>sale_price DECIMAL(14,2) NOT NULL,</code></td><td>Продажная цена из строки продукции.</td></tr><tr><td><code>discount DECIMAL(14,2) NOT NULL DEFAULT 0.00,</code></td><td>Скидка из строки продукции. Если скидки нет, 0.</td></tr><tr><td><code>PRIMARY KEY (id),</code></td><td>Первичный ключ делает строку узнаваемой и запрещает пустое значение.</td></tr><tr><td><code>KEY ix_line_order (order_id),</code></td><td>Обычный индекс ускоряет поиск по внешнему ключу.</td></tr><tr><td><code>KEY ix_line_product (product_id),</code></td><td>Обычный индекс ускоряет поиск по внешнему ключу.</td></tr><tr><td><code>CONSTRAINT ck_line_qty CHECK (qty &gt; 0),</code></td><td>Количество в заказе больше нуля.</td></tr><tr><td><code>CONSTRAINT ck_line_price CHECK (sale_price &gt;= 0),</code></td><td>Продажная цена не может быть отрицательной.</td></tr><tr><td><code>CONSTRAINT ck_line_discount CHECK (discount &gt;= 0)</code></td><td>Скидка не может быть отрицательной.</td></tr></tbody></table>
+<p><b>Полный скрипт для проверки</b></p>
+<pre><code>CREATE TABLE customer_order_line (
+  id INT NOT NULL,
+  order_id INT NOT NULL,
+  product_id INT NOT NULL,
+  qty INT NOT NULL,
+  sale_price DECIMAL(14,2) NOT NULL,
+  discount DECIMAL(14,2) NOT NULL DEFAULT 0.00,
+  PRIMARY KEY (id),
+  KEY ix_line_order (order_id),
+  KEY ix_line_product (product_id),
+  CONSTRAINT ck_line_qty CHECK (qty &gt; 0),
+  CONSTRAINT ck_line_price CHECK (sale_price &gt;= 0),
+  CONSTRAINT ck_line_discount CHECK (discount &gt;= 0)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;</code></pre>
+</article>
+<article class="schema-slide" aria-label="production_order">
+<h4>8. <code>production_order</code></h4>
+<p>Шапка производственного заказа: номер, дата, дата запуска и подразделение.</p>
+<table class="schema-lines"><thead><tr><th>Строка</th><th>Что означает и почему</th></tr></thead><tbody><tr><td><code>id INT NOT NULL,</code></td><td>Внутренний номер производственного заказа.</td></tr><tr><td><code>doc_no VARCHAR(64) NOT NULL,</code></td><td>Номер производственного заказа.</td></tr><tr><td><code>doc_date DATE NOT NULL,</code></td><td>Дата создания. Берём дату заказа покупателя.</td></tr><tr><td><code>launch_date DATE NOT NULL,</code></td><td>Дата запуска из шапки производственного заказа.</td></tr><tr><td><code>department VARCHAR(128) NOT NULL,</code></td><td>Подразделение из шапки.</td></tr><tr><td><code>PRIMARY KEY (id),</code></td><td>Первичный ключ делает строку узнаваемой и запрещает пустое значение.</td></tr><tr><td><code>UNIQUE KEY uq_prod_doc (doc_no)</code></td><td>Уникальный индекс не даёт двум строкам получить одинаковое значение.</td></tr></tbody></table>
+<p><b>Полный скрипт для проверки</b></p>
+<pre><code>CREATE TABLE production_order (
+  id INT NOT NULL,
+  doc_no VARCHAR(64) NOT NULL,
+  doc_date DATE NOT NULL,
+  launch_date DATE NOT NULL,
+  department VARCHAR(128) NOT NULL,
+  PRIMARY KEY (id),
+  UNIQUE KEY uq_prod_doc (doc_no)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;</code></pre>
+</article>
+<article class="schema-slide" aria-label="production_product">
+<h4>9. <code>production_product</code></h4>
+<p>Что выпускаем по производственному заказу и в каком количестве.</p>
+<table class="schema-lines"><thead><tr><th>Строка</th><th>Что означает и почему</th></tr></thead><tbody><tr><td><code>production_id INT NOT NULL,</code></td><td>Ссылка на производственный заказ.</td></tr><tr><td><code>product_id INT NOT NULL,</code></td><td>Ссылка на изделие в item.</td></tr><tr><td><code>qty INT NOT NULL,</code></td><td>Количество к выпуску из строки «Продукция к выпуску».</td></tr><tr><td><code>PRIMARY KEY (production_id, product_id),</code></td><td>Первичный ключ делает строку узнаваемой и запрещает пустое значение.</td></tr><tr><td><code>KEY ix_prod_product (product_id),</code></td><td>Обычный индекс ускоряет поиск по внешнему ключу.</td></tr><tr><td><code>CONSTRAINT ck_pp_qty CHECK (qty &gt; 0)</code></td><td>Количество к выпуску больше нуля.</td></tr></tbody></table>
+<p><b>Полный скрипт для проверки</b></p>
+<pre><code>CREATE TABLE production_product (
+  production_id INT NOT NULL,
+  product_id INT NOT NULL,
+  qty INT NOT NULL,
+  PRIMARY KEY (production_id, product_id),
+  KEY ix_prod_product (product_id),
+  CONSTRAINT ck_pp_qty CHECK (qty &gt; 0)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;</code></pre>
+</article>
+<article class="schema-slide" aria-label="production_resource">
+<h4>10. <code>production_resource</code></h4>
+<p>Плановый расход материалов и времени по производственному заказу.</p>
+<table class="schema-lines"><thead><tr><th>Строка</th><th>Что означает и почему</th></tr></thead><tbody><tr><td><code>production_id INT NOT NULL,</code></td><td>Ссылка на производственный заказ.</td></tr><tr><td><code>item_id INT NOT NULL,</code></td><td>Ссылка на материал или операцию.</td></tr><tr><td><code>qty DECIMAL(14,3) NOT NULL,</code></td><td>Плановое количество материала. Для операции 0.</td></tr><tr><td><code>time_norm DECIMAL(14,3) NOT NULL,</code></td><td>Плановые часы операции. Для материала 0.</td></tr><tr><td><code>PRIMARY KEY (production_id, item_id),</code></td><td>Первичный ключ делает строку узнаваемой и запрещает пустое значение.</td></tr><tr><td><code>KEY ix_prod_resource (item_id),</code></td><td>Обычный индекс ускоряет поиск по внешнему ключу.</td></tr><tr><td><code>CONSTRAINT ck_pr_qty CHECK (qty &gt;= 0),</code></td><td>Плановое количество не может быть отрицательным.</td></tr><tr><td><code>CONSTRAINT ck_pr_time CHECK (time_norm &gt;= 0)</code></td><td>Плановое время не может быть отрицательным.</td></tr></tbody></table>
+<p><b>Полный скрипт для проверки</b></p>
+<pre><code>CREATE TABLE production_resource (
+  production_id INT NOT NULL,
+  item_id INT NOT NULL,
+  qty DECIMAL(14,3) NOT NULL,
+  time_norm DECIMAL(14,3) NOT NULL,
+  PRIMARY KEY (production_id, item_id),
+  KEY ix_prod_resource (item_id),
+  CONSTRAINT ck_pr_qty CHECK (qty &gt;= 0),
+  CONSTRAINT ck_pr_time CHECK (time_norm &gt;= 0)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;</code></pre>
+</article>
+<article class="schema-slide" aria-label="users">
+<h4>11. <code>users</code></h4>
+<p>Учётные записи приложения: логин, хеш пароля, роль и блокировка.</p>
+<table class="schema-lines"><thead><tr><th>Строка</th><th>Что означает и почему</th></tr></thead><tbody><tr><td><code>id INT NOT NULL AUTO_INCREMENT,</code></td><td>Номер пользователя, AUTO_INCREMENT заполняет сервер.</td></tr><tr><td><code>login VARCHAR(64) NOT NULL,</code></td><td>Логин для входа. UNIQUE запрещает дубли.</td></tr><tr><td><code>password_hash VARCHAR(64) NOT NULL,</code></td><td>Хеш пароля, а не сам пароль.</td></tr><tr><td><code>salt VARCHAR(32) NOT NULL,</code></td><td>Соль для хеширования.</td></tr><tr><td><code>role ENUM(&#x27;admin&#x27;, &#x27;user&#x27;) NOT NULL DEFAULT &#x27;user&#x27;,</code></td><td>admin или user. ENUM не даёт записать другую роль.</td></tr><tr><td><code>failed_attempts INT NOT NULL DEFAULT 0,</code></td><td>Счётчик подряд ошибок входа.</td></tr><tr><td><code>is_locked TINYINT(1) NOT NULL DEFAULT 0,</code></td><td>Признак блокировки после третьей ошибки.</td></tr><tr><td><code>PRIMARY KEY (id),</code></td><td>Первичный ключ делает строку узнаваемой и запрещает пустое значение.</td></tr><tr><td><code>UNIQUE KEY uq_users_login (login)</code></td><td>Уникальный индекс не даёт двум строкам получить одинаковое значение.</td></tr></tbody></table>
+<p><b>Полный скрипт для проверки</b></p>
+<pre><code>CREATE TABLE users (
+  id INT NOT NULL AUTO_INCREMENT,
+  login VARCHAR(64) NOT NULL,
+  password_hash VARCHAR(64) NOT NULL,
+  salt VARCHAR(32) NOT NULL,
+  role ENUM(&#x27;admin&#x27;, &#x27;user&#x27;) NOT NULL DEFAULT &#x27;user&#x27;,
+  failed_attempts INT NOT NULL DEFAULT 0,
+  is_locked TINYINT(1) NOT NULL DEFAULT 0,
+  PRIMARY KEY (id),
+  UNIQUE KEY uq_users_login (login)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;</code></pre>
+</article>
+<article class="schema-slide" aria-label="notes">
+<h4>12. <code>notes</code></h4>
+<p>Заметки сотрудников. Автор хранится ссылкой на users.</p>
+<table class="schema-lines"><thead><tr><th>Строка</th><th>Что означает и почему</th></tr></thead><tbody><tr><td><code>id INT NOT NULL AUTO_INCREMENT,</code></td><td>Номер заметки, AUTO_INCREMENT.</td></tr><tr><td><code>title VARCHAR(255) NOT NULL,</code></td><td>Заголовок заметки.</td></tr><tr><td><code>content TEXT NOT NULL,</code></td><td>Текст заметки.</td></tr><tr><td><code>id_user INT NOT NULL,</code></td><td>Ссылка на автора в users.</td></tr><tr><td><code>created_at DATE NOT NULL,</code></td><td>Дата создания заметки.</td></tr><tr><td><code>PRIMARY KEY (id),</code></td><td>Первичный ключ делает строку узнаваемой и запрещает пустое значение.</td></tr><tr><td><code>KEY ix_notes_user (id_user)</code></td><td>Обычный индекс ускоряет поиск по внешнему ключу.</td></tr></tbody></table>
+<p><b>Полный скрипт для проверки</b></p>
+<pre><code>CREATE TABLE notes (
+  id INT NOT NULL AUTO_INCREMENT,
+  title VARCHAR(255) NOT NULL,
+  content TEXT NOT NULL,
+  id_user INT NOT NULL,
+  created_at DATE NOT NULL,
+  PRIMARY KEY (id),
+  KEY ix_notes_user (id_user)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;</code></pre>
+</article>
+</div>
+</div>
+
+<figure class="diagram">
+<img src="reports/screens/mysql/v02-tables.png" alt="Список таблиц базы dkip2027_v02">
+<figcaption>Результат: в базе двенадцать таблиц. Внешние ключи добавляются на следующем шаге.</figcaption>
+</figure>
+
+<h3>Связи между таблицами</h3>
+<p>Таблицы созданы без внешних ключей. Ниже все четырнадцать связей: выполняйте команды по одной после создания таблиц. Слайдер идёт в порядке зависимостей.</p>
+<details class="hint">
+<summary>Шпаргалка: ALTER TABLE</summary>
+
+
+<div class="codehilite" data-lang="sql"><pre><span></span><code><span class="k">ALTER</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="err">дочерняя</span><span class="n">_таблица</span>
+<span class="w">  </span><span class="k">ADD</span><span class="w"> </span><span class="k">CONSTRAINT</span><span class="w"> </span><span class="err">имя</span><span class="n">_связи</span>
+<span class="w">  </span><span class="k">FOREIGN</span><span class="w"> </span><span class="k">KEY</span><span class="w"> </span><span class="p">(</span><span class="err">поле</span><span class="n">_дочерней</span><span class="p">)</span>
+<span class="w">  </span><span class="k">REFERENCES</span><span class="w"> </span><span class="err">родительская</span><span class="n">_таблица</span><span class="w"> </span><span class="p">(</span><span class="err">поле</span><span class="n">_родительской</span><span class="p">);</span>
+</code></pre></div>
+
+
+
+`ALTER TABLE` меняет готовую таблицу. `ADD CONSTRAINT` добавляет правило, `FOREIGN KEY` выбирает поле, `REFERENCES` указывает родительский ключ.
+
+</details>
+
+<div class="schema-slider" data-slider>
+<div class="schema-slider-bar">
+<strong>Все 14 связей: листайте стрелками</strong>
+<div class="schema-slider-actions">
+<button type="button" class="schema-btn" data-slider-prev aria-label="Предыдущая связь">←</button>
+<span class="schema-slider-counter" data-slider-counter>1 / 14</span>
+<button type="button" class="schema-btn" data-slider-next aria-label="Следующая связь">→</button>
+</div>
+</div>
+<div class="schema-track" data-slider-track>
+<article class="schema-slide" aria-label="price → item">
+<h4>1. price → item</h4>
+<p>Каждая цена ссылается на ресурс. Один ресурс может иметь несколько цен с разными датами.</p>
+<pre><code>ALTER TABLE price
+  ADD CONSTRAINT fk_price_item
+  FOREIGN KEY (item_id)
+  REFERENCES item (id);</code></pre>
+</article>
+<article class="schema-slide" aria-label="specification → item">
+<h4>2. specification → item</h4>
+<p>Спецификация описывает изделие. Ссылка ведёт на строку продукции в справочнике item.</p>
+<pre><code>ALTER TABLE specification
+  ADD CONSTRAINT fk_spec_product
+  FOREIGN KEY (product_id)
+  REFERENCES item (id);</code></pre>
+</article>
+<article class="schema-slide" aria-label="specification → counterparty">
+<h4>3. specification → counterparty</h4>
+<p>Изготовитель спецификации это контрагент с типом «Изготовитель».</p>
+<pre><code>ALTER TABLE specification
+  ADD CONSTRAINT fk_spec_maker
+  FOREIGN KEY (manufacturer_id)
+  REFERENCES counterparty (id);</code></pre>
+</article>
+<article class="schema-slide" aria-label="specification_component → specification">
+<h4>4. specification_component → specification</h4>
+<p>Строка состава принадлежит одной спецификации.</p>
+<pre><code>ALTER TABLE specification_component
+  ADD CONSTRAINT fk_comp_spec
+  FOREIGN KEY (specification_id)
+  REFERENCES specification (id);</code></pre>
+</article>
+<article class="schema-slide" aria-label="specification_component → item">
+<h4>5. specification_component → item</h4>
+<p>Строка состава ссылается на материал или операцию.</p>
+<pre><code>ALTER TABLE specification_component
+  ADD CONSTRAINT fk_comp_item
+  FOREIGN KEY (item_id)
+  REFERENCES item (id);</code></pre>
+</article>
+<article class="schema-slide" aria-label="customer_order → counterparty">
+<h4>6. customer_order → counterparty</h4>
+<p>Заказчик заказа это контрагент с типом «Покупатель».</p>
+<pre><code>ALTER TABLE customer_order
+  ADD CONSTRAINT fk_order_customer
+  FOREIGN KEY (customer_id)
+  REFERENCES counterparty (id);</code></pre>
+</article>
+<article class="schema-slide" aria-label="customer_order → counterparty">
+<h4>7. customer_order → counterparty</h4>
+<p>Исполнитель заказа это контрагент с типом «Изготовитель».</p>
+<pre><code>ALTER TABLE customer_order
+  ADD CONSTRAINT fk_order_executor
+  FOREIGN KEY (executor_id)
+  REFERENCES counterparty (id);</code></pre>
+</article>
+<article class="schema-slide" aria-label="customer_order_line → customer_order">
+<h4>8. customer_order_line → customer_order</h4>
+<p>Строка заказа принадлежит шапке заказа.</p>
+<pre><code>ALTER TABLE customer_order_line
+  ADD CONSTRAINT fk_line_order
+  FOREIGN KEY (order_id)
+  REFERENCES customer_order (id);</code></pre>
+</article>
+<article class="schema-slide" aria-label="customer_order_line → item">
+<h4>9. customer_order_line → item</h4>
+<p>Строка заказа ссылается на изделие из справочника.</p>
+<pre><code>ALTER TABLE customer_order_line
+  ADD CONSTRAINT fk_line_product
+  FOREIGN KEY (product_id)
+  REFERENCES item (id);</code></pre>
+</article>
+<article class="schema-slide" aria-label="production_product → production_order">
+<h4>10. production_product → production_order</h4>
+<p>Продукция к выпуску принадлежит производственному заказу.</p>
+<pre><code>ALTER TABLE production_product
+  ADD CONSTRAINT fk_pp_order
+  FOREIGN KEY (production_id)
+  REFERENCES production_order (id);</code></pre>
+</article>
+<article class="schema-slide" aria-label="production_product → item">
+<h4>11. production_product → item</h4>
+<p>Продукция к выпуску ссылается на изделие.</p>
+<pre><code>ALTER TABLE production_product
+  ADD CONSTRAINT fk_pp_item
+  FOREIGN KEY (product_id)
+  REFERENCES item (id);</code></pre>
+</article>
+<article class="schema-slide" aria-label="production_resource → production_order">
+<h4>12. production_resource → production_order</h4>
+<p>Плановый расход принадлежит производственному заказу.</p>
+<pre><code>ALTER TABLE production_resource
+  ADD CONSTRAINT fk_pr_order
+  FOREIGN KEY (production_id)
+  REFERENCES production_order (id);</code></pre>
+</article>
+<article class="schema-slide" aria-label="production_resource → item">
+<h4>13. production_resource → item</h4>
+<p>Плановый расход ссылается на материал или операцию.</p>
+<pre><code>ALTER TABLE production_resource
+  ADD CONSTRAINT fk_pr_item
+  FOREIGN KEY (item_id)
+  REFERENCES item (id);</code></pre>
+</article>
+<article class="schema-slide" aria-label="notes → users">
+<h4>14. notes → users</h4>
+<p>Заметка ссылается на автора в таблице пользователей.</p>
+<pre><code>ALTER TABLE notes
+  ADD CONSTRAINT fk_notes_user
+  FOREIGN KEY (id_user)
+  REFERENCES users (id);</code></pre>
+</article>
+</div>
+</div>
+
+<h3>Вставка данных</h3>
+<p>Перед вставкой откройте шпаргалку.</p>
+<details class="hint">
+<summary>Шпаргалка: INSERT</summary>
+
+
+<div class="codehilite" data-lang="sql"><pre><span></span><code><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="err">имя</span><span class="n">_таблицы</span><span class="w"> </span><span class="p">(</span><span class="err">поле</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="err">поле</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="err">поле</span><span class="mi">3</span><span class="p">)</span>
+<span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="err">значение</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="err">значение</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="err">значение</span><span class="mi">3</span><span class="p">);</span>
+</code></pre></div>
+
+
+
+`INSERT INTO` выбирает таблицу. В скобках перечислены поля в порядке значений. `VALUES` начинает список. Текст и даты в пишут в кавычках, числа без кавычек. Строки разделяют запятыми, после последней запятой нет.
+
+</details>
+
+<h3>Откуда берутся значения для INSERT</h3>
+<p>Перед вставкой сопоставьте поля файлов и таблиц. Значения не придумываются: каждое берётся из конкретного столбца исходного документа. Для каждой группы сначала показано, из какой ячейки берётся значение, затем код, затем источник и результат.</p>
+<table>
+<thead>
+<tr>
+<th>Файл</th>
+<th>Что берём</th>
+<th>Таблица</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Заказчики.json</code></td>
+<td><code>id</code>, <code>name</code>, <code>inn</code>, <code>addres</code>, <code>phone</code>, <code>type</code></td>
+<td><code>counterparty</code></td>
+</tr>
+<tr>
+<td><code>Заказ покупателя.xlsx</code></td>
+<td>номер, дата, срок, код заказчика, изделие, количество, цена, скидка</td>
+<td><code>customer_order</code>, <code>customer_order_line</code></td>
+</tr>
+<tr>
+<td><code>Спецификация.xlsx</code></td>
+<td>материал, операция, единица, норма, часы</td>
+<td><code>item</code>, <code>specification</code>, <code>specification_component</code></td>
+</tr>
+<tr>
+<td><code>Цены.xlsx</code></td>
+<td>ресурс, цена, дата</td>
+<td><code>price</code></td>
+</tr>
+<tr>
+<td><code>Заказ на производство.xlsx</code></td>
+<td>заказ, дата запуска, изделие, плановый расход</td>
+<td><code>production_order</code>, <code>production_product</code>, <code>production_resource</code></td>
+</tr>
+<tr>
+<td><code>Заметки.json</code></td>
+<td>заголовок, логин, текст, дата</td>
+<td><code>notes</code></td>
+</tr>
+</tbody>
+</table>
+<p>В документах номера записаны как «№ 1». В базе к ним добавляется префикс варианта: заказ покупателя становится <code>V02-01</code>, производственный заказ <code>V02-P01</code>.</p>
+<h3>Шаг 1. Загрузите заказчиков из JSON</h3>
+<figure class="diagram">
+<img src="reports/screens/mysql/json-source-v02.png" alt="Файл Заказчики.json варианта V02">
+<figcaption>Источник: JSON с шестью заказчиками. Коды начинаются с `002`, ИНН может быть пустым.</figcaption>
+</figure>
+
+<table>
+<thead>
+<tr>
+<th>Поле таблицы</th>
+<th>Откуда значение</th>
+<th>Почему</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id</code></td>
+<td><code>id</code> из JSON</td>
+<td>код хранится текстом, ведущие нули не теряются</td>
+</tr>
+<tr>
+<td><code>name</code></td>
+<td><code>name</code> из JSON</td>
+<td>название организации</td>
+</tr>
+<tr>
+<td><code>inn</code></td>
+<td><code>inn</code> из JSON</td>
+<td>пустая строка, если ИНН нет</td>
+</tr>
+<tr>
+<td><code>address</code></td>
+<td><code>addres</code> из JSON</td>
+<td>в таблице поле переименовано</td>
+</tr>
+<tr>
+<td><code>phone</code></td>
+<td><code>phone</code> из JSON</td>
+<td>контакт</td>
+</tr>
+<tr>
+<td><code>party_type</code></td>
+<td><code>type</code> из JSON</td>
+<td>роль контрагента</td>
+</tr>
+</tbody>
+</table>
+<div class="codehilite" data-lang="sql"><pre><span></span><code><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">counterparty</span><span class="w"> </span><span class="p">(</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">inn</span><span class="p">,</span><span class="w"> </span><span class="n">address</span><span class="p">,</span><span class="w"> </span><span class="n">phone</span><span class="p">,</span><span class="w"> </span><span class="n">party_type</span><span class="p">)</span><span class="w"> </span><span class="k">VALUES</span>
+<span class="p">(</span><span class="s1">'002000001'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Магазин «Колос-1»'</span><span class="p">,</span><span class="w"> </span><span class="s1">''</span><span class="p">,</span><span class="w"> </span><span class="s1">'Учебный город, улица Производственная, 2, офис 1'</span><span class="p">,</span><span class="w"> </span><span class="s1">'+79990020001'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Покупатель'</span><span class="p">),</span>
+<span class="p">(</span><span class="s1">'002000002'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Торговый дом «Колос-2»'</span><span class="p">,</span><span class="w"> </span><span class="s1">''</span><span class="p">,</span><span class="w"> </span><span class="s1">'Учебный город, улица Производственная, 2, офис 2'</span><span class="p">,</span><span class="w"> </span><span class="s1">'+79990020002'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Покупатель'</span><span class="p">),</span>
+<span class="p">(</span><span class="s1">'002000003'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Студия «Колос-3»'</span><span class="p">,</span><span class="w"> </span><span class="s1">''</span><span class="p">,</span><span class="w"> </span><span class="s1">'Учебный город, улица Производственная, 2, офис 3'</span><span class="p">,</span><span class="w"> </span><span class="s1">'+79990020003'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Покупатель'</span><span class="p">),</span>
+<span class="p">(</span><span class="s1">'002000004'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Магазин подарков «Колос-4»'</span><span class="p">,</span><span class="w"> </span><span class="s1">''</span><span class="p">,</span><span class="w"> </span><span class="s1">'Учебный город, улица Производственная, 2, офис 4'</span><span class="p">,</span><span class="w"> </span><span class="s1">'+79990020004'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Покупатель'</span><span class="p">),</span>
+<span class="p">(</span><span class="s1">'002000005'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Мастерская «Колос-5»'</span><span class="p">,</span><span class="w"> </span><span class="s1">''</span><span class="p">,</span><span class="w"> </span><span class="s1">'Учебный город, улица Производственная, 2, офис 5'</span><span class="p">,</span><span class="w"> </span><span class="s1">'+79990020005'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Покупатель'</span><span class="p">),</span>
+<span class="p">(</span><span class="s1">'002000006'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Оптовый склад «Колос-6»'</span><span class="p">,</span><span class="w"> </span><span class="s1">''</span><span class="p">,</span><span class="w"> </span><span class="s1">'Учебный город, улица Производственная, 2, офис 6'</span><span class="p">,</span><span class="w"> </span><span class="s1">'+79990020006'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Покупатель'</span><span class="p">);</span>
+</code></pre></div>
+
+<p>Изготовитель в JSON отсутствует. В заказе он указан в блоке «Исполнитель», поэтому добавьте его отдельной строкой.</p>
+<div class="codehilite" data-lang="sql"><pre><span></span><code><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">counterparty</span><span class="w"> </span><span class="p">(</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">inn</span><span class="p">,</span><span class="w"> </span><span class="n">address</span><span class="p">,</span><span class="w"> </span><span class="n">phone</span><span class="p">,</span><span class="w"> </span><span class="n">party_type</span><span class="p">)</span><span class="w"> </span><span class="k">VALUES</span>
+<span class="p">(</span><span class="s1">'M-001'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Пекарня «Колос»'</span><span class="p">,</span><span class="w"> </span><span class="s1">''</span><span class="p">,</span><span class="w"> </span><span class="s1">'Учебный город, улица Производственная, 2'</span><span class="p">,</span><span class="w"> </span><span class="s1">'+79990020000'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Изготовитель'</span><span class="p">);</span>
+</code></pre></div>
+
+<figure class="diagram">
+<img src="reports/screens/mysql/v02-customers.png" alt="Таблица counterparty после загрузки: заказчики и изготовитель">
+<figcaption>Результат: шесть записей JSON и изготовитель. Коды `002000001`... сохранили ведущие нули.</figcaption>
+</figure>
+
+<h3>Шаг 2. Загрузите изделия, цены, спецификацию, заказ и производство</h3>
+<h4>Изделия и ресурсы</h4>
+<table>
+<thead>
+<tr>
+<th>Поле</th>
+<th>Откуда значение</th>
+<th>Почему</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id</code></td>
+<td>назначается по порядку</td>
+<td>1 изделие, 2-4 материалы, 5-6 операции</td>
+</tr>
+<tr>
+<td><code>code</code></td>
+<td>код из заказа и производства</td>
+<td>код нужен для связи с документами</td>
+</tr>
+<tr>
+<td><code>name</code></td>
+<td>название из заказа, спецификации или цен</td>
+<td>одинаковое имя во всех файлах</td>
+</tr>
+<tr>
+<td><code>kind</code></td>
+<td>по разделу файла</td>
+<td><code>product</code>, <code>material</code> или <code>operation</code></td>
+</tr>
+<tr>
+<td><code>unit</code></td>
+<td>единица из спецификации или цен</td>
+<td>ед., кг, шт, ч</td>
+</tr>
+</tbody>
+</table>
+<div class="codehilite" data-lang="sql"><pre><span></span><code><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">item</span><span class="w"> </span><span class="p">(</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">code</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">kind</span><span class="p">,</span><span class="w"> </span><span class="n">unit</span><span class="p">)</span><span class="w"> </span><span class="k">VALUES</span>
+<span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="s1">'P-01'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Хлеб ржаной 500 г'</span><span class="p">,</span><span class="w"> </span><span class="s1">'product'</span><span class="p">,</span><span class="w"> </span><span class="s1">'ед.'</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="s1">'M-01'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Мука ржаная'</span><span class="p">,</span><span class="w"> </span><span class="s1">'material'</span><span class="p">,</span><span class="w"> </span><span class="s1">'кг'</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="s1">'M-02'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Закваска'</span><span class="p">,</span><span class="w"> </span><span class="s1">'material'</span><span class="p">,</span><span class="w"> </span><span class="s1">'кг'</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="s1">'M-03'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Пакет'</span><span class="p">,</span><span class="w"> </span><span class="s1">'material'</span><span class="p">,</span><span class="w"> </span><span class="s1">'шт'</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="s1">'O-01'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Замес и формование'</span><span class="p">,</span><span class="w"> </span><span class="s1">'operation'</span><span class="p">,</span><span class="w"> </span><span class="s1">'ч'</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="w"> </span><span class="s1">'O-02'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Выпечка'</span><span class="p">,</span><span class="w"> </span><span class="s1">'operation'</span><span class="p">,</span><span class="w"> </span><span class="s1">'ч'</span><span class="p">);</span>
+</code></pre></div>
+
+<figure class="diagram">
+<img src="reports/screens/prep/V02_order_xlsx.png" alt="Заказ покупателя V02: изделие, код и количество">
+<figcaption>Из заказа берём изделие, код и количество. Название изделия становится строкой `product` в `item`.</figcaption>
+</figure>
+
+<figure class="diagram">
+<img src="reports/screens/prep/V02_spec_xlsx.png" alt="Спецификация V02: материалы, операции и нормы">
+<figcaption>Из спецификации берём названия материалов и операций, единицы и нормы. Каждая строка станет отдельным ресурсом в `item`.</figcaption>
+</figure>
+
+<h4>Цены</h4>
+<table>
+<thead>
+<tr>
+<th>Поле</th>
+<th>Откуда значение</th>
+<th>Почему</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>item_id</code></td>
+<td>код ресурса из <code>item</code></td>
+<td>цена ссылается на ресурс, а не на название</td>
+</tr>
+<tr>
+<td><code>valid_from</code></td>
+<td><code>2027-03-01</code></td>
+<td>дата из файла <code>Цены.xlsx</code></td>
+</tr>
+<tr>
+<td><code>amount</code></td>
+<td>столбец «Цена»</td>
+<td>цена за единицу ресурса</td>
+</tr>
+</tbody>
+</table>
+<div class="codehilite" data-lang="sql"><pre><span></span><code><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">price</span><span class="w"> </span><span class="p">(</span><span class="n">item_id</span><span class="p">,</span><span class="w"> </span><span class="n">valid_from</span><span class="p">,</span><span class="w"> </span><span class="n">amount</span><span class="p">)</span><span class="w"> </span><span class="k">VALUES</span>
+<span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="s1">'2027-03-01'</span><span class="p">,</span><span class="w"> </span><span class="mi">65</span><span class="p">.</span><span class="mi">00</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="s1">'2027-03-01'</span><span class="p">,</span><span class="w"> </span><span class="mi">100</span><span class="p">.</span><span class="mi">00</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="s1">'2027-03-01'</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">.</span><span class="mi">00</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="s1">'2027-03-01'</span><span class="p">,</span><span class="w"> </span><span class="mi">500</span><span class="p">.</span><span class="mi">00</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="w"> </span><span class="s1">'2027-03-01'</span><span class="p">,</span><span class="w"> </span><span class="mi">700</span><span class="p">.</span><span class="mi">00</span><span class="p">);</span>
+</code></pre></div>
+
+<figure class="diagram">
+<img src="reports/screens/prep/V02_prices_xlsx.png" alt="Цены V02: ресурс, цена и дата">
+<figcaption>Источник цен: название ресурса, цена и дата начала действия.</figcaption>
+</figure>
+
+<figure class="diagram">
+<img src="reports/screens/mysql/v02-price.png" alt="Таблица price после вставки цен V02">
+<figcaption>Результат: цены в `price`. У каждого ресурса своя строка и дата `2027-03-01`.</figcaption>
+</figure>
+
+<h4>Спецификация и состав</h4>
+<table>
+<thead>
+<tr>
+<th>Поле</th>
+<th>Откуда значение</th>
+<th>Почему</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>specification.id</code></td>
+<td>1</td>
+<td>в варианте одна спецификация</td>
+</tr>
+<tr>
+<td><code>specification.product_id</code></td>
+<td>1</td>
+<td>ссылка на изделие</td>
+</tr>
+<tr>
+<td><code>specification.name</code></td>
+<td>шапка «Изделие»</td>
+<td>название изделия</td>
+</tr>
+<tr>
+<td><code>specification.output_qty</code></td>
+<td>1</td>
+<td>нормы даны на одну буханку</td>
+</tr>
+<tr>
+<td><code>specification.manufacturer_id</code></td>
+<td><code>M-001</code></td>
+<td>изготовитель из шапки</td>
+</tr>
+<tr>
+<td><code>specification_component.qty</code></td>
+<td>«Норма расхода»</td>
+<td>норма материала</td>
+</tr>
+<tr>
+<td><code>specification_component.time_norm</code></td>
+<td>«Норма времени»</td>
+<td>часы операции</td>
+</tr>
+</tbody>
+</table>
+<div class="codehilite" data-lang="sql"><pre><span></span><code><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">specification</span><span class="w"> </span><span class="p">(</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">product_id</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">output_qty</span><span class="p">,</span><span class="w"> </span><span class="n">manufacturer_id</span><span class="p">)</span>
+<span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="s1">'Хлеб ржаной 500 г'</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">.</span><span class="mi">000</span><span class="p">,</span><span class="w"> </span><span class="s1">'M-001'</span><span class="p">);</span>
+
+<span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">specification_component</span><span class="w"> </span><span class="p">(</span><span class="n">specification_id</span><span class="p">,</span><span class="w"> </span><span class="n">item_id</span><span class="p">,</span><span class="w"> </span><span class="n">qty</span><span class="p">,</span><span class="w"> </span><span class="n">time_norm</span><span class="p">)</span><span class="w"> </span><span class="k">VALUES</span>
+<span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">.</span><span class="mi">320</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">.</span><span class="mi">000</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">.</span><span class="mi">080</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">.</span><span class="mi">000</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">.</span><span class="mi">000</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">.</span><span class="mi">000</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">.</span><span class="mi">000</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">.</span><span class="mi">040</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">6</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">.</span><span class="mi">000</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">.</span><span class="mi">020</span><span class="p">);</span>
+</code></pre></div>
+
+<p>Для материалов <code>qty</code> это норма на единицу, <code>time_norm</code> равно нулю. Для операций <code>qty</code> равно нулю, <code>time_norm</code> хранит часы.</p>
+<figure class="diagram">
+<img src="reports/screens/mysql/v02-spec.png" alt="Состав спецификации V02: материалы и операции с нормами">
+<figcaption>Результат: пять строк состава. У материалов заполнена норма, у операций время.</figcaption>
+</figure>
+
+<h4>Заказ и строка заказа</h4>
+<table>
+<thead>
+<tr>
+<th>Поле</th>
+<th>Откуда значение</th>
+<th>Почему</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>customer_order.doc_no</code></td>
+<td>номер заказа</td>
+<td><code>V02-01</code></td>
+</tr>
+<tr>
+<td><code>customer_order.doc_date</code></td>
+<td>дата заказа</td>
+<td><code>15.03.2027</code></td>
+</tr>
+<tr>
+<td><code>customer_order.customer_id</code></td>
+<td>код заказчика</td>
+<td><code>002000001</code></td>
+</tr>
+<tr>
+<td><code>customer_order.executor_id</code></td>
+<td>код изготовителя</td>
+<td><code>M-001</code></td>
+</tr>
+<tr>
+<td><code>customer_order_line.product_id</code></td>
+<td>изделие</td>
+<td><code>1</code></td>
+</tr>
+<tr>
+<td><code>customer_order_line.qty</code></td>
+<td>«Кол-во»</td>
+<td>40</td>
+</tr>
+<tr>
+<td><code>customer_order_line.sale_price</code></td>
+<td>«Цена»</td>
+<td>700,00</td>
+</tr>
+<tr>
+<td><code>customer_order_line.discount</code></td>
+<td>«Скидка»</td>
+<td>0,00</td>
+</tr>
+</tbody>
+</table>
+<div class="codehilite" data-lang="sql"><pre><span></span><code><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">customer_order</span><span class="w"> </span><span class="p">(</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">doc_no</span><span class="p">,</span><span class="w"> </span><span class="n">doc_date</span><span class="p">,</span><span class="w"> </span><span class="n">customer_id</span><span class="p">,</span><span class="w"> </span><span class="n">executor_id</span><span class="p">)</span>
+<span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="s1">'V02-01'</span><span class="p">,</span><span class="w"> </span><span class="s1">'2027-03-15'</span><span class="p">,</span><span class="w"> </span><span class="s1">'002000001'</span><span class="p">,</span><span class="w"> </span><span class="s1">'M-001'</span><span class="p">);</span>
+
+<span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">customer_order_line</span><span class="w"> </span><span class="p">(</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">order_id</span><span class="p">,</span><span class="w"> </span><span class="n">product_id</span><span class="p">,</span><span class="w"> </span><span class="n">qty</span><span class="p">,</span><span class="w"> </span><span class="n">sale_price</span><span class="p">,</span><span class="w"> </span><span class="n">discount</span><span class="p">)</span>
+<span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">40</span><span class="p">,</span><span class="w"> </span><span class="mi">700</span><span class="p">.</span><span class="mi">00</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">.</span><span class="mi">00</span><span class="p">);</span>
+</code></pre></div>
+
+<figure class="diagram">
+<img src="reports/screens/prep/V02_order_xlsx.png" alt="Заказ покупателя V02: шапка и строка продукции">
+<figcaption>Источник: номер, дата, заказчик, изделие, количество и цена. Из шапки получается `customer_order`, из строки продукции `customer_order_line`.</figcaption>
+</figure>
+
+<figure class="diagram">
+<img src="reports/screens/mysql/v02-order.png" alt="Заказ V02-01 в таблице customer_order">
+<figcaption>Результат: шапка заказа V02-01. Дата 15.03.2027, заказчик 002000001, исполнитель M-001.</figcaption>
+</figure>
+
+<figure class="diagram">
+<img src="reports/screens/mysql/v02-lines.png" alt="Строка заказа V02 в таблице customer_order_line">
+<figcaption>Результат: строка заказа. Количество 40, цена 700,00, скидка 0,00.</figcaption>
+</figure>
+
+<h4>Производственный заказ</h4>
+<table>
+<thead>
+<tr>
+<th>Поле</th>
+<th>Откуда значение</th>
+<th>Почему</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>production_order.doc_no</code></td>
+<td>номер производственного заказа</td>
+<td><code>V02-P01</code></td>
+</tr>
+<tr>
+<td><code>production_order.doc_date</code></td>
+<td>дата заказа покупателя</td>
+<td><code>15.03.2027</code></td>
+</tr>
+<tr>
+<td><code>production_order.launch_date</code></td>
+<td>«Дата запуска»</td>
+<td><code>16.03.2027</code></td>
+</tr>
+<tr>
+<td><code>production_order.department</code></td>
+<td>«Подразделение»</td>
+<td>основное производство</td>
+</tr>
+<tr>
+<td><code>production_product.qty</code></td>
+<td>«Продукция к выпуску»</td>
+<td>40</td>
+</tr>
+<tr>
+<td><code>production_resource.qty</code></td>
+<td>«Потребность в материалах»</td>
+<td>плановый расход</td>
+</tr>
+<tr>
+<td><code>production_resource.time_norm</code></td>
+<td>«Технологические операции»</td>
+<td>плановые часы</td>
+</tr>
+</tbody>
+</table>
+<div class="codehilite" data-lang="sql"><pre><span></span><code><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">production_order</span><span class="w"> </span><span class="p">(</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">doc_no</span><span class="p">,</span><span class="w"> </span><span class="n">doc_date</span><span class="p">,</span><span class="w"> </span><span class="n">launch_date</span><span class="p">,</span><span class="w"> </span><span class="n">department</span><span class="p">)</span>
+<span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="s1">'V02-P01'</span><span class="p">,</span><span class="w"> </span><span class="s1">'2027-03-15'</span><span class="p">,</span><span class="w"> </span><span class="s1">'2027-03-16'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Основное производство'</span><span class="p">);</span>
+
+<span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">production_product</span><span class="w"> </span><span class="p">(</span><span class="n">production_id</span><span class="p">,</span><span class="w"> </span><span class="n">product_id</span><span class="p">,</span><span class="w"> </span><span class="n">qty</span><span class="p">)</span>
+<span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">40</span><span class="p">);</span>
+
+<span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">production_resource</span><span class="w"> </span><span class="p">(</span><span class="n">production_id</span><span class="p">,</span><span class="w"> </span><span class="n">item_id</span><span class="p">,</span><span class="w"> </span><span class="n">qty</span><span class="p">,</span><span class="w"> </span><span class="n">time_norm</span><span class="p">)</span><span class="w"> </span><span class="k">VALUES</span>
+<span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">12</span><span class="p">.</span><span class="mi">800</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">.</span><span class="mi">000</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">.</span><span class="mi">200</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">.</span><span class="mi">000</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="mi">40</span><span class="p">.</span><span class="mi">000</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">.</span><span class="mi">000</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">.</span><span class="mi">000</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">.</span><span class="mi">600</span><span class="p">),</span>
+<span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">6</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">.</span><span class="mi">000</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">.</span><span class="mi">800</span><span class="p">);</span>
+</code></pre></div>
+
+<figure class="diagram">
+<img src="reports/screens/prep/V02_production_xlsx.png" alt="Заказ на производство V02: продукция, материалы и операции">
+<figcaption>Источник: изделие, потребность в материалах и технологические операции. Каждая строка становится строкой `production_resource`.</figcaption>
+</figure>
+
+<figure class="diagram">
+<img src="reports/screens/mysql/v02-production.png" alt="Шапка производственного заказа V02">
+<figcaption>Результат: производственный заказ V02-P01. Дата запуска и подразделение перенесены из Excel.</figcaption>
+</figure>
+
+<figure class="diagram">
+<img src="reports/screens/mysql/v02-production-product.png" alt="Продукция к выпуску V02">
+<figcaption>Результат: в производственном заказе 40 единиц изделия. Количество взято из строки «Продукция к выпуску».</figcaption>
+</figure>
+
+<figure class="diagram">
+<img src="reports/screens/mysql/v02-production-resource.png" alt="Плановый расход ресурсов V02">
+<figcaption>Результат: пять строк планового расхода. Материалы и операции хранятся в одной таблице.</figcaption>
+</figure>
+
+<h3>Шаг 3. Проверьте данные</h3>
+<div class="codehilite" data-lang="sql"><pre><span></span><code><span class="k">SELECT</span><span class="w"> </span><span class="k">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">customers</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">counterparty</span><span class="p">;</span>
+<span class="k">SELECT</span><span class="w"> </span><span class="k">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">items</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">item</span><span class="p">;</span>
+<span class="k">SELECT</span><span class="w"> </span><span class="k">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">components</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">specification_component</span><span class="p">;</span>
+<span class="k">SELECT</span><span class="w"> </span><span class="k">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">orders</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">customer_order</span><span class="p">;</span>
+<span class="k">SELECT</span><span class="w"> </span><span class="k">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">production_rows</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">production_resource</span><span class="p">;</span>
+</code></pre></div>
+
+<p>Ожидается семь контрагентов, шесть ресурсов, пять строк состава, один заказ и пять строк производственного расхода.</p>
+<p>Попробуйте вставить заказ с несуществующим заказчиком:</p>
+<div class="codehilite" data-lang="sql"><pre><span></span><code><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">customer_order</span><span class="w"> </span><span class="p">(</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">doc_no</span><span class="p">,</span><span class="w"> </span><span class="n">doc_date</span><span class="p">,</span><span class="w"> </span><span class="n">customer_id</span><span class="p">,</span><span class="w"> </span><span class="n">executor_id</span><span class="p">)</span>
+<span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="mi">99</span><span class="p">,</span><span class="w"> </span><span class="s1">'TEST-1'</span><span class="p">,</span><span class="w"> </span><span class="s1">'2027-03-20'</span><span class="p">,</span><span class="w"> </span><span class="s1">'NO-SUCH'</span><span class="p">,</span><span class="w"> </span><span class="s1">'M-001'</span><span class="p">);</span>
+</code></pre></div>
+
+<p>Сервер должен ответить ошибкой 1452. Это доказывает, что внешний ключ работает.</p>
+<h2 id="задание-3-sql-запрос-стоимости"><span class="num">04</span>Задание 3. SQL-запрос стоимости</h2>
+<p>Соберите запрос по тем же правилам, что и в V01. Материалы: количество выпуска × норма × цена. Операции: количество выпуска × часы × тариф за час. Цены действуют с 01.03.2027.</p>
+<div class="codehilite" data-lang="sql"><pre><span></span><code><span class="k">SELECT</span>
+<span class="w">  </span><span class="n">o</span><span class="p">.</span><span class="n">doc_no</span><span class="p">,</span>
+<span class="w">  </span><span class="n">ROUND</span><span class="p">(</span><span class="k">SUM</span><span class="p">(</span><span class="n">l</span><span class="p">.</span><span class="n">qty</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="n">output_qty</span>
+<span class="w">    </span><span class="o">*</span><span class="w"> </span><span class="k">CASE</span><span class="w"> </span><span class="k">WHEN</span><span class="w"> </span><span class="n">i</span><span class="p">.</span><span class="n">kind</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'operation'</span><span class="w"> </span><span class="k">THEN</span><span class="w"> </span><span class="k">c</span><span class="p">.</span><span class="n">time_norm</span><span class="w"> </span><span class="k">ELSE</span><span class="w"> </span><span class="k">c</span><span class="p">.</span><span class="n">qty</span><span class="w"> </span><span class="k">END</span>
+<span class="w">    </span><span class="o">*</span><span class="w"> </span><span class="n">p</span><span class="p">.</span><span class="n">amount</span><span class="p">),</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">total_cost</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">customer_order</span><span class="w"> </span><span class="n">o</span>
+<span class="k">JOIN</span><span class="w"> </span><span class="n">customer_order_line</span><span class="w"> </span><span class="n">l</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">l</span><span class="p">.</span><span class="n">order_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">o</span><span class="p">.</span><span class="n">id</span>
+<span class="k">JOIN</span><span class="w"> </span><span class="n">specification</span><span class="w"> </span><span class="n">s</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="n">product_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">l</span><span class="p">.</span><span class="n">product_id</span>
+<span class="k">JOIN</span><span class="w"> </span><span class="n">specification_component</span><span class="w"> </span><span class="k">c</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="k">c</span><span class="p">.</span><span class="n">specification_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="n">id</span>
+<span class="k">JOIN</span><span class="w"> </span><span class="n">item</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">i</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">c</span><span class="p">.</span><span class="n">item_id</span>
+<span class="k">JOIN</span><span class="w"> </span><span class="n">price</span><span class="w"> </span><span class="n">p</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">p</span><span class="p">.</span><span class="n">item_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">c</span><span class="p">.</span><span class="n">item_id</span>
+<span class="w">  </span><span class="k">AND</span><span class="w"> </span><span class="n">p</span><span class="p">.</span><span class="n">valid_from</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="k">SELECT</span><span class="w"> </span><span class="k">MAX</span><span class="p">(</span><span class="n">p2</span><span class="p">.</span><span class="n">valid_from</span><span class="p">)</span>
+<span class="w">    </span><span class="k">FROM</span><span class="w"> </span><span class="n">price</span><span class="w"> </span><span class="n">p2</span>
+<span class="w">    </span><span class="k">WHERE</span><span class="w"> </span><span class="n">p2</span><span class="p">.</span><span class="n">item_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">c</span><span class="p">.</span><span class="n">item_id</span>
+<span class="w">      </span><span class="k">AND</span><span class="w"> </span><span class="n">p2</span><span class="p">.</span><span class="n">valid_from</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">o</span><span class="p">.</span><span class="n">doc_date</span>
+<span class="w">  </span><span class="p">)</span>
+<span class="k">WHERE</span><span class="w"> </span><span class="n">o</span><span class="p">.</span><span class="n">doc_no</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'V02-01'</span>
+<span class="k">GROUP</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">o</span><span class="p">.</span><span class="n">doc_no</span><span class="p">;</span>
+</code></pre></div>
+
+<figure class="diagram">
+<img src="reports/screens/mysql/v02-total.png" alt="Итоговая стоимость заказа V02-01: 2672.00">
+<figcaption>Итог запроса: номер заказа и нормативная стоимость 2 672,00.</figcaption>
+</figure>
+
+<p>Проверьте строки расчёта:</p>
+<div class="codehilite" data-lang="sql"><pre><span></span><code><span class="k">SELECT</span>
+<span class="w">  </span><span class="n">i</span><span class="p">.</span><span class="n">name</span><span class="p">,</span>
+<span class="w">  </span><span class="n">i</span><span class="p">.</span><span class="n">kind</span><span class="p">,</span>
+<span class="w">  </span><span class="k">c</span><span class="p">.</span><span class="n">qty</span><span class="p">,</span>
+<span class="w">  </span><span class="k">c</span><span class="p">.</span><span class="n">time_norm</span><span class="p">,</span>
+<span class="w">  </span><span class="n">p</span><span class="p">.</span><span class="n">amount</span><span class="p">,</span>
+<span class="w">  </span><span class="n">ROUND</span><span class="p">(</span><span class="n">l</span><span class="p">.</span><span class="n">qty</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="n">output_qty</span>
+<span class="w">    </span><span class="o">*</span><span class="w"> </span><span class="k">CASE</span><span class="w"> </span><span class="k">WHEN</span><span class="w"> </span><span class="n">i</span><span class="p">.</span><span class="n">kind</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'operation'</span><span class="w"> </span><span class="k">THEN</span><span class="w"> </span><span class="k">c</span><span class="p">.</span><span class="n">time_norm</span><span class="w"> </span><span class="k">ELSE</span><span class="w"> </span><span class="k">c</span><span class="p">.</span><span class="n">qty</span><span class="w"> </span><span class="k">END</span>
+<span class="w">    </span><span class="o">*</span><span class="w"> </span><span class="n">p</span><span class="p">.</span><span class="n">amount</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">line_cost</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">customer_order</span><span class="w"> </span><span class="n">o</span>
+<span class="k">JOIN</span><span class="w"> </span><span class="n">customer_order_line</span><span class="w"> </span><span class="n">l</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">l</span><span class="p">.</span><span class="n">order_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">o</span><span class="p">.</span><span class="n">id</span>
+<span class="k">JOIN</span><span class="w"> </span><span class="n">specification</span><span class="w"> </span><span class="n">s</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="n">product_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">l</span><span class="p">.</span><span class="n">product_id</span>
+<span class="k">JOIN</span><span class="w"> </span><span class="n">specification_component</span><span class="w"> </span><span class="k">c</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="k">c</span><span class="p">.</span><span class="n">specification_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="n">id</span>
+<span class="k">JOIN</span><span class="w"> </span><span class="n">item</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">i</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">c</span><span class="p">.</span><span class="n">item_id</span>
+<span class="k">JOIN</span><span class="w"> </span><span class="n">price</span><span class="w"> </span><span class="n">p</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">p</span><span class="p">.</span><span class="n">item_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">c</span><span class="p">.</span><span class="n">item_id</span>
+<span class="w">  </span><span class="k">AND</span><span class="w"> </span><span class="n">p</span><span class="p">.</span><span class="n">valid_from</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="k">SELECT</span><span class="w"> </span><span class="k">MAX</span><span class="p">(</span><span class="n">p2</span><span class="p">.</span><span class="n">valid_from</span><span class="p">)</span>
+<span class="w">    </span><span class="k">FROM</span><span class="w"> </span><span class="n">price</span><span class="w"> </span><span class="n">p2</span>
+<span class="w">    </span><span class="k">WHERE</span><span class="w"> </span><span class="n">p2</span><span class="p">.</span><span class="n">item_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">c</span><span class="p">.</span><span class="n">item_id</span>
+<span class="w">      </span><span class="k">AND</span><span class="w"> </span><span class="n">p2</span><span class="p">.</span><span class="n">valid_from</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">o</span><span class="p">.</span><span class="n">doc_date</span>
+<span class="w">  </span><span class="p">)</span>
+<span class="k">WHERE</span><span class="w"> </span><span class="n">o</span><span class="p">.</span><span class="n">doc_no</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'V02-01'</span>
+<span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">i</span><span class="p">.</span><span class="n">kind</span><span class="p">,</span><span class="w"> </span><span class="n">i</span><span class="p">.</span><span class="n">id</span><span class="p">;</span>
+</code></pre></div>
+
+<figure class="diagram">
+<img src="reports/screens/mysql/v02-detail.png" alt="Пять строк расчёта стоимости V02">
+<figcaption>Строки расчёта: три материала и две операции. Сумма равна 2 672,00.</figcaption>
+</figure>
+
+<p>Материалы дают <code>1312.00</code>, операции <code>1360.00</code>, вместе <code>2672.00</code>. Если получилось другое число, проверьте пять строк состава и цену на дату <code>2027-03-15</code>, а не подгоняйте запрос.</p>
+<p>Проверьте, что соединение не удвоило строки:</p>
+<div class="codehilite" data-lang="sql"><pre><span></span><code><span class="k">SELECT</span>
+<span class="w">  </span><span class="p">(</span><span class="k">SELECT</span><span class="w"> </span><span class="k">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">specification</span><span class="w"> </span><span class="n">s</span>
+<span class="w">   </span><span class="k">JOIN</span><span class="w"> </span><span class="n">specification_component</span><span class="w"> </span><span class="k">c</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="k">c</span><span class="p">.</span><span class="n">specification_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="n">id</span>
+<span class="w">   </span><span class="k">WHERE</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="n">product_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">components</span><span class="p">,</span>
+<span class="w">  </span><span class="p">(</span><span class="k">SELECT</span><span class="w"> </span><span class="k">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">customer_order</span><span class="w"> </span><span class="n">o</span>
+<span class="w">   </span><span class="k">JOIN</span><span class="w"> </span><span class="n">customer_order_line</span><span class="w"> </span><span class="n">l</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">l</span><span class="p">.</span><span class="n">order_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">o</span><span class="p">.</span><span class="n">id</span>
+<span class="w">   </span><span class="k">JOIN</span><span class="w"> </span><span class="n">specification</span><span class="w"> </span><span class="n">s</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="n">product_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">l</span><span class="p">.</span><span class="n">product_id</span>
+<span class="w">   </span><span class="k">JOIN</span><span class="w"> </span><span class="n">specification_component</span><span class="w"> </span><span class="k">c</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="k">c</span><span class="p">.</span><span class="n">specification_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="n">id</span>
+<span class="w">   </span><span class="k">JOIN</span><span class="w"> </span><span class="n">price</span><span class="w"> </span><span class="n">p</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">p</span><span class="p">.</span><span class="n">item_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">c</span><span class="p">.</span><span class="n">item_id</span>
+<span class="w">     </span><span class="k">AND</span><span class="w"> </span><span class="n">p</span><span class="p">.</span><span class="n">valid_from</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="k">SELECT</span><span class="w"> </span><span class="k">MAX</span><span class="p">(</span><span class="n">p2</span><span class="p">.</span><span class="n">valid_from</span><span class="p">)</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">price</span><span class="w"> </span><span class="n">p2</span>
+<span class="w">                         </span><span class="k">WHERE</span><span class="w"> </span><span class="n">p2</span><span class="p">.</span><span class="n">item_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">c</span><span class="p">.</span><span class="n">item_id</span><span class="w"> </span><span class="k">AND</span><span class="w"> </span><span class="n">p2</span><span class="p">.</span><span class="n">valid_from</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">o</span><span class="p">.</span><span class="n">doc_date</span><span class="p">)</span>
+<span class="w">   </span><span class="k">WHERE</span><span class="w"> </span><span class="n">o</span><span class="p">.</span><span class="n">doc_no</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'V02-01'</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">joined_rows</span><span class="p">;</span>
+</code></pre></div>
+
+<figure class="diagram">
+<img src="reports/screens/mysql/v02-count.png" alt="Проверка числа строк V02: 5 и 5">
+<figcaption>Проверка: в составе 5 строк и после соединения тоже 5.</figcaption>
+</figure>
+
+<h2 id="файлы-решения-v02"><span class="num">05</span>Файлы решения V02</h2>
+<table>
+<thead>
+<tr>
+<th>Файл</th>
+<th>Что внутри</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>V02_schema.sql</code></td>
+<td>двенадцать таблиц, <code>PRIMARY KEY</code> и <code>CHECK</code>, без внешних ключей</td>
+</tr>
+<tr>
+<td><code>V02_fk.sql</code></td>
+<td>четырнадцать связей через <code>ALTER TABLE</code></td>
+</tr>
+<tr>
+<td><code>V02_import.sql</code></td>
+<td>заказчики, ресурсы, спецификация, цены и производственный заказ</td>
+</tr>
+<tr>
+<td><code>V02_cost.sql</code></td>
+<td>запрос стоимости и результат <code>2672.00</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="чек-лист-v02"><span class="num">06</span>Чек-лист V02</h2>
+<ul>
+<li>База <code>dkip2027_v02</code> создана в <code>utf8mb4</code>.</li>
+<li>Все двенадцать таблиц используют <code>InnoDB</code>.</li>
+<li>Внешние ключи добавлены после создания таблиц.</li>
+<li>Шесть записей JSON и изготовитель загружены.</li>
+<li>Изделие, материалы, операции, цены, спецификация и заказ загружены.</li>
+<li>Производственный заказ и плановый расход загружены.</li>
+<li>Итог задания 3 равен <code>2672.00</code>.</li>
+<li>Скриншоты показывают источник, код и результат.</li>
+</ul></article><nav class="pager"><a class="" href="00-preparation.html"><span>← Предыдущий раздел</span>Предварительная подготовка: вариант V01</a><a class="next" style="text-align:right;margin-left:auto" href="01-info.html"><span>Следующий раздел →</span>Общая информация об экзамене</a></nav></main>
+<script>
+(function(){
+  var root = document.documentElement;
+  var media = matchMedia('(prefers-color-scheme: dark)');
+  function current(){
+    var t = root.dataset.theme;
+    if(t === 'dark' || t === 'light') return t;
+    return media.matches ? 'dark' : 'light';
+  }
+  function label(btn){
+    var t = current();
+    var ico = btn.querySelector('.theme-ico');
+    if(ico){
+      btn.setAttribute('aria-label', t === 'dark' ? 'Светлая тема' : 'Тёмная тема');
+    } else {
+      btn.textContent = t === 'dark' ? 'Светлая тема' : 'Тёмная тема';
+    }
+    btn.setAttribute('aria-pressed', t === 'dark' ? 'true' : 'false');
+  }
+  function refresh(){
+    document.querySelectorAll('[data-theme-toggle]').forEach(label);
+    window.dispatchEvent(new Event('themechange'));
+  }
+  function apply(t){
+    if(t === 'dark' || t === 'light'){
+      root.dataset.theme = t;
+      try{ localStorage.setItem('mdk-theme', t); }catch(e){}
+    } else {
+      delete root.dataset.theme;
+      try{ localStorage.removeItem('mdk-theme'); }catch(e){}
+    }
+    refresh();
+  }
+  document.querySelectorAll('[data-theme-toggle]').forEach(function(btn){
+    label(btn);
+    btn.addEventListener('click', function(){
+      apply(current() === 'dark' ? 'light' : 'dark');
+      var ico = btn.querySelector('.theme-ico');
+      if(!ico) return;
+      ico.classList.remove('is-spinning');
+      void ico.offsetWidth;
+      ico.classList.add('is-spinning');
+      var stop = function(){ ico.classList.remove('is-spinning'); };
+      ico.addEventListener('animationend', stop, {once: true});
+      setTimeout(stop, 700);
+    });
+  });
+  media.addEventListener('change', function(){ if(!root.dataset.theme) refresh(); });
+})();
+
+(function(){
+  document.querySelectorAll('[data-to-top]').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      window.scrollTo({top: 0, behavior: reduce ? 'auto' : 'smooth'});
+    });
+  });
+})();
+
+(function(){
+  document.querySelectorAll('[data-slider]').forEach(function(slider){
+    var track = slider.querySelector('[data-slider-track]');
+    var slides = track ? Array.prototype.slice.call(track.children) : [];
+    var counter = slider.querySelector('[data-slider-counter]');
+    var prev = slider.querySelector('[data-slider-prev]');
+    var next = slider.querySelector('[data-slider-next]');
+    if(!track || slides.length < 2) return;
+    function current(){
+      var best = 0, dist = Infinity;
+      slides.forEach(function(slide, i){
+        var d = Math.abs(slide.offsetLeft - track.scrollLeft);
+        if(d < dist){ dist = d; best = i; }
+      });
+      return best;
+    }
+    function update(){
+      if(counter) counter.textContent = (current() + 1) + ' / ' + slides.length;
+    }
+    function go(delta){
+      var i = Math.max(0, Math.min(slides.length - 1, current() + delta));
+      var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      track.scrollTo({left: slides[i].offsetLeft, behavior: reduce ? 'auto' : 'smooth'});
+    }
+    if(prev) prev.addEventListener('click', function(){ go(-1); });
+    if(next) next.addEventListener('click', function(){ go(1); });
+    track.addEventListener('scroll', function(){
+      clearTimeout(track._sliderTimer);
+      track._sliderTimer = setTimeout(update, 80);
+    }, {passive: true});
+    update();
+  });
+})();
+(function(){
+  var cards = [].slice.call(document.querySelectorAll('[data-shader]'));
+  if(!cards.length) return;
+  var reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var vsrc = 'attribute vec2 p;void main(){gl_Position=vec4(p,0.,1.);}';
+  var fsrc = `precision highp float;uniform vec2 u_res;uniform float u_time;
+  uniform vec3 u_c1;uniform vec3 u_c2;uniform vec3 u_c3;uniform float u_seed;
+  float hash(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}
+  float noise(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);
+    return mix(mix(hash(i),hash(i+vec2(1.,0.)),f.x),mix(hash(i+vec2(0.,1.)),hash(i+vec2(1.,1.)),f.x),f.y);}
+  float fbm(vec2 p){float v=0.,a=.5;for(int i=0;i<4;i++){v+=a*noise(p);p*=2.03;a*=.5;}return v;}
+  void main(){
+    vec2 uv=(gl_FragCoord.xy*2.-u_res)/min(u_res.x,u_res.y);
+    uv += vec2(u_seed*1.7,u_seed*1.1);
+    float t=u_time*.05+u_seed*3.0;
+    vec2 q=vec2(fbm(uv*1.15+t*.7),fbm(uv*1.15-t*.5));
+    float r=fbm(uv*1.4+q*1.9+vec2(t*.6,0.));
+    vec3 col=vec3(.031,.035,.051);
+    col=mix(col,u_c1,smoothstep(.30,.82,r)*.95);
+    col=mix(col,u_c2,smoothstep(.50,.90,fbm(uv*2.1-q*1.6+t*.4))*.45);
+    col=mix(col,u_c3,smoothstep(.60,.95,r+q.x*.3)*.5);
+    col*=.82+.50*q.y;
+    gl_FragColor=vec4(col,1.);
+  }`;
+  function hexRgb(hex){
+    hex = String(hex||'#7C5CFF').replace('#','');
+    if(hex.length === 3) hex = hex.split('').map(function(c){ return c+c; }).join('');
+    var n = parseInt(hex,16);
+    if(isNaN(n)) return [.486,.361,1];
+    return [((n>>16)&255)/255,((n>>8)&255)/255,(n&255)/255];
+  }
+  function rgbHsl(c){
+    var r=c[0],g=c[1],b=c[2],max=Math.max(r,g,b),min=Math.min(r,g,b),h=0,s=0,l=(max+min)/2,d=max-min;
+    if(d){ s=l>.5?d/(2-max-min):d/(max+min);
+      if(max===r) h=(g-b)/d+(g<b?6:0);
+      else if(max===g) h=(b-r)/d+2;
+      else h=(r-g)/d+4;
+      h/=6; }
+    return [h,s,l];
+  }
+  function hue(h,s,l){
+    function f(n){var k=(n+h*12)%12;return l-s*Math.min(l,1-l)*Math.max(-1,Math.min(k-3,Math.min(9-k,1)));}
+    return [f(0),f(8),f(4)];
+  }
+  function palette(hex, seed){
+    var hsl=rgbHsl(hexRgb(hex));
+    var h=(hsl[0]+(seed-.5)*.75+1)%1, s=Math.max(.62,hsl[1]);
+    return [hue(h,s,.55),hue((h+.34)%1,.82,.53),hue((h+.67)%1,.78,.58)];
+  }
+  function shader(gl,type,src){
+    var s=gl.createShader(type); gl.shaderSource(s,src); gl.compileShader(s); return s;
+  }
+  function init(card,index){
+    var cv=card.querySelector('canvas.shader-bg'); if(!cv) return;
+    var gl=null;
+    try { gl=cv.getContext('webgl',{antialias:false,alpha:false,powerPreference:'low-power'}) || cv.getContext('experimental-webgl'); } catch(e) {}
+    if(!gl){ return; }
+    var pr=gl.createProgram();
+    gl.attachShader(pr,shader(gl,gl.VERTEX_SHADER,vsrc));
+    gl.attachShader(pr,shader(gl,gl.FRAGMENT_SHADER,fsrc));
+    gl.linkProgram(pr); gl.useProgram(pr);
+    var buf=gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER,buf);
+    gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,1,-1,-1,1,1,-1,1,1,-1,1]),gl.STATIC_DRAW);
+    var loc=gl.getAttribLocation(pr,'p'); gl.enableVertexAttribArray(loc); gl.vertexAttribPointer(loc,2,gl.FLOAT,false,0,0);
+    var uRes=gl.getUniformLocation(pr,'u_res'),uT=gl.getUniformLocation(pr,'u_time');
+    var uC1=gl.getUniformLocation(pr,'u_c1'),uC2=gl.getUniformLocation(pr,'u_c2'),uC3=gl.getUniformLocation(pr,'u_c3');
+    var uSeed=gl.getUniformLocation(pr,'u_seed');
+    var seed=parseFloat(card.getAttribute('data-seed'))||0;
+    var colors=palette(card.getAttribute('data-accent'),seed);
+    gl.uniform3f(uC1,colors[0][0],colors[0][1],colors[0][2]);
+    gl.uniform3f(uC2,colors[1][0],colors[1][1],colors[1][2]);
+    gl.uniform3f(uC3,colors[2][0],colors[2][1],colors[2][2]);
+    gl.uniform1f(uSeed,seed);
+    function size(){
+      var dpr=Math.min(window.devicePixelRatio||1,2);
+      var w=cv.clientWidth||card.clientWidth||640, h=cv.clientHeight||card.clientHeight||360;
+      cv.width=Math.max(1,Math.round(w*dpr)); cv.height=Math.max(1,Math.round(h*dpr));
+      gl.viewport(0,0,cv.width,cv.height);
+    }
+    function draw(now){
+      gl.uniform2f(uRes,cv.width,cv.height);
+      gl.uniform1f(uT,(now/1000)+seed*4.0);
+      gl.drawArrays(gl.TRIANGLES,0,6);
+    }
+    size();
+    if(reduced){ draw(42000); return; }
+    if(!('IntersectionObserver' in window)){ draw(42000); return; }
+    var running=false, raf=0;
+    function frame(now){ draw(now); raf=requestAnimationFrame(frame); }
+    var io=new IntersectionObserver(function(entries){
+      entries.forEach(function(en){
+        if(en.isIntersecting && !running){ running=true; raf=requestAnimationFrame(frame); }
+        else if(!en.isIntersecting && running){ running=false; cancelAnimationFrame(raf); }
+      });
+    },{threshold:.02});
+    io.observe(cv);
+    window.addEventListener('resize',function(){ size(); if(!running) draw(performance.now()); });
+  }
+  cards.forEach(init);
+})();
+
+(function(){
+  var bar=document.querySelector('.read-progress'); if(!bar) return;
+  var fill=bar.querySelector('span'), ticking=false;
+  function scrollPct(){
+    var max=document.documentElement.scrollHeight-window.innerHeight;
+    return max>0?Math.min(100,Math.max(0,window.scrollY/max*100)):100;
+  }
+  function gatePct(){
+    var steps=[].slice.call(document.querySelectorAll('.gate-step'));
+    if(!steps.length) return null;
+    var n=steps.length;
+    var open=steps.filter(function(step){ return step.classList.contains('open'); });
+    var article=document.querySelector('article.prose')||document.querySelector('.prose');
+    var view=window.scrollY+window.innerHeight;
+    if(!open.length){
+      if(!article) return 0;
+      var articleTop=article.getBoundingClientRect().top+window.scrollY;
+      var firstTop=steps[0].getBoundingClientRect().top+window.scrollY;
+      var span=Math.max(1, firstTop-articleTop);
+      var done=Math.min(1,Math.max(0,(view-articleTop)/span));
+      return done/(n+1)*100;
+    }
+    var last=open[open.length-1];
+    var box=last.getBoundingClientRect();
+    var top=box.top+window.scrollY;
+    var height=last.offsetHeight||box.height||1;
+    var seen=Math.min(1,Math.max(0,(view-top)/height));
+    return Math.min(100,Math.max(0,(1+(open.length-1)+seen)/(n+1)*100));
+  }
+  function update(){
+    var pct=gatePct();
+    if(pct===null) pct=scrollPct();
+    fill.style.width=pct.toFixed(2)+'%';
+    bar.setAttribute('aria-valuenow', String(Math.round(pct)));
+  }
+  function onScroll(){ if(ticking) return; ticking=true;
+    requestAnimationFrame(function(){update();ticking=false;}); }
+  addEventListener('scroll',onScroll,{passive:true});
+  addEventListener('resize',onScroll);
+  window.__readProgress = update;
+  update();
+})();
+
+(function(){
+  if(!('IntersectionObserver' in window)) return;
+  if(matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  var prose = document.querySelector('article.prose');
+  if(!prose) return;
+  var vh = window.innerHeight || 800;
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(en){
+      if(en.isIntersecting){ en.target.classList.add('in'); io.unobserve(en.target); }
+    });
+  }, {threshold: .06, rootMargin: '0px 0px -4% 0px'});
+  function add(el){
+    if(!el || el.nodeType !== 1) return;
+    if(el.classList.contains('gate-step') || el.classList.contains('gate-action')) return;
+    if(el.classList.contains('quiz')) return;
+    var hidden = el.closest('[hidden]');
+    if(!hidden && el.getBoundingClientRect().top < vh * .82) return;
+    el.classList.add('reveal');
+    io.observe(el);
+  }
+  [].slice.call(prose.children).forEach(add);
+  prose.querySelectorAll('.gate-content > *').forEach(function(el){
+    var step = el.closest('.gate-step');
+    if(step && !step.hidden) return;
+    add(el);
+  });
+})();
+
+(function(){
+  document.querySelectorAll('[data-pdf]').forEach(function(button){
+    button.addEventListener('click',function(){ window.print(); });
+  });
+})();
+
+(function(){
+  document.querySelectorAll('.work-checklist input[type="checkbox"]').forEach(function(cb){
+    cb.addEventListener('change', function(){
+      if(!cb.checked) return;
+      var row = cb.closest('tr');
+      row.querySelectorAll('input[type="checkbox"]').forEach(function(other){
+        if(other !== cb) other.checked = false;
+      });
+    });
+  });
+})();
+</script>
+</body>
+</html>

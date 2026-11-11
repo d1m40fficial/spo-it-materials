@@ -1,6 +1,6 @@
 ---
-title: Предварительная подготовка
-dek: "Разбор первых трёх заданий V01 в draw.io и XAMPP: диаграмма, база в phpMyAdmin и SQL-запрос стоимости."
+title: "Предварительная подготовка: вариант V01"
+dek: "Разбор первых трёх заданий V01 в draw.io и XAMPP: диаграмма, таблицы и связи, вставка данных и SQL-запрос стоимости."
 chapter: "Подготовка"
 level: СПО
 glyph: "00"
@@ -12,7 +12,7 @@ outcomes:
 
 ## Зачем этот раздел
 
-Первые три задания проверяют модель данных, базу и расчёт. В этом разделе они разобраны на варианте V01 «ООО ТД «Вершина»» в приложениях, которые уже установлены: draw.io для диаграммы, XAMPP и phpMyAdmin для базы. Дополнительно в конце раздела разобран вариант V02 на тех же инструментах.
+Первые три задания проверяют модель данных, базу и расчёт. В этом разделе они разобраны на варианте V01 (ООО ТД «Вершина») в приложениях, которые уже установлены: draw.io для диаграммы, XAMPP и phpMyAdmin для базы. Для V02 есть отдельная страница [Предварительная подготовка: вариант V02](00-preparation-v02.html).
 
 | Задание | Инструмент | Что сдать |
 |---|---|---|
@@ -430,21 +430,112 @@ CREATE TABLE counterparty (
 - `CONSTRAINT ck_party_type CHECK (...)` разрешает только три значения типа контрагента.
 - `ENGINE=InnoDB` включает поддержку внешних ключей, `DEFAULT CHARSET=utf8mb4` задаёт кодировку.
 
-Остальные таблицы создайте по диаграмме. Ниже слайдер с двенадцатью определениями. Листайте стрелками и сверяйте поля, типы и ключи.
+Остальные таблицы создайте по диаграмме. Ниже два слайдера: первый показывает, откуда взялась каждая таблица, второй разбирает её создание построчно. В конце второго слайдера есть полный скрипт для проверки.
+
+<p>Первый слайдер показывает, откуда взялась каждая таблица: какой файл или документ её породил, какие поля в неё попадают и почему.</p>
 
 <div class="schema-slider" data-slider>
 <div class="schema-slider-bar">
-<strong>Все двенадцать таблиц: листайте стрелками</strong>
+<strong>Откуда берутся таблицы: V01, 12 слайдов</strong>
 <div class="schema-slider-actions">
-<button type="button" class="schema-btn" data-slider-prev aria-label="Предыдущая таблица">←</button>
+<button type="button" class="schema-btn" data-slider-prev aria-label="Предыдущий слайд">←</button>
 <span class="schema-slider-counter" data-slider-counter>1 / 12</span>
-<button type="button" class="schema-btn" data-slider-next aria-label="Следующая таблица">→</button>
+<button type="button" class="schema-btn" data-slider-next aria-label="Следующий слайд">→</button>
 </div>
 </div>
 <div class="schema-track" data-slider-track>
 <article class="schema-slide" aria-label="counterparty">
 <h4>1. <code>counterparty</code></h4>
-<p>Контрагенты: покупатели, поставщики и изготовители. Код хранится текстом, поэтому ведущие нули не теряются.</p>
+<p>Кто участвует в системе: покупатели, поставщики и изготовители. Одна таблица вместо трёх справочников, роль хранится в поле party_type.</p>
+<p><b>Откуда берём:</b> Заказчики.json: шесть записей. Заказ покупателя.xlsx: блоки «Заказчик» и «Исполнитель». Для V01 добавляются ИП Томилин и ООО ТД «Вершина», для V02 изготовитель Пекарня «Колос».</p>
+<table class="schema-lines"><thead><tr><th>Поле</th><th>Откуда значение и почему</th></tr></thead><tbody><tr><td><code>id</code></td><td>JSON id; для ИП Томилина 000000004, для изготовителя M-001.</td></tr><tr><td><code>name</code></td><td>JSON name; из заказа название заказчика и исполнителя.</td></tr><tr><td><code>inn</code></td><td>JSON inn; пустая строка, если ИНН нет.</td></tr><tr><td><code>address</code></td><td>JSON addres; в таблице address.</td></tr><tr><td><code>phone</code></td><td>JSON phone.</td></tr><tr><td><code>party_type</code></td><td>JSON type: Покупатель, Поставщик или Изготовитель.</td></tr></tbody></table>
+</article>
+<article class="schema-slide" aria-label="item">
+<h4>2. <code>item</code></h4>
+<p>Один справочник ресурсов: продукция, материалы и операции. Поле kind говорит, как ресурс участвует в расчёте.</p>
+<p><b>Откуда берём:</b> Заказ покупателя.xlsx: строка продукции. Спецификация.xlsx и Цены.xlsx: материалы, операции, единицы. Заказ на производство.xlsx: коды и плановые наименования.</p>
+<table class="schema-lines"><thead><tr><th>Поле</th><th>Откуда значение и почему</th></tr></thead><tbody><tr><td><code>id</code></td><td>Номер по порядку: 1 продукция, далее материалы и операции.</td></tr><tr><td><code>code</code></td><td>Код из заказа и производственного заказа: P-01/ФР-00000034.</td></tr><tr><td><code>name</code></td><td>Название из строки продукции и таблиц спецификации.</td></tr><tr><td><code>kind</code></td><td>product для изделия, material для материалов, operation для операций.</td></tr><tr><td><code>unit</code></td><td>Единица из спецификации и цен.</td></tr></tbody></table>
+</article>
+<article class="schema-slide" aria-label="price">
+<h4>3. <code>price</code></h4>
+<p>История цен. Цена не хранится в item, потому что со временем меняется.</p>
+<p><b>Откуда берём:</b> Цены.xlsx: столбцы «Номенклатура» и «Цена». Дата начала действия задана условием варианта.</p>
+<table class="schema-lines"><thead><tr><th>Поле</th><th>Откуда значение и почему</th></tr></thead><tbody><tr><td><code>item_id</code></td><td>Код ресурса из item, а не название. Название может измениться.</td></tr><tr><td><code>valid_from</code></td><td>2026-04-01 для V01.</td></tr><tr><td><code>amount</code></td><td>Цена из строки ресурса в Цены.xlsx.</td></tr></tbody></table>
+</article>
+<article class="schema-slide" aria-label="specification">
+<h4>4. <code>specification</code></h4>
+<p>Шапка спецификации: какое изделие и на какое количество выпуска описано.</p>
+<p><b>Откуда берём:</b> Спецификация.xlsx: шапка «Изделие», «Изготовитель», нормы на одну единицу.</p>
+<table class="schema-lines"><thead><tr><th>Поле</th><th>Откуда значение и почему</th></tr></thead><tbody><tr><td><code>id</code></td><td>1, потому что в варианте одна спецификация.</td></tr><tr><td><code>product_id</code></td><td>1, ссылка на изделие в item.</td></tr><tr><td><code>name</code></td><td>Название изделия из шапки.</td></tr><tr><td><code>output_qty</code></td><td>1, нормы даны на одну единицу.</td></tr><tr><td><code>manufacturer_id</code></td><td>M-001, изготовитель из шапки.</td></tr></tbody></table>
+</article>
+<article class="schema-slide" aria-label="specification_component">
+<h4>5. <code>specification_component</code></h4>
+<p>Строки состава: сколько материала нужно на единицу и сколько часов занимает операция.</p>
+<p><b>Откуда берём:</b> Спецификация.xlsx: таблицы «Состав» и «Технологические операции».</p>
+<table class="schema-lines"><thead><tr><th>Поле</th><th>Откуда значение и почему</th></tr></thead><tbody><tr><td><code>specification_id</code></td><td>1, ссылка на шапку.</td></tr><tr><td><code>item_id</code></td><td>Код материала или операции из item.</td></tr><tr><td><code>qty</code></td><td>Норма расхода материала из столбца «Норма расхода».</td></tr><tr><td><code>time_norm</code></td><td>Норма времени операции из столбца «Норма времени».</td></tr></tbody></table>
+</article>
+<article class="schema-slide" aria-label="customer_order">
+<h4>6. <code>customer_order</code></h4>
+<p>Шапка заказа покупателя: номер, дата, заказчик и исполнитель.</p>
+<p><b>Откуда берём:</b> Заказ покупателя.xlsx: шапка заказа.</p>
+<table class="schema-lines"><thead><tr><th>Поле</th><th>Откуда значение и почему</th></tr></thead><tbody><tr><td><code>id</code></td><td>1, внутренний номер.</td></tr><tr><td><code>doc_no</code></td><td>V01-01.</td></tr><tr><td><code>doc_date</code></td><td>22.04.2026.</td></tr><tr><td><code>customer_id</code></td><td>000000004, ИП Томилин.</td></tr><tr><td><code>executor_id</code></td><td>M-001, ООО ТД «Вершина».</td></tr></tbody></table>
+</article>
+<article class="schema-slide" aria-label="customer_order_line">
+<h4>7. <code>customer_order_line</code></h4>
+<p>Строки заказа: какое изделие, сколько, по какой продажной цене и со скидкой.</p>
+<p><b>Откуда берём:</b> Заказ покупателя.xlsx: строка «Товары (работы, услуги)».</p>
+<table class="schema-lines"><thead><tr><th>Поле</th><th>Откуда значение и почему</th></tr></thead><tbody><tr><td><code>id</code></td><td>1, одна строка заказа.</td></tr><tr><td><code>order_id</code></td><td>1, ссылка на шапку.</td></tr><tr><td><code>product_id</code></td><td>1, ссылка на изделие.</td></tr><tr><td><code>qty</code></td><td>2.</td></tr><tr><td><code>sale_price</code></td><td>14120.00.</td></tr><tr><td><code>discount</code></td><td>1412.00.</td></tr></tbody></table>
+</article>
+<article class="schema-slide" aria-label="production_order">
+<h4>8. <code>production_order</code></h4>
+<p>Шапка производственного заказа: номер, дата, дата запуска и подразделение.</p>
+<p><b>Откуда берём:</b> Заказ на производство.xlsx: шапка.</p>
+<table class="schema-lines"><thead><tr><th>Поле</th><th>Откуда значение и почему</th></tr></thead><tbody><tr><td><code>id</code></td><td>1, внутренний номер.</td></tr><tr><td><code>doc_no</code></td><td>V01-P-01.</td></tr><tr><td><code>doc_date</code></td><td>22.04.2026, дата заказа.</td></tr><tr><td><code>launch_date</code></td><td>23.04.2026.</td></tr><tr><td><code>department</code></td><td>Основное подразделение.</td></tr></tbody></table>
+</article>
+<article class="schema-slide" aria-label="production_product">
+<h4>9. <code>production_product</code></h4>
+<p>Что выпускаем по производственному заказу и в каком количестве.</p>
+<p><b>Откуда берём:</b> Заказ на производство.xlsx: «Продукция к выпуску».</p>
+<table class="schema-lines"><thead><tr><th>Поле</th><th>Откуда значение и почему</th></tr></thead><tbody><tr><td><code>production_id</code></td><td>1, ссылка на производственный заказ.</td></tr><tr><td><code>product_id</code></td><td>1, ссылка на изделие.</td></tr><tr><td><code>qty</code></td><td>2.</td></tr></tbody></table>
+</article>
+<article class="schema-slide" aria-label="production_resource">
+<h4>10. <code>production_resource</code></h4>
+<p>Плановый расход материалов и времени по производственному заказу.</p>
+<p><b>Откуда берём:</b> Заказ на производство.xlsx: «Потребность в материалах» и «Технологические операции».</p>
+<table class="schema-lines"><thead><tr><th>Поле</th><th>Откуда значение и почему</th></tr></thead><tbody><tr><td><code>production_id</code></td><td>1, ссылка на заказ.</td></tr><tr><td><code>item_id</code></td><td>Код материала или операции.</td></tr><tr><td><code>qty</code></td><td>Плановое количество материала.</td></tr><tr><td><code>time_norm</code></td><td>Плановые часы операции.</td></tr></tbody></table>
+</article>
+<article class="schema-slide" aria-label="users">
+<h4>11. <code>users</code></h4>
+<p>Учётные записи приложения: логин, хеш пароля, роль и блокировка.</p>
+<p><b>Откуда берём:</b> Требования задания 4. В Excel и JSON этих данных нет.</p>
+<table class="schema-lines"><thead><tr><th>Поле</th><th>Откуда значение и почему</th></tr></thead><tbody><tr><td><code>id</code></td><td>AUTO_INCREMENT, сервер сам выдаёт номер.</td></tr><tr><td><code>login</code></td><td>Логин пользователя.</td></tr><tr><td><code>password_hash</code></td><td>Хеш пароля.</td></tr><tr><td><code>salt</code></td><td>Соль.</td></tr><tr><td><code>role</code></td><td>admin или user.</td></tr><tr><td><code>failed_attempts</code></td><td>Счётчик ошибок.</td></tr><tr><td><code>is_locked</code></td><td>Блокировка.</td></tr></tbody></table>
+</article>
+<article class="schema-slide" aria-label="notes">
+<h4>12. <code>notes</code></h4>
+<p>Заметки сотрудников. Автор хранится ссылкой на users.</p>
+<p><b>Откуда берём:</b> Заметки.json: пять записей.</p>
+<table class="schema-lines"><thead><tr><th>Поле</th><th>Откуда значение и почему</th></tr></thead><tbody><tr><td><code>id</code></td><td>AUTO_INCREMENT.</td></tr><tr><td><code>title</code></td><td>Поле title.</td></tr><tr><td><code>content</code></td><td>Поле content.</td></tr><tr><td><code>id_user</code></td><td>Пользователь по login: manager 2, technologist 3, master 4.</td></tr><tr><td><code>created_at</code></td><td>Поле created_date.</td></tr></tbody></table>
+</article>
+</div>
+</div>
+
+<p>Второй слайдер разбирает создание таблиц построчно. В конце каждого слайда есть полный скрипт для проверки.</p>
+
+<div class="schema-slider" data-slider>
+<div class="schema-slider-bar">
+<strong>Создание всех таблиц построчно: 12 слайдов</strong>
+<div class="schema-slider-actions">
+<button type="button" class="schema-btn" data-slider-prev aria-label="Предыдущий слайд">←</button>
+<span class="schema-slider-counter" data-slider-counter>1 / 12</span>
+<button type="button" class="schema-btn" data-slider-next aria-label="Следующий слайд">→</button>
+</div>
+</div>
+<div class="schema-track" data-slider-track>
+<article class="schema-slide" aria-label="counterparty">
+<h4>1. <code>counterparty</code></h4>
+<p>Кто участвует в системе: покупатели, поставщики и изготовители. Одна таблица вместо трёх справочников, роль хранится в поле party_type.</p>
+<table class="schema-lines"><thead><tr><th>Строка</th><th>Что означает и почему</th></tr></thead><tbody><tr><td><code>id VARCHAR(32) NOT NULL,</code></td><td>Код контрагента. В JSON это id, для изготовителя код назначается вручную. Ведущие нули сохраняются, поэтому тип VARCHAR.</td></tr><tr><td><code>name VARCHAR(255) NOT NULL,</code></td><td>Название из name JSON или из блока «Заказчик»/«Исполнитель» заказа.</td></tr><tr><td><code>inn VARCHAR(20) NOT NULL DEFAULT &#x27;&#x27;,</code></td><td>ИНН из inn. Если его нет, DEFAULT &#x27;&#x27; подставляет пустую строку.</td></tr><tr><td><code>address VARCHAR(500) NOT NULL,</code></td><td>Адрес из addres. В таблице поле называется address.</td></tr><tr><td><code>phone VARCHAR(64) NOT NULL,</code></td><td>Телефон из phone.</td></tr><tr><td><code>party_type VARCHAR(24) NOT NULL,</code></td><td>Тип из type: Покупатель, Поставщик или Изготовитель.</td></tr><tr><td><code>PRIMARY KEY (id),</code></td><td>Первичный ключ делает строку узнаваемой и запрещает пустое значение.</td></tr><tr><td><code>CONSTRAINT ck_party_type</code></td><td>Проверка разрешает только три роли контрагента.</td></tr><tr><td><code>CHECK (party_type IN (&#x27;Покупатель&#x27;, &#x27;Поставщик&#x27;, &#x27;Изготовитель&#x27;))</code></td><td>Список допустимых ролей: покупатель, поставщик, изготовитель.</td></tr></tbody></table>
+<p><b>Полный скрипт для проверки</b></p>
 <pre><code>CREATE TABLE counterparty (
   id VARCHAR(32) NOT NULL,
   name VARCHAR(255) NOT NULL,
@@ -459,7 +550,9 @@ CREATE TABLE counterparty (
 </article>
 <article class="schema-slide" aria-label="item">
 <h4>2. <code>item</code></h4>
-<p>Справочник продукции, материалов и операций. Поле kind показывает, что это за ресурс.</p>
+<p>Один справочник ресурсов: продукция, материалы и операции. Поле kind говорит, как ресурс участвует в расчёте.</p>
+<table class="schema-lines"><thead><tr><th>Строка</th><th>Что означает и почему</th></tr></thead><tbody><tr><td><code>id INT NOT NULL,</code></td><td>Внутренний номер ресурса. Назначаем по порядку: 1 продукция, затем материалы и операции.</td></tr><tr><td><code>code VARCHAR(64) DEFAULT NULL,</code></td><td>Код из документа: ФР-00000034 у стола, ФР-00000009 у столешницы и так далее. UNIQUE не даёт повторять код.</td></tr><tr><td><code>name VARCHAR(255) NOT NULL,</code></td><td>Название из заказа, спецификации или цен.</td></tr><tr><td><code>kind VARCHAR(16) NOT NULL,</code></td><td>product, material или operation. По этому полю запрос понимает, что считать.</td></tr><tr><td><code>unit VARCHAR(16) NOT NULL,</code></td><td>Единица из спецификации или цен: шт, тыс. шт, ч.</td></tr><tr><td><code>PRIMARY KEY (id),</code></td><td>Первичный ключ делает строку узнаваемой и запрещает пустое значение.</td></tr><tr><td><code>UNIQUE KEY uq_item_code (code),</code></td><td>Уникальный индекс не даёт двум строкам получить одинаковое значение.</td></tr><tr><td><code>CONSTRAINT ck_item_kind</code></td><td>Проверка разрешает только три вида ресурса.</td></tr><tr><td><code>CHECK (kind IN (&#x27;product&#x27;, &#x27;material&#x27;, &#x27;operation&#x27;))</code></td><td>Список допустимых видов: product, material, operation.</td></tr></tbody></table>
+<p><b>Полный скрипт для проверки</b></p>
 <pre><code>CREATE TABLE item (
   id INT NOT NULL,
   code VARCHAR(64) DEFAULT NULL,
@@ -474,20 +567,22 @@ CREATE TABLE counterparty (
 </article>
 <article class="schema-slide" aria-label="price">
 <h4>3. <code>price</code></h4>
-<p>История цен. Ключ из ресурса и даты не даёт двум ценам действовать с одной даты.</p>
+<p>История цен. Цена не хранится в item, потому что со временем меняется.</p>
+<table class="schema-lines"><thead><tr><th>Строка</th><th>Что означает и почему</th></tr></thead><tbody><tr><td><code>item_id INT NOT NULL,</code></td><td>Ссылка на ресурс в item.</td></tr><tr><td><code>valid_from DATE NOT NULL,</code></td><td>Дата начала действия цены.</td></tr><tr><td><code>amount DECIMAL(14,2) NOT NULL,</code></td><td>Цена из файла Цены.xlsx.</td></tr><tr><td><code>PRIMARY KEY (item_id, valid_from),</code></td><td>Первичный ключ делает строку узнаваемой и запрещает пустое значение.</td></tr><tr><td><code>CONSTRAINT ck_price_amount CHECK (amount &gt;= 0)</code></td><td>Цена не может быть отрицательной.</td></tr></tbody></table>
+<p><b>Полный скрипт для проверки</b></p>
 <pre><code>CREATE TABLE price (
   item_id INT NOT NULL,
   valid_from DATE NOT NULL,
   amount DECIMAL(14,2) NOT NULL,
   PRIMARY KEY (item_id, valid_from),
-  CONSTRAINT fk_price_item
-    FOREIGN KEY (item_id) REFERENCES item (id),
   CONSTRAINT ck_price_amount CHECK (amount &gt;= 0)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;</code></pre>
 </article>
 <article class="schema-slide" aria-label="specification">
 <h4>4. <code>specification</code></h4>
-<p>Шапка спецификации изделия. Поле output_qty показывает, на какое количество изделий даны нормы.</p>
+<p>Шапка спецификации: какое изделие и на какое количество выпуска описано.</p>
+<table class="schema-lines"><thead><tr><th>Строка</th><th>Что означает и почему</th></tr></thead><tbody><tr><td><code>id INT NOT NULL,</code></td><td>Номер спецификации.</td></tr><tr><td><code>product_id INT NOT NULL,</code></td><td>Ссылка на изделие в item.</td></tr><tr><td><code>name VARCHAR(255) NOT NULL,</code></td><td>Название изделия из шапки спецификации.</td></tr><tr><td><code>output_qty DECIMAL(14,3) NOT NULL,</code></td><td>На какое количество изделий даны нормы.</td></tr><tr><td><code>manufacturer_id VARCHAR(32) NOT NULL,</code></td><td>Код изготовителя из блока «Исполнитель».</td></tr><tr><td><code>PRIMARY KEY (id),</code></td><td>Первичный ключ делает строку узнаваемой и запрещает пустое значение.</td></tr><tr><td><code>UNIQUE KEY uq_spec_product (product_id),</code></td><td>Уникальный индекс не даёт двум строкам получить одинаковое значение.</td></tr><tr><td><code>KEY ix_spec_maker (manufacturer_id),</code></td><td>Обычный индекс ускоряет поиск по внешнему ключу.</td></tr><tr><td><code>CONSTRAINT ck_spec_output CHECK (output_qty &gt; 0)</code></td><td>Количество выпуска должно быть больше нуля.</td></tr></tbody></table>
+<p><b>Полный скрипт для проверки</b></p>
 <pre><code>CREATE TABLE specification (
   id INT NOT NULL,
   product_id INT NOT NULL,
@@ -497,16 +592,14 @@ CREATE TABLE counterparty (
   PRIMARY KEY (id),
   UNIQUE KEY uq_spec_product (product_id),
   KEY ix_spec_maker (manufacturer_id),
-  CONSTRAINT fk_spec_product
-    FOREIGN KEY (product_id) REFERENCES item (id),
-  CONSTRAINT fk_spec_maker
-    FOREIGN KEY (manufacturer_id) REFERENCES counterparty (id),
   CONSTRAINT ck_spec_output CHECK (output_qty &gt; 0)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;</code></pre>
 </article>
 <article class="schema-slide" aria-label="specification_component">
 <h4>5. <code>specification_component</code></h4>
-<p>Нормы материалов и время операций. Для материала заполнено qty, для операции time_norm.</p>
+<p>Строки состава: сколько материала нужно на единицу и сколько часов занимает операция.</p>
+<table class="schema-lines"><thead><tr><th>Строка</th><th>Что означает и почему</th></tr></thead><tbody><tr><td><code>specification_id INT NOT NULL,</code></td><td>Ссылка на шапку спецификации.</td></tr><tr><td><code>item_id INT NOT NULL,</code></td><td>Ссылка на материал или операцию в item.</td></tr><tr><td><code>qty DECIMAL(14,3) NOT NULL,</code></td><td>Норма расхода материала. Для операции ставим 0.</td></tr><tr><td><code>time_norm DECIMAL(14,3) NOT NULL,</code></td><td>Часы операции. Для материала ставим 0.</td></tr><tr><td><code>PRIMARY KEY (specification_id, item_id),</code></td><td>Первичный ключ делает строку узнаваемой и запрещает пустое значение.</td></tr><tr><td><code>KEY ix_comp_item (item_id),</code></td><td>Обычный индекс ускоряет поиск по внешнему ключу.</td></tr><tr><td><code>CONSTRAINT ck_comp_qty CHECK (qty &gt;= 0),</code></td><td>Норма расхода не может быть отрицательной.</td></tr><tr><td><code>CONSTRAINT ck_comp_time CHECK (time_norm &gt;= 0)</code></td><td>Время операции не может быть отрицательным.</td></tr></tbody></table>
+<p><b>Полный скрипт для проверки</b></p>
 <pre><code>CREATE TABLE specification_component (
   specification_id INT NOT NULL,
   item_id INT NOT NULL,
@@ -514,10 +607,6 @@ CREATE TABLE counterparty (
   time_norm DECIMAL(14,3) NOT NULL,
   PRIMARY KEY (specification_id, item_id),
   KEY ix_comp_item (item_id),
-  CONSTRAINT fk_comp_spec
-    FOREIGN KEY (specification_id) REFERENCES specification (id),
-  CONSTRAINT fk_comp_item
-    FOREIGN KEY (item_id) REFERENCES item (id),
   CONSTRAINT ck_comp_qty CHECK (qty &gt;= 0),
   CONSTRAINT ck_comp_time CHECK (time_norm &gt;= 0)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;</code></pre>
@@ -525,6 +614,8 @@ CREATE TABLE counterparty (
 <article class="schema-slide" aria-label="customer_order">
 <h4>6. <code>customer_order</code></h4>
 <p>Шапка заказа покупателя: номер, дата, заказчик и исполнитель.</p>
+<table class="schema-lines"><thead><tr><th>Строка</th><th>Что означает и почему</th></tr></thead><tbody><tr><td><code>id INT NOT NULL,</code></td><td>Внутренний номер заказа.</td></tr><tr><td><code>doc_no VARCHAR(64) NOT NULL,</code></td><td>Номер документа из шапки заказа.</td></tr><tr><td><code>doc_date DATE NOT NULL,</code></td><td>Дата заказа из шапки Excel.</td></tr><tr><td><code>customer_id VARCHAR(32) NOT NULL,</code></td><td>Код заказчика из блока «Заказчик».</td></tr><tr><td><code>executor_id VARCHAR(32) NOT NULL,</code></td><td>Код изготовителя из блока «Исполнитель».</td></tr><tr><td><code>PRIMARY KEY (id),</code></td><td>Первичный ключ делает строку узнаваемой и запрещает пустое значение.</td></tr><tr><td><code>UNIQUE KEY uq_order_doc (doc_no),</code></td><td>Уникальный индекс не даёт двум строкам получить одинаковое значение.</td></tr><tr><td><code>KEY ix_order_customer (customer_id),</code></td><td>Обычный индекс ускоряет поиск по внешнему ключу.</td></tr><tr><td><code>KEY ix_order_executor (executor_id)</code></td><td>Обычный индекс ускоряет поиск по внешнему ключу.</td></tr></tbody></table>
+<p><b>Полный скрипт для проверки</b></p>
 <pre><code>CREATE TABLE customer_order (
   id INT NOT NULL,
   doc_no VARCHAR(64) NOT NULL,
@@ -534,16 +625,14 @@ CREATE TABLE counterparty (
   PRIMARY KEY (id),
   UNIQUE KEY uq_order_doc (doc_no),
   KEY ix_order_customer (customer_id),
-  KEY ix_order_executor (executor_id),
-  CONSTRAINT fk_order_customer
-    FOREIGN KEY (customer_id) REFERENCES counterparty (id),
-  CONSTRAINT fk_order_executor
-    FOREIGN KEY (executor_id) REFERENCES counterparty (id)
+  KEY ix_order_executor (executor_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;</code></pre>
 </article>
 <article class="schema-slide" aria-label="customer_order_line">
 <h4>7. <code>customer_order_line</code></h4>
-<p>Строки заказа: изделие, количество, продажная цена и скидка.</p>
+<p>Строки заказа: какое изделие, сколько, по какой продажной цене и со скидкой.</p>
+<table class="schema-lines"><thead><tr><th>Строка</th><th>Что означает и почему</th></tr></thead><tbody><tr><td><code>id INT NOT NULL,</code></td><td>Номер строки заказа.</td></tr><tr><td><code>order_id INT NOT NULL,</code></td><td>Ссылка на шапку customer_order.</td></tr><tr><td><code>product_id INT NOT NULL,</code></td><td>Ссылка на изделие в item.</td></tr><tr><td><code>qty INT NOT NULL,</code></td><td>Количество изделий из строки продукции.</td></tr><tr><td><code>sale_price DECIMAL(14,2) NOT NULL,</code></td><td>Продажная цена из строки продукции.</td></tr><tr><td><code>discount DECIMAL(14,2) NOT NULL DEFAULT 0.00,</code></td><td>Скидка из строки продукции. Если скидки нет, 0.</td></tr><tr><td><code>PRIMARY KEY (id),</code></td><td>Первичный ключ делает строку узнаваемой и запрещает пустое значение.</td></tr><tr><td><code>KEY ix_line_order (order_id),</code></td><td>Обычный индекс ускоряет поиск по внешнему ключу.</td></tr><tr><td><code>KEY ix_line_product (product_id),</code></td><td>Обычный индекс ускоряет поиск по внешнему ключу.</td></tr><tr><td><code>CONSTRAINT ck_line_qty CHECK (qty &gt; 0),</code></td><td>Количество в заказе больше нуля.</td></tr><tr><td><code>CONSTRAINT ck_line_price CHECK (sale_price &gt;= 0),</code></td><td>Продажная цена не может быть отрицательной.</td></tr><tr><td><code>CONSTRAINT ck_line_discount CHECK (discount &gt;= 0)</code></td><td>Скидка не может быть отрицательной.</td></tr></tbody></table>
+<p><b>Полный скрипт для проверки</b></p>
 <pre><code>CREATE TABLE customer_order_line (
   id INT NOT NULL,
   order_id INT NOT NULL,
@@ -554,10 +643,6 @@ CREATE TABLE counterparty (
   PRIMARY KEY (id),
   KEY ix_line_order (order_id),
   KEY ix_line_product (product_id),
-  CONSTRAINT fk_line_order
-    FOREIGN KEY (order_id) REFERENCES customer_order (id),
-  CONSTRAINT fk_line_product
-    FOREIGN KEY (product_id) REFERENCES item (id),
   CONSTRAINT ck_line_qty CHECK (qty &gt; 0),
   CONSTRAINT ck_line_price CHECK (sale_price &gt;= 0),
   CONSTRAINT ck_line_discount CHECK (discount &gt;= 0)
@@ -565,7 +650,9 @@ CREATE TABLE counterparty (
 </article>
 <article class="schema-slide" aria-label="production_order">
 <h4>8. <code>production_order</code></h4>
-<p>Шапка производственного заказа: номер, дата документа, дата запуска и подразделение.</p>
+<p>Шапка производственного заказа: номер, дата, дата запуска и подразделение.</p>
+<table class="schema-lines"><thead><tr><th>Строка</th><th>Что означает и почему</th></tr></thead><tbody><tr><td><code>id INT NOT NULL,</code></td><td>Внутренний номер производственного заказа.</td></tr><tr><td><code>doc_no VARCHAR(64) NOT NULL,</code></td><td>Номер производственного заказа.</td></tr><tr><td><code>doc_date DATE NOT NULL,</code></td><td>Дата создания. Берём дату заказа покупателя.</td></tr><tr><td><code>launch_date DATE NOT NULL,</code></td><td>Дата запуска из шапки производственного заказа.</td></tr><tr><td><code>department VARCHAR(128) NOT NULL,</code></td><td>Подразделение из шапки.</td></tr><tr><td><code>PRIMARY KEY (id),</code></td><td>Первичный ключ делает строку узнаваемой и запрещает пустое значение.</td></tr><tr><td><code>UNIQUE KEY uq_prod_doc (doc_no)</code></td><td>Уникальный индекс не даёт двум строкам получить одинаковое значение.</td></tr></tbody></table>
+<p><b>Полный скрипт для проверки</b></p>
 <pre><code>CREATE TABLE production_order (
   id INT NOT NULL,
   doc_no VARCHAR(64) NOT NULL,
@@ -578,23 +665,23 @@ CREATE TABLE counterparty (
 </article>
 <article class="schema-slide" aria-label="production_product">
 <h4>9. <code>production_product</code></h4>
-<p>Продукция к выпуску по производственному заказу.</p>
+<p>Что выпускаем по производственному заказу и в каком количестве.</p>
+<table class="schema-lines"><thead><tr><th>Строка</th><th>Что означает и почему</th></tr></thead><tbody><tr><td><code>production_id INT NOT NULL,</code></td><td>Ссылка на производственный заказ.</td></tr><tr><td><code>product_id INT NOT NULL,</code></td><td>Ссылка на изделие в item.</td></tr><tr><td><code>qty INT NOT NULL,</code></td><td>Количество к выпуску из строки «Продукция к выпуску».</td></tr><tr><td><code>PRIMARY KEY (production_id, product_id),</code></td><td>Первичный ключ делает строку узнаваемой и запрещает пустое значение.</td></tr><tr><td><code>KEY ix_prod_product (product_id),</code></td><td>Обычный индекс ускоряет поиск по внешнему ключу.</td></tr><tr><td><code>CONSTRAINT ck_pp_qty CHECK (qty &gt; 0)</code></td><td>Количество к выпуску больше нуля.</td></tr></tbody></table>
+<p><b>Полный скрипт для проверки</b></p>
 <pre><code>CREATE TABLE production_product (
   production_id INT NOT NULL,
   product_id INT NOT NULL,
   qty INT NOT NULL,
   PRIMARY KEY (production_id, product_id),
   KEY ix_prod_product (product_id),
-  CONSTRAINT fk_pp_order
-    FOREIGN KEY (production_id) REFERENCES production_order (id),
-  CONSTRAINT fk_pp_item
-    FOREIGN KEY (product_id) REFERENCES item (id),
   CONSTRAINT ck_pp_qty CHECK (qty &gt; 0)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;</code></pre>
 </article>
 <article class="schema-slide" aria-label="production_resource">
 <h4>10. <code>production_resource</code></h4>
 <p>Плановый расход материалов и времени по производственному заказу.</p>
+<table class="schema-lines"><thead><tr><th>Строка</th><th>Что означает и почему</th></tr></thead><tbody><tr><td><code>production_id INT NOT NULL,</code></td><td>Ссылка на производственный заказ.</td></tr><tr><td><code>item_id INT NOT NULL,</code></td><td>Ссылка на материал или операцию.</td></tr><tr><td><code>qty DECIMAL(14,3) NOT NULL,</code></td><td>Плановое количество материала. Для операции 0.</td></tr><tr><td><code>time_norm DECIMAL(14,3) NOT NULL,</code></td><td>Плановые часы операции. Для материала 0.</td></tr><tr><td><code>PRIMARY KEY (production_id, item_id),</code></td><td>Первичный ключ делает строку узнаваемой и запрещает пустое значение.</td></tr><tr><td><code>KEY ix_prod_resource (item_id),</code></td><td>Обычный индекс ускоряет поиск по внешнему ключу.</td></tr><tr><td><code>CONSTRAINT ck_pr_qty CHECK (qty &gt;= 0),</code></td><td>Плановое количество не может быть отрицательным.</td></tr><tr><td><code>CONSTRAINT ck_pr_time CHECK (time_norm &gt;= 0)</code></td><td>Плановое время не может быть отрицательным.</td></tr></tbody></table>
+<p><b>Полный скрипт для проверки</b></p>
 <pre><code>CREATE TABLE production_resource (
   production_id INT NOT NULL,
   item_id INT NOT NULL,
@@ -602,17 +689,15 @@ CREATE TABLE counterparty (
   time_norm DECIMAL(14,3) NOT NULL,
   PRIMARY KEY (production_id, item_id),
   KEY ix_prod_resource (item_id),
-  CONSTRAINT fk_pr_order
-    FOREIGN KEY (production_id) REFERENCES production_order (id),
-  CONSTRAINT fk_pr_item
-    FOREIGN KEY (item_id) REFERENCES item (id),
   CONSTRAINT ck_pr_qty CHECK (qty &gt;= 0),
   CONSTRAINT ck_pr_time CHECK (time_norm &gt;= 0)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;</code></pre>
 </article>
 <article class="schema-slide" aria-label="users">
 <h4>11. <code>users</code></h4>
-<p>Учётные записи приложения. Пароль хранится не открытым текстом, а хешем с солью.</p>
+<p>Учётные записи приложения: логин, хеш пароля, роль и блокировка.</p>
+<table class="schema-lines"><thead><tr><th>Строка</th><th>Что означает и почему</th></tr></thead><tbody><tr><td><code>id INT NOT NULL AUTO_INCREMENT,</code></td><td>Номер пользователя, AUTO_INCREMENT заполняет сервер.</td></tr><tr><td><code>login VARCHAR(64) NOT NULL,</code></td><td>Логин для входа. UNIQUE запрещает дубли.</td></tr><tr><td><code>password_hash VARCHAR(64) NOT NULL,</code></td><td>Хеш пароля, а не сам пароль.</td></tr><tr><td><code>salt VARCHAR(32) NOT NULL,</code></td><td>Соль для хеширования.</td></tr><tr><td><code>role ENUM(&#x27;admin&#x27;, &#x27;user&#x27;) NOT NULL DEFAULT &#x27;user&#x27;,</code></td><td>admin или user. ENUM не даёт записать другую роль.</td></tr><tr><td><code>failed_attempts INT NOT NULL DEFAULT 0,</code></td><td>Счётчик подряд ошибок входа.</td></tr><tr><td><code>is_locked TINYINT(1) NOT NULL DEFAULT 0,</code></td><td>Признак блокировки после третьей ошибки.</td></tr><tr><td><code>PRIMARY KEY (id),</code></td><td>Первичный ключ делает строку узнаваемой и запрещает пустое значение.</td></tr><tr><td><code>UNIQUE KEY uq_users_login (login)</code></td><td>Уникальный индекс не даёт двум строкам получить одинаковое значение.</td></tr></tbody></table>
+<p><b>Полный скрипт для проверки</b></p>
 <pre><code>CREATE TABLE users (
   id INT NOT NULL AUTO_INCREMENT,
   login VARCHAR(64) NOT NULL,
@@ -627,7 +712,9 @@ CREATE TABLE counterparty (
 </article>
 <article class="schema-slide" aria-label="notes">
 <h4>12. <code>notes</code></h4>
-<p>Заметки сотрудников. Внешний ключ связывает заметку с автором.</p>
+<p>Заметки сотрудников. Автор хранится ссылкой на users.</p>
+<table class="schema-lines"><thead><tr><th>Строка</th><th>Что означает и почему</th></tr></thead><tbody><tr><td><code>id INT NOT NULL AUTO_INCREMENT,</code></td><td>Номер заметки, AUTO_INCREMENT.</td></tr><tr><td><code>title VARCHAR(255) NOT NULL,</code></td><td>Заголовок заметки.</td></tr><tr><td><code>content TEXT NOT NULL,</code></td><td>Текст заметки.</td></tr><tr><td><code>id_user INT NOT NULL,</code></td><td>Ссылка на автора в users.</td></tr><tr><td><code>created_at DATE NOT NULL,</code></td><td>Дата создания заметки.</td></tr><tr><td><code>PRIMARY KEY (id),</code></td><td>Первичный ключ делает строку узнаваемой и запрещает пустое значение.</td></tr><tr><td><code>KEY ix_notes_user (id_user)</code></td><td>Обычный индекс ускоряет поиск по внешнему ключу.</td></tr></tbody></table>
+<p><b>Полный скрипт для проверки</b></p>
 <pre><code>CREATE TABLE notes (
   id INT NOT NULL AUTO_INCREMENT,
   title VARCHAR(255) NOT NULL,
@@ -635,9 +722,7 @@ CREATE TABLE counterparty (
   id_user INT NOT NULL,
   created_at DATE NOT NULL,
   PRIMARY KEY (id),
-  KEY ix_notes_user (id_user),
-  CONSTRAINT fk_notes_user
-    FOREIGN KEY (id_user) REFERENCES users (id)
+  KEY ix_notes_user (id_user)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;</code></pre>
 </article>
 </div>
@@ -679,7 +764,7 @@ ALTER TABLE customer_order
 
 `ADD CONSTRAINT` добавляет правило с именем. Имя помогает понять, какое ограничение нарушено.
 
-Ниже все четырнадцать связей модели. Если таблицы уже созданы с `FOREIGN KEY` внутри `CREATE TABLE`, повторно эти команды не выполняйте. Если создавали таблицы без внешних ключей, выполняйте команды по одной.
+Таблицы созданы без внешних ключей. Ниже все четырнадцать связей: выполняйте команды по одной после создания таблиц. Слайдер идёт в порядке зависимостей.
 
 <div class="schema-slider" data-slider>
 <div class="schema-slider-bar">
@@ -806,7 +891,40 @@ ALTER TABLE customer_order
 </div>
 </div>
 
-### Шаг 5. Вставьте данные запросами
+### Откуда берутся значения для INSERT
+
+Перед вставкой сопоставьте поля файлов и таблиц. Значения не придумываются: каждое берётся из конкретного столбца исходного документа. Для каждой группы сначала показано, из какой ячейки берётся значение, затем код, затем источник и результат.
+
+| Файл | Что берём | Таблица |
+|---|---|---|
+| `Заказчики.json` | `id`, `name`, `inn`, `addres`, `phone`, `type` | `counterparty` |
+| `Заказ покупателя.xlsx` | номер, дата, срок, код заказчика, изделие, количество, цена, скидка | `customer_order`, `customer_order_line` |
+| `Спецификация.xlsx` | материал, операция, единица, норма, часы | `item`, `specification`, `specification_component` |
+| `Цены.xlsx` | ресурс, цена | `price` |
+| `Заказ на производство.xlsx` | заказ, дата запуска, изделие, плановый расход | `production_order`, `production_product`, `production_resource` |
+| `Заметки.json` | заголовок, логин, текст, дата | `notes` |
+
+В документах номера записаны как «№ 1». В базе к ним добавляется префикс варианта: заказ покупателя становится `V01-01`, производственный заказ `V01-P-01`.
+
+### Шаг 5. Загрузите заказчиков из JSON
+
+Сначала разберите одну запись JSON по полям.
+
+| Поле таблицы | Откуда значение | Почему |
+|---|---|---|
+| `id` | `id` из JSON | код хранится текстом, ведущие нули не теряются |
+| `name` | `name` из JSON | название организации |
+| `inn` | `inn` из JSON | пустая строка, если ИНН нет |
+| `address` | `addres` из JSON | в таблице поле переименовано |
+| `phone` | `phone` из JSON | контакт |
+| `party_type` | `type` из JSON | роль контрагента |
+
+<figure class="diagram">
+<img src="reports/screens/mysql/json-source.png" alt="Файл Заказчики.json: коды, названия и адреса">
+<figcaption>Источник: JSON с полями `id`, `name`, `inn`, `addres`, `phone`, `type`. Код хранится строкой.</figcaption>
+</figure>
+
+Перед вставкой откройте шпаргалку.
 
 <details class="hint">
 <summary>Шпаргалка: INSERT</summary>
@@ -816,11 +934,11 @@ INSERT INTO имя_таблицы (поле1, поле2, поле3)
 VALUES (значение1, значение2, значение3);
 ```
 
-`INSERT INTO` выбирает таблицу. В скобках перечислены поля в порядке значений. `VALUES` начинает список. Текст и даты в кавычках, числа без кавычек. Строки разделяют запятыми, после последней запятой нет.
+`INSERT INTO` выбирает таблицу. В скобках перечислены поля в том порядке, в котором пойдут значения. `VALUES` начинает список значений. Текст и даты пишут в кавычках, числа без кавычек. Несколько строк разделяют запятыми, после последней строки запятая не ставится.
 
 </details>
 
-Сначала заказчики из JSON:
+Вставьте все строки одним запросом:
 
 ```sql
 INSERT INTO counterparty (id, name, inn, address, phone, party_type) VALUES
@@ -832,7 +950,7 @@ INSERT INTO counterparty (id, name, inn, address, phone, party_type) VALUES
 ('000000010', 'ООО "Ассоль"', '2629011278', 'г. Калуга, ул. Пушкина, 94', '+79184572398', 'Покупатель');
 ```
 
-ИП Томилин из заказа и изготовитель добавляются отдельно:
+В заказе указан ИП Томилин, а среди шести записей JSON его нет. Добавьте его отдельной строкой. Изготовитель тоже добавляется отдельно: в заказе он указан в блоке «Исполнитель».
 
 ```sql
 INSERT INTO counterparty (id, name, inn, address, phone, party_type) VALUES
@@ -841,52 +959,28 @@ INSERT INTO counterparty (id, name, inn, address, phone, party_type) VALUES
 ```
 
 <figure class="diagram">
-<img src="reports/screens/mysql/t2-customers.png" alt="Таблица counterparty после вставки: заказчики и изготовитель">
-<figcaption>Результат вставки: шесть записей JSON, ИП Томилин и изготовитель. Коды сохранили ведущие нули.</figcaption>
+<img src="reports/screens/mysql/t2-insert-sql.png" alt="Вставка заказчиков запросом INSERT в phpMyAdmin">
+<figcaption>Код в phpMyAdmin: список полей и значения в том же порядке. Текстовые значения в кавычках.</figcaption>
 </figure>
 
-### Шаг 6. Загрузите заказ, спецификацию и цены
+<figure class="diagram">
+<img src="reports/screens/mysql/t2-customers.png" alt="Таблица counterparty после загрузки: восемь контрагентов">
+<figcaption>Результат: шесть записей JSON, ИП Томилин и изготовитель. Коды сохранили ведущие нули, `addres` стало `address`, `type` стало `party_type`.</figcaption>
+</figure>
 
-Перед вставкой сопоставьте файлы и таблицы.
+### Шаг 6. Загрузите изделия, цены, спецификацию, заказ и производство
 
-| Файл | Поля | Таблица |
+#### Изделия и ресурсы
+
+Сначала создайте строки в `item`. Одна таблица хранит и изделие, и материалы, и операции, а различает их поле `kind`.
+
+| Поле | Откуда значение | Почему |
 |---|---|---|
-| `Заказ покупателя.xlsx` | номер, дата, срок, код заказчика, изделие, количество, цена, скидка | `customer_order`, `customer_order_line` |
-| `Спецификация.xlsx` | материал, операция, единица, норма, часы | `item`, `specification`, `specification_component` |
-| `Цены.xlsx` | ресурс, цена | `price` |
-| `Заказ на производство.xlsx` | заказ, дата запуска, изделие, расход | `production_order`, `production_product`, `production_resource` |
-
-<figure class="diagram">
-<img src="reports/screens/prep/V01_order_xlsx.png" alt="Заказ покупателя: шапка и строка продукции">
-<figcaption>Заказ покупателя: номер, дата, срок, код заказчика, изделие, количество, цена и скидка.</figcaption>
-</figure>
-
-<figure class="diagram">
-<img src="reports/screens/mysql/t2-order.png" alt="Шапка заказа V01-01 в таблице customer_order">
-<figcaption>Результат: шапка заказа в `customer_order`.</figcaption>
-</figure>
-
-<figure class="diagram">
-<img src="reports/screens/prep/V01_spec_xlsx.png" alt="Спецификация: материалы, операции и нормы">
-<figcaption>Спецификация: строки материалов и операций с нормами и часами.</figcaption>
-</figure>
-
-<figure class="diagram">
-<img src="reports/screens/mysql/t2-spec.png" alt="Состав спецификации в таблице specification_component">
-<figcaption>Результат: состав в `specification_component`.</figcaption>
-</figure>
-
-<figure class="diagram">
-<img src="reports/screens/prep/V01_prices_xlsx.png" alt="Цены: ресурс и цена">
-<figcaption>Цены: ресурс и цена. Дата начала действия задана условием варианта.</figcaption>
-</figure>
-
-<figure class="diagram">
-<img src="reports/screens/mysql/t2-price-table.png" alt="Таблица price после вставки цен">
-<figcaption>Результат: цены в `price`, дата записана как `2026-04-01`.</figcaption>
-</figure>
-
-Данные из Excel вставляются тем же запросом `INSERT`. Сначала создайте изделие и ресурсы в `item`, затем цены, спецификацию, состав, заказ и строку заказа. Порядок важен: строка заказа ссылается на заказ и изделие, цена ссылается на ресурс.
+| `id` | назначается по порядку | 1 изделие, 2-6 материалы и операции |
+| `code` | код из заказа и производственного заказа | код нужен для связи с документами |
+| `name` | название из заказа, спецификации или цен | одинаковое имя во всех файлах |
+| `kind` | по разделу файла | `product`, `material` или `operation` |
+| `unit` | единица из спецификации или цен | шт, тыс. шт, ч |
 
 ```sql
 INSERT INTO item (id, code, name, kind, unit) VALUES
@@ -899,7 +993,27 @@ INSERT INTO item (id, code, name, kind, unit) VALUES
 (7, 'ФР-00000053', 'Сборка модулей', 'operation', 'ч'),
 (8, 'ФР-00000052', 'Распил ДСП, МДФ и листового материала', 'operation', 'ч'),
 (9, 'ФР-00000494', 'Упаковка', 'operation', 'ч');
+```
 
+<figure class="diagram">
+<img src="reports/screens/prep/V01_order_xlsx.png" alt="Заказ покупателя: изделие, код, количество и цена">
+<figcaption>Из заказа берём изделие, код и количество. Название изделия становится строкой `product` в `item`.</figcaption>
+</figure>
+
+<figure class="diagram">
+<img src="reports/screens/prep/V01_spec_xlsx.png" alt="Спецификация: материалы, операции и нормы">
+<figcaption>Из спецификации берём названия материалов и операций, единицы и нормы. Каждая строка станет отдельным ресурсом в `item`.</figcaption>
+</figure>
+
+#### Цены
+
+| Поле | Откуда значение | Почему |
+|---|---|---|
+| `item_id` | код ресурса из `item` | цена ссылается на ресурс, а не на название |
+| `valid_from` | `2026-04-01` | дата начала действия задана условием варианта |
+| `amount` | столбец «Цена» в `Цены.xlsx` | цена за единицу ресурса |
+
+```sql
 INSERT INTO price (item_id, valid_from, amount) VALUES
 (2, '2026-04-01', 3250.00),
 (3, '2026-04-01', 95.00),
@@ -909,7 +1023,31 @@ INSERT INTO price (item_id, valid_from, amount) VALUES
 (7, '2026-04-01', 1400.00),
 (8, '2026-04-01', 450.00),
 (9, '2026-04-01', 950.00);
+```
 
+<figure class="diagram">
+<img src="reports/screens/prep/V01_prices_xlsx.png" alt="Цены: ресурс и цена">
+<figcaption>Источник цен: название ресурса и цена. Дата `2026-04-01` задана условием варианта.</figcaption>
+</figure>
+
+<figure class="diagram">
+<img src="reports/screens/mysql/t2-price-table.png" alt="Таблица price после вставки цен">
+<figcaption>Результат: цены в `price`. У каждого ресурса своя строка и дата начала действия.</figcaption>
+</figure>
+
+#### Спецификация и состав
+
+| Поле | Откуда значение | Почему |
+|---|---|---|
+| `specification.id` | 1 | в варианте одна спецификация |
+| `specification.product_id` | 1 | ссылка на изделие |
+| `specification.name` | шапка «Изделие» | название изделия |
+| `specification.output_qty` | 1 | нормы даны на одну единицу |
+| `specification.manufacturer_id` | `M-001` | изготовитель из шапки |
+| `specification_component.qty` | «Норма расхода» | норма материала |
+| `specification_component.time_norm` | «Норма времени» | часы операции |
+
+```sql
 INSERT INTO specification (id, product_id, name, output_qty, manufacturer_id)
 VALUES (1, 1, 'Стол кухонный "Самобранка"', 1.000, 'M-001');
 
@@ -922,7 +1060,29 @@ INSERT INTO specification_component (specification_id, item_id, qty, time_norm) 
 (1, 7, 0.000, 0.750),
 (1, 8, 0.000, 1.500),
 (1, 9, 0.000, 0.500);
+```
 
+Для материалов `qty` это норма на единицу, `time_norm` равно нулю. Для операций `qty` равно нулю, `time_norm` хранит часы. Такая запись позволяет выбрать нужное поле через `CASE` в задании 3.
+
+<figure class="diagram">
+<img src="reports/screens/mysql/t2-spec.png" alt="Состав спецификации V01: материалы и операции с нормами">
+<figcaption>Результат: восемь строк состава. У материалов заполнена норма, у операций время.</figcaption>
+</figure>
+
+#### Заказ и строка заказа
+
+| Поле | Откуда значение | Почему |
+|---|---|---|
+| `customer_order.doc_no` | номер заказа | `V01-01` |
+| `customer_order.doc_date` | дата заказа | `22.04.2026` |
+| `customer_order.customer_id` | код ИП Томилина | `000000004` |
+| `customer_order.executor_id` | код изготовителя | `M-001` |
+| `customer_order_line.product_id` | изделие | `1` |
+| `customer_order_line.qty` | «Кол-во» | 2 |
+| `customer_order_line.sale_price` | «Цена» | 14 120,00 |
+| `customer_order_line.discount` | «Скидка» | 1 412,00 |
+
+```sql
 INSERT INTO customer_order (id, doc_no, doc_date, customer_id, executor_id)
 VALUES (1, 'V01-01', '2026-04-22', '000000004', 'M-001');
 
@@ -930,7 +1090,32 @@ INSERT INTO customer_order_line (id, order_id, product_id, qty, sale_price, disc
 VALUES (1, 1, 1, 2, 14120.00, 1412.00);
 ```
 
-Производственный заказ:
+<figure class="diagram">
+<img src="reports/screens/prep/V01_order_xlsx.png" alt="Заказ покупателя: шапка и строка продукции">
+<figcaption>Источник: номер, дата, заказчик, изделие, количество, цена и скидка. Из шапки получается `customer_order`, из строки продукции `customer_order_line`.</figcaption>
+</figure>
+
+<figure class="diagram">
+<img src="reports/screens/mysql/t2-order.png" alt="Заказ V01-01 в phpMyAdmin: номер, дата, заказчик и исполнитель">
+<figcaption>Результат: шапка заказа V01-01. Дата 22.04.2026, заказчик 000000004, исполнитель M-001.</figcaption>
+</figure>
+
+<figure class="diagram">
+<img src="reports/screens/mysql/t2-lines-table.png" alt="Строка заказа в таблице customer_order_line">
+<figcaption>Результат: строка заказа. Количество 2, цена 14 120,00, скидка 1 412,00.</figcaption>
+</figure>
+
+#### Производственный заказ
+
+| Поле | Откуда значение | Почему |
+|---|---|---|
+| `production_order.doc_no` | номер производственного заказа | `V01-P-01` |
+| `production_order.doc_date` | дата заказа покупателя | `22.04.2026` |
+| `production_order.launch_date` | «Дата запуска» | `23.04.2026` |
+| `production_order.department` | «Подразделение» | основное производство |
+| `production_product.qty` | «Продукция к выпуску» | 2 |
+| `production_resource.qty` | «Потребность в материалах» | плановый расход |
+| `production_resource.time_norm` | «Технологические операции» | плановые часы |
 
 ```sql
 INSERT INTO production_order (id, doc_no, doc_date, launch_date, department)
@@ -950,7 +1135,48 @@ INSERT INTO production_resource (production_id, item_id, qty, time_norm) VALUES
 (1, 9, 0.000, 2.000);
 ```
 
-### Шаг 7. Сделайте выгрузку и восстановите её
+<figure class="diagram">
+<img src="reports/screens/prep/V01_production_xlsx.png" alt="Заказ на производство V01: продукция, материалы и операции">
+<figcaption>Источник: изделие, потребность в материалах и технологические операции. Каждая строка становится строкой `production_resource`.</figcaption>
+</figure>
+
+<figure class="diagram">
+<img src="reports/screens/mysql/t2-production.png" alt="Шапка производственного заказа в таблице production_order">
+<figcaption>Результат: производственный заказ V01-P-01. Дата запуска и подразделение перенесены из Excel.</figcaption>
+</figure>
+
+<figure class="diagram">
+<img src="reports/screens/mysql/t2-production-product.png" alt="Продукция к выпуску в таблице production_product">
+<figcaption>Результат: в заказе две единицы изделия. Количество взято из строки «Продукция, работа».</figcaption>
+</figure>
+
+<figure class="diagram">
+<img src="reports/screens/mysql/t2-production-resource.png" alt="Плановый расход ресурсов в таблице production_resource">
+<figcaption>Результат: восемь строк планового расхода. Материалы и операции хранятся в одной таблице.</figcaption>
+</figure>
+
+### Шаг 7. Проверьте данные и ограничения
+
+```sql
+SELECT COUNT(*) AS customers FROM counterparty;
+SELECT COUNT(*) AS items FROM item;
+SELECT COUNT(*) AS components FROM specification_component;
+SELECT COUNT(*) AS orders FROM customer_order;
+SELECT COUNT(*) AS production_rows FROM production_resource;
+```
+
+Ожидается восемь контрагентов, девять ресурсов, восемь строк состава, один заказ и восемь строк производственного расхода.
+
+Попробуйте вставить заказ с несуществующим заказчиком:
+
+```sql
+INSERT INTO customer_order (id, doc_no, doc_date, customer_id, executor_id)
+VALUES (99, 'TEST-1', '2026-04-25', 'NO-SUCH', 'M-001');
+```
+
+Сервер должен ответить ошибкой 1452. Это доказывает, что внешний ключ работает.
+
+### Шаг 8. Сделайте выгрузку и восстановите её
 
 Откройте базу `dkip2027_course`, вкладку `Экспорт`, выберите `Быстрый` и `SQL`. Сохраните файл как `dkip2027-mysql.sql`. Затем создайте пустую базу `dkip2027_restore`, откройте `Импорт`, выберите файл и загрузите его. Если таблицы и строки появились снова, выгрузка рабочая.
 
@@ -1099,7 +1325,8 @@ ORDER BY i.kind, i.id;
 |---|---|
 | `V01_ER.drawio` | двенадцать таблиц, поля, первичные и внешние ключи |
 | `V01_ER.pdf` | статичная диаграмма на одном листе |
-| `V01_schema.sql` | двенадцать таблиц, `PRIMARY KEY`, `FOREIGN KEY`, `CHECK` |
+| `V01_schema.sql` | двенадцать таблиц, `PRIMARY KEY` и `CHECK`, без внешних ключей |
+| `V01_fk.sql` | четырнадцать связей через `ALTER TABLE` |
 | `V01_import.sql` | заказчики, ресурсы, спецификация, цены и производственный заказ |
 | `V01_cost.sql` | запрос стоимости и результат `14374.28` |
 
