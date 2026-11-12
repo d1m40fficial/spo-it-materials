@@ -42,7 +42,7 @@ outcomes:
 
 ### Что требуется
 
-Нарисовать ER-диаграмму предприятия по документам варианта и сохранить её в PDF. На диаграмме должны быть таблицы, поля, первичные и внешние ключи, связи и кратность. Модель приводится к третьей нормальной форме.
+Нарисовать ER-диаграмму предприятия по документам варианта и сохранить её в PDF. На диаграмме должны быть таблицы, поля, первичные и внешние ключи и связи с кратностью на концах линий. Модель приводится к третьей нормальной форме.
 
 Сдаются два файла: PDF с диаграммой и исходник `.drawio`. PDF проверяют на экране и на печати, исходник нужен, чтобы показать, что схема собрана в редакторе, а не нарисована картинкой.
 
@@ -54,9 +54,13 @@ outcomes:
 
 | Файл | Что внутри | Что из него берут |
 |---|---|---|
-| `Заказчики.json` | заказчики: код, название, ИНН, адрес, телефон, тип | таблица `counterparty` |
-| `Спецификация.xlsx` и `Цены.xlsx` | ресурсы, нормы, часы и цены | таблицы `item`, `price`, `specification_component` |
-| `Заказ покупателя.xlsx` и `Заказ на производство.xlsx` | шапки и строки документов | `customer_order`, `customer_order_line`, `production_order` |
+| `Заказчики.json` | заказчики: код, название, ИНН, адрес, телефон, тип | `counterparty` |
+| `Заказ покупателя.xlsx` | шапка заказа, заказчик, исполнитель, строка продукции | `customer_order`, `customer_order_line`, записи `counterparty` |
+| `Спецификация.xlsx` | изделие, изготовитель, состав и операции | `item`, `specification`, `specification_component` |
+| `Цены.xlsx` | ресурсы, цены и даты | `price` |
+| `Заказ на производство.xlsx` | шапка, продукция к выпуску, материалы и операции | `production_order`, `production_product`, `production_resource` |
+| `Заметки.json` | заголовок, логин, текст, дата | `notes` |
+| Требования задания 4 | логины, роли, блокировка | `users` |
 
 Задайте себе восемь вопросов и запишите ответы в черновик:
 
@@ -99,16 +103,39 @@ outcomes:
 
 **Третья нормальная форма** означает три простых правила: в ячейке одно значение, поле зависит от всего ключа, неключевые поля не зависят друг от друга. Цена материала хранится в `price`, а не в строке состава. Норма хранится в составе, а не в справочнике товаров. Стоимость заказа не хранится нигде, потому что её можно посчитать.
 
+### Связи, которые должны получиться
+
+Сначала посмотрите на список связей. Он подсказывает, какие строки будут соединяться и какую линию выбрать. Для всех связей, кроме одной, берите `1 to Many`. У `specification.product_id` связь `1 to 1`, потому что у изделия одна спецификация.
+
+| № | Откуда | Куда | Линия |
+|---:|---|---|---|
+| 1 | `price.item_id` | `item.id` | `1 to Many` |
+| 2 | `specification.product_id` | `item.id` | `1 to 1` |
+| 3 | `specification.manufacturer_id` | `counterparty.id` | `1 to Many` |
+| 4 | `specification_component.specification_id` | `specification.id` | `1 to Many` |
+| 5 | `specification_component.item_id` | `item.id` | `1 to Many` |
+| 6 | `customer_order.customer_id` | `counterparty.id` | `1 to Many` |
+| 7 | `customer_order.executor_id` | `counterparty.id` | `1 to Many` |
+| 8 | `customer_order_line.order_id` | `customer_order.id` | `1 to Many` |
+| 9 | `customer_order_line.product_id` | `item.id` | `1 to Many` |
+| 10 | `production_product.production_id` | `production_order.id` | `1 to Many` |
+| 11 | `production_product.product_id` | `item.id` | `1 to Many` |
+| 12 | `production_resource.production_id` | `production_order.id` | `1 to Many` |
+| 13 | `production_resource.item_id` | `item.id` | `1 to Many` |
+| 14 | `notes.id_user` | `users.id` | `1 to Many` |
+
+Связь многие ко многим в итоговой модели не рисуют напрямую: между таблицами уже стоит промежуточная таблица. В нашем наборе это `specification_component`: она связывает `specification` и `item` двумя связями `1:N`.
+
 ### Шаг 1. Откройте draw.io и выберите фигуру
 
 Откройте `app.diagrams.net`. Учётная запись не нужна. Выберите пустую диаграмму и хранение на устройстве.
 
-Слева найдите раздел **Отношения сущностей** и фигуру **Entity**. Это таблица с заголовком и строками. Именно она нужна для ER-диаграммы.
+Слева найдите раздел **Отношения сущностей** и фигуру **Table 1**. Это таблица с заголовком, узкой колонкой для метки `PK`/`FK` и широкой колонкой для имени поля.
 
-<a href="reports/screens/prep/drawio-shapes.png" target="_blank" rel="noopener"><img src="reports/screens/prep/drawio-shapes.png" alt="Панель draw.io с открытым разделом Отношения сущностей и фигурой Entity"></a>
-<figcaption>Раздел «Отношения сущностей» и фигура Entity. Заголовок станет именем таблицы, строки полями.</figcaption>
+<a href="reports/screens/prep/drawio-table1-palette.png" target="_blank" rel="noopener"><img src="reports/screens/prep/drawio-table1-palette.png" alt="Панель draw.io с фигурой Table 1 в разделе Отношения сущностей"></a>
+<figcaption>Раздел «Отношения сущностей» и фигура `Table 1`. Заголовок станет именем таблицы, строки полями.</figcaption>
 
-Не берите обычный прямоугольник: в нём нет строк, поля придётся рисовать линиями, и они разъедутся при первом сдвиге. Не берите и готовую таблицу из другого раздела, пока не понимаете, как она устроена.
+Не берите `List`, `Table 2` или обычный прямоугольник: у `List` нет колонки ключей, `Table 2` рассчитана на несколько внешних ключей, а прямоугольник не держит строки. Строку добавляйте так: выделите её, чтобы слева появился ромбик, и нажмите `Ctrl+D`.
 
 ### Шаг 2. Таблица `counterparty`: кто участвует в системе
 
@@ -123,10 +150,10 @@ outcomes:
 | `phone` | TEXT |  | контакт |
 | `party_type` | TEXT |  | покупатель, изготовитель или поставщик |
 
-Создайте Entity, назовите её `counterparty`, добавьте шесть строк. В строках пишите `PK id TEXT`, затем `name TEXT` и так далее. Буквы `PK` и `FK` это пометки для проверяющего, а не часть имени поля.
+Создайте `Table 1`, назовите её `counterparty`. В узкой колонке первой строки поставьте `PK`, в широкой напишите `id`. Ниже добавьте `name`, `inn`, `address`, `phone`, `party_type`. Источник: `Заказчики.json` и блоки «Заказчик»/«Исполнитель» из `Заказ покупателя.xlsx`. Метки `PK` и `FK` это пометки для проверяющего, а не часть имени поля.
 
-<a href="reports/screens/prep/drawio-table-01.png" target="_blank" rel="noopener"><img src="reports/screens/prep/drawio-table-01.png" alt="Первая таблица counterparty в draw.io с полями и первичным ключом"></a>
-<figcaption>Таблица `counterparty`. Первичный ключ `id`, остальные поля описывают контрагента.</figcaption>
+<a href="reports/screens/prep/drawio-table-style.png" target="_blank" rel="noopener"><img src="reports/screens/prep/drawio-table-style.png" alt="Первая таблица Counterparty в draw.io: заголовок, колонка PK и поля"></a>
+<figcaption>Таблица `counterparty` в фигуре `Table 1`. Первичный ключ `id`, остальные поля описывают контрагента.</figcaption>
 
 Проверка: если убрать `id`, две организации с одинаковым названием станут неразличимы. Значит, ключ выбран правильно.
 
@@ -142,7 +169,6 @@ outcomes:
 | `kind` | TEXT |  | `product`, `material` или `operation` |
 | `unit` | TEXT |  | метр, штука, час |
 
-
 Ход мысли: «Что общего у ткани и раскроя? Оба расходуются в спецификации. Чем отличаются? Единицей и способом расчёта. Значит, общее выносим в справочник, различие в поле вида».
 
 ### Шаг 4. Таблица `price`: цена меняется во времени
@@ -154,7 +180,6 @@ outcomes:
 | `item_id` | INTEGER | PK, FK | ссылка на ресурс |
 | `valid_from` | TEXT | PK | дата начала действия цены |
 | `amount` | REAL |  | цена за единицу |
-
 
 Составной ключ читается так: одна и та же цена не может быть записана дважды на одну дату, но на разные даты может.
 
@@ -170,7 +195,6 @@ outcomes:
 | `output_qty` | REAL |  | сколько единиц выпускается по нормам |
 | `manufacturer_id` | TEXT | FK | кто изготавливает |
 
-
 Почему `product_id` отдельно, а не название изделия? Название уже есть в `item`. Повторять его в спецификации значит хранить две версии одного факта.
 
 ### Шаг 6. Таблица `specification_component`: строки состава
@@ -183,7 +207,6 @@ outcomes:
 | `item_id` | INTEGER | PK, FK | ссылка на ресурс |
 | `qty` | REAL |  | норма расхода на единицу |
 | `time_norm` | REAL |  | часы для операции, `1` для материала |
-
 
 Проверка: одну и ту же ткань нельзя добавить в спецификацию дважды с разными нормами без объяснения. Составной ключ это запрещает.
 
@@ -198,7 +221,6 @@ outcomes:
 | `doc_date` | TEXT |  | дата заказа |
 | `customer_id` | TEXT | FK | кто заказал |
 | `executor_id` | TEXT | FK | кто выполняет |
-
 
 Номер документа и внутренний `id` это разные вещи. Номер может измениться при переносе, а `id` остаётся ключом.
 
@@ -215,7 +237,6 @@ outcomes:
 | `sale_price` | REAL |  | продажная цена |
 | `discount` | REAL |  | скидка |
 
-
 Ход мысли: «Что повторяется в каждой строке? Номер заказа и дата. Значит, они остаются в шапке. Что своё у строки? Изделие, количество, цена. Значит, это поля строки».
 
 ### Шаг 9. Таблица `production_order`: шапка производственного заказа
@@ -230,7 +251,6 @@ outcomes:
 | `launch_date` | TEXT |  | дата запуска |
 | `department` | TEXT |  | цех или участок |
 
-
 ### Шаг 10. Таблица `production_product`: что выпускаем
 
 В производственном заказе может быть несколько изделий. Появляется таблица продукции к выпуску с количеством.
@@ -240,7 +260,6 @@ outcomes:
 | `production_id` | INTEGER | PK, FK | ссылка на производственный заказ |
 | `product_id` | INTEGER | PK, FK | ссылка на изделие |
 | `qty` | INTEGER |  | сколько выпустить |
-
 
 ### Шаг 11. Таблица `production_resource`: плановый расход
 
@@ -253,7 +272,6 @@ outcomes:
 | `qty` | REAL |  | плановое количество |
 | `time_norm` | REAL |  | плановые часы |
 
-
 ### Шаг 12. Таблица `users`: кто входит в приложение
 
 В следующих заданиях приложению нужен вход. Появляется справочник учётных записей: логин, хеш пароля, роль, число ошибок и блокировка.
@@ -263,10 +281,10 @@ outcomes:
 | `id` | INTEGER | PK | номер пользователя |
 | `login` | TEXT |  | имя для входа |
 | `password_hash` | TEXT |  | хеш, не сам пароль |
+| `salt` | TEXT |  | случайная соль для хеша |
 | `role` | TEXT |  | права |
 | `failed_attempts` | INTEGER |  | счётчик ошибок |
 | `is_locked` | INTEGER |  | признак блокировки |
-
 
 ### Шаг 13. Таблица `notes`: заметки сотрудников
 
@@ -280,34 +298,46 @@ outcomes:
 | `id_user` | INTEGER | FK | автор |
 | `created_at` | TEXT |  | дата создания |
 
-
 После двенадцатой таблицы на холсте двенадцать сущностей. Если появилась тринадцатая, проверьте, не является ли она строкой уже существующего документа.
+
+Оформляйте таблицы одинаково: заголовок светло-оранжевый, тело светло-голубое, рамка тонкая синяя. У ключей пишите оранжевые метки `PK` и `FK`, у обычных полей только имя и тип. Так диаграмма читается как единый документ.
+
+<figure class="diagram">
+<img src="reports/screens/prep/drawio-table-style.png" alt="Оформление таблицы counterparty: оранжевый заголовок, голубое тело, оранжевые метки PK и FK">
+<figcaption>Образец оформления таблицы: заголовок, тело, оранжевые метки ключей и обычные атрибуты.</figcaption>
+</figure>
 
 ### Шаг 14. Соедините таблицы связями
 
-Связь рисуется от внешнего ключа к первичному ключу. Наведите курсор на край таблицы, возьмите синюю стрелку и протяните к другой таблице. Подпись ставьте двойным щелчком по линии: `1:N`.
+В разделе `Отношения сущностей` прокрутите палитру вниз. Там есть готовые линии `1 to Many`, `1 to 1` и `Many to Many`. Наведите курсор на линию, чтобы увидеть название.
 
-| Связь | Откуда | Куда | Кратность |
-|---|---|---|---|
-| заказчик заказа | `customer_order.customer_id` | `counterparty.id` | 1:N |
-| исполнитель заказа | `customer_order.executor_id` | `counterparty.id` | 1:N |
-| строки заказа | `customer_order_line.order_id` | `customer_order.id` | 1:N |
-| изделие в строке | `customer_order_line.product_id` | `item.id` | 1:N |
-| спецификация изделия | `specification.product_id` | `item.id` | 1:N |
-| изготовитель спецификации | `specification.manufacturer_id` | `counterparty.id` | 1:N |
-| состав спецификации | `specification_component.specification_id` | `specification.id` | 1:N |
-| ресурс в составе | `specification_component.item_id` | `item.id` | 1:N |
-| цена ресурса | `price.item_id` | `item.id` | 1:N |
-| продукция к выпуску | `production_product.production_id` | `production_order.id` | 1:N |
-| изделие к выпуску | `production_product.product_id` | `item.id` | 1:N |
-| расход по заказу | `production_resource.production_id` | `production_order.id` | 1:N |
-| ресурс в расходе | `production_resource.item_id` | `item.id` | 1:N |
-| автор заметки | `notes.id_user` | `users.id` | 1:N |
+<figure class="diagram">
+<img src="reports/screens/prep/drawio-relations-types.png" alt="Готовые линии связей в разделе Отношения сущностей">
+<figcaption>Готовые линии `1 to Many`, `1 to 1` и `Many to Many`. Для обычной связи берите `1 to Many`, для изделия и спецификации `1 to 1`.</figcaption>
+</figure>
 
-<a href="reports/screens/prep/drawio-er.png" target="_blank" rel="noopener"><img src="reports/screens/prep/drawio-er.png" alt="Полная ER-диаграмма V01: двенадцать таблиц и четырнадцать связей"></a>
-<figcaption>Полная модель V01. Проверьте, что каждая линия соединяет внешний ключ с первичным, а не два произвольных поля.</figcaption>
+Перетащите линию на холст. У `1 to Many` один конец простой, второй с маркером `1:N`. Простой конец соедините с родительской таблицей, конец с маркером с дочерней. Выделите линию, откройте `Соединение` и включите `Автоматически обходить фигуры`, чтобы линия не перекрывала таблицы.
 
-Если линия идёт от строки заказа к шапке, подпись всё равно `1:N`: один заказ содержит много строк. Направление стрелки не меняет смысл кратности.
+<figure class="diagram">
+<img src="reports/screens/prep/drawio-relation-line.png" alt="Связь Counterparty и Customer_order">
+<figcaption>Фрагмент диаграммы: линии от `Counterparty` к строкам `customer_id` и `executor_id` в `Customer_order`. Они обходят таблицы, маркер кратности стоит у дочерней строки.</figcaption>
+</figure>
+
+Связывайте по одной команде. Формат: поле дочерней таблицы, стрелка, поле родительской.
+
+- Свяжите `price.item_id` → `item.id`.
+- Свяжите `specification.product_id` → `item.id` линией `1 to 1` и `specification.manufacturer_id` → `counterparty.id`.
+- Свяжите `specification_component.specification_id` → `specification.id` и `specification_component.item_id` → `item.id`.
+- Свяжите `customer_order.customer_id` → `counterparty.id` и `customer_order.executor_id` → `counterparty.id`.
+- Свяжите `customer_order_line.order_id` → `customer_order.id` и `customer_order_line.product_id` → `item.id`.
+- Свяжите `production_product.production_id` → `production_order.id` и `production_product.product_id` → `item.id`.
+- Свяжите `production_resource.production_id` → `production_order.id` и `production_resource.item_id` → `item.id`.
+- Свяжите `notes.id_user` → `users.id`.
+
+Проверяйте маркеры у таблиц: у родительской `1`, у дочерней `N` или `1:N`. Если наоборот, поменяйте концы линии местами. Текстовые подписи `1:N` не добавляйте.
+
+<a href="reports/screens/prep/drawio-er.png" target="_blank" rel="noopener"><img src="reports/screens/prep/drawio-er.png" alt="Полная ER-диаграмма V01: двенадцать таблиц Table 1 и четырнадцать связей с маркерами кратности"></a>
+<figcaption>Полная модель V01: двенадцать таблиц `Table 1` и четырнадцать связей. Линии обходят таблицы, кратность показана маркерами.</figcaption>
 
 ### Шаг 15. Проверьте третью нормальную форму
 
@@ -331,7 +361,7 @@ outcomes:
 3. Назовите файл `V01_ER.drawio` и сохраните.
 4. Откройте `Файл`, затем `Экспорт как`, затем `PDF`.
 5. Оставьте экспорт всей диаграммы, а не выделения. Проверьте, что все двенадцать таблиц попали на лист.
-6. Откройте PDF и увеличьте масштаб: подписи должны читаться без догадок.
+6. Откройте PDF и увеличьте масштаб: маркеры кратности должны читаться без догадок.
 
 <a href="reports/screens/prep/drawio-save-menu.png" target="_blank" rel="noopener"><img src="reports/screens/prep/drawio-save-menu.png" alt="Меню Файл в draw.io с командами сохранения и экспорта"></a>
 <figcaption>Меню `Файл`: здесь находятся `Сохранить как` и `Экспорт как`. Сначала сохраните `.drawio`, затем экспортируйте PDF.</figcaption>
@@ -339,8 +369,7 @@ outcomes:
 <a href="reports/screens/prep/drawio-export.png" target="_blank" rel="noopener"><img src="reports/screens/prep/drawio-export.png" alt="Диалог экспорта PDF в draw.io"></a>
 <figcaption>Экспорт PDF. Не выбирайте «Только выделение», иначе на листе останется одна таблица.</figcaption>
 
-Перед сдачей проверьте: двенадцать таблиц, у каждой первичный ключ, четырнадцать подписанных связей, нет вычисляемых полей. Если таблиц девять, скорее всего шапка заказа слита со строками. Если пятнадцать, появилась лишняя таблица под каждую строку документа.
-
+Перед сдачей проверьте: двенадцать таблиц, у каждой первичный ключ, четырнадцать связей с маркерами кратности, нет вычисляемых полей. Если таблиц девять, скорее всего шапка заказа слита со строками. Если пятнадцать, появилась лишняя таблица под каждую строку документа.
 
 ## Задание 2. База в XAMPP и phpMyAdmin
 
