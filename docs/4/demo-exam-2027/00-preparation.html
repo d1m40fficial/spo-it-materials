@@ -1153,6 +1153,7 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 </tbody>
 </table>
 <p>Связь многие ко многим в итоговой модели не рисуют напрямую: между таблицами уже стоит промежуточная таблица. В нашем наборе это <code>specification_component</code>: она связывает <code>specification</code> и <code>item</code> двумя связями <code>1:N</code>.</p>
+<p>В командах связь записывается как <code>таблица.атрибут</code>. Например, <code>price.item_id</code> читается так: таблица <code>price</code>, атрибут <code>item_id</code>. Запись <code>item.id</code> означает таблицу <code>item</code> и её первичный ключ <code>id</code>. Стрелка идёт от внешнего ключа к первичному. На линии связь выходит из левой или правой границы нужного атрибута и входит в левую или правую границу атрибута другой таблицы. Ниже каждая таблица добавляется отдельным шагом, и сразу после неё указано, какие связи провести.</p>
 <h3>Шаг 1. Откройте draw.io и выберите фигуру</h3>
 <p>Откройте <code>app.diagrams.net</code>. Учётная запись не нужна. Выберите пустую диаграмму и хранение на устройстве.</p>
 <p>Слева найдите раздел <strong>Отношения сущностей</strong> и фигуру <strong>Table 1</strong>. Это таблица с заголовком, узкой колонкой для метки <code>PK</code>/<code>FK</code> и широкой колонкой для имени поля.</p>
@@ -1160,7 +1161,7 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <figcaption>Раздел «Отношения сущностей» и фигура `Table 1`. Заголовок станет именем таблицы, строки полями.</figcaption>
 
 <p>Не берите <code>List</code>, <code>Table 2</code> или обычный прямоугольник: у <code>List</code> нет колонки ключей, <code>Table 2</code> рассчитана на несколько внешних ключей, а прямоугольник не держит строки. Строку добавляйте так: выделите её, чтобы слева появился ромбик, и нажмите <code>Ctrl+D</code>.</p>
-<h3>Шаг 2. Таблица <code>counterparty</code>: кто участвует в системе</h3>
+<h3>Шаг 2. Добавьте таблицу <code>counterparty</code></h3>
 <p>Первая таблица появляется из вопроса «кто заказчик и кто исполнитель». В JSON есть шесть заказчиков, в описании варианта есть изготовитель. Все они имеют одинаковый набор полей, значит, это одна сущность.</p>
 <table>
 <thead>
@@ -1210,12 +1211,12 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 </tr>
 </tbody>
 </table>
-<p>Создайте <code>Table 1</code>, назовите её <code>counterparty</code>. В узкой колонке первой строки поставьте <code>PK</code>, в широкой напишите <code>id</code>. Ниже добавьте <code>name</code>, <code>inn</code>, <code>address</code>, <code>phone</code>, <code>party_type</code>. Источник: <code>Заказчики.json</code> и блоки «Заказчик»/«Исполнитель» из <code>Заказ покупателя.xlsx</code>. Метки <code>PK</code> и <code>FK</code> это пометки для проверяющего, а не часть имени поля.</p>
+<p>Добавьте таблицу <code>counterparty</code> с полями <code>id</code>, <code>name</code>, <code>inn</code>, <code>address</code>, <code>phone</code>, <code>party_type</code>. У <code>id</code> в узкой колонке поставьте <code>PK</code>, остальные поля оставьте без метки. Источник: <code>Заказчики.json</code> и блоки «Заказчик»/«Исполнитель» из <code>Заказ покупателя.xlsx</code>. Метки <code>PK</code> и <code>FK</code> это пометки для проверяющего, а не часть имени поля.</p>
 <p><a href="reports/screens/prep/drawio-table-style.png" target="_blank" rel="noopener"><img src="reports/screens/prep/drawio-table-style.png" alt="Первая таблица Counterparty в draw.io: заголовок, колонка PK и поля"></a></p>
 <figcaption>Таблица `counterparty` в фигуре `Table 1`. Первичный ключ `id`, остальные поля описывают контрагента.</figcaption>
 
 <p>Проверка: если убрать <code>id</code>, две организации с одинаковым названием станут неразличимы. Значит, ключ выбран правильно.</p>
-<h3>Шаг 3. Таблица <code>item</code>: один справочник ресурсов</h3>
+<h3>Шаг 3. Добавьте таблицу <code>item</code></h3>
 <p>В книгах Excel есть материалы и операции. У них разные единицы, но общая структура: код, название, вид, единица. Если сделать отдельные таблицы <code>material</code> и <code>operation</code>, появятся две почти одинаковые сущности и два внешних ключа в составе. Проще один справочник с полем <code>kind</code>.</p>
 <table>
 <thead>
@@ -1259,8 +1260,9 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 </tr>
 </tbody>
 </table>
+<p>Добавьте таблицу <code>item</code> с полями <code>id</code>, <code>code</code>, <code>name</code>, <code>kind</code>, <code>unit</code>. У <code>id</code> поставьте <code>PK</code>, у <code>code</code> пометьте уникальность.</p>
 <p>Ход мысли: «Что общего у ткани и раскроя? Оба расходуются в спецификации. Чем отличаются? Единицей и способом расчёта. Значит, общее выносим в справочник, различие в поле вида».</p>
-<h3>Шаг 4. Таблица <code>price</code>: цена меняется во времени</h3>
+<h3>Шаг 4. Добавьте таблицу <code>price</code> и связь с <code>item</code></h3>
 <p>Цена не принадлежит товару навсегда: с 1 марта одна, с 1 апреля другая. Если хранить цену в <code>item</code>, история потеряется. Появляется отдельная сущность с составным ключом: ресурс плюс дата, с которой цена действует.</p>
 <table>
 <thead>
@@ -1292,8 +1294,14 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 </tr>
 </tbody>
 </table>
+<p>Добавьте таблицу <code>price</code> с полями <code>item_id</code>, <code>valid_from</code>, <code>amount</code>. У <code>item_id</code> поставьте <code>PK</code> и <code>FK</code>, у <code>valid_from</code> поставьте <code>PK</code>. Проведите связь <code>price.item_id</code> → <code>item.id</code>.</p>
+<figure class="diagram">
+<img src="reports/screens/prep/drawio-relation-line.png" alt="Пример одной связи price.item_id → item.id" width="460">
+<figcaption>Пример одной связи: <code>price.item_id</code> → <code>item.id</code>. На линии она идёт от атрибута <code>id</code> таблицы <code>item</code> к атрибуту <code>item_id</code> таблицы <code>price</code>: линия выходит из правой границы <code>id</code> и входит в левую границу <code>item_id</code>. <code>price</code> это таблица, <code>item_id</code> её атрибут; <code>item</code> это таблица, <code>id</code> её первичный ключ. Маркер кратности стоит у дочерней таблицы <code>price</code>. Остальные связи проводятся так же, отдельные скриншоты для них не нужны.</figcaption>
+</figure>
+
 <p>Составной ключ читается так: одна и та же цена не может быть записана дважды на одну дату, но на разные даты может.</p>
-<h3>Шаг 5. Таблица <code>specification</code>: шапка рецепта изделия</h3>
+<h3>Шаг 5. Добавьте таблицу <code>specification</code> и её связи</h3>
 <p>Спецификация описывает, из чего и как делают изделие. У неё есть номер, название, выпуск и изготовитель. Это шапка, как у заказа: одна спецификация на изделие.</p>
 <table>
 <thead>
@@ -1337,8 +1345,9 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 </tr>
 </tbody>
 </table>
+<p>Добавьте таблицу <code>specification</code> с полями <code>id</code>, <code>product_id</code>, <code>name</code>, <code>output_qty</code>, <code>manufacturer_id</code>. У <code>id</code> поставьте <code>PK</code>, у <code>product_id</code> поставьте <code>FK</code> и пометьте уникальность, у <code>manufacturer_id</code> поставьте <code>FK</code>. Проведите связи <code>specification.product_id</code> → <code>item.id</code> линией <code>1 to 1</code> и <code>specification.manufacturer_id</code> → <code>counterparty.id</code>.</p>
 <p>Почему <code>product_id</code> отдельно, а не название изделия? Название уже есть в <code>item</code>. Повторять его в спецификации значит хранить две версии одного факта.</p>
-<h3>Шаг 6. Таблица <code>specification_component</code>: строки состава</h3>
+<h3>Шаг 6. Добавьте таблицу <code>specification_component</code> и её связи</h3>
 <p>В одной спецификации много материалов и операций. Это типичная связь многие ко многим, её нельзя оставить двумя стрелками. Появляется промежуточная таблица, где каждая строка это один ресурс в составе.</p>
 <table>
 <thead>
@@ -1376,8 +1385,9 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 </tr>
 </tbody>
 </table>
+<p>Добавьте таблицу <code>specification_component</code> с полями <code>specification_id</code>, <code>item_id</code>, <code>qty</code>, <code>time_norm</code>. У <code>specification_id</code> и <code>item_id</code> поставьте <code>PK</code> и <code>FK</code>. Проведите связи <code>specification_component.specification_id</code> → <code>specification.id</code> и <code>specification_component.item_id</code> → <code>item.id</code>.</p>
 <p>Проверка: одну и ту же ткань нельзя добавить в спецификацию дважды с разными нормами без объяснения. Составной ключ это запрещает.</p>
-<h3>Шаг 7. Таблица <code>customer_order</code>: шапка заказа</h3>
+<h3>Шаг 7. Добавьте таблицу <code>customer_order</code> и её связи</h3>
 <p>Заказ приходит от покупателя и содержит номер, дату, заказчика и исполнителя. Это шапка документа. Строки заказа появятся в следующей таблице.</p>
 <table>
 <thead>
@@ -1421,8 +1431,9 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 </tr>
 </tbody>
 </table>
+<p>Добавьте таблицу <code>customer_order</code> с полями <code>id</code>, <code>doc_no</code>, <code>doc_date</code>, <code>customer_id</code>, <code>executor_id</code>. У <code>id</code> поставьте <code>PK</code>, у <code>customer_id</code> и <code>executor_id</code> поставьте <code>FK</code>. Проведите связи <code>customer_order.customer_id</code> → <code>counterparty.id</code> и <code>customer_order.executor_id</code> → <code>counterparty.id</code>.</p>
 <p>Номер документа и внутренний <code>id</code> это разные вещи. Номер может измениться при переносе, а <code>id</code> остаётся ключом.</p>
-<h3>Шаг 8. Таблица <code>customer_order_line</code>: строки заказа</h3>
+<h3>Шаг 8. Добавьте таблицу <code>customer_order_line</code> и её связи</h3>
 <p>В заказе несколько изделий. Если хранить их в шапке через запятую, нельзя посчитать количество и цену по каждому. Появляется таблица строк.</p>
 <table>
 <thead>
@@ -1472,8 +1483,9 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 </tr>
 </tbody>
 </table>
+<p>Добавьте таблицу <code>customer_order_line</code> с полями <code>id</code>, <code>order_id</code>, <code>product_id</code>, <code>qty</code>, <code>sale_price</code>, <code>discount</code>. У <code>id</code> поставьте <code>PK</code>, у <code>order_id</code> и <code>product_id</code> поставьте <code>FK</code>. Проведите связи <code>customer_order_line.order_id</code> → <code>customer_order.id</code> и <code>customer_order_line.product_id</code> → <code>item.id</code>.</p>
 <p>Ход мысли: «Что повторяется в каждой строке? Номер заказа и дата. Значит, они остаются в шапке. Что своё у строки? Изделие, количество, цена. Значит, это поля строки».</p>
-<h3>Шаг 9. Таблица <code>production_order</code>: шапка производственного заказа</h3>
+<h3>Шаг 9. Добавьте таблицу <code>production_order</code></h3>
 <p>Производственный заказ запускает выпуск. У него свой номер, дата, дата запуска и подразделение. Это отдельный документ, поэтому отдельная шапка.</p>
 <table>
 <thead>
@@ -1517,7 +1529,8 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 </tr>
 </tbody>
 </table>
-<h3>Шаг 10. Таблица <code>production_product</code>: что выпускаем</h3>
+<p>Добавьте таблицу <code>production_order</code> с полями <code>id</code>, <code>doc_no</code>, <code>doc_date</code>, <code>launch_date</code>, <code>department</code>. У <code>id</code> поставьте <code>PK</code>.</p>
+<h3>Шаг 10. Добавьте таблицу <code>production_product</code> и её связи</h3>
 <p>В производственном заказе может быть несколько изделий. Появляется таблица продукции к выпуску с количеством.</p>
 <table>
 <thead>
@@ -1549,7 +1562,8 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 </tr>
 </tbody>
 </table>
-<h3>Шаг 11. Таблица <code>production_resource</code>: плановый расход</h3>
+<p>Добавьте таблицу <code>production_product</code> с полями <code>production_id</code>, <code>product_id</code>, <code>qty</code>. У <code>production_id</code> и <code>product_id</code> поставьте <code>PK</code> и <code>FK</code>. Проведите связи <code>production_product.production_id</code> → <code>production_order.id</code> и <code>production_product.product_id</code> → <code>item.id</code>.</p>
+<h3>Шаг 11. Добавьте таблицу <code>production_resource</code> и её связи</h3>
 <p>Для производства нужно знать, сколько материалов и часов потребуется. Это отдельная таблица, потому что расход относится к производственному заказу, а не к заказу покупателя.</p>
 <table>
 <thead>
@@ -1587,7 +1601,8 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 </tr>
 </tbody>
 </table>
-<h3>Шаг 12. Таблица <code>users</code>: кто входит в приложение</h3>
+<p>Добавьте таблицу <code>production_resource</code> с полями <code>production_id</code>, <code>item_id</code>, <code>qty</code>, <code>time_norm</code>. У <code>production_id</code> и <code>item_id</code> поставьте <code>PK</code> и <code>FK</code>. Проведите связи <code>production_resource.production_id</code> → <code>production_order.id</code> и <code>production_resource.item_id</code> → <code>item.id</code>.</p>
+<h3>Шаг 12. Добавьте таблицу <code>users</code></h3>
 <p>В следующих заданиях приложению нужен вход. Появляется справочник учётных записей: логин, хеш пароля, роль, число ошибок и блокировка.</p>
 <table>
 <thead>
@@ -1643,7 +1658,8 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 </tr>
 </tbody>
 </table>
-<h3>Шаг 13. Таблица <code>notes</code>: заметки сотрудников</h3>
+<p>Добавьте таблицу <code>users</code> с полями <code>id</code>, <code>login</code>, <code>password_hash</code>, <code>salt</code>, <code>role</code>, <code>failed_attempts</code>, <code>is_locked</code>. У <code>id</code> поставьте <code>PK</code>, у <code>login</code> пометьте уникальность.</p>
+<h3>Шаг 13. Добавьте таблицу <code>notes</code> и связь с <code>users</code></h3>
 <p>Заметка принадлежит пользователю. Она не входит в заказ и не влияет на стоимость, но нужна приложению. Появляется последняя таблица с внешним ключом на <code>users</code>.</p>
 <table>
 <thead>
@@ -1687,6 +1703,7 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 </tr>
 </tbody>
 </table>
+<p>Добавьте таблицу <code>notes</code> с полями <code>id</code>, <code>title</code>, <code>content</code>, <code>id_user</code>, <code>created_at</code>. У <code>id</code> поставьте <code>PK</code>, у <code>id_user</code> поставьте <code>FK</code>. Проведите связь <code>notes.id_user</code> → <code>users.id</code>.</p>
 <p>После двенадцатой таблицы на холсте двенадцать сущностей. Если появилась тринадцатая, проверьте, не является ли она строкой уже существующего документа.</p>
 <p>Оформляйте таблицы одинаково: заголовок светло-оранжевый, тело светло-голубое, рамка тонкая синяя. У ключей пишите оранжевые метки <code>PK</code> и <code>FK</code>, у обычных полей только имя и тип. Так диаграмма читается как единый документ.</p>
 <figure class="diagram">
@@ -1694,33 +1711,10 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <figcaption>Образец оформления таблицы: заголовок, тело, оранжевые метки ключей и обычные атрибуты.</figcaption>
 </figure>
 
-<h3>Шаг 14. Соедините таблицы связями</h3>
-<p>В разделе <code>Отношения сущностей</code> прокрутите палитру вниз. Там есть готовые линии <code>1 to Many</code>, <code>1 to 1</code> и <code>Many to Many</code>. Наведите курсор на линию, чтобы увидеть название.</p>
-<figure class="diagram">
-<img src="reports/screens/prep/drawio-relations-types.png" alt="Готовые линии связей в разделе Отношения сущностей">
-<figcaption>Готовые линии `1 to Many`, `1 to 1` и `Many to Many`. Для обычной связи берите `1 to Many`, для изделия и спецификации `1 to 1`.</figcaption>
-</figure>
-
-<p>Перетащите линию на холст. У <code>1 to Many</code> один конец простой, второй с маркером <code>1:N</code>. Простой конец соедините с родительской таблицей, конец с маркером с дочерней. Выделите линию, откройте <code>Соединение</code> и включите <code>Автоматически обходить фигуры</code>, чтобы линия не перекрывала таблицы.</p>
-<figure class="diagram">
-<img src="reports/screens/prep/drawio-relation-line.png" alt="Связь Counterparty и Customer_order">
-<figcaption>Фрагмент диаграммы: линии от `Counterparty` к строкам `customer_id` и `executor_id` в `Customer_order`. Они обходят таблицы, маркер кратности стоит у дочерней строки.</figcaption>
-</figure>
-
-<p>Связывайте по одной команде. Формат: поле дочерней таблицы, стрелка, поле родительской.</p>
-<ul>
-<li>Свяжите <code>price.item_id</code> → <code>item.id</code>.</li>
-<li>Свяжите <code>specification.product_id</code> → <code>item.id</code> линией <code>1 to 1</code> и <code>specification.manufacturer_id</code> → <code>counterparty.id</code>.</li>
-<li>Свяжите <code>specification_component.specification_id</code> → <code>specification.id</code> и <code>specification_component.item_id</code> → <code>item.id</code>.</li>
-<li>Свяжите <code>customer_order.customer_id</code> → <code>counterparty.id</code> и <code>customer_order.executor_id</code> → <code>counterparty.id</code>.</li>
-<li>Свяжите <code>customer_order_line.order_id</code> → <code>customer_order.id</code> и <code>customer_order_line.product_id</code> → <code>item.id</code>.</li>
-<li>Свяжите <code>production_product.production_id</code> → <code>production_order.id</code> и <code>production_product.product_id</code> → <code>item.id</code>.</li>
-<li>Свяжите <code>production_resource.production_id</code> → <code>production_order.id</code> и <code>production_resource.item_id</code> → <code>item.id</code>.</li>
-<li>Свяжите <code>notes.id_user</code> → <code>users.id</code>.</li>
-</ul>
-<p>Проверяйте маркеры у таблиц: у родительской <code>1</code>, у дочерней <code>N</code> или <code>1:N</code>. Если наоборот, поменяйте концы линии местами. Текстовые подписи <code>1:N</code> не добавляйте.</p>
+<h3>Шаг 14. Проверьте связи и маркеры</h3>
+<p>Все четырнадцать связей уже проведены по шагам. Проверьте маркеры у таблиц: у родительской должен быть <code>1</code>, у дочерней <code>N</code> или <code>1:N</code>. Если маркеры стоят наоборот, поменяйте концы линии местами. Текстовые подписи <code>1:N</code> не добавляйте: они накладываются на соседние линии и путают проверяющего.</p>
 <p><a href="reports/screens/prep/drawio-er.png" target="_blank" rel="noopener"><img src="reports/screens/prep/drawio-er.png" alt="Полная ER-диаграмма V01: двенадцать таблиц Table 1 и четырнадцать связей с маркерами кратности"></a></p>
-<figcaption>Полная модель V01: двенадцать таблиц `Table 1` и четырнадцать связей. Линии обходят таблицы, кратность показана маркерами.</figcaption>
+<figcaption>Полная модель V01: двенадцать таблиц <code>Table 1</code> и четырнадцать связей. Линии обходят таблицы, кратность показана маркерами.</figcaption>
 
 <h3>Шаг 15. Проверьте третью нормальную форму</h3>
 <p>Пройдите по каждой таблице тремя вопросами:</p>

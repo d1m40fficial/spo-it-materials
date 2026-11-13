@@ -1128,8 +1128,16 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <p>Именование подчиняется простым правилам. Одно понятие называется одинаково во всех таблицах. Таблицы названы в одном стиле, латиницей и через подчёркивание. Внутри своей таблицы ключ называется <code>id</code>, при ссылке извне он получает имя <code>&lt;таблица&gt;_id</code>. Зарезервированные слова не используются: поэтому таблица называется <code>customer_order</code>, а не <code>order</code>, и <code>users</code>, а не <code>user</code>. Сокращения расшифровываются один раз, а не собираются из первых букв.</p>
 <p>Перед первым нажатием на холсте ответьте себе на два вопроса. Какая таблица самая главная в каждом документе? Какие строки в документе повторяются? Если ответы есть, схема собирается за один проход.</p>
 <h2 id="пошаговая-инструкция"><span class="num">04</span>Пошаговая инструкция</h2>
+<h3>Как читать команды</h3>
+<p>Каждая таблица добавляется отдельной командой, а связи проводятся сразу после неё. Запись <code>price.item_id</code> читается так: <code>price</code> это таблица, <code>item_id</code> это её атрибут. Запись <code>item.id</code> означает таблицу <code>item</code> и её первичный ключ <code>id</code>. Стрелка всегда идёт от внешнего ключа к первичному ключу, даже если линию удобнее рисовать в обратную сторону.</p>
+<p>Для связи перетащите на холст готовую линию <code>1 to Many</code>. Простой конец соедините с родительской таблицей, конец с маркером с дочерней. Следите, чтобы линия выходила из левой или правой границы нужного атрибута и входила в левую или правую границу атрибута другой таблицы. Не соединяйте линию с заголовком или с серединой строки. Выделите линию, откройте раздел <code>Соединение</code> и включите <code>Автоматически обходить фигуры</code>. Тогда линия обойдёт таблицы и не перекроет атрибуты.</p>
+<figure class="diagram">
+<img src="reports/screens/prep/drawio-relation-line.png" alt="Пример одной связи price.item_id → item.id" width="460">
+<figcaption>Пример одной связи: <code>price.item_id</code> → <code>item.id</code>. На линии она идёт от атрибута <code>id</code> таблицы <code>item</code> к атрибуту <code>item_id</code> таблицы <code>price</code>: линия выходит из правой границы <code>id</code> и входит в левую границу <code>item_id</code>. <code>price</code> это таблица, <code>item_id</code> её атрибут; <code>item</code> это таблица, <code>id</code> её первичный ключ. Маркер кратности стоит у дочерней таблицы <code>price</code>. Остальные связи проводятся так же, отдельные скриншоты для них не нужны.</figcaption>
+</figure>
+
 <h3>Связи, которые должны получиться</h3>
-<p>Сначала посмотрите на список связей. Он подсказывает, какие строки будут соединяться и какую линию выбрать. Для всех связей, кроме одной, берите <code>1 to Many</code>. У <code>specification.product_id</code> связь <code>1 to 1</code>, потому что у изделия одна спецификация.</p>
+<p>Ниже полный список связей. Он нужен как проверка: после каждого шага сверяйте, что связь с нужными атрибутами уже проведена. Для всех связей, кроме одной, берите <code>1 to Many</code>. У <code>specification.product_id</code> связь <code>1 to 1</code>, потому что у изделия одна спецификация.</p>
 <table>
 <thead>
 <tr>
@@ -1247,14 +1255,14 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <p>Перетащите <code>Table 1</code> на холст. В заголовке будет <code>Table</code>, в первой строке <code>PK</code> и <code>UniqueID</code>. Замените заголовок на имя таблицы, а строки на свои поля.</p>
 <figure class="diagram">
 <img src="reports/screens/prep/drawio-table1-palette.png" alt="Панель фигур draw.io: раздел Отношения сущностей и фигура Table 1">
-<figcaption>Раздел «Отношения сущностей»: фигура `Table 1` с колонкой `PK` и строками полей. Ниже в палитре находятся готовые линии связей.</figcaption>
+<figcaption>Раздел «Отношения сущностей»: фигура <code>Table 1</code> с колонкой <code>PK</code> и строками полей.</figcaption>
 </figure>
 
 <p>Строка добавляется копированием. Выделите строку так, чтобы слева появился ромбик, и нажмите <code>Ctrl+D</code>. Новая строка появится ниже с теми же ячейками. Так быстрее и ровнее, чем растягивать таблицу вручную.</p>
-<h3>Шаг 4. Соберите таблицу контрагентов</h3>
+<h3>Шаг 4. Добавьте таблицу counterparty</h3>
 <p><strong>Контрагент</strong> это организация или предприниматель, с которым предприятие оформляет деловые отношения: заказчик, поставщик, изготовитель. В модели все роли сведены в одну таблицу <code>counterparty</code>, а конкретная роль хранится в поле <code>party_type</code>. Поэтому заказчик и изготовитель не заводятся двумя разными таблицами.</p>
 <p>Источник таблицы: <code>Заказчики.json</code> даёт шесть записей с полями <code>id</code>, <code>name</code>, <code>inn</code>, <code>addres</code>, <code>phone</code>, <code>type</code>. Блоки «Заказчик» и «Исполнитель» в <code>Заказ покупателя.xlsx</code> добавляют ИП Томилина и ООО ТД «Вершина».</p>
-<p>У <code>Table 1</code> две колонки. В узкой колонке пишите метку ключа, в широкой имя поля. Заполните строки:</p>
+<p>Добавьте таблицу <code>counterparty</code> с полями <code>id</code>, <code>name</code>, <code>inn</code>, <code>address</code>, <code>phone</code>, <code>party_type</code>. У <code>id</code> в узкой колонке поставьте <code>PK</code>, остальные поля оставьте без метки.</p>
 <table>
 <thead>
 <tr>
@@ -1292,67 +1300,55 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <p>Заголовок таблицы сделайте светло-персиковым, рамку бирюзовой, текст тёмным. Метки <code>PK</code> и <code>FK</code> остаются в первой колонке и не сливаются с именем поля.</p>
 <figure class="diagram">
 <img src="reports/screens/prep/drawio-table-style.png" alt="Оформление таблицы Counterparty: персиковый заголовок, бирюзовая рамка, колонка PK и поле id">
-<figcaption>Образец таблицы `Table 1`: заголовок `Counterparty`, колонка `PK` и поле `id`, ниже остальные атрибуты. Так же оформляются остальные таблицы.</figcaption>
+<figcaption>Образец таблицы <code>Table 1</code>: заголовок <code>Counterparty</code>, колонка <code>PK</code> и поле <code>id</code>, ниже остальные атрибуты. Так же оформляются остальные таблицы.</figcaption>
 </figure>
 
-<h3>Шаг 5. Сделайте справочники item и price</h3>
-<p>Выделите таблицу контрагентов щелчком по рамке, нажмите Ctrl+D. Появится копия со всеми полями. Сдвиньте её ниже и переименуйте в <code>item</code>. Замените поля на <code>id</code>, <code>code</code>, <code>name</code>, <code>kind</code>, <code>unit</code>. Источник: <code>Заказ покупателя.xlsx</code> даёт изделие и код, <code>Спецификация.xlsx</code> даёт материалы, операции и единицы, <code>Цены.xlsx</code> подтверждает названия и единицы.</p>
+<h3>Шаг 5. Добавьте таблицу item</h3>
+<p>Выделите таблицу контрагентов щелчком по рамке, нажмите Ctrl+D. Появится копия со всеми полями. Сдвиньте её ниже и переименуйте в <code>item</code>.</p>
+<p>Добавьте таблицу <code>item</code> с полями <code>id</code>, <code>code</code>, <code>name</code>, <code>kind</code>, <code>unit</code>. У <code>id</code> поставьте <code>PK</code>, у <code>code</code> пометьте уникальность. Источник: <code>Заказ покупателя.xlsx</code> даёт изделие и код, <code>Спецификация.xlsx</code> даёт материалы, операции и единицы, <code>Цены.xlsx</code> подтверждает названия и единицы.</p>
 <p>Поле <code>kind</code> хранит вид ресурса: <code>product</code>, <code>material</code> или <code>operation</code>. Благодаря этому материалы и операции живут в одном справочнике, и состав не раздваивается на две таблицы. Поле <code>code</code> хранит код из документа и объявляется уникальным, а <code>id</code> остаётся внутренним ключом.</p>
-<p>Снова скопируйте таблицу и назовите её <code>price</code>. Поля: <code>item_id</code>, <code>valid_from</code>, <code>amount</code>. Источник: <code>Цены.xlsx</code>, где у каждого ресурса есть цена и дата начала действия. Первичный ключ здесь составной: в колонке метки у <code>item_id</code> и <code>valid_from</code> стоит <code>PK</code>.</p>
+<h3>Шаг 6. Добавьте таблицу price и связь с item</h3>
+<p>Снова скопируйте таблицу и назовите её <code>price</code>.</p>
+<p>Добавьте таблицу <code>price</code> с полями <code>item_id</code>, <code>valid_from</code>, <code>amount</code>. У <code>item_id</code> поставьте <code>PK</code> и <code>FK</code>, у <code>valid_from</code> поставьте <code>PK</code>. Проведите связь <code>price.item_id</code> → <code>item.id</code>. Источник: <code>Цены.xlsx</code>, где у каждого ресурса есть цена и дата начала действия.</p>
 <p>Составной ключ означает, что у одного ресурса не может быть двух цен с одной даты, но может быть много цен с разными датами. Именно это позволяет считать старый заказ по старой цене.</p>
-<h3>Шаг 6. Постройте спецификацию и состав</h3>
-<p>Скопируйте таблицу ещё раз и назовите её <code>specification</code>. Поля: <code>id</code>, <code>product_id</code>, <code>name</code>, <code>output_qty</code>, <code>manufacturer_id</code>. Источник: шапка <code>Спецификация.xlsx</code>, где указаны изделие, изготовитель и количество выпуска. Ключ <code>id</code> первичный, <code>product_id</code> ссылается на изделие и объявляется уникальным, <code>manufacturer_id</code> ссылается на контрагента.</p>
-<p>Рядом поставьте <code>specification_component</code>. Поля: <code>specification_id</code>, <code>item_id</code>, <code>qty</code>, <code>time_norm</code>. Источник: таблицы «Состав» и «Технологические операции» в <code>Спецификация.xlsx</code>. Первичный ключ это пара <code>specification_id</code> и <code>item_id</code>: один ресурс входит в спецификацию один раз. Оба поля являются внешними ключами.</p>
-<p>Норма расхода и норма времени принадлежат строке состава, а не справочнику ресурса. Один и тот же материал входит в разные изделия с разным количеством, и хранить это в <code>item</code> нельзя.</p>
-<h3>Шаг 7. Постройте заказы покупателя</h3>
-<p>Таблица <code>customer_order</code> хранит шапку: <code>id</code>, <code>doc_no</code>, <code>doc_date</code>, <code>customer_id</code>, <code>executor_id</code>. Источник: шапка <code>Заказ покупателя.xlsx</code>. Номер документа объявляется уникальным, но первичным ключом остаётся внутренний <code>id</code>: номер может измениться при переносе данных.</p>
-<p>Таблица <code>customer_order_line</code> хранит строки: <code>id</code>, <code>order_id</code>, <code>product_id</code>, <code>qty</code>, <code>sale_price</code>, <code>discount</code>. Источник: строка продукции в <code>Заказ покупателя.xlsx</code>. Код изделия хранится в <code>item</code>, а строка заказа ссылается на него через <code>product_id</code>.</p>
+<h3>Шаг 7. Добавьте таблицу specification и её связи</h3>
+<p>Скопируйте таблицу ещё раз и назовите её <code>specification</code>.</p>
+<p>Добавьте таблицу <code>specification</code> с полями <code>id</code>, <code>product_id</code>, <code>name</code>, <code>output_qty</code>, <code>manufacturer_id</code>. У <code>id</code> поставьте <code>PK</code>, у <code>product_id</code> поставьте <code>FK</code> и пометьте уникальность, у <code>manufacturer_id</code> поставьте <code>FK</code>. Проведите связи <code>specification.product_id</code> → <code>item.id</code> линией <code>1 to 1</code> и <code>specification.manufacturer_id</code> → <code>counterparty.id</code>. Источник: шапка <code>Спецификация.xlsx</code>, где указаны изделие, изготовитель и количество выпуска.</p>
+<h3>Шаг 8. Добавьте таблицу specification_component и её связи</h3>
+<p>Рядом поставьте <code>specification_component</code>.</p>
+<p>Добавьте таблицу <code>specification_component</code> с полями <code>specification_id</code>, <code>item_id</code>, <code>qty</code>, <code>time_norm</code>. У <code>specification_id</code> и <code>item_id</code> поставьте <code>PK</code> и <code>FK</code>. Проведите связи <code>specification_component.specification_id</code> → <code>specification.id</code> и <code>specification_component.item_id</code> → <code>item.id</code>. Источник: таблицы «Состав» и «Технологические операции» в <code>Спецификация.xlsx</code>.</p>
+<p>Первичный ключ это пара <code>specification_id</code> и <code>item_id</code>: один ресурс входит в спецификацию один раз. Норма расхода и норма времени принадлежат строке состава, а не справочнику ресурса. Один и тот же материал входит в разные изделия с разным количеством, и хранить это в <code>item</code> нельзя.</p>
+<h3>Шаг 9. Добавьте таблицу customer_order и её связи</h3>
+<p>Добавьте таблицу <code>customer_order</code> с полями <code>id</code>, <code>doc_no</code>, <code>doc_date</code>, <code>customer_id</code>, <code>executor_id</code>. У <code>id</code> поставьте <code>PK</code>, у <code>customer_id</code> и <code>executor_id</code> поставьте <code>FK</code>. Проведите связи <code>customer_order.customer_id</code> → <code>counterparty.id</code> и <code>customer_order.executor_id</code> → <code>counterparty.id</code>. Источник: шапка <code>Заказ покупателя.xlsx</code>.</p>
+<p>Номер документа объявляется уникальным, но первичным ключом остаётся внутренний <code>id</code>: номер может измениться при переносе данных.</p>
+<h3>Шаг 10. Добавьте таблицу customer_order_line и её связи</h3>
+<p>Добавьте таблицу <code>customer_order_line</code> с полями <code>id</code>, <code>order_id</code>, <code>product_id</code>, <code>qty</code>, <code>sale_price</code>, <code>discount</code>. У <code>id</code> поставьте <code>PK</code>, у <code>order_id</code> и <code>product_id</code> поставьте <code>FK</code>. Проведите связи <code>customer_order_line.order_id</code> → <code>customer_order.id</code> и <code>customer_order_line.product_id</code> → <code>item.id</code>. Источник: строка продукции в <code>Заказ покупателя.xlsx</code>.</p>
 <p>Цена продажи и скидка относятся к строке заказа, а не к справочнику изделия. У одного и того же товара в разных заказах разные условия, поэтому эти поля живут в строке.</p>
-<h3>Шаг 8. Постройте производственный заказ</h3>
-<p>Производственный заказ состоит из трёх таблиц. Источник: <code>Заказ на производство.xlsx</code>. Шапка <code>production_order</code> хранит <code>id</code>, <code>doc_no</code>, <code>doc_date</code>, <code>launch_date</code>, <code>department</code>. Таблица <code>production_product</code> хранит продукцию к выпуску: <code>production_id</code>, <code>product_id</code>, <code>qty</code>. Таблица <code>production_resource</code> хранит план ресурсов: <code>production_id</code>, <code>item_id</code>, <code>qty</code>, <code>time_norm</code>.</p>
+<h3>Шаг 11. Добавьте таблицу production_order</h3>
+<p>Добавьте таблицу <code>production_order</code> с полями <code>id</code>, <code>doc_no</code>, <code>doc_date</code>, <code>launch_date</code>, <code>department</code>. У <code>id</code> поставьте <code>PK</code>. Источник: <code>Заказ на производство.xlsx</code>.</p>
+<p>Номер документа объявляется уникальным, но первичным ключом остаётся внутренний <code>id</code>: номер может измениться при переносе данных.</p>
+<h3>Шаг 12. Добавьте таблицу production_product и её связи</h3>
+<p>Добавьте таблицу <code>production_product</code> с полями <code>production_id</code>, <code>product_id</code>, <code>qty</code>. У <code>production_id</code> и <code>product_id</code> поставьте <code>PK</code> и <code>FK</code>. Проведите связи <code>production_product.production_id</code> → <code>production_order.id</code> и <code>production_product.product_id</code> → <code>item.id</code>.</p>
+<h3>Шаг 13. Добавьте таблицу production_resource и её связи</h3>
+<p>Добавьте таблицу <code>production_resource</code> с полями <code>production_id</code>, <code>item_id</code>, <code>qty</code>, <code>time_norm</code>. У <code>production_id</code> и <code>item_id</code> поставьте <code>PK</code> и <code>FK</code>. Проведите связи <code>production_resource.production_id</code> → <code>production_order.id</code> и <code>production_resource.item_id</code> → <code>item.id</code>.</p>
 <p>Единица измерения хранится в справочнике <code>item</code>, поэтому в плане она не повторяется. Если документ использует другую единицу, количество пересчитывают при загрузке, а не хранят второй раз.</p>
 <p>Ключи у <code>production_product</code> и <code>production_resource</code> составные: заказ и ресурс вместе. Один ресурс не может дважды появиться в плане одного заказа.</p>
-<h3>Шаг 9. Добавьте пользователей и заметки</h3>
-<p>Таблица <code>users</code> хранит <code>id</code>, <code>login</code>, <code>password_hash</code>, <code>salt</code>, <code>role</code>, <code>failed_attempts</code>, <code>is_locked</code>. Источник: требования к приложению из задания 4, в Excel этих данных нет. Таблица <code>notes</code> хранит <code>id</code>, <code>title</code>, <code>content</code>, <code>id_user</code>, <code>created_at</code>. Источник: <code>Заметки.json</code>.</p>
+<h3>Шаг 14. Добавьте таблицу users</h3>
+<p>Добавьте таблицу <code>users</code> с полями <code>id</code>, <code>login</code>, <code>password_hash</code>, <code>salt</code>, <code>role</code>, <code>failed_attempts</code>, <code>is_locked</code>. У <code>id</code> поставьте <code>PK</code>, у <code>login</code> пометьте уникальность. Источник: требования к приложению из задания 4, в Excel этих данных нет.</p>
+<h3>Шаг 15. Добавьте таблицу notes и связь с users</h3>
+<p>Добавьте таблицу <code>notes</code> с полями <code>id</code>, <code>title</code>, <code>content</code>, <code>id_user</code>, <code>created_at</code>. У <code>id</code> поставьте <code>PK</code>, у <code>id_user</code> поставьте <code>FK</code>. Проведите связь <code>notes.id_user</code> → <code>users.id</code>. Источник: <code>Заметки.json</code>.</p>
 <p>Поля <code>title_user</code> и <code>formatted_date</code> в таблицу не добавляйте. Они вычисляются при выдаче ответа: заголовок соединяется с логином, дата приводится к формату ДД.ММ.ГГГГ. В базе хранятся исходные значения.</p>
-<p>Эти две таблицы появляются в следующих заданиях, но входят в ту же модель. База строится один раз, поэтому на диаграмме они должны быть сразу.</p>
-<h3>Шаг 10. Проведите связи готовыми линиями</h3>
-<p>В разделе <code>Отношения сущностей</code> прокрутите палитру вниз. После таблиц идут готовые линии <code>1 to Many</code>, <code>1 to 1</code> и <code>Many to Many</code>. Наведите курсор на линию, чтобы увидеть название.</p>
-<figure class="diagram">
-<img src="reports/screens/prep/drawio-relations-types.png" alt="Готовые линии связей в разделе Отношения сущностей: 1 to Many, 1 to 1 и Many to Many">
-<figcaption>Готовые линии в разделе «Отношения сущностей». Для обычной связи берите `1 to Many`, для связи изделия и спецификации `1 to 1`. Линию `Many to Many` в итоговой 3НФ не используйте.</figcaption>
-</figure>
-
-<p>Перетащите линию на холст. У <code>1 to Many</code> один конец простой, второй с маркером <code>1:N</code>. Простой конец соедините с родительской таблицей, конец с маркером с дочерней. У <code>1 to 1</code> маркеры стоят на обоих концах.</p>
-<p>Выделите линию, откройте раздел <code>Соединение</code> и включите <code>Автоматически обходить фигуры</code>. Тогда линия обойдёт таблицы и не перекроет атрибуты. Если линия уже нарисована обычной стрелкой, удалите её и замените готовой линией из палитры.</p>
-<figure class="diagram">
-<img src="reports/screens/prep/drawio-relation-line.png" alt="Связь Counterparty и Customer_order: линия с маркером кратности и обходом таблиц">
-<figcaption>Фрагмент диаграммы: линии от `Counterparty` к строкам `customer_id` и `executor_id` в `Customer_order`. Они обходят таблицы и не имеют текстовой подписи.</figcaption>
-</figure>
-
-<p>Связывайте по одной команде. Формат такой: сначала поле дочерней таблицы, затем стрелка и поле родительской.</p>
-<ul>
-<li>Свяжите <code>price.item_id</code> → <code>item.id</code>.</li>
-<li>Свяжите <code>specification.product_id</code> → <code>item.id</code> линией <code>1 to 1</code> и <code>specification.manufacturer_id</code> → <code>counterparty.id</code>.</li>
-<li>Свяжите <code>specification_component.specification_id</code> → <code>specification.id</code> и <code>specification_component.item_id</code> → <code>item.id</code>.</li>
-<li>Свяжите <code>customer_order.customer_id</code> → <code>counterparty.id</code> и <code>customer_order.executor_id</code> → <code>counterparty.id</code>.</li>
-<li>Свяжите <code>customer_order_line.order_id</code> → <code>customer_order.id</code> и <code>customer_order_line.product_id</code> → <code>item.id</code>.</li>
-<li>Свяжите <code>production_product.production_id</code> → <code>production_order.id</code> и <code>production_product.product_id</code> → <code>item.id</code>.</li>
-<li>Свяжите <code>production_resource.production_id</code> → <code>production_order.id</code> и <code>production_resource.item_id</code> → <code>item.id</code>.</li>
-<li>Свяжите <code>notes.id_user</code> → <code>users.id</code>.</li>
-</ul>
-<p>Проверяйте не направление рисования, а маркеры у таблиц: у родительской должен быть <code>1</code>, у дочерней <code>N</code> или <code>1:N</code>. Если маркеры стоят наоборот, поменяйте концы линии местами. Текстовые подписи <code>1:N</code> не добавляйте: они накладываются на соседние линии.</p>
 <figure class="diagram">
 <img src="reports/screens/prep/drawio-er.png" alt="Полная ER-диаграмма V01: двенадцать таблиц Table 1 и четырнадцать связей с маркерами кратности">
-<figcaption>Полная ER-диаграмма: двенадцать таблиц `Table 1` и четырнадцать связей. Линии обходят таблицы, кратность показана маркерами, текстовых подписей нет.</figcaption>
+<figcaption>Полная ER-диаграмма: двенадцать таблиц <code>Table 1</code> и четырнадцать связей. Линии обходят таблицы, кратность показана маркерами, текстовых подписей нет.</figcaption>
 </figure>
 
-<h3>Шаг 11. Проверьте третью нормальную форму и ключи</h3>
+<h3>Шаг 16. Проверьте третью нормальную форму и ключи</h3>
 <p>Пройдите по каждой таблице тремя вопросами. Есть ли ячейка с несколькими значениями? Есть ли поле, зависящее от части составного ключа? Есть ли поле, зависящее от другого неключевого поля? Все три ответа должны быть отрицательными.</p>
 <p>Отдельно проверьте вычисляемые величины. Стоимость заказа, сумма строки и количество изделий в заказе не хранятся. Если такая величина оказалась в таблице, удалите поле и объясните в примечании, что расчёт вынесен в запрос.</p>
 <p>Сверьте количество. В базовой модели двенадцать таблиц и четырнадцать связей. Если таблиц девять, скорее всего шапка слита со строками. Если пятнадцать, появилась лишняя таблица под каждую строку документа.</p>
 <p>Проверьте ключи. У каждой таблицы есть первичный ключ. Каждый внешний ключ указывает на первичный ключ другой таблицы, а не на произвольное поле. У каждой связи маркеры кратности стоят у нужных таблиц: <code>1</code> у родительской, <code>N</code> у дочерней. Связей многие ко многим без промежуточной таблицы нет.</p>
-<h3>Шаг 12. Экспортируйте PDF и сохраните исходник</h3>
+<h3>Шаг 17. Экспортируйте PDF и сохраните исходник</h3>
 <p>Нажмите Ctrl+A, чтобы выделить все фигуры. Откройте меню <code>File</code>, затем <code>Export as</code>, затем <code>PDF</code>. В диалоге выставьте параметры:</p>
 <ul>
 <li>область <code>Page</code>, если схема занимает одну страницу, или <code>Selection</code>, если хотите выгрузить только выделенное;</li>
