@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Блок-схема: максимум из трёх</title>
+<style>
+  :root { --paper:#f7f4ee; --ink:#2d3142; --muted:#4f5d75; --accent:#bf4520; --rule:rgba(45,49,66,.12); }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Geist","Segoe UI",system-ui,sans-serif; }
+  .frame { background:var(--paper); border:1px solid var(--rule); border-radius:12px; padding:18px 18px 14px; }
+  .eyebrow { margin:0 0 8px; font:600 9px/1.2 "Geist Mono",Consolas,ui-monospace,monospace; letter-spacing:.16em; text-transform:uppercase; color:var(--muted); }
+  svg { display:block; width:100%; height:auto; }
+</style>
+</head>
+<body>
+<div class="frame">
+  <p class="eyebrow">Блок-схема · Diagram Design</p>
+  <svg viewBox="0 0 680 560" role="img" aria-labelledby="flow-title flow-desc">
+    <title id="flow-title">Блок-схема поиска максимума из трёх чисел</title>
+    <desc id="flow-desc">Сначала m равно a. Затем m заменяется на b, если b больше m, и на c, если c больше m. В конце выводится m.</desc>
+    <defs>
+      <marker id="arw-flow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#4f5d75"/></marker>
+      <marker id="arw-flow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#bf4520"/></marker>
+    </defs>
+
+    <line x1="340" y1="60" x2="340" y2="86" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#arw-flow)"/>
+    <line x1="340" y1="132" x2="340" y2="158" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#arw-flow)"/>
+    <line x1="340" y1="200" x2="340" y2="220" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#arw-flow)"/>
+    <line x1="340" y1="318" x2="340" y2="346" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#arw-flow)"/>
+    <line x1="340" y1="444" x2="340" y2="476" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#arw-flow)"/>
+
+    <line x1="220" y1="270" x2="182" y2="270" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#arw-flow)"/>
+    <polyline points="120,290 120,396 218,396" fill="none" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#arw-flow)"/>
+
+    <line x1="460" y1="396" x2="498" y2="396" stroke="#bf4520" stroke-width="1.3" marker-end="url(#arw-flow-accent)"/>
+    <polyline points="560,416 560,500 430,500" fill="none" stroke="#bf4520" stroke-width="1.3" marker-end="url(#arw-flow-accent)"/>
+
+    <rect x="270" y="20" width="140" height="40" rx="20" fill="rgba(45,49,66,.03)" stroke="#2d3142" stroke-width="1"/>
+    <text x="340" y="45" text-anchor="middle" font-family="'Geist',sans-serif" font-size="12" font-weight="600" fill="#2d3142">Начало</text>
+
+    <polygon points="260,86 440,86 420,132 240,132" fill="#ffffff" stroke="#2d3142" stroke-width="1"/>
+    <text x="340" y="113" text-anchor="middle" font-family="'Geist',sans-serif" font-size="12" font-weight="600" fill="#2d3142">Ввести a, b, c</text>
+
+    <rect x="260" y="158" width="160" height="42" rx="6" fill="#ffffff" stroke="#2d3142" stroke-width="1"/>
+    <text x="340" y="184" text-anchor="middle" font-family="'Geist Mono',monospace" font-size="11" font-weight="600" fill="#2d3142">m = a</text>
+
+    <polygon points="340,220 460,270 340,318 220,270" fill="#ffffff" stroke="#bf4520" stroke-width="1.2"/>
+    <text x="340" y="266" text-anchor="middle" font-family="'Geist',sans-serif" font-size="11" font-weight="600" fill="#2d3142">b &gt; m?</text>
+    <rect x="196" y="258" width="20" height="12" rx="2" fill="#f7f4ee"/>
+    <text x="206" y="267" text-anchor="middle" font-family="'Geist Mono',monospace" font-size="8" letter-spacing=".1em" fill="#4f5d75">ДА</text>
+    <rect x="346" y="328" width="28" height="12" rx="2" fill="#f7f4ee"/>
+    <text x="360" y="337" text-anchor="middle" font-family="'Geist Mono',monospace" font-size="8" letter-spacing=".1em" fill="#4f5d75">НЕТ</text>
+
+    <rect x="60" y="250" width="120" height="40" rx="6" fill="#ffffff" stroke="#2d3142" stroke-width="1"/>
+    <text x="120" y="275" text-anchor="middle" font-family="'Geist Mono',monospace" font-size="11" font-weight="600" fill="#2d3142">m = b</text>
+
+    <polygon points="340,346 460,396 340,444 220,396" fill="#ffffff" stroke="#bf4520" stroke-width="1.2"/>
+    <text x="340" y="392" text-anchor="middle" font-family="'Geist',sans-serif" font-size="11" font-weight="600" fill="#2d3142">c &gt; m?</text>
+    <rect x="472" y="386" width="20" height="12" rx="2" fill="#f7f4ee"/>
+    <text x="482" y="395" text-anchor="middle" font-family="'Geist Mono',monospace" font-size="8" letter-spacing=".1em" fill="#bf4520">ДА</text>
+    <rect x="346" y="454" width="28" height="12" rx="2" fill="#f7f4ee"/>
+    <text x="360" y="463" text-anchor="middle" font-family="'Geist Mono',monospace" font-size="8" letter-spacing=".1em" fill="#4f5d75">НЕТ</text>
+
+    <rect x="500" y="376" width="120" height="40" rx="6" fill="#ffffff" stroke="#2d3142" stroke-width="1"/>
+    <text x="560" y="401" text-anchor="middle" font-family="'Geist Mono',monospace" font-size="11" font-weight="600" fill="#2d3142">m = c</text>
+
+    <polygon points="260,476 440,476 420,522 240,522" fill="rgba(191,69,32,.08)" stroke="#bf4520" stroke-width="1.2"/>
+    <text x="340" y="503" text-anchor="middle" font-family="'Geist',sans-serif" font-size="12" font-weight="600" fill="#bf4520">Вывести m</text>
+  </svg>
+</div>
+</body>
+</html>

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Типы данных Python</title>
+<style>
+  :root { --paper:#f7f4ee; --ink:#2d3142; --muted:#4f5d75; --accent:#bf4520; --rule:rgba(45,49,66,.12); }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Geist","Segoe UI",system-ui,sans-serif; }
+  .frame { background:var(--paper); border:1px solid var(--rule); border-radius:12px; padding:18px 18px 14px; }
+  .eyebrow { margin:0 0 8px; font:600 9px/1.2 "Geist Mono",Consolas,ui-monospace,monospace; letter-spacing:.16em; text-transform:uppercase; color:var(--muted); }
+  svg { display:block; width:100%; height:auto; }
+</style>
+</head>
+<body>
+<div class="frame">
+  <p class="eyebrow">Типы · Diagram Design</p>
+  <svg viewBox="0 0 680 300" role="img" aria-labelledby="types-title types-desc">
+    <title id="types-title">Пять базовых типов Python</title>
+    <desc id="types-desc">Целые числа int, дробные float, строки str, логические bool и пустое значение None. Ввод возвращает строку, поэтому её преобразуют в число.</desc>
+    <defs>
+      <marker id="arw-types" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#4f5d75"/></marker>
+    </defs>
+
+    <line x1="340" y1="64" x2="340" y2="90" stroke="#4f5d75" stroke-width="1.2"/>
+    <line x1="96" y1="90" x2="584" y2="90" stroke="#4f5d75" stroke-width="1.2"/>
+    <line x1="96" y1="90" x2="96" y2="108" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#arw-types)"/>
+    <line x1="218" y1="90" x2="218" y2="108" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#arw-types)"/>
+    <line x1="340" y1="90" x2="340" y2="108" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#arw-types)"/>
+    <line x1="462" y1="90" x2="462" y2="108" stroke="#bf4520" stroke-width="1.3" marker-end="url(#arw-types)"/>
+    <line x1="584" y1="90" x2="584" y2="108" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#arw-types)"/>
+
+    <rect x="270" y="20" width="140" height="44" rx="22" fill="rgba(45,49,66,.03)" stroke="#2d3142" stroke-width="1"/>
+    <text x="340" y="48" text-anchor="middle" font-family="'Instrument Serif',Georgia,serif" font-size="17" fill="#2d3142">Тип</text>
+
+    <rect x="38" y="108" width="116" height="100" rx="6" fill="#ffffff" stroke="#2d3142" stroke-width="1"/>
+    <text x="96" y="134" text-anchor="middle" font-family="'Geist Mono',monospace" font-size="12" font-weight="600" fill="#2d3142">int</text>
+    <text x="96" y="158" text-anchor="middle" font-family="'Geist Mono',monospace" font-size="10" fill="#4f5d75">5</text>
+    <text x="96" y="182" text-anchor="middle" font-family="'Geist',sans-serif" font-size="8.5" fill="#4f5d75">целое</text>
+
+    <rect x="160" y="108" width="116" height="100" rx="6" fill="#ffffff" stroke="#2d3142" stroke-width="1"/>
+    <text x="218" y="134" text-anchor="middle" font-family="'Geist Mono',monospace" font-size="12" font-weight="600" fill="#2d3142">float</text>
+    <text x="218" y="158" text-anchor="middle" font-family="'Geist Mono',monospace" font-size="10" fill="#4f5d75">3.14</text>
+    <text x="218" y="182" text-anchor="middle" font-family="'Geist',sans-serif" font-size="8.5" fill="#4f5d75">дробное</text>
+
+    <rect x="282" y="108" width="116" height="100" rx="6" fill="rgba(191,69,32,.08)" stroke="#bf4520" stroke-width="1.2"/>
+    <text x="340" y="134" text-anchor="middle" font-family="'Geist Mono',monospace" font-size="12" font-weight="600" fill="#bf4520">str</text>
+    <text x="340" y="158" text-anchor="middle" font-family="'Geist Mono',monospace" font-size="10" fill="#bf4520">&quot;5&quot;</text>
+    <text x="340" y="182" text-anchor="middle" font-family="'Geist',sans-serif" font-size="8.5" fill="#bf4520">строка</text>
+
+    <rect x="404" y="108" width="116" height="100" rx="6" fill="#ffffff" stroke="#2d3142" stroke-width="1"/>
+    <text x="462" y="134" text-anchor="middle" font-family="'Geist Mono',monospace" font-size="12" font-weight="600" fill="#2d3142">bool</text>
+    <text x="462" y="158" text-anchor="middle" font-family="'Geist Mono',monospace" font-size="10" fill="#4f5d75">True</text>
+    <text x="462" y="182" text-anchor="middle" font-family="'Geist',sans-serif" font-size="8.5" fill="#4f5d75">логика</text>
+
+    <rect x="526" y="108" width="116" height="100" rx="6" fill="#ffffff" stroke="#2d3142" stroke-width="1"/>
+    <text x="584" y="134" text-anchor="middle" font-family="'Geist Mono',monospace" font-size="12" font-weight="600" fill="#2d3142">None</text>
+    <text x="584" y="158" text-anchor="middle" font-family="'Geist Mono',monospace" font-size="10" fill="#4f5d75">None</text>
+    <text x="584" y="182" text-anchor="middle" font-family="'Geist',sans-serif" font-size="8.5" fill="#4f5d75">пусто</text>
+
+    <line x1="180" y1="240" x2="500" y2="240" stroke="rgba(45,49,66,.12)" stroke-width="1" stroke-dasharray="4 4"/>
+    <text x="340" y="262" text-anchor="middle" font-family="'Geist Mono',monospace" font-size="8.5" fill="#4f5d75">type(x) ПОКАЗЫВАЕТ ТИП · int(x) И float(x) ПРЕОБРАЗУЮТ</text>
+  </svg>
+</div>
+</body>
+</html>
