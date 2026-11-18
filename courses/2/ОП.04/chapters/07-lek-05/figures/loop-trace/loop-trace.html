@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Цикл: сумма чисел по шагам</title>
+<style>
+  :root { --paper:#f7f4ee; --card:#fffdf8; --ink:#1a1916; --muted:#6b6459; --rule:#ded6c8; --accent:#2f6f5e; --accent-soft:#ddebe5; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .demo { background:var(--paper); border:1px solid var(--rule); border-radius:14px; padding:18px; }
+  .head { display:flex; justify-content:space-between; align-items:flex-end; gap:16px; padding-bottom:10px; border-bottom:1px solid var(--rule); }
+  .eyebrow { margin:0 0 4px; font:600 10px/1.2 Consolas,monospace; letter-spacing:.12em; text-transform:uppercase; color:var(--accent); }
+  h3 { margin:0; font-size:20px; line-height:1.2; }
+  .code { font:12px/1.5 Consolas,monospace; color:var(--muted); white-space:nowrap; }
+  .code b { color:var(--ink); }
+  table { width:100%; border-collapse:collapse; table-layout:fixed; margin:14px 0 4px; font-size:13px; }
+  th, td { border-bottom:1px solid var(--rule); padding:7px 8px; text-align:left; }
+  th { font:600 10px/1.2 Consolas,monospace; letter-spacing:.08em; color:var(--muted); }
+  th:nth-child(1) { width:20%; }
+  th:nth-child(2) { width:10%; }
+  th:nth-child(3) { width:35%; }
+  th:nth-child(4) { width:35%; }
+  td.num { font-family:Consolas,monospace; }
+  tr.current td { background:var(--accent-soft); }
+  tr.done td { color:var(--muted); }
+  .status { min-height:24px; margin:8px 0 0; color:var(--muted); font-size:13px; }
+  .status b { color:var(--ink); }
+  .controls { display:flex; gap:8px; flex-wrap:wrap; margin-top:12px; }
+  button { font:600 13px/1 "Segoe UI",system-ui,sans-serif; padding:10px 14px; border-radius:9px; border:1px solid var(--rule); background:var(--card); color:var(--ink); cursor:pointer; }
+  button:hover { border-color:var(--accent); color:var(--accent); }
+  button.primary { background:var(--accent); border-color:var(--accent); color:#fff; }
+  button.primary:hover { background:#245a4c; color:#fff; }
+  button:disabled { opacity:.45; cursor:default; }
+  .meta { display:flex; justify-content:space-between; gap:12px; margin-top:10px; font:11px/1.4 Consolas,monospace; color:var(--muted); }
+  @media (max-width:560px) { .demo { padding:12px; } .code { display:none; } }
+</style>
+</head>
+<body>
+<div class="demo">
+  <div class="head">
+    <div><p class="eyebrow">Цикл · шаг за шагом</p><h3>Сумма чисел от 1 до 5</h3></div>
+    <div class="code">s = 0<br><b>for i in range(1, 6):</b><br>&nbsp;&nbsp;s = s + i</div>
+  </div>
+  <table>
+    <thead><tr><th>Итерация</th><th>i</th><th>s до</th><th>s после</th></tr></thead>
+    <tbody id="rows"></tbody>
+  </table>
+  <div class="status" id="status">Нажмите «Шаг», чтобы выполнить первую итерацию.</div>
+  <div class="controls">
+    <button class="primary" id="step">Шаг</button>
+    <button id="play">Запустить</button>
+    <button id="reset">Сброс</button>
+  </div>
+  <div class="meta"><span id="counter">Итераций: 0 из 5</span><span>После цикла: s = 15</span></div>
+</div>
+<script>
+(function () {
+  var n = 5;
+  var iteration = 0;
+  var s = 0;
+  var timer = null;
+  var rows = document.getElementById('rows');
+  var status = document.getElementById('status');
+  var counter = document.getElementById('counter');
+  var stepBtn = document.getElementById('step');
+  var playBtn = document.getElementById('play');
+  var resetBtn = document.getElementById('reset');
+
+  function render() {
+    rows.innerHTML = '';
+    for (var k = 0; k < n; k += 1) {
+      var tr = document.createElement('tr');
+      var i = k + 1;
+      var before = k < iteration ? (k * (k + 1)) / 2 : '';
+      var after = k < iteration ? ((k + 1) * (k + 2)) / 2 : '';
+      if (k === iteration - 1 && iteration > 0) tr.className = 'current';
+      if (k < iteration - 1) tr.className = 'done';
+      tr.innerHTML = '<td class="num">' + i + '</td><td class="num">' + (k < iteration ? i : '') + '</td><td class="num">' + before + '</td><td class="num">' + after + '</td>';
+      rows.appendChild(tr);
+    }
+    counter.textContent = 'Итераций: ' + iteration + ' из ' + n;
+    stepBtn.disabled = iteration >= n;
+    playBtn.disabled = iteration >= n;
+  }
+
+  function step() {
+    if (iteration >= n) return;
+    var i = iteration + 1;
+    var before = s;
+    s += i;
+    iteration += 1;
+    status.innerHTML = 'Итерация <b>' + i + '</b>: s = ' + before + ' + ' + i + ' = <b>' + s + '</b>.';
+    if (iteration === n) status.innerHTML += ' Цикл завершён.';
+    render();
+  }
+
+  function play() {
+    if (timer || iteration >= n) return;
+    timer = setInterval(function () { step(); if (iteration >= n) stop(); }, 750);
+  }
+  function stop() { if (timer) clearInterval(timer); timer = null; }
+  function reset() { stop(); iteration = 0; s = 0; status.textContent = 'Нажмите «Шаг», чтобы выполнить первую итерацию.'; render(); }
+
+  stepBtn.addEventListener('click', step);
+  playBtn.addEventListener('click', play);
+  resetBtn.addEventListener('click', reset);
+  render();
+})();
+</script>
+</body>
+</html>

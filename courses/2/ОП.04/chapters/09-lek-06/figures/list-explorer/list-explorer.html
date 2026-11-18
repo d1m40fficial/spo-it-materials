@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Список: индексы и срезы</title>
+<style>
+  :root { --paper:#f7f4ee; --card:#fffdf8; --ink:#1a1916; --muted:#6b6459; --rule:#ded6c8; --accent:#2f6f5e; --accent-soft:#ddebe5; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .demo { background:var(--paper); border:1px solid var(--rule); border-radius:14px; padding:18px; }
+  .head { display:flex; justify-content:space-between; align-items:flex-end; gap:16px; padding-bottom:10px; border-bottom:1px solid var(--rule); }
+  .eyebrow { margin:0 0 4px; font:600 10px/1.2 Consolas,monospace; letter-spacing:.12em; text-transform:uppercase; color:var(--accent); }
+  h3 { margin:0; font-size:20px; line-height:1.2; }
+  .len { font:12px/1.4 Consolas,monospace; color:var(--muted); white-space:nowrap; }
+  .len b { color:var(--ink); }
+  .row { display:flex; gap:8px; justify-content:center; margin:20px 0 6px; flex-wrap:wrap; }
+  .cell { width:66px; text-align:center; cursor:pointer; border:0; background:transparent; padding:0; font:inherit; color:inherit; }
+  .value { display:grid; place-items:center; height:54px; border:1px solid var(--rule); border-radius:8px; background:var(--card); font:600 17px/1 Consolas,monospace; transition:background .18s,border-color .18s,transform .18s; }
+  .index { margin-top:5px; font:11px/1.2 Consolas,monospace; color:var(--muted); }
+  .cell:hover .value, .cell:focus-visible .value { border-color:var(--accent); transform:translateY(-2px); }
+  .cell:focus-visible { outline:2px solid var(--accent); outline-offset:3px; border-radius:10px; }
+  .cell.active .value { background:var(--accent); border-color:var(--accent); color:#fff; }
+  .status { min-height:24px; margin:8px 0 0; text-align:center; color:var(--muted); font-size:13px; }
+  .status b { color:var(--ink); }
+  .controls { display:flex; gap:8px; justify-content:center; flex-wrap:wrap; margin-top:12px; }
+  button { font:600 12px/1 "Segoe UI",system-ui,sans-serif; padding:9px 12px; border-radius:9px; border:1px solid var(--rule); background:var(--card); color:var(--ink); cursor:pointer; }
+  button:hover { border-color:var(--accent); color:var(--accent); }
+  button.primary { background:var(--accent); border-color:var(--accent); color:#fff; }
+  button.primary:hover { background:#245a4c; color:#fff; }
+  .note { margin:12px 0 0; padding-top:10px; border-top:1px solid var(--rule); font-size:12px; line-height:1.5; color:var(--muted); }
+  @media (max-width:560px) { .cell { width:50px; } .value { height:44px; font-size:14px; } .demo { padding:12px; } }
+</style>
+</head>
+<body>
+<div class="demo">
+  <div class="head">
+    <div><p class="eyebrow">Список · индексы и срезы</p><h3>Измерения</h3></div>
+    <div class="len">len = <b id="len">5</b></div>
+  </div>
+  <div class="row" id="row" aria-label="Элементы списка"></div>
+  <div class="status" id="status">Нажмите на элемент, чтобы увидеть его индекс и значение.</div>
+  <div class="controls">
+    <button class="primary" id="last">Показать последний</button>
+    <button id="append">Добавить 30</button>
+    <button id="pop">Удалить последний</button>
+    <button id="slice">Срез [1:4]</button>
+    <button id="reset">Сброс</button>
+  </div>
+  <p class="note">Индексы начинаются с нуля. Отрицательный индекс считается с конца. Срез <b>[1:4]</b> берёт элементы с индексами 1, 2 и 3, не включая 4.</p>
+</div>
+<script>
+(function () {
+  var original = [12, 7, 25, 42, 18];
+  var data = original.slice();
+  var active = -1;
+  var row = document.getElementById('row');
+  var status = document.getElementById('status');
+  var len = document.getElementById('len');
+
+  function show(text) { status.innerHTML = text; }
+
+  function render() {
+    row.innerHTML = '';
+    data.forEach(function (value, i) {
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'cell' + (i === active ? ' active' : '');
+      b.setAttribute('aria-label', 'Элемент ' + i + ': ' + value);
+      b.innerHTML = '<div class="value">' + value + '</div><div class="index">' + i + '</div>';
+      b.addEventListener('click', function () {
+        active = i;
+        show('list[' + i + '] = <b>' + value + '</b>');
+        render();
+      });
+      row.appendChild(b);
+    });
+    len.textContent = data.length;
+  }
+
+  document.getElementById('last').addEventListener('click', function () {
+    if (!data.length) { show('Список пуст.'); return; }
+    active = data.length - 1;
+    show('list[-1] = <b>' + data[active] + '</b>, это последний элемент.');
+    render();
+  });
+  document.getElementById('append').addEventListener('click', function () {
+    data.push(30);
+    active = data.length - 1;
+    show('append(30): новый элемент получил индекс <b>' + active + '</b>.');
+    render();
+  });
+  document.getElementById('pop').addEventListener('click', function () {
+    if (!data.length) { show('Список пуст.'); return; }
+    var removed = data.pop();
+    active = -1;
+    show('pop() удалил <b>' + removed + '</b>. Длина стала ' + data.length + '.');
+    render();
+  });
+  document.getElementById('slice').addEventListener('click', function () {
+    var part = data.slice(1, 4);
+    active = -1;
+    show('list[1:4] = <b>[' + part.join(', ') + ']</b>');
+    render();
+  });
+  document.getElementById('reset').addEventListener('click', function () {
+    data = original.slice();
+    active = -1;
+    show('Список восстановлен.');
+    render();
+  });
+  render();
+})();
+</script>
+</body>
+</html>
