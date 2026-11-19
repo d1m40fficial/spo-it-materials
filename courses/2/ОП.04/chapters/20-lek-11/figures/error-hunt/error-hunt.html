@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Найдите строку с ошибкой</title>
+<style>
+  :root { --paper:#f7f4ee; --card:#fffdf8; --ink:#1a1916; --muted:#6b6459; --rule:#ded6c8; --accent:#2f6f5e; --accent-soft:#ddebe5; --bad:#b23a2b; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .demo { background:var(--paper); border:1px solid var(--rule); border-radius:14px; padding:18px; }
+  .head { display:flex; justify-content:space-between; align-items:flex-end; gap:16px; padding-bottom:10px; border-bottom:1px solid var(--rule); }
+  .eyebrow { margin:0 0 4px; font:600 10px/1.2 Consolas,monospace; letter-spacing:.12em; text-transform:uppercase; color:var(--accent); }
+  h3 { margin:0; font-size:20px; line-height:1.2; }
+  .hint-count { font:12px/1.4 Consolas,monospace; color:var(--muted); }
+  .code { margin-top:12px; border:1px solid var(--rule); border-radius:10px; overflow:hidden; background:var(--card); }
+  .row { display:flex; align-items:stretch; font:12.5px/1.6 Consolas,monospace; cursor:pointer; border-bottom:1px solid transparent; }
+  .row:last-child { border-bottom:0; }
+  .row:hover { background:#f1ece3; }
+  .row .no { width:34px; padding:8px 0; text-align:center; color:#b9b0a2; background:#f4efe6; flex:none; }
+  .row .src { padding:8px 12px; white-space:pre; }
+  .row.wrong { background:rgba(178,58,43,.07); }
+  .row.right { background:var(--accent-soft); }
+  .row.right .no { background:#cfe3da; color:var(--accent); }
+  .status { min-height:24px; margin:12px 0 0; font-size:13px; line-height:1.5; color:var(--muted); }
+  .status b { color:var(--ink); }
+  .status.bad b { color:var(--bad); }
+  .status.good b { color:var(--accent); }
+  .explain { margin-top:8px; padding:12px; border:1px solid var(--accent); border-radius:9px; background:var(--accent-soft); font-size:12.5px; line-height:1.55; display:none; }
+  .explain.on { display:block; }
+  .explain code { font-family:Consolas,monospace; background:#fff; padding:1px 5px; border-radius:4px; }
+  .controls { display:flex; gap:8px; flex-wrap:wrap; margin-top:10px; }
+  button { font:600 12.5px/1 "Segoe UI",system-ui,sans-serif; padding:9px 13px; border-radius:9px; border:1px solid var(--rule); background:var(--card); color:var(--ink); cursor:pointer; }
+  button:hover { border-color:var(--accent); color:var(--accent); }
+  button.primary { background:var(--accent); border-color:var(--accent); color:#fff; }
+  button.primary:hover { background:#245a4c; color:#fff; }
+  .trace { display:none; margin-top:10px; padding:10px 12px; border-left:3px solid var(--bad); background:#fbf3f1; font:11px/1.5 Consolas,monospace; color:#7d2a1f; white-space:pre-wrap; }
+  .trace.on { display:block; }
+  @media (max-width:560px) { .demo { padding:12px; } }
+</style>
+</head>
+<body>
+<div class="demo">
+  <div class="head">
+    <div><p class="eyebrow">Отладка · поиск ошибки</p><h3>Почему программа падает?</h3></div>
+    <div class="hint-count">попыток: <b id="tries">0</b></div>
+  </div>
+  <div class="code" id="code"></div>
+  <div class="status" id="status">Нажмите на строку, где, по вашему мнению, ошибка.</div>
+  <div class="explain" id="explain"></div>
+  <div class="trace" id="trace">Traceback (most recent call last):
+  File "check.py", line 2, in &lt;module&gt;
+    if age &gt;= 18:
+TypeError: '&gt;=' not supported between instances of 'str' and 'int'</div>
+  <div class="controls">
+    <button class="primary" id="hint">Показать трассировку</button>
+    <button id="reset">Сброс</button>
+  </div>
+</div>
+<script>
+(function () {
+  var lines = [
+    'age = input("Возраст: ")',
+    'if age >= 18:',
+    '    print("Проход разрешён")',
+    'else:',
+    '    print("Вход только с 18 лет")'
+  ];
+  var bug = 2;
+  var tries = 0;
+  var solved = false;
+  var code = document.getElementById('code');
+  var status = document.getElementById('status');
+  var explain = document.getElementById('explain');
+  var trace = document.getElementById('trace');
+  var triesEl = document.getElementById('tries');
+
+  function build() {
+    code.innerHTML = '';
+    lines.forEach(function (src, i) {
+      var row = document.createElement('div');
+      row.className = 'row';
+      row.dataset.line = String(i + 1);
+      var no = document.createElement('div');
+      no.className = 'no';
+      no.textContent = String(i + 1);
+      var text = document.createElement('div');
+      text.className = 'src';
+      text.textContent = src;
+      row.appendChild(no);
+      row.appendChild(text);
+      row.addEventListener('click', function () { guess(i + 1, row); });
+      code.appendChild(row);
+    });
+  }
+
+  function guess(n, row) {
+    if (solved) return;
+    tries += 1;
+    triesEl.textContent = tries;
+    if (n === bug) {
+      solved = true;
+      row.classList.add('right');
+      status.className = 'status good';
+      status.innerHTML = 'Верно: ошибка в строке <b>2</b>.';
+      explain.classList.add('on');
+      explain.innerHTML = 'Функция <code>input()</code> возвращает строку, а сравнение <code>&gt;=</code> с числом 18 требует числа. Python не приводит типы сам. Исправление: <code>age = int(input("Возраст: "))</code>. Сравнивать строки тоже можно, но тогда <code>"9" &gt; "18"</code> даст True, потому что символы сравниваются по кодам.';
+      trace.classList.add('on');
+    } else {
+      row.classList.add('wrong');
+      status.className = 'status bad';
+      status.innerHTML = 'В строке <b>' + n + '</b> ошибки нет. Посмотрите на типы значений и на то, что возвращает <code>input()</code>.';
+    }
+  }
+
+  document.getElementById('hint').addEventListener('click', function () {
+    trace.classList.toggle('on');
+  });
+
+  document.getElementById('reset').addEventListener('click', function () {
+    tries = 0;
+    solved = false;
+    triesEl.textContent = '0';
+    status.className = 'status';
+    status.textContent = 'Нажмите на строку, где, по вашему мнению, ошибка.';
+    explain.classList.remove('on');
+    trace.classList.remove('on');
+    build();
+  });
+
+  build();
+})();
+</script>
+</body>
+</html>

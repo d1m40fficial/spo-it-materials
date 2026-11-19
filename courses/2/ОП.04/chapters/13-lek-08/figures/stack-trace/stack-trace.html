@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Стек вызовов: factorial(3)</title>
+<style>
+  :root { --paper:#f7f4ee; --card:#fffdf8; --ink:#1a1916; --muted:#6b6459; --rule:#ded6c8; --accent:#2f6f5e; --accent-soft:#ddebe5; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .demo { background:var(--paper); border:1px solid var(--rule); border-radius:14px; padding:18px; }
+  .head { display:flex; justify-content:space-between; align-items:flex-end; gap:16px; padding-bottom:10px; border-bottom:1px solid var(--rule); }
+  .eyebrow { margin:0 0 4px; font:600 10px/1.2 Consolas,monospace; letter-spacing:.12em; text-transform:uppercase; color:var(--accent); }
+  h3 { margin:0; font-size:20px; line-height:1.2; }
+  .counter { font:12px/1.4 Consolas,monospace; color:var(--muted); white-space:nowrap; }
+  .grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:12px; }
+  .code { background:var(--card); border:1px solid var(--rule); border-radius:10px; padding:12px; font:11px/1.7 Consolas,monospace; white-space:pre; overflow:auto; }
+  .code b { color:var(--accent); }
+  .stack { min-height:150px; background:var(--card); border:1px solid var(--rule); border-radius:10px; padding:10px; }
+  .stack .cap { font:600 9px/1.2 Consolas,monospace; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); margin-bottom:8px; }
+  .frame { display:flex; justify-content:space-between; gap:10px; padding:8px 10px; border:1px solid var(--rule); border-radius:8px; margin-bottom:6px; font:11px/1.4 Consolas,monospace; background:#fff; }
+  .frame.top { border-color:var(--accent); background:var(--accent-soft); }
+  .frame .note { color:var(--muted); }
+  .empty { color:var(--muted); font-size:12px; }
+  .status { min-height:38px; margin:12px 0 0; padding:10px 12px; border-radius:9px; background:var(--accent-soft); font-size:13px; line-height:1.45; }
+  .status b { color:var(--accent); }
+  .controls { display:flex; gap:8px; flex-wrap:wrap; margin-top:12px; }
+  button { font:600 13px/1 "Segoe UI",system-ui,sans-serif; padding:10px 14px; border-radius:9px; border:1px solid var(--rule); background:var(--card); color:var(--ink); cursor:pointer; }
+  button:hover { border-color:var(--accent); color:var(--accent); }
+  button.primary { background:var(--accent); border-color:var(--accent); color:#fff; }
+  button.primary:hover { background:#245a4c; color:#fff; }
+  button:disabled { opacity:.45; cursor:default; }
+  @media (max-width:620px) { .grid { grid-template-columns:1fr; } .demo { padding:12px; } }
+</style>
+</head>
+<body>
+<div class="demo">
+  <div class="head">
+    <div><p class="eyebrow">Функция · стек вызовов</p><h3>factorial(3)</h3></div>
+    <div class="counter" id="counter">шаг 0 из 6</div>
+  </div>
+  <div class="grid">
+    <div class="code">def factorial(n):
+    if n &lt;= 1:
+        <b>return 1</b>
+    return n * factorial(n - 1)
+
+print(factorial(3))</div>
+    <div class="stack">
+      <div class="cap">Стек: сверху последний вызов</div>
+      <div id="frames"><div class="empty">Стек пуст. Нажмите «Шаг».</div></div>
+    </div>
+  </div>
+  <div class="status" id="status">Нажмите «Шаг», чтобы выполнить первый вызов.</div>
+  <div class="controls">
+    <button class="primary" id="step">Шаг</button>
+    <button id="reset">Сброс</button>
+  </div>
+</div>
+<script>
+(function () {
+  var steps = [
+    { kind: 'call', n: 3, text: 'Вызов <b>factorial(3)</b>: аргумент 3 копируется в параметр n.' },
+    { kind: 'call', n: 2, text: 'Внутри вычисляется <b>factorial(2)</b>. Первый вызов ждёт результата.' },
+    { kind: 'call', n: 1, text: 'Вызов <b>factorial(1)</b>. Условие n &lt;= 1 истинно, дальше будет return.' },
+    { kind: 'ret', n: 1, val: 1, text: '<b>factorial(1)</b> возвращает 1. Кадр снимается со стека.' },
+    { kind: 'ret', n: 2, val: 2, text: '<b>factorial(2)</b> возвращает 2 * 1 = 2.' },
+    { kind: 'ret', n: 3, val: 6, text: '<b>factorial(3)</b> возвращает 3 * 2 = 6. Стек пуст.' }
+  ];
+  var pos = 0;
+  var stack = [];
+  var frames = document.getElementById('frames');
+  var status = document.getElementById('status');
+  var counter = document.getElementById('counter');
+  var stepBtn = document.getElementById('step');
+  var resetBtn = document.getElementById('reset');
+
+  function render() {
+    if (!stack.length) {
+      frames.innerHTML = '<div class="empty">Стек пуст.</div>';
+    } else {
+      frames.innerHTML = '';
+      stack.slice().reverse().forEach(function (f, i) {
+        var d = document.createElement('div');
+        d.className = 'frame' + (i === 0 ? ' top' : '');
+        var left = document.createElement('span');
+        left.textContent = 'factorial(' + f.n + ')';
+        var right = document.createElement('span');
+        right.className = 'note';
+        right.textContent = f.note;
+        d.appendChild(left);
+        d.appendChild(right);
+        frames.appendChild(d);
+      });
+    }
+    counter.textContent = 'шаг ' + pos + ' из ' + steps.length;
+    stepBtn.disabled = pos >= steps.length;
+  }
+
+  function step() {
+    if (pos >= steps.length) return;
+    var s = steps[pos];
+    if (s.kind === 'call') {
+      if (stack.length) stack[stack.length - 1].note = 'ждёт factorial(' + s.n + ')';
+      stack.push({ n: s.n, note: s.n <= 1 ? 'готов вернуть 1' : 'вычисляет' });
+    } else {
+      stack.pop();
+      if (stack.length) stack[stack.length - 1].note = 'получил ' + s.val;
+    }
+    status.innerHTML = s.text;
+    pos += 1;
+    render();
+  }
+
+  function reset() {
+    pos = 0;
+    stack = [];
+    status.textContent = 'Нажмите «Шаг», чтобы выполнить первый вызов.';
+    render();
+  }
+
+  stepBtn.addEventListener('click', step);
+  resetBtn.addEventListener('click', reset);
+  render();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Строка: индексы и срезы</title>
+<style>
+  :root { --paper:#f7f4ee; --ink:#2d3142; --muted:#4f5d75; --accent:#2f6f5e; --accent-soft:#ddebe5; --rule:rgba(45,49,66,.12); }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .frame { background:var(--paper); border:1px solid var(--rule); border-radius:12px; padding:18px 18px 14px; }
+  .eyebrow { margin:0 0 8px; font:600 9px/1.2 Consolas,monospace; letter-spacing:.16em; text-transform:uppercase; color:var(--muted); }
+  .note { margin:10px 2px 0; font:11px/1.5 Consolas,monospace; color:var(--muted); }
+  svg { display:block; width:100%; height:auto; }
+</style>
+</head>
+<body>
+<div class="frame">
+  <p class="eyebrow">Строка · символы и срезы</p>
+  <svg viewBox="0 0 680 300" role="img" aria-labelledby="str-title str-desc">
+    <title id="str-title">Индексы и срезы строки</title>
+    <desc id="str-desc">Слово алгоритм из восьми символов. Индексы идут от 0 до 7, отрицательные от -8 до -1. Срез [0:3] даёт алг, срез [3:] даёт оритм, срез [::2] берёт каждый второй символ.</desc>
+
+    <text x="40" y="30" font-family="Consolas,monospace" font-size="9" letter-spacing=".1em" fill="#4f5d75">ИНДЕКС</text>
+
+    <g font-family="Consolas,monospace" text-anchor="middle">
+      <text x="60" y="62" font-size="11" fill="#4f5d75">0</text>
+      <rect x="30" y="70" width="60" height="48" rx="7" fill="#ffffff" stroke="#2d3142"/>
+      <text x="60" y="100" font-size="17" font-weight="600" fill="#2d3142">а</text>
+
+      <text x="120" y="62" font-size="11" fill="#4f5d75">1</text>
+      <rect x="90" y="70" width="60" height="48" rx="7" fill="#ffffff" stroke="#2d3142"/>
+      <text x="120" y="100" font-size="17" font-weight="600" fill="#2d3142">л</text>
+
+      <text x="180" y="62" font-size="11" fill="#4f5d75">2</text>
+      <rect x="150" y="70" width="60" height="48" rx="7" fill="#ffffff" stroke="#2d3142"/>
+      <text x="180" y="100" font-size="17" font-weight="600" fill="#2d3142">г</text>
+
+      <text x="240" y="62" font-size="11" fill="#4f5d75">3</text>
+      <rect x="210" y="70" width="60" height="48" rx="7" fill="#ffffff" stroke="#2d3142"/>
+      <text x="240" y="100" font-size="17" font-weight="600" fill="#2d3142">о</text>
+
+      <text x="300" y="62" font-size="11" fill="#4f5d75">4</text>
+      <rect x="270" y="70" width="60" height="48" rx="7" fill="#ffffff" stroke="#2d3142"/>
+      <text x="300" y="100" font-size="17" font-weight="600" fill="#2d3142">р</text>
+
+      <text x="360" y="62" font-size="11" fill="#4f5d75">5</text>
+      <rect x="330" y="70" width="60" height="48" rx="7" fill="#ffffff" stroke="#2d3142"/>
+      <text x="360" y="100" font-size="17" font-weight="600" fill="#2d3142">и</text>
+
+      <text x="420" y="62" font-size="11" fill="#4f5d75">6</text>
+      <rect x="390" y="70" width="60" height="48" rx="7" fill="#ffffff" stroke="#2d3142"/>
+      <text x="420" y="100" font-size="17" font-weight="600" fill="#2d3142">т</text>
+
+      <text x="480" y="62" font-size="11" fill="#4f5d75">7</text>
+      <rect x="450" y="70" width="60" height="48" rx="7" fill="#ffffff" stroke="#2d3142"/>
+      <text x="480" y="100" font-size="17" font-weight="600" fill="#2d3142">м</text>
+
+      <text x="60" y="140" font-size="11" fill="#2f6f5e">-8</text>
+      <text x="120" y="140" font-size="11" fill="#2f6f5e">-7</text>
+      <text x="180" y="140" font-size="11" fill="#2f6f5e">-6</text>
+      <text x="240" y="140" font-size="11" fill="#2f6f5e">-5</text>
+      <text x="300" y="140" font-size="11" fill="#2f6f5e">-4</text>
+      <text x="360" y="140" font-size="11" fill="#2f6f5e">-3</text>
+      <text x="420" y="140" font-size="11" fill="#2f6f5e">-2</text>
+      <text x="480" y="140" font-size="11" fill="#2f6f5e">-1</text>
+    </g>
+
+    <rect x="30" y="176" width="480" height="34" rx="6" fill="rgba(47,111,94,.07)" stroke="#2f6f5e" stroke-dasharray="4 4"/>
+    <text x="270" y="198" text-anchor="middle" font-family="Consolas,monospace" font-size="11" fill="#2f6f5e">срез [0:3] выделяет три первых символа</text>
+
+    <rect x="540" y="20" width="120" height="82" rx="8" fill="#ffffff" stroke="#2d3142"/>
+    <text x="600" y="42" text-anchor="middle" font-family="Consolas,monospace" font-size="10" font-weight="600" fill="#2d3142">word[0:3]</text>
+    <text x="600" y="68" text-anchor="middle" font-family="Consolas,monospace" font-size="14" font-weight="600" fill="#2f6f5e">"алг"</text>
+    <text x="600" y="88" text-anchor="middle" font-family="Segoe UI,sans-serif" font-size="9" fill="#4f5d75">три символа</text>
+
+    <rect x="540" y="114" width="120" height="82" rx="8" fill="#ffffff" stroke="#2d3142"/>
+    <text x="600" y="136" text-anchor="middle" font-family="Consolas,monospace" font-size="10" font-weight="600" fill="#2d3142">word[3:]</text>
+    <text x="600" y="162" text-anchor="middle" font-family="Consolas,monospace" font-size="14" font-weight="600" fill="#2f6f5e">"оритм"</text>
+    <text x="600" y="182" text-anchor="middle" font-family="Segoe UI,sans-serif" font-size="9" fill="#4f5d75">до конца</text>
+
+    <rect x="540" y="208" width="120" height="82" rx="8" fill="#ffffff" stroke="#2d3142"/>
+    <text x="600" y="230" text-anchor="middle" font-family="Consolas,monospace" font-size="10" font-weight="600" fill="#2d3142">word[::2]</text>
+    <text x="600" y="256" text-anchor="middle" font-family="Consolas,monospace" font-size="14" font-weight="600" fill="#2f6f5e">"агрт"</text>
+    <text x="600" y="276" text-anchor="middle" font-family="Segoe UI,sans-serif" font-size="9" fill="#4f5d75">каждый второй</text>
+  </svg>
+  <p class="note">Строка неизменяема: срез создаёт новую строку, а заменить символ по индексу нельзя.</p>
+</div>
+</body>
+</html>

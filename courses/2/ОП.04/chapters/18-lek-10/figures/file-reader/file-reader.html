@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Чтение журнала построчно</title>
+<style>
+  :root { --paper:#f7f4ee; --card:#fffdf8; --ink:#1a1916; --muted:#6b6459; --rule:#ded6c8; --accent:#2f6f5e; --accent-soft:#ddebe5; --warn:#9a7300; --bad:#b23a2b; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .demo { background:var(--paper); border:1px solid var(--rule); border-radius:14px; padding:18px; }
+  .head { display:flex; justify-content:space-between; align-items:flex-end; gap:16px; padding-bottom:10px; border-bottom:1px solid var(--rule); }
+  .eyebrow { margin:0 0 4px; font:600 10px/1.2 Consolas,monospace; letter-spacing:.12em; text-transform:uppercase; color:var(--accent); }
+  h3 { margin:0; font-size:20px; line-height:1.2; }
+  .counter { font:12px/1.4 Consolas,monospace; color:var(--muted); white-space:nowrap; }
+  .log { margin-top:12px; background:var(--card); border:1px solid var(--rule); border-radius:10px; padding:10px; font:11.5px/1.7 Consolas,monospace; min-height:132px; }
+  .line { display:flex; gap:8px; padding:2px 4px; border-radius:5px; }
+  .line.new { background:var(--accent-soft); }
+  .line .no { color:#b9b0a2; width:18px; text-align:right; }
+  .line .text { white-space:pre-wrap; word-break:break-word; }
+  .parsed { display:grid; grid-template-columns:repeat(3, 1fr); gap:8px; margin-top:10px; }
+  .cell { background:var(--card); border:1px solid var(--rule); border-radius:8px; padding:8px 10px; }
+  .cell .k { font:600 8.5px/1.2 Consolas,monospace; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); }
+  .cell .v { margin-top:4px; font:12px/1.4 Consolas,monospace; color:var(--ink); word-break:break-word; }
+  .counts { display:flex; gap:8px; margin-top:10px; flex-wrap:wrap; }
+  .chip { font:600 11px/1 Consolas,monospace; padding:6px 9px; border-radius:7px; border:1px solid var(--rule); background:#fff; }
+  .chip.info { color:var(--accent); border-color:var(--accent); }
+  .chip.warning { color:var(--warn); border-color:var(--warn); }
+  .chip.error { color:var(--bad); border-color:var(--bad); }
+  .status { min-height:22px; margin-top:10px; font-size:12.5px; color:var(--muted); }
+  .status b { color:var(--ink); }
+  .controls { display:flex; gap:8px; flex-wrap:wrap; margin-top:10px; }
+  button { font:600 12.5px/1 "Segoe UI",system-ui,sans-serif; padding:9px 13px; border-radius:9px; border:1px solid var(--rule); background:var(--card); color:var(--ink); cursor:pointer; }
+  button:hover { border-color:var(--accent); color:var(--accent); }
+  button.primary { background:var(--accent); border-color:var(--accent); color:#fff; }
+  button.primary:hover { background:#245a4c; color:#fff; }
+  button:disabled { opacity:.45; cursor:default; }
+  @media (max-width:600px) { .parsed { grid-template-columns:1fr; } .demo { padding:12px; } }
+</style>
+</head>
+<body>
+<div class="demo">
+  <div class="head">
+    <div><p class="eyebrow">Файл · чтение построчно</p><h3>Журнал событий</h3></div>
+    <div class="counter" id="counter">строка 0 из 5</div>
+  </div>
+  <div class="log" id="log"></div>
+  <div class="parsed">
+    <div class="cell"><div class="k">Время</div><div class="v" id="t">нет</div></div>
+    <div class="cell"><div class="k">Уровень</div><div class="v" id="lvl">нет</div></div>
+    <div class="cell"><div class="k">Сообщение</div><div class="v" id="msg">нет</div></div>
+  </div>
+  <div class="counts">
+    <span class="chip info">INFO: <b id="c-info">0</b></span>
+    <span class="chip warning">WARNING: <b id="c-warn">0</b></span>
+    <span class="chip error">ERROR: <b id="c-err">0</b></span>
+  </div>
+  <div class="status" id="status">Нажмите «Следующая строка», чтобы прочитать первую запись.</div>
+  <div class="controls">
+    <button class="primary" id="next">Следующая строка</button>
+    <button id="reset">Сброс</button>
+  </div>
+</div>
+<script>
+(function () {
+  var lines = [
+    '2026-11-18 09:12:01;INFO;Запуск',
+    '2026-11-18 09:12:05;INFO;Чтение файла',
+    '2026-11-18 09:12:07;WARNING;Пустая строка',
+    '2026-11-18 09:12:09;ERROR;Файл не найден',
+    '2026-11-18 09:12:11;INFO;Завершение'
+  ];
+  var pos = 0;
+  var counts = { INFO: 0, WARNING: 0, ERROR: 0 };
+  var log = document.getElementById('log');
+  var status = document.getElementById('status');
+  var counter = document.getElementById('counter');
+  var nextBtn = document.getElementById('next');
+
+  function el(tag, cls, text) {
+    var d = document.createElement(tag);
+    if (cls) d.className = cls;
+    if (text !== undefined) d.textContent = text;
+    return d;
+  }
+
+  function renderCounts() {
+    document.getElementById('c-info').textContent = counts.INFO;
+    document.getElementById('c-warn').textContent = counts.WARNING;
+    document.getElementById('c-err').textContent = counts.ERROR;
+  }
+
+  function setParsed(t, l, m) {
+    document.getElementById('t').textContent = t;
+    document.getElementById('lvl').textContent = l;
+    document.getElementById('msg').textContent = m;
+  }
+
+  function drawLog() {
+    log.innerHTML = '';
+    for (var i = 0; i < pos; i += 1) {
+      var row = el('div', 'line' + (i === pos - 1 ? ' new' : ''));
+      row.appendChild(el('span', 'no', String(i + 1)));
+      row.appendChild(el('span', 'text', lines[i]));
+      log.appendChild(row);
+    }
+    if (!pos) log.appendChild(el('div', 'line', 'Файл ещё не открыт.'));
+    counter.textContent = 'строка ' + pos + ' из ' + lines.length;
+    nextBtn.disabled = pos >= lines.length;
+  }
+
+  function next() {
+    if (pos >= lines.length) return;
+    var raw = lines[pos];
+    var parts = raw.split(';');
+    var time = parts[0];
+    var level = parts[1];
+    var message = parts.slice(2).join(';');
+    counts[level] = (counts[level] || 0) + 1;
+    pos += 1;
+    setParsed(time, level, message);
+    status.innerHTML = 'Строка <b>' + pos + '</b>: split(";") дал ' + parts.length + ' поля. Уровень <b>' + level + '</b> учтён в сводке.';
+    renderCounts();
+    drawLog();
+    if (pos === lines.length) status.innerHTML = 'Файл прочитан. Итог: INFO ' + counts.INFO + ', WARNING ' + counts.WARNING + ', ERROR ' + counts.ERROR + '.';
+  }
+
+  function reset() {
+    pos = 0;
+    counts = { INFO: 0, WARNING: 0, ERROR: 0 };
+    setParsed('нет', 'нет', 'нет');
+    renderCounts();
+    status.textContent = 'Нажмите «Следующая строка», чтобы прочитать первую запись.';
+    drawLog();
+  }
+
+  nextBtn.addEventListener('click', next);
+  document.getElementById('reset').addEventListener('click', reset);
+  drawLog();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Словарь: добавление, поиск, удаление</title>
+<style>
+  :root { --paper:#f7f4ee; --card:#fffdf8; --ink:#1a1916; --muted:#6b6459; --rule:#ded6c8; --accent:#2f6f5e; --accent-soft:#ddebe5; --bad:#b23a2b; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .demo { background:var(--paper); border:1px solid var(--rule); border-radius:14px; padding:18px; }
+  .head { display:flex; justify-content:space-between; align-items:flex-end; gap:16px; padding-bottom:10px; border-bottom:1px solid var(--rule); }
+  .eyebrow { margin:0 0 4px; font:600 10px/1.2 Consolas,monospace; letter-spacing:.12em; text-transform:uppercase; color:var(--accent); }
+  h3 { margin:0; font-size:20px; line-height:1.2; }
+  .count { font:12px/1.4 Consolas,monospace; color:var(--muted); }
+  .form { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:12px; }
+  input { padding:10px 11px; font:14px/1.3 Consolas,monospace; color:var(--ink); background:var(--card); border:1px solid var(--rule); border-radius:9px; }
+  input:focus { outline:2px solid var(--accent); outline-offset:1px; }
+  .controls { display:flex; flex-wrap:wrap; gap:7px; margin-top:10px; }
+  button { font:600 12px/1 "Segoe UI",system-ui,sans-serif; padding:9px 12px; border-radius:9px; border:1px solid var(--rule); background:var(--card); color:var(--ink); cursor:pointer; }
+  button:hover { border-color:var(--accent); color:var(--accent); }
+  button.primary { background:var(--accent); border-color:var(--accent); color:#fff; }
+  button.primary:hover { background:#245a4c; color:#fff; }
+  .status { min-height:24px; margin:12px 0 0; font-size:13px; color:var(--muted); }
+  .status b { color:var(--ink); }
+  .status.bad b { color:var(--bad); }
+  table { width:100%; border-collapse:collapse; margin-top:10px; font:13px/1.4 Consolas,monospace; }
+  th, td { padding:8px 10px; border-bottom:1px solid var(--rule); text-align:left; }
+  th { font:600 9px/1.2 Consolas,monospace; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); }
+  td.val { color:var(--accent); font-weight:600; }
+  tr.hit td { background:var(--accent-soft); }
+  .empty { color:var(--muted); font-size:12px; padding:10px 0; }
+  @media (max-width:560px) { .demo { padding:12px; } .form { grid-template-columns:1fr; } }
+</style>
+</head>
+<body>
+<div class="demo">
+  <div class="head">
+    <div><p class="eyebrow">Словарь · практика</p><h3>Цены товаров</h3></div>
+    <div class="count">len = <b id="count">3</b></div>
+  </div>
+  <div class="form">
+    <input id="key" placeholder="ключ, например чайник" spellcheck="false">
+    <input id="val" placeholder="значение, например 950" spellcheck="false">
+  </div>
+  <div class="controls">
+    <button class="primary" id="save">Сохранить</button>
+    <button id="find">Найти</button>
+    <button id="del">Удалить</button>
+    <button id="reset">Сброс</button>
+  </div>
+  <div class="status" id="status">Введите ключ и значение, затем нажмите «Сохранить».</div>
+  <table>
+    <thead><tr><th>Ключ</th><th>Значение</th></tr></thead>
+    <tbody id="rows"></tbody>
+  </table>
+</div>
+<script>
+(function () {
+  var initial = [['кружка', '640'], ['блюдце', '420'], ['коробка', '40']];
+  var items = initial.map(function (p) { return p.slice(); });
+  var hit = -1;
+  var rows = document.getElementById('rows');
+  var count = document.getElementById('count');
+  var status = document.getElementById('status');
+  var keyInput = document.getElementById('key');
+  var valInput = document.getElementById('val');
+
+  function say(text, bad) {
+    status.innerHTML = text;
+    status.className = 'status' + (bad ? ' bad' : '');
+  }
+
+  function render() {
+    rows.innerHTML = '';
+    if (!items.length) {
+      var tr = document.createElement('tr');
+      var td = document.createElement('td');
+      td.colSpan = 2;
+      td.className = 'empty';
+      td.textContent = 'Словарь пуст.';
+      tr.appendChild(td);
+      rows.appendChild(tr);
+    } else {
+      items.forEach(function (pair, i) {
+        var tr = document.createElement('tr');
+        if (i === hit) tr.className = 'hit';
+        var k = document.createElement('td');
+        k.textContent = '"' + pair[0] + '"';
+        var v = document.createElement('td');
+        v.className = 'val';
+        v.textContent = pair[1];
+        tr.appendChild(k);
+        tr.appendChild(v);
+        rows.appendChild(tr);
+      });
+    }
+    count.textContent = items.length;
+  }
+
+  function indexOf(key) {
+    for (var i = 0; i < items.length; i += 1) if (items[i][0] === key) return i;
+    return -1;
+  }
+
+  function readKey() {
+    return keyInput.value.trim();
+  }
+
+  document.getElementById('save').addEventListener('click', function () {
+    var key = readKey();
+    var val = valInput.value.trim();
+    if (!key || !val) { say('Нужны и ключ, и значение.', true); return; }
+    var i = indexOf(key);
+    if (i >= 0) {
+      items[i][1] = val;
+      hit = i;
+      say('Ключ <b>"' + key + '"</b> уже был: значение обновлено на ' + val + '.');
+    } else {
+      items.push([key, val]);
+      hit = items.length - 1;
+      say('Добавлена пара <b>"' + key + '": ' + val + '</b>.');
+    }
+    render();
+  });
+
+  document.getElementById('find').addEventListener('click', function () {
+    var key = readKey();
+    var i = indexOf(key);
+    if (i >= 0) {
+      hit = i;
+      say('prices["' + key + '"] = <b>' + items[i][1] + '</b>');
+    } else {
+      hit = -1;
+      say('Ключа <b>"' + key + '"</b> нет. Обращение по нему дало бы KeyError, а get вернул бы значение по умолчанию.', true);
+    }
+    render();
+  });
+
+  document.getElementById('del').addEventListener('click', function () {
+    var key = readKey();
+    var i = indexOf(key);
+    if (i >= 0) {
+      items.splice(i, 1);
+      hit = -1;
+      say('Пара <b>"' + key + '"</b> удалена.');
+    } else {
+      say('Удалять нечего: ключа <b>"' + key + '"</b> нет.', true);
+    }
+    render();
+  });
+
+  document.getElementById('reset').addEventListener('click', function () {
+    items = initial.map(function (p) { return p.slice(); });
+    hit = -1;
+    keyInput.value = '';
+    valInput.value = '';
+    say('Словарь восстановлен.');
+    render();
+  });
+
+  render();
+})();
+</script>
+</body>
+</html>
