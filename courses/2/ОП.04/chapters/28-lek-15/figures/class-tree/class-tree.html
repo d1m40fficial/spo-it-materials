@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Наследование: общий родитель и переопределение</title>
+<style>
+  :root { --paper:#f7f4ee; --ink:#2d3142; --muted:#4f5d75; --accent:#2f6f5e; --accent-soft:#ddebe5; --rule:rgba(45,49,66,.12); }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .frame { background:var(--paper); border:1px solid var(--rule); border-radius:12px; padding:18px 18px 14px; }
+  .eyebrow { margin:0 0 8px; font:600 9px/1.2 Consolas,monospace; letter-spacing:.16em; text-transform:uppercase; color:var(--muted); }
+  .note { margin:10px 2px 0; font:11px/1.5 Consolas,monospace; color:var(--muted); }
+  svg { display:block; width:100%; height:auto; }
+</style>
+</head>
+<body>
+<div class="frame">
+  <p class="eyebrow">Наследование · иерархия</p>
+  <svg viewBox="0 0 680 340" role="img" aria-labelledby="tree-title tree-desc">
+    <title id="tree-title">Иерархия Product, Book и Pen</title>
+    <desc id="tree-desc">Класс Product хранит имя и цену и объявляет метод describe. Классы Book и Pen наследуют поля и переопределяют describe, добавляя автора и цвет.</desc>
+    <defs>
+      <marker id="arw-tree" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto"><polygon points="0 0, 9 3.5, 0 7" fill="#4f5d75"/></marker>
+    </defs>
+
+    <rect x="230" y="24" width="220" height="96" rx="10" fill="#ffffff" stroke="#2d3142"/>
+    <text x="340" y="48" text-anchor="middle" font-family="Consolas,monospace" font-size="12" font-weight="600" fill="#2d3142">Product</text>
+    <text x="246" y="72" font-family="Consolas,monospace" font-size="9.5" fill="#4f5d75">name, price</text>
+    <text x="246" y="90" font-family="Consolas,monospace" font-size="9.5" fill="#2f6f5e">describe() → "Товар ..."</text>
+    <text x="340" y="110" text-anchor="middle" font-family="Segoe UI,sans-serif" font-size="8.5" fill="#4f5d75">общие поля и общий метод</text>
+
+    <line x1="300" y1="120" x2="190" y2="168" stroke="#4f5d75" stroke-width="1.3" marker-end="url(#arw-tree)"/>
+    <line x1="380" y1="120" x2="490" y2="168" stroke="#4f5d75" stroke-width="1.3" marker-end="url(#arw-tree)"/>
+    <text x="220" y="142" font-family="Consolas,monospace" font-size="8.5" fill="#4f5d75">наследует</text>
+    <text x="440" y="142" font-family="Consolas,monospace" font-size="8.5" fill="#4f5d75">наследует</text>
+
+    <rect x="60" y="172" width="260" height="136" rx="10" fill="#ffffff" stroke="#2f6f5e"/>
+    <text x="190" y="196" text-anchor="middle" font-family="Consolas,monospace" font-size="12" font-weight="600" fill="#2f6f5e">Book(Product)</text>
+    <text x="76" y="220" font-family="Consolas,monospace" font-size="9.5" fill="#4f5d75">+ author</text>
+    <text x="76" y="242" font-family="Consolas,monospace" font-size="9.5" fill="#2f6f5e">describe() → "Книга ..."</text>
+    <text x="76" y="266" font-family="Segoe UI,sans-serif" font-size="9" fill="#4f5d75">добавляет автора</text>
+    <text x="76" y="284" font-family="Segoe UI,sans-serif" font-size="9" fill="#4f5d75">и меняет текст</text>
+
+    <rect x="360" y="172" width="260" height="136" rx="10" fill="#ffffff" stroke="#2f6f5e"/>
+    <text x="490" y="196" text-anchor="middle" font-family="Consolas,monospace" font-size="12" font-weight="600" fill="#2f6f5e">Pen(Product)</text>
+    <text x="376" y="220" font-family="Consolas,monospace" font-size="9.5" fill="#4f5d75">+ color</text>
+    <text x="376" y="242" font-family="Consolas,monospace" font-size="9.5" fill="#2f6f5e">describe() → "Ручка ..."</text>
+    <text x="376" y="266" font-family="Segoe UI,sans-serif" font-size="9" fill="#4f5d75">добавляет цвет</text>
+    <text x="376" y="284" font-family="Segoe UI,sans-serif" font-size="9" fill="#4f5d75">и меняет текст</text>
+
+    <rect x="60" y="318" width="560" height="0" rx="0" fill="none"/>
+    <text x="340" y="330" text-anchor="middle" font-family="Consolas,monospace" font-size="8.5" fill="#4f5d75">ВЫЗОВ describe() У ОБЪЕКТА ВЫБИРАЕТ ЕГО СОБСТВЕННУЮ РЕАЛИЗАЦИЮ</text>
+  </svg>
+  <p class="note">Полиморфизм: один и тот же вызов метода даёт разный текст в зависимости от класса объекта.</p>
+</div>
+</body>
+</html>

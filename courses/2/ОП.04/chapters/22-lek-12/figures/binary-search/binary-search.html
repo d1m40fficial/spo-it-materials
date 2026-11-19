@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Бинарный поиск по шагам</title>
+<style>
+  :root { --paper:#f7f4ee; --card:#fffdf8; --ink:#1a1916; --muted:#6b6459; --rule:#ded6c8; --accent:#2f6f5e; --accent-soft:#ddebe5; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .demo { background:var(--paper); border:1px solid var(--rule); border-radius:14px; padding:18px; }
+  .head { display:flex; justify-content:space-between; align-items:flex-end; gap:16px; padding-bottom:10px; border-bottom:1px solid var(--rule); }
+  .eyebrow { margin:0 0 4px; font:600 10px/1.2 Consolas,monospace; letter-spacing:.12em; text-transform:uppercase; color:var(--accent); }
+  h3 { margin:0; font-size:20px; line-height:1.2; }
+  .target { font:12px/1.4 Consolas,monospace; color:var(--muted); white-space:nowrap; }
+  .target b { color:var(--ink); font-size:15px; }
+  .row { display:flex; gap:8px; justify-content:center; margin:20px 0 8px; flex-wrap:wrap; }
+  .cell { width:62px; text-align:center; transition:opacity .2s; }
+  .value { display:grid; place-items:center; height:50px; border:1px solid var(--rule); border-radius:8px; background:var(--card); font:600 16px/1 Consolas,monospace; transition:background .18s,border-color .18s,transform .18s; }
+  .index { margin-top:5px; font:11px/1.2 Consolas,monospace; color:var(--muted); }
+  .cell.out .value { opacity:.32; }
+  .cell.mid .value { border-color:var(--accent); background:var(--accent-soft); transform:translateY(-2px); }
+  .cell.found .value { border-color:var(--accent); background:var(--accent); color:#fff; }
+  .status { min-height:46px; margin:10px 0 2px; text-align:center; font-size:13px; line-height:1.5; color:var(--muted); }
+  .status b { color:var(--ink); }
+  .range { display:flex; justify-content:center; gap:18px; margin-top:4px; font:11px/1.4 Consolas,monospace; color:var(--muted); }
+  .range b { color:var(--accent); }
+  .controls { display:flex; gap:8px; justify-content:center; flex-wrap:wrap; margin-top:12px; }
+  button { font:600 13px/1 "Segoe UI",system-ui,sans-serif; padding:10px 14px; border-radius:9px; border:1px solid var(--rule); background:var(--card); color:var(--ink); cursor:pointer; }
+  button:hover { border-color:var(--accent); color:var(--accent); }
+  button.primary { background:var(--accent); border-color:var(--accent); color:#fff; }
+  button.primary:hover { background:#245a4c; color:#fff; }
+  button:disabled { opacity:.45; cursor:default; }
+  .note { margin:12px 0 0; padding-top:10px; border-top:1px solid var(--rule); font-size:12px; line-height:1.5; color:var(--muted); }
+  @media (max-width:560px) { .cell { width:44px; } .value { height:40px; font-size:13px; } .demo { padding:12px; } }
+</style>
+</head>
+<body>
+<div class="demo">
+  <div class="head">
+    <div><p class="eyebrow">Поиск · бинарный</p><h3>Найти 25</h3></div>
+    <div class="target">Цель: <b>25</b></div>
+  </div>
+  <div class="row" id="row"></div>
+  <div class="range"><span>low: <b id="low">0</b></span><span>mid: <b id="mid">-</b></span><span>high: <b id="high">7</b></span></div>
+  <div class="status" id="status">Нажмите «Шаг», чтобы проверить середину.</div>
+  <div class="controls">
+    <button class="primary" id="step">Шаг</button>
+    <button id="reset">Сброс</button>
+  </div>
+  <p class="note">На каждом шаге проверяется середина текущего диапазона. Если значение меньше цели, левая половина отбрасывается, если больше, правая.</p>
+</div>
+<script>
+(function () {
+  var data = [3, 7, 12, 19, 25, 31, 42, 56];
+  var target = 25;
+  var steps = [
+    { low: 0, high: 7, mid: 3, cmp: '19 < 25, левая половина отброшена', nextLow: 4, nextHigh: 7 },
+    { low: 4, high: 7, mid: 5, cmp: '31 > 25, правая половина отброшена', nextLow: 4, nextHigh: 4 },
+    { low: 4, high: 4, mid: 4, cmp: '25 = 25, элемент найден', nextLow: 4, nextHigh: 4, found: true }
+  ];
+  var pos = 0;
+  var state = { low: 0, high: 7, mid: -1, found: false };
+  var row = document.getElementById('row');
+  var status = document.getElementById('status');
+  var stepBtn = document.getElementById('step');
+
+  function render() {
+    row.innerHTML = '';
+    data.forEach(function (value, i) {
+      var cell = document.createElement('div');
+      cell.className = 'cell';
+      if (state.mid >= 0 && (i < state.low || i > state.high)) cell.classList.add('out');
+      if (i === state.mid) cell.classList.add(state.found ? 'found' : 'mid');
+      cell.innerHTML = '<div class="value">' + value + '</div><div class="index">' + i + '</div>';
+      row.appendChild(cell);
+    });
+    document.getElementById('low').textContent = state.low;
+    document.getElementById('high').textContent = state.high;
+    document.getElementById('mid').textContent = state.mid < 0 ? '-' : state.mid;
+    stepBtn.disabled = pos >= steps.length;
+  }
+
+  function step() {
+    if (pos >= steps.length) return;
+    var s = steps[pos];
+    state.low = s.low;
+    state.high = s.high;
+    state.mid = s.mid;
+    state.found = !!s.found;
+    status.innerHTML = 'Середина <b>' + s.mid + '</b>, значение <b>' + data[s.mid] + '</b>: ' + s.cmp + '.';
+    if (s.found) status.innerHTML += ' Сравнений: ' + (pos + 1) + '.';
+    pos += 1;
+    if (pos === steps.length && s.found) stepBtn.disabled = true;
+    render();
+  }
+
+  function reset() {
+    pos = 0;
+    state = { low: 0, high: 7, mid: -1, found: false };
+    status.textContent = 'Нажмите «Шаг», чтобы проверить середину.';
+    render();
+  }
+
+  stepBtn.addEventListener('click', step);
+  document.getElementById('reset').addEventListener('click', reset);
+  render();
+})();
+</script>
+</body>
+</html>

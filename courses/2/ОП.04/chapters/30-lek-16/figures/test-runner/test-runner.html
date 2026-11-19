@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Запуск модульных тестов</title>
+<style>
+  :root { --paper:#f7f4ee; --card:#fffdf8; --ink:#1a1916; --muted:#6b6459; --rule:#ded6c8; --accent:#2f6f5e; --accent-soft:#ddebe5; --bad:#b23a2b; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .demo { background:var(--paper); border:1px solid var(--rule); border-radius:14px; padding:18px; }
+  .head { display:flex; justify-content:space-between; align-items:flex-end; gap:16px; padding-bottom:10px; border-bottom:1px solid var(--rule); }
+  .eyebrow { margin:0 0 4px; font:600 10px/1.2 Consolas,monospace; letter-spacing:.12em; text-transform:uppercase; color:var(--accent); }
+  h3 { margin:0; font-size:20px; line-height:1.2; }
+  .summary { font:12px/1.4 Consolas,monospace; color:var(--muted); }
+  .code { margin-top:12px; padding:10px 12px; border:1px solid var(--rule); border-radius:9px; background:var(--card); font:11.5px/1.7 Consolas,monospace; white-space:pre-wrap; }
+  .code b { color:var(--accent); }
+  .code .bad { color:var(--bad); }
+  table { width:100%; border-collapse:collapse; margin-top:12px; font:12px/1.4 Consolas,monospace; }
+  th, td { padding:7px 9px; border-bottom:1px solid var(--rule); text-align:left; }
+  th { font:600 8.5px/1.2 Consolas,monospace; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); }
+  td.res { font-weight:700; }
+  tr.pass td.res { color:var(--accent); }
+  tr.fail td.res { color:var(--bad); }
+  tr.fail { background:rgba(178,58,43,.06); }
+  .status { min-height:22px; margin-top:10px; font-size:12.5px; color:var(--muted); }
+  .status b { color:var(--ink); }
+  .status.bad b { color:var(--bad); }
+  .controls { display:flex; gap:8px; flex-wrap:wrap; margin-top:10px; }
+  button { font:600 12.5px/1 "Segoe UI",system-ui,sans-serif; padding:9px 12px; border-radius:9px; border:1px solid var(--rule); background:var(--card); color:var(--ink); cursor:pointer; }
+  button:hover { border-color:var(--accent); color:var(--accent); }
+  button.primary { background:var(--accent); border-color:var(--accent); color:#fff; }
+  button.primary:hover { background:#245a4c; color:#fff; }
+  button:disabled { opacity:.45; cursor:default; }
+  @media (max-width:560px) { .demo { padding:12px; } table { font-size:10.5px; } }
+</style>
+</head>
+<body>
+<div class="demo">
+  <div class="head">
+    <div><p class="eyebrow">Тесты · запуск</p><h3>discount(total, percent)</h3></div>
+    <div class="summary" id="summary">тесты ещё не запускались</div>
+  </div>
+  <div class="code" id="code">def discount(total, percent):
+    return total - total * percent / 100</div>
+  <table>
+    <thead><tr><th>Проверка</th><th>Ожидалось</th><th>Получено</th><th>Итог</th></tr></thead>
+    <tbody id="rows"></tbody>
+  </table>
+  <div class="status" id="status">Нажмите «Запустить тесты».</div>
+  <div class="controls">
+    <button class="primary" id="run">Запустить тесты</button>
+    <button id="fix">Исправить код</button>
+    <button id="reset">Сброс</button>
+  </div>
+</div>
+<script>
+(function () {
+  var cases = [
+    { call: 'discount(1000, 10)', args: [1000, 10], want: 900 },
+    { call: 'discount(500, 0)', args: [500, 0], want: 500 },
+    { call: 'discount(200, 100)', args: [200, 100], want: 0 },
+    { call: 'discount(100, 150)', args: [100, 150], want: 0 },
+    { call: 'discount(0, 10)', args: [0, 10], want: 0 }
+  ];
+  var fixed = false;
+  var rows = document.getElementById('rows');
+  var status = document.getElementById('status');
+  var summary = document.getElementById('summary');
+  var code = document.getElementById('code');
+
+  function discount(total, percent) {
+    var value = total - total * percent / 100;
+    return fixed ? Math.max(0, value) : value;
+  }
+
+  function render(results) {
+    rows.innerHTML = '';
+    cases.forEach(function (c, i) {
+      var tr = document.createElement('tr');
+      var call = document.createElement('td'); call.textContent = c.call;
+      var want = document.createElement('td'); want.textContent = String(c.want);
+      var got = document.createElement('td'); got.textContent = results ? results[i] : 'нет';
+      var res = document.createElement('td'); res.className = 'res';
+      if (results) {
+        var ok = results[i] === c.want;
+        res.textContent = ok ? 'PASS' : 'FAIL';
+        tr.className = ok ? 'pass' : 'fail';
+      } else {
+        res.textContent = 'нет';
+      }
+      tr.appendChild(call); tr.appendChild(want); tr.appendChild(got); tr.appendChild(res);
+      rows.appendChild(tr);
+    });
+  }
+
+  function run() {
+    var results = cases.map(function (c) { return discount(c.args[0], c.args[1]); });
+    var passed = results.filter(function (v, i) { return v === cases[i].want; }).length;
+    render(results);
+    summary.textContent = passed + ' из ' + cases.length + ' прошли';
+    status.className = 'status' + (passed === cases.length ? '' : ' bad');
+    status.innerHTML = passed === cases.length
+      ? 'Все тесты прошли. Функция ведёт себя как ожидалось.'
+      : 'Есть падение: <b>' + (cases.length - passed) + '</b>. Посмотрите, при каком значении результат расходится с ожиданием.';
+  }
+
+  document.getElementById('run').addEventListener('click', run);
+
+  document.getElementById('fix').addEventListener('click', function () {
+    fixed = true;
+    code.innerHTML = 'def discount(total, percent):\n    value = total - total * percent / 100\n    return <b>max(0, value)</b>';
+    run();
+  });
+
+  document.getElementById('reset').addEventListener('click', function () {
+    fixed = false;
+    code.textContent = 'def discount(total, percent):\n    return total - total * percent / 100';
+    summary.textContent = 'тесты ещё не запускались';
+    status.className = 'status';
+    status.textContent = 'Нажмите «Запустить тесты».';
+    render(null);
+  });
+
+  render(null);
+})();
+</script>
+</body>
+</html>

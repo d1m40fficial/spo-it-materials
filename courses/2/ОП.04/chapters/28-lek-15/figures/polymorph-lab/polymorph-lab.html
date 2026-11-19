@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Полиморфизм: один вызов, разные реализации</title>
+<style>
+  :root { --paper:#f7f4ee; --card:#fffdf8; --ink:#1a1916; --muted:#6b6459; --rule:#ded6c8; --accent:#2f6f5e; --accent-soft:#ddebe5; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .demo { background:var(--paper); border:1px solid var(--rule); border-radius:14px; padding:18px; }
+  .head { display:flex; justify-content:space-between; align-items:flex-end; gap:16px; padding-bottom:10px; border-bottom:1px solid var(--rule); }
+  .eyebrow { margin:0 0 4px; font:600 10px/1.2 Consolas,monospace; letter-spacing:.12em; text-transform:uppercase; color:var(--accent); }
+  h3 { margin:0; font-size:20px; line-height:1.2; }
+  .count { font:12px/1.4 Consolas,monospace; color:var(--muted); }
+  .list { margin-top:12px; border:1px solid var(--rule); border-radius:10px; overflow:hidden; }
+  .item { display:flex; justify-content:space-between; gap:10px; padding:10px 12px; font:12px/1.5 Consolas,monospace; border-bottom:1px solid var(--rule); background:var(--card); }
+  .item:last-child { border-bottom:0; }
+  .item .cls { color:var(--muted); }
+  .item .out { color:var(--accent); font-weight:600; }
+  .item.wait { color:#b9b0a2; }
+  .controls { display:flex; gap:8px; flex-wrap:wrap; margin-top:12px; }
+  button { font:600 12.5px/1 "Segoe UI",system-ui,sans-serif; padding:9px 12px; border-radius:9px; border:1px solid var(--rule); background:var(--card); color:var(--ink); cursor:pointer; }
+  button:hover { border-color:var(--accent); color:var(--accent); }
+  button.primary { background:var(--accent); border-color:var(--accent); color:#fff; }
+  button.primary:hover { background:#245a4c; color:#fff; }
+  button:disabled { opacity:.45; cursor:default; }
+  .status { min-height:22px; margin-top:10px; font-size:12.5px; color:var(--muted); }
+  .status b { color:var(--ink); }
+  @media (max-width:560px) { .demo { padding:12px; } .item { font-size:11px; } }
+</style>
+</head>
+<body>
+<div class="demo">
+  <div class="head">
+    <div><p class="eyebrow">Полиморфизм · лаборатория</p><h3>Список товаров</h3></div>
+    <div class="count">объектов: <b id="count">3</b></div>
+  </div>
+  <div class="list" id="list"></div>
+  <div class="status" id="status">Нажмите «Следующий объект», чтобы вызвать describe() у очередного элемента списка.</div>
+  <div class="controls">
+    <button class="primary" id="next">Следующий объект</button>
+    <button id="all">Все сразу</button>
+    <button id="reset">Сброс</button>
+  </div>
+</div>
+<script>
+(function () {
+  var items = [
+    { cls: 'Book', args: '"Алгоритмы", 1200, "Кормен"', out: 'Книга «Алгоритмы», автор Кормен, 1200.00' },
+    { cls: 'Pen', args: '"Ручка", 150, "синий"', out: 'Ручка «Ручка», цвет синий, 150.00' },
+    { cls: 'Book', args: '"Python", 900, "Лутц"', out: 'Книга «Python», автор Лутц, 900.00' }
+  ];
+  var shown = 0;
+  var list = document.getElementById('list');
+  var status = document.getElementById('status');
+  var nextBtn = document.getElementById('next');
+
+  function render() {
+    list.innerHTML = '';
+    items.forEach(function (it, i) {
+      var row = document.createElement('div');
+      row.className = 'item' + (i >= shown ? ' wait' : '');
+      var left = document.createElement('span');
+      left.className = 'cls';
+      left.textContent = it.cls + '(' + it.args + ')';
+      var right = document.createElement('span');
+      if (i < shown) {
+        right.className = 'out';
+        right.textContent = it.out;
+      } else {
+        right.textContent = 'ещё не вызван';
+      }
+      row.appendChild(left);
+      row.appendChild(right);
+      list.appendChild(row);
+    });
+    document.getElementById('count').textContent = items.length;
+    nextBtn.disabled = shown >= items.length;
+  }
+
+  function next() {
+    if (shown >= items.length) return;
+    var it = items[shown];
+    shown += 1;
+    status.innerHTML = '<b>' + it.cls + '</b> вернул: ' + it.out + '. Метод выбран по классу объекта.';
+    render();
+  }
+
+  function all() {
+    shown = items.length;
+    status.innerHTML = 'Все три объекта получили один и тот же вызов <b>describe()</b>, но ответили по-разному.';
+    render();
+  }
+
+  function reset() {
+    shown = 0;
+    status.textContent = 'Нажмите «Следующий объект», чтобы вызвать describe() у очередного элемента списка.';
+    render();
+  }
+
+  nextBtn.addEventListener('click', next);
+  document.getElementById('all').addEventListener('click', all);
+  document.getElementById('reset').addEventListener('click', reset);
+  render();
+})();
+</script>
+</body>
+</html>

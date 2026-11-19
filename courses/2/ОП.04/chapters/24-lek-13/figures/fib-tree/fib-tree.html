@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Дерево вызовов fib(4)</title>
+<style>
+  :root { --paper:#f7f4ee; --card:#fffdf8; --ink:#1a1916; --muted:#6b6459; --rule:#ded6c8; --accent:#2f6f5e; --accent-soft:#ddebe5; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .demo { background:var(--paper); border:1px solid var(--rule); border-radius:14px; padding:18px; }
+  .head { display:flex; justify-content:space-between; align-items:flex-end; gap:16px; padding-bottom:10px; border-bottom:1px solid var(--rule); }
+  .eyebrow { margin:0 0 4px; font:600 10px/1.2 Consolas,monospace; letter-spacing:.12em; text-transform:uppercase; color:var(--accent); }
+  h3 { margin:0; font-size:20px; line-height:1.2; }
+  .counter { font:12px/1.4 Consolas,monospace; color:var(--muted); white-space:nowrap; }
+  svg { display:block; width:100%; height:auto; margin-top:8px; }
+  .node rect { fill:#fff; stroke:var(--rule); stroke-width:1.4; transition:fill .2s,stroke .2s; }
+  .node text { font-family:Consolas,monospace; font-size:11px; fill:var(--ink); text-anchor:middle; }
+  .node .val { font-size:12px; font-weight:700; }
+  .node.active rect { fill:var(--accent-soft); stroke:var(--accent); stroke-width:2; }
+  .node.done rect { fill:var(--accent); stroke:var(--accent); }
+  .node.done text { fill:#fff; }
+  .status { min-height:44px; margin:10px 0 0; padding:10px 12px; border-radius:9px; background:var(--accent-soft); font-size:13px; line-height:1.45; }
+  .status b { color:var(--accent); }
+  .controls { display:flex; gap:8px; flex-wrap:wrap; margin-top:12px; }
+  button { font:600 13px/1 "Segoe UI",system-ui,sans-serif; padding:10px 14px; border-radius:9px; border:1px solid var(--rule); background:var(--card); color:var(--ink); cursor:pointer; }
+  button:hover { border-color:var(--accent); color:var(--accent); }
+  button.primary { background:var(--accent); border-color:var(--accent); color:#fff; }
+  button.primary:hover { background:#245a4c; color:#fff; }
+  button:disabled { opacity:.45; cursor:default; }
+  @media (max-width:600px) { .demo { padding:12px; } }
+</style>
+</head>
+<body>
+<div class="demo">
+  <div class="head">
+    <div><p class="eyebrow">Рекурсия · дерево вызовов</p><h3>fib(4)</h3></div>
+    <div class="counter" id="counter">шаг 0 из 12</div>
+  </div>
+  <svg id="tree" viewBox="0 0 680 330" role="img" aria-label="Дерево вызовов fib(4)">
+    <g stroke="#b9b0a2" stroke-width="1.2">
+      <line x1="340" y1="58" x2="205" y2="96"/>
+      <line x1="340" y1="58" x2="475" y2="96"/>
+      <line x1="200" y1="138" x2="115" y2="176"/>
+      <line x1="200" y1="138" x2="285" y2="176"/>
+      <line x1="480" y1="138" x2="425" y2="176"/>
+      <line x1="480" y1="138" x2="565" y2="176"/>
+      <line x1="110" y1="218" x2="75" y2="256"/>
+      <line x1="110" y1="218" x2="155" y2="256"/>
+    </g>
+    <g id="nodes"></g>
+  </svg>
+  <div class="status" id="status">Нажмите «Шаг», чтобы начать с fib(4).</div>
+  <div class="controls">
+    <button class="primary" id="step">Шаг</button>
+    <button id="reset">Сброс</button>
+  </div>
+</div>
+<script>
+(function () {
+  var nodes = {
+    A: { x: 340, y: 36, label: 'f(4)' },
+    B: { x: 200, y: 116, label: 'f(3)' },
+    C: { x: 480, y: 116, label: 'f(2)' },
+    D: { x: 110, y: 196, label: 'f(2)' },
+    E: { x: 285, y: 196, label: 'f(1)' },
+    F: { x: 425, y: 196, label: 'f(1)' },
+    G: { x: 565, y: 196, label: 'f(0)' },
+    H: { x: 70, y: 276, label: 'f(1)' },
+    I: { x: 160, y: 276, label: 'f(0)' }
+  };
+  var steps = [
+    { id: 'A', text: 'Вызов <b>fib(4)</b>. Он не может вернуть результат без fib(3) и fib(2).' },
+    { id: 'B', text: 'Вызов <b>fib(3)</b>. Он ждёт fib(2) и fib(1).' },
+    { id: 'D', text: 'Вызов <b>fib(2)</b>. Он ждёт fib(1) и fib(0).' },
+    { id: 'H', value: 1, text: '<b>fib(1) = 1</b>. Это базовый случай, вызов сразу возвращает число.' },
+    { id: 'I', value: 0, text: '<b>fib(0) = 0</b>. Второй базовый случай.' },
+    { id: 'D', value: 1, text: 'Возврат в <b>fib(2)</b>: 1 + 0 = <b>1</b>.' },
+    { id: 'E', value: 1, text: '<b>fib(1) = 1</b>, базовый случай во второй ветви.' },
+    { id: 'B', value: 2, text: 'Возврат в <b>fib(3)</b>: 1 + 1 = <b>2</b>.' },
+    { id: 'F', value: 1, text: '<b>fib(1) = 1</b> в правой ветви.' },
+    { id: 'G', value: 0, text: '<b>fib(0) = 0</b> в правой ветви.' },
+    { id: 'C', value: 1, text: 'Возврат в <b>fib(2)</b>: 1 + 0 = <b>1</b>.' },
+    { id: 'A', value: 3, text: 'Возврат в <b>fib(4)</b>: 2 + 1 = <b>3</b>. Дерево обойдено.' }
+  ];
+  var pos = 0;
+  var values = {};
+  var active = null;
+  var done = {};
+  var counter = document.getElementById('counter');
+  var status = document.getElementById('status');
+  var stepBtn = document.getElementById('step');
+  var nodesG = document.getElementById('nodes');
+
+  function render() {
+    nodesG.innerHTML = '';
+    Object.keys(nodes).forEach(function (id) {
+      var n = nodes[id];
+      var g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+      g.setAttribute('class', 'node' + (id === active ? ' active' : '') + (done[id] ? ' done' : ''));
+      var rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+      rect.setAttribute('x', n.x - 36); rect.setAttribute('y', n.y - 18);
+      rect.setAttribute('width', 72); rect.setAttribute('height', 36); rect.setAttribute('rx', 7);
+      g.appendChild(rect);
+      var t = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+      t.setAttribute('x', n.x); t.setAttribute('y', n.y - 2);
+      t.textContent = n.label;
+      g.appendChild(t);
+      if (values[id] !== undefined) {
+        var v = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        v.setAttribute('class', 'val'); v.setAttribute('x', n.x); v.setAttribute('y', n.y + 13);
+        v.textContent = '= ' + values[id];
+        g.appendChild(v);
+      }
+      nodesG.appendChild(g);
+    });
+    counter.textContent = 'шаг ' + pos + ' из ' + steps.length;
+    stepBtn.disabled = pos >= steps.length;
+  }
+
+  function step() {
+    if (pos >= steps.length) return;
+    var s = steps[pos];
+    active = s.id;
+    if (s.value !== undefined) { values[s.id] = s.value; done[s.id] = true; }
+    status.innerHTML = s.text;
+    pos += 1;
+    render();
+  }
+
+  function reset() {
+    pos = 0;
+    values = {};
+    done = {};
+    active = null;
+    status.textContent = 'Нажмите «Шаг», чтобы начать с fib(4).';
+    render();
+  }
+
+  stepBtn.addEventListener('click', step);
+  document.getElementById('reset').addEventListener('click', reset);
+  render();
+})();
+</script>
+</body>
+</html>
