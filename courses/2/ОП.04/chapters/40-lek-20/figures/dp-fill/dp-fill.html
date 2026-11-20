@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Заполнение таблицы dp</title>
+<style>
+  :root { --paper:#f7f4ee; --card:#fffdf8; --ink:#1a1916; --muted:#6b6459; --rule:#ded6c8; --accent:#2f6f5e; --accent-soft:#ddebe5; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .demo { background:var(--paper); border:1px solid var(--rule); border-radius:14px; padding:18px; }
+  .head { display:flex; justify-content:space-between; align-items:flex-end; gap:16px; padding-bottom:10px; border-bottom:1px solid var(--rule); }
+  .eyebrow { margin:0 0 4px; font:600 10px/1.2 Consolas,monospace; letter-spacing:.12em; text-transform:uppercase; color:var(--accent); }
+  h3 { margin:0; font-size:20px; line-height:1.2; }
+  .counter { font:12px/1.4 Consolas,monospace; color:var(--muted); white-space:nowrap; }
+  .grid { display:grid; grid-template-columns:repeat(7, 1fr); gap:6px; margin-top:14px; }
+  .cell { text-align:center; }
+  .cell .idx { font:10px/1.2 Consolas,monospace; color:var(--muted); margin-bottom:3px; }
+  .cell .val { display:grid; place-items:center; height:44px; border:1px solid var(--rule); border-radius:8px; background:var(--card); font:600 15px/1 Consolas,monospace; color:#b9b0a2; }
+  .cell.filled .val { color:var(--ink); border-color:#2d3142; }
+  .cell.cur .val { border-color:var(--accent); background:var(--accent-soft); color:var(--accent); }
+  .status { min-height:44px; margin-top:12px; padding:10px 12px; border-radius:9px; background:var(--accent-soft); font-size:13px; line-height:1.45; }
+  .status b { color:var(--accent); }
+  .controls { display:flex; gap:8px; flex-wrap:wrap; margin-top:10px; }
+  button { font:600 12.5px/1 "Segoe UI",system-ui,sans-serif; padding:9px 12px; border-radius:9px; border:1px solid var(--rule); background:var(--card); color:var(--ink); cursor:pointer; }
+  button:hover { border-color:var(--accent); color:var(--accent); }
+  button.primary { background:var(--accent); border-color:var(--accent); color:#fff; }
+  button.primary:hover { background:#245a4c; color:#fff; }
+  button:disabled { opacity:.45; cursor:default; }
+  @media (max-width:560px) { .demo { padding:12px; } .cell .val { height:36px; font-size:12px; } }
+</style>
+</head>
+<body>
+<div class="demo">
+  <div class="head">
+    <div><p class="eyebrow">Динамика · таблица</p><h3>Способы подняться на n ступеней</h3></div>
+    <div class="counter" id="counter">заполнено 2 из 7</div>
+  </div>
+  <div class="grid" id="grid"></div>
+  <div class="status" id="status">База заполнена: dp[0] = 1, dp[1] = 1. Нажмите «Шаг», чтобы посчитать dp[2].</div>
+  <div class="controls">
+    <button class="primary" id="step">Шаг</button>
+    <button id="reset">Сброс</button>
+  </div>
+</div>
+<script>
+(function () {
+  var values = [1, 1, null, null, null, null, null];
+  var i = 2;
+  var highlight = -1;
+  var grid = document.getElementById('grid');
+  var status = document.getElementById('status');
+  var counter = document.getElementById('counter');
+  var stepBtn = document.getElementById('step');
+
+  function render() {
+    grid.innerHTML = '';
+    values.forEach(function (v, idx) {
+      var cell = document.createElement('div');
+      cell.className = 'cell' + (v !== null ? ' filled' : '') + (idx === highlight ? ' cur' : '');
+      var lab = document.createElement('div');
+      lab.className = 'idx';
+      lab.textContent = idx;
+      var val = document.createElement('div');
+      val.className = 'val';
+      val.textContent = v !== null ? v : '?';
+      cell.appendChild(lab); cell.appendChild(val);
+      grid.appendChild(cell);
+    });
+    var filled = values.filter(function (v) { return v !== null; }).length;
+    counter.textContent = 'заполнено ' + filled + ' из 7';
+    stepBtn.disabled = i >= values.length;
+  }
+
+  function step() {
+    if (i >= values.length) return;
+    highlight = i;
+    values[i] = values[i - 1] + values[i - 2];
+    status.innerHTML = 'dp[' + i + '] = dp[' + (i - 1) + '] + dp[' + (i - 2) + '] = ' + values[i - 1] + ' + ' + values[i - 2] + ' = <b>' + values[i] + '</b>.';
+    i += 1;
+    if (i >= values.length) status.innerHTML += ' Таблица заполнена, ответ для n = 6 равен <b>13</b>.';
+    render();
+  }
+
+  function reset() {
+    values = [1, 1, null, null, null, null, null];
+    i = 2;
+    highlight = -1;
+    status.textContent = 'База заполнена: dp[0] = 1, dp[1] = 1. Нажмите «Шаг», чтобы посчитать dp[2].';
+    render();
+  }
+
+  stepBtn.addEventListener('click', step);
+  document.getElementById('reset').addEventListener('click', reset);
+  render();
+})();
+</script>
+</body>
+</html>

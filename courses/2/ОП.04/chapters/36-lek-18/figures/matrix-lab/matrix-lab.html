@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Матрица мест: занятость и поиск</title>
+<style>
+  :root { --paper:#f7f4ee; --card:#fffdf8; --ink:#1a1916; --muted:#6b6459; --rule:#ded6c8; --accent:#2f6f5e; --accent-soft:#ddebe5; --bad:#b23a2b; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .demo { background:var(--paper); border:1px solid var(--rule); border-radius:14px; padding:18px; }
+  .head { display:flex; justify-content:space-between; align-items:flex-end; gap:16px; padding-bottom:10px; border-bottom:1px solid var(--rule); }
+  .eyebrow { margin:0 0 4px; font:600 10px/1.2 Consolas,monospace; letter-spacing:.12em; text-transform:uppercase; color:var(--accent); }
+  h3 { margin:0; font-size:20px; line-height:1.2; }
+  .count { font:12px/1.4 Consolas,monospace; color:var(--muted); white-space:nowrap; }
+  .board { display:grid; grid-template-columns:22px repeat(5, 1fr); gap:6px; margin-top:14px; align-items:center; }
+  .lab { font:10px/1 Consolas,monospace; color:var(--muted); text-align:center; }
+  .seat { border:1px solid var(--rule); border-radius:8px; background:var(--card); padding:10px 0; font:600 12px/1 Consolas,monospace; color:var(--accent); cursor:pointer; transition:background .15s,border-color .15s; }
+  .seat:hover { border-color:var(--accent); }
+  .seat.taken { background:#efe7dc; color:#a99f8f; }
+  .seat.sel { outline:2px solid var(--accent); outline-offset:1px; }
+  .status { min-height:40px; margin-top:12px; padding:10px 12px; border-radius:9px; background:var(--accent-soft); font:12px/1.5 Consolas,monospace; }
+  .status b { color:var(--accent); }
+  .controls { display:flex; gap:8px; flex-wrap:wrap; margin-top:10px; }
+  button { font:600 12.5px/1 "Segoe UI",system-ui,sans-serif; padding:9px 12px; border-radius:9px; border:1px solid var(--rule); background:var(--card); color:var(--ink); cursor:pointer; }
+  button:hover { border-color:var(--accent); color:var(--accent); }
+  button.primary { background:var(--accent); border-color:var(--accent); color:#fff; }
+  button.primary:hover { background:#245a4c; color:#fff; }
+  button:disabled { opacity:.45; cursor:default; }
+  @media (max-width:560px) { .demo { padding:12px; } .seat { padding:8px 0; font-size:10px; } }
+</style>
+</head>
+<body>
+<div class="demo">
+  <div class="head">
+    <div><p class="eyebrow">Матрица · места</p><h3>Аудитория 4 x 5</h3></div>
+    <div class="count">свободно: <b id="free">14</b> из 20</div>
+  </div>
+  <div class="board" id="board"></div>
+  <div class="status" id="status">Нажмите на место, чтобы выбрать его. Занятые места отмечены серым.</div>
+  <div class="controls">
+    <button class="primary" id="take">Занять</button>
+    <button id="release">Освободить</button>
+    <button id="first">Найти свободное</button>
+    <button id="reset">Сброс</button>
+  </div>
+</div>
+<script>
+(function () {
+  var start = [
+    [1, 1, 0, 0, 0],
+    [0, 0, 0, 1, 0],
+    [1, 0, 0, 0, 1],
+    [0, 0, 0, 0, 0]
+  ];
+  var grid = start.map(function (row) { return row.slice(); });
+  var sel = null;
+  var board = document.getElementById('board');
+  var status = document.getElementById('status');
+
+  function freeCount() {
+    var n = 0;
+    grid.forEach(function (row) { row.forEach(function (v) { if (!v) n += 1; }); });
+    return n;
+  }
+
+  function render() {
+    board.innerHTML = '';
+    var corner = document.createElement('div');
+    corner.className = 'lab';
+    corner.textContent = '';
+    board.appendChild(corner);
+    for (var c = 0; c < 5; c += 1) {
+      var h = document.createElement('div');
+      h.className = 'lab';
+      h.textContent = c;
+      board.appendChild(h);
+    }
+    grid.forEach(function (row, r) {
+      var lab = document.createElement('div');
+      lab.className = 'lab';
+      lab.textContent = r;
+      board.appendChild(lab);
+      row.forEach(function (v, c) {
+        var b = document.createElement('button');
+        b.className = 'seat' + (v ? ' taken' : '') + (sel && sel[0] === r && sel[1] === c ? ' sel' : '');
+        b.textContent = v ? '×' : '○';
+        b.addEventListener('click', function () {
+          sel = [r, c];
+          status.innerHTML = 'Выбрано <b>matrix[' + r + '][' + c + ']</b>, значение ' + v + '.';
+          render();
+        });
+        board.appendChild(b);
+      });
+    });
+    document.getElementById('free').textContent = freeCount();
+  }
+
+  function say(text) { status.innerHTML = text; }
+
+  document.getElementById('take').addEventListener('click', function () {
+    if (!sel) { say('Сначала выберите место.'); return; }
+    var r = sel[0], c = sel[1];
+    if (grid[r][c]) { say('Место уже занято.'); return; }
+    grid[r][c] = 1;
+    say('matrix[' + r + '][' + c + '] = 1. Свободных мест: ' + freeCount() + '.');
+    render();
+  });
+
+  document.getElementById('release').addEventListener('click', function () {
+    if (!sel) { say('Сначала выберите место.'); return; }
+    var r = sel[0], c = sel[1];
+    grid[r][c] = 0;
+    say('matrix[' + r + '][' + c + '] = 0. Свободных мест: ' + freeCount() + '.');
+    render();
+  });
+
+  document.getElementById('first').addEventListener('click', function () {
+    for (var r = 0; r < grid.length; r += 1) {
+      for (var c = 0; c < grid[r].length; c += 1) {
+        if (!grid[r][c]) {
+          sel = [r, c];
+          status.innerHTML = 'Первое свободное место: <b>matrix[' + r + '][' + c + ']</b>. Обход идёт по строкам.';
+          render();
+          return;
+        }
+      }
+    }
+    say('Свободных мест нет.');
+  });
+
+  document.getElementById('reset').addEventListener('click', function () {
+    grid = start.map(function (row) { return row.slice(); });
+    sel = null;
+    say('Схема восстановлена.');
+    render();
+  });
+
+  render();
+})();
+</script>
+</body>
+</html>

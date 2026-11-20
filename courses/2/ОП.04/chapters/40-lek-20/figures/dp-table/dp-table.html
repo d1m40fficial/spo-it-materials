@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Таблица динамического программирования</title>
+<style>
+  :root { --paper:#f7f4ee; --ink:#2d3142; --muted:#4f5d75; --accent:#2f6f5e; --accent-soft:#ddebe5; --rule:rgba(45,49,66,.12); }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .frame { background:var(--paper); border:1px solid var(--rule); border-radius:12px; padding:18px 18px 14px; }
+  .eyebrow { margin:0 0 8px; font:600 9px/1.2 Consolas,monospace; letter-spacing:.16em; text-transform:uppercase; color:var(--muted); }
+  .note { margin:10px 2px 0; font:11px/1.5 Consolas,monospace; color:var(--muted); }
+  svg { display:block; width:100%; height:auto; }
+</style>
+</head>
+<body>
+<div class="frame">
+  <p class="eyebrow">Динамика · лестница</p>
+  <svg viewBox="0 0 680 320" role="img" aria-labelledby="dp-title dp-desc">
+    <title id="dp-title">Таблица способов подняться по лестнице</title>
+    <desc id="dp-desc">Для n от 0 до 6 значения равны 1, 1, 2, 3, 5, 8, 13. Каждое следующее значение равно сумме двух предыдущих.</desc>
+
+    <text x="20" y="28" font-family="Consolas,monospace" font-size="9" letter-spacing=".1em" fill="#4f5d75">ШАГОВ: n, СПОСОБОВ: dp[n]</text>
+
+    <g font-family="Consolas,monospace" text-anchor="middle">
+      <rect x="20" y="92" width="82" height="52" rx="7" fill="#ffffff" stroke="#2d3142"/><text x="61" y="124" font-size="14" font-weight="600" fill="#2d3142">1</text><text x="61" y="82" font-size="10" fill="#4f5d75">0</text>
+      <rect x="110" y="92" width="82" height="52" rx="7" fill="#ffffff" stroke="#2d3142"/><text x="151" y="124" font-size="14" font-weight="600" fill="#2d3142">1</text><text x="151" y="82" font-size="10" fill="#4f5d75">1</text>
+      <rect x="200" y="92" width="82" height="52" rx="7" fill="#ffffff" stroke="#2d3142"/><text x="241" y="124" font-size="14" font-weight="600" fill="#2d3142">2</text><text x="241" y="82" font-size="10" fill="#4f5d75">2</text>
+      <rect x="290" y="92" width="82" height="52" rx="7" fill="#ffffff" stroke="#2d3142"/><text x="331" y="124" font-size="14" font-weight="600" fill="#2d3142">3</text><text x="331" y="82" font-size="10" fill="#4f5d75">3</text>
+      <rect x="380" y="92" width="82" height="52" rx="7" fill="#ffffff" stroke="#2d3142"/><text x="421" y="124" font-size="14" font-weight="600" fill="#2d3142">5</text><text x="421" y="82" font-size="10" fill="#4f5d75">4</text>
+      <rect x="470" y="92" width="82" height="52" rx="7" fill="#ddebe5" stroke="#2f6f5e" stroke-width="1.6"/><text x="511" y="124" font-size="14" font-weight="600" fill="#2f6f5e">8</text><text x="511" y="82" font-size="10" fill="#2f6f5e">5</text>
+      <rect x="560" y="92" width="82" height="52" rx="7" fill="#ffffff" stroke="#2d3142"/><text x="601" y="124" font-size="14" font-weight="600" fill="#2d3142">13</text><text x="601" y="82" font-size="10" fill="#4f5d75">6</text>
+    </g>
+
+    <text x="340" y="176" text-anchor="middle" font-family="Consolas,monospace" font-size="10.5" fill="#2f6f5e">dp[5] = dp[4] + dp[3] = 5 + 3 = 8</text>
+
+    <rect x="20" y="196" width="300" height="98" rx="8" fill="#ffffff" stroke="#2d3142"/>
+    <text x="34" y="218" font-family="Consolas,monospace" font-size="9.5" fill="#4f5d75">dp[0] = 1</text>
+    <text x="34" y="236" font-family="Consolas,monospace" font-size="9.5" fill="#4f5d75">dp[1] = 1</text>
+    <text x="34" y="256" font-family="Consolas,monospace" font-size="9.5" fill="#2f6f5e">dp[i] = dp[i-1] + dp[i-2]</text>
+    <text x="34" y="278" font-family="Segoe UI,sans-serif" font-size="9" fill="#4f5d75">два базовых случая и один переход</text>
+
+    <rect x="340" y="196" width="320" height="98" rx="8" fill="#ffffff" stroke="#2d3142"/>
+    <text x="354" y="218" font-family="Consolas,monospace" font-size="9.5" fill="#4f5d75">порядок: слева направо</text>
+    <text x="354" y="238" font-family="Consolas,monospace" font-size="9.5" fill="#4f5d75">каждая ячейка считается один раз</text>
+    <text x="354" y="258" font-family="Consolas,monospace" font-size="9.5" fill="#2f6f5e">ответ лежит в dp[n]</text>
+    <text x="354" y="278" font-family="Segoe UI,sans-serif" font-size="9" fill="#4f5d75">для n = 6 ответ 13</text>
+
+    <text x="340" y="312" text-anchor="middle" font-family="Consolas,monospace" font-size="8.5" fill="#4f5d75">РЕКУРСИЯ СЧИТАЛА БЫ ОДНИ И ТЕ ЖЕ ЗНАЧЕНИЯ СНОВА, ТАБЛИЦА НЕТ</text>
+  </svg>
+  <p class="note">Динамическое программирование заменяет повторные вычисления таблицей: значение считается один раз и переиспользуется.</p>
+</div>
+</body>
+</html>

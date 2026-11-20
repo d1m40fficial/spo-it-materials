@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>JSON: разбор по узлам</title>
+<style>
+  :root { --paper:#f7f4ee; --card:#fffdf8; --ink:#1a1916; --muted:#6b6459; --rule:#ded6c8; --accent:#2f6f5e; --accent-soft:#ddebe5; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .demo { background:var(--paper); border:1px solid var(--rule); border-radius:14px; padding:18px; }
+  .head { display:flex; justify-content:space-between; align-items:flex-end; gap:16px; padding-bottom:10px; border-bottom:1px solid var(--rule); }
+  .eyebrow { margin:0 0 4px; font:600 10px/1.2 Consolas,monospace; letter-spacing:.12em; text-transform:uppercase; color:var(--accent); }
+  h3 { margin:0; font-size:20px; line-height:1.2; }
+  .hint { font:11px/1.4 Consolas,monospace; color:var(--muted); }
+  .tree { margin-top:12px; border:1px solid var(--rule); border-radius:10px; background:var(--card); padding:8px; max-height:300px; overflow:auto; }
+  .row { display:flex; align-items:baseline; gap:8px; padding:5px 8px; border-radius:6px; cursor:pointer; font:12px/1.4 Consolas,monospace; }
+  .row:hover { background:#f1ece3; }
+  .row.sel { background:var(--accent-soft); }
+  .key { color:var(--accent); font-weight:600; }
+  .val { color:var(--ink); }
+  .type { color:var(--muted); font-size:9.5px; }
+  .status { min-height:40px; margin-top:10px; padding:10px 12px; border-radius:9px; background:var(--accent-soft); font:12px/1.5 Consolas,monospace; word-break:break-word; }
+  .status b { color:var(--accent); }
+  @media (max-width:560px) { .demo { padding:12px; } }
+</style>
+</head>
+<body>
+<div class="demo">
+  <div class="head">
+    <div><p class="eyebrow">JSON · разбор</p><h3>Заказ</h3></div>
+    <div class="hint">нажмите на узел</div>
+  </div>
+  <div class="tree" id="tree"></div>
+  <div class="status" id="status">Выберите ключ, чтобы увидеть путь и тип значения.</div>
+</div>
+<script>
+(function () {
+  var data = {
+    order: 7,
+    paid: true,
+    customer: { name: "Анна", city: "Тверь" },
+    items: [
+      { name: "Кружка", price: 640 },
+      { name: "Блюдце", price: 420 }
+    ]
+  };
+  var tree = document.getElementById('tree');
+  var status = document.getElementById('status');
+
+  function typeName(v) {
+    if (Array.isArray(v)) return 'list';
+    if (v === null) return 'NoneType';
+    return typeof v === 'object' ? 'dict' : typeof v;
+  }
+
+  function short(v) {
+    if (Array.isArray(v)) return '[ ' + v.length + ' элемента ]';
+    if (v !== null && typeof v === 'object') return '{ ' + Object.keys(v).length + ' ключа }';
+    if (typeof v === 'string') return '"' + v + '"';
+    if (v === true) return 'true';
+    if (v === false) return 'false';
+    return String(v);
+  }
+
+  function addRow(path, key, value, depth, label) {
+    var row = document.createElement('div');
+    row.className = 'row';
+    row.style.paddingLeft = (8 + depth * 16) + 'px';
+    var k = document.createElement('span');
+    k.className = 'key';
+    k.textContent = label;
+    var v = document.createElement('span');
+    v.className = 'val';
+    v.textContent = short(value);
+    var t = document.createElement('span');
+    t.className = 'type';
+    t.textContent = typeName(value);
+    row.appendChild(k); row.appendChild(v); row.appendChild(t);
+    row.addEventListener('click', function () {
+      document.querySelectorAll('.row.sel').forEach(function (r) { r.classList.remove('sel'); });
+      row.classList.add('sel');
+      status.innerHTML = '<b>' + path + '</b> = ' + short(value) + '&nbsp;&nbsp;тип: ' + typeName(value);
+    });
+    tree.appendChild(row);
+  }
+
+  function walk(value, path, depth, label) {
+    addRow(path, label, value, depth, label);
+    if (value !== null && typeof value === 'object' && !Array.isArray(value)) {
+      Object.keys(value).forEach(function (key) {
+        walk(value[key], path + '["' + key + '"]', depth + 1, '"' + key + '"');
+      });
+    } else if (Array.isArray(value)) {
+      value.forEach(function (item, i) {
+        walk(item, path + '[' + i + ']', depth + 1, '[' + i + ']');
+      });
+    }
+  }
+
+  walk(data, 'data', 0, 'data');
+})();
+</script>
+</body>
+</html>

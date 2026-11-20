@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Граф и список смежности</title>
+<style>
+  :root { --paper:#f7f4ee; --ink:#2d3142; --muted:#4f5d75; --accent:#2f6f5e; --accent-soft:#ddebe5; --rule:rgba(45,49,66,.12); }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .frame { background:var(--paper); border:1px solid var(--rule); border-radius:12px; padding:18px 18px 14px; }
+  .eyebrow { margin:0 0 8px; font:600 9px/1.2 Consolas,monospace; letter-spacing:.16em; text-transform:uppercase; color:var(--muted); }
+  .note { margin:10px 2px 0; font:11px/1.5 Consolas,monospace; color:var(--muted); }
+  svg { display:block; width:100%; height:auto; }
+</style>
+</head>
+<body>
+<div class="frame">
+  <p class="eyebrow">Граф · вершины и смежность</p>
+  <svg viewBox="0 0 680 310" role="img" aria-labelledby="gr-title gr-desc">
+    <title id="gr-title">Неориентированный граф из шести вершин</title>
+    <desc id="gr-desc">Вершины A, B, C, D, E, F соединены рёбрами. Справа приведён список смежности для каждой вершины.</desc>
+
+    <line x1="60" y1="70" x2="150" y2="40" stroke="#4f5d75" stroke-width="1.6"/>
+    <line x1="60" y1="70" x2="150" y2="140" stroke="#4f5d75" stroke-width="1.6"/>
+    <line x1="150" y1="40" x2="250" y2="90" stroke="#4f5d75" stroke-width="1.6"/>
+    <line x1="150" y1="140" x2="250" y2="90" stroke="#4f5d75" stroke-width="1.6"/>
+    <line x1="150" y1="140" x2="250" y2="200" stroke="#4f5d75" stroke-width="1.6"/>
+    <line x1="250" y1="90" x2="340" y2="140" stroke="#4f5d75" stroke-width="1.6"/>
+    <line x1="250" y1="200" x2="340" y2="140" stroke="#4f5d75" stroke-width="1.6"/>
+
+    <g font-family="Consolas,monospace" font-size="14" font-weight="600" text-anchor="middle">
+      <circle cx="60" cy="70" r="22" fill="#ddebe5" stroke="#2f6f5e" stroke-width="1.6"/><text x="60" y="75" fill="#2f6f5e">A</text>
+      <circle cx="150" cy="40" r="22" fill="#ffffff" stroke="#2d3142"/><text x="150" y="45" fill="#2d3142">B</text>
+      <circle cx="150" cy="140" r="22" fill="#ffffff" stroke="#2d3142"/><text x="150" y="145" fill="#2d3142">C</text>
+      <circle cx="250" cy="90" r="22" fill="#ffffff" stroke="#2d3142"/><text x="250" y="95" fill="#2d3142">D</text>
+      <circle cx="250" cy="200" r="22" fill="#ffffff" stroke="#2d3142"/><text x="250" y="205" fill="#2d3142">E</text>
+      <circle cx="340" cy="140" r="22" fill="#ffffff" stroke="#2d3142"/><text x="340" y="145" fill="#2d3142">F</text>
+    </g>
+
+    <text x="160" y="250" text-anchor="middle" font-family="Segoe UI,sans-serif" font-size="9.5" fill="#4f5d75">рёбра неориентированные</text>
+    <text x="160" y="268" text-anchor="middle" font-family="Consolas,monospace" font-size="9" fill="#4f5d75">A соединена с B, значит B соединена с A</text>
+
+    <rect x="384" y="24" width="278" height="252" rx="10" fill="#ffffff" stroke="#2d3142"/>
+    <text x="408" y="46" font-family="Consolas,monospace" font-size="9" letter-spacing=".1em" fill="#4f5d75">СПИСОК СМЕЖНОСТИ</text>
+    <g font-family="Consolas,monospace" font-size="10.5">
+      <text x="408" y="74" fill="#2f6f5e">A</text><text x="436" y="74" fill="#4f5d75">: [B, C]</text>
+      <text x="408" y="98" fill="#2f6f5e">B</text><text x="436" y="98" fill="#4f5d75">: [A, D]</text>
+      <text x="408" y="122" fill="#2f6f5e">C</text><text x="436" y="122" fill="#4f5d75">: [A, D, E]</text>
+      <text x="408" y="146" fill="#2f6f5e">D</text><text x="436" y="146" fill="#4f5d75">: [B, C, F]</text>
+      <text x="408" y="170" fill="#2f6f5e">E</text><text x="436" y="170" fill="#4f5d75">: [C, F]</text>
+      <text x="408" y="194" fill="#2f6f5e">F</text><text x="436" y="194" fill="#4f5d75">: [D, E]</text>
+    </g>
+    <line x1="408" y1="208" x2="646" y2="208" stroke="rgba(45,49,66,.12)"/>
+    <text x="408" y="228" font-family="Consolas,monospace" font-size="9" fill="#4f5d75">BFS из A: A B C D E F</text>
+    <text x="408" y="246" font-family="Consolas,monospace" font-size="9" fill="#4f5d75">DFS из A: A B D C E F</text>
+    <text x="408" y="264" font-family="Consolas,monospace" font-size="9" fill="#4f5d75">степень A: 2, степень D: 3</text>
+  </svg>
+  <p class="note">Список смежности хранит для каждой вершины только её соседей. Порядок обхода зависит от порядка в списке.</p>
+</div>
+</body>
+</html>

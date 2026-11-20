@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>JSON и CSV: два формата обмена</title>
+<style>
+  :root { --paper:#f7f4ee; --ink:#2d3142; --muted:#4f5d75; --accent:#2f6f5e; --accent-soft:#ddebe5; --rule:rgba(45,49,66,.12); }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .frame { background:var(--paper); border:1px solid var(--rule); border-radius:12px; padding:18px 18px 14px; }
+  .eyebrow { margin:0 0 8px; font:600 9px/1.2 Consolas,monospace; letter-spacing:.16em; text-transform:uppercase; color:var(--muted); }
+  .note { margin:10px 2px 0; font:11px/1.5 Consolas,monospace; color:var(--muted); }
+  svg { display:block; width:100%; height:auto; }
+</style>
+</head>
+<body>
+<div class="frame">
+  <p class="eyebrow">Данные · форматы обмена</p>
+  <svg viewBox="0 0 680 360" role="img" aria-labelledby="fmt-title fmt-desc">
+    <title id="fmt-title">JSON и CSV на одних данных</title>
+    <desc id="fmt-desc">JSON хранит вложенный объект с числами, логическим значением и массивом. CSV хранит плоскую таблицу, где все поля записаны текстом.</desc>
+
+    <text x="20" y="24" font-family="Consolas,monospace" font-size="9" letter-spacing=".1em" fill="#2f6f5e">JSON</text>
+    <rect x="16" y="36" width="330" height="240" rx="10" fill="#ffffff" stroke="#2d3142"/>
+    <g font-family="Consolas,monospace" font-size="10">
+      <text x="30" y="60" fill="#2d3142">{</text>
+      <text x="42" y="78" fill="#2f6f5e">"order"</text><text x="100" y="78" fill="#2d3142">: 7,</text>
+      <text x="42" y="96" fill="#2f6f5e">"paid"</text><text x="94" y="96" fill="#2d3142">: true,</text>
+      <text x="42" y="114" fill="#2f6f5e">"items"</text><text x="100" y="114" fill="#2d3142">: [</text>
+      <text x="54" y="132" fill="#2d3142">{</text><text x="66" y="132" fill="#2f6f5e">"name"</text><text x="118" y="132" fill="#2d3142">: "Кружка", </text><text x="208" y="132" fill="#2f6f5e">"price"</text><text x="262" y="132" fill="#2d3142">: 640},</text>
+      <text x="54" y="150" fill="#2d3142">{</text><text x="66" y="150" fill="#2f6f5e">"name"</text><text x="118" y="150" fill="#2d3142">: "Блюдце", </text><text x="208" y="150" fill="#2f6f5e">"price"</text><text x="262" y="150" fill="#2d3142">: 420}</text>
+      <text x="42" y="168" fill="#2d3142">]</text>
+      <text x="30" y="186" fill="#2d3142">}</text>
+    </g>
+    <text x="30" y="214" font-family="Segoe UI,sans-serif" font-size="9.5" fill="#4f5d75">числа остаются числами, есть true и вложенный массив</text>
+    <text x="30" y="232" font-family="Segoe UI,sans-serif" font-size="9.5" fill="#4f5d75">структура может быть любой глубины</text>
+    <text x="30" y="258" font-family="Consolas,monospace" font-size="9" fill="#2f6f5e">json.load() → dict, list, int, bool</text>
+
+    <line x1="346" y1="150" x2="374" y2="150" stroke="#4f5d75" stroke-width="1.3"/>
+
+    <text x="392" y="24" font-family="Consolas,monospace" font-size="9" letter-spacing=".1em" fill="#bf4520">CSV</text>
+    <rect x="388" y="36" width="276" height="156" rx="10" fill="#ffffff" stroke="#2d3142"/>
+    <rect x="388" y="36" width="276" height="30" rx="10" fill="rgba(191,69,32,.08)"/>
+    <text x="402" y="56" font-family="Consolas,monospace" font-size="10" font-weight="600" fill="#2d3142">name;price;quantity</text>
+    <text x="402" y="82" font-family="Consolas,monospace" font-size="10" fill="#4f5d75">Кружка;640;3</text>
+    <text x="402" y="102" font-family="Consolas,monospace" font-size="10" fill="#4f5d75">Блюдце;420;2</text>
+    <text x="402" y="122" font-family="Consolas,monospace" font-size="10" fill="#4f5d75">Коробка;40;10</text>
+    <text x="402" y="150" font-family="Segoe UI,sans-serif" font-size="9.5" fill="#4f5d75">первая строка это заголовок</text>
+    <text x="402" y="168" font-family="Segoe UI,sans-serif" font-size="9.5" fill="#4f5d75">каждая строка это запись</text>
+
+    <text x="402" y="214" font-family="Segoe UI,sans-serif" font-size="9.5" fill="#4f5d75">все поля приходят строками</text>
+    <text x="402" y="232" font-family="Segoe UI,sans-serif" font-size="9.5" fill="#4f5d75">вложенности нет</text>
+    <text x="402" y="258" font-family="Consolas,monospace" font-size="9" fill="#bf4520">цена "640" требует int() или float()</text>
+
+    <rect x="16" y="292" width="648" height="52" rx="8" fill="#ffffff" stroke="#2d3142" stroke-dasharray="4 4"/>
+    <text x="32" y="312" font-family="Consolas,monospace" font-size="9.5" fill="#4f5d75">JSON удобен для вложенных объектов и API.</text>
+    <text x="32" y="330" font-family="Consolas,monospace" font-size="9.5" fill="#4f5d75">CSV удобен для таблиц и электронных таблиц.</text>
+  </svg>
+  <p class="note">Выбор формата зависит от структуры данных и от того, кто будет их читать.</p>
+</div>
+</body>
+</html>
