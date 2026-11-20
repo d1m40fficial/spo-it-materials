@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Анатомия регулярного выражения</title>
+<style>
+  :root { --paper:#f7f4ee; --ink:#2d3142; --muted:#4f5d75; --accent:#2f6f5e; --accent-soft:#ddebe5; --bad:#bf4520; --rule:rgba(45,49,66,.12); }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .frame { background:var(--paper); border:1px solid var(--rule); border-radius:12px; padding:18px 18px 14px; }
+  .eyebrow { margin:0 0 8px; font:600 9px/1.2 Consolas,monospace; letter-spacing:.16em; text-transform:uppercase; color:var(--muted); }
+  .note { margin:10px 2px 0; font:11px/1.5 Consolas,monospace; color:var(--muted); }
+  svg { display:block; width:100%; height:auto; }
+</style>
+</head>
+<body>
+<div class="frame">
+  <p class="eyebrow">Регулярные выражения · шаблон</p>
+  <svg viewBox="0 0 680 340" role="img" aria-labelledby="re-title re-desc">
+    <title id="re-title">Разбор шаблона телефона</title>
+    <desc id="re-desc">Шаблон начинается с якоря начала, содержит литерал плюс семь, группы цифр и якорь конца. Строка +7-912-345-67-89 подходит, строка с буквой нет.</desc>
+
+    <text x="20" y="26" font-family="Consolas,monospace" font-size="9" letter-spacing=".1em" fill="#4f5d75">ШАБЛОН</text>
+
+    <g font-family="Consolas,monospace" font-size="13">
+      <rect x="20" y="40" width="30" height="34" rx="5" fill="#ddebe5"/><text x="35" y="63" text-anchor="middle" fill="#2f6f5e">^</text>
+      <rect x="56" y="40" width="46" height="34" rx="5" fill="#ffffff" stroke="#2d3142"/><text x="79" y="63" text-anchor="middle" fill="#2d3142">\+7</text>
+      <rect x="108" y="40" width="26" height="34" rx="5" fill="#ffffff" stroke="#2d3142"/><text x="121" y="63" text-anchor="middle" fill="#2d3142">-</text>
+      <rect x="140" y="40" width="60" height="34" rx="5" fill="#ddebe5"/><text x="170" y="63" text-anchor="middle" fill="#2f6f5e">\d{3}</text>
+      <rect x="206" y="40" width="26" height="34" rx="5" fill="#ffffff" stroke="#2d3142"/><text x="219" y="63" text-anchor="middle" fill="#2d3142">-</text>
+      <rect x="238" y="40" width="60" height="34" rx="5" fill="#ddebe5"/><text x="268" y="63" text-anchor="middle" fill="#2f6f5e">\d{3}</text>
+      <rect x="304" y="40" width="26" height="34" rx="5" fill="#ffffff" stroke="#2d3142"/><text x="317" y="63" text-anchor="middle" fill="#2d3142">-</text>
+      <rect x="336" y="40" width="60" height="34" rx="5" fill="#ddebe5"/><text x="366" y="63" text-anchor="middle" fill="#2f6f5e">\d{2}</text>
+      <rect x="402" y="40" width="26" height="34" rx="5" fill="#ffffff" stroke="#2d3142"/><text x="415" y="63" text-anchor="middle" fill="#2d3142">-</text>
+      <rect x="434" y="40" width="60" height="34" rx="5" fill="#ddebe5"/><text x="464" y="63" text-anchor="middle" fill="#2f6f5e">\d{2}</text>
+      <rect x="500" y="40" width="30" height="34" rx="5" fill="#ddebe5"/><text x="515" y="63" text-anchor="middle" fill="#2f6f5e">$</text>
+    </g>
+
+    <text x="20" y="100" font-family="Consolas,monospace" font-size="9" fill="#4f5d75">^ начало · \+7 литерал · \d{3} три цифры · \- дефис · $ конец</text>
+
+    <text x="20" y="132" font-family="Segoe UI,sans-serif" font-size="10" font-weight="600" fill="#2f6f5e">Подходит</text>
+    <rect x="20" y="142" width="290" height="38" rx="7" fill="#ffffff" stroke="#2f6f5e"/>
+    <text x="34" y="166" font-family="Consolas,monospace" font-size="13" fill="#2d3142">+7-912-345-67-89</text>
+
+    <text x="20" y="206" font-family="Segoe UI,sans-serif" font-size="10" font-weight="600" fill="#bf4520">Не подходит</text>
+    <rect x="20" y="216" width="290" height="38" rx="7" fill="#ffffff" stroke="#bf4520"/>
+    <text x="34" y="240" font-family="Consolas,monospace" font-size="13" fill="#4f5d75">+7-912-345-67-8X</text>
+
+    <text x="20" y="286" font-family="Consolas,monospace" font-size="9.5" fill="#4f5d75">re.fullmatch(r"^\+7-\d{3}-\d{3}-\d{2}-\d{2}$", text)</text>
+    <text x="20" y="306" font-family="Consolas,monospace" font-size="9.5" fill="#4f5d75">без якорей шаблон найдёт телефон внутри другой строки</text>
+
+    <rect x="340" y="142" width="320" height="150" rx="10" fill="#ffffff" stroke="#2d3142"/>
+    <text x="356" y="164" font-family="Consolas,monospace" font-size="9" letter-spacing=".1em" fill="#4f5d75">ЧТО ЗНАЧИТ КАЖДАЯ ЧАСТЬ</text>
+    <text x="356" y="188" font-family="Consolas,monospace" font-size="9.5" fill="#2d3142">^ и $ держат шаблон в границах</text>
+    <text x="356" y="208" font-family="Consolas,monospace" font-size="9.5" fill="#2d3142">\d это одна цифра 0-9</text>
+    <text x="356" y="228" font-family="Consolas,monospace" font-size="9.5" fill="#2d3142">{3} повторяет ровно три раза</text>
+    <text x="356" y="248" font-family="Consolas,monospace" font-size="9.5" fill="#2d3142">\+ экранирует знак плюс</text>
+    <text x="356" y="268" font-family="Consolas,monospace" font-size="9.5" fill="#4f5d75">шаблон проверяет формат, не смысл</text>
+  </svg>
+  <p class="note">Полное совпадение проверяют через fullmatch или якоря. Поиск внутри строки делает search.</p>
+</div>
+</body>
+</html>

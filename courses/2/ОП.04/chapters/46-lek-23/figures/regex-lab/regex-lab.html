@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Проверка строки регулярным выражением</title>
+<style>
+  :root { --paper:#f7f4ee; --card:#fffdf8; --ink:#1a1916; --muted:#6b6459; --rule:#ded6c8; --accent:#2f6f5e; --accent-soft:#ddebe5; --bad:#b23a2b; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .demo { background:var(--paper); border:1px solid var(--rule); border-radius:14px; padding:18px; }
+  .head { display:flex; justify-content:space-between; align-items:flex-end; gap:16px; padding-bottom:10px; border-bottom:1px solid var(--rule); }
+  .eyebrow { margin:0 0 4px; font:600 10px/1.2 Consolas,monospace; letter-spacing:.12em; text-transform:uppercase; color:var(--accent); }
+  h3 { margin:0; font-size:20px; line-height:1.2; }
+  .hint { font:11px/1.4 Consolas,monospace; color:var(--muted); }
+  label { display:block; margin:13px 0 5px; font:600 10px/1.2 Consolas,monospace; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); }
+  input { width:100%; padding:10px 12px; font:14px/1.3 Consolas,monospace; color:var(--ink); background:var(--card); border:1px solid var(--rule); border-radius:9px; }
+  input:focus { outline:2px solid var(--accent); outline-offset:1px; }
+  .presets { display:flex; gap:7px; flex-wrap:wrap; margin-top:10px; }
+  .presets button { font:600 11.5px/1 "Segoe UI",system-ui,sans-serif; padding:8px 10px; border-radius:8px; border:1px solid var(--rule); background:var(--card); color:var(--ink); cursor:pointer; }
+  .presets button.on { background:var(--accent); border-color:var(--accent); color:#fff; }
+  .pattern { margin-top:10px; padding:9px 11px; border:1px solid var(--rule); border-radius:9px; background:var(--card); font:11px/1.5 Consolas,monospace; color:var(--muted); word-break:break-all; }
+  .result { margin-top:10px; padding:11px 12px; border-radius:9px; background:var(--accent-soft); font:12.5px/1.55 Consolas,monospace; }
+  .result.bad { background:#fbf3f1; }
+  .result b { color:var(--accent); }
+  .result.bad b { color:var(--bad); }
+  .groups { margin-top:8px; font-size:11.5px; color:var(--muted); }
+  .groups span { display:inline-block; margin-right:10px; }
+  @media (max-width:560px) { .demo { padding:12px; } }
+</style>
+</head>
+<body>
+<div class="demo">
+  <div class="head">
+    <div><p class="eyebrow">Регулярное выражение · проверка</p><h3>Подходит ли строка?</h3></div>
+    <div class="hint">полное совпадение</div>
+  </div>
+  <label for="text">Строка</label>
+  <input id="text" value="+7-912-345-67-89" spellcheck="false">
+  <div class="presets" id="presets"></div>
+  <div class="pattern" id="pattern"></div>
+  <div class="result" id="result">Выберите шаблон или измените строку.</div>
+  <div class="groups" id="groups"></div>
+</div>
+<script>
+(function () {
+  var presets = [
+    { id: 'phone', label: 'Телефон', src: '^\\+7-(\\d{3})-(\\d{3})-(\\d{2})-(\\d{2})$', sample: '+7-912-345-67-89' },
+    { id: 'date', label: 'Дата', src: '^(\\d{2})\\.(\\d{2})\\.(\\d{4})$', sample: '18.11.2026' },
+    { id: 'code', label: 'Артикул', src: '^[A-Z]{2}-\\d{4}$', sample: 'AB-1234' },
+    { id: 'email', label: 'Почта', src: '^[\\w.+-]+@[\\w-]+\\.[a-z]{2,}$', sample: 'student@example.ru' }
+  ];
+  var current = 'phone';
+  var text = document.getElementById('text');
+  var patternBox = document.getElementById('pattern');
+  var result = document.getElementById('result');
+  var groups = document.getElementById('groups');
+  var presetsBox = document.getElementById('presets');
+
+  function renderPresets() {
+    presetsBox.innerHTML = '';
+    presets.forEach(function (p) {
+      var b = document.createElement('button');
+      b.textContent = p.label;
+      b.className = p.id === current ? 'on' : '';
+      b.addEventListener('click', function () {
+        current = p.id;
+        text.value = p.sample;
+        check();
+        renderPresets();
+      });
+      presetsBox.appendChild(b);
+    });
+  }
+
+  function check() {
+    var p = presets.find(function (x) { return x.id === current; });
+    patternBox.textContent = 're.fullmatch(r"' + p.src + '", text)';
+    var re = new RegExp(p.src);
+    var m = re.exec(text.value);
+    groups.innerHTML = '';
+    if (!m) {
+      result.className = 'result bad';
+      result.innerHTML = '<b>Не подходит.</b> Строка не совпала с шаблоном целиком.';
+      return;
+    }
+    result.className = 'result';
+    result.innerHTML = '<b>Подходит.</b> Совпадение: ' + m[0];
+    if (m.length > 1) {
+      var parts = [];
+      for (var i = 1; i < m.length; i += 1) parts.push('группа ' + i + ': ' + m[i]);
+      groups.innerHTML = parts.map(function (s) { return '<span>' + s + '</span>'; }).join('');
+    }
+  }
+
+  text.addEventListener('input', check);
+  renderPresets();
+  check();
+})();
+</script>
+</body>
+</html>

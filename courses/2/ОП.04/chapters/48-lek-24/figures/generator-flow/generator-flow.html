@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Генератор: next() и пауза</title>
+<style>
+  :root { --paper:#f7f4ee; --card:#fffdf8; --ink:#1a1916; --muted:#6b6459; --rule:#ded6c8; --accent:#2f6f5e; --accent-soft:#ddebe5; --bad:#b23a2b; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .demo { background:var(--paper); border:1px solid var(--rule); border-radius:14px; padding:18px; }
+  .head { display:flex; justify-content:space-between; align-items:flex-end; gap:16px; padding-bottom:10px; border-bottom:1px solid var(--rule); }
+  .eyebrow { margin:0 0 4px; font:600 10px/1.2 Consolas,monospace; letter-spacing:.12em; text-transform:uppercase; color:var(--accent); }
+  h3 { margin:0; font-size:20px; line-height:1.2; }
+  .state { font:11px/1.4 Consolas,monospace; color:var(--muted); }
+  .code { margin-top:12px; padding:10px 12px; border:1px solid var(--rule); border-radius:9px; background:var(--card); font:11.5px/1.65 Consolas,monospace; white-space:pre-wrap; }
+  .code b { color:var(--accent); }
+  .out { display:flex; align-items:center; gap:10px; margin-top:12px; }
+  .out .label { font:600 9px/1.2 Consolas,monospace; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); }
+  .out .value { font:600 22px/1 Consolas,monospace; color:var(--accent); }
+  .history { display:flex; gap:7px; flex-wrap:wrap; margin-top:8px; min-height:32px; }
+  .history span { display:grid; place-items:center; min-width:36px; height:32px; padding:0 9px; border-radius:16px; background:var(--accent-soft); font:600 12px/1 Consolas,monospace; color:var(--accent); }
+  .status { min-height:38px; margin-top:10px; font-size:12.5px; line-height:1.5; color:var(--muted); }
+  .status b { color:var(--ink); }
+  .status.bad b { color:var(--bad); }
+  .controls { display:flex; gap:8px; flex-wrap:wrap; margin-top:10px; }
+  button { font:600 12.5px/1 "Segoe UI",system-ui,sans-serif; padding:9px 12px; border-radius:9px; border:1px solid var(--rule); background:var(--card); color:var(--ink); cursor:pointer; }
+  button:hover { border-color:var(--accent); color:var(--accent); }
+  button.primary { background:var(--accent); border-color:var(--accent); color:#fff; }
+  button.primary:hover { background:#245a4c; color:#fff; }
+  button:disabled { opacity:.45; cursor:default; }
+  @media (max-width:560px) { .demo { padding:12px; } }
+</style>
+</head>
+<body>
+<div class="demo">
+  <div class="head">
+    <div><p class="eyebrow">Генератор · next()</p><h3>countdown(3)</h3></div>
+    <div class="state" id="state">не запущен</div>
+  </div>
+  <div class="code">def countdown(n):
+    while n &gt; 0:
+        <b>yield n</b>
+        n -= 1
+
+gen = countdown(3)</div>
+  <div class="out">
+    <span class="label">Получено</span>
+    <span class="value" id="value">нет</span>
+  </div>
+  <div class="history" id="history"></div>
+  <div class="status" id="status">Нажмите «next()», чтобы получить первое значение.</div>
+  <div class="controls">
+    <button class="primary" id="next">next()</button>
+    <button id="reset">Сброс</button>
+  </div>
+</div>
+<script>
+(function () {
+  var values = [3, 2, 1];
+  var index = 0;
+  var done = false;
+  var value = document.getElementById('value');
+  var state = document.getElementById('state');
+  var history = document.getElementById('history');
+  var status = document.getElementById('status');
+  var nextBtn = document.getElementById('next');
+
+  function render() {
+    history.innerHTML = '';
+    for (var i = 0; i < index; i += 1) {
+      var s = document.createElement('span');
+      s.textContent = values[i];
+      history.appendChild(s);
+    }
+    nextBtn.disabled = done;
+  }
+
+  function step() {
+    if (done) return;
+    if (index < values.length) {
+      value.textContent = values[index];
+      status.innerHTML = 'yield вернул <b>' + values[index] + '</b>. Генератор приостановлен и запомнил место.';
+      state.textContent = 'пауза после yield ' + values[index];
+      index += 1;
+      if (index === values.length) status.innerHTML += ' Следующий вызов завершит генератор.';
+    } else {
+      done = true;
+      value.textContent = 'StopIteration';
+      state.textContent = 'завершён';
+      status.className = 'status bad';
+      status.innerHTML = '<b>StopIteration</b>. Генератор исчерпан, новых значений нет.';
+    }
+    render();
+  }
+
+  function reset() {
+    values = [3, 2, 1];
+    index = 0;
+    done = false;
+    value.textContent = 'нет';
+    state.textContent = 'не запущен';
+    status.className = 'status';
+    status.textContent = 'Нажмите «next()», чтобы получить первое значение.';
+    render();
+  }
+
+  nextBtn.addEventListener('click', step);
+  document.getElementById('reset').addEventListener('click', reset);
+  render();
+})();
+</script>
+</body>
+</html>

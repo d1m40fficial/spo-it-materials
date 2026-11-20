@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Битовая лаборатория</title>
+<style>
+  :root { --paper:#f7f4ee; --card:#fffdf8; --ink:#1a1916; --muted:#6b6459; --rule:#ded6c8; --accent:#2f6f5e; --accent-soft:#ddebe5; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .demo { background:var(--paper); border:1px solid var(--rule); border-radius:14px; padding:18px; }
+  .head { display:flex; justify-content:space-between; align-items:flex-end; gap:16px; padding-bottom:10px; border-bottom:1px solid var(--rule); }
+  .eyebrow { margin:0 0 4px; font:600 10px/1.2 Consolas,monospace; letter-spacing:.12em; text-transform:uppercase; color:var(--accent); }
+  h3 { margin:0; font-size:20px; line-height:1.2; }
+  .value { font:12px/1.4 Consolas,monospace; color:var(--muted); }
+  .value b { color:var(--ink); font-size:16px; }
+  .bits { display:grid; grid-template-columns:repeat(8, 1fr); gap:6px; margin-top:14px; }
+  .bit { text-align:center; }
+  .bit .w { font:9px/1.2 Consolas,monospace; color:var(--muted); margin-bottom:3px; }
+  .bit button { width:100%; height:42px; border:1px solid var(--rule); border-radius:8px; background:var(--card); font:600 15px/1 Consolas,monospace; color:#b9b0a2; cursor:pointer; }
+  .bit button.on { background:var(--accent); border-color:var(--accent); color:#fff; }
+  .readout { display:flex; gap:10px; flex-wrap:wrap; margin-top:12px; }
+  .readout div { flex:1; min-width:150px; background:var(--card); border:1px solid var(--rule); border-radius:9px; padding:8px 11px; font:12px/1.5 Consolas,monospace; }
+  .readout .k { font:600 8.5px/1.2 Consolas,monospace; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); }
+  .status { min-height:36px; margin-top:10px; padding:9px 11px; border-radius:9px; background:var(--accent-soft); font-size:12.5px; line-height:1.45; }
+  .status b { color:var(--accent); }
+  .controls { display:flex; gap:8px; flex-wrap:wrap; margin-top:10px; }
+  button.op { font:600 12px/1 "Segoe UI",system-ui,sans-serif; padding:8px 11px; border-radius:9px; border:1px solid var(--rule); background:var(--card); color:var(--ink); cursor:pointer; }
+  button.op:hover { border-color:var(--accent); color:var(--accent); }
+  button.op.primary { background:var(--accent); border-color:var(--accent); color:#fff; }
+  button.op.primary:hover { background:#245a4c; color:#fff; }
+  @media (max-width:560px) { .demo { padding:12px; } .bit button { height:36px; font-size:13px; } }
+</style>
+</head>
+<body>
+<div class="demo">
+  <div class="head">
+    <div><p class="eyebrow">Биты · лаборатория</p><h3>Восемь разрядов</h3></div>
+    <div class="value">значение: <b id="dec">45</b></div>
+  </div>
+  <div class="bits" id="bits"></div>
+  <div class="readout">
+    <div><div class="k">Двоичный вид</div><div id="bin">00101101</div></div>
+    <div><div class="k">Последняя операция</div><div id="op">нет</div></div>
+  </div>
+  <div class="status" id="status">Нажимайте на разряды, чтобы включать и выключать биты.</div>
+  <div class="controls">
+    <button class="op primary" id="or">ИЛИ с маской 15</button>
+    <button class="op" id="and">И с маской 15</button>
+    <button class="op" id="xor">XOR с маской 15</button>
+    <button class="op" id="reset">Сброс</button>
+  </div>
+</div>
+<script>
+(function () {
+  var start = [0, 0, 1, 0, 1, 1, 0, 1];
+  var weights = [128, 64, 32, 16, 8, 4, 2, 1];
+  var bits = start.slice();
+  var bitsBox = document.getElementById('bits');
+  var status = document.getElementById('status');
+
+  function value() {
+    return bits.reduce(function (sum, bit, i) { return sum + (bit ? weights[i] : 0); }, 0);
+  }
+
+  function bin() {
+    return bits.join('');
+  }
+
+  function render() {
+    bitsBox.innerHTML = '';
+    bits.forEach(function (bit, i) {
+      var cell = document.createElement('div');
+      cell.className = 'bit';
+      var w = document.createElement('div');
+      w.className = 'w';
+      w.textContent = weights[i];
+      var b = document.createElement('button');
+      b.className = bit ? 'on' : '';
+      b.textContent = bit;
+      b.addEventListener('click', function () {
+        bits[i] = bits[i] ? 0 : 1;
+        document.getElementById('op').textContent = 'бит ' + weights[i] + ' переключён';
+        status.innerHTML = 'Бит с весом <b>' + weights[i] + '</b> теперь равен ' + bits[i] + '.';
+        render();
+      });
+      cell.appendChild(w);
+      cell.appendChild(b);
+      bitsBox.appendChild(cell);
+    });
+    document.getElementById('dec').textContent = value();
+    document.getElementById('bin').textContent = bin();
+  }
+
+  function apply(mask, kind) {
+    var v = value();
+    var result;
+    if (kind === 'or') result = v | mask;
+    else if (kind === 'and') result = v & mask;
+    else result = v ^ mask;
+    bits = weights.map(function (w) { return (result & w) ? 1 : 0; });
+    document.getElementById('op').textContent = kind.toUpperCase() + ' 15: ' + v + ' → ' + result;
+    status.innerHTML = 'Операция <b>' + kind.toUpperCase() + '</b> с маской 15 дала ' + result + ' (' + bin() + ').';
+    render();
+  }
+
+  document.getElementById('or').addEventListener('click', function () { apply(15, 'or'); });
+  document.getElementById('and').addEventListener('click', function () { apply(15, 'and'); });
+  document.getElementById('xor').addEventListener('click', function () { apply(15, 'xor'); });
+  document.getElementById('reset').addEventListener('click', function () {
+    bits = start.slice();
+    document.getElementById('op').textContent = 'нет';
+    status.textContent = 'Состояние восстановлено: 45.';
+    render();
+  });
+
+  render();
+})();
+</script>
+</body>
+</html>

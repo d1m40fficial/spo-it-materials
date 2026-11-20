@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Жадный выбор монет</title>
+<style>
+  :root { --paper:#f7f4ee; --ink:#2d3142; --muted:#4f5d75; --accent:#2f6f5e; --accent-soft:#ddebe5; --bad:#bf4520; --rule:rgba(45,49,66,.12); }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .frame { background:var(--paper); border:1px solid var(--rule); border-radius:12px; padding:18px 18px 14px; }
+  .eyebrow { margin:0 0 8px; font:600 9px/1.2 Consolas,monospace; letter-spacing:.16em; text-transform:uppercase; color:var(--muted); }
+  .note { margin:10px 2px 0; font:11px/1.5 Consolas,monospace; color:var(--muted); }
+  svg { display:block; width:100%; height:auto; }
+</style>
+</head>
+<body>
+<div class="frame">
+  <p class="eyebrow">Жадный алгоритм · монеты</p>
+  <svg viewBox="0 0 680 350" role="img" aria-labelledby="gr-title gr-desc">
+    <title id="gr-title">Жадный размен монет</title>
+    <desc id="gr-desc">Сумму 67 жадный алгоритм разменивает монетами 50, 10, 5 и 2. Для набора 4, 3, 1 и суммы 6 жадный выбор даёт 4 + 1 + 1, а оптимальный 3 + 3.</desc>
+
+    <text x="20" y="28" font-family="Consolas,monospace" font-size="9" letter-spacing=".1em" fill="#2f6f5e">СУММА 67 · МОНЕТЫ 50, 20, 10, 5, 2, 1</text>
+
+    <g font-family="Consolas,monospace" text-anchor="middle">
+      <rect x="30" y="48" width="64" height="40" rx="20" fill="#2f6f5e"/><text x="62" y="73" font-size="13" font-weight="600" fill="#ffffff">50</text>
+      <rect x="106" y="48" width="64" height="40" rx="20" fill="#f1ece3" stroke="#2d3142"/><text x="138" y="73" font-size="13" fill="#4f5d75">20</text>
+      <rect x="182" y="48" width="64" height="40" rx="20" fill="#2f6f5e"/><text x="214" y="73" font-size="13" font-weight="600" fill="#ffffff">10</text>
+      <rect x="258" y="48" width="64" height="40" rx="20" fill="#2f6f5e"/><text x="290" y="73" font-size="13" font-weight="600" fill="#ffffff">5</text>
+      <rect x="334" y="48" width="64" height="40" rx="20" fill="#2f6f5e"/><text x="366" y="73" font-size="13" font-weight="600" fill="#ffffff">2</text>
+      <rect x="410" y="48" width="64" height="40" rx="20" fill="#f1ece3" stroke="#2d3142"/><text x="442" y="73" font-size="13" fill="#4f5d75">1</text>
+    </g>
+
+    <text x="30" y="120" font-family="Consolas,monospace" font-size="10" fill="#4f5d75">67 − 50 = 17</text>
+    <text x="30" y="140" font-family="Consolas,monospace" font-size="10" fill="#4f5d75">17 − 10 = 7</text>
+    <text x="30" y="160" font-family="Consolas,monospace" font-size="10" fill="#4f5d75">7 − 5 = 2</text>
+    <text x="30" y="180" font-family="Consolas,monospace" font-size="10" fill="#4f5d75">2 − 2 = 0</text>
+    <text x="30" y="206" font-family="Consolas,monospace" font-size="10.5" font-weight="600" fill="#2f6f5e">итого 4 монеты: 50 + 10 + 5 + 2</text>
+
+    <line x1="20" y1="226" x2="660" y2="226" stroke="rgba(45,49,66,.12)" stroke-dasharray="4 4"/>
+
+    <text x="20" y="248" font-family="Consolas,monospace" font-size="9" letter-spacing=".1em" fill="#bf4520">КОГДА ЖАДНЫЙ ВЫБОР ОШИБАЕТСЯ</text>
+    <text x="20" y="272" font-family="Consolas,monospace" font-size="10" fill="#4f5d75">монеты 4, 3, 1 · сумма 6</text>
+
+    <rect x="30" y="284" width="290" height="52" rx="8" fill="#ffffff" stroke="#bf4520"/>
+    <text x="44" y="304" font-family="Consolas,monospace" font-size="10" fill="#bf4520">жадный: 4 + 1 + 1 = 3 монеты</text>
+    <text x="44" y="322" font-family="Consolas,monospace" font-size="10" fill="#4f5d75">сначала берём самую крупную</text>
+
+    <rect x="340" y="284" width="300" height="52" rx="8" fill="#ffffff" stroke="#2f6f5e"/>
+    <text x="354" y="304" font-family="Consolas,monospace" font-size="10" fill="#2f6f5e">лучше: 3 + 3 = 2 монеты</text>
+    <text x="354" y="322" font-family="Consolas,monospace" font-size="10" fill="#4f5d75">жадный выбор не всегда оптимален</text>
+  </svg>
+  <p class="note">Жадный алгоритм делает локально лучший выбор на каждом шаге. Это не всегда даёт глобальный оптимум.</p>
+</div>
+</body>
+</html>

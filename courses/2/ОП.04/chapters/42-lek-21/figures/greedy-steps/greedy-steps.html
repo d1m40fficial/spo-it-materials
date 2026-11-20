@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Жадный размен по шагам</title>
+<style>
+  :root { --paper:#f7f4ee; --card:#fffdf8; --ink:#1a1916; --muted:#6b6459; --rule:#ded6c8; --accent:#2f6f5e; --accent-soft:#ddebe5; --bad:#b23a2b; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .demo { background:var(--paper); border:1px solid var(--rule); border-radius:14px; padding:18px; }
+  .head { display:flex; justify-content:space-between; align-items:flex-end; gap:16px; padding-bottom:10px; border-bottom:1px solid var(--rule); }
+  .eyebrow { margin:0 0 4px; font:600 10px/1.2 Consolas,monospace; letter-spacing:.12em; text-transform:uppercase; color:var(--accent); }
+  h3 { margin:0; font-size:20px; line-height:1.2; }
+  .count { font:12px/1.4 Consolas,monospace; color:var(--muted); white-space:nowrap; }
+  .amount { display:flex; justify-content:space-between; align-items:center; gap:12px; margin-top:14px; padding:12px; border-radius:10px; background:var(--accent-soft); }
+  .amount .k { font:600 10px/1.2 Consolas,monospace; letter-spacing:.08em; text-transform:uppercase; color:var(--accent); }
+  .amount .v { font:600 22px/1 Consolas,monospace; color:var(--accent); }
+  .coins { display:flex; gap:7px; flex-wrap:wrap; margin-top:10px; min-height:38px; }
+  .coin { display:grid; place-items:center; min-width:42px; height:38px; padding:0 9px; border-radius:19px; border:1px solid var(--rule); background:var(--card); font:600 13px/1 Consolas,monospace; color:var(--muted); }
+  .coin.taken { background:var(--accent); border-color:var(--accent); color:#fff; }
+  .status { min-height:40px; margin-top:10px; font-size:13px; line-height:1.5; color:var(--muted); }
+  .status b { color:var(--ink); }
+  .controls { display:flex; gap:8px; flex-wrap:wrap; margin-top:10px; }
+  button { font:600 12.5px/1 "Segoe UI",system-ui,sans-serif; padding:9px 12px; border-radius:9px; border:1px solid var(--rule); background:var(--card); color:var(--ink); cursor:pointer; }
+  button:hover { border-color:var(--accent); color:var(--accent); }
+  button.primary { background:var(--accent); border-color:var(--accent); color:#fff; }
+  button.primary:hover { background:#245a4c; color:#fff; }
+  button:disabled { opacity:.45; cursor:default; }
+  @media (max-width:560px) { .demo { padding:12px; } }
+</style>
+</head>
+<body>
+<div class="demo">
+  <div class="head">
+    <div><p class="eyebrow">Жадный алгоритм · шаги</p><h3>Размен монет</h3></div>
+    <div class="count" id="counter">монет: 0</div>
+  </div>
+  <div class="amount">
+    <span class="k">Осталось</span>
+    <span class="v" id="rem">67</span>
+  </div>
+  <div class="coins" id="coins"></div>
+  <div class="status" id="status">Нажмите «Шаг»: алгоритм возьмёт самую крупную монету, которая не больше остатка.</div>
+  <div class="controls">
+    <button class="primary" id="step">Шаг</button>
+    <button id="fail">Пример с ошибкой</button>
+    <button id="reset">Сброс</button>
+  </div>
+</div>
+<script>
+(function () {
+  var coins = [50, 20, 10, 5, 2, 1];
+  var total = 67;
+  var remaining = 67;
+  var chosen = [];
+  var counter = document.getElementById('counter');
+  var rem = document.getElementById('rem');
+  var coinsBox = document.getElementById('coins');
+  var status = document.getElementById('status');
+  var stepBtn = document.getElementById('step');
+
+  function render() {
+    coinsBox.innerHTML = '';
+    chosen.forEach(function (c) {
+      var d = document.createElement('span');
+      d.className = 'coin taken';
+      d.textContent = c;
+      coinsBox.appendChild(d);
+    });
+    if (!chosen.length) {
+      var hint = document.createElement('span');
+      hint.className = 'coin';
+      hint.textContent = 'нет';
+      coinsBox.appendChild(hint);
+    }
+    rem.textContent = remaining;
+    counter.textContent = 'монет: ' + chosen.length;
+    stepBtn.disabled = remaining === 0;
+  }
+
+  function step() {
+    if (remaining === 0) return;
+    var pick = 0;
+    for (var i = 0; i < coins.length; i += 1) {
+      if (coins[i] <= remaining) { pick = coins[i]; break; }
+    }
+    if (!pick) {
+      status.innerHTML = 'Остаток ' + remaining + ' нельзя разменять этими монетами.';
+      return;
+    }
+    remaining -= pick;
+    chosen.push(pick);
+    status.innerHTML = 'Берём <b>' + pick + '</b>. Остаток: <b>' + remaining + '</b>. Монет: ' + chosen.length + '.';
+    if (remaining === 0) status.innerHTML += ' Размен завершён.';
+    render();
+  }
+
+  function reset() {
+    coins = [50, 20, 10, 5, 2, 1];
+    total = 67;
+    remaining = 67;
+    chosen = [];
+    status.textContent = 'Нажмите «Шаг»: алгоритм возьмёт самую крупную монету, которая не больше остатка.';
+    render();
+  }
+
+  function fail() {
+    coins = [4, 3, 1];
+    total = 6;
+    remaining = 6;
+    chosen = [];
+    status.innerHTML = 'Набор 4, 3, 1, сумма 6. Жадный алгоритм возьмёт 4, затем 1 и 1. Проверьте, сколько монет получится.';
+    render();
+  }
+
+  stepBtn.addEventListener('click', step);
+  document.getElementById('reset').addEventListener('click', reset);
+  document.getElementById('fail').addEventListener('click', fail);
+  render();
+})();
+</script>
+</body>
+</html>
