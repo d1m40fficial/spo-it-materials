@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Порог загрузки канала</title>
+<style>
+  :root { --paper:#faf6f3; --card:#fffdfb; --ink:#1a1916; --muted:#6b6459; --rule:#e4d8cf; --accent:#D04A28; --soft:#F4E1D8; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .demo { background:var(--paper); border:1px solid var(--rule); border-radius:14px; padding:18px; }
+  .head { display:flex; justify-content:space-between; align-items:flex-end; gap:16px; padding-bottom:10px; border-bottom:1px solid var(--rule); }
+  .eyebrow { margin:0 0 4px; font:600 10px/1.2 Consolas,monospace; letter-spacing:.12em; text-transform:uppercase; color:var(--accent); }
+  h3 { margin:0; font-size:20px; line-height:1.2; }
+  .counter { font:12px/1.4 Consolas,monospace; color:var(--muted); white-space:nowrap; }
+  svg { display:block; width:100%; height:auto; margin-top:4px; }
+  .grid { stroke:#e4d8cf; stroke-width:.5; }
+  .axis { font-family:Consolas,monospace; font-size:8px; fill:#8a8078; }
+  .thr { stroke:#D04A28; stroke-width:1.4; stroke-dasharray:5 4; }
+  .line { fill:none; stroke:#2d3142; stroke-width:1.6; }
+  .bad { fill:#D04A28; }
+  .ok { fill:#5b5560; }
+  .status { min-height:44px; margin-top:8px; padding:10px 12px; border-radius:9px; background:var(--soft); font-size:12.5px; line-height:1.45; }
+  .status b { color:var(--accent); }
+  .controls { display:flex; gap:7px; flex-wrap:wrap; margin-top:10px; align-items:center; }
+  .controls span { font:11px/1.3 Consolas,monospace; color:var(--muted); margin-right:2px; }
+  button { font:600 12px/1 "Segoe UI",system-ui,sans-serif; padding:8px 11px; border-radius:9px; border:1px solid var(--rule); background:var(--card); color:var(--ink); cursor:pointer; }
+  button:hover { border-color:var(--accent); color:var(--accent); }
+  button.on { background:var(--accent); border-color:var(--accent); color:#fff; }
+  @media (max-width:560px) { .demo { padding:12px; } }
+</style>
+</head>
+<body>
+<div class="demo">
+  <div class="head">
+    <div><p class="eyebrow">Мониторинг · порог</p><h3>Загрузка канала за сутки</h3></div>
+    <div class="counter" id="alerts">оповещений: 0</div>
+  </div>
+  <svg viewBox="0 0 680 220" role="img" aria-label="График загрузки канала за сутки с линией порога">
+    <g id="grid"></g>
+    <g id="chart">
+      <polyline id="load" class="line" points=""/>
+      <g id="dots"></g>
+      <line id="thrline" class="thr" x1="64" y1="0" x2="636" y2="0"/>
+      <text id="thrlabel" class="axis" x="636" y="0" text-anchor="end"></text>
+    </g>
+    <text class="axis" x="58" y="184" text-anchor="end">0</text>
+    <text class="axis" x="58" y="114" text-anchor="end">50</text>
+    <text class="axis" x="58" y="44" text-anchor="end">100</text>
+    <g id="hours"></g>
+    <text class="axis" x="64" y="214">загрузка канала, %</text>
+    <text class="axis" x="636" y="214" text-anchor="end">часы</text>
+  </svg>
+  <div class="status" id="status">Порог 80%: оповещение сработает на утреннем пике.</div>
+  <div class="controls">
+    <span>порог:</span>
+    <button data-t="60">60%</button>
+    <button data-t="75">75%</button>
+    <button data-t="85" class="on">85%</button>
+  </div>
+</div>
+<script>
+(function () {
+  var vals = [18,14,12,11,13,20,28,42,58,95,76,64,70,82,88,74,66,58,72,80,62,44,30,22];
+  var L = 64, R = 636, T = 40, B = 180;
+  var n = vals.length;
+  var step = (R - L) / (n - 1);
+  var thr = 85;
+
+  function y(v) { return B - (v / 100) * (B - T); }
+  function x(i) { return L + i * step; }
+
+  var grid = document.getElementById('grid');
+  [0, 25, 50, 75, 100].forEach(function (v) {
+    var g = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+    g.setAttribute('x1', L); g.setAttribute('x2', R);
+    g.setAttribute('y1', y(v)); g.setAttribute('y2', y(v));
+    g.setAttribute('class', 'grid');
+    grid.appendChild(g);
+  });
+
+  var hours = document.getElementById('hours');
+  for (var i = 0; i < n; i += 3) {
+    var t = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    t.setAttribute('x', x(i)); t.setAttribute('y', 198);
+    t.setAttribute('text-anchor', 'middle');
+    t.setAttribute('class', 'axis');
+    t.textContent = i + ':00';
+    hours.appendChild(t);
+  }
+
+  var pts = vals.map(function (v, i) { return x(i) + ',' + y(v); }).join(' ');
+  document.getElementById('load').setAttribute('points', pts);
+
+  var dots = document.getElementById('dots');
+  vals.forEach(function (v, i) {
+    var c = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+    c.setAttribute('cx', x(i)); c.setAttribute('cy', y(v)); c.setAttribute('r', 2.4);
+    c.setAttribute('class', 'ok');
+    c.dataset.v = v;
+    dots.appendChild(c);
+  });
+
+  var peak = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+  peak.setAttribute('x', x(9)); peak.setAttribute('y', y(95) - 8);
+  peak.setAttribute('text-anchor', 'middle');
+  peak.setAttribute('font-family', 'Consolas,monospace');
+  peak.setAttribute('font-size', '8.5');
+  peak.setAttribute('fill', '#D04A28');
+  peak.textContent = '9:00 · 95%';
+  document.getElementById('chart').appendChild(peak);
+
+  var thrline = document.getElementById('thrline');
+  var thrlabel = document.getElementById('thrlabel');
+  var alerts = document.getElementById('alerts');
+  var status = document.getElementById('status');
+  var buttons = document.querySelectorAll('button[data-t]');
+
+  function apply(value) {
+    thr = value;
+    var yy = y(thr);
+    thrline.setAttribute('y1', yy); thrline.setAttribute('y2', yy);
+    thrlabel.setAttribute('y', yy - 4);
+    thrlabel.textContent = 'порог ' + thr + '%';
+    var count = 0;
+    dots.querySelectorAll('circle').forEach(function (c) {
+      var v = Number(c.dataset.v);
+      var hit = v > thr;
+      c.setAttribute('class', hit ? 'bad' : 'ok');
+      c.setAttribute('r', hit ? 3.6 : 2.2);
+      if (hit) count += 1;
+    });
+    alerts.textContent = 'оповещений: ' + count;
+    if (thr <= 60) {
+      status.innerHTML = '<b>Порог 60%.</b> Оповещений ' + count + ': часть из них ночные всплески и обычная работа. Такой порог быстро утомляет дежурного.';
+    } else if (thr <= 75) {
+      status.innerHTML = '<b>Порог 75%.</b> Оповещений ' + count + ': ловится начало роста, но остаются ложные срабатывания.';
+    } else {
+      status.innerHTML = '<b>Порог 85%.</b> Оповещений ' + count + ': видны только пики. Начало перегрузки в 13:00 остаётся без сигнала.';
+    }
+    buttons.forEach(function (b) { b.classList.toggle('on', Number(b.dataset.t) === thr); });
+  }
+
+  buttons.forEach(function (b) {
+    b.addEventListener('click', function () { apply(Number(b.dataset.t)); });
+  });
+
+  apply(85);
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Сегменты сети и адресный план</title>
+<style>
+  :root { --paper:#faf6f3; --card:#fffdfb; --ink:#1a1916; --muted:#6b6459; --rule:#e4d8cf; --accent:#D04A28; --soft:#F4E1D8; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .demo { background:var(--paper); border:1px solid var(--rule); border-radius:14px; padding:18px; }
+  .head { display:flex; justify-content:space-between; align-items:flex-end; gap:16px; padding-bottom:10px; border-bottom:1px solid var(--rule); }
+  .eyebrow { margin:0 0 4px; font:600 10px/1.2 Consolas,monospace; letter-spacing:.12em; text-transform:uppercase; color:var(--accent); }
+  h3 { margin:0; font-size:20px; line-height:1.2; }
+  .hint { font:11px/1.4 Consolas,monospace; color:var(--muted); white-space:nowrap; }
+  svg { display:block; width:100%; height:auto; margin-top:4px; }
+  .node rect { fill:#fff; stroke:#2d3142; stroke-width:1.3; }
+  .node text { font-family:Consolas,monospace; font-size:8.5px; fill:#2d3142; text-anchor:middle; }
+  .node .sub { font-size:7px; fill:#6b6459; }
+  .core rect { fill:var(--soft); stroke:var(--accent); stroke-width:1.3; }
+  .core text { font-family:Consolas,monospace; font-size:9px; fill:#a83a1f; text-anchor:middle; }
+  .seg { cursor:pointer; }
+  .seg rect { fill:#fff; stroke:#2d3142; stroke-width:1.3; transition:fill .2s, stroke .2s; }
+  .seg text { font-family:Consolas,monospace; font-size:8.5px; fill:#2d3142; text-anchor:middle; }
+  .seg .sub { font-size:7px; fill:#6b6459; }
+  .seg.on rect { fill:var(--soft); stroke:var(--accent); stroke-width:2; }
+  .seg.on text { fill:var(--accent); }
+  .seg.on .sub { fill:#8a4a34; }
+  .link { stroke:#b9ac9f; stroke-width:1.3; }
+  .detail { display:grid; grid-template-columns:repeat(4, 1fr); gap:8px; margin-top:8px; }
+  .cell { padding:8px 10px; border:1px solid var(--rule); border-radius:8px; background:var(--card); }
+  .cell .k { font:600 7.5px/1.2 Consolas,monospace; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); }
+  .cell .v { margin-top:3px; font:11.5px/1.35 Consolas,monospace; color:var(--ink); }
+  .note { margin-top:9px; font-size:12.5px; line-height:1.45; color:var(--muted); }
+  .note b { color:var(--accent); }
+  @media (max-width:620px) { .demo { padding:12px; } .detail { grid-template-columns:repeat(2, 1fr); } }
+</style>
+</head>
+<body>
+<div class="demo">
+  <div class="head">
+    <div><p class="eyebrow">Проектирование · сегменты</p><h3>Сеть информационной системы</h3></div>
+    <div class="hint">нажмите сегмент</div>
+  </div>
+  <svg viewBox="0 0 680 232" role="img" aria-label="Интернет, маршрутизатор, ядро коммутации и пять сегментов сети">
+    <g class="node"><rect x="275" y="8" width="130" height="30" rx="6"/><text x="340" y="27">интернет</text></g>
+    <g class="node"><rect x="275" y="50" width="130" height="32" rx="6"/><text x="340" y="70">маршрутизатор</text></g>
+    <g class="core"><rect x="240" y="98" width="200" height="34" rx="7"/><text x="340" y="119">ядро коммутации</text></g>
+
+    <line class="link" x1="340" y1="38" x2="340" y2="50"/>
+    <line class="link" x1="340" y1="82" x2="340" y2="98"/>
+
+    <g class="link">
+      <line x1="340" y1="132" x2="340" y2="152"/>
+      <line x1="78" y1="152" x2="602" y2="152"/>
+      <line x1="78" y1="152" x2="78" y2="168"/>
+      <line x1="209" y1="152" x2="209" y2="168"/>
+      <line x1="340" y1="152" x2="340" y2="168"/>
+      <line x1="471" y1="152" x2="471" y2="168"/>
+      <line x1="602" y1="152" x2="602" y2="168"/>
+    </g>
+
+    <g class="seg" data-k="users"><rect x="20" y="168" width="116" height="48" rx="7"/><text x="78" y="188">пользователи</text><text x="78" y="204" class="sub">60 мест · DHCP</text></g>
+    <g class="seg" data-k="servers"><rect x="151" y="168" width="116" height="48" rx="7"/><text x="209" y="188">серверы</text><text x="209" y="204" class="sub">10 адресов</text></g>
+    <g class="seg on" data-k="dmz"><rect x="282" y="168" width="116" height="48" rx="7"/><text x="340" y="188">DMZ</text><text x="340" y="204" class="sub">4 адреса</text></g>
+    <g class="seg" data-k="mgmt"><rect x="413" y="168" width="116" height="48" rx="7"/><text x="471" y="188">управление</text><text x="471" y="204" class="sub">6 адресов</text></g>
+    <g class="seg" data-k="guest"><rect x="544" y="168" width="116" height="48" rx="7"/><text x="602" y="188">гости</text><text x="602" y="204" class="sub">20 мест · DHCP</text></g>
+  </svg>
+
+  <div class="detail">
+    <div class="cell"><div class="k">Подсеть</div><div class="v" id="d-subnet">192.168.30.0/24</div></div>
+    <div class="cell"><div class="k">VLAN</div><div class="v" id="d-vlan">30</div></div>
+    <div class="cell"><div class="k">Адреса</div><div class="v" id="d-addrs">4 статических</div></div>
+    <div class="cell"><div class="k">Доступ</div><div class="v" id="d-access">443 из интернета</div></div>
+  </div>
+  <div class="note" id="note"><b>DMZ.</b> Здесь стоит веб-сервер. Снаружи открыт только порт 443, к базе из этого сегмента доступа нет.</div>
+</div>
+<script>
+(function () {
+  var segs = {
+    users: { subnet: '192.168.10.0/24', vlan: '10', addrs: '60 · DHCP', access: 'интернет и серверы', text: '<b>Пользователи.</b> Рабочие места получают адрес по DHCP. Сегмент ходит в интернет и к серверам по нужным портам, гостей не видит.' },
+    servers: { subnet: '192.168.20.0/24', vlan: '20', addrs: '10 статических', access: 'из сегмента пользователей', text: '<b>Серверы.</b> Приложение и база. Адреса статические, доступ только из сегмента пользователей и от веб-сервера из DMZ.' },
+    dmz: { subnet: '192.168.30.0/24', vlan: '30', addrs: '4 статических', access: '443 из интернета', text: '<b>DMZ.</b> Здесь стоит веб-сервер. Снаружи открыт только порт 443, к базе из этого сегмента доступа нет.' },
+    mgmt: { subnet: '192.168.40.0/24', vlan: '40', addrs: '6 статических', access: 'с рабочей станции', text: '<b>Управление.</b> Адреса коммутаторов и гипервизоров. Вход только с выделенной рабочей станции администратора.' },
+    guest: { subnet: '192.168.50.0/24', vlan: '50', addrs: '20 · DHCP', access: 'только интернет', text: '<b>Гости.</b> Отдельная сеть с изоляцией: гости выходят в интернет, но не видят внутренние сегменты.' }
+  };
+  var boxes = document.querySelectorAll('.seg');
+  var fields = {
+    subnet: document.getElementById('d-subnet'),
+    vlan: document.getElementById('d-vlan'),
+    addrs: document.getElementById('d-addrs'),
+    access: document.getElementById('d-access')
+  };
+  var note = document.getElementById('note');
+
+  function apply(key) {
+    var s = segs[key];
+    boxes.forEach(function (b) { b.classList.toggle('on', b.dataset.k === key); });
+    fields.subnet.textContent = s.subnet;
+    fields.vlan.textContent = s.vlan;
+    fields.addrs.textContent = s.addrs;
+    fields.access.textContent = s.access;
+    note.innerHTML = s.text;
+  }
+
+  boxes.forEach(function (b) {
+    b.addEventListener('click', function () { apply(b.dataset.k); });
+  });
+
+  apply('dmz');
+})();
+</script>
+</body>
+</html>
