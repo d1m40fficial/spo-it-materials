@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Маршрут пакета и TTL</title>
+<style>
+  :root { --paper:#faf6f3; --card:#fffdfb; --ink:#1a1916; --muted:#6b6459; --rule:#e4d8cf; --accent:#D04A28; --soft:#F4E1D8; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .demo { background:var(--paper); border:1px solid var(--rule); border-radius:14px; padding:18px; }
+  .head { display:flex; justify-content:space-between; align-items:flex-end; gap:16px; padding-bottom:10px; border-bottom:1px solid var(--rule); }
+  .eyebrow { margin:0 0 4px; font:600 10px/1.2 Consolas,monospace; letter-spacing:.12em; text-transform:uppercase; color:var(--accent); }
+  h3 { margin:0; font-size:20px; line-height:1.2; }
+  .ttl { font:12px/1.4 Consolas,monospace; color:var(--muted); white-space:nowrap; }
+  .ttl b { color:var(--ink); font-size:16px; }
+  svg { display:block; width:100%; height:auto; margin-top:6px; }
+  .node rect { fill:#fff; stroke:#2d3142; stroke-width:1.4; transition:fill .2s,stroke .2s; }
+  .node text { font-family:Consolas,monospace; font-size:10px; fill:#2d3142; text-anchor:middle; }
+  .node.active rect { fill:var(--soft); stroke:var(--accent); stroke-width:2; }
+  .table { margin-top:8px; padding:9px 11px; border:1px solid var(--rule); border-radius:9px; background:var(--card); font:11.5px/1.6 Consolas,monospace; white-space:pre-wrap; min-height:58px; }
+  .status { min-height:40px; margin-top:8px; font-size:12.5px; line-height:1.45; color:var(--muted); }
+  .status b { color:var(--accent); }
+  .controls { display:flex; gap:8px; flex-wrap:wrap; margin-top:10px; }
+  button { font:600 12.5px/1 "Segoe UI",system-ui,sans-serif; padding:9px 13px; border-radius:9px; border:1px solid var(--rule); background:var(--card); color:var(--ink); cursor:pointer; }
+  button:hover { border-color:var(--accent); color:var(--accent); }
+  button.primary { background:var(--accent); border-color:var(--accent); color:#fff; }
+  button.primary:hover { background:#a83a1f; color:#fff; }
+  button:disabled { opacity:.45; cursor:default; }
+  @media (max-width:600px) { .demo { padding:12px; } }
+</style>
+</head>
+<body>
+<div class="demo">
+  <div class="head">
+    <div><p class="eyebrow">Сетевой уровень · маршрут</p><h3>Из 10.0.1.0/24 в 10.0.2.0/24</h3></div>
+    <div class="ttl">TTL: <b id="ttl">64</b></div>
+  </div>
+  <svg viewBox="0 0 680 190" role="img" aria-label="Маршрут через два маршрутизатора">
+    <g stroke="#b9ac9f" stroke-width="2">
+      <line x1="110" y1="90" x2="200" y2="90"/>
+      <line x1="290" y1="90" x2="370" y2="90"/>
+      <line x1="460" y1="90" x2="540" y2="90"/>
+    </g>
+    <g id="nodes">
+      <g class="node" id="n-a"><rect x="50" y="66" width="60" height="48" rx="7"/><text x="80" y="86">PC A</text><text x="80" y="100" font-size="7.5">10.0.1.10</text></g>
+      <g class="node" id="n-r1"><rect x="200" y="62" width="90" height="56" rx="7"/><text x="245" y="84">R1</text><text x="245" y="98" font-size="7.5">10.0.1.1</text></g>
+      <g class="node" id="n-r2"><rect x="370" y="62" width="90" height="56" rx="7"/><text x="415" y="84">R2</text><text x="415" y="98" font-size="7.5">10.0.2.1</text></g>
+      <g class="node" id="n-b"><rect x="540" y="66" width="80" height="48" rx="7"/><text x="580" y="86">Server B</text><text x="580" y="100" font-size="7.5">10.0.2.20</text></g>
+    </g>
+  </svg>
+  <div class="table" id="table">Маршрутов пока нет. Нажмите «Шаг».</div>
+  <div class="status" id="status">Нажмите «Шаг», чтобы отправить пакет из сети 10.0.1.0/24.</div>
+  <div class="controls">
+    <button class="primary" id="step">Шаг</button>
+    <button id="reset">Сброс</button>
+  </div>
+</div>
+<script>
+(function () {
+  var steps = [
+    {
+      node: 'n-a', ttl: 64,
+      text: 'PC A видит, что 10.0.2.20 не в его сети. Пакет уходит на шлюз <b>10.0.1.1</b>.',
+      table: 'PC A: сеть 10.0.1.0/24 напрямую\nшлюз по умолчанию: 10.0.1.1'
+    },
+    {
+      node: 'n-r1', ttl: 63,
+      text: 'R1 уменьшает TTL до <b>63</b> и ищет маршрут. Самый длинный совпавший префикс: 10.0.2.0/24 через 10.0.12.2.',
+      table: 'R1: 10.0.1.0/24 напрямую\n10.0.2.0/24 via 10.0.12.2'
+    },
+    {
+      node: 'n-r2', ttl: 62,
+      text: 'R2 уменьшает TTL до <b>62</b>. Сеть 10.0.2.0/24 подключена напрямую, пакет уходит в локальный сегмент.',
+      table: 'R2: 10.0.2.0/24 напрямую\n10.0.12.0/24 напрямую'
+    },
+    {
+      node: 'n-b', ttl: 62,
+      text: 'Сервер получил пакет с TTL <b>62</b>. Адреса получателя и отправителя не менялись.',
+      table: 'Server B: принят пакет\nисточник 10.0.1.10, TTL 62'
+    }
+  ];
+  var pos = 0;
+  var ttl = document.getElementById('ttl');
+  var table = document.getElementById('table');
+  var status = document.getElementById('status');
+  var stepBtn = document.getElementById('step');
+
+  function activate(id) {
+    ['n-a', 'n-r1', 'n-r2', 'n-b'].forEach(function (n) {
+      document.getElementById(n).classList.toggle('active', n === id);
+    });
+  }
+
+  function step() {
+    if (pos >= steps.length) return;
+    var s = steps[pos];
+    activate(s.node);
+    ttl.textContent = s.ttl;
+    table.textContent = s.table;
+    status.innerHTML = s.text;
+    pos += 1;
+    stepBtn.disabled = pos >= steps.length;
+  }
+
+  function reset() {
+    pos = 0;
+    activate(null);
+    ttl.textContent = '64';
+    table.textContent = 'Маршрутов пока нет. Нажмите «Шаг».';
+    status.textContent = 'Нажмите «Шаг», чтобы отправить пакет из сети 10.0.1.0/24.';
+    stepBtn.disabled = false;
+  }
+
+  stepBtn.addEventListener('click', step);
+  document.getElementById('reset').addEventListener('click', reset);
+})();
+</script>
+</body>
+</html>

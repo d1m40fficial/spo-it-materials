@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Инкапсуляция данных</title>
+<style>
+  :root { --paper:#faf6f3; --card:#fffdfb; --ink:#1a1916; --muted:#6b6459; --rule:#e4d8cf; --accent:#D04A28; --soft:#F4E1D8; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .demo { background:var(--paper); border:1px solid var(--rule); border-radius:14px; padding:18px; }
+  .head { display:flex; justify-content:space-between; align-items:flex-end; gap:16px; padding-bottom:10px; border-bottom:1px solid var(--rule); }
+  .eyebrow { margin:0 0 4px; font:600 10px/1.2 Consolas,monospace; letter-spacing:.12em; text-transform:uppercase; color:var(--accent); }
+  h3 { margin:0; font-size:20px; line-height:1.2; }
+  .level { font:12px/1.4 Consolas,monospace; color:var(--muted); white-space:nowrap; }
+  .chain { display:flex; align-items:stretch; gap:4px; margin:18px 0 8px; flex-wrap:wrap; min-height:72px; }
+  .part { display:flex; flex-direction:column; justify-content:center; gap:3px; padding:9px 11px; border-radius:8px; font:11px/1.35 Consolas,monospace; color:#fff; }
+  .part .k { font-weight:700; font-size:10px; }
+  .part.data { background:var(--accent); }
+  .part.tcp { background:#2b6cb0; }
+  .part.ip { background:#7a5c00; }
+  .part.eth { background:#2d3142; }
+  .status { min-height:44px; margin-top:8px; padding:10px 12px; border-radius:9px; background:var(--soft); font-size:13px; line-height:1.45; }
+  .status b { color:var(--accent); }
+  .controls { display:flex; gap:8px; flex-wrap:wrap; margin-top:10px; }
+  button { font:600 12.5px/1 "Segoe UI",system-ui,sans-serif; padding:9px 13px; border-radius:9px; border:1px solid var(--rule); background:var(--card); color:var(--ink); cursor:pointer; }
+  button:hover { border-color:var(--accent); color:var(--accent); }
+  button.primary { background:var(--accent); border-color:var(--accent); color:#fff; }
+  button.primary:hover { background:#a83a1f; color:#fff; }
+  button:disabled { opacity:.45; cursor:default; }
+  @media (max-width:560px) { .demo { padding:12px; } }
+</style>
+</head>
+<body>
+<div class="demo">
+  <div class="head">
+    <div><p class="eyebrow">OSI · инкапсуляция</p><h3>Запрос GET /</h3></div>
+    <div class="level" id="level">прикладной уровень</div>
+  </div>
+  <div class="chain" id="chain"></div>
+  <div class="status" id="status">Данные готовы на прикладном уровне. Нажмите «Вниз», чтобы добавить заголовок TCP.</div>
+  <div class="controls">
+    <button class="primary" id="down">Вниз</button>
+    <button id="up">Вверх</button>
+    <button id="reset">Сброс</button>
+  </div>
+</div>
+<script>
+(function () {
+  var stack = [
+    { cls: 'data', key: 'данные', val: 'GET / HTTP/1.1' }
+  ];
+  var layers = [
+    { cls: 'tcp', key: 'TCP', val: '51000 → 80', name: 'транспортный уровень' },
+    { cls: 'ip', key: 'IP', val: '10.0.0.5 → 93.184.216.34', name: 'сетевой уровень' },
+    { cls: 'eth', key: 'Ethernet', val: 'MAC шлюза, MAC ПК', name: 'канальный уровень' }
+  ];
+  var added = 0;
+  var chain = document.getElementById('chain');
+  var status = document.getElementById('status');
+  var level = document.getElementById('level');
+  var downBtn = document.getElementById('down');
+
+  function render() {
+    chain.innerHTML = '';
+    stack.forEach(function (part) {
+      var d = document.createElement('div');
+      d.className = 'part ' + part.cls;
+      var k = document.createElement('span');
+      k.className = 'k';
+      k.textContent = part.key;
+      var v = document.createElement('span');
+      v.textContent = part.val;
+      d.appendChild(k);
+      d.appendChild(v);
+      chain.appendChild(d);
+    });
+    downBtn.disabled = added >= layers.length;
+    level.textContent = added === 0 ? 'прикладной уровень' : layers[added - 1].name;
+  }
+
+  document.getElementById('down').addEventListener('click', function () {
+    if (added >= layers.length) return;
+    var layer = layers[added];
+    stack.unshift(layer);
+    added += 1;
+    status.innerHTML = 'Добавлен заголовок <b>' + layer.key + '</b>. Блок данных стал ' + (added === 1 ? 'сегментом' : added === 2 ? 'пакетом' : 'кадром') + '.';
+    render();
+  });
+
+  document.getElementById('up').addEventListener('click', function () {
+    if (added === 0) {
+      status.innerHTML = 'Выше прикладного уровня заголовков нет.';
+      return;
+    }
+    var layer = stack.shift();
+    added -= 1;
+    status.innerHTML = 'Снят заголовок <b>' + layer.key + '</b>. Получатель читает следующий уровень.';
+    render();
+  });
+
+  document.getElementById('reset').addEventListener('click', function () {
+    stack = [{ cls: 'data', key: 'данные', val: 'GET / HTTP/1.1' }];
+    added = 0;
+    status.textContent = 'Данные готовы на прикладном уровне. Нажмите «Вниз», чтобы добавить заголовок TCP.';
+    render();
+  });
+
+  render();
+})();
+</script>
+</body>
+</html>

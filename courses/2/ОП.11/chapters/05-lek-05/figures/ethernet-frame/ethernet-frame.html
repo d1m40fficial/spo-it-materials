@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Кадр Ethernet</title>
+<style>
+  :root { --paper:#faf6f3; --ink:#2d3142; --muted:#5b5560; --accent:#D04A28; --soft:#F4E1D8; --rule:rgba(45,49,66,.12); }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .frame { background:var(--paper); border:1px solid var(--rule); border-radius:12px; padding:18px 18px 14px; }
+  .eyebrow { margin:0 0 8px; font:600 9px/1.2 Consolas,monospace; letter-spacing:.16em; text-transform:uppercase; color:var(--muted); }
+  .note { margin:10px 2px 0; font:11px/1.5 Consolas,monospace; color:var(--muted); }
+  svg { display:block; width:100%; height:auto; }
+</style>
+</head>
+<body>
+<div class="frame">
+  <p class="eyebrow">Канальный уровень · Ethernet II</p>
+  <svg viewBox="0 0 680 280" role="img" aria-labelledby="fr-title fr-desc">
+    <title id="fr-title">Поля кадра Ethernet</title>
+    <desc id="fr-desc">Кадр начинается с преамбулы и SFD, затем идут MAC получателя и отправителя, тип, данные и контрольная сумма FCS.</desc>
+
+    <g font-family="Consolas,monospace" text-anchor="middle">
+      <rect x="20" y="48" width="64" height="58" rx="4" fill="#f1ece7" stroke="#2d3142"/><text x="52" y="68" font-size="8" fill="#5b5560">преамбула</text><text x="52" y="86" font-size="8" fill="#2d3142">7 байт</text>
+      <rect x="86" y="48" width="30" height="58" rx="4" fill="#f1ece7" stroke="#2d3142"/><text x="101" y="76" font-size="8" fill="#2d3142">SFD</text>
+      <rect x="118" y="48" width="120" height="58" rx="4" fill="#F4E1D8" stroke="#D04A28"/><text x="178" y="68" font-size="8" fill="#D04A28">MAC получателя</text><text x="178" y="86" font-size="8" fill="#2d3142">6 байт</text>
+      <rect x="240" y="48" width="120" height="58" rx="4" fill="#F4E1D8" stroke="#D04A28"/><text x="300" y="68" font-size="8" fill="#D04A28">MAC отправителя</text><text x="300" y="86" font-size="8" fill="#2d3142">6 байт</text>
+      <rect x="362" y="48" width="58" height="58" rx="4" fill="#ffffff" stroke="#2d3142"/><text x="391" y="68" font-size="8" fill="#5b5560">тип</text><text x="391" y="86" font-size="8" fill="#2d3142">2 байта</text>
+      <rect x="422" y="48" width="180" height="58" rx="4" fill="#ffffff" stroke="#2d3142"/><text x="512" y="68" font-size="8" fill="#5b5560">данные</text><text x="512" y="86" font-size="8" fill="#2d3142">46-1500 байт</text>
+      <rect x="604" y="48" width="56" height="58" rx="4" fill="#f1ece7" stroke="#2d3142"/><text x="632" y="68" font-size="8" fill="#5b5560">FCS</text><text x="632" y="86" font-size="8" fill="#2d3142">4 байта</text>
+    </g>
+
+    <text x="20" y="132" font-family="Consolas,monospace" font-size="9" letter-spacing=".1em" fill="#5b5560">ПРИМЕР</text>
+    <g font-family="Consolas,monospace" font-size="9.5">
+      <text x="20" y="154" fill="#2d3142">получатель: 3C:22:FB:1A:44:01</text>
+      <text x="20" y="174" fill="#2d3142">отправитель: 08:00:27:7B:10:5E</text>
+      <text x="20" y="194" fill="#2d3142">тип: 0x0800 (IPv4)</text>
+      <text x="20" y="214" fill="#2d3142">данные: пакет IP</text>
+      <text x="20" y="234" fill="#2d3142">FCS: CRC-32</text>
+    </g>
+
+    <rect x="330" y="126" width="330" height="120" rx="9" fill="#ffffff" stroke="#2d3142"/>
+    <text x="346" y="148" font-family="Consolas,monospace" font-size="9" letter-spacing=".1em" fill="#5b5560">ЧТО ЗА ЧТО ОТВЕЧАЕТ</text>
+    <text x="346" y="170" font-family="Consolas,monospace" font-size="9" fill="#2d3142">MAC-адреса действуют в пределах сети</text>
+    <text x="346" y="190" font-family="Consolas,monospace" font-size="9" fill="#2d3142">тип говорит, что внутри: IP или ARP</text>
+    <text x="346" y="210" font-family="Consolas,monospace" font-size="9" fill="#2d3142">FCS проверяет кадр на ошибки</text>
+    <text x="346" y="230" font-family="Consolas,monospace" font-size="9" fill="#D04A28">минимальная длина данных 46 байт</text>
+
+    <text x="340" y="266" text-anchor="middle" font-family="Consolas,monospace" font-size="8.5" fill="#5b5560">КОММУТАТОР ЧИТАЕТ MAC-АДРЕСА, МАРШРУТИЗАТОР СМОТРИТ ВНУТРЬ</text>
+  </svg>
+  <p class="note">На каждом участке пути кадр новый, а IP-пакет внутри остаётся тем же.</p>
+</div>
+</body>
+</html>

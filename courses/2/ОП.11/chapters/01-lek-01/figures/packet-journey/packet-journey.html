@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Путь пакета по сети</title>
+<style>
+  :root { --paper:#faf6f3; --card:#fffdfb; --ink:#1a1916; --muted:#6b6459; --rule:#e4d8cf; --accent:#D04A28; --soft:#F4E1D8; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .demo { background:var(--paper); border:1px solid var(--rule); border-radius:14px; padding:18px; }
+  .head { display:flex; justify-content:space-between; align-items:flex-end; gap:16px; padding-bottom:10px; border-bottom:1px solid var(--rule); }
+  .eyebrow { margin:0 0 4px; font:600 10px/1.2 Consolas,monospace; letter-spacing:.12em; text-transform:uppercase; color:var(--accent); }
+  h3 { margin:0; font-size:20px; line-height:1.2; }
+  .counter { font:12px/1.4 Consolas,monospace; color:var(--muted); white-space:nowrap; }
+  svg { display:block; width:100%; height:auto; margin-top:6px; }
+  .status { min-height:44px; margin-top:8px; padding:10px 12px; border-radius:9px; background:var(--soft); font-size:13px; line-height:1.45; }
+  .status b { color:var(--accent); }
+  .controls { display:flex; gap:8px; flex-wrap:wrap; margin-top:10px; }
+  button { font:600 12.5px/1 "Segoe UI",system-ui,sans-serif; padding:9px 13px; border-radius:9px; border:1px solid var(--rule); background:var(--card); color:var(--ink); cursor:pointer; }
+  button:hover { border-color:var(--accent); color:var(--accent); }
+  button.primary { background:var(--accent); border-color:var(--accent); color:#fff; }
+  button.primary:hover { background:#a83a1f; color:#fff; }
+  button:disabled { opacity:.45; cursor:default; }
+  @media (max-width:600px) { .demo { padding:12px; } }
+</style>
+</head>
+<body>
+<div class="demo">
+  <div class="head">
+    <div><p class="eyebrow">Сеть · путь кадра</p><h3>От PC 1 к серверу</h3></div>
+    <div class="counter" id="counter">шаг 0 из 5</div>
+  </div>
+  <svg viewBox="0 0 680 240" role="img" aria-label="Путь пакета от компьютера через коммутатор и маршрутизатор к серверу">
+    <line x1="100" y1="120" x2="205" y2="120" stroke="#b9ac9f" stroke-width="2"/>
+    <line x1="275" y1="120" x2="370" y2="120" stroke="#b9ac9f" stroke-width="2"/>
+    <line x1="450" y1="120" x2="545" y2="120" stroke="#b9ac9f" stroke-width="2"/>
+
+    <rect x="40" y="86" width="72" height="68" rx="8" fill="#fff" stroke="#2d3142"/>
+    <text x="76" y="112" text-anchor="middle" font-family="Consolas,monospace" font-size="10" font-weight="600" fill="#2d3142">PC 1</text>
+    <text x="76" y="130" text-anchor="middle" font-family="Consolas,monospace" font-size="8" fill="#5b5560">192.168.1.10</text>
+
+    <rect x="205" y="100" width="70" height="40" rx="6" fill="#F4E1D8" stroke="#D04A28"/>
+    <text x="240" y="125" text-anchor="middle" font-family="Consolas,monospace" font-size="9" font-weight="600" fill="#D04A28">switch</text>
+
+    <rect x="370" y="94" width="80" height="52" rx="8" fill="#fff" stroke="#2d3142"/>
+    <text x="410" y="114" text-anchor="middle" font-family="Consolas,monospace" font-size="9" font-weight="600" fill="#2d3142">router</text>
+    <text x="410" y="130" text-anchor="middle" font-family="Consolas,monospace" font-size="7.5" fill="#5b5560">192.168.1.1</text>
+
+    <rect x="545" y="86" width="80" height="68" rx="8" fill="#fff" stroke="#2d3142"/>
+    <text x="585" y="112" text-anchor="middle" font-family="Consolas,monospace" font-size="10" font-weight="600" fill="#2d3142">сервер</text>
+    <text x="585" y="130" text-anchor="middle" font-family="Consolas,monospace" font-size="8" fill="#5b5560">192.168.2.20</text>
+
+    <g id="packet" style="display:none">
+      <rect x="-16" y="-10" width="32" height="20" rx="4" fill="#D04A28"/>
+      <text x="0" y="4" text-anchor="middle" font-family="Consolas,monospace" font-size="8" font-weight="600" fill="#fff">IP</text>
+    </g>
+
+    <text x="150" y="80" text-anchor="middle" font-family="Consolas,monospace" font-size="8" fill="#5b5560">MAC-кадр</text>
+    <text x="322" y="80" text-anchor="middle" font-family="Consolas,monospace" font-size="8" fill="#5b5560">новый кадр</text>
+    <text x="498" y="80" text-anchor="middle" font-family="Consolas,monospace" font-size="8" fill="#5b5560">доставка</text>
+  </svg>
+  <div class="status" id="status">Нажмите «Шаг», чтобы отправить пакет.</div>
+  <div class="controls">
+    <button class="primary" id="step">Шаг</button>
+    <button id="reset">Сброс</button>
+  </div>
+</div>
+<script>
+(function () {
+  var steps = [
+    { x: 76, text: 'PC 1 формирует пакет: адрес назначения <b>192.168.2.20</b>, адрес шлюза <b>192.168.1.1</b>.' },
+    { x: 240, text: 'Кадр с MAC-адресом коммутатора доходит до <b>switch</b>. Коммутатор смотрит таблицу MAC и пересылает кадр в порт маршрутизатора.' },
+    { x: 410, text: 'Маршрутизатор снимает кадр, смотрит IP-адрес и выбирает маршрут в сеть <b>192.168.2.0/24</b>.' },
+    { x: 585, text: 'Маршрутизатор собирает новый кадр для сети назначения и отправляет его серверу.' },
+    { x: 585, text: 'Сервер получил пакет. IP-адреса не изменились, менялись только кадры на каждом участке.' }
+  ];
+  var pos = 0;
+  var packet = document.getElementById('packet');
+  var status = document.getElementById('status');
+  var counter = document.getElementById('counter');
+  var stepBtn = document.getElementById('step');
+
+  function place(x) {
+    packet.style.display = '';
+    packet.setAttribute('transform', 'translate(' + x + ',120)');
+  }
+
+  function render() {
+    counter.textContent = 'шаг ' + pos + ' из ' + steps.length;
+    stepBtn.disabled = pos >= steps.length;
+  }
+
+  function step() {
+    if (pos >= steps.length) return;
+    var s = steps[pos];
+    place(s.x);
+    status.innerHTML = s.text;
+    pos += 1;
+    render();
+  }
+
+  function reset() {
+    pos = 0;
+    packet.style.display = 'none';
+    status.textContent = 'Нажмите «Шаг», чтобы отправить пакет.';
+    render();
+  }
+
+  stepBtn.addEventListener('click', step);
+  document.getElementById('reset').addEventListener('click', reset);
+  render();
+})();
+</script>
+</body>
+</html>

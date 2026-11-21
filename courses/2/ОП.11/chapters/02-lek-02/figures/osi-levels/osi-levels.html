@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Семь уровней OSI</title>
+<style>
+  :root { --paper:#faf6f3; --ink:#2d3142; --muted:#5b5560; --accent:#D04A28; --soft:#F4E1D8; --rule:rgba(45,49,66,.12); }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .frame { background:var(--paper); border:1px solid var(--rule); border-radius:12px; padding:18px 18px 14px; }
+  .eyebrow { margin:0 0 8px; font:600 9px/1.2 Consolas,monospace; letter-spacing:.16em; text-transform:uppercase; color:var(--muted); }
+  .note { margin:10px 2px 0; font:11px/1.5 Consolas,monospace; color:var(--muted); }
+  svg { display:block; width:100%; height:auto; }
+</style>
+</head>
+<body>
+<div class="frame">
+  <p class="eyebrow">OSI · семь уровней</p>
+  <svg viewBox="0 0 680 380" role="img" aria-labelledby="osi-title osi-desc">
+    <title id="osi-title">Модель OSI</title>
+    <desc id="osi-desc">Семь уровней от прикладного до физического. Каждый уровень добавляет свой заголовок и оперирует своим блоком данных.</desc>
+
+    <text x="30" y="26" font-family="Consolas,monospace" font-size="9" letter-spacing=".1em" fill="#5b5560">УРОВЕНЬ</text>
+    <text x="230" y="26" font-family="Consolas,monospace" font-size="9" letter-spacing=".1em" fill="#5b5560">БЛОК ДАННЫХ</text>
+    <text x="360" y="26" font-family="Consolas,monospace" font-size="9" letter-spacing=".1em" fill="#5b5560">ПРИМЕРЫ</text>
+
+    <g font-family="Consolas,monospace">
+      <rect x="20" y="36" width="640" height="40" rx="6" fill="#F4E1D8" stroke="#D04A28"/><text x="38" y="61" font-size="10" font-weight="600" fill="#D04A28">7</text><text x="58" y="61" font-size="10" font-weight="600" fill="#D04A28">прикладной</text><text x="230" y="61" font-size="9.5" fill="#2d3142">данные</text><text x="360" y="61" font-size="9.5" fill="#5b5560">HTTP, DNS, SMTP</text>
+      <rect x="20" y="80" width="640" height="40" rx="6" fill="#ffffff" stroke="#2d3142"/><text x="38" y="105" font-size="10" font-weight="600" fill="#2d3142">6</text><text x="58" y="105" font-size="10" font-weight="600" fill="#2d3142">представления</text><text x="230" y="105" font-size="9.5" fill="#2d3142">данные</text><text x="360" y="105" font-size="9.5" fill="#5b5560">TLS, UTF-8, сжатие</text>
+      <rect x="20" y="124" width="640" height="40" rx="6" fill="#ffffff" stroke="#2d3142"/><text x="38" y="149" font-size="10" font-weight="600" fill="#2d3142">5</text><text x="58" y="149" font-size="10" font-weight="600" fill="#2d3142">сеансовый</text><text x="230" y="149" font-size="9.5" fill="#2d3142">данные</text><text x="360" y="149" font-size="9.5" fill="#5b5560">сессии, диалоги</text>
+      <rect x="20" y="168" width="640" height="40" rx="6" fill="#ffffff" stroke="#2d3142"/><text x="38" y="193" font-size="10" font-weight="600" fill="#2d3142">4</text><text x="58" y="193" font-size="10" font-weight="600" fill="#2d3142">транспортный</text><text x="230" y="193" font-size="9.5" fill="#2d3142">сегмент</text><text x="360" y="193" font-size="9.5" fill="#5b5560">TCP, UDP, порты</text>
+      <rect x="20" y="212" width="640" height="40" rx="6" fill="#ffffff" stroke="#2d3142"/><text x="38" y="237" font-size="10" font-weight="600" fill="#2d3142">3</text><text x="58" y="237" font-size="10" font-weight="600" fill="#2d3142">сетевой</text><text x="230" y="237" font-size="9.5" fill="#2d3142">пакет</text><text x="360" y="237" font-size="9.5" fill="#5b5560">IP, ICMP, маршруты</text>
+      <rect x="20" y="256" width="640" height="40" rx="6" fill="#ffffff" stroke="#2d3142"/><text x="38" y="281" font-size="10" font-weight="600" fill="#2d3142">2</text><text x="58" y="281" font-size="10" font-weight="600" fill="#2d3142">канальный</text><text x="230" y="281" font-size="9.5" fill="#2d3142">кадр</text><text x="360" y="281" font-size="9.5" fill="#5b5560">Ethernet, Wi-Fi, MAC</text>
+      <rect x="20" y="300" width="640" height="40" rx="6" fill="#ffffff" stroke="#2d3142"/><text x="38" y="325" font-size="10" font-weight="600" fill="#2d3142">1</text><text x="58" y="325" font-size="10" font-weight="600" fill="#2d3142">физический</text><text x="230" y="325" font-size="9.5" fill="#2d3142">биты</text><text x="360" y="325" font-size="9.5" fill="#5b5560">кабель, оптика, радио</text>
+    </g>
+
+    <text x="340" y="362" text-anchor="middle" font-family="Consolas,monospace" font-size="8.5" fill="#5b5560">ПРИ ПЕРЕДАЧЕ УРОВНИ ИДУТ ВНИЗ, ДОБАВЛЯЯ ЗАГОЛОВКИ</text>
+  </svg>
+  <p class="note">Модель OSI описывает задачи, а не конкретные программы. Один уровень не зависит от внутреннего устройства соседнего.</p>
+</div>
+</body>
+</html>

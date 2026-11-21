@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Виды сетей и топологии</title>
+<style>
+  :root { --paper:#faf6f3; --ink:#2d3142; --muted:#5b5560; --accent:#D04A28; --soft:#F4E1D8; --rule:rgba(45,49,66,.12); }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .frame { background:var(--paper); border:1px solid var(--rule); border-radius:12px; padding:18px 18px 14px; }
+  .eyebrow { margin:0 0 8px; font:600 9px/1.2 Consolas,monospace; letter-spacing:.16em; text-transform:uppercase; color:var(--muted); }
+  .note { margin:10px 2px 0; font:11px/1.5 Consolas,monospace; color:var(--muted); }
+  svg { display:block; width:100%; height:auto; }
+</style>
+</head>
+<body>
+<div class="frame">
+  <p class="eyebrow">Сети · масштаб и форма</p>
+  <svg viewBox="0 0 680 360" role="img" aria-labelledby="net-title net-desc">
+    <title id="net-title">Локальная и глобальная сеть, топологии</title>
+    <desc id="net-desc">Слева локальная сеть из трёх компьютеров и коммутатора, справа две локальные сети, соединённые через глобальную сеть. Внизу показаны топологии звезда, шина и кольцо.</desc>
+
+    <text x="20" y="24" font-family="Consolas,monospace" font-size="9" letter-spacing=".1em" fill="#D04A28">ЛОКАЛЬНАЯ СЕТЬ · LAN</text>
+    <rect x="20" y="36" width="300" height="150" rx="10" fill="#ffffff" stroke="#2d3142"/>
+    <rect x="140" y="92" width="60" height="34" rx="6" fill="#F4E1D8" stroke="#D04A28"/>
+    <text x="170" y="114" text-anchor="middle" font-family="Consolas,monospace" font-size="10" font-weight="600" fill="#D04A28">switch</text>
+    <g font-family="Consolas,monospace" font-size="9" text-anchor="middle">
+      <rect x="44" y="48" width="52" height="30" rx="5" fill="#ffffff" stroke="#2d3142"/><text x="70" y="67" fill="#2d3142">PC 1</text>
+      <rect x="244" y="48" width="52" height="30" rx="5" fill="#ffffff" stroke="#2d3142"/><text x="270" y="67" fill="#2d3142">PC 2</text>
+      <rect x="44" y="140" width="52" height="30" rx="5" fill="#ffffff" stroke="#2d3142"/><text x="70" y="159" fill="#2d3142">PC 3</text>
+      <rect x="244" y="140" width="52" height="30" rx="5" fill="#ffffff" stroke="#2d3142"/><text x="270" y="159" fill="#2d3142">сервер</text>
+    </g>
+    <g stroke="#5b5560" stroke-width="1.4">
+      <line x1="96" y1="63" x2="140" y2="96"/>
+      <line x1="244" y1="63" x2="200" y2="96"/>
+      <line x1="96" y1="155" x2="140" y2="122"/>
+      <line x1="244" y1="155" x2="200" y2="122"/>
+    </g>
+    <text x="170" y="176" text-anchor="middle" font-family="Segoe UI,sans-serif" font-size="9" fill="#5b5560">одна среда, общий коммутатор</text>
+
+    <text x="360" y="24" font-family="Consolas,monospace" font-size="9" letter-spacing=".1em" fill="#D04A28">ГЛОБАЛЬНАЯ СЕТЬ · WAN</text>
+    <rect x="360" y="36" width="300" height="150" rx="10" fill="#ffffff" stroke="#2d3142"/>
+    <rect x="380" y="86" width="70" height="50" rx="8" fill="#F4E1D8" stroke="#D04A28"/>
+    <text x="415" y="108" text-anchor="middle" font-family="Consolas,monospace" font-size="9" fill="#D04A28">офис A</text>
+    <text x="415" y="122" text-anchor="middle" font-family="Consolas,monospace" font-size="8" fill="#5b5560">LAN</text>
+    <rect x="570" y="86" width="70" height="50" rx="8" fill="#F4E1D8" stroke="#D04A28"/>
+    <text x="605" y="108" text-anchor="middle" font-family="Consolas,monospace" font-size="9" fill="#D04A28">офис B</text>
+    <text x="605" y="122" text-anchor="middle" font-family="Consolas,monospace" font-size="8" fill="#5b5560">LAN</text>
+    <circle cx="500" cy="111" r="28" fill="none" stroke="#2d3142" stroke-width="1.2"/>
+    <text x="500" y="108" text-anchor="middle" font-family="Consolas,monospace" font-size="8" fill="#2d3142">WAN</text>
+    <text x="500" y="120" text-anchor="middle" font-family="Consolas,monospace" font-size="7" fill="#5b5560">провайдер</text>
+    <line x1="450" y1="111" x2="472" y2="111" stroke="#5b5560" stroke-width="1.4"/>
+    <line x1="528" y1="111" x2="570" y2="111" stroke="#5b5560" stroke-width="1.4"/>
+    <text x="510" y="166" text-anchor="middle" font-family="Segoe UI,sans-serif" font-size="9" fill="#5b5560">разные сети, маршрутизаторы и каналы</text>
+
+    <line x1="20" y1="204" x2="660" y2="204" stroke="rgba(45,49,66,.12)" stroke-dasharray="4 4"/>
+
+    <text x="20" y="228" font-family="Consolas,monospace" font-size="9" letter-spacing=".1em" fill="#5b5560">ТОПОЛОГИИ</text>
+    <g font-family="Consolas,monospace" font-size="9" text-anchor="middle">
+      <text x="95" y="250" fill="#2d3142">звезда</text>
+      <circle cx="95" cy="292" r="12" fill="#F4E1D8" stroke="#D04A28"/>
+      <circle cx="55" cy="262" r="8" fill="#fff" stroke="#2d3142"/><circle cx="135" cy="262" r="8" fill="#fff" stroke="#2d3142"/>
+      <circle cx="55" cy="322" r="8" fill="#fff" stroke="#2d3142"/><circle cx="135" cy="322" r="8" fill="#fff" stroke="#2d3142"/>
+      <line x1="95" y1="280" x2="62" y2="266" stroke="#5b5560"/><line x1="95" y1="280" x2="128" y2="266" stroke="#5b5560"/>
+      <line x1="95" y1="304" x2="62" y2="318" stroke="#5b5560"/><line x1="95" y1="304" x2="128" y2="318" stroke="#5b5560"/>
+
+      <text x="300" y="250" fill="#2d3142">шина</text>
+      <line x1="235" y1="300" x2="365" y2="300" stroke="#2d3142" stroke-width="2"/>
+      <circle cx="255" cy="276" r="9" fill="#fff" stroke="#2d3142"/><circle cx="300" cy="276" r="9" fill="#fff" stroke="#2d3142"/><circle cx="345" cy="276" r="9" fill="#fff" stroke="#2d3142"/>
+      <line x1="255" y1="285" x2="255" y2="300" stroke="#5b5560"/><line x1="300" y1="285" x2="300" y2="300" stroke="#5b5560"/><line x1="345" y1="285" x2="345" y2="300" stroke="#5b5560"/>
+
+      <text x="525" y="250" fill="#2d3142">кольцо</text>
+      <circle cx="525" cy="292" r="32" fill="none" stroke="#2d3142" stroke-width="2"/>
+      <circle cx="525" cy="260" r="8" fill="#fff" stroke="#2d3142"/><circle cx="553" cy="308" r="8" fill="#fff" stroke="#2d3142"/><circle cx="497" cy="308" r="8" fill="#fff" stroke="#2d3142"/>
+    </g>
+    <text x="340" y="348" text-anchor="middle" font-family="Consolas,monospace" font-size="8.5" fill="#5b5560">ТОПОЛОГИЯ ЗАДАЁТ, КАК УСТРОЙСТВА ДЕЛЯТ СРЕДУ</text>
+  </svg>
+  <p class="note">LAN ограничена одним помещением или зданием, WAN соединяет сети на расстоянии.</p>
+</div>
+</body>
+</html>

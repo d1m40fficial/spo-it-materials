@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>IPv4: 32 бита и части адреса</title>
+<style>
+  :root { --paper:#faf6f3; --ink:#2d3142; --muted:#5b5560; --accent:#D04A28; --soft:#F4E1D8; --rule:rgba(45,49,66,.12); }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .frame { background:var(--paper); border:1px solid var(--rule); border-radius:12px; padding:18px 18px 14px; }
+  .eyebrow { margin:0 0 8px; font:600 9px/1.2 Consolas,monospace; letter-spacing:.16em; text-transform:uppercase; color:var(--muted); }
+  .note { margin:10px 2px 0; font:11px/1.5 Consolas,monospace; color:var(--muted); }
+  svg { display:block; width:100%; height:auto; }
+</style>
+</head>
+<body>
+<div class="frame">
+  <p class="eyebrow">IPv4 · адрес и маска</p>
+  <svg viewBox="0 0 680 320" role="img" aria-labelledby="v4-title v4-desc">
+    <title id="v4-title">Адрес 192.168.1.10 в двоичном виде</title>
+    <desc id="v4-desc">Четыре октета по восемь бит. При маске 24 бита первые три октета задают сеть, последний узел. Частные диапазоны перечислены ниже.</desc>
+
+    <g font-family="Consolas,monospace" text-anchor="middle">
+      <rect x="30" y="40" width="140" height="40" rx="6" fill="#F4E1D8" stroke="#D04A28"/><text x="100" y="65" font-size="13" font-weight="600" fill="#D04A28">192</text>
+      <rect x="180" y="40" width="140" height="40" rx="6" fill="#F4E1D8" stroke="#D04A28"/><text x="250" y="65" font-size="13" font-weight="600" fill="#D04A28">168</text>
+      <rect x="330" y="40" width="140" height="40" rx="6" fill="#F4E1D8" stroke="#D04A28"/><text x="400" y="65" font-size="13" font-weight="600" fill="#D04A28">1</text>
+      <rect x="480" y="40" width="140" height="40" rx="6" fill="#ffffff" stroke="#2d3142"/><text x="550" y="65" font-size="13" font-weight="600" fill="#2d3142">10</text>
+
+      <text x="100" y="104" font-size="9" fill="#5b5560">11000000</text>
+      <text x="250" y="104" font-size="9" fill="#5b5560">10101000</text>
+      <text x="400" y="104" font-size="9" fill="#5b5560">00000001</text>
+      <text x="550" y="104" font-size="9" fill="#5b5560">00001010</text>
+    </g>
+
+    <rect x="30" y="120" width="450" height="26" rx="4" fill="rgba(208,74,40,.08)" stroke="#D04A28" stroke-dasharray="4 3"/>
+    <text x="255" y="138" text-anchor="middle" font-family="Consolas,monospace" font-size="9" fill="#D04A28">сеть · 24 бита</text>
+    <rect x="480" y="120" width="140" height="26" rx="4" fill="#ffffff" stroke="#2d3142"/>
+    <text x="550" y="138" text-anchor="middle" font-family="Consolas,monospace" font-size="9" fill="#2d3142">узел · 8 бит</text>
+
+    <text x="30" y="172" font-family="Consolas,monospace" font-size="10" fill="#2d3142">маска /24: 255.255.255.0</text>
+    <text x="30" y="192" font-family="Consolas,monospace" font-size="10" fill="#2d3142">адрес сети: 192.168.1.0</text>
+    <text x="30" y="212" font-family="Consolas,monospace" font-size="10" fill="#2d3142">широковещательный: 192.168.1.255</text>
+    <text x="30" y="232" font-family="Consolas,monospace" font-size="10" fill="#5b5560">узлы: с 192.168.1.1 по 192.168.1.254</text>
+
+    <rect x="360" y="160" width="300" height="96" rx="9" fill="#ffffff" stroke="#2d3142"/>
+    <text x="374" y="180" font-family="Consolas,monospace" font-size="9" letter-spacing=".1em" fill="#5b5560">ЧАСТНЫЕ ДИАПАЗОНЫ</text>
+    <text x="374" y="202" font-family="Consolas,monospace" font-size="9.5" fill="#2d3142">10.0.0.0/8</text>
+    <text x="374" y="222" font-family="Consolas,monospace" font-size="9.5" fill="#2d3142">172.16.0.0/12</text>
+    <text x="374" y="242" font-family="Consolas,monospace" font-size="9.5" fill="#2d3142">192.168.0.0/16</text>
+
+    <text x="340" y="292" text-anchor="middle" font-family="Consolas,monospace" font-size="8.5" fill="#5b5560">ВНЕ ЧАСТНЫХ ДИАПАЗОНОВ АДРЕСА ВЫДАЮТ ПРОВАЙДЕРЫ</text>
+    <text x="340" y="308" text-anchor="middle" font-family="Consolas,monospace" font-size="8.5" fill="#D04A28">192.168.1.10 И 192.168.1.20 В ОДНОЙ СЕТИ, 192.168.2.10 УЖЕ В ДРУГОЙ</text>
+  </svg>
+  <p class="note">Маска отделяет номер сети от номера узла. Устройства в одной сети видят друг друга напрямую.</p>
+</div>
+</body>
+</html>

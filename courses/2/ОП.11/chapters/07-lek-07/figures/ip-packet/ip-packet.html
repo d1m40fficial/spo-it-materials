@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Заголовок IPv4</title>
+<style>
+  :root { --paper:#faf6f3; --ink:#2d3142; --muted:#5b5560; --accent:#D04A28; --soft:#F4E1D8; --rule:rgba(45,49,66,.12); }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .frame { background:var(--paper); border:1px solid var(--rule); border-radius:12px; padding:18px 18px 14px; }
+  .eyebrow { margin:0 0 8px; font:600 9px/1.2 Consolas,monospace; letter-spacing:.16em; text-transform:uppercase; color:var(--muted); }
+  .note { margin:10px 2px 0; font:11px/1.5 Consolas,monospace; color:var(--muted); }
+  svg { display:block; width:100%; height:auto; }
+</style>
+</head>
+<body>
+<div class="frame">
+  <p class="eyebrow">Сетевой уровень · IPv4</p>
+  <svg viewBox="0 0 680 330" role="img" aria-labelledby="ip-title ip-desc">
+    <title id="ip-title">Поля заголовка IPv4</title>
+    <desc id="ip-desc">Заголовок IPv4 содержит версию, длину, тип сервиса, общую длину, идентификатор, флаги, TTL, протокол, контрольную сумму и адреса отправителя и получателя.</desc>
+
+    <text x="20" y="26" font-family="Consolas,monospace" font-size="9" letter-spacing=".1em" fill="#5b5560">20 БАЙТ · 5 СТРОК ПО 32 БИТА</text>
+
+    <g font-family="Consolas,monospace" font-size="8.5" text-anchor="middle">
+      <rect x="20" y="40" width="80" height="44" fill="#F4E1D8" stroke="#D04A28"/><text x="60" y="58" fill="#D04A28">версия</text><text x="60" y="74" fill="#2d3142">4 бита</text>
+      <rect x="102" y="40" width="80" height="44" fill="#ffffff" stroke="#2d3142"/><text x="142" y="58" fill="#5b5560">длина заголовка</text><text x="142" y="74" fill="#2d3142">4 бита</text>
+      <rect x="184" y="40" width="150" height="44" fill="#ffffff" stroke="#2d3142"/><text x="259" y="58" fill="#5b5560">тип сервиса</text><text x="259" y="74" fill="#2d3142">8 бит</text>
+      <rect x="336" y="40" width="324" height="44" fill="#ffffff" stroke="#2d3142"/><text x="498" y="58" fill="#5b5560">общая длина</text><text x="498" y="74" fill="#2d3142">16 бит</text>
+
+      <rect x="20" y="88" width="320" height="44" fill="#ffffff" stroke="#2d3142"/><text x="180" y="106" fill="#5b5560">идентификатор</text><text x="180" y="122" fill="#2d3142">16 бит</text>
+      <rect x="342" y="88" width="96" height="44" fill="#ffffff" stroke="#2d3142"/><text x="390" y="106" fill="#5b5560">флаги</text><text x="390" y="122" fill="#2d3142">3 бита</text>
+      <rect x="440" y="88" width="220" height="44" fill="#ffffff" stroke="#2d3142"/><text x="550" y="106" fill="#5b5560">смещение фрагмента</text><text x="550" y="122" fill="#2d3142">13 бит</text>
+
+      <rect x="20" y="136" width="90" height="44" fill="#F4E1D8" stroke="#D04A28"/><text x="65" y="154" fill="#D04A28">TTL</text><text x="65" y="170" fill="#2d3142">8 бит</text>
+      <rect x="112" y="136" width="120" height="44" fill="#ffffff" stroke="#2d3142"/><text x="172" y="154" fill="#5b5560">протокол</text><text x="172" y="170" fill="#2d3142">8 бит</text>
+      <rect x="234" y="136" width="180" height="44" fill="#ffffff" stroke="#2d3142"/><text x="324" y="154" fill="#5b5560">контрольная сумма</text><text x="324" y="170" fill="#2d3142">16 бит</text>
+      <rect x="416" y="136" width="244" height="44" fill="#ffffff" stroke="#2d3142"/><text x="538" y="158" fill="#5b5560">зарезервировано</text>
+
+      <rect x="20" y="184" width="640" height="44" fill="#ffffff" stroke="#2d3142"/><text x="340" y="202" fill="#5b5560">адрес отправителя</text><text x="340" y="218" fill="#2d3142">32 бита</text>
+      <rect x="20" y="232" width="640" height="44" fill="#F4E1D8" stroke="#D04A28"/><text x="340" y="250" fill="#D04A28">адрес получателя</text><text x="340" y="266" fill="#2d3142">32 бита</text>
+    </g>
+
+    <text x="20" y="300" font-family="Consolas,monospace" font-size="9" fill="#5b5560">TTL уменьшается на каждом маршрутизаторе. Протокол говорит, что внутри: TCP (6), UDP (17), ICMP (1).</text>
+    <text x="20" y="318" font-family="Consolas,monospace" font-size="9" fill="#D04A28">заголовок проверяется контрольной суммой, данные проверяет транспорт</text>
+  </svg>
+  <p class="note">Маршрутизатор меняет TTL и контрольную сумму, но адреса получателя и отправителя сохраняются.</p>
+</div>
+</body>
+</html>
