@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FTP: два соединения</title>
+<style>
+  :root { --paper:#faf6f3; --ink:#2d3142; --muted:#5b5560; --accent:#D04A28; --soft:#F4E1D8; --rule:rgba(45,49,66,.12); }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .frame { background:var(--paper); border:1px solid var(--rule); border-radius:12px; padding:18px 18px 14px; }
+  .eyebrow { margin:0 0 8px; font:600 9px/1.2 Consolas,monospace; letter-spacing:.16em; text-transform:uppercase; color:var(--muted); }
+  .note { margin:10px 2px 0; font:11px/1.5 Consolas,monospace; color:var(--muted); }
+  svg { display:block; width:100%; height:auto; }
+</style>
+</head>
+<body>
+<div class="frame">
+  <p class="eyebrow">Файлы · FTP и SMB</p>
+  <svg viewBox="0 0 680 290" role="img" aria-labelledby="ftp-title ftp-desc">
+    <title id="ftp-title">Управляющее и информационное соединение FTP</title>
+    <desc id="ftp-desc">FTP открывает управляющее соединение на порт 21 и отдельное соединение для данных. В активном режиме данные идут с порта 20 сервера, в пассивном клиент подключается к порту сервера.</desc>
+
+    <rect x="40" y="80" width="150" height="80" rx="8" fill="#ffffff" stroke="#2d3142"/>
+    <text x="115" y="108" text-anchor="middle" font-family="Consolas,monospace" font-size="9" fill="#5b5560">FTP-КЛИЕНТ</text>
+    <text x="115" y="128" text-anchor="middle" font-family="Consolas,monospace" font-size="9" fill="#2d3142">команды и данные</text>
+    <text x="115" y="144" text-anchor="middle" font-family="Consolas,monospace" font-size="8" fill="#5b5560">временные порты</text>
+
+    <rect x="490" y="80" width="150" height="80" rx="8" fill="#F4E1D8" stroke="#D04A28"/>
+    <text x="565" y="108" text-anchor="middle" font-family="Consolas,monospace" font-size="9" fill="#D04A28">FTP-СЕРВЕР</text>
+    <text x="565" y="128" text-anchor="middle" font-family="Consolas,monospace" font-size="9" fill="#2d3142">файлы и каталоги</text>
+    <text x="565" y="144" text-anchor="middle" font-family="Consolas,monospace" font-size="8" fill="#5b5560">порты 21 и 20</text>
+
+    <line x1="190" y1="104" x2="486" y2="104" stroke="#D04A28" stroke-width="1.6" marker-end="url(#arw-ftp)"/>
+    <text x="338" y="96" text-anchor="middle" font-family="Consolas,monospace" font-size="9" fill="#D04A28">управление · порт 21</text>
+
+    <line x1="486" y1="140" x2="190" y2="140" stroke="#2d3142" stroke-width="1.6" marker-end="url(#arw-ftp2)"/>
+    <text x="338" y="132" text-anchor="middle" font-family="Consolas,monospace" font-size="9" fill="#2d3142">активный режим · данные с порта 20</text>
+
+    <line x1="190" y1="176" x2="486" y2="176" stroke="#5b5560" stroke-width="1.6" stroke-dasharray="5 4" marker-end="url(#arw-ftp3)"/>
+    <text x="338" y="196" text-anchor="middle" font-family="Consolas,monospace" font-size="9" fill="#5b5560">пассивный режим · клиент подключается к порту сервера</text>
+
+    <rect x="40" y="218" width="600" height="52" rx="8" fill="#ffffff" stroke="#2d3142"/>
+    <text x="56" y="238" font-family="Consolas,monospace" font-size="9" letter-spacing=".1em" fill="#5b5560">SMB · ОБЩИЕ ПАПКИ В ЛОКАЛЬНОЙ СЕТИ</text>
+    <text x="56" y="258" font-family="Consolas,monospace" font-size="9" fill="#2d3142">порт 445 · доступ по учётной записи · права на папку и файл</text>
+
+    <defs>
+      <marker id="arw-ftp" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#D04A28"/></marker>
+      <marker id="arw-ftp2" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#2d3142"/></marker>
+      <marker id="arw-ftp3" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#5b5560"/></marker>
+    </defs>
+  </svg>
+  <p class="note">FTP передаёт файлы по двум соединениям, SMB даёт общий доступ к папкам внутри сети.</p>
+</div>
+</body>
+</html>

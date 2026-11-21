@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Диагностика по цепочке</title>
+<style>
+  :root { --paper:#faf6f3; --card:#fffdfb; --ink:#1a1916; --muted:#6b6459; --rule:#e4d8cf; --accent:#D04A28; --soft:#F4E1D8; --bad:#b23a2b; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .demo { background:var(--paper); border:1px solid var(--rule); border-radius:14px; padding:18px; }
+  .head { display:flex; justify-content:space-between; align-items:flex-end; gap:16px; padding-bottom:10px; border-bottom:1px solid var(--rule); }
+  .eyebrow { margin:0 0 4px; font:600 10px/1.2 Consolas,monospace; letter-spacing:.12em; text-transform:uppercase; color:var(--accent); }
+  h3 { margin:0; font-size:20px; line-height:1.2; }
+  .counter { font:12px/1.4 Consolas,monospace; color:var(--muted); white-space:nowrap; }
+  svg { display:block; width:100%; height:auto; margin-top:6px; }
+  .step rect { fill:#fff; stroke:#2d3142; stroke-width:1.4; transition:fill .2s,stroke .2s; }
+  .step text { font-family:Consolas,monospace; font-size:9px; fill:#2d3142; text-anchor:middle; }
+  .step.active rect { fill:var(--soft); stroke:var(--accent); stroke-width:2; }
+  .step.fail rect { fill:#fbf3f1; stroke:var(--bad); stroke-width:2; }
+  .step.fail text { fill:var(--bad); }
+  .cmd { margin-top:8px; padding:9px 11px; border:1px solid var(--rule); border-radius:9px; background:var(--card); font:11.5px/1.6 Consolas,monospace; white-space:pre-wrap; min-height:44px; }
+  .status { min-height:40px; margin-top:9px; font-size:12.5px; line-height:1.45; color:var(--muted); }
+  .status b { color:var(--accent); }
+  .status.bad b { color:var(--bad); }
+  .controls { display:flex; gap:8px; flex-wrap:wrap; margin-top:10px; }
+  button { font:600 12.5px/1 "Segoe UI",system-ui,sans-serif; padding:9px 13px; border-radius:9px; border:1px solid var(--rule); background:var(--card); color:var(--ink); cursor:pointer; }
+  button:hover { border-color:var(--accent); color:var(--accent); }
+  button.primary { background:var(--accent); border-color:var(--accent); color:#fff; }
+  button.primary:hover { background:#a83a1f; color:#fff; }
+  button:disabled { opacity:.45; cursor:default; }
+  @media (max-width:600px) { .demo { padding:12px; } }
+</style>
+</head>
+<body>
+<div class="demo">
+  <div class="head">
+    <div><p class="eyebrow">Диагностика · цепочка</p><h3>От кабеля к приложению</h3></div>
+    <div class="counter" id="counter">шаг 0 из 5</div>
+  </div>
+  <svg viewBox="0 0 680 130" role="img" aria-label="Пять шагов диагностики">
+    <g stroke="#b9ac9f" stroke-width="1.4">
+      <line x1="130" y1="70" x2="146" y2="70"/><line x1="270" y1="70" x2="286" y2="70"/>
+      <line x1="410" y1="70" x2="426" y2="70"/><line x1="550" y1="70" x2="566" y2="70"/>
+    </g>
+    <g class="step" id="s1"><rect x="10" y="46" width="120" height="48" rx="7"/><text x="70" y="66">канал</text><text x="70" y="82" font-size="8">кабель или Wi-Fi</text></g>
+    <g class="step" id="s2"><rect x="150" y="46" width="120" height="48" rx="7"/><text x="210" y="66">адрес</text><text x="210" y="82" font-size="8">IP и маска</text></g>
+    <g class="step" id="s3"><rect x="290" y="46" width="120" height="48" rx="7"/><text x="350" y="66">шлюз</text><text x="350" y="82" font-size="8">ping</text></g>
+    <g class="step" id="s4"><rect x="430" y="46" width="120" height="48" rx="7"/><text x="490" y="66">DNS</text><text x="490" y="82" font-size="8">имя</text></g>
+    <g class="step" id="s5"><rect x="570" y="46" width="100" height="48" rx="7"/><text x="620" y="66">порт</text><text x="620" y="82" font-size="8">служба</text></g>
+  </svg>
+  <div class="cmd" id="cmd">Нажмите «Шаг», чтобы проверить канал.</div>
+  <div class="status" id="status">Диагностика идёт от нижнего уровня к приложению: каждый шаг отсекает часть причин.</div>
+  <div class="controls">
+    <button class="primary" id="step">Шаг</button>
+    <button id="fail">Сбой DNS</button>
+    <button id="reset">Сброс</button>
+  </div>
+</div>
+<script>
+(function () {
+  var steps = [
+    { id: 's1', cmd: 'ip link\nWi-Fi: connected', text: 'Канал есть: интерфейс подключён, ошибок нет.' },
+    { id: 's2', cmd: 'ip addr\ninet 192.168.1.10/24', text: 'Адрес получен, маска верная, адрес не конфликтует.' },
+    { id: 's3', cmd: 'ping -c 2 192.168.1.1\n2 packets transmitted, 2 received', text: 'Шлюз отвечает, значит локальная сеть работает.' },
+    { id: 's4', cmd: 'nslookup example.ru\nAddress: 93.184.216.34', text: 'DNS отвечает, имя переводится в адрес.' },
+    { id: 's5', cmd: 'curl -I https://example.ru\nHTTP/1.1 200 OK', text: 'Порт 443 отвечает, служба работает. Цепочка пройдена.' }
+  ];
+  var pos = 0;
+  var failMode = false;
+  var cmd = document.getElementById('cmd');
+  var status = document.getElementById('status');
+  var counter = document.getElementById('counter');
+  var stepBtn = document.getElementById('step');
+
+  function clear() {
+    ['s1', 's2', 's3', 's4', 's5'].forEach(function (id) {
+      document.getElementById(id).classList.remove('active', 'fail');
+    });
+  }
+
+  function step() {
+    if (pos >= steps.length) return;
+    var s = steps[pos];
+    clear();
+    if (failMode && pos === 3) {
+      document.getElementById(s.id).classList.add('fail');
+      cmd.textContent = 'nslookup example.ru\nserver can not find example.ru';
+      status.className = 'status bad';
+      status.innerHTML = '<b>Сбой на шаге DNS.</b> Адрес и шлюз работают, но имя не переводится. Проверьте настройки DNS и доступность сервера.';
+      pos = steps.length;
+      counter.textContent = 'остановка на шаге 4';
+      stepBtn.disabled = true;
+      return;
+    }
+    document.getElementById(s.id).classList.add('active');
+    cmd.textContent = s.cmd;
+    status.className = 'status';
+    status.innerHTML = s.text;
+    pos += 1;
+    counter.textContent = 'шаг ' + pos + ' из ' + steps.length;
+    stepBtn.disabled = pos >= steps.length;
+  }
+
+  function reset() {
+    pos = 0;
+    failMode = false;
+    clear();
+    cmd.textContent = 'Нажмите «Шаг», чтобы проверить канал.';
+    status.className = 'status';
+    status.textContent = 'Диагностика идёт от нижнего уровня к приложению: каждый шаг отсекает часть причин.';
+    counter.textContent = 'шаг 0 из ' + steps.length;
+    stepBtn.disabled = false;
+  }
+
+  document.getElementById('step').addEventListener('click', step);
+  document.getElementById('reset').addEventListener('click', reset);
+  document.getElementById('fail').addEventListener('click', function () {
+    reset();
+    failMode = true;
+    status.innerHTML = 'Включён режим сбоя DNS. Нажимайте «Шаг»: проверки до DNS пройдут, на имени произойдёт остановка.';
+  });
+})();
+</script>
+</body>
+</html>

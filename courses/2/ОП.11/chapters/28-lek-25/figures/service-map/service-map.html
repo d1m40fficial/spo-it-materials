@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Сетевые службы информационной системы</title>
+<style>
+  :root { --paper:#faf6f3; --ink:#2d3142; --muted:#5b5560; --accent:#D04A28; --soft:#F4E1D8; --rule:rgba(45,49,66,.12); }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .frame { background:var(--paper); border:1px solid var(--rule); border-radius:12px; padding:18px 18px 14px; }
+  .eyebrow { margin:0 0 8px; font:600 9px/1.2 Consolas,monospace; letter-spacing:.16em; text-transform:uppercase; color:var(--muted); }
+  .note { margin:10px 2px 0; font:11px/1.5 Consolas,monospace; color:var(--muted); }
+  svg { display:block; width:100%; height:auto; }
+</style>
+</head>
+<body>
+<div class="frame">
+  <p class="eyebrow">Информационная система · службы</p>
+  <svg viewBox="0 0 680 310" role="img" aria-labelledby="svc-title svc-desc">
+    <title id="svc-title">Схема сетевых служб информационной системы</title>
+    <desc id="svc-desc">Пользователи проходят через межсетевой экран к веб-серверу. Веб-сервер обращается к приложению и базе данных, а также к DNS, файловому серверу и каталогу.</desc>
+
+    <rect x="20" y="120" width="100" height="56" rx="8" fill="#ffffff" stroke="#2d3142"/>
+    <text x="70" y="144" text-anchor="middle" font-family="Consolas,monospace" font-size="9" fill="#2d3142">пользователи</text>
+    <text x="70" y="162" text-anchor="middle" font-family="Consolas,monospace" font-size="8" fill="#5b5560">браузер</text>
+
+    <rect x="150" y="120" width="110" height="56" rx="8" fill="#F4E1D8" stroke="#D04A28"/>
+    <text x="205" y="144" text-anchor="middle" font-family="Consolas,monospace" font-size="9" fill="#D04A28">межсетевой</text>
+    <text x="205" y="160" text-anchor="middle" font-family="Consolas,monospace" font-size="9" fill="#D04A28">экран</text>
+
+    <rect x="290" y="50" width="120" height="56" rx="8" fill="#ffffff" stroke="#2d3142"/>
+    <text x="350" y="74" text-anchor="middle" font-family="Consolas,monospace" font-size="9" fill="#2d3142">веб-сервер</text>
+    <text x="350" y="90" text-anchor="middle" font-family="Consolas,monospace" font-size="8" fill="#5b5560">HTTPS · 443</text>
+
+    <rect x="440" y="120" width="110" height="56" rx="8" fill="#ffffff" stroke="#2d3142"/>
+    <text x="495" y="144" text-anchor="middle" font-family="Consolas,monospace" font-size="9" fill="#2d3142">приложение</text>
+    <text x="495" y="160" text-anchor="middle" font-family="Consolas,monospace" font-size="8" fill="#5b5560">бизнес-логика</text>
+
+    <rect x="570" y="120" width="90" height="56" rx="8" fill="#F4E1D8" stroke="#D04A28"/>
+    <text x="615" y="144" text-anchor="middle" font-family="Consolas,monospace" font-size="9" fill="#D04A28">база</text>
+    <text x="615" y="160" text-anchor="middle" font-family="Consolas,monospace" font-size="8" fill="#5b5560">данных</text>
+
+    <rect x="290" y="210" width="110" height="46" rx="7" fill="#ffffff" stroke="#2d3142"/>
+    <text x="345" y="230" text-anchor="middle" font-family="Consolas,monospace" font-size="9" fill="#2d3142">DNS</text>
+    <text x="345" y="246" text-anchor="middle" font-family="Consolas,monospace" font-size="8" fill="#5b5560">имена</text>
+
+    <rect x="415" y="210" width="110" height="46" rx="7" fill="#ffffff" stroke="#2d3142"/>
+    <text x="470" y="230" text-anchor="middle" font-family="Consolas,monospace" font-size="9" fill="#2d3142">файлы</text>
+    <text x="470" y="246" text-anchor="middle" font-family="Consolas,monospace" font-size="8" fill="#5b5560">SMB · 445</text>
+
+    <rect x="540" y="210" width="120" height="46" rx="7" fill="#ffffff" stroke="#2d3142"/>
+    <text x="600" y="230" text-anchor="middle" font-family="Consolas,monospace" font-size="9" fill="#2d3142">каталог</text>
+    <text x="600" y="246" text-anchor="middle" font-family="Consolas,monospace" font-size="8" fill="#5b5560">учётные записи</text>
+
+    <g stroke="#5b5560" stroke-width="1.4" marker-end="url(#arw-svc)">
+      <line x1="120" y1="148" x2="148" y2="148"/>
+      <line x1="260" y1="148" x2="288" y2="100"/>
+      <line x1="410" y1="78" x2="438" y2="130"/>
+      <line x1="550" y1="148" x2="568" y2="148"/>
+      <line x1="350" y1="106" x2="345" y2="208"/>
+      <line x1="410" y1="100" x2="455" y2="208"/>
+      <line x1="470" y1="148" x2="560" y2="208"/>
+    </g>
+
+    <text x="340" y="292" text-anchor="middle" font-family="Consolas,monospace" font-size="8.5" fill="#D04A28">КАЖДАЯ СЛУЖБА ИМЕЕТ СВОЙ ПОРТ, УЧЁТНУЮ ЗАПИСЬ И ПРАВИЛА ДОСТУПА</text>
+
+    <defs>
+      <marker id="arw-svc" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#5b5560"/></marker>
+    </defs>
+  </svg>
+  <p class="note">Схема служб задаёт, что видно снаружи, что только внутри и какие порты открыты.</p>
+</div>
+</body>
+</html>

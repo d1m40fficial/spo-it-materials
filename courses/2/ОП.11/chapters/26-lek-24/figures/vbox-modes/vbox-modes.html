@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Режимы сети в VirtualBox</title>
+<style>
+  :root { --paper:#faf6f3; --card:#fffdfb; --ink:#1a1916; --muted:#6b6459; --rule:#e4d8cf; --accent:#D04A28; --soft:#F4E1D8; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .demo { background:var(--paper); border:1px solid var(--rule); border-radius:14px; padding:18px; }
+  .head { display:flex; justify-content:space-between; align-items:flex-end; gap:16px; padding-bottom:10px; border-bottom:1px solid var(--rule); }
+  .eyebrow { margin:0 0 4px; font:600 10px/1.2 Consolas,monospace; letter-spacing:.12em; text-transform:uppercase; color:var(--accent); }
+  h3 { margin:0; font-size:20px; line-height:1.2; }
+  .mode { font:11px/1.4 Consolas,monospace; color:var(--muted); }
+  svg { display:block; width:100%; height:auto; margin-top:6px; }
+  .box { fill:#fff; stroke:#2d3142; stroke-width:1.4; }
+  .lbl { font-family:Consolas,monospace; font-size:9px; fill:#2d3142; text-anchor:middle; }
+  .sub { font-family:Consolas,monospace; font-size:7.5px; fill:#5b5560; text-anchor:middle; }
+  .link { stroke:#b9ac9f; stroke-width:1.6; opacity:.15; transition:opacity .2s, stroke .2s; }
+  .link.on { stroke:#D04A28; opacity:1; }
+  .tag { font-family:Consolas,monospace; font-size:7.5px; fill:#D04A28; text-anchor:middle; opacity:0; }
+  .tag.on { opacity:1; }
+  .status { min-height:44px; margin-top:8px; padding:10px 12px; border-radius:9px; background:var(--soft); font-size:12.5px; line-height:1.45; }
+  .status b { color:var(--accent); }
+  .controls { display:flex; gap:7px; flex-wrap:wrap; margin-top:10px; }
+  button { font:600 12px/1 "Segoe UI",system-ui,sans-serif; padding:8px 11px; border-radius:9px; border:1px solid var(--rule); background:var(--card); color:var(--ink); cursor:pointer; }
+  button:hover { border-color:var(--accent); color:var(--accent); }
+  button.on { background:var(--accent); border-color:var(--accent); color:#fff; }
+  @media (max-width:560px) { .demo { padding:12px; } }
+</style>
+</head>
+<body>
+<div class="demo">
+  <div class="head">
+    <div><p class="eyebrow">Виртуализация · сеть</p><h3>Режим адаптера</h3></div>
+    <div class="mode" id="mode">NAT</div>
+  </div>
+  <svg viewBox="0 0 680 220" role="img" aria-label="Виртуальные машины, хост, локальная сеть и интернет">
+    <g id="links">
+      <line class="link" id="l-nat1" x1="130" y1="80" x2="250" y2="110"/>
+      <line class="link" id="l-nat2" x1="370" y1="110" x2="540" y2="110"/>
+      <line class="link" id="l-br1" x1="130" y1="80" x2="436" y2="52"/>
+      <line class="link" id="l-br2" x1="562" y1="56" x2="594" y2="76"/>
+      <line class="link" id="l-int" x1="70" y1="108" x2="70" y2="152"/>
+      <line class="link" id="l-ho" x1="130" y1="80" x2="250" y2="110"/>
+    </g>
+    <g>
+      <rect class="box" x="20" y="46" width="110" height="58" rx="7"/><text class="lbl" x="75" y="70">ВМ 1</text><text class="sub" x="75" y="86">10.0.2.15</text>
+      <rect class="box" x="20" y="152" width="110" height="50" rx="7"/><text class="lbl" x="75" y="174">ВМ 2</text><text class="sub" x="75" y="190">10.0.2.16</text>
+      <rect class="box" x="250" y="82" width="120" height="56" rx="7"/><text class="lbl" x="310" y="106">хост</text><text class="sub" x="310" y="122">192.168.1.5</text>
+      <rect class="box" x="440" y="28" width="120" height="50" rx="7"/><text class="lbl" x="500" y="50">локальная сеть</text><text class="sub" x="500" y="66">192.168.1.0/24</text>
+      <ellipse cx="600" cy="110" rx="58" ry="34" fill="#fff" stroke="#2d3142"/><text class="lbl" x="600" y="108">интернет</text><text class="sub" x="600" y="122">провайдер</text>
+    </g>
+    <text class="tag" id="t-nat" x="190" y="90">NAT</text>
+    <text class="tag" id="t-br" x="290" y="52">bridge</text>
+    <text class="tag" id="t-int" x="95" y="135">internal</text>
+    <text class="tag" id="t-ho" x="190" y="126">host-only</text>
+  </svg>
+  <div class="status" id="status">В режиме NAT виртуальная машина выходит в интернет через хост, но снаружи её не видно.</div>
+  <div class="controls">
+    <button data-mode="nat" class="on">NAT</button>
+    <button data-mode="bridge">Мост</button>
+    <button data-mode="internal">Внутренняя</button>
+    <button data-mode="hostonly">Только хост</button>
+  </div>
+</div>
+<script>
+(function () {
+  var modes = {
+    nat: { name: 'NAT', links: ['l-nat1', 'l-nat2'], tags: ['t-nat'], text: 'В режиме NAT виртуальная машина выходит в интернет через хост, но снаружи её не видно. Адрес внутри сети 10.0.2.15.' },
+    bridge: { name: 'Мост', links: ['l-br1', 'l-br2'], tags: ['t-br'], text: 'В режиме моста виртуальная машина получает адрес в локальной сети и видна соседям как отдельное устройство.' },
+    internal: { name: 'Внутренняя', links: ['l-int'], tags: ['t-int'], text: 'Внутренняя сеть соединяет только виртуальные машины между собой. Хост и интернет недоступны.' },
+    hostonly: { name: 'Только хост', links: ['l-ho'], tags: ['t-ho'], text: 'Сеть только с хостом: виртуальная машина видит хост, но не локальную сеть и не интернет.' }
+  };
+  var status = document.getElementById('status');
+  var modeLabel = document.getElementById('mode');
+  var buttons = document.querySelectorAll('button[data-mode]');
+
+  function apply(key) {
+    var m = modes[key];
+    document.querySelectorAll('.link').forEach(function (l) { l.classList.remove('on'); });
+    document.querySelectorAll('.tag').forEach(function (t) { t.classList.remove('on'); });
+    m.links.forEach(function (id) { document.getElementById(id).classList.add('on'); });
+    m.tags.forEach(function (id) { document.getElementById(id).classList.add('on'); });
+    status.innerHTML = m.text;
+    modeLabel.textContent = m.name;
+    buttons.forEach(function (b) { b.classList.toggle('on', b.dataset.mode === key); });
+  }
+
+  buttons.forEach(function (b) {
+    b.addEventListener('click', function () { apply(b.dataset.mode); });
+  });
+
+  apply('nat');
+})();
+</script>
+</body>
+</html>

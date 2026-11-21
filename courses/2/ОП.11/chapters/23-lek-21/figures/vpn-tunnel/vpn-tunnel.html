@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>VPN-туннель по шагам</title>
+<style>
+  :root { --paper:#faf6f3; --card:#fffdfb; --ink:#1a1916; --muted:#6b6459; --rule:#e4d8cf; --accent:#D04A28; --soft:#F4E1D8; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .demo { background:var(--paper); border:1px solid var(--rule); border-radius:14px; padding:18px; }
+  .head { display:flex; justify-content:space-between; align-items:flex-end; gap:16px; padding-bottom:10px; border-bottom:1px solid var(--rule); }
+  .eyebrow { margin:0 0 4px; font:600 10px/1.2 Consolas,monospace; letter-spacing:.12em; text-transform:uppercase; color:var(--accent); }
+  h3 { margin:0; font-size:20px; line-height:1.2; }
+  .counter { font:12px/1.4 Consolas,monospace; color:var(--muted); white-space:nowrap; }
+  svg { display:block; width:100%; height:auto; margin-top:4px; }
+  .chips { display:flex; gap:8px; flex-wrap:wrap; margin-top:8px; }
+  .chip { flex:1; min-width:200px; padding:8px 10px; border:1px solid var(--rule); border-radius:8px; background:var(--card); font:11px/1.5 Consolas,monospace; }
+  .chip .k { font:600 8px/1.2 Consolas,monospace; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); }
+  .status { min-height:40px; margin-top:8px; font-size:12.5px; line-height:1.45; color:var(--muted); }
+  .status b { color:var(--accent); }
+  .controls { display:flex; gap:8px; flex-wrap:wrap; margin-top:10px; }
+  button { font:600 12.5px/1 "Segoe UI",system-ui,sans-serif; padding:9px 13px; border-radius:9px; border:1px solid var(--rule); background:var(--card); color:var(--ink); cursor:pointer; }
+  button:hover { border-color:var(--accent); color:var(--accent); }
+  button.primary { background:var(--accent); border-color:var(--accent); color:#fff; }
+  button.primary:hover { background:#a83a1f; color:#fff; }
+  button:disabled { opacity:.45; cursor:default; }
+  @media (max-width:560px) { .demo { padding:12px; } }
+</style>
+</head>
+<body>
+<div class="demo">
+  <div class="head">
+    <div><p class="eyebrow">VPN · инкапсуляция</p><h3>Из дома в офис</h3></div>
+    <div class="counter" id="counter">шаг 0 из 5</div>
+  </div>
+  <svg viewBox="0 0 680 220" role="img" aria-label="Клиент, интернет, VPN-шлюз и внутренний сервер">
+    <line x1="150" y1="110" x2="215" y2="110" stroke="#b9ac9f" stroke-width="2"/>
+    <line x1="365" y1="110" x2="425" y2="110" stroke="#b9ac9f" stroke-width="2"/>
+    <line x1="545" y1="110" x2="590" y2="110" stroke="#b9ac9f" stroke-width="2"/>
+
+    <rect x="30" y="80" width="120" height="60" rx="8" fill="#fff" stroke="#2d3142"/>
+    <text x="90" y="104" text-anchor="middle" font-family="Consolas,monospace" font-size="9" fill="#2d3142">клиент</text>
+    <text x="90" y="120" text-anchor="middle" font-family="Consolas,monospace" font-size="7.5" fill="#5b5560">192.168.1.10</text>
+
+    <ellipse cx="290" cy="110" rx="75" ry="44" fill="#fff" stroke="#5b5560"/>
+    <text x="290" y="108" text-anchor="middle" font-family="Consolas,monospace" font-size="9" fill="#5b5560">интернет</text>
+    <text x="290" y="124" text-anchor="middle" font-family="Consolas,monospace" font-size="7.5" fill="#5b5560">видит только внешний адрес</text>
+
+    <rect x="425" y="80" width="120" height="60" rx="8" fill="#F4E1D8" stroke="#D04A28"/>
+    <text x="485" y="104" text-anchor="middle" font-family="Consolas,monospace" font-size="9" fill="#D04A28">VPN-шлюз</text>
+    <text x="485" y="120" text-anchor="middle" font-family="Consolas,monospace" font-size="7.5" fill="#5b5560">203.0.113.5</text>
+
+    <rect x="590" y="80" width="70" height="60" rx="8" fill="#fff" stroke="#2d3142"/>
+    <text x="625" y="104" text-anchor="middle" font-family="Consolas,monospace" font-size="9" fill="#2d3142">сервер</text>
+    <text x="625" y="120" text-anchor="middle" font-family="Consolas,monospace" font-size="7.5" fill="#5b5560">10.0.0.20</text>
+
+    <g id="packet" style="display:none">
+      <rect x="-38" y="-11" width="76" height="22" rx="5" fill="#D04A28"/>
+      <text x="0" y="3" text-anchor="middle" font-family="Consolas,monospace" font-size="8" font-weight="600" fill="#fff">пакет</text>
+    </g>
+  </svg>
+  <div class="chips">
+    <div class="chip"><div class="k">Внутренний пакет</div><div id="inner">ещё не создан</div></div>
+    <div class="chip"><div class="k">Внешний пакет</div><div id="outer">ещё не создан</div></div>
+  </div>
+  <div class="status" id="status">Нажмите «Шаг», чтобы отправить запрос из дома.</div>
+  <div class="controls">
+    <button class="primary" id="step">Шаг</button>
+    <button id="reset">Сброс</button>
+  </div>
+</div>
+<script>
+(function () {
+  var steps = [
+    { x: 90, inner: '192.168.1.10 → 10.0.0.20', outer: 'нет', text: 'Клиент формирует внутренний пакет к серверу офиса. Адрес сервера частный и в интернете не маршрутизируется.' },
+    { x: 290, inner: '192.168.1.10 → 10.0.0.20', outer: '192.168.1.10 → 203.0.113.5', text: 'Пакет шифруется и упаковывается во внешний. Интернет видит только адрес VPN-шлюза.' },
+    { x: 485, inner: '192.168.1.10 → 10.0.0.20', outer: '192.168.1.10 → 203.0.113.5', text: 'Шлюз принимает внешний пакет и проверяет туннель.' },
+    { x: 625, inner: '192.168.1.10 → 10.0.0.20', outer: 'снят', text: 'Шлюз снимает внешний заголовок и передаёт внутренний пакет серверу.' },
+    { x: 625, inner: '10.0.0.20 → 192.168.1.10', outer: 'обратный туннель', text: 'Ответ идёт обратно через туннель. Внутренние адреса сохраняются, внешний адрес один.' }
+  ];
+  var pos = 0;
+  var packet = document.getElementById('packet');
+  var status = document.getElementById('status');
+  var inner = document.getElementById('inner');
+  var outer = document.getElementById('outer');
+  var counter = document.getElementById('counter');
+  var stepBtn = document.getElementById('step');
+
+  function place(x) {
+    packet.style.display = '';
+    packet.setAttribute('transform', 'translate(' + x + ',110)');
+  }
+
+  function step() {
+    if (pos >= steps.length) return;
+    var s = steps[pos];
+    place(s.x);
+    inner.textContent = s.inner;
+    outer.textContent = s.outer;
+    status.innerHTML = s.text;
+    pos += 1;
+    counter.textContent = 'шаг ' + pos + ' из ' + steps.length;
+    stepBtn.disabled = pos >= steps.length;
+  }
+
+  function reset() {
+    pos = 0;
+    packet.style.display = 'none';
+    inner.textContent = 'ещё не создан';
+    outer.textContent = 'ещё не создан';
+    counter.textContent = 'шаг 0 из ' + steps.length;
+    status.textContent = 'Нажмите «Шаг», чтобы отправить запрос из дома.';
+    stepBtn.disabled = false;
+  }
+
+  stepBtn.addEventListener('click', step);
+  document.getElementById('reset').addEventListener('click', reset);
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Путь электронного письма</title>
+<style>
+  :root { --paper:#faf6f3; --ink:#2d3142; --muted:#5b5560; --accent:#D04A28; --soft:#F4E1D8; --rule:rgba(45,49,66,.12); }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .frame { background:var(--paper); border:1px solid var(--rule); border-radius:12px; padding:18px 18px 14px; }
+  .eyebrow { margin:0 0 8px; font:600 9px/1.2 Consolas,monospace; letter-spacing:.16em; text-transform:uppercase; color:var(--muted); }
+  .note { margin:10px 2px 0; font:11px/1.5 Consolas,monospace; color:var(--muted); }
+  svg { display:block; width:100%; height:auto; }
+</style>
+</head>
+<body>
+<div class="frame">
+  <p class="eyebrow">Почта · путь письма</p>
+  <svg viewBox="0 0 680 280" role="img" aria-labelledby="mail-title mail-desc">
+    <title id="mail-title">Путь письма от отправителя к получателю</title>
+    <desc id="mail-desc">Клиент отправляет письмо по SMTP на сервер отправки, тот находит MX-запись получателя и передаёт письмо серверу получателя. Получатель забирает письмо по IMAP или POP3.</desc>
+
+    <g font-family="Consolas,monospace" text-anchor="middle">
+      <rect x="16" y="70" width="100" height="60" rx="8" fill="#ffffff" stroke="#2d3142"/><text x="66" y="96" font-size="9" fill="#2d3142">отправитель</text><text x="66" y="112" font-size="8" fill="#5b5560">клиент</text>
+      <rect x="146" y="70" width="120" height="60" rx="8" fill="#F4E1D8" stroke="#D04A28"/><text x="206" y="96" font-size="9" fill="#D04A28">сервер отправки</text><text x="206" y="112" font-size="8" fill="#5b5560">SMTP · 587</text>
+      <rect x="296" y="70" width="90" height="60" rx="8" fill="#ffffff" stroke="#2d3142"/><text x="341" y="96" font-size="9" fill="#2d3142">DNS</text><text x="341" y="112" font-size="8" fill="#5b5560">MX-запись</text>
+      <rect x="416" y="70" width="120" height="60" rx="8" fill="#F4E1D8" stroke="#D04A28"/><text x="476" y="96" font-size="9" fill="#D04A28">сервер получателя</text><text x="476" y="112" font-size="8" fill="#5b5560">SMTP · 25</text>
+      <rect x="566" y="70" width="98" height="60" rx="8" fill="#ffffff" stroke="#2d3142"/><text x="615" y="96" font-size="9" fill="#2d3142">ящик</text><text x="615" y="112" font-size="8" fill="#5b5560">получателя</text>
+    </g>
+
+    <g stroke="#5b5560" stroke-width="1.4" marker-end="url(#arw-mail)">
+      <line x1="116" y1="100" x2="144" y2="100"/>
+      <line x1="266" y1="100" x2="294" y2="100"/>
+      <line x1="386" y1="100" x2="414" y2="100"/>
+      <line x1="536" y1="100" x2="564" y2="100"/>
+    </g>
+
+    <text x="130" y="86" text-anchor="middle" font-family="Consolas,monospace" font-size="7.5" fill="#D04A28">SMTP</text>
+    <text x="400" y="86" text-anchor="middle" font-family="Consolas,monospace" font-size="7.5" fill="#D04A28">SMTP</text>
+
+    <rect x="416" y="164" width="248" height="70" rx="8" fill="#ffffff" stroke="#2d3142"/>
+    <text x="430" y="184" font-family="Consolas,monospace" font-size="9" letter-spacing=".1em" fill="#5b5560">ЗАБРАТЬ ПИСЬМО</text>
+    <text x="430" y="204" font-family="Consolas,monospace" font-size="9" fill="#2d3142">IMAP · 143: письмо остаётся на сервере</text>
+    <text x="430" y="222" font-family="Consolas,monospace" font-size="9" fill="#2d3142">POP3 · 110: письмо скачивается</text>
+
+    <rect x="16" y="164" width="360" height="70" rx="8" fill="#ffffff" stroke="#2d3142"/>
+    <text x="30" y="184" font-family="Consolas,monospace" font-size="9" letter-spacing=".1em" fill="#5b5560">ПОРТЫ</text>
+    <text x="30" y="204" font-family="Consolas,monospace" font-size="9" fill="#2d3142">587 отправка с шифрованием · 25 пересылка</text>
+    <text x="30" y="222" font-family="Consolas,monospace" font-size="9" fill="#2d3142">993 IMAPS · 995 POP3S</text>
+
+    <text x="340" y="264" text-anchor="middle" font-family="Consolas,monospace" font-size="8.5" fill="#D04A28">ПИСЬМО ХРАНИТСЯ, ПОКА ПОЛУЧАТЕЛЬ ЕГО НЕ ЗАБЕРЁТ</text>
+
+    <defs>
+      <marker id="arw-mail" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#5b5560"/></marker>
+    </defs>
+  </svg>
+  <p class="note">SMTP передаёт письмо между серверами, IMAP и POP3 нужны получателю для чтения.</p>
+</div>
+</body>
+</html>
