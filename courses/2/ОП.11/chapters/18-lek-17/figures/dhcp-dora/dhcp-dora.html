@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DHCP: четыре шага</title>
+<style>
+  :root { --paper:#faf6f3; --ink:#2d3142; --muted:#5b5560; --accent:#D04A28; --soft:#F4E1D8; --rule:rgba(45,49,66,.12); }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .frame { background:var(--paper); border:1px solid var(--rule); border-radius:12px; padding:18px 18px 14px; }
+  .eyebrow { margin:0 0 8px; font:600 9px/1.2 Consolas,monospace; letter-spacing:.16em; text-transform:uppercase; color:var(--muted); }
+  .note { margin:10px 2px 0; font:11px/1.5 Consolas,monospace; color:var(--muted); }
+  svg { display:block; width:100%; height:auto; }
+</style>
+</head>
+<body>
+<div class="frame">
+  <p class="eyebrow">DHCP · выдача адреса</p>
+  <svg viewBox="0 0 680 310" role="img" aria-labelledby="dora-title dora-desc">
+    <title id="dora-title">Четыре шага DHCP</title>
+    <desc id="dora-desc">Клиент широковещательно отправляет Discover, сервер отвечает Offer, клиент запрашивает Request, сервер подтверждает Ack и выдаёт аренду.</desc>
+
+    <rect x="60" y="24" width="150" height="38" rx="7" fill="#F4E1D8" stroke="#D04A28"/>
+    <text x="135" y="48" text-anchor="middle" font-family="Consolas,monospace" font-size="10" font-weight="600" fill="#D04A28">клиент · порт 68</text>
+    <rect x="470" y="24" width="150" height="38" rx="7" fill="#ffffff" stroke="#2d3142"/>
+    <text x="545" y="48" text-anchor="middle" font-family="Consolas,monospace" font-size="10" font-weight="600" fill="#2d3142">сервер · порт 67</text>
+
+    <line x1="135" y1="62" x2="135" y2="286" stroke="#b9ac9f" stroke-dasharray="4 4"/>
+    <line x1="545" y1="62" x2="545" y2="286" stroke="#b9ac9f" stroke-dasharray="4 4"/>
+
+    <line x1="135" y1="88" x2="535" y2="88" stroke="#D04A28" stroke-width="1.6" marker-end="url(#arw-dora)"/>
+    <text x="340" y="80" text-anchor="middle" font-family="Consolas,monospace" font-size="9.5" fill="#D04A28">1. Discover: «есть ли DHCP?»</text>
+
+    <line x1="545" y1="128" x2="145" y2="128" stroke="#2d3142" stroke-width="1.6" marker-end="url(#arw-dora2)"/>
+    <text x="340" y="120" text-anchor="middle" font-family="Consolas,monospace" font-size="9.5" fill="#2d3142">2. Offer: предлагаю 192.168.1.50</text>
+
+    <line x1="135" y1="168" x2="535" y2="168" stroke="#D04A28" stroke-width="1.6" marker-end="url(#arw-dora)"/>
+    <text x="340" y="160" text-anchor="middle" font-family="Consolas,monospace" font-size="9.5" fill="#D04A28">3. Request: беру этот адрес</text>
+
+    <line x1="545" y1="208" x2="145" y2="208" stroke="#2d3142" stroke-width="1.6" marker-end="url(#arw-dora2)"/>
+    <text x="340" y="200" text-anchor="middle" font-family="Consolas,monospace" font-size="9.5" fill="#2d3142">4. Ack: адрес ваш, аренда 24 часа</text>
+
+    <rect x="40" y="236" width="600" height="46" rx="8" fill="#ffffff" stroke="#2d3142" stroke-dasharray="4 3"/>
+    <text x="56" y="256" font-family="Consolas,monospace" font-size="9" fill="#5b5560">вместе с адресом: маска, шлюз, DNS, срок аренды</text>
+    <text x="56" y="274" font-family="Consolas,monospace" font-size="9" fill="#D04A28">T1 = 50% срока, T2 = 87,5%: клиент продлевает аренду</text>
+
+    <defs>
+      <marker id="arw-dora" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#D04A28"/></marker>
+      <marker id="arw-dora2" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#2d3142"/></marker>
+    </defs>
+  </svg>
+  <p class="note">Discover и Request идут широковещательно: клиент ещё не знает адрес сервера.</p>
+</div>
+</body>
+</html>

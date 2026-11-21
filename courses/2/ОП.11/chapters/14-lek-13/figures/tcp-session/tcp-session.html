@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TCP-сессия по шагам</title>
+<style>
+  :root { --paper:#faf6f3; --card:#fffdfb; --ink:#1a1916; --muted:#6b6459; --rule:#e4d8cf; --accent:#D04A28; --soft:#F4E1D8; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .demo { background:var(--paper); border:1px solid var(--rule); border-radius:14px; padding:18px; }
+  .head { display:flex; justify-content:space-between; align-items:flex-end; gap:16px; padding-bottom:10px; border-bottom:1px solid var(--rule); }
+  .eyebrow { margin:0 0 4px; font:600 10px/1.2 Consolas,monospace; letter-spacing:.12em; text-transform:uppercase; color:var(--accent); }
+  h3 { margin:0; font-size:20px; line-height:1.2; }
+  .state { font:11px/1.4 Consolas,monospace; color:var(--muted); }
+  .flow { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:12px; }
+  .side { background:var(--card); border:1px solid var(--rule); border-radius:9px; padding:9px 11px; font:11px/1.5 Consolas,monospace; }
+  .side .k { font:600 8.5px/1.2 Consolas,monospace; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); }
+  .log { margin-top:10px; padding:9px 11px; border:1px solid var(--rule); border-radius:9px; background:var(--card); font:11.5px/1.65 Consolas,monospace; min-height:96px; white-space:pre-wrap; }
+  .log div { opacity:.45; }
+  .log div.on { opacity:1; color:var(--ink); }
+  .status { min-height:40px; margin-top:9px; font-size:12.5px; line-height:1.45; color:var(--muted); }
+  .status b { color:var(--accent); }
+  .controls { display:flex; gap:8px; flex-wrap:wrap; margin-top:10px; }
+  button { font:600 12.5px/1 "Segoe UI",system-ui,sans-serif; padding:9px 13px; border-radius:9px; border:1px solid var(--rule); background:var(--card); color:var(--ink); cursor:pointer; }
+  button:hover { border-color:var(--accent); color:var(--accent); }
+  button.primary { background:var(--accent); border-color:var(--accent); color:#fff; }
+  button.primary:hover { background:#a83a1f; color:#fff; }
+  button:disabled { opacity:.45; cursor:default; }
+  @media (max-width:560px) { .demo { padding:12px; } .flow { grid-template-columns:1fr; } }
+</style>
+</head>
+<body>
+<div class="demo">
+  <div class="head">
+    <div><p class="eyebrow">TCP · сессия</p><h3>От SYN до закрытия</h3></div>
+    <div class="state" id="state">CLOSED</div>
+  </div>
+  <div class="flow">
+    <div class="side"><div class="k">Клиент</div><div id="client">seq 1000</div></div>
+    <div class="side"><div class="k">Сервер</div><div id="server">ожидает</div></div>
+  </div>
+  <div class="log" id="log"></div>
+  <div class="status" id="status">Нажмите «Шаг», чтобы отправить SYN.</div>
+  <div class="controls">
+    <button class="primary" id="step">Шаг</button>
+    <button id="reset">Сброс</button>
+  </div>
+</div>
+<script>
+(function () {
+  var steps = [
+    { state: 'SYN_SENT', text: 'SYN, seq 1000', log: 'клиент → сервер: SYN, seq 1000', srv: 'получен SYN' },
+    { state: 'SYN_RECEIVED', text: 'SYN-ACK, seq 5000, ack 1001', log: 'сервер → клиент: SYN-ACK, seq 5000, ack 1001', srv: 'ждёт ACK' },
+    { state: 'ESTABLISHED', text: 'ACK, seq 1001, ack 5001', log: 'клиент → сервер: ACK, seq 1001, ack 5001', srv: 'соединение открыто' },
+    { state: 'ESTABLISHED', text: 'GET / HTTP/1.1, seq 1001', log: 'клиент → сервер: данные, seq 1001', srv: 'принял данные' },
+    { state: 'FIN_WAIT', text: 'FIN, seq 1040', log: 'клиент → сервер: FIN, seq 1040', srv: 'получил FIN' },
+    { state: 'CLOSED', text: 'ACK и закрытие', log: 'сервер → клиент: FIN-ACK, соединение закрыто', srv: 'закрыто' }
+  ];
+  var pos = 0;
+  var log = document.getElementById('log');
+  var status = document.getElementById('status');
+  var state = document.getElementById('state');
+  var client = document.getElementById('client');
+  var server = document.getElementById('server');
+  var stepBtn = document.getElementById('step');
+
+  function render() {
+    log.innerHTML = '';
+    steps.forEach(function (s, i) {
+      var d = document.createElement('div');
+      d.textContent = s.log;
+      if (i < pos) d.className = 'on';
+      log.appendChild(d);
+    });
+    stepBtn.disabled = pos >= steps.length;
+  }
+
+  function step() {
+    if (pos >= steps.length) return;
+    var s = steps[pos];
+    state.textContent = s.state;
+    client.textContent = s.text;
+    server.textContent = s.srv;
+    status.innerHTML = '<b>' + s.state + '</b>. ' + s.log + '.';
+    pos += 1;
+    render();
+  }
+
+  function reset() {
+    pos = 0;
+    state.textContent = 'CLOSED';
+    client.textContent = 'seq 1000';
+    server.textContent = 'ожидает';
+    status.textContent = 'Нажмите «Шаг», чтобы отправить SYN.';
+    render();
+  }
+
+  stepBtn.addEventListener('click', step);
+  document.getElementById('reset').addEventListener('click', reset);
+  render();
+})();
+</script>
+</body>
+</html>

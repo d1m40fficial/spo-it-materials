@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TCP и UDP: сравнение</title>
+<style>
+  :root { --paper:#faf6f3; --ink:#2d3142; --muted:#5b5560; --accent:#D04A28; --soft:#F4E1D8; --rule:rgba(45,49,66,.12); }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .frame { background:var(--paper); border:1px solid var(--rule); border-radius:12px; padding:18px 18px 14px; }
+  .eyebrow { margin:0 0 8px; font:600 9px/1.2 Consolas,monospace; letter-spacing:.16em; text-transform:uppercase; color:var(--muted); }
+  .note { margin:10px 2px 0; font:11px/1.5 Consolas,monospace; color:var(--muted); }
+  svg { display:block; width:100%; height:auto; }
+</style>
+</head>
+<body>
+<div class="frame">
+  <p class="eyebrow">Транспорт · два подхода</p>
+  <svg viewBox="0 0 680 320" role="img" aria-labelledby="tr-title tr-desc">
+    <title id="tr-title">Сравнение TCP и UDP</title>
+    <desc id="tr-desc">TCP устанавливает соединение, подтверждает доставку и сохраняет порядок. UDP отправляет дейтаграммы без соединения и подтверждений.</desc>
+
+    <rect x="20" y="36" width="310" height="220" rx="10" fill="#F4E1D8" stroke="#D04A28"/>
+    <text x="175" y="62" text-anchor="middle" font-family="Consolas,monospace" font-size="13" font-weight="600" fill="#D04A28">TCP</text>
+    <g font-family="Consolas,monospace" font-size="9.5">
+      <text x="36" y="90" fill="#5b5560">соединение</text><text x="170" y="90" fill="#2d3142">устанавливается</text>
+      <text x="36" y="114" fill="#5b5560">доставка</text><text x="170" y="114" fill="#2d3142">подтверждается</text>
+      <text x="36" y="138" fill="#5b5560">порядок</text><text x="170" y="138" fill="#2d3142">сохраняется</text>
+      <text x="36" y="162" fill="#5b5560">потери</text><text x="170" y="162" fill="#2d3142">повторная передача</text>
+      <text x="36" y="186" fill="#5b5560">заголовок</text><text x="170" y="186" fill="#2d3142">20 байт и больше</text>
+      <text x="36" y="210" fill="#5b5560">скорость</text><text x="170" y="210" fill="#2d3142">ниже из-за проверок</text>
+      <text x="36" y="234" fill="#5b5560">примеры</text><text x="170" y="234" fill="#2d3142">HTTP, SMTP, FTP</text>
+    </g>
+
+    <rect x="350" y="36" width="310" height="220" rx="10" fill="#ffffff" stroke="#2d3142"/>
+    <text x="505" y="62" text-anchor="middle" font-family="Consolas,monospace" font-size="13" font-weight="600" fill="#2d3142">UDP</text>
+    <g font-family="Consolas,monospace" font-size="9.5">
+      <text x="366" y="90" fill="#5b5560">соединение</text><text x="500" y="90" fill="#2d3142">не устанавливается</text>
+      <text x="366" y="114" fill="#5b5560">доставка</text><text x="500" y="114" fill="#2d3142">не подтверждается</text>
+      <text x="366" y="138" fill="#5b5560">порядок</text><text x="500" y="138" fill="#2d3142">не гарантируется</text>
+      <text x="366" y="162" fill="#5b5560">потери</text><text x="500" y="162" fill="#2d3142">остаются потерями</text>
+      <text x="366" y="186" fill="#5b5560">заголовок</text><text x="500" y="186" fill="#2d3142">8 байт</text>
+      <text x="366" y="210" fill="#5b5560">скорость</text><text x="500" y="210" fill="#2d3142">выше, меньше задержка</text>
+      <text x="366" y="234" fill="#5b5560">примеры</text><text x="500" y="234" fill="#2d3142">DNS, голос, видео</text>
+    </g>
+
+    <text x="340" y="284" text-anchor="middle" font-family="Consolas,monospace" font-size="9" fill="#5b5560">ОБА ПРОТОКОЛА ИСПОЛЬЗУЮТ ПОРТЫ ДЛЯ ВЫБОРА ПРИЛОЖЕНИЯ</text>
+    <text x="340" y="304" text-anchor="middle" font-family="Consolas,monospace" font-size="8.5" fill="#D04A28">ВЫБОР: НУЖНА ЦЕЛОСТНОСТЬ ИЛИ МИНИМАЛЬНАЯ ЗАДЕРЖКА</text>
+  </svg>
+  <p class="note">TCP и UDP не лучше и не хуже друг друга. Они решают разные задачи.</p>
+</div>
+</body>
+</html>

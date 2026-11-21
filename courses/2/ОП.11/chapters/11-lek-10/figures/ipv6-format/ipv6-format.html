@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>IPv6: 128 бит и сжатие</title>
+<style>
+  :root { --paper:#faf6f3; --ink:#2d3142; --muted:#5b5560; --accent:#D04A28; --soft:#F4E1D8; --rule:rgba(45,49,66,.12); }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .frame { background:var(--paper); border:1px solid var(--rule); border-radius:12px; padding:18px 18px 14px; }
+  .eyebrow { margin:0 0 8px; font:600 9px/1.2 Consolas,monospace; letter-spacing:.16em; text-transform:uppercase; color:var(--muted); }
+  .note { margin:10px 2px 0; font:11px/1.5 Consolas,monospace; color:var(--muted); }
+  svg { display:block; width:100%; height:auto; }
+</style>
+</head>
+<body>
+<div class="frame">
+  <p class="eyebrow">IPv6 · адрес и запись</p>
+  <svg viewBox="0 0 680 330" role="img" aria-labelledby="v6-title v6-desc">
+    <title id="v6-title">Адрес IPv6 и правила сжатия</title>
+    <desc id="v6-desc">Адрес IPv6 состоит из 128 бит и восьми групп по четыре шестнадцатеричные цифры. Ведущие нули опускают, одну группу нулей заменяют двумя двоеточиями.</desc>
+
+    <text x="20" y="26" font-family="Consolas,monospace" font-size="9" letter-spacing=".1em" fill="#5b5560">128 БИТ · 8 ГРУПП ПО 16 БИТ</text>
+
+    <g font-family="Consolas,monospace" text-anchor="middle" font-size="10">
+      <rect x="20" y="40" width="76" height="38" rx="5" fill="#F4E1D8" stroke="#D04A28"/><text x="58" y="64" fill="#D04A28">2001</text>
+      <rect x="100" y="40" width="76" height="38" rx="5" fill="#ffffff" stroke="#2d3142"/><text x="138" y="64" fill="#2d3142">0db8</text>
+      <rect x="180" y="40" width="76" height="38" rx="5" fill="#ffffff" stroke="#2d3142"/><text x="218" y="64" fill="#2d3142">0000</text>
+      <rect x="260" y="40" width="76" height="38" rx="5" fill="#ffffff" stroke="#2d3142"/><text x="298" y="64" fill="#2d3142">0000</text>
+      <rect x="340" y="40" width="76" height="38" rx="5" fill="#ffffff" stroke="#2d3142"/><text x="378" y="64" fill="#2d3142">0000</text>
+      <rect x="420" y="40" width="76" height="38" rx="5" fill="#ffffff" stroke="#2d3142"/><text x="458" y="64" fill="#2d3142">ff00</text>
+      <rect x="500" y="40" width="76" height="38" rx="5" fill="#ffffff" stroke="#2d3142"/><text x="538" y="64" fill="#2d3142">0042</text>
+      <rect x="580" y="40" width="76" height="38" rx="5" fill="#ffffff" stroke="#2d3142"/><text x="618" y="64" fill="#2d3142">8329</text>
+    </g>
+
+    <text x="20" y="104" font-family="Consolas,monospace" font-size="10" fill="#2d3142">полная запись:</text>
+    <text x="20" y="124" font-family="Consolas,monospace" font-size="12" font-weight="600" fill="#2d3142">2001:0db8:0000:0000:0000:ff00:0042:8329</text>
+
+    <text x="20" y="158" font-family="Consolas,monospace" font-size="10" fill="#2d3142">сжатая запись:</text>
+    <text x="20" y="178" font-family="Consolas,monospace" font-size="12" font-weight="600" fill="#D04A28">2001:db8::ff00:42:8329</text>
+
+    <rect x="20" y="198" width="640" height="76" rx="9" fill="#ffffff" stroke="#2d3142"/>
+    <text x="36" y="220" font-family="Consolas,monospace" font-size="9" letter-spacing=".1em" fill="#5b5560">ПРАВИЛА СЖАТИЯ</text>
+    <text x="36" y="242" font-family="Consolas,monospace" font-size="9.5" fill="#2d3142">1. Ведущие нули в группе можно опустить: 0db8 → db8, 0042 → 42.</text>
+    <text x="36" y="260" font-family="Consolas,monospace" font-size="9.5" fill="#2d3142">2. Одну непрерывную группу нулей заменяют ::, но только один раз.</text>
+
+    <text x="20" y="300" font-family="Consolas,monospace" font-size="9" letter-spacing=".1em" fill="#5b5560">ПРЕФИКС</text>
+    <text x="20" y="320" font-family="Consolas,monospace" font-size="10" fill="#2d3142">2001:db8::/32 сеть · 2001:db8:1::/64 подсеть · последние 64 бита узел</text>
+  </svg>
+  <p class="note">IPv6 даёт 2^128 адресов. Длина записи сокращается, но смысл групп сохраняется.</p>
+</div>
+</body>
+</html>

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Выбор маршрута по таблице</title>
+<style>
+  :root { --paper:#faf6f3; --card:#fffdfb; --ink:#1a1916; --muted:#6b6459; --rule:#e4d8cf; --accent:#D04A28; --soft:#F4E1D8; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .demo { background:var(--paper); border:1px solid var(--rule); border-radius:14px; padding:18px; }
+  .head { display:flex; justify-content:space-between; align-items:flex-end; gap:16px; padding-bottom:10px; border-bottom:1px solid var(--rule); }
+  .eyebrow { margin:0 0 4px; font:600 10px/1.2 Consolas,monospace; letter-spacing:.12em; text-transform:uppercase; color:var(--accent); }
+  h3 { margin:0; font-size:20px; line-height:1.2; }
+  .hint { font:11px/1.4 Consolas,monospace; color:var(--muted); }
+  table { width:100%; border-collapse:collapse; margin-top:12px; font:12px/1.5 Consolas,monospace; }
+  th, td { padding:8px 10px; border-bottom:1px solid var(--rule); text-align:left; }
+  th { font:600 8.5px/1.2 Consolas,monospace; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); }
+  tr.win td { background:var(--soft); font-weight:700; }
+  .targets { display:flex; gap:7px; flex-wrap:wrap; margin-top:12px; }
+  button { font:600 12px/1 "Segoe UI",system-ui,sans-serif; padding:8px 11px; border-radius:9px; border:1px solid var(--rule); background:var(--card); color:var(--ink); cursor:pointer; }
+  button:hover { border-color:var(--accent); color:var(--accent); }
+  button.primary { background:var(--accent); border-color:var(--accent); color:#fff; }
+  button.primary:hover { background:#a83a1f; color:#fff; }
+  .status { min-height:44px; margin-top:12px; padding:10px 12px; border-radius:9px; background:var(--soft); font-size:12.5px; line-height:1.45; }
+  .status b { color:var(--accent); }
+  @media (max-width:560px) { .demo { padding:12px; } table { font-size:10.5px; } }
+</style>
+</head>
+<body>
+<div class="demo">
+  <div class="head">
+    <div><p class="eyebrow">Маршрутизация · таблица</p><h3>Куда отправить пакет?</h3></div>
+    <div class="hint">самый длинный префикс</div>
+  </div>
+  <table>
+    <thead><tr><th>Сеть</th><th>Маска</th><th>Следующий узел</th></tr></thead>
+    <tbody id="rows">
+      <tr data-id="r8" data-len="8"><td>10.0.0.0</td><td>/8</td><td>R1</td></tr>
+      <tr data-id="r16" data-len="16"><td>10.1.0.0</td><td>/16</td><td>R2</td></tr>
+      <tr data-id="r24" data-len="24"><td>10.1.2.0</td><td>/24</td><td>R3</td></tr>
+      <tr data-id="r0" data-len="0"><td>0.0.0.0</td><td>/0</td><td>R4</td></tr>
+    </tbody>
+  </table>
+  <div class="targets">
+    <button class="primary" data-ip="10.1.2.55" data-row="r24">10.1.2.55</button>
+    <button data-ip="10.1.5.7" data-row="r16">10.1.5.7</button>
+    <button data-ip="10.2.3.4" data-row="r8">10.2.3.4</button>
+    <button data-ip="8.8.8.8" data-row="r0">8.8.8.8</button>
+  </div>
+  <div class="status" id="status">Нажмите на адрес назначения. Маршрутизатор выберет самую точную сеть.</div>
+</div>
+<script>
+(function () {
+  var status = document.getElementById('status');
+  var rows = document.querySelectorAll('#rows tr');
+
+  function clear() { rows.forEach(function (r) { r.classList.remove('win'); }); }
+
+  document.querySelectorAll('button[data-ip]').forEach(function (b) {
+    b.addEventListener('click', function () {
+      clear();
+      document.querySelector('tr[data-id="' + b.dataset.row + '"]').classList.add('win');
+      var len = document.querySelector('tr[data-id="' + b.dataset.row + '"]').dataset.len;
+      status.innerHTML = 'Для <b>' + b.dataset.ip + '</b> выбирается маршрут с префиксом /' + len + '. Более общий маршрут проигрывает, потому что совпал менее точно.';
+    });
+  });
+})();
+</script>
+</body>
+</html>

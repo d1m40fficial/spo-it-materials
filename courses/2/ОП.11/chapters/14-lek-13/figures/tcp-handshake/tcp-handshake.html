@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Тройное рукопожатие TCP</title>
+<style>
+  :root { --paper:#faf6f3; --ink:#2d3142; --muted:#5b5560; --accent:#D04A28; --soft:#F4E1D8; --rule:rgba(45,49,66,.12); }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .frame { background:var(--paper); border:1px solid var(--rule); border-radius:12px; padding:18px 18px 14px; }
+  .eyebrow { margin:0 0 8px; font:600 9px/1.2 Consolas,monospace; letter-spacing:.16em; text-transform:uppercase; color:var(--muted); }
+  .note { margin:10px 2px 0; font:11px/1.5 Consolas,monospace; color:var(--muted); }
+  svg { display:block; width:100%; height:auto; }
+</style>
+</head>
+<body>
+<div class="frame">
+  <p class="eyebrow">TCP · установка соединения</p>
+  <svg viewBox="0 0 680 330" role="img" aria-labelledby="hs-title hs-desc">
+    <title id="hs-title">Тройное рукопожатие TCP</title>
+    <desc id="hs-desc">Клиент отправляет SYN с номером 1000, сервер отвечает SYN-ACK с номером 5000 и подтверждением 1001, клиент подтверждает 5001. После этого начинается передача данных.</desc>
+
+    <rect x="70" y="24" width="150" height="38" rx="7" fill="#F4E1D8" stroke="#D04A28"/>
+    <text x="145" y="48" text-anchor="middle" font-family="Consolas,monospace" font-size="10" font-weight="600" fill="#D04A28">клиент</text>
+    <rect x="460" y="24" width="150" height="38" rx="7" fill="#ffffff" stroke="#2d3142"/>
+    <text x="535" y="48" text-anchor="middle" font-family="Consolas,monospace" font-size="10" font-weight="600" fill="#2d3142">сервер</text>
+
+    <line x1="145" y1="62" x2="145" y2="306" stroke="#b9ac9f" stroke-width="1.2" stroke-dasharray="4 4"/>
+    <line x1="535" y1="62" x2="535" y2="306" stroke="#b9ac9f" stroke-width="1.2" stroke-dasharray="4 3"/>
+
+    <line x1="145" y1="90" x2="525" y2="90" stroke="#D04A28" stroke-width="1.6" marker-end="url(#arw-hs)"/>
+    <text x="330" y="82" text-anchor="middle" font-family="Consolas,monospace" font-size="9.5" fill="#D04A28">SYN, seq = 1000</text>
+
+    <line x1="535" y1="130" x2="155" y2="130" stroke="#2d3142" stroke-width="1.6" marker-end="url(#arw-hs2)"/>
+    <text x="330" y="122" text-anchor="middle" font-family="Consolas,monospace" font-size="9.5" fill="#2d3142">SYN-ACK, seq = 5000, ack = 1001</text>
+
+    <line x1="145" y1="170" x2="525" y2="170" stroke="#D04A28" stroke-width="1.6" marker-end="url(#arw-hs)"/>
+    <text x="330" y="162" text-anchor="middle" font-family="Consolas,monospace" font-size="9.5" fill="#D04A28">ACK, seq = 1001, ack = 5001</text>
+
+    <line x1="145" y1="220" x2="525" y2="220" stroke="#5b5560" stroke-width="1.4" marker-end="url(#arw-hs3)"/>
+    <text x="330" y="212" text-anchor="middle" font-family="Consolas,monospace" font-size="9.5" fill="#5b5560">данные: GET / HTTP/1.1</text>
+
+    <line x1="535" y1="260" x2="155" y2="260" stroke="#5b5560" stroke-width="1.4" marker-end="url(#arw-hs3)"/>
+    <text x="330" y="252" text-anchor="middle" font-family="Consolas,monospace" font-size="9.5" fill="#5b5560">ответ и подтверждение</text>
+
+    <text x="330" y="296" text-anchor="middle" font-family="Consolas,monospace" font-size="9" fill="#5b5560">ЗАВЕРШЕНИЕ: FIN, ACK, FIN, ACK</text>
+
+    <defs>
+      <marker id="arw-hs" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#D04A28"/></marker>
+      <marker id="arw-hs2" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#2d3142"/></marker>
+      <marker id="arw-hs3" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#5b5560"/></marker>
+    </defs>
+  </svg>
+  <p class="note">Номера seq и ack отсчитывают байты. Подтверждение ack=1001 означает «жду байт 1001».</p>
+</div>
+</body>
+</html>

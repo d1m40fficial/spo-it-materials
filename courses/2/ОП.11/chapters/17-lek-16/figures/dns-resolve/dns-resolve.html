@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Разрешение имени в DNS</title>
+<style>
+  :root { --paper:#faf6f3; --card:#fffdfb; --ink:#1a1916; --muted:#6b6459; --rule:#e4d8cf; --accent:#D04A28; --soft:#F4E1D8; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .demo { background:var(--paper); border:1px solid var(--rule); border-radius:14px; padding:18px; }
+  .head { display:flex; justify-content:space-between; align-items:flex-end; gap:16px; padding-bottom:10px; border-bottom:1px solid var(--rule); }
+  .eyebrow { margin:0 0 4px; font:600 10px/1.2 Consolas,monospace; letter-spacing:.12em; text-transform:uppercase; color:var(--accent); }
+  h3 { margin:0; font-size:20px; line-height:1.2; }
+  .counter { font:12px/1.4 Consolas,monospace; color:var(--muted); white-space:nowrap; }
+  svg { display:block; width:100%; height:auto; margin-top:8px; }
+  .node rect { fill:#fff; stroke:#2d3142; stroke-width:1.4; transition:fill .2s,stroke .2s; }
+  .node text { font-family:Consolas,monospace; font-size:9.5px; fill:#2d3142; text-anchor:middle; }
+  .node.active rect { fill:var(--soft); stroke:var(--accent); stroke-width:2; }
+  .status { min-height:46px; margin-top:10px; padding:10px 12px; border-radius:9px; background:var(--soft); font-size:12.5px; line-height:1.45; }
+  .status b { color:var(--accent); }
+  .controls { display:flex; gap:8px; flex-wrap:wrap; margin-top:10px; }
+  button { font:600 12.5px/1 "Segoe UI",system-ui,sans-serif; padding:9px 13px; border-radius:9px; border:1px solid var(--rule); background:var(--card); color:var(--ink); cursor:pointer; }
+  button:hover { border-color:var(--accent); color:var(--accent); }
+  button.primary { background:var(--accent); border-color:var(--accent); color:#fff; }
+  button.primary:hover { background:#a83a1f; color:#fff; }
+  button:disabled { opacity:.45; cursor:default; }
+  @media (max-width:620px) { .demo { padding:12px; } }
+</style>
+</head>
+<body>
+<div class="demo">
+  <div class="head">
+    <div><p class="eyebrow">DNS · разрешение имени</p><h3>example.ru</h3></div>
+    <div class="counter" id="counter">шаг 0 из 6</div>
+  </div>
+  <svg viewBox="0 0 680 190" role="img" aria-label="Цепочка DNS-серверов">
+    <g class="node" id="n-client"><rect x="20" y="70" width="110" height="54" rx="7"/><text x="75" y="92">клиент</text><text x="75" y="108" font-size="8">кэш браузера</text></g>
+    <g class="node" id="n-resolver"><rect x="155" y="70" width="120" height="54" rx="7"/><text x="215" y="92">рекурсивный</text><text x="215" y="108" font-size="8">resolver</text></g>
+    <g class="node" id="n-root"><rect x="300" y="70" width="110" height="54" rx="7"/><text x="355" y="92">корневой</text><text x="355" y="108" font-size="8">. (root)</text></g>
+    <g class="node" id="n-tld"><rect x="435" y="70" width="110" height="54" rx="7"/><text x="490" y="92">зонный .ru</text><text x="490" y="108" font-size="8">TLD</text></g>
+    <g class="node" id="n-auth"><rect x="570" y="70" width="90" height="54" rx="7"/><text x="615" y="92">авторитетный</text><text x="615" y="108" font-size="8">example.ru</text></g>
+    <g stroke="#b9ac9f" stroke-width="1.4">
+      <line x1="130" y1="97" x2="153" y2="97"/>
+      <line x1="275" y1="97" x2="298" y2="97"/>
+      <line x1="410" y1="97" x2="433" y2="97"/>
+      <line x1="545" y1="97" x2="568" y2="97"/>
+    </g>
+  </svg>
+  <div class="status" id="status">Нажмите «Шаг»: браузер проверит кэш и отправит запрос резолверу.</div>
+  <div class="controls">
+    <button class="primary" id="step">Шаг</button>
+    <button id="reset">Сброс</button>
+  </div>
+</div>
+<script>
+(function () {
+  var steps = [
+    { node: 'n-client', text: 'Браузер проверяет свой кэш. Записи нет, запрос уходит в операционную систему.' },
+    { node: 'n-resolver', text: 'Резолвер проверяет кэш и, не найдя ответа, начинает рекурсивный запрос.' },
+    { node: 'n-root', text: 'Корневой сервер не знает адрес, но возвращает ссылку на зону <b>.ru</b>.' },
+    { node: 'n-tld', text: 'Зонный сервер <b>.ru</b> возвращает адреса авторитетных серверов example.ru.' },
+    { node: 'n-auth', text: 'Авторитетный сервер отвечает: <b>A 93.184.216.34</b>, TTL 300 секунд.' },
+    { node: 'n-resolver', text: 'Резолвер кэширует ответ на 300 секунд и возвращает адрес браузеру.' }
+  ];
+  var pos = 0;
+  var ids = ['n-client', 'n-resolver', 'n-root', 'n-tld', 'n-auth'];
+  var counter = document.getElementById('counter');
+  var status = document.getElementById('status');
+  var stepBtn = document.getElementById('step');
+
+  function activate(id) {
+    ids.forEach(function (n) {
+      document.getElementById(n).classList.toggle('active', n === id);
+    });
+  }
+
+  function step() {
+    if (pos >= steps.length) return;
+    var s = steps[pos];
+    activate(s.node);
+    status.innerHTML = s.text;
+    pos += 1;
+    counter.textContent = 'шаг ' + pos + ' из ' + steps.length;
+    stepBtn.disabled = pos >= steps.length;
+  }
+
+  function reset() {
+    pos = 0;
+    activate(null);
+    counter.textContent = 'шаг 0 из ' + steps.length;
+    status.textContent = 'Нажмите «Шаг»: браузер проверит кэш и отправит запрос резолверу.';
+    stepBtn.disabled = false;
+  }
+
+  stepBtn.addEventListener('click', step);
+  document.getElementById('reset').addEventListener('click', reset);
+})();
+</script>
+</body>
+</html>
