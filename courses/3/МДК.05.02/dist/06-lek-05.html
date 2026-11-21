@@ -411,17 +411,29 @@ html.quiz-pending .pager { display: none; }
 .quiz-actions button { -webkit-appearance: none; appearance: none; font: 600 13px var(--font-body); padding: 9px 15px; border-radius: 10px; border: 1px solid var(--rule); background: var(--paper); background-color: var(--paper); color: var(--ink); cursor: pointer; }
 .quiz-actions button[data-answer], .quiz-actions button.quiz-answer { background: #121212; background-color: #121212; color: #fff; border-color: transparent; }
 .quiz-actions button:hover { filter: brightness(.96); }
+.quiz-actions button:disabled { opacity: .45; cursor: default; filter: none; }
 .quiz-actions button:focus-visible { outline: 2px solid var(--quiz-accent); outline-offset: 2px; }
 .quiz-note { font-size: 13px; color: var(--bad); }
 .quiz .short-answer { width: 100%; font: 16px var(--font-body); padding: 12px 16px; border: 1px solid var(--quiz-line); border-radius: 8px; background: transparent; color: var(--quiz-ink); }
 .quiz .short-answer:focus { outline: 2px solid var(--quiz-accent); outline-offset: 1px; border-color: transparent; }
 .quiz-q.ok .short-answer { border-color: var(--quiz-ok); background: var(--quiz-ok-bg); }
 .quiz-q.bad .short-answer { border-color: var(--quiz-bad); background: var(--quiz-bad-bg); }
+.quiz-who { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; margin: 0 0 16px; }
+.quiz-who-label { display: flex; align-items: center; gap: 10px; font: 600 13px var(--font-body); color: var(--ink-2); }
+.quiz-who-label input { font: 15px var(--font-body); padding: 10px 12px; border: 1px solid var(--rule); border-radius: 9px; background: var(--card); color: var(--quiz-ink); min-width: 220px; max-width: 100%; }
+.quiz-who-label input:focus { outline: 2px solid var(--quiz-accent); outline-offset: 1px; border-color: transparent; }
+.quiz-attempts { font: 12px var(--font-mono); color: var(--ink-3); }
+.quiz-attempts.limit { color: var(--quiz-bad); font-weight: 600; }
+.modal-name-line { margin: 0 0 12px; font-size: 14px; color: var(--ink-2); }
+.quiz-q.missing { outline: 2px solid var(--quiz-bad); outline-offset: 2px; }
+.quiz-note[hidden] { display: none; }
+.quiz-submit-note { margin: 14px 0 0; }
 .quiz-result { margin-top: 22px; padding: 20px 22px; border: 1px solid var(--quiz-line); border-radius: 12px; background: var(--quiz-card); box-shadow: 0 2px 8px rgba(0,0,0,.02); color: var(--quiz-ink); }
 .quiz-result[hidden] { display: none; }
 .quiz-result > .label { display: block; font: 600 11px var(--font-mono); letter-spacing: .08em; text-transform: uppercase; color: var(--accent); margin-bottom: 6px; }
 .quiz-result h3 { margin: 0 0 14px; font: 800 24px/1.2 var(--font-display); }
 .quiz-result .modal-result { margin: 0 0 14px; }
+.quiz-result [data-modal-wrong] { margin-top: -6px; font-size: 14px; font-weight: 400; color: var(--quiz-ink); }
 .quiz-result .modal-times { margin-bottom: 0; }
 @media (max-width: 560px) {
   .quiz-q { padding: 18px 16px; }
@@ -553,6 +565,7 @@ html.modal-open { overflow: hidden; }
 .quiz-q { animation: quiz-in .32s cubic-bezier(.16,1,.3,1) both; }
 @keyframes quiz-in { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
 @media (prefers-reduced-motion: reduce) { .quiz-q { animation: none; } }
+@media (prefers-reduced-motion: reduce) { .quiz-q { animation: none; } }
 
 /* ---------- variant cards on the practice page ---------- */
 .variant { border: 1px solid var(--rule); border-radius: 14px; background: var(--card); margin: 0 0 12px; overflow: hidden; }
@@ -606,7 +619,7 @@ html.modal-open { overflow: hidden; }
   a { color: #000; text-decoration: none; }
   .callout, .check, .recap, .quiz-q, .quiz-result, .figure, .outcomes { border-color: #999; }
   .gate-step[hidden], .gate-content[hidden], .quiz-q[hidden] { display: block !important; }
-  .gate-action, .quiz-actions { display: none !important; }
+  .gate-action, .quiz-actions, .quiz-who { display: none !important; }
   .reveal { opacity: 1 !important; transform: none !important; transition: none !important; }
   .recap { background: #fff; color: #000; }
   .recap li, .recap p { color: #000; }
@@ -1316,7 +1329,7 @@ dotnet<span class="w"> </span>sln<span class="w"> </span>add<span class="w"> </s
 <li>Точка входа это метод <code>Main</code> или операторы верхнего уровня, и она должна быть одна.</li>
 <li>Visual Studio показывает решение целиком, потому что от него зависит сборка, а не только редактирование файла.</li>
 </ul>
-<div class="quiz" data-quiz><div class="quiz-q" data-type="single" data-correct="1" data-q="1"><p class="quiz-p"><span class="quiz-no" aria-hidden="true">01</span>Чем проект отличается от решения?</p><div class="opts"><label class="opt"><input type="radio" name="q205_0" value="2"><span>Проект содержит несколько решений</span></label><label class="opt"><input type="radio" name="q205_0" value="0" data-ok><span>Проект это единица сборки, решение объединяет несколько проектов</span></label><label class="opt"><input type="radio" name="q205_0" value="1"><span>Решение компилируется, а проект только хранит файлы</span></label><label class="opt"><input type="radio" name="q205_0" value="3"><span>Решение и проект это одно и то же</span></label></div><p class="quiz-why" hidden>Решение хранит список проектов и связи между ними.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="2" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">02</span>Почему в C# ошибка типов видна до запуска?</p><div class="opts"><label class="opt"><input type="radio" name="q205_1" value="2"><span>Visual Studio запускает программу дважды</span></label><label class="opt"><input type="radio" name="q205_1" value="0" data-ok><span>Компилятор проверяет типы при сборке</span></label><label class="opt"><input type="radio" name="q205_1" value="3"><span>Файл проекта содержит готовые значения переменных</span></label><label class="opt"><input type="radio" name="q205_1" value="1"><span>Среда исполнения проверяет типы при каждом выводе</span></label></div><p class="quiz-why" hidden>Проверка происходит на этапе компиляции.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="multi" data-correct="2" data-q="3" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">03</span>Какие каталоги создаются автоматически и не хранятся в Git?</p><div class="opts"><label class="opt"><input type="checkbox" name="q205_2" value="2"><span>src</span></label><label class="opt"><input type="checkbox" name="q205_2" value="3"><span>tests</span></label><label class="opt"><input type="checkbox" name="q205_2" value="1" data-ok><span>obj</span></label><label class="opt"><input type="checkbox" name="q205_2" value="0" data-ok><span>bin</span></label></div><p class="quiz-why" hidden>bin и obj это результат сборки и промежуточные файлы.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="4" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">04</span>Зачем в решении отдельный проект библиотеки?</p><div class="opts"><label class="opt"><input type="radio" name="q205_3" value="1"><span>Чтобы увеличить время сборки</span></label><label class="opt"><input type="radio" name="q205_3" value="3"><span>Чтобы хранить настройки Visual Studio</span></label><label class="opt"><input type="radio" name="q205_3" value="0" data-ok><span>Чтобы использовать расчёты в приложении, API и проверках</span></label><label class="opt"><input type="radio" name="q205_3" value="2"><span>Чтобы заменить файл решения</span></label></div><p class="quiz-why" hidden>Библиотека не зависит от интерфейса и переиспользуется.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="short" data-q="5" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">05</span>Как называется результат компиляции проекта на C#?</p><input type="text" class="short-answer" data-answers="[&quot;сборка&quot;, &quot;assembly&quot;]" placeholder="Введите ответ" autocomplete="off" spellcheck="false" aria-label="Как называется результат компиляции проекта на C#?"><p class="quiz-why" hidden>Компилятор превращает исходный код проекта в сборку.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="6" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">06</span>Что делает команда dotnet run?</p><div class="opts"><label class="opt"><input type="radio" name="q205_5" value="3"><span>Удаляет каталоги bin и obj</span></label><label class="opt"><input type="radio" name="q205_5" value="1"><span>Только собирает проект без запуска</span></label><label class="opt"><input type="radio" name="q205_5" value="2"><span>Только запускает ранее собранный файл</span></label><label class="opt"><input type="radio" name="q205_5" value="0" data-ok><span>Собирает проект при необходимости и запускает его</span></label></div><p class="quiz-why" hidden>Команда объединяет сборку и запуск.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="7" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">07</span>Что означает ошибка CS0029?</p><div class="opts"><label class="opt"><input type="radio" name="q205_6" value="1"><span>Пропущена точка с запятой</span></label><label class="opt"><input type="radio" name="q205_6" value="3"><span>Не найдено пространство имён</span></label><label class="opt"><input type="radio" name="q205_6" value="2"><span>В проекте две точки входа</span></label><label class="opt"><input type="radio" name="q205_6" value="0" data-ok><span>Нельзя неявно преобразовать один тип в другой</span></label></div><p class="quiz-why" hidden>Компилятор требует явного преобразования, если типы несовместимы.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="multi" data-correct="3" data-q="8" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">08</span>Какие команды относятся к работе с решением и проектами?</p><div class="opts"><label class="opt"><input type="checkbox" name="q205_7" value="1" data-ok><span>dotnet sln add</span></label><label class="opt"><input type="checkbox" name="q205_7" value="4"><span>dotnet publish database</span></label><label class="opt"><input type="checkbox" name="q205_7" value="2" data-ok><span>dotnet add reference</span></label><label class="opt"><input type="checkbox" name="q205_7" value="0" data-ok><span>dotnet new sln</span></label><label class="opt"><input type="checkbox" name="q205_7" value="3"><span>dotnet format disk</span></label></div><p class="quiz-why" hidden>Эти команды создают решение, добавляют проекты и ссылки.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="9" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">09</span>Где оказывается готовая сборка после команды dotnet build?</p><div class="opts"><label class="opt"><input type="radio" name="q205_8" value="2"><span>В корне решения рядом с файлом .sln</span></label><label class="opt"><input type="radio" name="q205_8" value="1"><span>В каталоге obj</span></label><label class="opt"><input type="radio" name="q205_8" value="0" data-ok><span>В каталоге bin внутри проекта</span></label><label class="opt"><input type="radio" name="q205_8" value="3"><span>В папке docs</span></label></div><p class="quiz-why" hidden>В bin лежит результат сборки, в obj промежуточные файлы.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="10" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">10</span>Чем запуск с отладкой отличается от запуска без отладки?</p><div class="opts"><label class="opt"><input type="radio" name="q205_9" value="1"><span>С отладкой программа работает быстрее</span></label><label class="opt"><input type="radio" name="q205_9" value="2"><span>Без отладки нельзя собрать проект</span></label><label class="opt"><input type="radio" name="q205_9" value="0" data-ok><span>С отладкой программа останавливается на точках останова и показывает переменные</span></label><label class="opt"><input type="radio" name="q205_9" value="3"><span>Без отладки программа не выводит текст в консоль</span></label></div><p class="quiz-why" hidden>Отладка даёт пошаговое выполнение и просмотр значений.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="short" data-q="11" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">11</span>Какая команда собирает проект и сразу его запускает?</p><input type="text" class="short-answer" data-answers="[&quot;dotnet run&quot;]" placeholder="Введите ответ" autocomplete="off" spellcheck="false" aria-label="Какая команда собирает проект и сразу его запускает?"><p class="quiz-why" hidden>Команда dotnet run объединяет сборку и запуск.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="12" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">12</span>Что исполняет среда, когда запускается программа на C#?</p><div class="opts"><label class="opt"><input type="radio" name="q205_11" value="1"><span>Исходный файл Program.cs</span></label><label class="opt"><input type="radio" name="q205_11" value="0" data-ok><span>Собранную сборку в виде файла .dll</span></label><label class="opt"><input type="radio" name="q205_11" value="3"><span>Файл проекта SkladPlus.App.csproj</span></label><label class="opt"><input type="radio" name="q205_11" value="2"><span>Файл решения sklad-plus.sln</span></label></div><p class="quiz-why" hidden>Компилятор превращает исходный код в сборку, и запускается именно она.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="multi" data-correct="3" data-q="13" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">13</span>Какие утверждения о точке входа в C# верны?</p><div class="opts"><label class="opt"><input type="checkbox" name="q205_12" value="2" data-ok><span>Операторы верхнего уровня заменяют метод Main</span></label><label class="opt"><input type="checkbox" name="q205_12" value="3"><span>Метод Main обязан возвращать строку</span></label><label class="opt"><input type="checkbox" name="q205_12" value="4"><span>Точка входа может находиться в любом количестве файлов</span></label><label class="opt"><input type="checkbox" name="q205_12" value="0" data-ok><span>Метод Main должен быть статическим</span></label><label class="opt"><input type="checkbox" name="q205_12" value="1" data-ok><span>В проекте допускается только одна точка входа</span></label></div><p class="quiz-why" hidden>Компилятор ищет один статический Main или один файл с операторами верхнего уровня.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="14" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">14</span>Что делает команда dotnet publish?</p><div class="opts"><label class="opt"><input type="radio" name="q205_13" value="1"><span>Запускает программу в режиме отладки</span></label><label class="opt"><input type="radio" name="q205_13" value="0" data-ok><span>Готовит сборку и зависимости для запуска на другой машине</span></label><label class="opt"><input type="radio" name="q205_13" value="3"><span>Добавляет проект в решение</span></label><label class="opt"><input type="radio" name="q205_13" value="2"><span>Создаёт новый проект из шаблона</span></label></div><p class="quiz-why" hidden>Публикация складывает всё нужное в отдельную папку.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="15" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">15</span>Что задаёт строка TargetFramework в файле проекта?</p><div class="opts"><label class="opt"><input type="radio" name="q205_14" value="1"><span>Имя программы</span></label><label class="opt"><input type="radio" name="q205_14" value="2"><span>Список исходных файлов</span></label><label class="opt"><input type="radio" name="q205_14" value="3"><span>Пароль доступа к базе данных</span></label><label class="opt"><input type="radio" name="q205_14" value="0" data-ok><span>Версию платформы .NET, под которую собирается проект</span></label></div><p class="quiz-why" hidden>От целевой платформы зависит набор доступных возможностей и версия среды.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-result" data-quiz-result hidden aria-live="polite"><span class="label">Результат теста</span><h3>Тест завершён</h3><label class="modal-name" data-student-label><span>ФИО студента</span><input type="text" data-student-name maxlength="80" autocomplete="name" placeholder="Иванов Иван Иванович"></label><p class="modal-result" data-modal-result></p><dl class="modal-times"><div><dt>Время выполнения теста</dt><dd data-test-time>00:00</dd></div><div><dt>Время просмотра лекции</dt><dd data-view-time>00:00</dd></div></dl></div></div></div>
+<div class="quiz" data-quiz><div class="quiz-who"><label class="quiz-who-label"><span>ФИО</span><input type="text" class="quiz-name" data-quiz-name maxlength="80" autocomplete="off" placeholder="Иванов Иван Иванович"></label><span class="quiz-attempts" data-quiz-attempts>две попытки на лекцию</span><span class="quiz-note" data-who-note hidden></span></div><div class="quiz-q" data-type="single" data-correct="1" data-q="1"><p class="quiz-p"><span class="quiz-no" aria-hidden="true">01</span>Чем проект отличается от решения?</p><div class="opts"><label class="opt"><input type="radio" name="q205_0" value="2" autocomplete="off"><span>Проект содержит несколько решений</span></label><label class="opt"><input type="radio" name="q205_0" value="0" autocomplete="off" data-ok><span>Проект это единица сборки, решение объединяет несколько проектов</span></label><label class="opt"><input type="radio" name="q205_0" value="1" autocomplete="off"><span>Решение компилируется, а проект только хранит файлы</span></label><label class="opt"><input type="radio" name="q205_0" value="3" autocomplete="off"><span>Решение и проект это одно и то же</span></label></div><p class="quiz-why" hidden>Решение хранит список проектов и связи между ними.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="2" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">02</span>Почему в C# ошибка типов видна до запуска?</p><div class="opts"><label class="opt"><input type="radio" name="q205_1" value="2" autocomplete="off"><span>Visual Studio запускает программу дважды</span></label><label class="opt"><input type="radio" name="q205_1" value="0" autocomplete="off" data-ok><span>Компилятор проверяет типы при сборке</span></label><label class="opt"><input type="radio" name="q205_1" value="3" autocomplete="off"><span>Файл проекта содержит готовые значения переменных</span></label><label class="opt"><input type="radio" name="q205_1" value="1" autocomplete="off"><span>Среда исполнения проверяет типы при каждом выводе</span></label></div><p class="quiz-why" hidden>Проверка происходит на этапе компиляции.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="multi" data-correct="2" data-q="3" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">03</span>Какие каталоги создаются автоматически и не хранятся в Git?</p><div class="opts"><label class="opt"><input type="checkbox" name="q205_2" value="2" autocomplete="off"><span>src</span></label><label class="opt"><input type="checkbox" name="q205_2" value="3" autocomplete="off"><span>tests</span></label><label class="opt"><input type="checkbox" name="q205_2" value="1" autocomplete="off" data-ok><span>obj</span></label><label class="opt"><input type="checkbox" name="q205_2" value="0" autocomplete="off" data-ok><span>bin</span></label></div><p class="quiz-why" hidden>bin и obj это результат сборки и промежуточные файлы.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="4" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">04</span>Зачем в решении отдельный проект библиотеки?</p><div class="opts"><label class="opt"><input type="radio" name="q205_3" value="1" autocomplete="off"><span>Чтобы увеличить время сборки</span></label><label class="opt"><input type="radio" name="q205_3" value="3" autocomplete="off"><span>Чтобы хранить настройки Visual Studio</span></label><label class="opt"><input type="radio" name="q205_3" value="0" autocomplete="off" data-ok><span>Чтобы использовать расчёты в приложении, API и проверках</span></label><label class="opt"><input type="radio" name="q205_3" value="2" autocomplete="off"><span>Чтобы заменить файл решения</span></label></div><p class="quiz-why" hidden>Библиотека не зависит от интерфейса и переиспользуется.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="short" data-q="5" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">05</span>Как называется результат компиляции проекта на C#?</p><input type="text" class="short-answer" data-answers="[&quot;сборка&quot;, &quot;assembly&quot;]" placeholder="Введите ответ" autocomplete="off" spellcheck="false" aria-label="Как называется результат компиляции проекта на C#?"><p class="quiz-why" hidden>Компилятор превращает исходный код проекта в сборку.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="6" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">06</span>Что делает команда dotnet run?</p><div class="opts"><label class="opt"><input type="radio" name="q205_5" value="3" autocomplete="off"><span>Удаляет каталоги bin и obj</span></label><label class="opt"><input type="radio" name="q205_5" value="1" autocomplete="off"><span>Только собирает проект без запуска</span></label><label class="opt"><input type="radio" name="q205_5" value="2" autocomplete="off"><span>Только запускает ранее собранный файл</span></label><label class="opt"><input type="radio" name="q205_5" value="0" autocomplete="off" data-ok><span>Собирает проект при необходимости и запускает его</span></label></div><p class="quiz-why" hidden>Команда объединяет сборку и запуск.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="7" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">07</span>Что означает ошибка CS0029?</p><div class="opts"><label class="opt"><input type="radio" name="q205_6" value="1" autocomplete="off"><span>Пропущена точка с запятой</span></label><label class="opt"><input type="radio" name="q205_6" value="3" autocomplete="off"><span>Не найдено пространство имён</span></label><label class="opt"><input type="radio" name="q205_6" value="2" autocomplete="off"><span>В проекте две точки входа</span></label><label class="opt"><input type="radio" name="q205_6" value="0" autocomplete="off" data-ok><span>Нельзя неявно преобразовать один тип в другой</span></label></div><p class="quiz-why" hidden>Компилятор требует явного преобразования, если типы несовместимы.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="multi" data-correct="3" data-q="8" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">08</span>Какие команды относятся к работе с решением и проектами?</p><div class="opts"><label class="opt"><input type="checkbox" name="q205_7" value="1" autocomplete="off" data-ok><span>dotnet sln add</span></label><label class="opt"><input type="checkbox" name="q205_7" value="4" autocomplete="off"><span>dotnet publish database</span></label><label class="opt"><input type="checkbox" name="q205_7" value="2" autocomplete="off" data-ok><span>dotnet add reference</span></label><label class="opt"><input type="checkbox" name="q205_7" value="0" autocomplete="off" data-ok><span>dotnet new sln</span></label><label class="opt"><input type="checkbox" name="q205_7" value="3" autocomplete="off"><span>dotnet format disk</span></label></div><p class="quiz-why" hidden>Эти команды создают решение, добавляют проекты и ссылки.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="9" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">09</span>Где оказывается готовая сборка после команды dotnet build?</p><div class="opts"><label class="opt"><input type="radio" name="q205_8" value="2" autocomplete="off"><span>В корне решения рядом с файлом .sln</span></label><label class="opt"><input type="radio" name="q205_8" value="1" autocomplete="off"><span>В каталоге obj</span></label><label class="opt"><input type="radio" name="q205_8" value="0" autocomplete="off" data-ok><span>В каталоге bin внутри проекта</span></label><label class="opt"><input type="radio" name="q205_8" value="3" autocomplete="off"><span>В папке docs</span></label></div><p class="quiz-why" hidden>В bin лежит результат сборки, в obj промежуточные файлы.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="10" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">10</span>Чем запуск с отладкой отличается от запуска без отладки?</p><div class="opts"><label class="opt"><input type="radio" name="q205_9" value="1" autocomplete="off"><span>С отладкой программа работает быстрее</span></label><label class="opt"><input type="radio" name="q205_9" value="2" autocomplete="off"><span>Без отладки нельзя собрать проект</span></label><label class="opt"><input type="radio" name="q205_9" value="0" autocomplete="off" data-ok><span>С отладкой программа останавливается на точках останова и показывает переменные</span></label><label class="opt"><input type="radio" name="q205_9" value="3" autocomplete="off"><span>Без отладки программа не выводит текст в консоль</span></label></div><p class="quiz-why" hidden>Отладка даёт пошаговое выполнение и просмотр значений.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="short" data-q="11" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">11</span>Какая команда собирает проект и сразу его запускает?</p><input type="text" class="short-answer" data-answers="[&quot;dotnet run&quot;]" placeholder="Введите ответ" autocomplete="off" spellcheck="false" aria-label="Какая команда собирает проект и сразу его запускает?"><p class="quiz-why" hidden>Команда dotnet run объединяет сборку и запуск.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="12" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">12</span>Что исполняет среда, когда запускается программа на C#?</p><div class="opts"><label class="opt"><input type="radio" name="q205_11" value="1" autocomplete="off"><span>Исходный файл Program.cs</span></label><label class="opt"><input type="radio" name="q205_11" value="0" autocomplete="off" data-ok><span>Собранную сборку в виде файла .dll</span></label><label class="opt"><input type="radio" name="q205_11" value="3" autocomplete="off"><span>Файл проекта SkladPlus.App.csproj</span></label><label class="opt"><input type="radio" name="q205_11" value="2" autocomplete="off"><span>Файл решения sklad-plus.sln</span></label></div><p class="quiz-why" hidden>Компилятор превращает исходный код в сборку, и запускается именно она.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="multi" data-correct="3" data-q="13" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">13</span>Какие утверждения о точке входа в C# верны?</p><div class="opts"><label class="opt"><input type="checkbox" name="q205_12" value="2" autocomplete="off" data-ok><span>Операторы верхнего уровня заменяют метод Main</span></label><label class="opt"><input type="checkbox" name="q205_12" value="3" autocomplete="off"><span>Метод Main обязан возвращать строку</span></label><label class="opt"><input type="checkbox" name="q205_12" value="4" autocomplete="off"><span>Точка входа может находиться в любом количестве файлов</span></label><label class="opt"><input type="checkbox" name="q205_12" value="0" autocomplete="off" data-ok><span>Метод Main должен быть статическим</span></label><label class="opt"><input type="checkbox" name="q205_12" value="1" autocomplete="off" data-ok><span>В проекте допускается только одна точка входа</span></label></div><p class="quiz-why" hidden>Компилятор ищет один статический Main или один файл с операторами верхнего уровня.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="14" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">14</span>Что делает команда dotnet publish?</p><div class="opts"><label class="opt"><input type="radio" name="q205_13" value="1" autocomplete="off"><span>Запускает программу в режиме отладки</span></label><label class="opt"><input type="radio" name="q205_13" value="0" autocomplete="off" data-ok><span>Готовит сборку и зависимости для запуска на другой машине</span></label><label class="opt"><input type="radio" name="q205_13" value="3" autocomplete="off"><span>Добавляет проект в решение</span></label><label class="opt"><input type="radio" name="q205_13" value="2" autocomplete="off"><span>Создаёт новый проект из шаблона</span></label></div><p class="quiz-why" hidden>Публикация складывает всё нужное в отдельную папку.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="15" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">15</span>Что задаёт строка TargetFramework в файле проекта?</p><div class="opts"><label class="opt"><input type="radio" name="q205_14" value="1" autocomplete="off"><span>Имя программы</span></label><label class="opt"><input type="radio" name="q205_14" value="2" autocomplete="off"><span>Список исходных файлов</span></label><label class="opt"><input type="radio" name="q205_14" value="3" autocomplete="off"><span>Пароль доступа к базе данных</span></label><label class="opt"><input type="radio" name="q205_14" value="0" autocomplete="off" data-ok><span>Версию платформы .NET, под которую собирается проект</span></label></div><p class="quiz-why" hidden>От целевой платформы зависит набор доступных возможностей и версия среды.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><p class="quiz-note quiz-submit-note" data-quiz-note hidden></p><div class="quiz-result" data-quiz-result hidden aria-live="polite"><span class="label">Результат теста</span><h3>Тест завершён</h3><p class="modal-name-line">ФИО: <b data-student-name></b></p><p class="modal-result" data-modal-result></p><p class="modal-result" data-modal-wrong></p><dl class="modal-times"><div><dt>Время выполнения теста</dt><dd data-test-time>00:00</dd></div><div><dt>Время просмотра лекции</dt><dd data-view-time>00:00</dd></div></dl></div></div></div>
 </div></article><nav class="pager"><a class="" href="05-prakt-01.html"><span>← Предыдущее занятие</span>Практика 1. Каркас учебного проекта и первый модуль</a><a class="next" style="text-align:right;margin-left:auto" href="07-prakt-02.html"><span>Следующее занятие →</span>Практика 2. Рабочее окружение разработчика</a></nav></main>
 <div class="modal" data-modal="warn" hidden>
   <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="warn-title">
@@ -1702,32 +1715,131 @@ dotnet<span class="w"> </span>sln<span class="w"> </span>add<span class="w"> </s
     q.querySelectorAll('input').forEach(function(i){ i.disabled = true; });
   }
 
+  function resetQuiz(quiz){
+    quiz.querySelectorAll('input').forEach(function(i){
+      if(i.type === 'checkbox' || i.type === 'radio') i.checked = false;
+      else i.value = '';
+      i.disabled = false;
+    });
+    quiz.querySelectorAll('.opt').forEach(function(o){ o.classList.remove('picked', 'correct'); });
+    quiz.querySelectorAll('.quiz-q').forEach(function(q){
+      q.classList.remove('ok', 'bad', 'missing');
+      delete q.dataset.answered;
+    });
+    quiz.querySelectorAll('.quiz-why').forEach(function(w){ w.hidden = true; });
+    quiz.querySelectorAll('[data-note]').forEach(function(n){ n.hidden = true; n.textContent = ''; });
+    quiz.querySelectorAll('[data-answer]').forEach(function(b){ b.hidden = false; b.disabled = false; });
+    var note = quiz.querySelector('[data-quiz-note]');
+    if(note){ note.hidden = true; note.textContent = ''; }
+    var card = quiz.querySelector('[data-quiz-result]');
+    if(card) card.hidden = true;
+    document.documentElement.classList.add('quiz-pending');
+  }
+
+  function shuffleQuestions(quiz){
+    var list = [].slice.call(quiz.querySelectorAll('.quiz-q'));
+    var anchor = quiz.querySelector('[data-quiz-note]') || null;
+    for(var i = list.length - 1; i > 0; i--){
+      var j = Math.floor(Math.random() * (i + 1));
+      var tmp = list[i]; list[i] = list[j]; list[j] = tmp;
+    }
+    list.forEach(function(q, idx){
+      var no = q.querySelector('.quiz-no');
+      if(no) no.textContent = String(idx + 1).padStart(2, '0');
+      if(anchor) quiz.insertBefore(q, anchor); else quiz.appendChild(q);
+    });
+  }
+
+  addEventListener('pageshow', function(e){ if(e.persisted) location.reload(); });
+
+  function quizStoreKey(){ return 'mdk-quiz:' + location.pathname; }
+  function readAttempts(name){
+    try { var raw = localStorage.getItem(quizStoreKey() + ':' + encodeURIComponent(name)); return raw ? JSON.parse(raw) : null; }
+    catch(e){ return null; }
+  }
+  function writeAttempts(name, data){
+    try { localStorage.setItem(quizStoreKey() + ':' + encodeURIComponent(name), JSON.stringify(data)); } catch(e){}
+  }
+  function shuffleOptions(quiz){
+    quiz.querySelectorAll('.quiz-q .opts').forEach(function(box){
+      var list = [].slice.call(box.children);
+      for(var i = list.length - 1; i > 0; i--){
+        var j = Math.floor(Math.random() * (i + 1));
+        var tmp = list[i]; list[i] = list[j]; list[j] = tmp;
+      }
+      list.forEach(function(o){ box.appendChild(o); });
+    });
+  }
+
   document.querySelectorAll('[data-quiz]').forEach(function(quiz){
+    resetQuiz(quiz);
+    shuffleQuestions(quiz);
+    shuffleOptions(quiz);
     var qs = [].slice.call(quiz.querySelectorAll('.quiz-q'));
     if(!qs.length) return;
-    document.documentElement.classList.add('quiz-pending');
-    var current = 0, right = 0, firstAt = null, lastAt = null;
+    var last = qs.length - 1;
+    var nameInput = quiz.querySelector('[data-quiz-name]');
+    var whoNote = quiz.querySelector('[data-who-note]');
+    var attemptsLabel = quiz.querySelector('[data-quiz-attempts]');
+    var right = 0, submitted = false, blocked = false, firstAt = null, lastAt = null;
     function mark(){ var now = performance.now(); if(firstAt === null) firstAt = now; lastAt = now; }
-    function showQuestion(i){
-      current = i;
-      qs[i].hidden = false;
-      if(window.__readProgress) window.__readProgress();
+    qs.forEach(function(q, i){
+      var b = q.querySelector('[data-answer]');
+      if(b) b.textContent = i === last ? 'Завершить тест' : 'Ответить';
+      q.hidden = i > 0;
+    });
+
+    function updateAttempts(){
+      if(!nameInput) return false;
+      var name = norm(nameInput.value);
+      if(!name){
+        blocked = false;
+        if(attemptsLabel){ attemptsLabel.textContent = 'две попытки на лекцию'; attemptsLabel.classList.remove('limit'); }
+        return false;
+      }
+      var data = readAttempts(name);
+      var count = data && data.count ? data.count : 0;
+      blocked = count >= 2;
+      if(attemptsLabel){
+        attemptsLabel.textContent = 'Попыток: ' + count + ' из 2' + (data && data.best != null ? ' · лучший ' + data.best + ' из ' + qs.length : '');
+        attemptsLabel.classList.toggle('limit', blocked);
+      }
+      if(whoNote){
+        whoNote.hidden = !blocked;
+        whoNote.textContent = blocked ? 'Для этого ФИО попытки закончились: 2 из 2.' : '';
+      }
+      qs.forEach(function(q){
+        var b = q.querySelector('[data-answer]');
+        if(b && !submitted) b.disabled = blocked;
+      });
+      return blocked;
     }
-    function finish(){
-      var card = quiz.querySelector('[data-quiz-result]');
-      if(!card) return;
-      var total = qs.length, pct = total ? Math.round(right / total * 100) : 0;
-      var testMs = (firstAt !== null && lastAt !== null) ? Math.max(0, lastAt - firstAt) : 0;
-      card.querySelector('[data-modal-result]').textContent = 'Правильных ответов: ' + right + ' из ' + total + ' (' + pct + '%)';
-      card.querySelector('[data-test-time]').textContent = fmt(testMs);
-      card.querySelector('[data-view-time]').textContent = fmt(viewingMs());
-      card.hidden = false;
-      document.documentElement.classList.remove('quiz-pending');
-      if(window.__readProgress) window.__readProgress();
-      window.dispatchEvent(new Event('resize'));
+    if(nameInput){
+      nameInput.addEventListener('input', updateAttempts);
+      nameInput.addEventListener('change', updateAttempts);
     }
+
+    qs.forEach(function(q, idx){
+      q.addEventListener('input', function(e){ if(e.target.matches('input')){ mark(); q.classList.remove('missing'); } });
+      q.addEventListener('change', function(e){ if(e.target.matches('input')){ mark(); paintPicked(q); q.classList.remove('missing'); } });
+      var short = q.querySelector('.short-answer');
+      if(short) short.addEventListener('keydown', function(e){ if(e.key === 'Enter'){ e.preventDefault(); mark(); } });
+      var answerBtn = q.querySelector('[data-answer]');
+      if(answerBtn) answerBtn.addEventListener('click', function(){ answer(q, idx); });
+    });
+
     function answer(q, idx){
-      if(q.dataset.answered === '1') return;
+      if(submitted) return;
+      if(nameInput && !norm(nameInput.value)){
+        if(whoNote){ whoNote.hidden = false; whoNote.textContent = 'Укажите ФИО перед началом теста.'; }
+        nameInput.focus();
+        return;
+      }
+      if(whoNote) whoNote.hidden = true;
+      if(updateAttempts()){
+        if(whoNote){ whoNote.hidden = false; whoNote.textContent = 'Для этого ФИО попытки закончились: 2 из 2.'; }
+        return;
+      }
       var note = q.querySelector('[data-note]');
       if(!hasAnswer(q)){
         if(note){ note.hidden = false; note.textContent = q.dataset.type === 'short' ? 'Введите ответ.' : 'Выберите вариант.'; }
@@ -1735,26 +1847,60 @@ dotnet<span class="w"> </span>sln<span class="w"> </span>add<span class="w"> </s
       }
       if(note) note.hidden = true;
       mark();
-      var ok = questionCorrect(q);
-      q.dataset.answered = '1';
-      q.classList.add(ok ? 'ok' : 'bad');
-      paintChoices(q);
-      var why = q.querySelector('.quiz-why'); if(why) why.hidden = false;
-      lock(q);
-      var answerBtn = q.querySelector('[data-answer]'); if(answerBtn) answerBtn.hidden = true;
-      if(ok) right++;
-      if(idx === qs.length - 1){ finish(); }
-      else { showQuestion(idx + 1); }
+      var btn = q.querySelector('[data-answer]');
+      if(btn){ btn.disabled = true; btn.hidden = true; }
+      if(idx === last){ finish(); }
+      else { qs[idx + 1].hidden = false; if(window.__readProgress) window.__readProgress(); }
     }
-    qs.forEach(function(q, idx){
-      q.addEventListener('input', function(e){ if(e.target.matches('input')) mark(); });
-      q.addEventListener('change', function(e){ if(e.target.matches('input')){ mark(); paintPicked(q); } });
-      var answerBtn = q.querySelector('[data-answer]');
-      if(answerBtn) answerBtn.addEventListener('click', function(){ answer(q, idx); });
-      var short = q.querySelector('.short-answer');
-      if(short) short.addEventListener('keydown', function(e){ if(e.key === 'Enter'){ e.preventDefault(); answer(q, idx); } });
-    });
-    showQuestion(0);
+
+    function finish(){
+      if(submitted) return;
+      var note = quiz.querySelector('[data-quiz-note]');
+      var missing = qs.filter(function(q){ return !hasAnswer(q); });
+      if(missing.length){
+        qs.forEach(function(q){ q.classList.toggle('missing', !hasAnswer(q)); });
+        if(note){ note.hidden = false; note.textContent = 'Без ответа осталось вопросов: ' + missing.length + '. Ответьте на все и завершите тест снова.'; }
+        missing[0].scrollIntoView({block:'center', behavior:'smooth'});
+        return;
+      }
+      submitted = true;
+      if(note) note.hidden = true;
+      mark();
+      var wrong = [];
+      qs.forEach(function(q, i){
+        q.classList.remove('missing');
+        var ok = questionCorrect(q);
+        q.classList.add(ok ? 'ok' : 'bad');
+        paintPicked(q);
+        lock(q);
+        var btn = q.querySelector('[data-answer]'); if(btn) btn.hidden = true;
+        if(ok) right++; else wrong.push(i + 1);
+      });
+      var name = nameInput ? nameInput.value.trim() : '';
+      var nameKey = norm(name);
+      if(nameKey){
+        var data = readAttempts(nameKey) || {count: 0, best: 0};
+        data.count = (data.count || 0) + 1;
+        data.best = Math.max(data.best || 0, right);
+        writeAttempts(nameKey, data);
+      }
+      updateAttempts();
+      var card = quiz.querySelector('[data-quiz-result]');
+      if(!card) return;
+      var total = qs.length, pct = total ? Math.round(right / total * 100) : 0;
+      var testMs = (firstAt !== null && lastAt !== null) ? Math.max(0, lastAt - firstAt) : 0;
+      card.querySelector('[data-student-name]').textContent = name || 'не указано';
+      card.querySelector('[data-modal-result]').textContent = 'Правильных ответов: ' + right + ' из ' + total + ' (' + pct + '%)';
+      card.querySelector('[data-modal-wrong]').textContent = wrong.length
+        ? 'Вопросы с ошибками: ' + wrong.join(', ') + '. Повторите эти разделы лекции.'
+        : 'Ошибок нет.';
+      card.querySelector('[data-test-time]').textContent = fmt(testMs);
+      card.querySelector('[data-view-time]').textContent = fmt(viewingMs());
+      card.hidden = false;
+      document.documentElement.classList.remove('quiz-pending');
+      if(window.__readProgress) window.__readProgress();
+      window.dispatchEvent(new Event('resize'));
+    }
   });
 })();
 </script>

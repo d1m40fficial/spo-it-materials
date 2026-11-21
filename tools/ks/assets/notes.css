@@ -402,17 +402,29 @@ html.quiz-pending .pager { display: none; }
 .quiz-actions button { -webkit-appearance: none; appearance: none; font: 600 13px var(--font-body); padding: 9px 15px; border-radius: 10px; border: 1px solid var(--rule); background: var(--paper); background-color: var(--paper); color: var(--ink); cursor: pointer; }
 .quiz-actions button[data-answer], .quiz-actions button.quiz-answer { background: #121212; background-color: #121212; color: #fff; border-color: transparent; }
 .quiz-actions button:hover { filter: brightness(.96); }
+.quiz-actions button:disabled { opacity: .45; cursor: default; filter: none; }
 .quiz-actions button:focus-visible { outline: 2px solid var(--quiz-accent); outline-offset: 2px; }
 .quiz-note { font-size: 13px; color: var(--bad); }
 .quiz .short-answer { width: 100%; font: 16px var(--font-body); padding: 12px 16px; border: 1px solid var(--quiz-line); border-radius: 8px; background: transparent; color: var(--quiz-ink); }
 .quiz .short-answer:focus { outline: 2px solid var(--quiz-accent); outline-offset: 1px; border-color: transparent; }
 .quiz-q.ok .short-answer { border-color: var(--quiz-ok); background: var(--quiz-ok-bg); }
 .quiz-q.bad .short-answer { border-color: var(--quiz-bad); background: var(--quiz-bad-bg); }
+.quiz-who { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; margin: 0 0 16px; }
+.quiz-who-label { display: flex; align-items: center; gap: 10px; font: 600 13px var(--font-body); color: var(--ink-2); }
+.quiz-who-label input { font: 15px var(--font-body); padding: 10px 12px; border: 1px solid var(--rule); border-radius: 9px; background: var(--card); color: var(--quiz-ink); min-width: 220px; max-width: 100%; }
+.quiz-who-label input:focus { outline: 2px solid var(--quiz-accent); outline-offset: 1px; border-color: transparent; }
+.quiz-attempts { font: 12px var(--font-mono); color: var(--ink-3); }
+.quiz-attempts.limit { color: var(--quiz-bad); font-weight: 600; }
+.modal-name-line { margin: 0 0 12px; font-size: 14px; color: var(--ink-2); }
+.quiz-q.missing { outline: 2px solid var(--quiz-bad); outline-offset: 2px; }
+.quiz-note[hidden] { display: none; }
+.quiz-submit-note { margin: 14px 0 0; }
 .quiz-result { margin-top: 22px; padding: 20px 22px; border: 1px solid var(--quiz-line); border-radius: 12px; background: var(--quiz-card); box-shadow: 0 2px 8px rgba(0,0,0,.02); color: var(--quiz-ink); }
 .quiz-result[hidden] { display: none; }
 .quiz-result > .label { display: block; font: 600 11px var(--font-mono); letter-spacing: .08em; text-transform: uppercase; color: var(--accent); margin-bottom: 6px; }
 .quiz-result h3 { margin: 0 0 14px; font: 800 24px/1.2 var(--font-display); }
 .quiz-result .modal-result { margin: 0 0 14px; }
+.quiz-result [data-modal-wrong] { margin-top: -6px; font-size: 14px; font-weight: 400; color: var(--quiz-ink); }
 .quiz-result .modal-times { margin-bottom: 0; }
 @media (max-width: 560px) {
   .quiz-q { padding: 18px 16px; }
@@ -544,6 +556,7 @@ html.modal-open { overflow: hidden; }
 .quiz-q { animation: quiz-in .32s cubic-bezier(.16,1,.3,1) both; }
 @keyframes quiz-in { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
 @media (prefers-reduced-motion: reduce) { .quiz-q { animation: none; } }
+@media (prefers-reduced-motion: reduce) { .quiz-q { animation: none; } }
 
 /* ---------- variant cards on the practice page ---------- */
 .variant { border: 1px solid var(--rule); border-radius: 14px; background: var(--card); margin: 0 0 12px; overflow: hidden; }
@@ -597,7 +610,7 @@ html.modal-open { overflow: hidden; }
   a { color: #000; text-decoration: none; }
   .callout, .check, .recap, .quiz-q, .quiz-result, .figure, .outcomes { border-color: #999; }
   .gate-step[hidden], .gate-content[hidden], .quiz-q[hidden] { display: block !important; }
-  .gate-action, .quiz-actions { display: none !important; }
+  .gate-action, .quiz-actions, .quiz-who { display: none !important; }
   .reveal { opacity: 1 !important; transform: none !important; transition: none !important; }
   .recap { background: #fff; color: #000; }
   .recap li, .recap p { color: #000; }

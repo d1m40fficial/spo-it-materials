@@ -411,17 +411,29 @@ html.quiz-pending .pager { display: none; }
 .quiz-actions button { -webkit-appearance: none; appearance: none; font: 600 13px var(--font-body); padding: 9px 15px; border-radius: 10px; border: 1px solid var(--rule); background: var(--paper); background-color: var(--paper); color: var(--ink); cursor: pointer; }
 .quiz-actions button[data-answer], .quiz-actions button.quiz-answer { background: #121212; background-color: #121212; color: #fff; border-color: transparent; }
 .quiz-actions button:hover { filter: brightness(.96); }
+.quiz-actions button:disabled { opacity: .45; cursor: default; filter: none; }
 .quiz-actions button:focus-visible { outline: 2px solid var(--quiz-accent); outline-offset: 2px; }
 .quiz-note { font-size: 13px; color: var(--bad); }
 .quiz .short-answer { width: 100%; font: 16px var(--font-body); padding: 12px 16px; border: 1px solid var(--quiz-line); border-radius: 8px; background: transparent; color: var(--quiz-ink); }
 .quiz .short-answer:focus { outline: 2px solid var(--quiz-accent); outline-offset: 1px; border-color: transparent; }
 .quiz-q.ok .short-answer { border-color: var(--quiz-ok); background: var(--quiz-ok-bg); }
 .quiz-q.bad .short-answer { border-color: var(--quiz-bad); background: var(--quiz-bad-bg); }
+.quiz-who { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; margin: 0 0 16px; }
+.quiz-who-label { display: flex; align-items: center; gap: 10px; font: 600 13px var(--font-body); color: var(--ink-2); }
+.quiz-who-label input { font: 15px var(--font-body); padding: 10px 12px; border: 1px solid var(--rule); border-radius: 9px; background: var(--card); color: var(--quiz-ink); min-width: 220px; max-width: 100%; }
+.quiz-who-label input:focus { outline: 2px solid var(--quiz-accent); outline-offset: 1px; border-color: transparent; }
+.quiz-attempts { font: 12px var(--font-mono); color: var(--ink-3); }
+.quiz-attempts.limit { color: var(--quiz-bad); font-weight: 600; }
+.modal-name-line { margin: 0 0 12px; font-size: 14px; color: var(--ink-2); }
+.quiz-q.missing { outline: 2px solid var(--quiz-bad); outline-offset: 2px; }
+.quiz-note[hidden] { display: none; }
+.quiz-submit-note { margin: 14px 0 0; }
 .quiz-result { margin-top: 22px; padding: 20px 22px; border: 1px solid var(--quiz-line); border-radius: 12px; background: var(--quiz-card); box-shadow: 0 2px 8px rgba(0,0,0,.02); color: var(--quiz-ink); }
 .quiz-result[hidden] { display: none; }
 .quiz-result > .label { display: block; font: 600 11px var(--font-mono); letter-spacing: .08em; text-transform: uppercase; color: var(--accent); margin-bottom: 6px; }
 .quiz-result h3 { margin: 0 0 14px; font: 800 24px/1.2 var(--font-display); }
 .quiz-result .modal-result { margin: 0 0 14px; }
+.quiz-result [data-modal-wrong] { margin-top: -6px; font-size: 14px; font-weight: 400; color: var(--quiz-ink); }
 .quiz-result .modal-times { margin-bottom: 0; }
 @media (max-width: 560px) {
   .quiz-q { padding: 18px 16px; }
@@ -553,6 +565,7 @@ html.modal-open { overflow: hidden; }
 .quiz-q { animation: quiz-in .32s cubic-bezier(.16,1,.3,1) both; }
 @keyframes quiz-in { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
 @media (prefers-reduced-motion: reduce) { .quiz-q { animation: none; } }
+@media (prefers-reduced-motion: reduce) { .quiz-q { animation: none; } }
 
 /* ---------- variant cards on the practice page ---------- */
 .variant { border: 1px solid var(--rule); border-radius: 14px; background: var(--card); margin: 0 0 12px; overflow: hidden; }
@@ -606,7 +619,7 @@ html.modal-open { overflow: hidden; }
   a { color: #000; text-decoration: none; }
   .callout, .check, .recap, .quiz-q, .quiz-result, .figure, .outcomes { border-color: #999; }
   .gate-step[hidden], .gate-content[hidden], .quiz-q[hidden] { display: block !important; }
-  .gate-action, .quiz-actions { display: none !important; }
+  .gate-action, .quiz-actions, .quiz-who { display: none !important; }
   .reveal { opacity: 1 !important; transform: none !important; transition: none !important; }
   .recap { background: #fff; color: #000; }
   .recap li, .recap p { color: #000; }
@@ -1353,7 +1366,7 @@ IndexError: list index out of range
 <li>Округление вверх при целочисленном делении делают добавкой <code>pack - 1</code> до деления.</li>
 <li>Граничные случаи проверяют на пустом списке, одном элементе, последнем элементе и значении на пороге.</li>
 </ul>
-<div class="quiz" data-quiz><div class="quiz-q" data-type="single" data-correct="1" data-q="1"><p class="quiz-p"><span class="quiz-no" aria-hidden="true">01</span>Где нужно объявить накопитель итога?</p><div class="opts"><label class="opt"><input type="radio" name="q145_0" value="3"><span>В условии цикла</span></label><label class="opt"><input type="radio" name="q145_0" value="1"><span>Внутри тела цикла, рядом с расчётом</span></label><label class="opt"><input type="radio" name="q145_0" value="2"><span>После цикла, перед выводом</span></label><label class="opt"><input type="radio" name="q145_0" value="0" data-ok><span>До цикла, чтобы значение сохранилось после его окончания</span></label></div><p class="quiz-why" hidden>Переменная внутри тела создаётся заново на каждой итерации.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="2" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">02</span>Почему в Python после удаления двух элементов подряд один остался в списке?</p><div class="opts"><label class="opt"><input type="radio" name="q145_1" value="2"><span>Условие <code>in</code> проверяет только первый элемент</span></label><label class="opt"><input type="radio" name="q145_1" value="1"><span>Python удаляет только первый элемент за цикл</span></label><label class="opt"><input type="radio" name="q145_1" value="0" data-ok><span>После удаления следующие элементы сдвигаются, и цикл перескакивает через один</span></label><label class="opt"><input type="radio" name="q145_1" value="3"><span>Список автоматически сортируется</span></label></div><p class="quiz-why" hidden>Сдвиг элементов приводит к пропуску соседней строки.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="multi" data-correct="2" data-q="3" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">03</span>Какие действия выполняет <code>continue</code> внутри цикла?</p><div class="opts"><label class="opt"><input type="checkbox" name="q145_2" value="0" data-ok><span>Пропускает остаток тела для текущей строки</span></label><label class="opt"><input type="checkbox" name="q145_2" value="2"><span>Прерывает цикл полностью</span></label><label class="opt"><input type="checkbox" name="q145_2" value="3"><span>Возвращает значение из функции</span></label><label class="opt"><input type="checkbox" name="q145_2" value="1" data-ok><span>Переходит к следующей итерации</span></label></div><p class="quiz-why" hidden><code>continue</code> не выходит из цикла, а завершает текущую итерацию.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="short" data-q="4" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">04</span>Что нужно сделать перед удалением элементов из коллекции во время обхода?</p><input type="text" class="short-answer" data-answers="[&quot;собрать новый список&quot;, &quot;пройти по копии&quot;, &quot;удалять после обхода&quot;]" placeholder="Введите ответ" autocomplete="off" spellcheck="false" aria-label="Что нужно сделать перед удалением элементов из коллекции во время обхода?"><p class="quiz-why" hidden>Изменять коллекцию во время перебора нельзя, поэтому удаление откладывают или работают с копией.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="5" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">05</span>Чем отличается <code>while</code> от <code>do-while</code> в C#?</p><div class="opts"><label class="opt"><input type="radio" name="q145_4" value="3"><span><code>while</code> проверяет условие после тела</span></label><label class="opt"><input type="radio" name="q145_4" value="0" data-ok><span><code>do-while</code> выполняет тело хотя бы один раз</span></label><label class="opt"><input type="radio" name="q145_4" value="1"><span><code>while</code> не может содержать <code>break</code></span></label><label class="opt"><input type="radio" name="q145_4" value="2"><span><code>do-while</code> работает только с массивами</span></label></div><p class="quiz-why" hidden>В <code>do-while</code> условие стоит после тела, поэтому тело выполняется минимум один раз.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="6" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">06</span>Какая конструкция подходит для обхода всех 4800 позиций, когда индекс не нужен?</p><div class="opts"><label class="opt"><input type="radio" name="q145_5" value="2"><span><code>do-while</code> в C#</span></label><label class="opt"><input type="radio" name="q145_5" value="1"><span><code>while</code> с ручным счётчиком</span></label><label class="opt"><input type="radio" name="q145_5" value="0" data-ok><span><code>foreach</code> в C# и <code>for row in rows</code> в Python</span></label><label class="opt"><input type="radio" name="q145_5" value="3"><span><code>switch</code> по категории</span></label></div><p class="quiz-why" hidden>Обход коллекции целиком без индекса записывается через <code>foreach</code> или прямой <code>for</code>.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="multi" data-correct="3" data-q="7" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">07</span>Какие пары конструкций решают одну задачу в Python и C#?</p><div class="opts"><label class="opt"><input type="checkbox" name="q145_6" value="2" data-ok><span><code>if</code>, <code>elif</code>, <code>else</code> и <code>if</code>, <code>else if</code>, <code>else</code></span></label><label class="opt"><input type="checkbox" name="q145_6" value="4"><span><code>print</code> и <code>switch</code></span></label><label class="opt"><input type="checkbox" name="q145_6" value="1" data-ok><span><code>while condition:</code> и <code>while (condition)</code></span></label><label class="opt"><input type="checkbox" name="q145_6" value="3"><span><code>range(n)</code> и <code>do { } while</code></span></label><label class="opt"><input type="checkbox" name="q145_6" value="0" data-ok><span><code>for row in rows</code> и <code>foreach (var row in rows)</code></span></label></div><p class="quiz-why" hidden>Остальные пары сопоставляют разные по смыслу конструкции.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="8" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">08</span>Что делает ветвление в алгоритме расчёта заказа?</p><div class="opts"><label class="opt"><input type="radio" name="q145_7" value="1"><span>Повторяет обработку для каждой строки</span></label><label class="opt"><input type="radio" name="q145_7" value="3"><span>Сортирует позиции по категории</span></label><label class="opt"><input type="radio" name="q145_7" value="0" data-ok><span>Выбирает, какие строки участвуют в обработке</span></label><label class="opt"><input type="radio" name="q145_7" value="2"><span>Суммирует все остатки на складе</span></label></div><p class="quiz-why" hidden>Ветвление принимает решение по одной строке, а повторение обеспечивает цикл.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="9" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">09</span>Сколько значений обойдёт Python-цикл <code>for i in range(0, 5)</code>?</p><div class="opts"><label class="opt"><input type="radio" name="q145_8" value="2"><span>Шесть</span></label><label class="opt"><input type="radio" name="q145_8" value="3"><span>Зависит от длины списка</span></label><label class="opt"><input type="radio" name="q145_8" value="0" data-ok><span>Пять</span></label><label class="opt"><input type="radio" name="q145_8" value="1"><span>Четыре</span></label></div><p class="quiz-why" hidden>Правый конец диапазона не входит, поэтому получаются числа от 0 до 4.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="short" data-q="10" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">10</span>Как называется ошибка, когда цикл обрабатывает на один элемент больше длины массива?</p><input type="text" class="short-answer" data-answers="[&quot;ошибка на единицу&quot;, &quot;off-by-one&quot;, &quot;выход за границу массива&quot;]" placeholder="Введите ответ" autocomplete="off" spellcheck="false" aria-label="Как называется ошибка, когда цикл обрабатывает на один элемент больше длины массива?"><p class="quiz-why" hidden>Условие продолжения пропускает индекс, которого нет в массиве.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="11" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">11</span>Что произойдёт при удалении элемента списка внутри <code>foreach</code> в C#?</p><div class="opts"><label class="opt"><input type="radio" name="q145_10" value="1"><span>Элемент удалится без ошибки</span></label><label class="opt"><input type="radio" name="q145_10" value="3"><span>Компилятор запретит сборку</span></label><label class="opt"><input type="radio" name="q145_10" value="0" data-ok><span>Возникнет <code>InvalidOperationException</code></span></label><label class="opt"><input type="radio" name="q145_10" value="2"><span>Цикл завершится досрочно без сообщения</span></label></div><p class="quiz-why" hidden>Перечислитель замечает изменение коллекции и выбрасывает исключение.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="12" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">12</span>Что означает ошибка <code>IndexError: list index out of range</code>?</p><div class="opts"><label class="opt"><input type="radio" name="q145_11" value="1"><span>В списке хранятся значения разных типов</span></label><label class="opt"><input type="radio" name="q145_11" value="2"><span>Список пуст и не создан</span></label><label class="opt"><input type="radio" name="q145_11" value="3"><span>В условии использована строка вместо числа</span></label><label class="opt"><input type="radio" name="q145_11" value="0" data-ok><span>Индекс вышел за пределы длины списка</span></label></div><p class="quiz-why" hidden>Ошибка возникает, когда запрашивают элемент с несуществующим индексом.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="multi" data-correct="3" data-q="13" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">13</span>Какой набор входов проверяет границы цикла?</p><div class="opts"><label class="opt"><input type="checkbox" name="q145_12" value="2" data-ok><span>Значение ровно на пороге</span></label><label class="opt"><input type="checkbox" name="q145_12" value="1" data-ok><span>Один элемент</span></label><label class="opt"><input type="checkbox" name="q145_12" value="3"><span>Только обычный список из пяти строк</span></label><label class="opt"><input type="checkbox" name="q145_12" value="4"><span>Только список с максимальным остатком</span></label><label class="opt"><input type="checkbox" name="q145_12" value="0" data-ok><span>Пустая коллекция</span></label></div><p class="quiz-why" hidden>Границы проверяют крайние случаи, а не середину.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="14" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">14</span>Что произойдёт, если заменить условие <code>qty &lt; min_qty</code> на <code>qty &lt;= min_qty</code>?</p><div class="opts"><label class="opt"><input type="radio" name="q145_13" value="3"><span>Программа не соберётся</span></label><label class="opt"><input type="radio" name="q145_13" value="2"><span>Цикл пропустит последнюю строку</span></label><label class="opt"><input type="radio" name="q145_13" value="1"><span>Позиция с нулевым остатком выпадет из заказа</span></label><label class="opt"><input type="radio" name="q145_13" value="0" data-ok><span>Позиция с остатком ровно по минимуму попадёт в заказ</span></label></div><p class="quiz-why" hidden>Порог с нестрогим сравнением добавляет лишнюю позицию.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="15" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">15</span>Зачем в формуле округления добавляют <code>pack - 1</code>?</p><div class="opts"><label class="opt"><input type="radio" name="q145_14" value="3"><span>Чтобы перевести штуки в коробки без остатка</span></label><label class="opt"><input type="radio" name="q145_14" value="0" data-ok><span>Чтобы округлить дефицит вверх до целой упаковки</span></label><label class="opt"><input type="radio" name="q145_14" value="1"><span>Чтобы уменьшить заказ на одну упаковку</span></label><label class="opt"><input type="radio" name="q145_14" value="2"><span>Чтобы избежать деления на ноль</span></label></div><p class="quiz-why" hidden>Добавка перед целочисленным делением даёт округление вверх.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-result" data-quiz-result hidden aria-live="polite"><span class="label">Результат теста</span><h3>Тест завершён</h3><label class="modal-name" data-student-label><span>ФИО студента</span><input type="text" data-student-name maxlength="80" autocomplete="name" placeholder="Иванов Иван Иванович"></label><p class="modal-result" data-modal-result></p><dl class="modal-times"><div><dt>Время выполнения теста</dt><dd data-test-time>00:00</dd></div><div><dt>Время просмотра лекции</dt><dd data-view-time>00:00</dd></div></dl></div></div></div>
+<div class="quiz" data-quiz><div class="quiz-who"><label class="quiz-who-label"><span>ФИО</span><input type="text" class="quiz-name" data-quiz-name maxlength="80" autocomplete="off" placeholder="Иванов Иван Иванович"></label><span class="quiz-attempts" data-quiz-attempts>две попытки на лекцию</span><span class="quiz-note" data-who-note hidden></span></div><div class="quiz-q" data-type="single" data-correct="1" data-q="1"><p class="quiz-p"><span class="quiz-no" aria-hidden="true">01</span>Где нужно объявить накопитель итога?</p><div class="opts"><label class="opt"><input type="radio" name="q145_0" value="3" autocomplete="off"><span>В условии цикла</span></label><label class="opt"><input type="radio" name="q145_0" value="1" autocomplete="off"><span>Внутри тела цикла, рядом с расчётом</span></label><label class="opt"><input type="radio" name="q145_0" value="2" autocomplete="off"><span>После цикла, перед выводом</span></label><label class="opt"><input type="radio" name="q145_0" value="0" autocomplete="off" data-ok><span>До цикла, чтобы значение сохранилось после его окончания</span></label></div><p class="quiz-why" hidden>Переменная внутри тела создаётся заново на каждой итерации.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="2" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">02</span>Почему в Python после удаления двух элементов подряд один остался в списке?</p><div class="opts"><label class="opt"><input type="radio" name="q145_1" value="2" autocomplete="off"><span>Условие <code>in</code> проверяет только первый элемент</span></label><label class="opt"><input type="radio" name="q145_1" value="1" autocomplete="off"><span>Python удаляет только первый элемент за цикл</span></label><label class="opt"><input type="radio" name="q145_1" value="0" autocomplete="off" data-ok><span>После удаления следующие элементы сдвигаются, и цикл перескакивает через один</span></label><label class="opt"><input type="radio" name="q145_1" value="3" autocomplete="off"><span>Список автоматически сортируется</span></label></div><p class="quiz-why" hidden>Сдвиг элементов приводит к пропуску соседней строки.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="multi" data-correct="2" data-q="3" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">03</span>Какие действия выполняет <code>continue</code> внутри цикла?</p><div class="opts"><label class="opt"><input type="checkbox" name="q145_2" value="0" autocomplete="off" data-ok><span>Пропускает остаток тела для текущей строки</span></label><label class="opt"><input type="checkbox" name="q145_2" value="2" autocomplete="off"><span>Прерывает цикл полностью</span></label><label class="opt"><input type="checkbox" name="q145_2" value="3" autocomplete="off"><span>Возвращает значение из функции</span></label><label class="opt"><input type="checkbox" name="q145_2" value="1" autocomplete="off" data-ok><span>Переходит к следующей итерации</span></label></div><p class="quiz-why" hidden><code>continue</code> не выходит из цикла, а завершает текущую итерацию.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="short" data-q="4" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">04</span>Что нужно сделать перед удалением элементов из коллекции во время обхода?</p><input type="text" class="short-answer" data-answers="[&quot;собрать новый список&quot;, &quot;пройти по копии&quot;, &quot;удалять после обхода&quot;]" placeholder="Введите ответ" autocomplete="off" spellcheck="false" aria-label="Что нужно сделать перед удалением элементов из коллекции во время обхода?"><p class="quiz-why" hidden>Изменять коллекцию во время перебора нельзя, поэтому удаление откладывают или работают с копией.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="5" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">05</span>Чем отличается <code>while</code> от <code>do-while</code> в C#?</p><div class="opts"><label class="opt"><input type="radio" name="q145_4" value="3" autocomplete="off"><span><code>while</code> проверяет условие после тела</span></label><label class="opt"><input type="radio" name="q145_4" value="0" autocomplete="off" data-ok><span><code>do-while</code> выполняет тело хотя бы один раз</span></label><label class="opt"><input type="radio" name="q145_4" value="1" autocomplete="off"><span><code>while</code> не может содержать <code>break</code></span></label><label class="opt"><input type="radio" name="q145_4" value="2" autocomplete="off"><span><code>do-while</code> работает только с массивами</span></label></div><p class="quiz-why" hidden>В <code>do-while</code> условие стоит после тела, поэтому тело выполняется минимум один раз.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="6" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">06</span>Какая конструкция подходит для обхода всех 4800 позиций, когда индекс не нужен?</p><div class="opts"><label class="opt"><input type="radio" name="q145_5" value="2" autocomplete="off"><span><code>do-while</code> в C#</span></label><label class="opt"><input type="radio" name="q145_5" value="1" autocomplete="off"><span><code>while</code> с ручным счётчиком</span></label><label class="opt"><input type="radio" name="q145_5" value="0" autocomplete="off" data-ok><span><code>foreach</code> в C# и <code>for row in rows</code> в Python</span></label><label class="opt"><input type="radio" name="q145_5" value="3" autocomplete="off"><span><code>switch</code> по категории</span></label></div><p class="quiz-why" hidden>Обход коллекции целиком без индекса записывается через <code>foreach</code> или прямой <code>for</code>.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="multi" data-correct="3" data-q="7" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">07</span>Какие пары конструкций решают одну задачу в Python и C#?</p><div class="opts"><label class="opt"><input type="checkbox" name="q145_6" value="2" autocomplete="off" data-ok><span><code>if</code>, <code>elif</code>, <code>else</code> и <code>if</code>, <code>else if</code>, <code>else</code></span></label><label class="opt"><input type="checkbox" name="q145_6" value="4" autocomplete="off"><span><code>print</code> и <code>switch</code></span></label><label class="opt"><input type="checkbox" name="q145_6" value="1" autocomplete="off" data-ok><span><code>while condition:</code> и <code>while (condition)</code></span></label><label class="opt"><input type="checkbox" name="q145_6" value="3" autocomplete="off"><span><code>range(n)</code> и <code>do { } while</code></span></label><label class="opt"><input type="checkbox" name="q145_6" value="0" autocomplete="off" data-ok><span><code>for row in rows</code> и <code>foreach (var row in rows)</code></span></label></div><p class="quiz-why" hidden>Остальные пары сопоставляют разные по смыслу конструкции.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="8" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">08</span>Что делает ветвление в алгоритме расчёта заказа?</p><div class="opts"><label class="opt"><input type="radio" name="q145_7" value="1" autocomplete="off"><span>Повторяет обработку для каждой строки</span></label><label class="opt"><input type="radio" name="q145_7" value="3" autocomplete="off"><span>Сортирует позиции по категории</span></label><label class="opt"><input type="radio" name="q145_7" value="0" autocomplete="off" data-ok><span>Выбирает, какие строки участвуют в обработке</span></label><label class="opt"><input type="radio" name="q145_7" value="2" autocomplete="off"><span>Суммирует все остатки на складе</span></label></div><p class="quiz-why" hidden>Ветвление принимает решение по одной строке, а повторение обеспечивает цикл.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="9" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">09</span>Сколько значений обойдёт Python-цикл <code>for i in range(0, 5)</code>?</p><div class="opts"><label class="opt"><input type="radio" name="q145_8" value="2" autocomplete="off"><span>Шесть</span></label><label class="opt"><input type="radio" name="q145_8" value="3" autocomplete="off"><span>Зависит от длины списка</span></label><label class="opt"><input type="radio" name="q145_8" value="0" autocomplete="off" data-ok><span>Пять</span></label><label class="opt"><input type="radio" name="q145_8" value="1" autocomplete="off"><span>Четыре</span></label></div><p class="quiz-why" hidden>Правый конец диапазона не входит, поэтому получаются числа от 0 до 4.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="short" data-q="10" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">10</span>Как называется ошибка, когда цикл обрабатывает на один элемент больше длины массива?</p><input type="text" class="short-answer" data-answers="[&quot;ошибка на единицу&quot;, &quot;off-by-one&quot;, &quot;выход за границу массива&quot;]" placeholder="Введите ответ" autocomplete="off" spellcheck="false" aria-label="Как называется ошибка, когда цикл обрабатывает на один элемент больше длины массива?"><p class="quiz-why" hidden>Условие продолжения пропускает индекс, которого нет в массиве.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="11" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">11</span>Что произойдёт при удалении элемента списка внутри <code>foreach</code> в C#?</p><div class="opts"><label class="opt"><input type="radio" name="q145_10" value="1" autocomplete="off"><span>Элемент удалится без ошибки</span></label><label class="opt"><input type="radio" name="q145_10" value="3" autocomplete="off"><span>Компилятор запретит сборку</span></label><label class="opt"><input type="radio" name="q145_10" value="0" autocomplete="off" data-ok><span>Возникнет <code>InvalidOperationException</code></span></label><label class="opt"><input type="radio" name="q145_10" value="2" autocomplete="off"><span>Цикл завершится досрочно без сообщения</span></label></div><p class="quiz-why" hidden>Перечислитель замечает изменение коллекции и выбрасывает исключение.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="12" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">12</span>Что означает ошибка <code>IndexError: list index out of range</code>?</p><div class="opts"><label class="opt"><input type="radio" name="q145_11" value="1" autocomplete="off"><span>В списке хранятся значения разных типов</span></label><label class="opt"><input type="radio" name="q145_11" value="2" autocomplete="off"><span>Список пуст и не создан</span></label><label class="opt"><input type="radio" name="q145_11" value="3" autocomplete="off"><span>В условии использована строка вместо числа</span></label><label class="opt"><input type="radio" name="q145_11" value="0" autocomplete="off" data-ok><span>Индекс вышел за пределы длины списка</span></label></div><p class="quiz-why" hidden>Ошибка возникает, когда запрашивают элемент с несуществующим индексом.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="multi" data-correct="3" data-q="13" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">13</span>Какой набор входов проверяет границы цикла?</p><div class="opts"><label class="opt"><input type="checkbox" name="q145_12" value="2" autocomplete="off" data-ok><span>Значение ровно на пороге</span></label><label class="opt"><input type="checkbox" name="q145_12" value="1" autocomplete="off" data-ok><span>Один элемент</span></label><label class="opt"><input type="checkbox" name="q145_12" value="3" autocomplete="off"><span>Только обычный список из пяти строк</span></label><label class="opt"><input type="checkbox" name="q145_12" value="4" autocomplete="off"><span>Только список с максимальным остатком</span></label><label class="opt"><input type="checkbox" name="q145_12" value="0" autocomplete="off" data-ok><span>Пустая коллекция</span></label></div><p class="quiz-why" hidden>Границы проверяют крайние случаи, а не середину.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="14" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">14</span>Что произойдёт, если заменить условие <code>qty &lt; min_qty</code> на <code>qty &lt;= min_qty</code>?</p><div class="opts"><label class="opt"><input type="radio" name="q145_13" value="3" autocomplete="off"><span>Программа не соберётся</span></label><label class="opt"><input type="radio" name="q145_13" value="2" autocomplete="off"><span>Цикл пропустит последнюю строку</span></label><label class="opt"><input type="radio" name="q145_13" value="1" autocomplete="off"><span>Позиция с нулевым остатком выпадет из заказа</span></label><label class="opt"><input type="radio" name="q145_13" value="0" autocomplete="off" data-ok><span>Позиция с остатком ровно по минимуму попадёт в заказ</span></label></div><p class="quiz-why" hidden>Порог с нестрогим сравнением добавляет лишнюю позицию.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="15" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">15</span>Зачем в формуле округления добавляют <code>pack - 1</code>?</p><div class="opts"><label class="opt"><input type="radio" name="q145_14" value="3" autocomplete="off"><span>Чтобы перевести штуки в коробки без остатка</span></label><label class="opt"><input type="radio" name="q145_14" value="0" autocomplete="off" data-ok><span>Чтобы округлить дефицит вверх до целой упаковки</span></label><label class="opt"><input type="radio" name="q145_14" value="1" autocomplete="off"><span>Чтобы уменьшить заказ на одну упаковку</span></label><label class="opt"><input type="radio" name="q145_14" value="2" autocomplete="off"><span>Чтобы избежать деления на ноль</span></label></div><p class="quiz-why" hidden>Добавка перед целочисленным делением даёт округление вверх.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><p class="quiz-note quiz-submit-note" data-quiz-note hidden></p><div class="quiz-result" data-quiz-result hidden aria-live="polite"><span class="label">Результат теста</span><h3>Тест завершён</h3><p class="modal-name-line">ФИО: <b data-student-name></b></p><p class="modal-result" data-modal-result></p><p class="modal-result" data-modal-wrong></p><dl class="modal-times"><div><dt>Время выполнения теста</dt><dd data-test-time>00:00</dd></div><div><dt>Время просмотра лекции</dt><dd data-view-time>00:00</dd></div></dl></div></div></div>
 </div></article><nav class="pager"><a class="" href="08-lek-06.html"><span>← Предыдущее занятие</span>Лекция 6. Переменные и типы</a><a class="next" style="text-align:right;margin-left:auto" href="10-lek-08.html"><span>Следующее занятие →</span>Лекция 8. Функции и модули</a></nav></main>
 <div class="modal" data-modal="warn" hidden>
   <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="warn-title">
@@ -1739,32 +1752,131 @@ IndexError: list index out of range
     q.querySelectorAll('input').forEach(function(i){ i.disabled = true; });
   }
 
+  function resetQuiz(quiz){
+    quiz.querySelectorAll('input').forEach(function(i){
+      if(i.type === 'checkbox' || i.type === 'radio') i.checked = false;
+      else i.value = '';
+      i.disabled = false;
+    });
+    quiz.querySelectorAll('.opt').forEach(function(o){ o.classList.remove('picked', 'correct'); });
+    quiz.querySelectorAll('.quiz-q').forEach(function(q){
+      q.classList.remove('ok', 'bad', 'missing');
+      delete q.dataset.answered;
+    });
+    quiz.querySelectorAll('.quiz-why').forEach(function(w){ w.hidden = true; });
+    quiz.querySelectorAll('[data-note]').forEach(function(n){ n.hidden = true; n.textContent = ''; });
+    quiz.querySelectorAll('[data-answer]').forEach(function(b){ b.hidden = false; b.disabled = false; });
+    var note = quiz.querySelector('[data-quiz-note]');
+    if(note){ note.hidden = true; note.textContent = ''; }
+    var card = quiz.querySelector('[data-quiz-result]');
+    if(card) card.hidden = true;
+    document.documentElement.classList.add('quiz-pending');
+  }
+
+  function shuffleQuestions(quiz){
+    var list = [].slice.call(quiz.querySelectorAll('.quiz-q'));
+    var anchor = quiz.querySelector('[data-quiz-note]') || null;
+    for(var i = list.length - 1; i > 0; i--){
+      var j = Math.floor(Math.random() * (i + 1));
+      var tmp = list[i]; list[i] = list[j]; list[j] = tmp;
+    }
+    list.forEach(function(q, idx){
+      var no = q.querySelector('.quiz-no');
+      if(no) no.textContent = String(idx + 1).padStart(2, '0');
+      if(anchor) quiz.insertBefore(q, anchor); else quiz.appendChild(q);
+    });
+  }
+
+  addEventListener('pageshow', function(e){ if(e.persisted) location.reload(); });
+
+  function quizStoreKey(){ return 'mdk-quiz:' + location.pathname; }
+  function readAttempts(name){
+    try { var raw = localStorage.getItem(quizStoreKey() + ':' + encodeURIComponent(name)); return raw ? JSON.parse(raw) : null; }
+    catch(e){ return null; }
+  }
+  function writeAttempts(name, data){
+    try { localStorage.setItem(quizStoreKey() + ':' + encodeURIComponent(name), JSON.stringify(data)); } catch(e){}
+  }
+  function shuffleOptions(quiz){
+    quiz.querySelectorAll('.quiz-q .opts').forEach(function(box){
+      var list = [].slice.call(box.children);
+      for(var i = list.length - 1; i > 0; i--){
+        var j = Math.floor(Math.random() * (i + 1));
+        var tmp = list[i]; list[i] = list[j]; list[j] = tmp;
+      }
+      list.forEach(function(o){ box.appendChild(o); });
+    });
+  }
+
   document.querySelectorAll('[data-quiz]').forEach(function(quiz){
+    resetQuiz(quiz);
+    shuffleQuestions(quiz);
+    shuffleOptions(quiz);
     var qs = [].slice.call(quiz.querySelectorAll('.quiz-q'));
     if(!qs.length) return;
-    document.documentElement.classList.add('quiz-pending');
-    var current = 0, right = 0, firstAt = null, lastAt = null;
+    var last = qs.length - 1;
+    var nameInput = quiz.querySelector('[data-quiz-name]');
+    var whoNote = quiz.querySelector('[data-who-note]');
+    var attemptsLabel = quiz.querySelector('[data-quiz-attempts]');
+    var right = 0, submitted = false, blocked = false, firstAt = null, lastAt = null;
     function mark(){ var now = performance.now(); if(firstAt === null) firstAt = now; lastAt = now; }
-    function showQuestion(i){
-      current = i;
-      qs[i].hidden = false;
-      if(window.__readProgress) window.__readProgress();
+    qs.forEach(function(q, i){
+      var b = q.querySelector('[data-answer]');
+      if(b) b.textContent = i === last ? 'Завершить тест' : 'Ответить';
+      q.hidden = i > 0;
+    });
+
+    function updateAttempts(){
+      if(!nameInput) return false;
+      var name = norm(nameInput.value);
+      if(!name){
+        blocked = false;
+        if(attemptsLabel){ attemptsLabel.textContent = 'две попытки на лекцию'; attemptsLabel.classList.remove('limit'); }
+        return false;
+      }
+      var data = readAttempts(name);
+      var count = data && data.count ? data.count : 0;
+      blocked = count >= 2;
+      if(attemptsLabel){
+        attemptsLabel.textContent = 'Попыток: ' + count + ' из 2' + (data && data.best != null ? ' · лучший ' + data.best + ' из ' + qs.length : '');
+        attemptsLabel.classList.toggle('limit', blocked);
+      }
+      if(whoNote){
+        whoNote.hidden = !blocked;
+        whoNote.textContent = blocked ? 'Для этого ФИО попытки закончились: 2 из 2.' : '';
+      }
+      qs.forEach(function(q){
+        var b = q.querySelector('[data-answer]');
+        if(b && !submitted) b.disabled = blocked;
+      });
+      return blocked;
     }
-    function finish(){
-      var card = quiz.querySelector('[data-quiz-result]');
-      if(!card) return;
-      var total = qs.length, pct = total ? Math.round(right / total * 100) : 0;
-      var testMs = (firstAt !== null && lastAt !== null) ? Math.max(0, lastAt - firstAt) : 0;
-      card.querySelector('[data-modal-result]').textContent = 'Правильных ответов: ' + right + ' из ' + total + ' (' + pct + '%)';
-      card.querySelector('[data-test-time]').textContent = fmt(testMs);
-      card.querySelector('[data-view-time]').textContent = fmt(viewingMs());
-      card.hidden = false;
-      document.documentElement.classList.remove('quiz-pending');
-      if(window.__readProgress) window.__readProgress();
-      window.dispatchEvent(new Event('resize'));
+    if(nameInput){
+      nameInput.addEventListener('input', updateAttempts);
+      nameInput.addEventListener('change', updateAttempts);
     }
+
+    qs.forEach(function(q, idx){
+      q.addEventListener('input', function(e){ if(e.target.matches('input')){ mark(); q.classList.remove('missing'); } });
+      q.addEventListener('change', function(e){ if(e.target.matches('input')){ mark(); paintPicked(q); q.classList.remove('missing'); } });
+      var short = q.querySelector('.short-answer');
+      if(short) short.addEventListener('keydown', function(e){ if(e.key === 'Enter'){ e.preventDefault(); mark(); } });
+      var answerBtn = q.querySelector('[data-answer]');
+      if(answerBtn) answerBtn.addEventListener('click', function(){ answer(q, idx); });
+    });
+
     function answer(q, idx){
-      if(q.dataset.answered === '1') return;
+      if(submitted) return;
+      if(nameInput && !norm(nameInput.value)){
+        if(whoNote){ whoNote.hidden = false; whoNote.textContent = 'Укажите ФИО перед началом теста.'; }
+        nameInput.focus();
+        return;
+      }
+      if(whoNote) whoNote.hidden = true;
+      if(updateAttempts()){
+        if(whoNote){ whoNote.hidden = false; whoNote.textContent = 'Для этого ФИО попытки закончились: 2 из 2.'; }
+        return;
+      }
       var note = q.querySelector('[data-note]');
       if(!hasAnswer(q)){
         if(note){ note.hidden = false; note.textContent = q.dataset.type === 'short' ? 'Введите ответ.' : 'Выберите вариант.'; }
@@ -1772,26 +1884,60 @@ IndexError: list index out of range
       }
       if(note) note.hidden = true;
       mark();
-      var ok = questionCorrect(q);
-      q.dataset.answered = '1';
-      q.classList.add(ok ? 'ok' : 'bad');
-      paintChoices(q);
-      var why = q.querySelector('.quiz-why'); if(why) why.hidden = false;
-      lock(q);
-      var answerBtn = q.querySelector('[data-answer]'); if(answerBtn) answerBtn.hidden = true;
-      if(ok) right++;
-      if(idx === qs.length - 1){ finish(); }
-      else { showQuestion(idx + 1); }
+      var btn = q.querySelector('[data-answer]');
+      if(btn){ btn.disabled = true; btn.hidden = true; }
+      if(idx === last){ finish(); }
+      else { qs[idx + 1].hidden = false; if(window.__readProgress) window.__readProgress(); }
     }
-    qs.forEach(function(q, idx){
-      q.addEventListener('input', function(e){ if(e.target.matches('input')) mark(); });
-      q.addEventListener('change', function(e){ if(e.target.matches('input')){ mark(); paintPicked(q); } });
-      var answerBtn = q.querySelector('[data-answer]');
-      if(answerBtn) answerBtn.addEventListener('click', function(){ answer(q, idx); });
-      var short = q.querySelector('.short-answer');
-      if(short) short.addEventListener('keydown', function(e){ if(e.key === 'Enter'){ e.preventDefault(); answer(q, idx); } });
-    });
-    showQuestion(0);
+
+    function finish(){
+      if(submitted) return;
+      var note = quiz.querySelector('[data-quiz-note]');
+      var missing = qs.filter(function(q){ return !hasAnswer(q); });
+      if(missing.length){
+        qs.forEach(function(q){ q.classList.toggle('missing', !hasAnswer(q)); });
+        if(note){ note.hidden = false; note.textContent = 'Без ответа осталось вопросов: ' + missing.length + '. Ответьте на все и завершите тест снова.'; }
+        missing[0].scrollIntoView({block:'center', behavior:'smooth'});
+        return;
+      }
+      submitted = true;
+      if(note) note.hidden = true;
+      mark();
+      var wrong = [];
+      qs.forEach(function(q, i){
+        q.classList.remove('missing');
+        var ok = questionCorrect(q);
+        q.classList.add(ok ? 'ok' : 'bad');
+        paintPicked(q);
+        lock(q);
+        var btn = q.querySelector('[data-answer]'); if(btn) btn.hidden = true;
+        if(ok) right++; else wrong.push(i + 1);
+      });
+      var name = nameInput ? nameInput.value.trim() : '';
+      var nameKey = norm(name);
+      if(nameKey){
+        var data = readAttempts(nameKey) || {count: 0, best: 0};
+        data.count = (data.count || 0) + 1;
+        data.best = Math.max(data.best || 0, right);
+        writeAttempts(nameKey, data);
+      }
+      updateAttempts();
+      var card = quiz.querySelector('[data-quiz-result]');
+      if(!card) return;
+      var total = qs.length, pct = total ? Math.round(right / total * 100) : 0;
+      var testMs = (firstAt !== null && lastAt !== null) ? Math.max(0, lastAt - firstAt) : 0;
+      card.querySelector('[data-student-name]').textContent = name || 'не указано';
+      card.querySelector('[data-modal-result]').textContent = 'Правильных ответов: ' + right + ' из ' + total + ' (' + pct + '%)';
+      card.querySelector('[data-modal-wrong]').textContent = wrong.length
+        ? 'Вопросы с ошибками: ' + wrong.join(', ') + '. Повторите эти разделы лекции.'
+        : 'Ошибок нет.';
+      card.querySelector('[data-test-time]').textContent = fmt(testMs);
+      card.querySelector('[data-view-time]').textContent = fmt(viewingMs());
+      card.hidden = false;
+      document.documentElement.classList.remove('quiz-pending');
+      if(window.__readProgress) window.__readProgress();
+      window.dispatchEvent(new Event('resize'));
+    }
   });
 })();
 </script>

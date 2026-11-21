@@ -411,17 +411,29 @@ html.quiz-pending .pager { display: none; }
 .quiz-actions button { -webkit-appearance: none; appearance: none; font: 600 13px var(--font-body); padding: 9px 15px; border-radius: 10px; border: 1px solid var(--rule); background: var(--paper); background-color: var(--paper); color: var(--ink); cursor: pointer; }
 .quiz-actions button[data-answer], .quiz-actions button.quiz-answer { background: #121212; background-color: #121212; color: #fff; border-color: transparent; }
 .quiz-actions button:hover { filter: brightness(.96); }
+.quiz-actions button:disabled { opacity: .45; cursor: default; filter: none; }
 .quiz-actions button:focus-visible { outline: 2px solid var(--quiz-accent); outline-offset: 2px; }
 .quiz-note { font-size: 13px; color: var(--bad); }
 .quiz .short-answer { width: 100%; font: 16px var(--font-body); padding: 12px 16px; border: 1px solid var(--quiz-line); border-radius: 8px; background: transparent; color: var(--quiz-ink); }
 .quiz .short-answer:focus { outline: 2px solid var(--quiz-accent); outline-offset: 1px; border-color: transparent; }
 .quiz-q.ok .short-answer { border-color: var(--quiz-ok); background: var(--quiz-ok-bg); }
 .quiz-q.bad .short-answer { border-color: var(--quiz-bad); background: var(--quiz-bad-bg); }
+.quiz-who { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; margin: 0 0 16px; }
+.quiz-who-label { display: flex; align-items: center; gap: 10px; font: 600 13px var(--font-body); color: var(--ink-2); }
+.quiz-who-label input { font: 15px var(--font-body); padding: 10px 12px; border: 1px solid var(--rule); border-radius: 9px; background: var(--card); color: var(--quiz-ink); min-width: 220px; max-width: 100%; }
+.quiz-who-label input:focus { outline: 2px solid var(--quiz-accent); outline-offset: 1px; border-color: transparent; }
+.quiz-attempts { font: 12px var(--font-mono); color: var(--ink-3); }
+.quiz-attempts.limit { color: var(--quiz-bad); font-weight: 600; }
+.modal-name-line { margin: 0 0 12px; font-size: 14px; color: var(--ink-2); }
+.quiz-q.missing { outline: 2px solid var(--quiz-bad); outline-offset: 2px; }
+.quiz-note[hidden] { display: none; }
+.quiz-submit-note { margin: 14px 0 0; }
 .quiz-result { margin-top: 22px; padding: 20px 22px; border: 1px solid var(--quiz-line); border-radius: 12px; background: var(--quiz-card); box-shadow: 0 2px 8px rgba(0,0,0,.02); color: var(--quiz-ink); }
 .quiz-result[hidden] { display: none; }
 .quiz-result > .label { display: block; font: 600 11px var(--font-mono); letter-spacing: .08em; text-transform: uppercase; color: var(--accent); margin-bottom: 6px; }
 .quiz-result h3 { margin: 0 0 14px; font: 800 24px/1.2 var(--font-display); }
 .quiz-result .modal-result { margin: 0 0 14px; }
+.quiz-result [data-modal-wrong] { margin-top: -6px; font-size: 14px; font-weight: 400; color: var(--quiz-ink); }
 .quiz-result .modal-times { margin-bottom: 0; }
 @media (max-width: 560px) {
   .quiz-q { padding: 18px 16px; }
@@ -553,6 +565,7 @@ html.modal-open { overflow: hidden; }
 .quiz-q { animation: quiz-in .32s cubic-bezier(.16,1,.3,1) both; }
 @keyframes quiz-in { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
 @media (prefers-reduced-motion: reduce) { .quiz-q { animation: none; } }
+@media (prefers-reduced-motion: reduce) { .quiz-q { animation: none; } }
 
 /* ---------- variant cards on the practice page ---------- */
 .variant { border: 1px solid var(--rule); border-radius: 14px; background: var(--card); margin: 0 0 12px; overflow: hidden; }
@@ -606,7 +619,7 @@ html.modal-open { overflow: hidden; }
   a { color: #000; text-decoration: none; }
   .callout, .check, .recap, .quiz-q, .quiz-result, .figure, .outcomes { border-color: #999; }
   .gate-step[hidden], .gate-content[hidden], .quiz-q[hidden] { display: block !important; }
-  .gate-action, .quiz-actions { display: none !important; }
+  .gate-action, .quiz-actions, .quiz-who { display: none !important; }
   .reveal { opacity: 1 !important; transform: none !important; transition: none !important; }
   .recap { background: #fff; color: #000; }
   .recap li, .recap p { color: #000; }
@@ -1198,7 +1211,7 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <li>Путь запроса проходит через системный вызов, файловую систему, драйвер, контроллер, шину и само устройство.</li>
 <li>Скорость определяет самый медленный участок цепочки, а не самая заметная деталь.</li>
 </ul>
-<div class="quiz" data-quiz><div class="quiz-q" data-type="single" data-correct="1" data-q="1"><p class="quiz-p"><span class="quiz-no" aria-hidden="true">01</span>Где в разобранном примере находится узкое место при копировании 4 ГБ на флешку?</p><div class="opts"><label class="opt"><input type="radio" name="q143_0" value="1"><span>В работе восьми ядер процессора</span></label><label class="opt"><input type="radio" name="q143_0" value="3"><span>В мощности блока питания</span></label><label class="opt"><input type="radio" name="q143_0" value="0" data-ok><span>В записи ячеек памяти флешки</span></label><label class="opt"><input type="radio" name="q143_0" value="2"><span>В объёме оперативной памяти</span></label></div><p class="quiz-why" hidden>Запись на флешку идёт со скоростью около 120 МБ/с и занимает больше всего времени.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="multi" data-correct="3" data-q="2" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">02</span>Какие признаки указывают на границу между уровнями?</p><div class="opts"><label class="opt"><input type="checkbox" name="q143_1" value="0" data-ok><span>Зафиксированный набор запросов и ответов</span></label><label class="opt"><input type="checkbox" name="q143_1" value="2" data-ok><span>Скрытие внутреннего устройства нижнего слоя</span></label><label class="opt"><input type="checkbox" name="q143_1" value="4"><span>Отсутствие документации на интерфейс</span></label><label class="opt"><input type="checkbox" name="q143_1" value="3"><span>Полное совпадение всех деталей у разных устройств</span></label><label class="opt"><input type="checkbox" name="q143_1" value="1" data-ok><span>Возможность заменить одну часть, не переделывая другую</span></label></div><p class="quiz-why" hidden>Граница задаёт контракт и позволяет менять реализацию.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="3" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">03</span>Что такое шина?</p><div class="opts"><label class="opt"><input type="radio" name="q143_2" value="2"><span>Микросхема, которая хранит прошивку</span></label><label class="opt"><input type="radio" name="q143_2" value="0" data-ok><span>Набор линий и правил для передачи адресов, данных и управляющих сигналов</span></label><label class="opt"><input type="radio" name="q143_2" value="3"><span>Разъём для подключения блока питания</span></label><label class="opt"><input type="radio" name="q143_2" value="1"><span>Программа для управления накопителем</span></label></div><p class="quiz-why" hidden>Шина связывает узлы и передаёт между ними информацию.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="short" data-q="4" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">04</span>Как называется набор команд, который понимает процессор?</p><input type="text" class="short-answer" data-answers="[&quot;система команд&quot;, &quot;архитектура системы команд&quot;, &quot;ISA&quot;]" placeholder="Введите ответ" autocomplete="off" spellcheck="false" aria-label="Как называется набор команд, который понимает процессор?"><p class="quiz-why" hidden>Система команд определяет операции и регистры процессора.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="5" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">05</span>Какой уровень превращает запрос операционной системы в команды конкретного устройства?</p><div class="opts"><label class="opt"><input type="radio" name="q143_4" value="3"><span>Системный</span></label><label class="opt"><input type="radio" name="q143_4" value="2"><span>Аппаратный</span></label><label class="opt"><input type="radio" name="q143_4" value="1"><span>Прикладной</span></label><label class="opt"><input type="radio" name="q143_4" value="0" data-ok><span>Драйверный</span></label></div><p class="quiz-why" hidden>Драйвер знает особенности контроллера и формат его команд.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="multi" data-correct="3" data-q="6" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">06</span>Что относится к аппаратной части платформы?</p><div class="opts"><label class="opt"><input type="checkbox" name="q143_5" value="0" data-ok><span>Процессор и оперативная память</span></label><label class="opt"><input type="checkbox" name="q143_5" value="3"><span>Операционная система</span></label><label class="opt"><input type="checkbox" name="q143_5" value="4"><span>Драйвер видеокарты</span></label><label class="opt"><input type="checkbox" name="q143_5" value="2" data-ok><span>Накопители и система охлаждения</span></label><label class="opt"><input type="checkbox" name="q143_5" value="1" data-ok><span>Материнская плата и блок питания</span></label></div><p class="quiz-why" hidden>Аппаратная часть это физические узлы, а не программы управления.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="7" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">07</span>Что такое уровень абстракции в вычислительной системе?</p><div class="opts"><label class="opt"><input type="radio" name="q143_6" value="2"><span>Количество ядер в процессоре</span></label><label class="opt"><input type="radio" name="q143_6" value="1"><span>Физическая высота устройства в корпусе компьютера</span></label><label class="opt"><input type="radio" name="q143_6" value="0" data-ok><span>Набор понятных действий, за которым скрыты подробности нижнего слоя</span></label><label class="opt"><input type="radio" name="q143_6" value="3"><span>Объём оперативной памяти, доступный программе</span></label></div><p class="quiz-why" hidden>Уровень задаёт контракт и прячет внутреннее устройство нижнего слоя.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="8" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">08</span>Накопитель обозначен как 512 ГБ. Сколько это гибибайт?</p><div class="opts"><label class="opt"><input type="radio" name="q143_7" value="2"><span>Около 500 ГиБ</span></label><label class="opt"><input type="radio" name="q143_7" value="1"><span>Ровно 512 ГиБ</span></label><label class="opt"><input type="radio" name="q143_7" value="3"><span>Около 488 ГиБ</span></label><label class="opt"><input type="radio" name="q143_7" value="0" data-ok><span>Около 476,8 ГиБ</span></label></div><p class="quiz-why" hidden>512 миллиардов байт делятся на 1 073 741 824 байта и дают 476,8 ГиБ.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="multi" data-correct="3" data-q="9" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">09</span>Что входит в понятие платформы?</p><div class="opts"><label class="opt"><input type="checkbox" name="q143_8" value="2" data-ok><span>Интерфейсы, на которые опирается система</span></label><label class="opt"><input type="checkbox" name="q143_8" value="3"><span>Только корпус и блок питания</span></label><label class="opt"><input type="checkbox" name="q143_8" value="0" data-ok><span>Аппаратные узлы компьютера</span></label><label class="opt"><input type="checkbox" name="q143_8" value="4"><span>Только прикладные программы</span></label><label class="opt"><input type="checkbox" name="q143_8" value="1" data-ok><span>Прошивка UEFI и микрокод</span></label></div><p class="quiz-why" hidden>Платформа объединяет железо, прошивки и правила взаимодействия.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="10" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">10</span>Почему замена процессора не ускорит копирование на медленную флешку?</p><div class="opts"><label class="opt"><input type="radio" name="q143_9" value="2"><span>Флешка работает только от оперативной памяти</span></label><label class="opt"><input type="radio" name="q143_9" value="0" data-ok><span>Узкое место находится на участке записи флешки</span></label><label class="opt"><input type="radio" name="q143_9" value="1"><span>Процессор не участвует в копировании файлов</span></label><label class="opt"><input type="radio" name="q143_9" value="3"><span>Копирование выполняет блок питания</span></label></div><p class="quiz-why" hidden>Пока самый медленный участок не изменён, общее время остаётся прежним.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="11" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">11</span>Какая шина передаёт адрес, по которому нужно прочитать данные?</p><div class="opts"><label class="opt"><input type="radio" name="q143_10" value="2"><span>Шина управления</span></label><label class="opt"><input type="radio" name="q143_10" value="1"><span>Шина данных</span></label><label class="opt"><input type="radio" name="q143_10" value="3"><span>Шина питания</span></label><label class="opt"><input type="radio" name="q143_10" value="0" data-ok><span>Шина адреса</span></label></div><p class="quiz-why" hidden>Адресная шина указывает ячейку памяти или устройство.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="short" data-q="12" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">12</span>Как называется программа, которая управляет устройством со стороны операционной системы?</p><input type="text" class="short-answer" data-answers="[&quot;драйвер&quot;, &quot;драйвер устройства&quot;]" placeholder="Введите ответ" autocomplete="off" spellcheck="false" aria-label="Как называется программа, которая управляет устройством со стороны операционной системы?"><p class="quiz-why" hidden>Драйвер переводит общие запросы системы в команды контроллера.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="13" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">13</span>Где хранится прошивка устройства?</p><div class="opts"><label class="opt"><input type="radio" name="q143_12" value="1"><span>В оперативной памяти во время работы программы</span></label><label class="opt"><input type="radio" name="q143_12" value="2"><span>В файле на флешке пользователя</span></label><label class="opt"><input type="radio" name="q143_12" value="0" data-ok><span>В микросхеме самого устройства или на материнской плате</span></label><label class="opt"><input type="radio" name="q143_12" value="3"><span>В драйвере операционной системы</span></label></div><p class="quiz-why" hidden>Прошивка это программа, записанная в постоянную память устройства.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="multi" data-correct="3" data-q="14" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">14</span>Какие границы проходит запрос при записи файла на флешку?</p><div class="opts"><label class="opt"><input type="checkbox" name="q143_13" value="4"><span>Формат таблицы Excel</span></label><label class="opt"><input type="checkbox" name="q143_13" value="2" data-ok><span>Протокол шины USB</span></label><label class="opt"><input type="checkbox" name="q143_13" value="3"><span>Интерфейс браузера</span></label><label class="opt"><input type="checkbox" name="q143_13" value="0" data-ok><span>Системный вызов операционной системы</span></label><label class="opt"><input type="checkbox" name="q143_13" value="1" data-ok><span>Интерфейс драйвера устройства</span></label></div><p class="quiz-why" hidden>Запрос последовательно проходит системный, драйверный и шинный уровни.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="15" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">15</span>В чём состоит ограничение схемы фон Неймана?</p><div class="opts"><label class="opt"><input type="radio" name="q143_14" value="3"><span>Устройства не могут подключаться к шине</span></label><label class="opt"><input type="radio" name="q143_14" value="1"><span>Процессор не может выполнять арифметические операции</span></label><label class="opt"><input type="radio" name="q143_14" value="2"><span>Память не может хранить программы</span></label><label class="opt"><input type="radio" name="q143_14" value="0" data-ok><span>Команды и данные хранятся в одной памяти и идут по общим линиям</span></label></div><p class="quiz-why" hidden>Общая память для команд и данных ограничивает одновременную передачу.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-result" data-quiz-result hidden aria-live="polite"><span class="label">Результат теста</span><h3>Тест завершён</h3><label class="modal-name" data-student-label><span>ФИО студента</span><input type="text" data-student-name maxlength="80" autocomplete="name" placeholder="Иванов Иван Иванович"></label><p class="modal-result" data-modal-result></p><dl class="modal-times"><div><dt>Время выполнения теста</dt><dd data-test-time>00:00</dd></div><div><dt>Время просмотра лекции</dt><dd data-view-time>00:00</dd></div></dl></div></div></div>
+<div class="quiz" data-quiz><div class="quiz-who"><label class="quiz-who-label"><span>ФИО</span><input type="text" class="quiz-name" data-quiz-name maxlength="80" autocomplete="off" placeholder="Иванов Иван Иванович"></label><span class="quiz-attempts" data-quiz-attempts>две попытки на лекцию</span><span class="quiz-note" data-who-note hidden></span></div><div class="quiz-q" data-type="single" data-correct="1" data-q="1"><p class="quiz-p"><span class="quiz-no" aria-hidden="true">01</span>Где в разобранном примере находится узкое место при копировании 4 ГБ на флешку?</p><div class="opts"><label class="opt"><input type="radio" name="q143_0" value="1" autocomplete="off"><span>В работе восьми ядер процессора</span></label><label class="opt"><input type="radio" name="q143_0" value="3" autocomplete="off"><span>В мощности блока питания</span></label><label class="opt"><input type="radio" name="q143_0" value="0" autocomplete="off" data-ok><span>В записи ячеек памяти флешки</span></label><label class="opt"><input type="radio" name="q143_0" value="2" autocomplete="off"><span>В объёме оперативной памяти</span></label></div><p class="quiz-why" hidden>Запись на флешку идёт со скоростью около 120 МБ/с и занимает больше всего времени.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="multi" data-correct="3" data-q="2" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">02</span>Какие признаки указывают на границу между уровнями?</p><div class="opts"><label class="opt"><input type="checkbox" name="q143_1" value="0" autocomplete="off" data-ok><span>Зафиксированный набор запросов и ответов</span></label><label class="opt"><input type="checkbox" name="q143_1" value="2" autocomplete="off" data-ok><span>Скрытие внутреннего устройства нижнего слоя</span></label><label class="opt"><input type="checkbox" name="q143_1" value="4" autocomplete="off"><span>Отсутствие документации на интерфейс</span></label><label class="opt"><input type="checkbox" name="q143_1" value="3" autocomplete="off"><span>Полное совпадение всех деталей у разных устройств</span></label><label class="opt"><input type="checkbox" name="q143_1" value="1" autocomplete="off" data-ok><span>Возможность заменить одну часть, не переделывая другую</span></label></div><p class="quiz-why" hidden>Граница задаёт контракт и позволяет менять реализацию.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="3" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">03</span>Что такое шина?</p><div class="opts"><label class="opt"><input type="radio" name="q143_2" value="2" autocomplete="off"><span>Микросхема, которая хранит прошивку</span></label><label class="opt"><input type="radio" name="q143_2" value="0" autocomplete="off" data-ok><span>Набор линий и правил для передачи адресов, данных и управляющих сигналов</span></label><label class="opt"><input type="radio" name="q143_2" value="3" autocomplete="off"><span>Разъём для подключения блока питания</span></label><label class="opt"><input type="radio" name="q143_2" value="1" autocomplete="off"><span>Программа для управления накопителем</span></label></div><p class="quiz-why" hidden>Шина связывает узлы и передаёт между ними информацию.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="short" data-q="4" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">04</span>Как называется набор команд, который понимает процессор?</p><input type="text" class="short-answer" data-answers="[&quot;система команд&quot;, &quot;архитектура системы команд&quot;, &quot;ISA&quot;]" placeholder="Введите ответ" autocomplete="off" spellcheck="false" aria-label="Как называется набор команд, который понимает процессор?"><p class="quiz-why" hidden>Система команд определяет операции и регистры процессора.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="5" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">05</span>Какой уровень превращает запрос операционной системы в команды конкретного устройства?</p><div class="opts"><label class="opt"><input type="radio" name="q143_4" value="3" autocomplete="off"><span>Системный</span></label><label class="opt"><input type="radio" name="q143_4" value="2" autocomplete="off"><span>Аппаратный</span></label><label class="opt"><input type="radio" name="q143_4" value="1" autocomplete="off"><span>Прикладной</span></label><label class="opt"><input type="radio" name="q143_4" value="0" autocomplete="off" data-ok><span>Драйверный</span></label></div><p class="quiz-why" hidden>Драйвер знает особенности контроллера и формат его команд.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="multi" data-correct="3" data-q="6" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">06</span>Что относится к аппаратной части платформы?</p><div class="opts"><label class="opt"><input type="checkbox" name="q143_5" value="0" autocomplete="off" data-ok><span>Процессор и оперативная память</span></label><label class="opt"><input type="checkbox" name="q143_5" value="3" autocomplete="off"><span>Операционная система</span></label><label class="opt"><input type="checkbox" name="q143_5" value="4" autocomplete="off"><span>Драйвер видеокарты</span></label><label class="opt"><input type="checkbox" name="q143_5" value="2" autocomplete="off" data-ok><span>Накопители и система охлаждения</span></label><label class="opt"><input type="checkbox" name="q143_5" value="1" autocomplete="off" data-ok><span>Материнская плата и блок питания</span></label></div><p class="quiz-why" hidden>Аппаратная часть это физические узлы, а не программы управления.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="7" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">07</span>Что такое уровень абстракции в вычислительной системе?</p><div class="opts"><label class="opt"><input type="radio" name="q143_6" value="2" autocomplete="off"><span>Количество ядер в процессоре</span></label><label class="opt"><input type="radio" name="q143_6" value="1" autocomplete="off"><span>Физическая высота устройства в корпусе компьютера</span></label><label class="opt"><input type="radio" name="q143_6" value="0" autocomplete="off" data-ok><span>Набор понятных действий, за которым скрыты подробности нижнего слоя</span></label><label class="opt"><input type="radio" name="q143_6" value="3" autocomplete="off"><span>Объём оперативной памяти, доступный программе</span></label></div><p class="quiz-why" hidden>Уровень задаёт контракт и прячет внутреннее устройство нижнего слоя.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="8" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">08</span>Накопитель обозначен как 512 ГБ. Сколько это гибибайт?</p><div class="opts"><label class="opt"><input type="radio" name="q143_7" value="2" autocomplete="off"><span>Около 500 ГиБ</span></label><label class="opt"><input type="radio" name="q143_7" value="1" autocomplete="off"><span>Ровно 512 ГиБ</span></label><label class="opt"><input type="radio" name="q143_7" value="3" autocomplete="off"><span>Около 488 ГиБ</span></label><label class="opt"><input type="radio" name="q143_7" value="0" autocomplete="off" data-ok><span>Около 476,8 ГиБ</span></label></div><p class="quiz-why" hidden>512 миллиардов байт делятся на 1 073 741 824 байта и дают 476,8 ГиБ.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="multi" data-correct="3" data-q="9" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">09</span>Что входит в понятие платформы?</p><div class="opts"><label class="opt"><input type="checkbox" name="q143_8" value="2" autocomplete="off" data-ok><span>Интерфейсы, на которые опирается система</span></label><label class="opt"><input type="checkbox" name="q143_8" value="3" autocomplete="off"><span>Только корпус и блок питания</span></label><label class="opt"><input type="checkbox" name="q143_8" value="0" autocomplete="off" data-ok><span>Аппаратные узлы компьютера</span></label><label class="opt"><input type="checkbox" name="q143_8" value="4" autocomplete="off"><span>Только прикладные программы</span></label><label class="opt"><input type="checkbox" name="q143_8" value="1" autocomplete="off" data-ok><span>Прошивка UEFI и микрокод</span></label></div><p class="quiz-why" hidden>Платформа объединяет железо, прошивки и правила взаимодействия.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="10" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">10</span>Почему замена процессора не ускорит копирование на медленную флешку?</p><div class="opts"><label class="opt"><input type="radio" name="q143_9" value="2" autocomplete="off"><span>Флешка работает только от оперативной памяти</span></label><label class="opt"><input type="radio" name="q143_9" value="0" autocomplete="off" data-ok><span>Узкое место находится на участке записи флешки</span></label><label class="opt"><input type="radio" name="q143_9" value="1" autocomplete="off"><span>Процессор не участвует в копировании файлов</span></label><label class="opt"><input type="radio" name="q143_9" value="3" autocomplete="off"><span>Копирование выполняет блок питания</span></label></div><p class="quiz-why" hidden>Пока самый медленный участок не изменён, общее время остаётся прежним.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="11" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">11</span>Какая шина передаёт адрес, по которому нужно прочитать данные?</p><div class="opts"><label class="opt"><input type="radio" name="q143_10" value="2" autocomplete="off"><span>Шина управления</span></label><label class="opt"><input type="radio" name="q143_10" value="1" autocomplete="off"><span>Шина данных</span></label><label class="opt"><input type="radio" name="q143_10" value="3" autocomplete="off"><span>Шина питания</span></label><label class="opt"><input type="radio" name="q143_10" value="0" autocomplete="off" data-ok><span>Шина адреса</span></label></div><p class="quiz-why" hidden>Адресная шина указывает ячейку памяти или устройство.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="short" data-q="12" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">12</span>Как называется программа, которая управляет устройством со стороны операционной системы?</p><input type="text" class="short-answer" data-answers="[&quot;драйвер&quot;, &quot;драйвер устройства&quot;]" placeholder="Введите ответ" autocomplete="off" spellcheck="false" aria-label="Как называется программа, которая управляет устройством со стороны операционной системы?"><p class="quiz-why" hidden>Драйвер переводит общие запросы системы в команды контроллера.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="13" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">13</span>Где хранится прошивка устройства?</p><div class="opts"><label class="opt"><input type="radio" name="q143_12" value="1" autocomplete="off"><span>В оперативной памяти во время работы программы</span></label><label class="opt"><input type="radio" name="q143_12" value="2" autocomplete="off"><span>В файле на флешке пользователя</span></label><label class="opt"><input type="radio" name="q143_12" value="0" autocomplete="off" data-ok><span>В микросхеме самого устройства или на материнской плате</span></label><label class="opt"><input type="radio" name="q143_12" value="3" autocomplete="off"><span>В драйвере операционной системы</span></label></div><p class="quiz-why" hidden>Прошивка это программа, записанная в постоянную память устройства.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="multi" data-correct="3" data-q="14" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">14</span>Какие границы проходит запрос при записи файла на флешку?</p><div class="opts"><label class="opt"><input type="checkbox" name="q143_13" value="4" autocomplete="off"><span>Формат таблицы Excel</span></label><label class="opt"><input type="checkbox" name="q143_13" value="2" autocomplete="off" data-ok><span>Протокол шины USB</span></label><label class="opt"><input type="checkbox" name="q143_13" value="3" autocomplete="off"><span>Интерфейс браузера</span></label><label class="opt"><input type="checkbox" name="q143_13" value="0" autocomplete="off" data-ok><span>Системный вызов операционной системы</span></label><label class="opt"><input type="checkbox" name="q143_13" value="1" autocomplete="off" data-ok><span>Интерфейс драйвера устройства</span></label></div><p class="quiz-why" hidden>Запрос последовательно проходит системный, драйверный и шинный уровни.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="15" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">15</span>В чём состоит ограничение схемы фон Неймана?</p><div class="opts"><label class="opt"><input type="radio" name="q143_14" value="3" autocomplete="off"><span>Устройства не могут подключаться к шине</span></label><label class="opt"><input type="radio" name="q143_14" value="1" autocomplete="off"><span>Процессор не может выполнять арифметические операции</span></label><label class="opt"><input type="radio" name="q143_14" value="2" autocomplete="off"><span>Память не может хранить программы</span></label><label class="opt"><input type="radio" name="q143_14" value="0" autocomplete="off" data-ok><span>Команды и данные хранятся в одной памяти и идут по общим линиям</span></label></div><p class="quiz-why" hidden>Общая память для команд и данных ограничивает одновременную передачу.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><p class="quiz-note quiz-submit-note" data-quiz-note hidden></p><div class="quiz-result" data-quiz-result hidden aria-live="polite"><span class="label">Результат теста</span><h3>Тест завершён</h3><p class="modal-name-line">ФИО: <b data-student-name></b></p><p class="modal-result" data-modal-result></p><p class="modal-result" data-modal-wrong></p><dl class="modal-times"><div><dt>Время выполнения теста</dt><dd data-test-time>00:00</dd></div><div><dt>Время просмотра лекции</dt><dd data-view-time>00:00</dd></div></dl></div></div></div>
 </div></article><nav class="pager"><span></span><a class="next" style="text-align:right;margin-left:auto" href="02-lek-02.html"><span>Следующее занятие →</span>Лекция 2. Представление данных в компьютере</a></nav></main>
 <div class="modal" data-modal="warn" hidden>
   <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="warn-title">
@@ -1584,32 +1597,131 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
     q.querySelectorAll('input').forEach(function(i){ i.disabled = true; });
   }
 
+  function resetQuiz(quiz){
+    quiz.querySelectorAll('input').forEach(function(i){
+      if(i.type === 'checkbox' || i.type === 'radio') i.checked = false;
+      else i.value = '';
+      i.disabled = false;
+    });
+    quiz.querySelectorAll('.opt').forEach(function(o){ o.classList.remove('picked', 'correct'); });
+    quiz.querySelectorAll('.quiz-q').forEach(function(q){
+      q.classList.remove('ok', 'bad', 'missing');
+      delete q.dataset.answered;
+    });
+    quiz.querySelectorAll('.quiz-why').forEach(function(w){ w.hidden = true; });
+    quiz.querySelectorAll('[data-note]').forEach(function(n){ n.hidden = true; n.textContent = ''; });
+    quiz.querySelectorAll('[data-answer]').forEach(function(b){ b.hidden = false; b.disabled = false; });
+    var note = quiz.querySelector('[data-quiz-note]');
+    if(note){ note.hidden = true; note.textContent = ''; }
+    var card = quiz.querySelector('[data-quiz-result]');
+    if(card) card.hidden = true;
+    document.documentElement.classList.add('quiz-pending');
+  }
+
+  function shuffleQuestions(quiz){
+    var list = [].slice.call(quiz.querySelectorAll('.quiz-q'));
+    var anchor = quiz.querySelector('[data-quiz-note]') || null;
+    for(var i = list.length - 1; i > 0; i--){
+      var j = Math.floor(Math.random() * (i + 1));
+      var tmp = list[i]; list[i] = list[j]; list[j] = tmp;
+    }
+    list.forEach(function(q, idx){
+      var no = q.querySelector('.quiz-no');
+      if(no) no.textContent = String(idx + 1).padStart(2, '0');
+      if(anchor) quiz.insertBefore(q, anchor); else quiz.appendChild(q);
+    });
+  }
+
+  addEventListener('pageshow', function(e){ if(e.persisted) location.reload(); });
+
+  function quizStoreKey(){ return 'mdk-quiz:' + location.pathname; }
+  function readAttempts(name){
+    try { var raw = localStorage.getItem(quizStoreKey() + ':' + encodeURIComponent(name)); return raw ? JSON.parse(raw) : null; }
+    catch(e){ return null; }
+  }
+  function writeAttempts(name, data){
+    try { localStorage.setItem(quizStoreKey() + ':' + encodeURIComponent(name), JSON.stringify(data)); } catch(e){}
+  }
+  function shuffleOptions(quiz){
+    quiz.querySelectorAll('.quiz-q .opts').forEach(function(box){
+      var list = [].slice.call(box.children);
+      for(var i = list.length - 1; i > 0; i--){
+        var j = Math.floor(Math.random() * (i + 1));
+        var tmp = list[i]; list[i] = list[j]; list[j] = tmp;
+      }
+      list.forEach(function(o){ box.appendChild(o); });
+    });
+  }
+
   document.querySelectorAll('[data-quiz]').forEach(function(quiz){
+    resetQuiz(quiz);
+    shuffleQuestions(quiz);
+    shuffleOptions(quiz);
     var qs = [].slice.call(quiz.querySelectorAll('.quiz-q'));
     if(!qs.length) return;
-    document.documentElement.classList.add('quiz-pending');
-    var current = 0, right = 0, firstAt = null, lastAt = null;
+    var last = qs.length - 1;
+    var nameInput = quiz.querySelector('[data-quiz-name]');
+    var whoNote = quiz.querySelector('[data-who-note]');
+    var attemptsLabel = quiz.querySelector('[data-quiz-attempts]');
+    var right = 0, submitted = false, blocked = false, firstAt = null, lastAt = null;
     function mark(){ var now = performance.now(); if(firstAt === null) firstAt = now; lastAt = now; }
-    function showQuestion(i){
-      current = i;
-      qs[i].hidden = false;
-      if(window.__readProgress) window.__readProgress();
+    qs.forEach(function(q, i){
+      var b = q.querySelector('[data-answer]');
+      if(b) b.textContent = i === last ? 'Завершить тест' : 'Ответить';
+      q.hidden = i > 0;
+    });
+
+    function updateAttempts(){
+      if(!nameInput) return false;
+      var name = norm(nameInput.value);
+      if(!name){
+        blocked = false;
+        if(attemptsLabel){ attemptsLabel.textContent = 'две попытки на лекцию'; attemptsLabel.classList.remove('limit'); }
+        return false;
+      }
+      var data = readAttempts(name);
+      var count = data && data.count ? data.count : 0;
+      blocked = count >= 2;
+      if(attemptsLabel){
+        attemptsLabel.textContent = 'Попыток: ' + count + ' из 2' + (data && data.best != null ? ' · лучший ' + data.best + ' из ' + qs.length : '');
+        attemptsLabel.classList.toggle('limit', blocked);
+      }
+      if(whoNote){
+        whoNote.hidden = !blocked;
+        whoNote.textContent = blocked ? 'Для этого ФИО попытки закончились: 2 из 2.' : '';
+      }
+      qs.forEach(function(q){
+        var b = q.querySelector('[data-answer]');
+        if(b && !submitted) b.disabled = blocked;
+      });
+      return blocked;
     }
-    function finish(){
-      var card = quiz.querySelector('[data-quiz-result]');
-      if(!card) return;
-      var total = qs.length, pct = total ? Math.round(right / total * 100) : 0;
-      var testMs = (firstAt !== null && lastAt !== null) ? Math.max(0, lastAt - firstAt) : 0;
-      card.querySelector('[data-modal-result]').textContent = 'Правильных ответов: ' + right + ' из ' + total + ' (' + pct + '%)';
-      card.querySelector('[data-test-time]').textContent = fmt(testMs);
-      card.querySelector('[data-view-time]').textContent = fmt(viewingMs());
-      card.hidden = false;
-      document.documentElement.classList.remove('quiz-pending');
-      if(window.__readProgress) window.__readProgress();
-      window.dispatchEvent(new Event('resize'));
+    if(nameInput){
+      nameInput.addEventListener('input', updateAttempts);
+      nameInput.addEventListener('change', updateAttempts);
     }
+
+    qs.forEach(function(q, idx){
+      q.addEventListener('input', function(e){ if(e.target.matches('input')){ mark(); q.classList.remove('missing'); } });
+      q.addEventListener('change', function(e){ if(e.target.matches('input')){ mark(); paintPicked(q); q.classList.remove('missing'); } });
+      var short = q.querySelector('.short-answer');
+      if(short) short.addEventListener('keydown', function(e){ if(e.key === 'Enter'){ e.preventDefault(); mark(); } });
+      var answerBtn = q.querySelector('[data-answer]');
+      if(answerBtn) answerBtn.addEventListener('click', function(){ answer(q, idx); });
+    });
+
     function answer(q, idx){
-      if(q.dataset.answered === '1') return;
+      if(submitted) return;
+      if(nameInput && !norm(nameInput.value)){
+        if(whoNote){ whoNote.hidden = false; whoNote.textContent = 'Укажите ФИО перед началом теста.'; }
+        nameInput.focus();
+        return;
+      }
+      if(whoNote) whoNote.hidden = true;
+      if(updateAttempts()){
+        if(whoNote){ whoNote.hidden = false; whoNote.textContent = 'Для этого ФИО попытки закончились: 2 из 2.'; }
+        return;
+      }
       var note = q.querySelector('[data-note]');
       if(!hasAnswer(q)){
         if(note){ note.hidden = false; note.textContent = q.dataset.type === 'short' ? 'Введите ответ.' : 'Выберите вариант.'; }
@@ -1617,26 +1729,60 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
       }
       if(note) note.hidden = true;
       mark();
-      var ok = questionCorrect(q);
-      q.dataset.answered = '1';
-      q.classList.add(ok ? 'ok' : 'bad');
-      paintChoices(q);
-      var why = q.querySelector('.quiz-why'); if(why) why.hidden = false;
-      lock(q);
-      var answerBtn = q.querySelector('[data-answer]'); if(answerBtn) answerBtn.hidden = true;
-      if(ok) right++;
-      if(idx === qs.length - 1){ finish(); }
-      else { showQuestion(idx + 1); }
+      var btn = q.querySelector('[data-answer]');
+      if(btn){ btn.disabled = true; btn.hidden = true; }
+      if(idx === last){ finish(); }
+      else { qs[idx + 1].hidden = false; if(window.__readProgress) window.__readProgress(); }
     }
-    qs.forEach(function(q, idx){
-      q.addEventListener('input', function(e){ if(e.target.matches('input')) mark(); });
-      q.addEventListener('change', function(e){ if(e.target.matches('input')){ mark(); paintPicked(q); } });
-      var answerBtn = q.querySelector('[data-answer]');
-      if(answerBtn) answerBtn.addEventListener('click', function(){ answer(q, idx); });
-      var short = q.querySelector('.short-answer');
-      if(short) short.addEventListener('keydown', function(e){ if(e.key === 'Enter'){ e.preventDefault(); answer(q, idx); } });
-    });
-    showQuestion(0);
+
+    function finish(){
+      if(submitted) return;
+      var note = quiz.querySelector('[data-quiz-note]');
+      var missing = qs.filter(function(q){ return !hasAnswer(q); });
+      if(missing.length){
+        qs.forEach(function(q){ q.classList.toggle('missing', !hasAnswer(q)); });
+        if(note){ note.hidden = false; note.textContent = 'Без ответа осталось вопросов: ' + missing.length + '. Ответьте на все и завершите тест снова.'; }
+        missing[0].scrollIntoView({block:'center', behavior:'smooth'});
+        return;
+      }
+      submitted = true;
+      if(note) note.hidden = true;
+      mark();
+      var wrong = [];
+      qs.forEach(function(q, i){
+        q.classList.remove('missing');
+        var ok = questionCorrect(q);
+        q.classList.add(ok ? 'ok' : 'bad');
+        paintPicked(q);
+        lock(q);
+        var btn = q.querySelector('[data-answer]'); if(btn) btn.hidden = true;
+        if(ok) right++; else wrong.push(i + 1);
+      });
+      var name = nameInput ? nameInput.value.trim() : '';
+      var nameKey = norm(name);
+      if(nameKey){
+        var data = readAttempts(nameKey) || {count: 0, best: 0};
+        data.count = (data.count || 0) + 1;
+        data.best = Math.max(data.best || 0, right);
+        writeAttempts(nameKey, data);
+      }
+      updateAttempts();
+      var card = quiz.querySelector('[data-quiz-result]');
+      if(!card) return;
+      var total = qs.length, pct = total ? Math.round(right / total * 100) : 0;
+      var testMs = (firstAt !== null && lastAt !== null) ? Math.max(0, lastAt - firstAt) : 0;
+      card.querySelector('[data-student-name]').textContent = name || 'не указано';
+      card.querySelector('[data-modal-result]').textContent = 'Правильных ответов: ' + right + ' из ' + total + ' (' + pct + '%)';
+      card.querySelector('[data-modal-wrong]').textContent = wrong.length
+        ? 'Вопросы с ошибками: ' + wrong.join(', ') + '. Повторите эти разделы лекции.'
+        : 'Ошибок нет.';
+      card.querySelector('[data-test-time]').textContent = fmt(testMs);
+      card.querySelector('[data-view-time]').textContent = fmt(viewingMs());
+      card.hidden = false;
+      document.documentElement.classList.remove('quiz-pending');
+      if(window.__readProgress) window.__readProgress();
+      window.dispatchEvent(new Event('resize'));
+    }
   });
 })();
 </script>

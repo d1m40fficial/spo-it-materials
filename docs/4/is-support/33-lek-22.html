@@ -411,17 +411,29 @@ html.quiz-pending .pager { display: none; }
 .quiz-actions button { -webkit-appearance: none; appearance: none; font: 600 13px var(--font-body); padding: 9px 15px; border-radius: 10px; border: 1px solid var(--rule); background: var(--paper); background-color: var(--paper); color: var(--ink); cursor: pointer; }
 .quiz-actions button[data-answer], .quiz-actions button.quiz-answer { background: #121212; background-color: #121212; color: #fff; border-color: transparent; }
 .quiz-actions button:hover { filter: brightness(.96); }
+.quiz-actions button:disabled { opacity: .45; cursor: default; filter: none; }
 .quiz-actions button:focus-visible { outline: 2px solid var(--quiz-accent); outline-offset: 2px; }
 .quiz-note { font-size: 13px; color: var(--bad); }
 .quiz .short-answer { width: 100%; font: 16px var(--font-body); padding: 12px 16px; border: 1px solid var(--quiz-line); border-radius: 8px; background: transparent; color: var(--quiz-ink); }
 .quiz .short-answer:focus { outline: 2px solid var(--quiz-accent); outline-offset: 1px; border-color: transparent; }
 .quiz-q.ok .short-answer { border-color: var(--quiz-ok); background: var(--quiz-ok-bg); }
 .quiz-q.bad .short-answer { border-color: var(--quiz-bad); background: var(--quiz-bad-bg); }
+.quiz-who { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; margin: 0 0 16px; }
+.quiz-who-label { display: flex; align-items: center; gap: 10px; font: 600 13px var(--font-body); color: var(--ink-2); }
+.quiz-who-label input { font: 15px var(--font-body); padding: 10px 12px; border: 1px solid var(--rule); border-radius: 9px; background: var(--card); color: var(--quiz-ink); min-width: 220px; max-width: 100%; }
+.quiz-who-label input:focus { outline: 2px solid var(--quiz-accent); outline-offset: 1px; border-color: transparent; }
+.quiz-attempts { font: 12px var(--font-mono); color: var(--ink-3); }
+.quiz-attempts.limit { color: var(--quiz-bad); font-weight: 600; }
+.modal-name-line { margin: 0 0 12px; font-size: 14px; color: var(--ink-2); }
+.quiz-q.missing { outline: 2px solid var(--quiz-bad); outline-offset: 2px; }
+.quiz-note[hidden] { display: none; }
+.quiz-submit-note { margin: 14px 0 0; }
 .quiz-result { margin-top: 22px; padding: 20px 22px; border: 1px solid var(--quiz-line); border-radius: 12px; background: var(--quiz-card); box-shadow: 0 2px 8px rgba(0,0,0,.02); color: var(--quiz-ink); }
 .quiz-result[hidden] { display: none; }
 .quiz-result > .label { display: block; font: 600 11px var(--font-mono); letter-spacing: .08em; text-transform: uppercase; color: var(--accent); margin-bottom: 6px; }
 .quiz-result h3 { margin: 0 0 14px; font: 800 24px/1.2 var(--font-display); }
 .quiz-result .modal-result { margin: 0 0 14px; }
+.quiz-result [data-modal-wrong] { margin-top: -6px; font-size: 14px; font-weight: 400; color: var(--quiz-ink); }
 .quiz-result .modal-times { margin-bottom: 0; }
 @media (max-width: 560px) {
   .quiz-q { padding: 18px 16px; }
@@ -553,6 +565,7 @@ html.modal-open { overflow: hidden; }
 .quiz-q { animation: quiz-in .32s cubic-bezier(.16,1,.3,1) both; }
 @keyframes quiz-in { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
 @media (prefers-reduced-motion: reduce) { .quiz-q { animation: none; } }
+@media (prefers-reduced-motion: reduce) { .quiz-q { animation: none; } }
 
 /* ---------- variant cards on the practice page ---------- */
 .variant { border: 1px solid var(--rule); border-radius: 14px; background: var(--card); margin: 0 0 12px; overflow: hidden; }
@@ -606,7 +619,7 @@ html.modal-open { overflow: hidden; }
   a { color: #000; text-decoration: none; }
   .callout, .check, .recap, .quiz-q, .quiz-result, .figure, .outcomes { border-color: #999; }
   .gate-step[hidden], .gate-content[hidden], .quiz-q[hidden] { display: block !important; }
-  .gate-action, .quiz-actions { display: none !important; }
+  .gate-action, .quiz-actions, .quiz-who { display: none !important; }
   .reveal { opacity: 1 !important; transform: none !important; transition: none !important; }
   .recap { background: #fff; color: #000; }
   .recap li, .recap p { color: #000; }
@@ -1227,7 +1240,7 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <li>Удовлетворённость считают по доле высоких оценок и с оговоркой о числе ответов.</li>
 <li>Перегрузка объясняет хвост, поэтому загрузку смотрят вместе со сроками.</li>
 </ul>
-<div class="quiz" data-quiz><div class="quiz-q" data-type="single" data-correct="1" data-q="1"><p class="quiz-p"><span class="quiz-no" aria-hidden="true">01</span>Почему среднее время решения может ввести заказчика в заблуждение?</p><div class="opts"><label class="opt"><input type="radio" name="q120_0" value="3"><span>Среднее нельзя посчитать из журнала</span></label><label class="opt"><input type="radio" name="q120_0" value="1"><span>Среднее всегда больше медианы</span></label><label class="opt"><input type="radio" name="q120_0" value="0" data-ok><span>Одно долгое обращение почти не меняет среднее, но сильно вредит работе склада</span></label><label class="opt"><input type="radio" name="q120_0" value="2"><span>Среднее считается только по закрытым обращениям</span></label></div><p class="quiz-why" hidden>Среднее сглаживает хвост, а пользователи сталкиваются именно с хвостом.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="multi" data-correct="3" data-q="2" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">02</span>Какие метрики показывают качество поддержки?</p><div class="opts"><label class="opt"><input type="checkbox" name="q120_1" value="0" data-ok><span>Доля повторных обращений</span></label><label class="opt"><input type="checkbox" name="q120_1" value="4"><span>Объём базы данных</span></label><label class="opt"><input type="checkbox" name="q120_1" value="1" data-ok><span>Удовлетворённость пользователей</span></label><label class="opt"><input type="checkbox" name="q120_1" value="3"><span>Число закрытых обращений на инженера</span></label><label class="opt"><input type="checkbox" name="q120_1" value="2" data-ok><span>Доля обращений, решённых в срок</span></label></div><p class="quiz-why" hidden>Число закрытых на инженера толкает к поверхностным решениям.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="short" data-q="3" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">03</span>Как называется заявка по той же проблеме в течение установленного срока?</p><input type="text" class="short-answer" data-answers="[&quot;повторное обращение&quot;, &quot;повторная заявка&quot;]" placeholder="Введите ответ" autocomplete="off" spellcheck="false" aria-label="Как называется заявка по той же проблеме в течение установленного срока?"><p class="quiz-why" hidden>Повторные обращения показывают качество решения, а не скорость.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="4" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">04</span>Почему перегрузка инженеров объясняет хвост медленных обращений?</p><div class="opts"><label class="opt"><input type="radio" name="q120_3" value="2"><span>Очередь сокращает время реакции</span></label><label class="opt"><input type="radio" name="q120_3" value="3"><span>Перегрузка не влияет на сроки</span></label><label class="opt"><input type="radio" name="q120_3" value="1"><span>Перегрузка ускоряет решение простых заявок</span></label><label class="opt"><input type="radio" name="q120_3" value="0" data-ok><span>Инженер берётся за срочное, а остальное ждёт свободного времени</span></label></div><p class="quiz-why" hidden>Медленные обращения часто ждут не решения, а исполнителя.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="5" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">05</span>Как считается время реакции?</p><div class="opts"><label class="opt"><input type="radio" name="q120_4" value="1"><span>От начала работы до решения</span></label><label class="opt"><input type="radio" name="q120_4" value="0" data-ok><span>От регистрации обращения до первого ответа пользователю</span></label><label class="opt"><input type="radio" name="q120_4" value="2"><span>От решения до подтверждения</span></label><label class="opt"><input type="radio" name="q120_4" value="3"><span>От звонка до приезда инженера</span></label></div><p class="quiz-why" hidden>Точку отсчёта фиксируют в регламенте, иначе показатель можно улучшить задним числом.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="multi" data-correct="3" data-q="6" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">06</span>Что входит в отчёт о поддержке за период?</p><div class="opts"><label class="opt"><input type="checkbox" name="q120_5" value="2" data-ok><span>Загрузка и выводы с предложениями</span></label><label class="opt"><input type="checkbox" name="q120_5" value="3"><span>Полный текст всех карточек обращений</span></label><label class="opt"><input type="checkbox" name="q120_5" value="0" data-ok><span>Объём обращений и соблюдение SLA</span></label><label class="opt"><input type="checkbox" name="q120_5" value="4"><span>Домашние адреса сотрудников</span></label><label class="opt"><input type="checkbox" name="q120_5" value="1" data-ok><span>Медиана, 90-й процентиль и повторные обращения</span></label></div><p class="quiz-why" hidden>Отчёт отвечает на вопросы заказчика и заканчивается предложениями.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="7" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">07</span>Что такое повторное обращение?</p><div class="opts"><label class="opt"><input type="radio" name="q120_6" value="1"><span>Любая заявка от того же пользователя</span></label><label class="opt"><input type="radio" name="q120_6" value="2"><span>Заявка, закрытая без подтверждения</span></label><label class="opt"><input type="radio" name="q120_6" value="3"><span>Заявка, переданная на вторую линию</span></label><label class="opt"><input type="radio" name="q120_6" value="0" data-ok><span>Заявка по той же проблеме от того же пользователя в установленный срок</span></label></div><p class="quiz-why" hidden>Повтор говорит о качестве решения лучше, чем срок.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="short" data-q="8" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">08</span>Как называется значение в середине упорядоченного ряда?</p><input type="text" class="short-answer" data-answers="[&quot;медиана&quot;, &quot;медиана времени решения&quot;]" placeholder="Введите ответ" autocomplete="off" spellcheck="false" aria-label="Как называется значение в середине упорядоченного ряда?"><p class="quiz-why" hidden>Медиана показывает типичное значение и не зависит от одного выброса.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="9" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">09</span>Как считают удовлетворённость?</p><div class="opts"><label class="opt"><input type="radio" name="q120_8" value="2"><span>Средний срок решения</span></label><label class="opt"><input type="radio" name="q120_8" value="0" data-ok><span>Долю оценок четыре и пять среди всех ответов</span></label><label class="opt"><input type="radio" name="q120_8" value="1"><span>Число жалоб за месяц</span></label><label class="opt"><input type="radio" name="q120_8" value="3"><span>Долю обращений без повторных</span></label></div><p class="quiz-why" hidden>Показатель смещается, если отвечает меньше половины пользователей.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="multi" data-correct="3" data-q="10" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">10</span>Какие метрики показывают скорость поддержки?</p><div class="opts"><label class="opt"><input type="checkbox" name="q120_9" value="1" data-ok><span>Время решения</span></label><label class="opt"><input type="checkbox" name="q120_9" value="4"><span>Стоимость лицензий</span></label><label class="opt"><input type="checkbox" name="q120_9" value="2" data-ok><span>Медиана и 90-й процентиль</span></label><label class="opt"><input type="checkbox" name="q120_9" value="0" data-ok><span>Время реакции</span></label><label class="opt"><input type="checkbox" name="q120_9" value="3"><span>Число сотрудников подрядчика</span></label></div><p class="quiz-why" hidden>Скорость описывают сроки и распределение, а не одно среднее.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="11" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">11</span>Почему долю первой линии смотрят вместе с повторными обращениями?</p><div class="opts"><label class="opt"><input type="radio" name="q120_10" value="2"><span>Повторные обращения не влияют на SLA</span></label><label class="opt"><input type="radio" name="q120_10" value="3"><span>Доля первой линии не имеет нормы</span></label><label class="opt"><input type="radio" name="q120_10" value="0" data-ok><span>Рост доли любой ценой ведёт к формальным закрытиям и повторам</span></label><label class="opt"><input type="radio" name="q120_10" value="1"><span>Эти показатели считаются из разных журналов</span></label></div><p class="quiz-why" hidden>Метрика меняет поведение, и рост доли может ухудшить качество.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="12" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">12</span>Что показывает 90-й процентиль?</p><div class="opts"><label class="opt"><input type="radio" name="q120_11" value="3"><span>Число обращений за месяц</span></label><label class="opt"><input type="radio" name="q120_11" value="2"><span>Долю обращений, закрытых первой линией</span></label><label class="opt"><input type="radio" name="q120_11" value="0" data-ok><span>Значение, ниже которого находится 90 процентов обращений</span></label><label class="opt"><input type="radio" name="q120_11" value="1"><span>Среднее время решения</span></label></div><p class="quiz-why" hidden>Процентиль показывает, как обслуживают почти всех, кроме одного из десяти.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="short" data-q="13" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">13</span>Как называется доля обращений, закрытых без передачи на вторую линию?</p><input type="text" class="short-answer" data-answers="[&quot;доля первой линии&quot;, &quot;первая линия&quot;]" placeholder="Введите ответ" autocomplete="off" spellcheck="false" aria-label="Как называется доля обращений, закрытых без передачи на вторую линию?"><p class="quiz-why" hidden>Показатель имеет норму и смотрится вместе с повторными обращениями.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="multi" data-correct="3" data-q="14" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">14</span>Какие способы улучшить метрику не улучшают работу?</p><div class="opts"><label class="opt"><input type="checkbox" name="q120_13" value="0" data-ok><span>Закрывать обращение без подтверждения пользователя</span></label><label class="opt"><input type="checkbox" name="q120_13" value="2" data-ok><span>Понижать приоритет, чтобы срок казался выполненным</span></label><label class="opt"><input type="checkbox" name="q120_13" value="4"><span>Фиксировать точку отсчёта в регламенте</span></label><label class="opt"><input type="checkbox" name="q120_13" value="3"><span>Считать время решения от регистрации</span></label><label class="opt"><input type="checkbox" name="q120_13" value="1" data-ok><span>Дробить одно обращение на несколько мелких</span></label></div><p class="quiz-why" hidden>Такие приёмы меняют число, а не результат для пользователя.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="15" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">15</span>Что показывает медиана времени решения?</p><div class="opts"><label class="opt"><input type="radio" name="q120_14" value="3"><span>Самое долгое обращение месяца</span></label><label class="opt"><input type="radio" name="q120_14" value="0" data-ok><span>Значение в середине упорядоченного ряда, типичное для пользователя</span></label><label class="opt"><input type="radio" name="q120_14" value="2"><span>Среднее арифметическое всех значений</span></label><label class="opt"><input type="radio" name="q120_14" value="1"><span>Сумму всех времён решения</span></label></div><p class="quiz-why" hidden>Медиана не искажается одним очень медленным обращением.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-result" data-quiz-result hidden aria-live="polite"><span class="label">Результат теста</span><h3>Тест завершён</h3><label class="modal-name" data-student-label><span>ФИО студента</span><input type="text" data-student-name maxlength="80" autocomplete="name" placeholder="Иванов Иван Иванович"></label><p class="modal-result" data-modal-result></p><dl class="modal-times"><div><dt>Время выполнения теста</dt><dd data-test-time>00:00</dd></div><div><dt>Время просмотра лекции</dt><dd data-view-time>00:00</dd></div></dl></div></div>
+<div class="quiz" data-quiz><div class="quiz-who"><label class="quiz-who-label"><span>ФИО</span><input type="text" class="quiz-name" data-quiz-name maxlength="80" autocomplete="off" placeholder="Иванов Иван Иванович"></label><span class="quiz-attempts" data-quiz-attempts>две попытки на лекцию</span><span class="quiz-note" data-who-note hidden></span></div><div class="quiz-q" data-type="single" data-correct="1" data-q="1"><p class="quiz-p"><span class="quiz-no" aria-hidden="true">01</span>Почему среднее время решения может ввести заказчика в заблуждение?</p><div class="opts"><label class="opt"><input type="radio" name="q120_0" value="3" autocomplete="off"><span>Среднее нельзя посчитать из журнала</span></label><label class="opt"><input type="radio" name="q120_0" value="1" autocomplete="off"><span>Среднее всегда больше медианы</span></label><label class="opt"><input type="radio" name="q120_0" value="0" autocomplete="off" data-ok><span>Одно долгое обращение почти не меняет среднее, но сильно вредит работе склада</span></label><label class="opt"><input type="radio" name="q120_0" value="2" autocomplete="off"><span>Среднее считается только по закрытым обращениям</span></label></div><p class="quiz-why" hidden>Среднее сглаживает хвост, а пользователи сталкиваются именно с хвостом.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="multi" data-correct="3" data-q="2" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">02</span>Какие метрики показывают качество поддержки?</p><div class="opts"><label class="opt"><input type="checkbox" name="q120_1" value="0" autocomplete="off" data-ok><span>Доля повторных обращений</span></label><label class="opt"><input type="checkbox" name="q120_1" value="4" autocomplete="off"><span>Объём базы данных</span></label><label class="opt"><input type="checkbox" name="q120_1" value="1" autocomplete="off" data-ok><span>Удовлетворённость пользователей</span></label><label class="opt"><input type="checkbox" name="q120_1" value="3" autocomplete="off"><span>Число закрытых обращений на инженера</span></label><label class="opt"><input type="checkbox" name="q120_1" value="2" autocomplete="off" data-ok><span>Доля обращений, решённых в срок</span></label></div><p class="quiz-why" hidden>Число закрытых на инженера толкает к поверхностным решениям.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="short" data-q="3" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">03</span>Как называется заявка по той же проблеме в течение установленного срока?</p><input type="text" class="short-answer" data-answers="[&quot;повторное обращение&quot;, &quot;повторная заявка&quot;]" placeholder="Введите ответ" autocomplete="off" spellcheck="false" aria-label="Как называется заявка по той же проблеме в течение установленного срока?"><p class="quiz-why" hidden>Повторные обращения показывают качество решения, а не скорость.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="4" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">04</span>Почему перегрузка инженеров объясняет хвост медленных обращений?</p><div class="opts"><label class="opt"><input type="radio" name="q120_3" value="2" autocomplete="off"><span>Очередь сокращает время реакции</span></label><label class="opt"><input type="radio" name="q120_3" value="3" autocomplete="off"><span>Перегрузка не влияет на сроки</span></label><label class="opt"><input type="radio" name="q120_3" value="1" autocomplete="off"><span>Перегрузка ускоряет решение простых заявок</span></label><label class="opt"><input type="radio" name="q120_3" value="0" autocomplete="off" data-ok><span>Инженер берётся за срочное, а остальное ждёт свободного времени</span></label></div><p class="quiz-why" hidden>Медленные обращения часто ждут не решения, а исполнителя.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="5" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">05</span>Как считается время реакции?</p><div class="opts"><label class="opt"><input type="radio" name="q120_4" value="1" autocomplete="off"><span>От начала работы до решения</span></label><label class="opt"><input type="radio" name="q120_4" value="0" autocomplete="off" data-ok><span>От регистрации обращения до первого ответа пользователю</span></label><label class="opt"><input type="radio" name="q120_4" value="2" autocomplete="off"><span>От решения до подтверждения</span></label><label class="opt"><input type="radio" name="q120_4" value="3" autocomplete="off"><span>От звонка до приезда инженера</span></label></div><p class="quiz-why" hidden>Точку отсчёта фиксируют в регламенте, иначе показатель можно улучшить задним числом.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="multi" data-correct="3" data-q="6" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">06</span>Что входит в отчёт о поддержке за период?</p><div class="opts"><label class="opt"><input type="checkbox" name="q120_5" value="2" autocomplete="off" data-ok><span>Загрузка и выводы с предложениями</span></label><label class="opt"><input type="checkbox" name="q120_5" value="3" autocomplete="off"><span>Полный текст всех карточек обращений</span></label><label class="opt"><input type="checkbox" name="q120_5" value="0" autocomplete="off" data-ok><span>Объём обращений и соблюдение SLA</span></label><label class="opt"><input type="checkbox" name="q120_5" value="4" autocomplete="off"><span>Домашние адреса сотрудников</span></label><label class="opt"><input type="checkbox" name="q120_5" value="1" autocomplete="off" data-ok><span>Медиана, 90-й процентиль и повторные обращения</span></label></div><p class="quiz-why" hidden>Отчёт отвечает на вопросы заказчика и заканчивается предложениями.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="7" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">07</span>Что такое повторное обращение?</p><div class="opts"><label class="opt"><input type="radio" name="q120_6" value="1" autocomplete="off"><span>Любая заявка от того же пользователя</span></label><label class="opt"><input type="radio" name="q120_6" value="2" autocomplete="off"><span>Заявка, закрытая без подтверждения</span></label><label class="opt"><input type="radio" name="q120_6" value="3" autocomplete="off"><span>Заявка, переданная на вторую линию</span></label><label class="opt"><input type="radio" name="q120_6" value="0" autocomplete="off" data-ok><span>Заявка по той же проблеме от того же пользователя в установленный срок</span></label></div><p class="quiz-why" hidden>Повтор говорит о качестве решения лучше, чем срок.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="short" data-q="8" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">08</span>Как называется значение в середине упорядоченного ряда?</p><input type="text" class="short-answer" data-answers="[&quot;медиана&quot;, &quot;медиана времени решения&quot;]" placeholder="Введите ответ" autocomplete="off" spellcheck="false" aria-label="Как называется значение в середине упорядоченного ряда?"><p class="quiz-why" hidden>Медиана показывает типичное значение и не зависит от одного выброса.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="9" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">09</span>Как считают удовлетворённость?</p><div class="opts"><label class="opt"><input type="radio" name="q120_8" value="2" autocomplete="off"><span>Средний срок решения</span></label><label class="opt"><input type="radio" name="q120_8" value="0" autocomplete="off" data-ok><span>Долю оценок четыре и пять среди всех ответов</span></label><label class="opt"><input type="radio" name="q120_8" value="1" autocomplete="off"><span>Число жалоб за месяц</span></label><label class="opt"><input type="radio" name="q120_8" value="3" autocomplete="off"><span>Долю обращений без повторных</span></label></div><p class="quiz-why" hidden>Показатель смещается, если отвечает меньше половины пользователей.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="multi" data-correct="3" data-q="10" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">10</span>Какие метрики показывают скорость поддержки?</p><div class="opts"><label class="opt"><input type="checkbox" name="q120_9" value="1" autocomplete="off" data-ok><span>Время решения</span></label><label class="opt"><input type="checkbox" name="q120_9" value="4" autocomplete="off"><span>Стоимость лицензий</span></label><label class="opt"><input type="checkbox" name="q120_9" value="2" autocomplete="off" data-ok><span>Медиана и 90-й процентиль</span></label><label class="opt"><input type="checkbox" name="q120_9" value="0" autocomplete="off" data-ok><span>Время реакции</span></label><label class="opt"><input type="checkbox" name="q120_9" value="3" autocomplete="off"><span>Число сотрудников подрядчика</span></label></div><p class="quiz-why" hidden>Скорость описывают сроки и распределение, а не одно среднее.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="11" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">11</span>Почему долю первой линии смотрят вместе с повторными обращениями?</p><div class="opts"><label class="opt"><input type="radio" name="q120_10" value="2" autocomplete="off"><span>Повторные обращения не влияют на SLA</span></label><label class="opt"><input type="radio" name="q120_10" value="3" autocomplete="off"><span>Доля первой линии не имеет нормы</span></label><label class="opt"><input type="radio" name="q120_10" value="0" autocomplete="off" data-ok><span>Рост доли любой ценой ведёт к формальным закрытиям и повторам</span></label><label class="opt"><input type="radio" name="q120_10" value="1" autocomplete="off"><span>Эти показатели считаются из разных журналов</span></label></div><p class="quiz-why" hidden>Метрика меняет поведение, и рост доли может ухудшить качество.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="12" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">12</span>Что показывает 90-й процентиль?</p><div class="opts"><label class="opt"><input type="radio" name="q120_11" value="3" autocomplete="off"><span>Число обращений за месяц</span></label><label class="opt"><input type="radio" name="q120_11" value="2" autocomplete="off"><span>Долю обращений, закрытых первой линией</span></label><label class="opt"><input type="radio" name="q120_11" value="0" autocomplete="off" data-ok><span>Значение, ниже которого находится 90 процентов обращений</span></label><label class="opt"><input type="radio" name="q120_11" value="1" autocomplete="off"><span>Среднее время решения</span></label></div><p class="quiz-why" hidden>Процентиль показывает, как обслуживают почти всех, кроме одного из десяти.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="short" data-q="13" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">13</span>Как называется доля обращений, закрытых без передачи на вторую линию?</p><input type="text" class="short-answer" data-answers="[&quot;доля первой линии&quot;, &quot;первая линия&quot;]" placeholder="Введите ответ" autocomplete="off" spellcheck="false" aria-label="Как называется доля обращений, закрытых без передачи на вторую линию?"><p class="quiz-why" hidden>Показатель имеет норму и смотрится вместе с повторными обращениями.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="multi" data-correct="3" data-q="14" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">14</span>Какие способы улучшить метрику не улучшают работу?</p><div class="opts"><label class="opt"><input type="checkbox" name="q120_13" value="0" autocomplete="off" data-ok><span>Закрывать обращение без подтверждения пользователя</span></label><label class="opt"><input type="checkbox" name="q120_13" value="2" autocomplete="off" data-ok><span>Понижать приоритет, чтобы срок казался выполненным</span></label><label class="opt"><input type="checkbox" name="q120_13" value="4" autocomplete="off"><span>Фиксировать точку отсчёта в регламенте</span></label><label class="opt"><input type="checkbox" name="q120_13" value="3" autocomplete="off"><span>Считать время решения от регистрации</span></label><label class="opt"><input type="checkbox" name="q120_13" value="1" autocomplete="off" data-ok><span>Дробить одно обращение на несколько мелких</span></label></div><p class="quiz-why" hidden>Такие приёмы меняют число, а не результат для пользователя.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="15" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">15</span>Что показывает медиана времени решения?</p><div class="opts"><label class="opt"><input type="radio" name="q120_14" value="3" autocomplete="off"><span>Самое долгое обращение месяца</span></label><label class="opt"><input type="radio" name="q120_14" value="0" autocomplete="off" data-ok><span>Значение в середине упорядоченного ряда, типичное для пользователя</span></label><label class="opt"><input type="radio" name="q120_14" value="2" autocomplete="off"><span>Среднее арифметическое всех значений</span></label><label class="opt"><input type="radio" name="q120_14" value="1" autocomplete="off"><span>Сумму всех времён решения</span></label></div><p class="quiz-why" hidden>Медиана не искажается одним очень медленным обращением.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><p class="quiz-note quiz-submit-note" data-quiz-note hidden></p><div class="quiz-result" data-quiz-result hidden aria-live="polite"><span class="label">Результат теста</span><h3>Тест завершён</h3><p class="modal-name-line">ФИО: <b data-student-name></b></p><p class="modal-result" data-modal-result></p><p class="modal-result" data-modal-wrong></p><dl class="modal-times"><div><dt>Время выполнения теста</dt><dd data-test-time>00:00</dd></div><div><dt>Время просмотра лекции</dt><dd data-view-time>00:00</dd></div></dl></div></div>
 
 <p>::/quiz</p></div>
 </div></article><nav class="pager"><a class="" href="32-lek-21.html"><span>← Предыдущее занятие</span>Лекция 21. Аутсорсинг</a><a class="next" style="text-align:right;margin-left:auto" href="34-prakt-12.html"><span>Следующее занятие →</span>Практика 12. Сводка обращений и соблюдение сроков</a></nav></main>
@@ -1615,32 +1628,131 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
     q.querySelectorAll('input').forEach(function(i){ i.disabled = true; });
   }
 
+  function resetQuiz(quiz){
+    quiz.querySelectorAll('input').forEach(function(i){
+      if(i.type === 'checkbox' || i.type === 'radio') i.checked = false;
+      else i.value = '';
+      i.disabled = false;
+    });
+    quiz.querySelectorAll('.opt').forEach(function(o){ o.classList.remove('picked', 'correct'); });
+    quiz.querySelectorAll('.quiz-q').forEach(function(q){
+      q.classList.remove('ok', 'bad', 'missing');
+      delete q.dataset.answered;
+    });
+    quiz.querySelectorAll('.quiz-why').forEach(function(w){ w.hidden = true; });
+    quiz.querySelectorAll('[data-note]').forEach(function(n){ n.hidden = true; n.textContent = ''; });
+    quiz.querySelectorAll('[data-answer]').forEach(function(b){ b.hidden = false; b.disabled = false; });
+    var note = quiz.querySelector('[data-quiz-note]');
+    if(note){ note.hidden = true; note.textContent = ''; }
+    var card = quiz.querySelector('[data-quiz-result]');
+    if(card) card.hidden = true;
+    document.documentElement.classList.add('quiz-pending');
+  }
+
+  function shuffleQuestions(quiz){
+    var list = [].slice.call(quiz.querySelectorAll('.quiz-q'));
+    var anchor = quiz.querySelector('[data-quiz-note]') || null;
+    for(var i = list.length - 1; i > 0; i--){
+      var j = Math.floor(Math.random() * (i + 1));
+      var tmp = list[i]; list[i] = list[j]; list[j] = tmp;
+    }
+    list.forEach(function(q, idx){
+      var no = q.querySelector('.quiz-no');
+      if(no) no.textContent = String(idx + 1).padStart(2, '0');
+      if(anchor) quiz.insertBefore(q, anchor); else quiz.appendChild(q);
+    });
+  }
+
+  addEventListener('pageshow', function(e){ if(e.persisted) location.reload(); });
+
+  function quizStoreKey(){ return 'mdk-quiz:' + location.pathname; }
+  function readAttempts(name){
+    try { var raw = localStorage.getItem(quizStoreKey() + ':' + encodeURIComponent(name)); return raw ? JSON.parse(raw) : null; }
+    catch(e){ return null; }
+  }
+  function writeAttempts(name, data){
+    try { localStorage.setItem(quizStoreKey() + ':' + encodeURIComponent(name), JSON.stringify(data)); } catch(e){}
+  }
+  function shuffleOptions(quiz){
+    quiz.querySelectorAll('.quiz-q .opts').forEach(function(box){
+      var list = [].slice.call(box.children);
+      for(var i = list.length - 1; i > 0; i--){
+        var j = Math.floor(Math.random() * (i + 1));
+        var tmp = list[i]; list[i] = list[j]; list[j] = tmp;
+      }
+      list.forEach(function(o){ box.appendChild(o); });
+    });
+  }
+
   document.querySelectorAll('[data-quiz]').forEach(function(quiz){
+    resetQuiz(quiz);
+    shuffleQuestions(quiz);
+    shuffleOptions(quiz);
     var qs = [].slice.call(quiz.querySelectorAll('.quiz-q'));
     if(!qs.length) return;
-    document.documentElement.classList.add('quiz-pending');
-    var current = 0, right = 0, firstAt = null, lastAt = null;
+    var last = qs.length - 1;
+    var nameInput = quiz.querySelector('[data-quiz-name]');
+    var whoNote = quiz.querySelector('[data-who-note]');
+    var attemptsLabel = quiz.querySelector('[data-quiz-attempts]');
+    var right = 0, submitted = false, blocked = false, firstAt = null, lastAt = null;
     function mark(){ var now = performance.now(); if(firstAt === null) firstAt = now; lastAt = now; }
-    function showQuestion(i){
-      current = i;
-      qs[i].hidden = false;
-      if(window.__readProgress) window.__readProgress();
+    qs.forEach(function(q, i){
+      var b = q.querySelector('[data-answer]');
+      if(b) b.textContent = i === last ? 'Завершить тест' : 'Ответить';
+      q.hidden = i > 0;
+    });
+
+    function updateAttempts(){
+      if(!nameInput) return false;
+      var name = norm(nameInput.value);
+      if(!name){
+        blocked = false;
+        if(attemptsLabel){ attemptsLabel.textContent = 'две попытки на лекцию'; attemptsLabel.classList.remove('limit'); }
+        return false;
+      }
+      var data = readAttempts(name);
+      var count = data && data.count ? data.count : 0;
+      blocked = count >= 2;
+      if(attemptsLabel){
+        attemptsLabel.textContent = 'Попыток: ' + count + ' из 2' + (data && data.best != null ? ' · лучший ' + data.best + ' из ' + qs.length : '');
+        attemptsLabel.classList.toggle('limit', blocked);
+      }
+      if(whoNote){
+        whoNote.hidden = !blocked;
+        whoNote.textContent = blocked ? 'Для этого ФИО попытки закончились: 2 из 2.' : '';
+      }
+      qs.forEach(function(q){
+        var b = q.querySelector('[data-answer]');
+        if(b && !submitted) b.disabled = blocked;
+      });
+      return blocked;
     }
-    function finish(){
-      var card = quiz.querySelector('[data-quiz-result]');
-      if(!card) return;
-      var total = qs.length, pct = total ? Math.round(right / total * 100) : 0;
-      var testMs = (firstAt !== null && lastAt !== null) ? Math.max(0, lastAt - firstAt) : 0;
-      card.querySelector('[data-modal-result]').textContent = 'Правильных ответов: ' + right + ' из ' + total + ' (' + pct + '%)';
-      card.querySelector('[data-test-time]').textContent = fmt(testMs);
-      card.querySelector('[data-view-time]').textContent = fmt(viewingMs());
-      card.hidden = false;
-      document.documentElement.classList.remove('quiz-pending');
-      if(window.__readProgress) window.__readProgress();
-      window.dispatchEvent(new Event('resize'));
+    if(nameInput){
+      nameInput.addEventListener('input', updateAttempts);
+      nameInput.addEventListener('change', updateAttempts);
     }
+
+    qs.forEach(function(q, idx){
+      q.addEventListener('input', function(e){ if(e.target.matches('input')){ mark(); q.classList.remove('missing'); } });
+      q.addEventListener('change', function(e){ if(e.target.matches('input')){ mark(); paintPicked(q); q.classList.remove('missing'); } });
+      var short = q.querySelector('.short-answer');
+      if(short) short.addEventListener('keydown', function(e){ if(e.key === 'Enter'){ e.preventDefault(); mark(); } });
+      var answerBtn = q.querySelector('[data-answer]');
+      if(answerBtn) answerBtn.addEventListener('click', function(){ answer(q, idx); });
+    });
+
     function answer(q, idx){
-      if(q.dataset.answered === '1') return;
+      if(submitted) return;
+      if(nameInput && !norm(nameInput.value)){
+        if(whoNote){ whoNote.hidden = false; whoNote.textContent = 'Укажите ФИО перед началом теста.'; }
+        nameInput.focus();
+        return;
+      }
+      if(whoNote) whoNote.hidden = true;
+      if(updateAttempts()){
+        if(whoNote){ whoNote.hidden = false; whoNote.textContent = 'Для этого ФИО попытки закончились: 2 из 2.'; }
+        return;
+      }
       var note = q.querySelector('[data-note]');
       if(!hasAnswer(q)){
         if(note){ note.hidden = false; note.textContent = q.dataset.type === 'short' ? 'Введите ответ.' : 'Выберите вариант.'; }
@@ -1648,26 +1760,60 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
       }
       if(note) note.hidden = true;
       mark();
-      var ok = questionCorrect(q);
-      q.dataset.answered = '1';
-      q.classList.add(ok ? 'ok' : 'bad');
-      paintChoices(q);
-      var why = q.querySelector('.quiz-why'); if(why) why.hidden = false;
-      lock(q);
-      var answerBtn = q.querySelector('[data-answer]'); if(answerBtn) answerBtn.hidden = true;
-      if(ok) right++;
-      if(idx === qs.length - 1){ finish(); }
-      else { showQuestion(idx + 1); }
+      var btn = q.querySelector('[data-answer]');
+      if(btn){ btn.disabled = true; btn.hidden = true; }
+      if(idx === last){ finish(); }
+      else { qs[idx + 1].hidden = false; if(window.__readProgress) window.__readProgress(); }
     }
-    qs.forEach(function(q, idx){
-      q.addEventListener('input', function(e){ if(e.target.matches('input')) mark(); });
-      q.addEventListener('change', function(e){ if(e.target.matches('input')){ mark(); paintPicked(q); } });
-      var answerBtn = q.querySelector('[data-answer]');
-      if(answerBtn) answerBtn.addEventListener('click', function(){ answer(q, idx); });
-      var short = q.querySelector('.short-answer');
-      if(short) short.addEventListener('keydown', function(e){ if(e.key === 'Enter'){ e.preventDefault(); answer(q, idx); } });
-    });
-    showQuestion(0);
+
+    function finish(){
+      if(submitted) return;
+      var note = quiz.querySelector('[data-quiz-note]');
+      var missing = qs.filter(function(q){ return !hasAnswer(q); });
+      if(missing.length){
+        qs.forEach(function(q){ q.classList.toggle('missing', !hasAnswer(q)); });
+        if(note){ note.hidden = false; note.textContent = 'Без ответа осталось вопросов: ' + missing.length + '. Ответьте на все и завершите тест снова.'; }
+        missing[0].scrollIntoView({block:'center', behavior:'smooth'});
+        return;
+      }
+      submitted = true;
+      if(note) note.hidden = true;
+      mark();
+      var wrong = [];
+      qs.forEach(function(q, i){
+        q.classList.remove('missing');
+        var ok = questionCorrect(q);
+        q.classList.add(ok ? 'ok' : 'bad');
+        paintPicked(q);
+        lock(q);
+        var btn = q.querySelector('[data-answer]'); if(btn) btn.hidden = true;
+        if(ok) right++; else wrong.push(i + 1);
+      });
+      var name = nameInput ? nameInput.value.trim() : '';
+      var nameKey = norm(name);
+      if(nameKey){
+        var data = readAttempts(nameKey) || {count: 0, best: 0};
+        data.count = (data.count || 0) + 1;
+        data.best = Math.max(data.best || 0, right);
+        writeAttempts(nameKey, data);
+      }
+      updateAttempts();
+      var card = quiz.querySelector('[data-quiz-result]');
+      if(!card) return;
+      var total = qs.length, pct = total ? Math.round(right / total * 100) : 0;
+      var testMs = (firstAt !== null && lastAt !== null) ? Math.max(0, lastAt - firstAt) : 0;
+      card.querySelector('[data-student-name]').textContent = name || 'не указано';
+      card.querySelector('[data-modal-result]').textContent = 'Правильных ответов: ' + right + ' из ' + total + ' (' + pct + '%)';
+      card.querySelector('[data-modal-wrong]').textContent = wrong.length
+        ? 'Вопросы с ошибками: ' + wrong.join(', ') + '. Повторите эти разделы лекции.'
+        : 'Ошибок нет.';
+      card.querySelector('[data-test-time]').textContent = fmt(testMs);
+      card.querySelector('[data-view-time]').textContent = fmt(viewingMs());
+      card.hidden = false;
+      document.documentElement.classList.remove('quiz-pending');
+      if(window.__readProgress) window.__readProgress();
+      window.dispatchEvent(new Event('resize'));
+    }
   });
 })();
 </script>

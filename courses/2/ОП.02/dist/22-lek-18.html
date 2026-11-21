@@ -411,17 +411,29 @@ html.quiz-pending .pager { display: none; }
 .quiz-actions button { -webkit-appearance: none; appearance: none; font: 600 13px var(--font-body); padding: 9px 15px; border-radius: 10px; border: 1px solid var(--rule); background: var(--paper); background-color: var(--paper); color: var(--ink); cursor: pointer; }
 .quiz-actions button[data-answer], .quiz-actions button.quiz-answer { background: #121212; background-color: #121212; color: #fff; border-color: transparent; }
 .quiz-actions button:hover { filter: brightness(.96); }
+.quiz-actions button:disabled { opacity: .45; cursor: default; filter: none; }
 .quiz-actions button:focus-visible { outline: 2px solid var(--quiz-accent); outline-offset: 2px; }
 .quiz-note { font-size: 13px; color: var(--bad); }
 .quiz .short-answer { width: 100%; font: 16px var(--font-body); padding: 12px 16px; border: 1px solid var(--quiz-line); border-radius: 8px; background: transparent; color: var(--quiz-ink); }
 .quiz .short-answer:focus { outline: 2px solid var(--quiz-accent); outline-offset: 1px; border-color: transparent; }
 .quiz-q.ok .short-answer { border-color: var(--quiz-ok); background: var(--quiz-ok-bg); }
 .quiz-q.bad .short-answer { border-color: var(--quiz-bad); background: var(--quiz-bad-bg); }
+.quiz-who { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; margin: 0 0 16px; }
+.quiz-who-label { display: flex; align-items: center; gap: 10px; font: 600 13px var(--font-body); color: var(--ink-2); }
+.quiz-who-label input { font: 15px var(--font-body); padding: 10px 12px; border: 1px solid var(--rule); border-radius: 9px; background: var(--card); color: var(--quiz-ink); min-width: 220px; max-width: 100%; }
+.quiz-who-label input:focus { outline: 2px solid var(--quiz-accent); outline-offset: 1px; border-color: transparent; }
+.quiz-attempts { font: 12px var(--font-mono); color: var(--ink-3); }
+.quiz-attempts.limit { color: var(--quiz-bad); font-weight: 600; }
+.modal-name-line { margin: 0 0 12px; font-size: 14px; color: var(--ink-2); }
+.quiz-q.missing { outline: 2px solid var(--quiz-bad); outline-offset: 2px; }
+.quiz-note[hidden] { display: none; }
+.quiz-submit-note { margin: 14px 0 0; }
 .quiz-result { margin-top: 22px; padding: 20px 22px; border: 1px solid var(--quiz-line); border-radius: 12px; background: var(--quiz-card); box-shadow: 0 2px 8px rgba(0,0,0,.02); color: var(--quiz-ink); }
 .quiz-result[hidden] { display: none; }
 .quiz-result > .label { display: block; font: 600 11px var(--font-mono); letter-spacing: .08em; text-transform: uppercase; color: var(--accent); margin-bottom: 6px; }
 .quiz-result h3 { margin: 0 0 14px; font: 800 24px/1.2 var(--font-display); }
 .quiz-result .modal-result { margin: 0 0 14px; }
+.quiz-result [data-modal-wrong] { margin-top: -6px; font-size: 14px; font-weight: 400; color: var(--quiz-ink); }
 .quiz-result .modal-times { margin-bottom: 0; }
 @media (max-width: 560px) {
   .quiz-q { padding: 18px 16px; }
@@ -553,6 +565,7 @@ html.modal-open { overflow: hidden; }
 .quiz-q { animation: quiz-in .32s cubic-bezier(.16,1,.3,1) both; }
 @keyframes quiz-in { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
 @media (prefers-reduced-motion: reduce) { .quiz-q { animation: none; } }
+@media (prefers-reduced-motion: reduce) { .quiz-q { animation: none; } }
 
 /* ---------- variant cards on the practice page ---------- */
 .variant { border: 1px solid var(--rule); border-radius: 14px; background: var(--card); margin: 0 0 12px; overflow: hidden; }
@@ -606,7 +619,7 @@ html.modal-open { overflow: hidden; }
   a { color: #000; text-decoration: none; }
   .callout, .check, .recap, .quiz-q, .quiz-result, .figure, .outcomes { border-color: #999; }
   .gate-step[hidden], .gate-content[hidden], .quiz-q[hidden] { display: block !important; }
-  .gate-action, .quiz-actions { display: none !important; }
+  .gate-action, .quiz-actions, .quiz-who { display: none !important; }
   .reveal { opacity: 1 !important; transform: none !important; transition: none !important; }
   .recap { background: #fff; color: #000; }
   .recap li, .recap p { color: #000; }
@@ -1237,7 +1250,7 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <details class="check"><summary><span>Что означает доступность 99,9 процента?</span></summary><div><p>Простой не больше 0,1 процента времени, то есть около 8,76 часа в год.</p></div></details>
 
 <h2 id="тест"><span class="num">13</span>Тест</h2>
-<div class="quiz" data-quiz><div class="quiz-q" data-type="single" data-correct="1" data-q="1"><p class="quiz-p"><span class="quiz-no" aria-hidden="true">01</span>Сколько полезной ёмкости даёт RAID 5 из четырёх дисков по 2 ТБ?</p><div class="opts"><label class="opt"><input type="radio" name="q178_0" value="2"><span>4 ТБ</span></label><label class="opt"><input type="radio" name="q178_0" value="0" data-ok><span>6 ТБ</span></label><label class="opt"><input type="radio" name="q178_0" value="3"><span>2 ТБ</span></label><label class="opt"><input type="radio" name="q178_0" value="1"><span>8 ТБ</span></label></div><p class="quiz-why" hidden>Полезная ёмкость равна трём дискам по 2 ТБ: 3 × 2 = 6 ТБ, один диск отдан под чётность.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="short" data-q="2" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">02</span>В каких единицах измеряют высоту стоечного сервера?</p><input type="text" class="short-answer" data-answers="[&quot;юнит&quot;, &quot;U&quot;, &quot;юниты&quot;]" placeholder="Введите ответ" autocomplete="off" spellcheck="false" aria-label="В каких единицах измеряют высоту стоечного сервера?"><p class="quiz-why" hidden>Один юнит равен 44,45 мм.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="multi" data-correct="3" data-q="3" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">03</span>Что входит в стоимость владения сервером?</p><div class="opts"><label class="opt"><input type="checkbox" name="q178_2" value="0" data-ok><span>Электричество</span></label><label class="opt"><input type="checkbox" name="q178_2" value="4"><span>Только лицензия на офисный пакет</span></label><label class="opt"><input type="checkbox" name="q178_2" value="3"><span>Только цена покупки</span></label><label class="opt"><input type="checkbox" name="q178_2" value="2" data-ok><span>Поддержка и обновления</span></label><label class="opt"><input type="checkbox" name="q178_2" value="1" data-ok><span>Охлаждение</span></label></div><p class="quiz-why" hidden>Сервер работает круглосуточно, поэтому эксплуатационные расходы сравнимы с ценой.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="4" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">04</span>Что главное отличает сервер от настольного ПК?</p><div class="opts"><label class="opt"><input type="radio" name="q178_3" value="2"><span>Обязательное наличие игровой видеокарты</span></label><label class="opt"><input type="radio" name="q178_3" value="3"><span>Работа только под управлением Windows</span></label><label class="opt"><input type="radio" name="q178_3" value="0" data-ok><span>Расчёт на непрерывную работу и обслуживание без остановки</span></label><label class="opt"><input type="radio" name="q178_3" value="1"><span>Всегда более высокая частота процессора</span></label></div><p class="quiz-why" hidden>Сервер проектируют под доступность и ремонтопригодность, а не под максимальную скорость в короткой задаче.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="5" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">05</span>Зачем серверу отдельный контроллер управления?</p><div class="opts"><label class="opt"><input type="radio" name="q178_4" value="2"><span>Чтобы заменить RAID</span></label><label class="opt"><input type="radio" name="q178_4" value="3"><span>Чтобы охлаждать процессор</span></label><label class="opt"><input type="radio" name="q178_4" value="0" data-ok><span>Чтобы включать питание и смотреть консоль удалённо</span></label><label class="opt"><input type="radio" name="q178_4" value="1"><span>Чтобы увеличить число ядер</span></label></div><p class="quiz-why" hidden>BMC работает независимо от системы и даёт доступ к питанию и датчикам.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="short" data-q="6" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">06</span>Как называется контроллер удалённого управления сервером?</p><input type="text" class="short-answer" data-answers="[&quot;BMC&quot;, &quot;IPMI&quot;, &quot;iDRAC&quot;]" placeholder="Введите ответ" autocomplete="off" spellcheck="false" aria-label="Как называется контроллер удалённого управления сервером?"><p class="quiz-why" hidden>BMC или IPMI даёт доступ к питанию и консоли по сети.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="7" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">07</span>Сколько часов простоя в год допускает доступность 99,9 процента?</p><div class="opts"><label class="opt"><input type="radio" name="q178_6" value="1"><span>Около 87,6 часа</span></label><label class="opt"><input type="radio" name="q178_6" value="2"><span>Около 52,6 минуты</span></label><label class="opt"><input type="radio" name="q178_6" value="3"><span>Около 4,38 часа</span></label><label class="opt"><input type="radio" name="q178_6" value="0" data-ok><span>Около 8,76 часа</span></label></div><p class="quiz-why" hidden>0,1 процента от 8760 часов равно 8,76 часа.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="multi" data-correct="3" data-q="8" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">08</span>Какие компоненты серверной платформы резервируют?</p><div class="opts"><label class="opt"><input type="checkbox" name="q178_7" value="3"><span>Операционную систему на одном диске</span></label><label class="opt"><input type="checkbox" name="q178_7" value="2" data-ok><span>Сетевые каналы</span></label><label class="opt"><input type="checkbox" name="q178_7" value="0" data-ok><span>Блоки питания</span></label><label class="opt"><input type="checkbox" name="q178_7" value="4"><span>Единственный кабель питания</span></label><label class="opt"><input type="checkbox" name="q178_7" value="1" data-ok><span>Вентиляторы</span></label></div><p class="quiz-why" hidden>Резервирование охватывает питание, охлаждение и пути передачи данных.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="9" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">09</span>Почему стоечный сервер шумит сильнее башенного?</p><div class="opts"><label class="opt"><input type="radio" name="q178_8" value="1"><span>В нём нет вентиляторов</span></label><label class="opt"><input type="radio" name="q178_8" value="0" data-ok><span>Маленькие вентиляторы вращаются быстро, чтобы продуть плотный корпус</span></label><label class="opt"><input type="radio" name="q178_8" value="2"><span>Он всегда мощнее</span></label><label class="opt"><input type="radio" name="q178_8" value="3"><span>Он работает только ночью</span></label></div><p class="quiz-why" hidden>Высокая плотность требует большого давления воздуха и высоких оборотов.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="10" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">10</span>Что означает схема питания 1+1?</p><div class="opts"><label class="opt"><input type="radio" name="q178_9" value="3"><span>Один блок на два сервера</span></label><label class="opt"><input type="radio" name="q178_9" value="1"><span>Один блок и один аккумулятор</span></label><label class="opt"><input type="radio" name="q178_9" value="2"><span>Два блока, работающих по очереди</span></label><label class="opt"><input type="radio" name="q178_9" value="0" data-ok><span>Два блока, каждый может питать всю нагрузку</span></label></div><p class="quiz-why" hidden>Второй блок это резерв, который включается при отказе первого.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="multi" data-correct="3" data-q="11" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">11</span>Какие признаки указывают на серверную платформу?</p><div class="opts"><label class="opt"><input type="checkbox" name="q178_10" value="2" data-ok><span>Удалённое управление</span></label><label class="opt"><input type="checkbox" name="q178_10" value="3"><span>Одна планка памяти</span></label><label class="opt"><input type="checkbox" name="q178_10" value="1" data-ok><span>Горячая замена дисков</span></label><label class="opt"><input type="checkbox" name="q178_10" value="4"><span>Один блок питания без резерва</span></label><label class="opt"><input type="checkbox" name="q178_10" value="0" data-ok><span>Поддержка ECC</span></label></div><p class="quiz-why" hidden>Эти признаки обеспечивают доступность и обслуживание.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="12" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">12</span>Почему RAID не заменяет резервное копирование?</p><div class="opts"><label class="opt"><input type="radio" name="q178_11" value="3"><span>Он не поддерживает большие диски</span></label><label class="opt"><input type="radio" name="q178_11" value="1"><span>Он не защищает от отказа диска</span></label><label class="opt"><input type="radio" name="q178_11" value="2"><span>Он работает только с SSD</span></label><label class="opt"><input type="radio" name="q178_11" value="0" data-ok><span>Он защищает от отказа диска, но не от удаления или шифрования данных</span></label></div><p class="quiz-why" hidden>Копия нужна на другом носителе и должна проверяться восстановлением.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="13" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">13</span>Какой уровень RAID не переживает отказ диска?</p><div class="opts"><label class="opt"><input type="radio" name="q178_12" value="1"><span>RAID 1</span></label><label class="opt"><input type="radio" name="q178_12" value="2"><span>RAID 5</span></label><label class="opt"><input type="radio" name="q178_12" value="3"><span>RAID 6</span></label><label class="opt"><input type="radio" name="q178_12" value="0" data-ok><span>RAID 0</span></label></div><p class="quiz-why" hidden>RAID 0 распределяет данные без чётности и зеркала, поэтому отказ любого диска теряет массив.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="short" data-q="14" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">14</span>Как называется память с коррекцией ошибок?</p><input type="text" class="short-answer" data-answers="[&quot;ECC&quot;, &quot;память ECC&quot;]" placeholder="Введите ответ" autocomplete="off" spellcheck="false" aria-label="Как называется память с коррекцией ошибок?"><p class="quiz-why" hidden>ECC расшифровывается как Error Correcting Code, код с исправлением ошибок.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="15" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">15</span>Что делает память ECC?</p><div class="opts"><label class="opt"><input type="radio" name="q178_14" value="3"><span>Ускоряет диски</span></label><label class="opt"><input type="radio" name="q178_14" value="1"><span>Увеличивает частоту процессора</span></label><label class="opt"><input type="radio" name="q178_14" value="2"><span>Заменяет резервное копирование</span></label><label class="opt"><input type="radio" name="q178_14" value="0" data-ok><span>Исправляет одиночные ошибки и обнаруживает двойные</span></label></div><p class="quiz-why" hidden>Контрольные биты позволяют восстановить один бит и зафиксировать сбой двух.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-result" data-quiz-result hidden aria-live="polite"><span class="label">Результат теста</span><h3>Тест завершён</h3><label class="modal-name" data-student-label><span>ФИО студента</span><input type="text" data-student-name maxlength="80" autocomplete="name" placeholder="Иванов Иван Иванович"></label><p class="modal-result" data-modal-result></p><dl class="modal-times"><div><dt>Время выполнения теста</dt><dd data-test-time>00:00</dd></div><div><dt>Время просмотра лекции</dt><dd data-view-time>00:00</dd></div></dl></div></div></div>
+<div class="quiz" data-quiz><div class="quiz-who"><label class="quiz-who-label"><span>ФИО</span><input type="text" class="quiz-name" data-quiz-name maxlength="80" autocomplete="off" placeholder="Иванов Иван Иванович"></label><span class="quiz-attempts" data-quiz-attempts>две попытки на лекцию</span><span class="quiz-note" data-who-note hidden></span></div><div class="quiz-q" data-type="single" data-correct="1" data-q="1"><p class="quiz-p"><span class="quiz-no" aria-hidden="true">01</span>Сколько полезной ёмкости даёт RAID 5 из четырёх дисков по 2 ТБ?</p><div class="opts"><label class="opt"><input type="radio" name="q178_0" value="2" autocomplete="off"><span>4 ТБ</span></label><label class="opt"><input type="radio" name="q178_0" value="0" autocomplete="off" data-ok><span>6 ТБ</span></label><label class="opt"><input type="radio" name="q178_0" value="3" autocomplete="off"><span>2 ТБ</span></label><label class="opt"><input type="radio" name="q178_0" value="1" autocomplete="off"><span>8 ТБ</span></label></div><p class="quiz-why" hidden>Полезная ёмкость равна трём дискам по 2 ТБ: 3 × 2 = 6 ТБ, один диск отдан под чётность.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="short" data-q="2" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">02</span>В каких единицах измеряют высоту стоечного сервера?</p><input type="text" class="short-answer" data-answers="[&quot;юнит&quot;, &quot;U&quot;, &quot;юниты&quot;]" placeholder="Введите ответ" autocomplete="off" spellcheck="false" aria-label="В каких единицах измеряют высоту стоечного сервера?"><p class="quiz-why" hidden>Один юнит равен 44,45 мм.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="multi" data-correct="3" data-q="3" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">03</span>Что входит в стоимость владения сервером?</p><div class="opts"><label class="opt"><input type="checkbox" name="q178_2" value="0" autocomplete="off" data-ok><span>Электричество</span></label><label class="opt"><input type="checkbox" name="q178_2" value="4" autocomplete="off"><span>Только лицензия на офисный пакет</span></label><label class="opt"><input type="checkbox" name="q178_2" value="3" autocomplete="off"><span>Только цена покупки</span></label><label class="opt"><input type="checkbox" name="q178_2" value="2" autocomplete="off" data-ok><span>Поддержка и обновления</span></label><label class="opt"><input type="checkbox" name="q178_2" value="1" autocomplete="off" data-ok><span>Охлаждение</span></label></div><p class="quiz-why" hidden>Сервер работает круглосуточно, поэтому эксплуатационные расходы сравнимы с ценой.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="4" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">04</span>Что главное отличает сервер от настольного ПК?</p><div class="opts"><label class="opt"><input type="radio" name="q178_3" value="2" autocomplete="off"><span>Обязательное наличие игровой видеокарты</span></label><label class="opt"><input type="radio" name="q178_3" value="3" autocomplete="off"><span>Работа только под управлением Windows</span></label><label class="opt"><input type="radio" name="q178_3" value="0" autocomplete="off" data-ok><span>Расчёт на непрерывную работу и обслуживание без остановки</span></label><label class="opt"><input type="radio" name="q178_3" value="1" autocomplete="off"><span>Всегда более высокая частота процессора</span></label></div><p class="quiz-why" hidden>Сервер проектируют под доступность и ремонтопригодность, а не под максимальную скорость в короткой задаче.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="5" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">05</span>Зачем серверу отдельный контроллер управления?</p><div class="opts"><label class="opt"><input type="radio" name="q178_4" value="2" autocomplete="off"><span>Чтобы заменить RAID</span></label><label class="opt"><input type="radio" name="q178_4" value="3" autocomplete="off"><span>Чтобы охлаждать процессор</span></label><label class="opt"><input type="radio" name="q178_4" value="0" autocomplete="off" data-ok><span>Чтобы включать питание и смотреть консоль удалённо</span></label><label class="opt"><input type="radio" name="q178_4" value="1" autocomplete="off"><span>Чтобы увеличить число ядер</span></label></div><p class="quiz-why" hidden>BMC работает независимо от системы и даёт доступ к питанию и датчикам.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="short" data-q="6" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">06</span>Как называется контроллер удалённого управления сервером?</p><input type="text" class="short-answer" data-answers="[&quot;BMC&quot;, &quot;IPMI&quot;, &quot;iDRAC&quot;]" placeholder="Введите ответ" autocomplete="off" spellcheck="false" aria-label="Как называется контроллер удалённого управления сервером?"><p class="quiz-why" hidden>BMC или IPMI даёт доступ к питанию и консоли по сети.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="7" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">07</span>Сколько часов простоя в год допускает доступность 99,9 процента?</p><div class="opts"><label class="opt"><input type="radio" name="q178_6" value="1" autocomplete="off"><span>Около 87,6 часа</span></label><label class="opt"><input type="radio" name="q178_6" value="2" autocomplete="off"><span>Около 52,6 минуты</span></label><label class="opt"><input type="radio" name="q178_6" value="3" autocomplete="off"><span>Около 4,38 часа</span></label><label class="opt"><input type="radio" name="q178_6" value="0" autocomplete="off" data-ok><span>Около 8,76 часа</span></label></div><p class="quiz-why" hidden>0,1 процента от 8760 часов равно 8,76 часа.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="multi" data-correct="3" data-q="8" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">08</span>Какие компоненты серверной платформы резервируют?</p><div class="opts"><label class="opt"><input type="checkbox" name="q178_7" value="3" autocomplete="off"><span>Операционную систему на одном диске</span></label><label class="opt"><input type="checkbox" name="q178_7" value="2" autocomplete="off" data-ok><span>Сетевые каналы</span></label><label class="opt"><input type="checkbox" name="q178_7" value="0" autocomplete="off" data-ok><span>Блоки питания</span></label><label class="opt"><input type="checkbox" name="q178_7" value="4" autocomplete="off"><span>Единственный кабель питания</span></label><label class="opt"><input type="checkbox" name="q178_7" value="1" autocomplete="off" data-ok><span>Вентиляторы</span></label></div><p class="quiz-why" hidden>Резервирование охватывает питание, охлаждение и пути передачи данных.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="9" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">09</span>Почему стоечный сервер шумит сильнее башенного?</p><div class="opts"><label class="opt"><input type="radio" name="q178_8" value="1" autocomplete="off"><span>В нём нет вентиляторов</span></label><label class="opt"><input type="radio" name="q178_8" value="0" autocomplete="off" data-ok><span>Маленькие вентиляторы вращаются быстро, чтобы продуть плотный корпус</span></label><label class="opt"><input type="radio" name="q178_8" value="2" autocomplete="off"><span>Он всегда мощнее</span></label><label class="opt"><input type="radio" name="q178_8" value="3" autocomplete="off"><span>Он работает только ночью</span></label></div><p class="quiz-why" hidden>Высокая плотность требует большого давления воздуха и высоких оборотов.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="10" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">10</span>Что означает схема питания 1+1?</p><div class="opts"><label class="opt"><input type="radio" name="q178_9" value="3" autocomplete="off"><span>Один блок на два сервера</span></label><label class="opt"><input type="radio" name="q178_9" value="1" autocomplete="off"><span>Один блок и один аккумулятор</span></label><label class="opt"><input type="radio" name="q178_9" value="2" autocomplete="off"><span>Два блока, работающих по очереди</span></label><label class="opt"><input type="radio" name="q178_9" value="0" autocomplete="off" data-ok><span>Два блока, каждый может питать всю нагрузку</span></label></div><p class="quiz-why" hidden>Второй блок это резерв, который включается при отказе первого.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="multi" data-correct="3" data-q="11" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">11</span>Какие признаки указывают на серверную платформу?</p><div class="opts"><label class="opt"><input type="checkbox" name="q178_10" value="2" autocomplete="off" data-ok><span>Удалённое управление</span></label><label class="opt"><input type="checkbox" name="q178_10" value="3" autocomplete="off"><span>Одна планка памяти</span></label><label class="opt"><input type="checkbox" name="q178_10" value="1" autocomplete="off" data-ok><span>Горячая замена дисков</span></label><label class="opt"><input type="checkbox" name="q178_10" value="4" autocomplete="off"><span>Один блок питания без резерва</span></label><label class="opt"><input type="checkbox" name="q178_10" value="0" autocomplete="off" data-ok><span>Поддержка ECC</span></label></div><p class="quiz-why" hidden>Эти признаки обеспечивают доступность и обслуживание.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="12" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">12</span>Почему RAID не заменяет резервное копирование?</p><div class="opts"><label class="opt"><input type="radio" name="q178_11" value="3" autocomplete="off"><span>Он не поддерживает большие диски</span></label><label class="opt"><input type="radio" name="q178_11" value="1" autocomplete="off"><span>Он не защищает от отказа диска</span></label><label class="opt"><input type="radio" name="q178_11" value="2" autocomplete="off"><span>Он работает только с SSD</span></label><label class="opt"><input type="radio" name="q178_11" value="0" autocomplete="off" data-ok><span>Он защищает от отказа диска, но не от удаления или шифрования данных</span></label></div><p class="quiz-why" hidden>Копия нужна на другом носителе и должна проверяться восстановлением.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="13" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">13</span>Какой уровень RAID не переживает отказ диска?</p><div class="opts"><label class="opt"><input type="radio" name="q178_12" value="1" autocomplete="off"><span>RAID 1</span></label><label class="opt"><input type="radio" name="q178_12" value="2" autocomplete="off"><span>RAID 5</span></label><label class="opt"><input type="radio" name="q178_12" value="3" autocomplete="off"><span>RAID 6</span></label><label class="opt"><input type="radio" name="q178_12" value="0" autocomplete="off" data-ok><span>RAID 0</span></label></div><p class="quiz-why" hidden>RAID 0 распределяет данные без чётности и зеркала, поэтому отказ любого диска теряет массив.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="short" data-q="14" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">14</span>Как называется память с коррекцией ошибок?</p><input type="text" class="short-answer" data-answers="[&quot;ECC&quot;, &quot;память ECC&quot;]" placeholder="Введите ответ" autocomplete="off" spellcheck="false" aria-label="Как называется память с коррекцией ошибок?"><p class="quiz-why" hidden>ECC расшифровывается как Error Correcting Code, код с исправлением ошибок.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="15" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">15</span>Что делает память ECC?</p><div class="opts"><label class="opt"><input type="radio" name="q178_14" value="3" autocomplete="off"><span>Ускоряет диски</span></label><label class="opt"><input type="radio" name="q178_14" value="1" autocomplete="off"><span>Увеличивает частоту процессора</span></label><label class="opt"><input type="radio" name="q178_14" value="2" autocomplete="off"><span>Заменяет резервное копирование</span></label><label class="opt"><input type="radio" name="q178_14" value="0" autocomplete="off" data-ok><span>Исправляет одиночные ошибки и обнаруживает двойные</span></label></div><p class="quiz-why" hidden>Контрольные биты позволяют восстановить один бит и зафиксировать сбой двух.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><p class="quiz-note quiz-submit-note" data-quiz-note hidden></p><div class="quiz-result" data-quiz-result hidden aria-live="polite"><span class="label">Результат теста</span><h3>Тест завершён</h3><p class="modal-name-line">ФИО: <b data-student-name></b></p><p class="modal-result" data-modal-result></p><p class="modal-result" data-modal-wrong></p><dl class="modal-times"><div><dt>Время выполнения теста</dt><dd data-test-time>00:00</dd></div><div><dt>Время просмотра лекции</dt><dd data-view-time>00:00</dd></div></dl></div></div></div>
 </div></article><nav class="pager"><a class="" href="21-lek-17.html"><span>← Предыдущее занятие</span>Лекция 17. Мобильные и встраиваемые платформы</a><a class="next" style="text-align:right;margin-left:auto" href="23-prakt-05.html"><span>Следующее занятие →</span>Практика 5. Выбор серверной платформы</a></nav></main>
 <div class="modal" data-modal="warn" hidden>
   <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="warn-title">
@@ -1623,32 +1636,131 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
     q.querySelectorAll('input').forEach(function(i){ i.disabled = true; });
   }
 
+  function resetQuiz(quiz){
+    quiz.querySelectorAll('input').forEach(function(i){
+      if(i.type === 'checkbox' || i.type === 'radio') i.checked = false;
+      else i.value = '';
+      i.disabled = false;
+    });
+    quiz.querySelectorAll('.opt').forEach(function(o){ o.classList.remove('picked', 'correct'); });
+    quiz.querySelectorAll('.quiz-q').forEach(function(q){
+      q.classList.remove('ok', 'bad', 'missing');
+      delete q.dataset.answered;
+    });
+    quiz.querySelectorAll('.quiz-why').forEach(function(w){ w.hidden = true; });
+    quiz.querySelectorAll('[data-note]').forEach(function(n){ n.hidden = true; n.textContent = ''; });
+    quiz.querySelectorAll('[data-answer]').forEach(function(b){ b.hidden = false; b.disabled = false; });
+    var note = quiz.querySelector('[data-quiz-note]');
+    if(note){ note.hidden = true; note.textContent = ''; }
+    var card = quiz.querySelector('[data-quiz-result]');
+    if(card) card.hidden = true;
+    document.documentElement.classList.add('quiz-pending');
+  }
+
+  function shuffleQuestions(quiz){
+    var list = [].slice.call(quiz.querySelectorAll('.quiz-q'));
+    var anchor = quiz.querySelector('[data-quiz-note]') || null;
+    for(var i = list.length - 1; i > 0; i--){
+      var j = Math.floor(Math.random() * (i + 1));
+      var tmp = list[i]; list[i] = list[j]; list[j] = tmp;
+    }
+    list.forEach(function(q, idx){
+      var no = q.querySelector('.quiz-no');
+      if(no) no.textContent = String(idx + 1).padStart(2, '0');
+      if(anchor) quiz.insertBefore(q, anchor); else quiz.appendChild(q);
+    });
+  }
+
+  addEventListener('pageshow', function(e){ if(e.persisted) location.reload(); });
+
+  function quizStoreKey(){ return 'mdk-quiz:' + location.pathname; }
+  function readAttempts(name){
+    try { var raw = localStorage.getItem(quizStoreKey() + ':' + encodeURIComponent(name)); return raw ? JSON.parse(raw) : null; }
+    catch(e){ return null; }
+  }
+  function writeAttempts(name, data){
+    try { localStorage.setItem(quizStoreKey() + ':' + encodeURIComponent(name), JSON.stringify(data)); } catch(e){}
+  }
+  function shuffleOptions(quiz){
+    quiz.querySelectorAll('.quiz-q .opts').forEach(function(box){
+      var list = [].slice.call(box.children);
+      for(var i = list.length - 1; i > 0; i--){
+        var j = Math.floor(Math.random() * (i + 1));
+        var tmp = list[i]; list[i] = list[j]; list[j] = tmp;
+      }
+      list.forEach(function(o){ box.appendChild(o); });
+    });
+  }
+
   document.querySelectorAll('[data-quiz]').forEach(function(quiz){
+    resetQuiz(quiz);
+    shuffleQuestions(quiz);
+    shuffleOptions(quiz);
     var qs = [].slice.call(quiz.querySelectorAll('.quiz-q'));
     if(!qs.length) return;
-    document.documentElement.classList.add('quiz-pending');
-    var current = 0, right = 0, firstAt = null, lastAt = null;
+    var last = qs.length - 1;
+    var nameInput = quiz.querySelector('[data-quiz-name]');
+    var whoNote = quiz.querySelector('[data-who-note]');
+    var attemptsLabel = quiz.querySelector('[data-quiz-attempts]');
+    var right = 0, submitted = false, blocked = false, firstAt = null, lastAt = null;
     function mark(){ var now = performance.now(); if(firstAt === null) firstAt = now; lastAt = now; }
-    function showQuestion(i){
-      current = i;
-      qs[i].hidden = false;
-      if(window.__readProgress) window.__readProgress();
+    qs.forEach(function(q, i){
+      var b = q.querySelector('[data-answer]');
+      if(b) b.textContent = i === last ? 'Завершить тест' : 'Ответить';
+      q.hidden = i > 0;
+    });
+
+    function updateAttempts(){
+      if(!nameInput) return false;
+      var name = norm(nameInput.value);
+      if(!name){
+        blocked = false;
+        if(attemptsLabel){ attemptsLabel.textContent = 'две попытки на лекцию'; attemptsLabel.classList.remove('limit'); }
+        return false;
+      }
+      var data = readAttempts(name);
+      var count = data && data.count ? data.count : 0;
+      blocked = count >= 2;
+      if(attemptsLabel){
+        attemptsLabel.textContent = 'Попыток: ' + count + ' из 2' + (data && data.best != null ? ' · лучший ' + data.best + ' из ' + qs.length : '');
+        attemptsLabel.classList.toggle('limit', blocked);
+      }
+      if(whoNote){
+        whoNote.hidden = !blocked;
+        whoNote.textContent = blocked ? 'Для этого ФИО попытки закончились: 2 из 2.' : '';
+      }
+      qs.forEach(function(q){
+        var b = q.querySelector('[data-answer]');
+        if(b && !submitted) b.disabled = blocked;
+      });
+      return blocked;
     }
-    function finish(){
-      var card = quiz.querySelector('[data-quiz-result]');
-      if(!card) return;
-      var total = qs.length, pct = total ? Math.round(right / total * 100) : 0;
-      var testMs = (firstAt !== null && lastAt !== null) ? Math.max(0, lastAt - firstAt) : 0;
-      card.querySelector('[data-modal-result]').textContent = 'Правильных ответов: ' + right + ' из ' + total + ' (' + pct + '%)';
-      card.querySelector('[data-test-time]').textContent = fmt(testMs);
-      card.querySelector('[data-view-time]').textContent = fmt(viewingMs());
-      card.hidden = false;
-      document.documentElement.classList.remove('quiz-pending');
-      if(window.__readProgress) window.__readProgress();
-      window.dispatchEvent(new Event('resize'));
+    if(nameInput){
+      nameInput.addEventListener('input', updateAttempts);
+      nameInput.addEventListener('change', updateAttempts);
     }
+
+    qs.forEach(function(q, idx){
+      q.addEventListener('input', function(e){ if(e.target.matches('input')){ mark(); q.classList.remove('missing'); } });
+      q.addEventListener('change', function(e){ if(e.target.matches('input')){ mark(); paintPicked(q); q.classList.remove('missing'); } });
+      var short = q.querySelector('.short-answer');
+      if(short) short.addEventListener('keydown', function(e){ if(e.key === 'Enter'){ e.preventDefault(); mark(); } });
+      var answerBtn = q.querySelector('[data-answer]');
+      if(answerBtn) answerBtn.addEventListener('click', function(){ answer(q, idx); });
+    });
+
     function answer(q, idx){
-      if(q.dataset.answered === '1') return;
+      if(submitted) return;
+      if(nameInput && !norm(nameInput.value)){
+        if(whoNote){ whoNote.hidden = false; whoNote.textContent = 'Укажите ФИО перед началом теста.'; }
+        nameInput.focus();
+        return;
+      }
+      if(whoNote) whoNote.hidden = true;
+      if(updateAttempts()){
+        if(whoNote){ whoNote.hidden = false; whoNote.textContent = 'Для этого ФИО попытки закончились: 2 из 2.'; }
+        return;
+      }
       var note = q.querySelector('[data-note]');
       if(!hasAnswer(q)){
         if(note){ note.hidden = false; note.textContent = q.dataset.type === 'short' ? 'Введите ответ.' : 'Выберите вариант.'; }
@@ -1656,26 +1768,60 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
       }
       if(note) note.hidden = true;
       mark();
-      var ok = questionCorrect(q);
-      q.dataset.answered = '1';
-      q.classList.add(ok ? 'ok' : 'bad');
-      paintChoices(q);
-      var why = q.querySelector('.quiz-why'); if(why) why.hidden = false;
-      lock(q);
-      var answerBtn = q.querySelector('[data-answer]'); if(answerBtn) answerBtn.hidden = true;
-      if(ok) right++;
-      if(idx === qs.length - 1){ finish(); }
-      else { showQuestion(idx + 1); }
+      var btn = q.querySelector('[data-answer]');
+      if(btn){ btn.disabled = true; btn.hidden = true; }
+      if(idx === last){ finish(); }
+      else { qs[idx + 1].hidden = false; if(window.__readProgress) window.__readProgress(); }
     }
-    qs.forEach(function(q, idx){
-      q.addEventListener('input', function(e){ if(e.target.matches('input')) mark(); });
-      q.addEventListener('change', function(e){ if(e.target.matches('input')){ mark(); paintPicked(q); } });
-      var answerBtn = q.querySelector('[data-answer]');
-      if(answerBtn) answerBtn.addEventListener('click', function(){ answer(q, idx); });
-      var short = q.querySelector('.short-answer');
-      if(short) short.addEventListener('keydown', function(e){ if(e.key === 'Enter'){ e.preventDefault(); answer(q, idx); } });
-    });
-    showQuestion(0);
+
+    function finish(){
+      if(submitted) return;
+      var note = quiz.querySelector('[data-quiz-note]');
+      var missing = qs.filter(function(q){ return !hasAnswer(q); });
+      if(missing.length){
+        qs.forEach(function(q){ q.classList.toggle('missing', !hasAnswer(q)); });
+        if(note){ note.hidden = false; note.textContent = 'Без ответа осталось вопросов: ' + missing.length + '. Ответьте на все и завершите тест снова.'; }
+        missing[0].scrollIntoView({block:'center', behavior:'smooth'});
+        return;
+      }
+      submitted = true;
+      if(note) note.hidden = true;
+      mark();
+      var wrong = [];
+      qs.forEach(function(q, i){
+        q.classList.remove('missing');
+        var ok = questionCorrect(q);
+        q.classList.add(ok ? 'ok' : 'bad');
+        paintPicked(q);
+        lock(q);
+        var btn = q.querySelector('[data-answer]'); if(btn) btn.hidden = true;
+        if(ok) right++; else wrong.push(i + 1);
+      });
+      var name = nameInput ? nameInput.value.trim() : '';
+      var nameKey = norm(name);
+      if(nameKey){
+        var data = readAttempts(nameKey) || {count: 0, best: 0};
+        data.count = (data.count || 0) + 1;
+        data.best = Math.max(data.best || 0, right);
+        writeAttempts(nameKey, data);
+      }
+      updateAttempts();
+      var card = quiz.querySelector('[data-quiz-result]');
+      if(!card) return;
+      var total = qs.length, pct = total ? Math.round(right / total * 100) : 0;
+      var testMs = (firstAt !== null && lastAt !== null) ? Math.max(0, lastAt - firstAt) : 0;
+      card.querySelector('[data-student-name]').textContent = name || 'не указано';
+      card.querySelector('[data-modal-result]').textContent = 'Правильных ответов: ' + right + ' из ' + total + ' (' + pct + '%)';
+      card.querySelector('[data-modal-wrong]').textContent = wrong.length
+        ? 'Вопросы с ошибками: ' + wrong.join(', ') + '. Повторите эти разделы лекции.'
+        : 'Ошибок нет.';
+      card.querySelector('[data-test-time]').textContent = fmt(testMs);
+      card.querySelector('[data-view-time]').textContent = fmt(viewingMs());
+      card.hidden = false;
+      document.documentElement.classList.remove('quiz-pending');
+      if(window.__readProgress) window.__readProgress();
+      window.dispatchEvent(new Event('resize'));
+    }
   });
 })();
 </script>

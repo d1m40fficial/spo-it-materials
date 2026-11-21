@@ -246,12 +246,20 @@ plan) -> chapter/lesson pages. The 09.02.07 row opens years 2, 3 and 4; 09.02.12
   `translateY(26px)` as they enter the screen; the first visible block stays immediate
   and `prefers-reduced-motion` disables the reveal.
 - Quiz questions are rendered one at a time, each as a new card below the previous one.
-  After an answer the builder marks the choices, shows the explanation for both a correct
-  and a wrong answer, and immediately reveals the next question, without a
-  `Следующий вопрос` button. After the last answer the former submission card appears
-  inline with the name field, score, test time and view time, without a submit button.
-  The lesson pager appears only after that result card is shown.
-- Do not add `Проверить ответы`, `Сбросить`, `Сдать работу`, a custom submission form or
+  Every question has its own `Ответить` button; the last one says `Завершить тест`.
+  Clicking validates that the question is answered and reveals the next card. No
+  correctness highlighting or explanation appears at that point. On `Завершить тест`
+  the builder scores every question, locks the answers and shows an inline result card
+  with the student name, score, the numbers of the missed questions, test time and view
+  time. Correct options and explanations are never revealed on the page. The lesson
+  pager appears only after that result card is shown.
+- A required name field and an attempt counter sit before the test. Each name gets two
+  attempts per lecture; the counter and best score live in localStorage keyed by the
+  page address. After the second attempt the questions are locked.
+- Questions and answer options are shuffled in the browser on every load, and question
+  numbers are recalculated. A reload clears the answers and the name and produces a new
+  order. Keep correct answers out of visible page text.
+- Do not add `Проверить ответы`, `Сбросить`, `Сдать работу`, a separate submit button or
   a second result dialog to a chapter.
 
 ## Quality bar
@@ -290,12 +298,15 @@ plan) -> chapter/lesson pages. The 09.02.07 row opens years 2, 3 and 4; 09.02.12
   about the next block, never says «Продолжить», and the first block stays visible with
   the signature figure. Gates never nest and each closes with `::/gate`.
 - Every lecture ends with a 15-question test: 6-10 single-choice, 2-4 multiple-choice,
-  1-3 short-answer, all with explanations. Do not list this breakdown in the lecture
-  text. The builder shows one question per new card, reveals the correct answer and
-  explanation after every answer (right or wrong), and immediately reveals the next
-  question without a button. After the last answer it shows an inline result card with
-  the student name, score, test time and lecture view time, with no action button. The
-  lesson pager stays hidden until that result card appears. The shared left-edge rail
+  1-3 short-answer, all with explanations kept for the author but not shown to students.
+  Do not list this breakdown in the lecture text. The builder shows one question per new
+  card with an `Ответить` button; the last button says `Завершить тест`. Answers are not
+  checked until that final button, and then only the score and the numbers of the missed
+  questions are shown, never the correct options or explanations. A required name field
+  limits each name to two attempts per lecture and remembers the best score in
+  localStorage. Questions and options are shuffled on every load, and a reload clears
+  the answers. The lesson pager stays hidden until the result card appears. The shared
+  left-edge rail
   carries the back arrow, PDF export, the progress warning and the dark-theme toggle;
   you must not rebuild these elements inside a chapter. The same rail is used by the
   discipline plan and year pages: the plan exports its syllabus to Excel as

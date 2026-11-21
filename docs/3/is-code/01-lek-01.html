@@ -411,17 +411,29 @@ html.quiz-pending .pager { display: none; }
 .quiz-actions button { -webkit-appearance: none; appearance: none; font: 600 13px var(--font-body); padding: 9px 15px; border-radius: 10px; border: 1px solid var(--rule); background: var(--paper); background-color: var(--paper); color: var(--ink); cursor: pointer; }
 .quiz-actions button[data-answer], .quiz-actions button.quiz-answer { background: #121212; background-color: #121212; color: #fff; border-color: transparent; }
 .quiz-actions button:hover { filter: brightness(.96); }
+.quiz-actions button:disabled { opacity: .45; cursor: default; filter: none; }
 .quiz-actions button:focus-visible { outline: 2px solid var(--quiz-accent); outline-offset: 2px; }
 .quiz-note { font-size: 13px; color: var(--bad); }
 .quiz .short-answer { width: 100%; font: 16px var(--font-body); padding: 12px 16px; border: 1px solid var(--quiz-line); border-radius: 8px; background: transparent; color: var(--quiz-ink); }
 .quiz .short-answer:focus { outline: 2px solid var(--quiz-accent); outline-offset: 1px; border-color: transparent; }
 .quiz-q.ok .short-answer { border-color: var(--quiz-ok); background: var(--quiz-ok-bg); }
 .quiz-q.bad .short-answer { border-color: var(--quiz-bad); background: var(--quiz-bad-bg); }
+.quiz-who { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; margin: 0 0 16px; }
+.quiz-who-label { display: flex; align-items: center; gap: 10px; font: 600 13px var(--font-body); color: var(--ink-2); }
+.quiz-who-label input { font: 15px var(--font-body); padding: 10px 12px; border: 1px solid var(--rule); border-radius: 9px; background: var(--card); color: var(--quiz-ink); min-width: 220px; max-width: 100%; }
+.quiz-who-label input:focus { outline: 2px solid var(--quiz-accent); outline-offset: 1px; border-color: transparent; }
+.quiz-attempts { font: 12px var(--font-mono); color: var(--ink-3); }
+.quiz-attempts.limit { color: var(--quiz-bad); font-weight: 600; }
+.modal-name-line { margin: 0 0 12px; font-size: 14px; color: var(--ink-2); }
+.quiz-q.missing { outline: 2px solid var(--quiz-bad); outline-offset: 2px; }
+.quiz-note[hidden] { display: none; }
+.quiz-submit-note { margin: 14px 0 0; }
 .quiz-result { margin-top: 22px; padding: 20px 22px; border: 1px solid var(--quiz-line); border-radius: 12px; background: var(--quiz-card); box-shadow: 0 2px 8px rgba(0,0,0,.02); color: var(--quiz-ink); }
 .quiz-result[hidden] { display: none; }
 .quiz-result > .label { display: block; font: 600 11px var(--font-mono); letter-spacing: .08em; text-transform: uppercase; color: var(--accent); margin-bottom: 6px; }
 .quiz-result h3 { margin: 0 0 14px; font: 800 24px/1.2 var(--font-display); }
 .quiz-result .modal-result { margin: 0 0 14px; }
+.quiz-result [data-modal-wrong] { margin-top: -6px; font-size: 14px; font-weight: 400; color: var(--quiz-ink); }
 .quiz-result .modal-times { margin-bottom: 0; }
 @media (max-width: 560px) {
   .quiz-q { padding: 18px 16px; }
@@ -553,6 +565,7 @@ html.modal-open { overflow: hidden; }
 .quiz-q { animation: quiz-in .32s cubic-bezier(.16,1,.3,1) both; }
 @keyframes quiz-in { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
 @media (prefers-reduced-motion: reduce) { .quiz-q { animation: none; } }
+@media (prefers-reduced-motion: reduce) { .quiz-q { animation: none; } }
 
 /* ---------- variant cards on the practice page ---------- */
 .variant { border: 1px solid var(--rule); border-radius: 14px; background: var(--card); margin: 0 0 12px; overflow: hidden; }
@@ -606,7 +619,7 @@ html.modal-open { overflow: hidden; }
   a { color: #000; text-decoration: none; }
   .callout, .check, .recap, .quiz-q, .quiz-result, .figure, .outcomes { border-color: #999; }
   .gate-step[hidden], .gate-content[hidden], .quiz-q[hidden] { display: block !important; }
-  .gate-action, .quiz-actions { display: none !important; }
+  .gate-action, .quiz-actions, .quiz-who { display: none !important; }
   .reveal { opacity: 1 !important; transform: none !important; transition: none !important; }
   .recap { background: #fff; color: #000; }
   .recap li, .recap p { color: #000; }
@@ -1183,7 +1196,7 @@ R-05 Роли кладовщика и менеджера: нет теста дл
 <li>Код живёт в сопровождении дольше, чем пишется, и его читаемость влияет на стоимость изменений.</li>
 <li>Дефект требования исправляют в документе, дефект кода в программе, и различает их записанное ожидание.</li>
 </ul>
-<div class="quiz" data-quiz><div class="quiz-q" data-type="single" data-correct="1" data-q="1"><p class="quiz-p"><span class="quiz-no" aria-hidden="true">01</span>Что показывает трассируемость требования?</p><div class="opts"><label class="opt"><input type="radio" name="q126_0" value="3"><span>Стоимость лицензии на систему</span></label><label class="opt"><input type="radio" name="q126_0" value="2"><span>Количество сотрудников в команде</span></label><label class="opt"><input type="radio" name="q126_0" value="0" data-ok><span>Связь требования с модулем и тестом, который его подтверждает</span></label><label class="opt"><input type="radio" name="q126_0" value="1"><span>Скорость работы программы на учебной базе</span></label></div><p class="quiz-why" hidden>Цепочка требование, модуль, тест позволяет найти слепые пятна.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="2" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">02</span>Что такое артефакт проекта?</p><div class="opts"><label class="opt"><input type="radio" name="q126_1" value="2"><span>Любая переписка в мессенджере</span></label><label class="opt"><input type="radio" name="q126_1" value="0" data-ok><span>Проверяемый результат работы с версией и владельцем</span></label><label class="opt"><input type="radio" name="q126_1" value="1"><span>Только исходный код программы</span></label><label class="opt"><input type="radio" name="q126_1" value="3"><span>Файл, который хранится на личном диске</span></label></div><p class="quiz-why" hidden>Артефактом является и требование, и схема, и тест, и инструкция.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="short" data-q="3" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">03</span>Как называется свойство проекта, при котором каждое требование связано с модулем и тестом?</p><input type="text" class="short-answer" data-answers="[&quot;трассируемость&quot;, &quot;трассировка требований&quot;]" placeholder="Введите ответ" autocomplete="off" spellcheck="false" aria-label="Как называется свойство проекта, при котором каждое требование связано с модулем и тестом?"><p class="quiz-why" hidden>Связь требований с реализацией и проверкой называют трассируемостью.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="multi" data-correct="3" data-q="4" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">04</span>Какие признаки говорят о проблемах сопровождаемости?</p><div class="opts"><label class="opt"><input type="checkbox" name="q126_3" value="2" data-ok><span>Запуск проекта описан только устно</span></label><label class="opt"><input type="checkbox" name="q126_3" value="3"><span>У функции понятное имя</span></label><label class="opt"><input type="checkbox" name="q126_3" value="1" data-ok><span>Правка одного правила тянет пять файлов</span></label><label class="opt"><input type="checkbox" name="q126_3" value="4"><span>Тест падает при поломке правила</span></label><label class="opt"><input type="checkbox" name="q126_3" value="0" data-ok><span>Для проверки функции нужен весь стенд</span></label></div><p class="quiz-why" hidden>Плохая сопровождаемость проявляется в связях, дублях и устных знаниях.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="5" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">05</span>Почему отчёт показал менеджеру Калуги 4800 позиций вместо 570?</p><div class="opts"><label class="opt"><input type="radio" name="q126_4" value="2"><span>Сеть не передала фильтр на сервер</span></label><label class="opt"><input type="radio" name="q126_4" value="1"><span>База потеряла часть записей</span></label><label class="opt"><input type="radio" name="q126_4" value="3"><span>Пользователь выбрал не ту роль</span></label><label class="opt"><input type="radio" name="q126_4" value="0" data-ok><span>Требование не уточняло площадку, и код просуммировал все площадки</span></label></div><p class="quiz-why" hidden>Дефект родился в двусмысленном требовании и проявился в коде.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="6" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">06</span>Чем функциональное требование отличается от нефункционального?</p><div class="opts"><label class="opt"><input type="radio" name="q126_5" value="3"><span>Первое относится к данным, второе к интерфейсу</span></label><label class="opt"><input type="radio" name="q126_5" value="1"><span>Первое пишет заказчик, второе разработчик</span></label><label class="opt"><input type="radio" name="q126_5" value="2"><span>Первое проверяют тестом, второе никогда не проверяют</span></label><label class="opt"><input type="radio" name="q126_5" value="0" data-ok><span>Первое описывает, что система делает, второе как она это делает</span></label></div><p class="quiz-why" hidden>Нефункциональные требования задают скорость, объём, надёжность и ограничения.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="short" data-q="7" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">07</span>Как называется результат работы, который можно передать и проверить?</p><input type="text" class="short-answer" data-answers="[&quot;артефакт&quot;, &quot;артефакт проекта&quot;]" placeholder="Введите ответ" autocomplete="off" spellcheck="false" aria-label="Как называется результат работы, который можно передать и проверить?"><p class="quiz-why" hidden>Артефактами являются требования, схемы, код, тесты и инструкции.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="8" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">08</span>Почему стоимость изменения кода растёт со временем?</p><div class="opts"><label class="opt"><input type="radio" name="q126_7" value="1"><span>Компьютеры становятся медленнее</span></label><label class="opt"><input type="radio" name="q126_7" value="3"><span>Заказчик запрещает менять систему</span></label><label class="opt"><input type="radio" name="q126_7" value="0" data-ok><span>Появляются связи, накапливаются данные и уходит знание автора</span></label><label class="opt"><input type="radio" name="q126_7" value="2"><span>Языки программирования устаревают каждый год</span></label></div><p class="quiz-why" hidden>Старение системы связано со связями, данными и людьми.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="9" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">09</span>Что такое разработка кода в жизненном цикле информационной системы?</p><div class="opts"><label class="opt"><input type="radio" name="q126_8" value="2"><span>Этап, который заменяет сопровождение после релиза</span></label><label class="opt"><input type="radio" name="q126_8" value="1"><span>Первый этап, с которого начинается любой проект</span></label><label class="opt"><input type="radio" name="q126_8" value="0" data-ok><span>Этап, который получает требования и проект и отдаёт код, тесты и сборку</span></label><label class="opt"><input type="radio" name="q126_8" value="3"><span>Работа, не связанная с требованиями и тестированием</span></label></div><p class="quiz-why" hidden>Код появляется после анализа и проектирования, а дальше его проверяют и сопровождают.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="multi" data-correct="3" data-q="10" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">10</span>Какие артефакты относятся к результатам разработки?</p><div class="opts"><label class="opt"><input type="checkbox" name="q126_9" value="2" data-ok><span>Собранная версия приложения</span></label><label class="opt"><input type="checkbox" name="q126_9" value="0" data-ok><span>Исходный код модулей</span></label><label class="opt"><input type="checkbox" name="q126_9" value="3"><span>Штатное расписание склада</span></label><label class="opt"><input type="checkbox" name="q126_9" value="4"><span>Договор аренды помещения</span></label><label class="opt"><input type="checkbox" name="q126_9" value="1" data-ok><span>Набор автоматических тестов</span></label></div><p class="quiz-why" hidden>Разработка отдаёт код, тесты и сборку, а не документы о сотрудниках.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="11" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">11</span>Что входит в определение готовности задачи?</p><div class="opts"><label class="opt"><input type="radio" name="q126_10" value="1"><span>Код написан и сохранён на рабочем компьютере</span></label><label class="opt"><input type="radio" name="q126_10" value="0" data-ok><span>Код написан, проверен тестом, прошёл ревью и слит в общую ветку</span></label><label class="opt"><input type="radio" name="q126_10" value="3"><span>Разработчик показал экран коллеге</span></label><label class="opt"><input type="radio" name="q126_10" value="2"><span>Задача отмечена выполненной без проверки</span></label></div><p class="quiz-why" hidden>Готовность подтверждается проверкой и слиянием, а не фактом набора текста.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="12" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">12</span>Чем дефект требования отличается от дефекта кода?</p><div class="opts"><label class="opt"><input type="radio" name="q126_11" value="2"><span>Дефект кода исправляют только в документе</span></label><label class="opt"><input type="radio" name="q126_11" value="0" data-ok><span>При дефекте требования система сделала записанное, но записано не то</span></label><label class="opt"><input type="radio" name="q126_11" value="3"><span>Разницы нет, оба исправляют перезапуском</span></label><label class="opt"><input type="radio" name="q126_11" value="1"><span>Дефект требования всегда находится в базе данных</span></label></div><p class="quiz-why" hidden>Сравнивают фактическое поведение с записанным ожиданием.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="short" data-q="13" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">13</span>Какой этап жизненного цикла идёт после разработки и длится годами?</p><input type="text" class="short-answer" data-answers="[&quot;эксплуатация&quot;, &quot;сопровождение&quot;, &quot;этап эксплуатации&quot;]" placeholder="Введите ответ" autocomplete="off" spellcheck="false" aria-label="Какой этап жизненного цикла идёт после разработки и длится годами?"><p class="quiz-why" hidden>Эксплуатация не имеет даты окончания, пока система используется.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="14" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">14</span>Что происходит, если требование не имеет способа проверки?</p><div class="opts"><label class="opt"><input type="radio" name="q126_13" value="3"><span>Требование автоматически удаляется</span></label><label class="opt"><input type="radio" name="q126_13" value="2"><span>Тестировщик получает больше времени</span></label><label class="opt"><input type="radio" name="q126_13" value="1"><span>Система работает быстрее</span></label><label class="opt"><input type="radio" name="q126_13" value="0" data-ok><span>Никто не может подтвердить, выполнено оно или нет</span></label></div><p class="quiz-why" hidden>Без критерия приёмки требование остаётся пожеланием.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="15" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">15</span>Кто отвечает за то, что требование сформулировано однозначно и проверяемо?</p><div class="opts"><label class="opt"><input type="radio" name="q126_14" value="3"><span>Кладовщик</span></label><label class="opt"><input type="radio" name="q126_14" value="2"><span>Администратор БД</span></label><label class="opt"><input type="radio" name="q126_14" value="1"><span>Тестировщик</span></label><label class="opt"><input type="radio" name="q126_14" value="0" data-ok><span>Аналитик</span></label></div><p class="quiz-why" hidden>Аналитик переводит потребность бизнеса в проверяемое требование.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-result" data-quiz-result hidden aria-live="polite"><span class="label">Результат теста</span><h3>Тест завершён</h3><label class="modal-name" data-student-label><span>ФИО студента</span><input type="text" data-student-name maxlength="80" autocomplete="name" placeholder="Иванов Иван Иванович"></label><p class="modal-result" data-modal-result></p><dl class="modal-times"><div><dt>Время выполнения теста</dt><dd data-test-time>00:00</dd></div><div><dt>Время просмотра лекции</dt><dd data-view-time>00:00</dd></div></dl></div></div></div>
+<div class="quiz" data-quiz><div class="quiz-who"><label class="quiz-who-label"><span>ФИО</span><input type="text" class="quiz-name" data-quiz-name maxlength="80" autocomplete="off" placeholder="Иванов Иван Иванович"></label><span class="quiz-attempts" data-quiz-attempts>две попытки на лекцию</span><span class="quiz-note" data-who-note hidden></span></div><div class="quiz-q" data-type="single" data-correct="1" data-q="1"><p class="quiz-p"><span class="quiz-no" aria-hidden="true">01</span>Что показывает трассируемость требования?</p><div class="opts"><label class="opt"><input type="radio" name="q126_0" value="3" autocomplete="off"><span>Стоимость лицензии на систему</span></label><label class="opt"><input type="radio" name="q126_0" value="2" autocomplete="off"><span>Количество сотрудников в команде</span></label><label class="opt"><input type="radio" name="q126_0" value="0" autocomplete="off" data-ok><span>Связь требования с модулем и тестом, который его подтверждает</span></label><label class="opt"><input type="radio" name="q126_0" value="1" autocomplete="off"><span>Скорость работы программы на учебной базе</span></label></div><p class="quiz-why" hidden>Цепочка требование, модуль, тест позволяет найти слепые пятна.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="2" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">02</span>Что такое артефакт проекта?</p><div class="opts"><label class="opt"><input type="radio" name="q126_1" value="2" autocomplete="off"><span>Любая переписка в мессенджере</span></label><label class="opt"><input type="radio" name="q126_1" value="0" autocomplete="off" data-ok><span>Проверяемый результат работы с версией и владельцем</span></label><label class="opt"><input type="radio" name="q126_1" value="1" autocomplete="off"><span>Только исходный код программы</span></label><label class="opt"><input type="radio" name="q126_1" value="3" autocomplete="off"><span>Файл, который хранится на личном диске</span></label></div><p class="quiz-why" hidden>Артефактом является и требование, и схема, и тест, и инструкция.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="short" data-q="3" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">03</span>Как называется свойство проекта, при котором каждое требование связано с модулем и тестом?</p><input type="text" class="short-answer" data-answers="[&quot;трассируемость&quot;, &quot;трассировка требований&quot;]" placeholder="Введите ответ" autocomplete="off" spellcheck="false" aria-label="Как называется свойство проекта, при котором каждое требование связано с модулем и тестом?"><p class="quiz-why" hidden>Связь требований с реализацией и проверкой называют трассируемостью.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="multi" data-correct="3" data-q="4" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">04</span>Какие признаки говорят о проблемах сопровождаемости?</p><div class="opts"><label class="opt"><input type="checkbox" name="q126_3" value="2" autocomplete="off" data-ok><span>Запуск проекта описан только устно</span></label><label class="opt"><input type="checkbox" name="q126_3" value="3" autocomplete="off"><span>У функции понятное имя</span></label><label class="opt"><input type="checkbox" name="q126_3" value="1" autocomplete="off" data-ok><span>Правка одного правила тянет пять файлов</span></label><label class="opt"><input type="checkbox" name="q126_3" value="4" autocomplete="off"><span>Тест падает при поломке правила</span></label><label class="opt"><input type="checkbox" name="q126_3" value="0" autocomplete="off" data-ok><span>Для проверки функции нужен весь стенд</span></label></div><p class="quiz-why" hidden>Плохая сопровождаемость проявляется в связях, дублях и устных знаниях.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="5" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">05</span>Почему отчёт показал менеджеру Калуги 4800 позиций вместо 570?</p><div class="opts"><label class="opt"><input type="radio" name="q126_4" value="2" autocomplete="off"><span>Сеть не передала фильтр на сервер</span></label><label class="opt"><input type="radio" name="q126_4" value="1" autocomplete="off"><span>База потеряла часть записей</span></label><label class="opt"><input type="radio" name="q126_4" value="3" autocomplete="off"><span>Пользователь выбрал не ту роль</span></label><label class="opt"><input type="radio" name="q126_4" value="0" autocomplete="off" data-ok><span>Требование не уточняло площадку, и код просуммировал все площадки</span></label></div><p class="quiz-why" hidden>Дефект родился в двусмысленном требовании и проявился в коде.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="6" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">06</span>Чем функциональное требование отличается от нефункционального?</p><div class="opts"><label class="opt"><input type="radio" name="q126_5" value="3" autocomplete="off"><span>Первое относится к данным, второе к интерфейсу</span></label><label class="opt"><input type="radio" name="q126_5" value="1" autocomplete="off"><span>Первое пишет заказчик, второе разработчик</span></label><label class="opt"><input type="radio" name="q126_5" value="2" autocomplete="off"><span>Первое проверяют тестом, второе никогда не проверяют</span></label><label class="opt"><input type="radio" name="q126_5" value="0" autocomplete="off" data-ok><span>Первое описывает, что система делает, второе как она это делает</span></label></div><p class="quiz-why" hidden>Нефункциональные требования задают скорость, объём, надёжность и ограничения.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="short" data-q="7" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">07</span>Как называется результат работы, который можно передать и проверить?</p><input type="text" class="short-answer" data-answers="[&quot;артефакт&quot;, &quot;артефакт проекта&quot;]" placeholder="Введите ответ" autocomplete="off" spellcheck="false" aria-label="Как называется результат работы, который можно передать и проверить?"><p class="quiz-why" hidden>Артефактами являются требования, схемы, код, тесты и инструкции.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="8" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">08</span>Почему стоимость изменения кода растёт со временем?</p><div class="opts"><label class="opt"><input type="radio" name="q126_7" value="1" autocomplete="off"><span>Компьютеры становятся медленнее</span></label><label class="opt"><input type="radio" name="q126_7" value="3" autocomplete="off"><span>Заказчик запрещает менять систему</span></label><label class="opt"><input type="radio" name="q126_7" value="0" autocomplete="off" data-ok><span>Появляются связи, накапливаются данные и уходит знание автора</span></label><label class="opt"><input type="radio" name="q126_7" value="2" autocomplete="off"><span>Языки программирования устаревают каждый год</span></label></div><p class="quiz-why" hidden>Старение системы связано со связями, данными и людьми.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="9" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">09</span>Что такое разработка кода в жизненном цикле информационной системы?</p><div class="opts"><label class="opt"><input type="radio" name="q126_8" value="2" autocomplete="off"><span>Этап, который заменяет сопровождение после релиза</span></label><label class="opt"><input type="radio" name="q126_8" value="1" autocomplete="off"><span>Первый этап, с которого начинается любой проект</span></label><label class="opt"><input type="radio" name="q126_8" value="0" autocomplete="off" data-ok><span>Этап, который получает требования и проект и отдаёт код, тесты и сборку</span></label><label class="opt"><input type="radio" name="q126_8" value="3" autocomplete="off"><span>Работа, не связанная с требованиями и тестированием</span></label></div><p class="quiz-why" hidden>Код появляется после анализа и проектирования, а дальше его проверяют и сопровождают.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="multi" data-correct="3" data-q="10" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">10</span>Какие артефакты относятся к результатам разработки?</p><div class="opts"><label class="opt"><input type="checkbox" name="q126_9" value="2" autocomplete="off" data-ok><span>Собранная версия приложения</span></label><label class="opt"><input type="checkbox" name="q126_9" value="0" autocomplete="off" data-ok><span>Исходный код модулей</span></label><label class="opt"><input type="checkbox" name="q126_9" value="3" autocomplete="off"><span>Штатное расписание склада</span></label><label class="opt"><input type="checkbox" name="q126_9" value="4" autocomplete="off"><span>Договор аренды помещения</span></label><label class="opt"><input type="checkbox" name="q126_9" value="1" autocomplete="off" data-ok><span>Набор автоматических тестов</span></label></div><p class="quiz-why" hidden>Разработка отдаёт код, тесты и сборку, а не документы о сотрудниках.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="11" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">11</span>Что входит в определение готовности задачи?</p><div class="opts"><label class="opt"><input type="radio" name="q126_10" value="1" autocomplete="off"><span>Код написан и сохранён на рабочем компьютере</span></label><label class="opt"><input type="radio" name="q126_10" value="0" autocomplete="off" data-ok><span>Код написан, проверен тестом, прошёл ревью и слит в общую ветку</span></label><label class="opt"><input type="radio" name="q126_10" value="3" autocomplete="off"><span>Разработчик показал экран коллеге</span></label><label class="opt"><input type="radio" name="q126_10" value="2" autocomplete="off"><span>Задача отмечена выполненной без проверки</span></label></div><p class="quiz-why" hidden>Готовность подтверждается проверкой и слиянием, а не фактом набора текста.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="12" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">12</span>Чем дефект требования отличается от дефекта кода?</p><div class="opts"><label class="opt"><input type="radio" name="q126_11" value="2" autocomplete="off"><span>Дефект кода исправляют только в документе</span></label><label class="opt"><input type="radio" name="q126_11" value="0" autocomplete="off" data-ok><span>При дефекте требования система сделала записанное, но записано не то</span></label><label class="opt"><input type="radio" name="q126_11" value="3" autocomplete="off"><span>Разницы нет, оба исправляют перезапуском</span></label><label class="opt"><input type="radio" name="q126_11" value="1" autocomplete="off"><span>Дефект требования всегда находится в базе данных</span></label></div><p class="quiz-why" hidden>Сравнивают фактическое поведение с записанным ожиданием.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="short" data-q="13" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">13</span>Какой этап жизненного цикла идёт после разработки и длится годами?</p><input type="text" class="short-answer" data-answers="[&quot;эксплуатация&quot;, &quot;сопровождение&quot;, &quot;этап эксплуатации&quot;]" placeholder="Введите ответ" autocomplete="off" spellcheck="false" aria-label="Какой этап жизненного цикла идёт после разработки и длится годами?"><p class="quiz-why" hidden>Эксплуатация не имеет даты окончания, пока система используется.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="14" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">14</span>Что происходит, если требование не имеет способа проверки?</p><div class="opts"><label class="opt"><input type="radio" name="q126_13" value="3" autocomplete="off"><span>Требование автоматически удаляется</span></label><label class="opt"><input type="radio" name="q126_13" value="2" autocomplete="off"><span>Тестировщик получает больше времени</span></label><label class="opt"><input type="radio" name="q126_13" value="1" autocomplete="off"><span>Система работает быстрее</span></label><label class="opt"><input type="radio" name="q126_13" value="0" autocomplete="off" data-ok><span>Никто не может подтвердить, выполнено оно или нет</span></label></div><p class="quiz-why" hidden>Без критерия приёмки требование остаётся пожеланием.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="15" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">15</span>Кто отвечает за то, что требование сформулировано однозначно и проверяемо?</p><div class="opts"><label class="opt"><input type="radio" name="q126_14" value="3" autocomplete="off"><span>Кладовщик</span></label><label class="opt"><input type="radio" name="q126_14" value="2" autocomplete="off"><span>Администратор БД</span></label><label class="opt"><input type="radio" name="q126_14" value="1" autocomplete="off"><span>Тестировщик</span></label><label class="opt"><input type="radio" name="q126_14" value="0" autocomplete="off" data-ok><span>Аналитик</span></label></div><p class="quiz-why" hidden>Аналитик переводит потребность бизнеса в проверяемое требование.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><p class="quiz-note quiz-submit-note" data-quiz-note hidden></p><div class="quiz-result" data-quiz-result hidden aria-live="polite"><span class="label">Результат теста</span><h3>Тест завершён</h3><p class="modal-name-line">ФИО: <b data-student-name></b></p><p class="modal-result" data-modal-result></p><p class="modal-result" data-modal-wrong></p><dl class="modal-times"><div><dt>Время выполнения теста</dt><dd data-test-time>00:00</dd></div><div><dt>Время просмотра лекции</dt><dd data-view-time>00:00</dd></div></dl></div></div></div>
 </div></article><nav class="pager"><span></span><a class="next" style="text-align:right;margin-left:auto" href="02-lek-02.html"><span>Следующее занятие →</span>Лекция 2. Архитектура приложения</a></nav></main>
 <div class="modal" data-modal="warn" hidden>
   <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="warn-title">
@@ -1569,32 +1582,131 @@ R-05 Роли кладовщика и менеджера: нет теста дл
     q.querySelectorAll('input').forEach(function(i){ i.disabled = true; });
   }
 
+  function resetQuiz(quiz){
+    quiz.querySelectorAll('input').forEach(function(i){
+      if(i.type === 'checkbox' || i.type === 'radio') i.checked = false;
+      else i.value = '';
+      i.disabled = false;
+    });
+    quiz.querySelectorAll('.opt').forEach(function(o){ o.classList.remove('picked', 'correct'); });
+    quiz.querySelectorAll('.quiz-q').forEach(function(q){
+      q.classList.remove('ok', 'bad', 'missing');
+      delete q.dataset.answered;
+    });
+    quiz.querySelectorAll('.quiz-why').forEach(function(w){ w.hidden = true; });
+    quiz.querySelectorAll('[data-note]').forEach(function(n){ n.hidden = true; n.textContent = ''; });
+    quiz.querySelectorAll('[data-answer]').forEach(function(b){ b.hidden = false; b.disabled = false; });
+    var note = quiz.querySelector('[data-quiz-note]');
+    if(note){ note.hidden = true; note.textContent = ''; }
+    var card = quiz.querySelector('[data-quiz-result]');
+    if(card) card.hidden = true;
+    document.documentElement.classList.add('quiz-pending');
+  }
+
+  function shuffleQuestions(quiz){
+    var list = [].slice.call(quiz.querySelectorAll('.quiz-q'));
+    var anchor = quiz.querySelector('[data-quiz-note]') || null;
+    for(var i = list.length - 1; i > 0; i--){
+      var j = Math.floor(Math.random() * (i + 1));
+      var tmp = list[i]; list[i] = list[j]; list[j] = tmp;
+    }
+    list.forEach(function(q, idx){
+      var no = q.querySelector('.quiz-no');
+      if(no) no.textContent = String(idx + 1).padStart(2, '0');
+      if(anchor) quiz.insertBefore(q, anchor); else quiz.appendChild(q);
+    });
+  }
+
+  addEventListener('pageshow', function(e){ if(e.persisted) location.reload(); });
+
+  function quizStoreKey(){ return 'mdk-quiz:' + location.pathname; }
+  function readAttempts(name){
+    try { var raw = localStorage.getItem(quizStoreKey() + ':' + encodeURIComponent(name)); return raw ? JSON.parse(raw) : null; }
+    catch(e){ return null; }
+  }
+  function writeAttempts(name, data){
+    try { localStorage.setItem(quizStoreKey() + ':' + encodeURIComponent(name), JSON.stringify(data)); } catch(e){}
+  }
+  function shuffleOptions(quiz){
+    quiz.querySelectorAll('.quiz-q .opts').forEach(function(box){
+      var list = [].slice.call(box.children);
+      for(var i = list.length - 1; i > 0; i--){
+        var j = Math.floor(Math.random() * (i + 1));
+        var tmp = list[i]; list[i] = list[j]; list[j] = tmp;
+      }
+      list.forEach(function(o){ box.appendChild(o); });
+    });
+  }
+
   document.querySelectorAll('[data-quiz]').forEach(function(quiz){
+    resetQuiz(quiz);
+    shuffleQuestions(quiz);
+    shuffleOptions(quiz);
     var qs = [].slice.call(quiz.querySelectorAll('.quiz-q'));
     if(!qs.length) return;
-    document.documentElement.classList.add('quiz-pending');
-    var current = 0, right = 0, firstAt = null, lastAt = null;
+    var last = qs.length - 1;
+    var nameInput = quiz.querySelector('[data-quiz-name]');
+    var whoNote = quiz.querySelector('[data-who-note]');
+    var attemptsLabel = quiz.querySelector('[data-quiz-attempts]');
+    var right = 0, submitted = false, blocked = false, firstAt = null, lastAt = null;
     function mark(){ var now = performance.now(); if(firstAt === null) firstAt = now; lastAt = now; }
-    function showQuestion(i){
-      current = i;
-      qs[i].hidden = false;
-      if(window.__readProgress) window.__readProgress();
+    qs.forEach(function(q, i){
+      var b = q.querySelector('[data-answer]');
+      if(b) b.textContent = i === last ? 'Завершить тест' : 'Ответить';
+      q.hidden = i > 0;
+    });
+
+    function updateAttempts(){
+      if(!nameInput) return false;
+      var name = norm(nameInput.value);
+      if(!name){
+        blocked = false;
+        if(attemptsLabel){ attemptsLabel.textContent = 'две попытки на лекцию'; attemptsLabel.classList.remove('limit'); }
+        return false;
+      }
+      var data = readAttempts(name);
+      var count = data && data.count ? data.count : 0;
+      blocked = count >= 2;
+      if(attemptsLabel){
+        attemptsLabel.textContent = 'Попыток: ' + count + ' из 2' + (data && data.best != null ? ' · лучший ' + data.best + ' из ' + qs.length : '');
+        attemptsLabel.classList.toggle('limit', blocked);
+      }
+      if(whoNote){
+        whoNote.hidden = !blocked;
+        whoNote.textContent = blocked ? 'Для этого ФИО попытки закончились: 2 из 2.' : '';
+      }
+      qs.forEach(function(q){
+        var b = q.querySelector('[data-answer]');
+        if(b && !submitted) b.disabled = blocked;
+      });
+      return blocked;
     }
-    function finish(){
-      var card = quiz.querySelector('[data-quiz-result]');
-      if(!card) return;
-      var total = qs.length, pct = total ? Math.round(right / total * 100) : 0;
-      var testMs = (firstAt !== null && lastAt !== null) ? Math.max(0, lastAt - firstAt) : 0;
-      card.querySelector('[data-modal-result]').textContent = 'Правильных ответов: ' + right + ' из ' + total + ' (' + pct + '%)';
-      card.querySelector('[data-test-time]').textContent = fmt(testMs);
-      card.querySelector('[data-view-time]').textContent = fmt(viewingMs());
-      card.hidden = false;
-      document.documentElement.classList.remove('quiz-pending');
-      if(window.__readProgress) window.__readProgress();
-      window.dispatchEvent(new Event('resize'));
+    if(nameInput){
+      nameInput.addEventListener('input', updateAttempts);
+      nameInput.addEventListener('change', updateAttempts);
     }
+
+    qs.forEach(function(q, idx){
+      q.addEventListener('input', function(e){ if(e.target.matches('input')){ mark(); q.classList.remove('missing'); } });
+      q.addEventListener('change', function(e){ if(e.target.matches('input')){ mark(); paintPicked(q); q.classList.remove('missing'); } });
+      var short = q.querySelector('.short-answer');
+      if(short) short.addEventListener('keydown', function(e){ if(e.key === 'Enter'){ e.preventDefault(); mark(); } });
+      var answerBtn = q.querySelector('[data-answer]');
+      if(answerBtn) answerBtn.addEventListener('click', function(){ answer(q, idx); });
+    });
+
     function answer(q, idx){
-      if(q.dataset.answered === '1') return;
+      if(submitted) return;
+      if(nameInput && !norm(nameInput.value)){
+        if(whoNote){ whoNote.hidden = false; whoNote.textContent = 'Укажите ФИО перед началом теста.'; }
+        nameInput.focus();
+        return;
+      }
+      if(whoNote) whoNote.hidden = true;
+      if(updateAttempts()){
+        if(whoNote){ whoNote.hidden = false; whoNote.textContent = 'Для этого ФИО попытки закончились: 2 из 2.'; }
+        return;
+      }
       var note = q.querySelector('[data-note]');
       if(!hasAnswer(q)){
         if(note){ note.hidden = false; note.textContent = q.dataset.type === 'short' ? 'Введите ответ.' : 'Выберите вариант.'; }
@@ -1602,26 +1714,60 @@ R-05 Роли кладовщика и менеджера: нет теста дл
       }
       if(note) note.hidden = true;
       mark();
-      var ok = questionCorrect(q);
-      q.dataset.answered = '1';
-      q.classList.add(ok ? 'ok' : 'bad');
-      paintChoices(q);
-      var why = q.querySelector('.quiz-why'); if(why) why.hidden = false;
-      lock(q);
-      var answerBtn = q.querySelector('[data-answer]'); if(answerBtn) answerBtn.hidden = true;
-      if(ok) right++;
-      if(idx === qs.length - 1){ finish(); }
-      else { showQuestion(idx + 1); }
+      var btn = q.querySelector('[data-answer]');
+      if(btn){ btn.disabled = true; btn.hidden = true; }
+      if(idx === last){ finish(); }
+      else { qs[idx + 1].hidden = false; if(window.__readProgress) window.__readProgress(); }
     }
-    qs.forEach(function(q, idx){
-      q.addEventListener('input', function(e){ if(e.target.matches('input')) mark(); });
-      q.addEventListener('change', function(e){ if(e.target.matches('input')){ mark(); paintPicked(q); } });
-      var answerBtn = q.querySelector('[data-answer]');
-      if(answerBtn) answerBtn.addEventListener('click', function(){ answer(q, idx); });
-      var short = q.querySelector('.short-answer');
-      if(short) short.addEventListener('keydown', function(e){ if(e.key === 'Enter'){ e.preventDefault(); answer(q, idx); } });
-    });
-    showQuestion(0);
+
+    function finish(){
+      if(submitted) return;
+      var note = quiz.querySelector('[data-quiz-note]');
+      var missing = qs.filter(function(q){ return !hasAnswer(q); });
+      if(missing.length){
+        qs.forEach(function(q){ q.classList.toggle('missing', !hasAnswer(q)); });
+        if(note){ note.hidden = false; note.textContent = 'Без ответа осталось вопросов: ' + missing.length + '. Ответьте на все и завершите тест снова.'; }
+        missing[0].scrollIntoView({block:'center', behavior:'smooth'});
+        return;
+      }
+      submitted = true;
+      if(note) note.hidden = true;
+      mark();
+      var wrong = [];
+      qs.forEach(function(q, i){
+        q.classList.remove('missing');
+        var ok = questionCorrect(q);
+        q.classList.add(ok ? 'ok' : 'bad');
+        paintPicked(q);
+        lock(q);
+        var btn = q.querySelector('[data-answer]'); if(btn) btn.hidden = true;
+        if(ok) right++; else wrong.push(i + 1);
+      });
+      var name = nameInput ? nameInput.value.trim() : '';
+      var nameKey = norm(name);
+      if(nameKey){
+        var data = readAttempts(nameKey) || {count: 0, best: 0};
+        data.count = (data.count || 0) + 1;
+        data.best = Math.max(data.best || 0, right);
+        writeAttempts(nameKey, data);
+      }
+      updateAttempts();
+      var card = quiz.querySelector('[data-quiz-result]');
+      if(!card) return;
+      var total = qs.length, pct = total ? Math.round(right / total * 100) : 0;
+      var testMs = (firstAt !== null && lastAt !== null) ? Math.max(0, lastAt - firstAt) : 0;
+      card.querySelector('[data-student-name]').textContent = name || 'не указано';
+      card.querySelector('[data-modal-result]').textContent = 'Правильных ответов: ' + right + ' из ' + total + ' (' + pct + '%)';
+      card.querySelector('[data-modal-wrong]').textContent = wrong.length
+        ? 'Вопросы с ошибками: ' + wrong.join(', ') + '. Повторите эти разделы лекции.'
+        : 'Ошибок нет.';
+      card.querySelector('[data-test-time]').textContent = fmt(testMs);
+      card.querySelector('[data-view-time]').textContent = fmt(viewingMs());
+      card.hidden = false;
+      document.documentElement.classList.remove('quiz-pending');
+      if(window.__readProgress) window.__readProgress();
+      window.dispatchEvent(new Event('resize'));
+    }
   });
 })();
 </script>

@@ -411,17 +411,29 @@ html.quiz-pending .pager { display: none; }
 .quiz-actions button { -webkit-appearance: none; appearance: none; font: 600 13px var(--font-body); padding: 9px 15px; border-radius: 10px; border: 1px solid var(--rule); background: var(--paper); background-color: var(--paper); color: var(--ink); cursor: pointer; }
 .quiz-actions button[data-answer], .quiz-actions button.quiz-answer { background: #121212; background-color: #121212; color: #fff; border-color: transparent; }
 .quiz-actions button:hover { filter: brightness(.96); }
+.quiz-actions button:disabled { opacity: .45; cursor: default; filter: none; }
 .quiz-actions button:focus-visible { outline: 2px solid var(--quiz-accent); outline-offset: 2px; }
 .quiz-note { font-size: 13px; color: var(--bad); }
 .quiz .short-answer { width: 100%; font: 16px var(--font-body); padding: 12px 16px; border: 1px solid var(--quiz-line); border-radius: 8px; background: transparent; color: var(--quiz-ink); }
 .quiz .short-answer:focus { outline: 2px solid var(--quiz-accent); outline-offset: 1px; border-color: transparent; }
 .quiz-q.ok .short-answer { border-color: var(--quiz-ok); background: var(--quiz-ok-bg); }
 .quiz-q.bad .short-answer { border-color: var(--quiz-bad); background: var(--quiz-bad-bg); }
+.quiz-who { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; margin: 0 0 16px; }
+.quiz-who-label { display: flex; align-items: center; gap: 10px; font: 600 13px var(--font-body); color: var(--ink-2); }
+.quiz-who-label input { font: 15px var(--font-body); padding: 10px 12px; border: 1px solid var(--rule); border-radius: 9px; background: var(--card); color: var(--quiz-ink); min-width: 220px; max-width: 100%; }
+.quiz-who-label input:focus { outline: 2px solid var(--quiz-accent); outline-offset: 1px; border-color: transparent; }
+.quiz-attempts { font: 12px var(--font-mono); color: var(--ink-3); }
+.quiz-attempts.limit { color: var(--quiz-bad); font-weight: 600; }
+.modal-name-line { margin: 0 0 12px; font-size: 14px; color: var(--ink-2); }
+.quiz-q.missing { outline: 2px solid var(--quiz-bad); outline-offset: 2px; }
+.quiz-note[hidden] { display: none; }
+.quiz-submit-note { margin: 14px 0 0; }
 .quiz-result { margin-top: 22px; padding: 20px 22px; border: 1px solid var(--quiz-line); border-radius: 12px; background: var(--quiz-card); box-shadow: 0 2px 8px rgba(0,0,0,.02); color: var(--quiz-ink); }
 .quiz-result[hidden] { display: none; }
 .quiz-result > .label { display: block; font: 600 11px var(--font-mono); letter-spacing: .08em; text-transform: uppercase; color: var(--accent); margin-bottom: 6px; }
 .quiz-result h3 { margin: 0 0 14px; font: 800 24px/1.2 var(--font-display); }
 .quiz-result .modal-result { margin: 0 0 14px; }
+.quiz-result [data-modal-wrong] { margin-top: -6px; font-size: 14px; font-weight: 400; color: var(--quiz-ink); }
 .quiz-result .modal-times { margin-bottom: 0; }
 @media (max-width: 560px) {
   .quiz-q { padding: 18px 16px; }
@@ -553,6 +565,7 @@ html.modal-open { overflow: hidden; }
 .quiz-q { animation: quiz-in .32s cubic-bezier(.16,1,.3,1) both; }
 @keyframes quiz-in { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
 @media (prefers-reduced-motion: reduce) { .quiz-q { animation: none; } }
+@media (prefers-reduced-motion: reduce) { .quiz-q { animation: none; } }
 
 /* ---------- variant cards on the practice page ---------- */
 .variant { border: 1px solid var(--rule); border-radius: 14px; background: var(--card); margin: 0 0 12px; overflow: hidden; }
@@ -606,7 +619,7 @@ html.modal-open { overflow: hidden; }
   a { color: #000; text-decoration: none; }
   .callout, .check, .recap, .quiz-q, .quiz-result, .figure, .outcomes { border-color: #999; }
   .gate-step[hidden], .gate-content[hidden], .quiz-q[hidden] { display: block !important; }
-  .gate-action, .quiz-actions { display: none !important; }
+  .gate-action, .quiz-actions, .quiz-who { display: none !important; }
   .reveal { opacity: 1 !important; transform: none !important; transition: none !important; }
   .recap { background: #fff; color: #000; }
   .recap li, .recap p { color: #000; }
@@ -1173,7 +1186,7 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <p>Настройка заканчивается не сохранением параметров, а протоколом, в котором видно, что именно проверено и кем. Этот протокол становится опорой для обучения, приёмки и сопровождения.</p>
 <h2 id="проверьте-себя"><span class="num">12</span>Проверьте себя</h2>
 <p>Ответьте на вопросы по материалу лекции. После каждого ответа система покажет верный вариант и пояснение.</p>
-<div class="quiz" data-quiz><div class="quiz-q" data-type="single" data-correct="1" data-q="1"><p class="quiz-p"><span class="quiz-no" aria-hidden="true">01</span>Зачем в системе создают организационную структуру?</p><div class="opts"><label class="opt"><input type="radio" name="q158_0" value="3"><span>Чтобы хранить пароли пользователей</span></label><label class="opt"><input type="radio" name="q158_0" value="1"><span>Чтобы нарисовать красивую схему для отчёта</span></label><label class="opt"><input type="radio" name="q158_0" value="0" data-ok><span>Чтобы права, документы и отчёты привязывались к подразделениям и складам</span></label><label class="opt"><input type="radio" name="q158_0" value="2"><span>Чтобы рассчитывать заработную плату</span></label></div><p class="quiz-why" hidden>Структура задаёт наследование прав и привязку документов, поэтому ошибка в ней искажает остатки и отчёты.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="short" data-q="2" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">02</span>Как называется последовательность шагов, через которые проходит документ при согласовании?</p><input type="text" class="short-answer" data-answers="[&quot;маршрут&quot;, &quot;маршрут согласования&quot;]" placeholder="Введите ответ" autocomplete="off" spellcheck="false" aria-label="Как называется последовательность шагов, через которые проходит документ при согласовании?"><p class="quiz-why" hidden>Маршрут задаёт участников, условия, сроки и порядок действий с документом.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="multi" data-correct="3" data-q="3" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">03</span>Какие события стоит отправлять уведомлением?</p><div class="opts"><label class="opt"><input type="checkbox" name="q158_2" value="0" data-ok><span>Заказ ушёл на согласование</span></label><label class="opt"><input type="checkbox" name="q158_2" value="4"><span>Смена цветовой темы интерфейса</span></label><label class="opt"><input type="checkbox" name="q158_2" value="3"><span>Каждое открытие формы заказа</span></label><label class="opt"><input type="checkbox" name="q158_2" value="1" data-ok><span>Просрочен шаг маршрута</span></label><label class="opt"><input type="checkbox" name="q158_2" value="2" data-ok><span>Остаток товара стал отрицательным</span></label></div><p class="quiz-why" hidden>Уведомление должно требовать действия или сообщать о проблеме, иначе сотрудники перестают его читать.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="4" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">04</span>Что такое роль в информационной системе?</p><div class="opts"><label class="opt"><input type="radio" name="q158_3" value="2"><span>Отдельный сотрудник компании</span></label><label class="opt"><input type="radio" name="q158_3" value="1"><span>Должность сотрудника в штатном расписании</span></label><label class="opt"><input type="radio" name="q158_3" value="0" data-ok><span>Набор прав, который назначается пользователю</span></label><label class="opt"><input type="radio" name="q158_3" value="3"><span>Подразделение организации</span></label></div><p class="quiz-why" hidden>Роль описывает функции, а не человека, поэтому одна роль может быть у нескольких сотрудников.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="5" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">05</span>Почему используемую запись справочника не удаляют?</p><div class="opts"><label class="opt"><input type="radio" name="q158_4" value="3"><span>Запись занимает мало места</span></label><label class="opt"><input type="radio" name="q158_4" value="2"><span>Удаление запрещено законом</span></label><label class="opt"><input type="radio" name="q158_4" value="1"><span>Запись может понадобиться для истории</span></label><label class="opt"><input type="radio" name="q158_4" value="0" data-ok><span>Удаление разрушит связи с уже созданными документами</span></label></div><p class="quiz-why" hidden>Вместо удаления ставят пометку неактивности: старые документы сохраняют связи.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="multi" data-correct="3" data-q="6" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">06</span>Какие поля обязательны для карточки товара?</p><div class="opts"><label class="opt"><input type="checkbox" name="q158_5" value="1" data-ok><span>Категория</span></label><label class="opt"><input type="checkbox" name="q158_5" value="2" data-ok><span>Единица измерения</span></label><label class="opt"><input type="checkbox" name="q158_5" value="4"><span>Адрес склада</span></label><label class="opt"><input type="checkbox" name="q158_5" value="0" data-ok><span>Наименование</span></label><label class="opt"><input type="checkbox" name="q158_5" value="3"><span>Номер заказа</span></label></div><p class="quiz-why" hidden>Эти поля нужны для поиска, отчётов и расчёта остатков; номер заказа и адрес относятся к другим объектам.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="7" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">07</span>Что обязательно должно быть у маршрута согласования кроме шагов и ролей?</p><div class="opts"><label class="opt"><input type="radio" name="q158_6" value="1"><span>Логотип компании и цвет кнопки</span></label><label class="opt"><input type="radio" name="q158_6" value="0" data-ok><span>Условия, сроки, заместитель и эскалация</span></label><label class="opt"><input type="radio" name="q158_6" value="3"><span>Список всех товаров склада</span></label><label class="opt"><input type="radio" name="q158_6" value="2"><span>Пароль согласующего</span></label></div><p class="quiz-why" hidden>Без условий и сроков маршрут превращается в устную договорённость, а без заместителя встаёт на время отпуска.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="8" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">08</span>Что такое настройка информационной системы?</p><div class="opts"><label class="opt"><input type="radio" name="q158_7" value="3"><span>Обучение сотрудников работе с системой</span></label><label class="opt"><input type="radio" name="q158_7" value="2"><span>Покупка дополнительных лицензий</span></label><label class="opt"><input type="radio" name="q158_7" value="0" data-ok><span>Перевод требований в параметры системы без изменения кода</span></label><label class="opt"><input type="radio" name="q158_7" value="1"><span>Переписывание модулей программы заново</span></label></div><p class="quiz-why" hidden>Настройка использует штатные возможности продукта, поэтому она дешевле доработки и сохраняется при обновлениях.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="short" data-q="9" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">09</span>Как называется набор прав, который назначается пользователю?</p><input type="text" class="short-answer" data-answers="[&quot;роль&quot;]" placeholder="Введите ответ" autocomplete="off" spellcheck="false" aria-label="Как называется набор прав, который назначается пользователю?"><p class="quiz-why" hidden>Роль описывает функцию сотрудника и определяет доступные действия.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="10" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">10</span>Что означает принцип минимальных привилегий?</p><div class="opts"><label class="opt"><input type="radio" name="q158_9" value="1"><span>Всем сотрудникам дают полный доступ</span></label><label class="opt"><input type="radio" name="q158_9" value="0" data-ok><span>Сотрудник получает только права, необходимые для его работы</span></label><label class="opt"><input type="radio" name="q158_9" value="2"><span>Вход в систему запрещён всем, кроме директора</span></label><label class="opt"><input type="radio" name="q158_9" value="3"><span>Все сотрудники используют один пароль</span></label></div><p class="quiz-why" hidden>Лишние права создают риск ошибки и злоупотребления, поэтому доступ ограничивают функцией.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="11" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">11</span>Зачем нужен шаблон документа?</p><div class="opts"><label class="opt"><input type="radio" name="q158_10" value="1"><span>Чтобы сотрудник вводил реквизиты вручную</span></label><label class="opt"><input type="radio" name="q158_10" value="2"><span>Чтобы хранить подписи клиентов</span></label><label class="opt"><input type="radio" name="q158_10" value="0" data-ok><span>Чтобы форма и реквизиты заполнялись единообразно из данных системы</span></label><label class="opt"><input type="radio" name="q158_10" value="3"><span>Чтобы рассчитывать налоги компании</span></label></div><p class="quiz-why" hidden>Шаблон уменьшает число ошибок и обеспечивает одинаковый вид документа у всех менеджеров.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="short" data-q="12" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">12</span>Как называется список нормативно-справочной информации с уникальными кодами?</p><input type="text" class="short-answer" data-answers="[&quot;справочник&quot;]" placeholder="Введите ответ" autocomplete="off" spellcheck="false" aria-label="Как называется список нормативно-справочной информации с уникальными кодами?"><p class="quiz-why" hidden>Справочники хранят товары, контрагентов, склады и другие данные, на которые опираются документы.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="13" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">13</span>Что проверяют негативным тестом прав доступа?</p><div class="opts"><label class="opt"><input type="radio" name="q158_12" value="3"><span>Что отчёт красиво оформлен</span></label><label class="opt"><input type="radio" name="q158_12" value="2"><span>Что пароль соответствует политике</span></label><label class="opt"><input type="radio" name="q158_12" value="1"><span>Что система запускается без ошибок</span></label><label class="opt"><input type="radio" name="q158_12" value="0" data-ok><span>Что запрещённое действие действительно запрещено</span></label></div><p class="quiz-why" hidden>Положительные тесты показывают, что разрешённое работает, а негативные ловят лишние права.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="multi" data-correct="3" data-q="14" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">14</span>Какие ошибки настройки встречаются чаще всего?</p><div class="opts"><label class="opt"><input type="checkbox" name="q158_13" value="0" data-ok><span>Полные права у администратора</span></label><label class="opt"><input type="checkbox" name="q158_13" value="2" data-ok><span>Дубли в справочнике товаров</span></label><label class="opt"><input type="checkbox" name="q158_13" value="4"><span>Ведение журнала изменений</span></label><label class="opt"><input type="checkbox" name="q158_13" value="1" data-ok><span>Маршрут без заместителя</span></label><label class="opt"><input type="checkbox" name="q158_13" value="3"><span>Наличие резервной копии</span></label></div><p class="quiz-why" hidden>Эти ошибки ломают разделение ответственности, останавливают согласование и искажают отчёты.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="15" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">15</span>Что делают с настройками перед переносом в промышленную среду?</p><div class="opts"><label class="opt"><input type="radio" name="q158_14" value="1"><span>Повторяют вручную по памяти</span></label><label class="opt"><input type="radio" name="q158_14" value="2"><span>Удаляют и настраивают заново</span></label><label class="opt"><input type="radio" name="q158_14" value="0" data-ok><span>Фиксируют версией и переносят пакетом</span></label><label class="opt"><input type="radio" name="q158_14" value="3"><span>Передают пользователям для ручной правки</span></label></div><p class="quiz-why" hidden>Пакетный перенос снижает расхождение сред и позволяет повторить настройку.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-result" data-quiz-result hidden aria-live="polite"><span class="label">Результат теста</span><h3>Тест завершён</h3><label class="modal-name" data-student-label><span>ФИО студента</span><input type="text" data-student-name maxlength="80" autocomplete="name" placeholder="Иванов Иван Иванович"></label><p class="modal-result" data-modal-result></p><dl class="modal-times"><div><dt>Время выполнения теста</dt><dd data-test-time>00:00</dd></div><div><dt>Время просмотра лекции</dt><dd data-view-time>00:00</dd></div></dl></div></div></div>
+<div class="quiz" data-quiz><div class="quiz-who"><label class="quiz-who-label"><span>ФИО</span><input type="text" class="quiz-name" data-quiz-name maxlength="80" autocomplete="off" placeholder="Иванов Иван Иванович"></label><span class="quiz-attempts" data-quiz-attempts>две попытки на лекцию</span><span class="quiz-note" data-who-note hidden></span></div><div class="quiz-q" data-type="single" data-correct="1" data-q="1"><p class="quiz-p"><span class="quiz-no" aria-hidden="true">01</span>Зачем в системе создают организационную структуру?</p><div class="opts"><label class="opt"><input type="radio" name="q158_0" value="3" autocomplete="off"><span>Чтобы хранить пароли пользователей</span></label><label class="opt"><input type="radio" name="q158_0" value="1" autocomplete="off"><span>Чтобы нарисовать красивую схему для отчёта</span></label><label class="opt"><input type="radio" name="q158_0" value="0" autocomplete="off" data-ok><span>Чтобы права, документы и отчёты привязывались к подразделениям и складам</span></label><label class="opt"><input type="radio" name="q158_0" value="2" autocomplete="off"><span>Чтобы рассчитывать заработную плату</span></label></div><p class="quiz-why" hidden>Структура задаёт наследование прав и привязку документов, поэтому ошибка в ней искажает остатки и отчёты.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="short" data-q="2" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">02</span>Как называется последовательность шагов, через которые проходит документ при согласовании?</p><input type="text" class="short-answer" data-answers="[&quot;маршрут&quot;, &quot;маршрут согласования&quot;]" placeholder="Введите ответ" autocomplete="off" spellcheck="false" aria-label="Как называется последовательность шагов, через которые проходит документ при согласовании?"><p class="quiz-why" hidden>Маршрут задаёт участников, условия, сроки и порядок действий с документом.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="multi" data-correct="3" data-q="3" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">03</span>Какие события стоит отправлять уведомлением?</p><div class="opts"><label class="opt"><input type="checkbox" name="q158_2" value="0" autocomplete="off" data-ok><span>Заказ ушёл на согласование</span></label><label class="opt"><input type="checkbox" name="q158_2" value="4" autocomplete="off"><span>Смена цветовой темы интерфейса</span></label><label class="opt"><input type="checkbox" name="q158_2" value="3" autocomplete="off"><span>Каждое открытие формы заказа</span></label><label class="opt"><input type="checkbox" name="q158_2" value="1" autocomplete="off" data-ok><span>Просрочен шаг маршрута</span></label><label class="opt"><input type="checkbox" name="q158_2" value="2" autocomplete="off" data-ok><span>Остаток товара стал отрицательным</span></label></div><p class="quiz-why" hidden>Уведомление должно требовать действия или сообщать о проблеме, иначе сотрудники перестают его читать.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="4" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">04</span>Что такое роль в информационной системе?</p><div class="opts"><label class="opt"><input type="radio" name="q158_3" value="2" autocomplete="off"><span>Отдельный сотрудник компании</span></label><label class="opt"><input type="radio" name="q158_3" value="1" autocomplete="off"><span>Должность сотрудника в штатном расписании</span></label><label class="opt"><input type="radio" name="q158_3" value="0" autocomplete="off" data-ok><span>Набор прав, который назначается пользователю</span></label><label class="opt"><input type="radio" name="q158_3" value="3" autocomplete="off"><span>Подразделение организации</span></label></div><p class="quiz-why" hidden>Роль описывает функции, а не человека, поэтому одна роль может быть у нескольких сотрудников.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="5" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">05</span>Почему используемую запись справочника не удаляют?</p><div class="opts"><label class="opt"><input type="radio" name="q158_4" value="3" autocomplete="off"><span>Запись занимает мало места</span></label><label class="opt"><input type="radio" name="q158_4" value="2" autocomplete="off"><span>Удаление запрещено законом</span></label><label class="opt"><input type="radio" name="q158_4" value="1" autocomplete="off"><span>Запись может понадобиться для истории</span></label><label class="opt"><input type="radio" name="q158_4" value="0" autocomplete="off" data-ok><span>Удаление разрушит связи с уже созданными документами</span></label></div><p class="quiz-why" hidden>Вместо удаления ставят пометку неактивности: старые документы сохраняют связи.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="multi" data-correct="3" data-q="6" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">06</span>Какие поля обязательны для карточки товара?</p><div class="opts"><label class="opt"><input type="checkbox" name="q158_5" value="1" autocomplete="off" data-ok><span>Категория</span></label><label class="opt"><input type="checkbox" name="q158_5" value="2" autocomplete="off" data-ok><span>Единица измерения</span></label><label class="opt"><input type="checkbox" name="q158_5" value="4" autocomplete="off"><span>Адрес склада</span></label><label class="opt"><input type="checkbox" name="q158_5" value="0" autocomplete="off" data-ok><span>Наименование</span></label><label class="opt"><input type="checkbox" name="q158_5" value="3" autocomplete="off"><span>Номер заказа</span></label></div><p class="quiz-why" hidden>Эти поля нужны для поиска, отчётов и расчёта остатков; номер заказа и адрес относятся к другим объектам.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="7" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">07</span>Что обязательно должно быть у маршрута согласования кроме шагов и ролей?</p><div class="opts"><label class="opt"><input type="radio" name="q158_6" value="1" autocomplete="off"><span>Логотип компании и цвет кнопки</span></label><label class="opt"><input type="radio" name="q158_6" value="0" autocomplete="off" data-ok><span>Условия, сроки, заместитель и эскалация</span></label><label class="opt"><input type="radio" name="q158_6" value="3" autocomplete="off"><span>Список всех товаров склада</span></label><label class="opt"><input type="radio" name="q158_6" value="2" autocomplete="off"><span>Пароль согласующего</span></label></div><p class="quiz-why" hidden>Без условий и сроков маршрут превращается в устную договорённость, а без заместителя встаёт на время отпуска.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="8" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">08</span>Что такое настройка информационной системы?</p><div class="opts"><label class="opt"><input type="radio" name="q158_7" value="3" autocomplete="off"><span>Обучение сотрудников работе с системой</span></label><label class="opt"><input type="radio" name="q158_7" value="2" autocomplete="off"><span>Покупка дополнительных лицензий</span></label><label class="opt"><input type="radio" name="q158_7" value="0" autocomplete="off" data-ok><span>Перевод требований в параметры системы без изменения кода</span></label><label class="opt"><input type="radio" name="q158_7" value="1" autocomplete="off"><span>Переписывание модулей программы заново</span></label></div><p class="quiz-why" hidden>Настройка использует штатные возможности продукта, поэтому она дешевле доработки и сохраняется при обновлениях.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="short" data-q="9" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">09</span>Как называется набор прав, который назначается пользователю?</p><input type="text" class="short-answer" data-answers="[&quot;роль&quot;]" placeholder="Введите ответ" autocomplete="off" spellcheck="false" aria-label="Как называется набор прав, который назначается пользователю?"><p class="quiz-why" hidden>Роль описывает функцию сотрудника и определяет доступные действия.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="10" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">10</span>Что означает принцип минимальных привилегий?</p><div class="opts"><label class="opt"><input type="radio" name="q158_9" value="1" autocomplete="off"><span>Всем сотрудникам дают полный доступ</span></label><label class="opt"><input type="radio" name="q158_9" value="0" autocomplete="off" data-ok><span>Сотрудник получает только права, необходимые для его работы</span></label><label class="opt"><input type="radio" name="q158_9" value="2" autocomplete="off"><span>Вход в систему запрещён всем, кроме директора</span></label><label class="opt"><input type="radio" name="q158_9" value="3" autocomplete="off"><span>Все сотрудники используют один пароль</span></label></div><p class="quiz-why" hidden>Лишние права создают риск ошибки и злоупотребления, поэтому доступ ограничивают функцией.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="11" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">11</span>Зачем нужен шаблон документа?</p><div class="opts"><label class="opt"><input type="radio" name="q158_10" value="1" autocomplete="off"><span>Чтобы сотрудник вводил реквизиты вручную</span></label><label class="opt"><input type="radio" name="q158_10" value="2" autocomplete="off"><span>Чтобы хранить подписи клиентов</span></label><label class="opt"><input type="radio" name="q158_10" value="0" autocomplete="off" data-ok><span>Чтобы форма и реквизиты заполнялись единообразно из данных системы</span></label><label class="opt"><input type="radio" name="q158_10" value="3" autocomplete="off"><span>Чтобы рассчитывать налоги компании</span></label></div><p class="quiz-why" hidden>Шаблон уменьшает число ошибок и обеспечивает одинаковый вид документа у всех менеджеров.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="short" data-q="12" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">12</span>Как называется список нормативно-справочной информации с уникальными кодами?</p><input type="text" class="short-answer" data-answers="[&quot;справочник&quot;]" placeholder="Введите ответ" autocomplete="off" spellcheck="false" aria-label="Как называется список нормативно-справочной информации с уникальными кодами?"><p class="quiz-why" hidden>Справочники хранят товары, контрагентов, склады и другие данные, на которые опираются документы.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="13" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">13</span>Что проверяют негативным тестом прав доступа?</p><div class="opts"><label class="opt"><input type="radio" name="q158_12" value="3" autocomplete="off"><span>Что отчёт красиво оформлен</span></label><label class="opt"><input type="radio" name="q158_12" value="2" autocomplete="off"><span>Что пароль соответствует политике</span></label><label class="opt"><input type="radio" name="q158_12" value="1" autocomplete="off"><span>Что система запускается без ошибок</span></label><label class="opt"><input type="radio" name="q158_12" value="0" autocomplete="off" data-ok><span>Что запрещённое действие действительно запрещено</span></label></div><p class="quiz-why" hidden>Положительные тесты показывают, что разрешённое работает, а негативные ловят лишние права.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="multi" data-correct="3" data-q="14" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">14</span>Какие ошибки настройки встречаются чаще всего?</p><div class="opts"><label class="opt"><input type="checkbox" name="q158_13" value="0" autocomplete="off" data-ok><span>Полные права у администратора</span></label><label class="opt"><input type="checkbox" name="q158_13" value="2" autocomplete="off" data-ok><span>Дубли в справочнике товаров</span></label><label class="opt"><input type="checkbox" name="q158_13" value="4" autocomplete="off"><span>Ведение журнала изменений</span></label><label class="opt"><input type="checkbox" name="q158_13" value="1" autocomplete="off" data-ok><span>Маршрут без заместителя</span></label><label class="opt"><input type="checkbox" name="q158_13" value="3" autocomplete="off"><span>Наличие резервной копии</span></label></div><p class="quiz-why" hidden>Эти ошибки ломают разделение ответственности, останавливают согласование и искажают отчёты.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="15" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">15</span>Что делают с настройками перед переносом в промышленную среду?</p><div class="opts"><label class="opt"><input type="radio" name="q158_14" value="1" autocomplete="off"><span>Повторяют вручную по памяти</span></label><label class="opt"><input type="radio" name="q158_14" value="2" autocomplete="off"><span>Удаляют и настраивают заново</span></label><label class="opt"><input type="radio" name="q158_14" value="0" autocomplete="off" data-ok><span>Фиксируют версией и переносят пакетом</span></label><label class="opt"><input type="radio" name="q158_14" value="3" autocomplete="off"><span>Передают пользователям для ручной правки</span></label></div><p class="quiz-why" hidden>Пакетный перенос снижает расхождение сред и позволяет повторить настройку.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><p class="quiz-note quiz-submit-note" data-quiz-note hidden></p><div class="quiz-result" data-quiz-result hidden aria-live="polite"><span class="label">Результат теста</span><h3>Тест завершён</h3><p class="modal-name-line">ФИО: <b data-student-name></b></p><p class="modal-result" data-modal-result></p><p class="modal-result" data-modal-wrong></p><dl class="modal-times"><div><dt>Время выполнения теста</dt><dd data-test-time>00:00</dd></div><div><dt>Время просмотра лекции</dt><dd data-view-time>00:00</dd></div></dl></div></div></div>
 </div></article><nav class="pager"><a class="" href="07-lek-05.html"><span>← Предыдущее занятие</span>Лекция 5. План внедрения</a><a class="next" style="text-align:right;margin-left:auto" href="09-prakt-03.html"><span>Следующее занятие →</span>Практика 3. Дорожная карта и рабочая среда</a></nav></main>
 <div class="modal" data-modal="warn" hidden>
   <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="warn-title">
@@ -1559,32 +1572,131 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
     q.querySelectorAll('input').forEach(function(i){ i.disabled = true; });
   }
 
+  function resetQuiz(quiz){
+    quiz.querySelectorAll('input').forEach(function(i){
+      if(i.type === 'checkbox' || i.type === 'radio') i.checked = false;
+      else i.value = '';
+      i.disabled = false;
+    });
+    quiz.querySelectorAll('.opt').forEach(function(o){ o.classList.remove('picked', 'correct'); });
+    quiz.querySelectorAll('.quiz-q').forEach(function(q){
+      q.classList.remove('ok', 'bad', 'missing');
+      delete q.dataset.answered;
+    });
+    quiz.querySelectorAll('.quiz-why').forEach(function(w){ w.hidden = true; });
+    quiz.querySelectorAll('[data-note]').forEach(function(n){ n.hidden = true; n.textContent = ''; });
+    quiz.querySelectorAll('[data-answer]').forEach(function(b){ b.hidden = false; b.disabled = false; });
+    var note = quiz.querySelector('[data-quiz-note]');
+    if(note){ note.hidden = true; note.textContent = ''; }
+    var card = quiz.querySelector('[data-quiz-result]');
+    if(card) card.hidden = true;
+    document.documentElement.classList.add('quiz-pending');
+  }
+
+  function shuffleQuestions(quiz){
+    var list = [].slice.call(quiz.querySelectorAll('.quiz-q'));
+    var anchor = quiz.querySelector('[data-quiz-note]') || null;
+    for(var i = list.length - 1; i > 0; i--){
+      var j = Math.floor(Math.random() * (i + 1));
+      var tmp = list[i]; list[i] = list[j]; list[j] = tmp;
+    }
+    list.forEach(function(q, idx){
+      var no = q.querySelector('.quiz-no');
+      if(no) no.textContent = String(idx + 1).padStart(2, '0');
+      if(anchor) quiz.insertBefore(q, anchor); else quiz.appendChild(q);
+    });
+  }
+
+  addEventListener('pageshow', function(e){ if(e.persisted) location.reload(); });
+
+  function quizStoreKey(){ return 'mdk-quiz:' + location.pathname; }
+  function readAttempts(name){
+    try { var raw = localStorage.getItem(quizStoreKey() + ':' + encodeURIComponent(name)); return raw ? JSON.parse(raw) : null; }
+    catch(e){ return null; }
+  }
+  function writeAttempts(name, data){
+    try { localStorage.setItem(quizStoreKey() + ':' + encodeURIComponent(name), JSON.stringify(data)); } catch(e){}
+  }
+  function shuffleOptions(quiz){
+    quiz.querySelectorAll('.quiz-q .opts').forEach(function(box){
+      var list = [].slice.call(box.children);
+      for(var i = list.length - 1; i > 0; i--){
+        var j = Math.floor(Math.random() * (i + 1));
+        var tmp = list[i]; list[i] = list[j]; list[j] = tmp;
+      }
+      list.forEach(function(o){ box.appendChild(o); });
+    });
+  }
+
   document.querySelectorAll('[data-quiz]').forEach(function(quiz){
+    resetQuiz(quiz);
+    shuffleQuestions(quiz);
+    shuffleOptions(quiz);
     var qs = [].slice.call(quiz.querySelectorAll('.quiz-q'));
     if(!qs.length) return;
-    document.documentElement.classList.add('quiz-pending');
-    var current = 0, right = 0, firstAt = null, lastAt = null;
+    var last = qs.length - 1;
+    var nameInput = quiz.querySelector('[data-quiz-name]');
+    var whoNote = quiz.querySelector('[data-who-note]');
+    var attemptsLabel = quiz.querySelector('[data-quiz-attempts]');
+    var right = 0, submitted = false, blocked = false, firstAt = null, lastAt = null;
     function mark(){ var now = performance.now(); if(firstAt === null) firstAt = now; lastAt = now; }
-    function showQuestion(i){
-      current = i;
-      qs[i].hidden = false;
-      if(window.__readProgress) window.__readProgress();
+    qs.forEach(function(q, i){
+      var b = q.querySelector('[data-answer]');
+      if(b) b.textContent = i === last ? 'Завершить тест' : 'Ответить';
+      q.hidden = i > 0;
+    });
+
+    function updateAttempts(){
+      if(!nameInput) return false;
+      var name = norm(nameInput.value);
+      if(!name){
+        blocked = false;
+        if(attemptsLabel){ attemptsLabel.textContent = 'две попытки на лекцию'; attemptsLabel.classList.remove('limit'); }
+        return false;
+      }
+      var data = readAttempts(name);
+      var count = data && data.count ? data.count : 0;
+      blocked = count >= 2;
+      if(attemptsLabel){
+        attemptsLabel.textContent = 'Попыток: ' + count + ' из 2' + (data && data.best != null ? ' · лучший ' + data.best + ' из ' + qs.length : '');
+        attemptsLabel.classList.toggle('limit', blocked);
+      }
+      if(whoNote){
+        whoNote.hidden = !blocked;
+        whoNote.textContent = blocked ? 'Для этого ФИО попытки закончились: 2 из 2.' : '';
+      }
+      qs.forEach(function(q){
+        var b = q.querySelector('[data-answer]');
+        if(b && !submitted) b.disabled = blocked;
+      });
+      return blocked;
     }
-    function finish(){
-      var card = quiz.querySelector('[data-quiz-result]');
-      if(!card) return;
-      var total = qs.length, pct = total ? Math.round(right / total * 100) : 0;
-      var testMs = (firstAt !== null && lastAt !== null) ? Math.max(0, lastAt - firstAt) : 0;
-      card.querySelector('[data-modal-result]').textContent = 'Правильных ответов: ' + right + ' из ' + total + ' (' + pct + '%)';
-      card.querySelector('[data-test-time]').textContent = fmt(testMs);
-      card.querySelector('[data-view-time]').textContent = fmt(viewingMs());
-      card.hidden = false;
-      document.documentElement.classList.remove('quiz-pending');
-      if(window.__readProgress) window.__readProgress();
-      window.dispatchEvent(new Event('resize'));
+    if(nameInput){
+      nameInput.addEventListener('input', updateAttempts);
+      nameInput.addEventListener('change', updateAttempts);
     }
+
+    qs.forEach(function(q, idx){
+      q.addEventListener('input', function(e){ if(e.target.matches('input')){ mark(); q.classList.remove('missing'); } });
+      q.addEventListener('change', function(e){ if(e.target.matches('input')){ mark(); paintPicked(q); q.classList.remove('missing'); } });
+      var short = q.querySelector('.short-answer');
+      if(short) short.addEventListener('keydown', function(e){ if(e.key === 'Enter'){ e.preventDefault(); mark(); } });
+      var answerBtn = q.querySelector('[data-answer]');
+      if(answerBtn) answerBtn.addEventListener('click', function(){ answer(q, idx); });
+    });
+
     function answer(q, idx){
-      if(q.dataset.answered === '1') return;
+      if(submitted) return;
+      if(nameInput && !norm(nameInput.value)){
+        if(whoNote){ whoNote.hidden = false; whoNote.textContent = 'Укажите ФИО перед началом теста.'; }
+        nameInput.focus();
+        return;
+      }
+      if(whoNote) whoNote.hidden = true;
+      if(updateAttempts()){
+        if(whoNote){ whoNote.hidden = false; whoNote.textContent = 'Для этого ФИО попытки закончились: 2 из 2.'; }
+        return;
+      }
       var note = q.querySelector('[data-note]');
       if(!hasAnswer(q)){
         if(note){ note.hidden = false; note.textContent = q.dataset.type === 'short' ? 'Введите ответ.' : 'Выберите вариант.'; }
@@ -1592,26 +1704,60 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
       }
       if(note) note.hidden = true;
       mark();
-      var ok = questionCorrect(q);
-      q.dataset.answered = '1';
-      q.classList.add(ok ? 'ok' : 'bad');
-      paintChoices(q);
-      var why = q.querySelector('.quiz-why'); if(why) why.hidden = false;
-      lock(q);
-      var answerBtn = q.querySelector('[data-answer]'); if(answerBtn) answerBtn.hidden = true;
-      if(ok) right++;
-      if(idx === qs.length - 1){ finish(); }
-      else { showQuestion(idx + 1); }
+      var btn = q.querySelector('[data-answer]');
+      if(btn){ btn.disabled = true; btn.hidden = true; }
+      if(idx === last){ finish(); }
+      else { qs[idx + 1].hidden = false; if(window.__readProgress) window.__readProgress(); }
     }
-    qs.forEach(function(q, idx){
-      q.addEventListener('input', function(e){ if(e.target.matches('input')) mark(); });
-      q.addEventListener('change', function(e){ if(e.target.matches('input')){ mark(); paintPicked(q); } });
-      var answerBtn = q.querySelector('[data-answer]');
-      if(answerBtn) answerBtn.addEventListener('click', function(){ answer(q, idx); });
-      var short = q.querySelector('.short-answer');
-      if(short) short.addEventListener('keydown', function(e){ if(e.key === 'Enter'){ e.preventDefault(); answer(q, idx); } });
-    });
-    showQuestion(0);
+
+    function finish(){
+      if(submitted) return;
+      var note = quiz.querySelector('[data-quiz-note]');
+      var missing = qs.filter(function(q){ return !hasAnswer(q); });
+      if(missing.length){
+        qs.forEach(function(q){ q.classList.toggle('missing', !hasAnswer(q)); });
+        if(note){ note.hidden = false; note.textContent = 'Без ответа осталось вопросов: ' + missing.length + '. Ответьте на все и завершите тест снова.'; }
+        missing[0].scrollIntoView({block:'center', behavior:'smooth'});
+        return;
+      }
+      submitted = true;
+      if(note) note.hidden = true;
+      mark();
+      var wrong = [];
+      qs.forEach(function(q, i){
+        q.classList.remove('missing');
+        var ok = questionCorrect(q);
+        q.classList.add(ok ? 'ok' : 'bad');
+        paintPicked(q);
+        lock(q);
+        var btn = q.querySelector('[data-answer]'); if(btn) btn.hidden = true;
+        if(ok) right++; else wrong.push(i + 1);
+      });
+      var name = nameInput ? nameInput.value.trim() : '';
+      var nameKey = norm(name);
+      if(nameKey){
+        var data = readAttempts(nameKey) || {count: 0, best: 0};
+        data.count = (data.count || 0) + 1;
+        data.best = Math.max(data.best || 0, right);
+        writeAttempts(nameKey, data);
+      }
+      updateAttempts();
+      var card = quiz.querySelector('[data-quiz-result]');
+      if(!card) return;
+      var total = qs.length, pct = total ? Math.round(right / total * 100) : 0;
+      var testMs = (firstAt !== null && lastAt !== null) ? Math.max(0, lastAt - firstAt) : 0;
+      card.querySelector('[data-student-name]').textContent = name || 'не указано';
+      card.querySelector('[data-modal-result]').textContent = 'Правильных ответов: ' + right + ' из ' + total + ' (' + pct + '%)';
+      card.querySelector('[data-modal-wrong]').textContent = wrong.length
+        ? 'Вопросы с ошибками: ' + wrong.join(', ') + '. Повторите эти разделы лекции.'
+        : 'Ошибок нет.';
+      card.querySelector('[data-test-time]').textContent = fmt(testMs);
+      card.querySelector('[data-view-time]').textContent = fmt(viewingMs());
+      card.hidden = false;
+      document.documentElement.classList.remove('quiz-pending');
+      if(window.__readProgress) window.__readProgress();
+      window.dispatchEvent(new Event('resize'));
+    }
   });
 })();
 </script>

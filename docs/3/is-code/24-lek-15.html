@@ -411,17 +411,29 @@ html.quiz-pending .pager { display: none; }
 .quiz-actions button { -webkit-appearance: none; appearance: none; font: 600 13px var(--font-body); padding: 9px 15px; border-radius: 10px; border: 1px solid var(--rule); background: var(--paper); background-color: var(--paper); color: var(--ink); cursor: pointer; }
 .quiz-actions button[data-answer], .quiz-actions button.quiz-answer { background: #121212; background-color: #121212; color: #fff; border-color: transparent; }
 .quiz-actions button:hover { filter: brightness(.96); }
+.quiz-actions button:disabled { opacity: .45; cursor: default; filter: none; }
 .quiz-actions button:focus-visible { outline: 2px solid var(--quiz-accent); outline-offset: 2px; }
 .quiz-note { font-size: 13px; color: var(--bad); }
 .quiz .short-answer { width: 100%; font: 16px var(--font-body); padding: 12px 16px; border: 1px solid var(--quiz-line); border-radius: 8px; background: transparent; color: var(--quiz-ink); }
 .quiz .short-answer:focus { outline: 2px solid var(--quiz-accent); outline-offset: 1px; border-color: transparent; }
 .quiz-q.ok .short-answer { border-color: var(--quiz-ok); background: var(--quiz-ok-bg); }
 .quiz-q.bad .short-answer { border-color: var(--quiz-bad); background: var(--quiz-bad-bg); }
+.quiz-who { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; margin: 0 0 16px; }
+.quiz-who-label { display: flex; align-items: center; gap: 10px; font: 600 13px var(--font-body); color: var(--ink-2); }
+.quiz-who-label input { font: 15px var(--font-body); padding: 10px 12px; border: 1px solid var(--rule); border-radius: 9px; background: var(--card); color: var(--quiz-ink); min-width: 220px; max-width: 100%; }
+.quiz-who-label input:focus { outline: 2px solid var(--quiz-accent); outline-offset: 1px; border-color: transparent; }
+.quiz-attempts { font: 12px var(--font-mono); color: var(--ink-3); }
+.quiz-attempts.limit { color: var(--quiz-bad); font-weight: 600; }
+.modal-name-line { margin: 0 0 12px; font-size: 14px; color: var(--ink-2); }
+.quiz-q.missing { outline: 2px solid var(--quiz-bad); outline-offset: 2px; }
+.quiz-note[hidden] { display: none; }
+.quiz-submit-note { margin: 14px 0 0; }
 .quiz-result { margin-top: 22px; padding: 20px 22px; border: 1px solid var(--quiz-line); border-radius: 12px; background: var(--quiz-card); box-shadow: 0 2px 8px rgba(0,0,0,.02); color: var(--quiz-ink); }
 .quiz-result[hidden] { display: none; }
 .quiz-result > .label { display: block; font: 600 11px var(--font-mono); letter-spacing: .08em; text-transform: uppercase; color: var(--accent); margin-bottom: 6px; }
 .quiz-result h3 { margin: 0 0 14px; font: 800 24px/1.2 var(--font-display); }
 .quiz-result .modal-result { margin: 0 0 14px; }
+.quiz-result [data-modal-wrong] { margin-top: -6px; font-size: 14px; font-weight: 400; color: var(--quiz-ink); }
 .quiz-result .modal-times { margin-bottom: 0; }
 @media (max-width: 560px) {
   .quiz-q { padding: 18px 16px; }
@@ -553,6 +565,7 @@ html.modal-open { overflow: hidden; }
 .quiz-q { animation: quiz-in .32s cubic-bezier(.16,1,.3,1) both; }
 @keyframes quiz-in { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
 @media (prefers-reduced-motion: reduce) { .quiz-q { animation: none; } }
+@media (prefers-reduced-motion: reduce) { .quiz-q { animation: none; } }
 
 /* ---------- variant cards on the practice page ---------- */
 .variant { border: 1px solid var(--rule); border-radius: 14px; background: var(--card); margin: 0 0 12px; overflow: hidden; }
@@ -606,7 +619,7 @@ html.modal-open { overflow: hidden; }
   a { color: #000; text-decoration: none; }
   .callout, .check, .recap, .quiz-q, .quiz-result, .figure, .outcomes { border-color: #999; }
   .gate-step[hidden], .gate-content[hidden], .quiz-q[hidden] { display: block !important; }
-  .gate-action, .quiz-actions { display: none !important; }
+  .gate-action, .quiz-actions, .quiz-who { display: none !important; }
   .reveal { opacity: 1 !important; transform: none !important; transition: none !important; }
   .recap { background: #fff; color: #000; }
   .recap li, .recap p { color: #000; }
@@ -1180,7 +1193,7 @@ lazy load operation of attribute 'stock' cannot proceed
 <li>Схему меняют миграциями, а <code>create_all</code> подходит только для старта и тестов.</li>
 <li>ORM и SQL дополняют друг друга: объекты через ORM, сложные отчёты через SQL.</li>
 </ul>
-<div class="quiz" data-quiz><div class="quiz-q" data-type="single" data-correct="1" data-q="1"><p class="quiz-p"><span class="quiz-no" aria-hidden="true">01</span>Что делает <code>selectinload</code>?</p><div class="opts"><label class="opt"><input type="radio" name="q145_0" value="2"><span>Удаляет связанные строки</span></label><label class="opt"><input type="radio" name="q145_0" value="0" data-ok><span>Загружает связь отдельным запросом с условием IN</span></label><label class="opt"><input type="radio" name="q145_0" value="1"><span>Запрещает ленивую загрузку навсегда</span></label><label class="opt"><input type="radio" name="q145_0" value="3"><span>Создаёт таблицу для связи</span></label></div><p class="quiz-why" hidden>Один дополнительный запрос обслуживает всю коллекцию родителей.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="multi" data-correct="3" data-q="2" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">02</span>Какие преимущества даёт ORM?</p><div class="opts"><label class="opt"><input type="checkbox" name="q145_1" value="2" data-ok><span>Строка выборки превращается в объект</span></label><label class="opt"><input type="checkbox" name="q145_1" value="4"><span>ORM отменяет необходимость знать SQL</span></label><label class="opt"><input type="checkbox" name="q145_1" value="1" data-ok><span>Параметры запросов используются по умолчанию</span></label><label class="opt"><input type="checkbox" name="q145_1" value="3"><span>Любой запрос выполняется быстрее ручного SQL</span></label><label class="opt"><input type="checkbox" name="q145_1" value="0" data-ok><span>Меньше повторяющегося кода для обычных операций</span></label></div><p class="quiz-why" hidden>ORM ускоряет разработку, но не гарантирует лучшую производительность.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="short" data-q="3" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">03</span>Как называется проблема, при которой список из N строк порождает N дополнительных запросов?</p><input type="text" class="short-answer" data-answers="[&quot;N+1&quot;, &quot;проблема N+1&quot;]" placeholder="Введите ответ" autocomplete="off" spellcheck="false" aria-label="Как называется проблема, при которой список из N строк порождает N дополнительных запросов?"><p class="quiz-why" hidden>Один запрос на список и по одному на каждую строку дают N+1 обращений.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="4" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">04</span>Что такое миграция?</p><div class="opts"><label class="opt"><input type="radio" name="q145_3" value="3"><span>Запрос на выборку всех строк</span></label><label class="opt"><input type="radio" name="q145_3" value="1"><span>Перенос данных в другой файл</span></label><label class="opt"><input type="radio" name="q145_3" value="2"><span>Копия базы на другой сервер</span></label><label class="opt"><input type="radio" name="q145_3" value="0" data-ok><span>Версионированное изменение схемы базы</span></label></div><p class="quiz-why" hidden>Миграции хранят историю изменений схемы и применяются по порядку.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="5" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">05</span>Что отображает ORM?</p><div class="opts"><label class="opt"><input type="radio" name="q145_4" value="3"><span>Пароль на хеш</span></label><label class="opt"><input type="radio" name="q145_4" value="0" data-ok><span>Класс программы на таблицу базы, а объект на строку</span></label><label class="opt"><input type="radio" name="q145_4" value="1"><span>Файл базы на файл журнала</span></label><label class="opt"><input type="radio" name="q145_4" value="2"><span>HTTP-маршрут на SQL-запрос</span></label></div><p class="quiz-why" hidden>ORM переводит объектную модель программы в реляционную модель базы.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="multi" data-correct="3" data-q="6" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">06</span>Что должно быть в модели таблицы?</p><div class="opts"><label class="opt"><input type="checkbox" name="q145_5" value="0" data-ok><span>Имя таблицы</span></label><label class="opt"><input type="checkbox" name="q145_5" value="1" data-ok><span>Колонки и их типы</span></label><label class="opt"><input type="checkbox" name="q145_5" value="3"><span>Пароль от базы данных</span></label><label class="opt"><input type="checkbox" name="q145_5" value="2" data-ok><span>Связи с другими моделями</span></label><label class="opt"><input type="checkbox" name="q145_5" value="4"><span>HTTP-маршрут API</span></label></div><p class="quiz-why" hidden>Модель описывает данные и связи, а не доступ к серверу и не маршруты.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="7" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">07</span>Что делает ленивая загрузка связи?</p><div class="opts"><label class="opt"><input type="radio" name="q145_6" value="1"><span>Читает все таблицы при старте программы</span></label><label class="opt"><input type="radio" name="q145_6" value="3"><span>Создаёт индекс на внешний ключ</span></label><label class="opt"><input type="radio" name="q145_6" value="0" data-ok><span>Читает связанные строки при первом обращении к свойству</span></label><label class="opt"><input type="radio" name="q145_6" value="2"><span>Запрещает доступ к связи</span></label></div><p class="quiz-why" hidden>Поэтому связь может вызвать дополнительный запрос неожиданно для автора кода.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="short" data-q="8" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">08</span>Как называется версионированное изменение схемы базы?</p><input type="text" class="short-answer" data-answers="[&quot;миграция&quot;]" placeholder="Введите ответ" autocomplete="off" spellcheck="false" aria-label="Как называется версионированное изменение схемы базы?"><p class="quiz-why" hidden>Миграции применяются по порядку и хранят историю изменений схемы.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="9" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">09</span>Что делает <code>Base.metadata.create_all</code>?</p><div class="opts"><label class="opt"><input type="radio" name="q145_8" value="3"><span>Обновляет колонки в существующих таблицах</span></label><label class="opt"><input type="radio" name="q145_8" value="2"><span>Удаляет таблицы перед созданием</span></label><label class="opt"><input type="radio" name="q145_8" value="0" data-ok><span>Создаёт отсутствующие таблицы, но не изменяет существующие</span></label><label class="opt"><input type="radio" name="q145_8" value="1"><span>Применяет все миграции по порядку</span></label></div><p class="quiz-why" hidden>Для изменения существующей таблицы нужна миграция.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="multi" data-correct="3" data-q="10" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">10</span>Когда ручной SQL удобнее ORM?</p><div class="opts"><label class="opt"><input type="checkbox" name="q145_9" value="1" data-ok><span>Для массового обновления большого числа строк</span></label><label class="opt"><input type="checkbox" name="q145_9" value="0" data-ok><span>Для сложного отчёта с группировкой и оконными функциями</span></label><label class="opt"><input type="checkbox" name="q145_9" value="3"><span>Для создания одного объекта</span></label><label class="opt"><input type="checkbox" name="q145_9" value="4"><span>Для чтения строки по первичному ключу</span></label><label class="opt"><input type="checkbox" name="q145_9" value="2" data-ok><span>Для запроса к специфичной возможности СУБД</span></label></div><p class="quiz-why" hidden>Сложная аналитика и массовые операции лучше видны в явном SQL.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="11" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">11</span>В чём суть проблемы N+1?</p><div class="opts"><label class="opt"><input type="radio" name="q145_10" value="3"><span>Сессия открывается N+1 раз</span></label><label class="opt"><input type="radio" name="q145_10" value="1"><span>Один запрос выполняется N раз из-за повтора</span></label><label class="opt"><input type="radio" name="q145_10" value="2"><span>Таблица содержит N+1 колонку</span></label><label class="opt"><input type="radio" name="q145_10" value="0" data-ok><span>Один запрос выбирает список, затем по запросу на каждую строку</span></label></div><p class="quiz-why" hidden>Число запросов растёт вместе с числом строк списка.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="12" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">12</span>Почему возникает <code>DetachedInstanceError</code>?</p><div class="opts"><label class="opt"><input type="radio" name="q145_11" value="2"><span>В модели не указан первичный ключ</span></label><label class="opt"><input type="radio" name="q145_11" value="1"><span>В базе закончилось место</span></label><label class="opt"><input type="radio" name="q145_11" value="0" data-ok><span>Объект используется после закрытия сессии, а связь не была загружена</span></label><label class="opt"><input type="radio" name="q145_11" value="3"><span>Запрос вернул слишком много строк</span></label></div><p class="quiz-why" hidden>После закрытия сессии догрузить связь нечем.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="short" data-q="13" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">13</span>Какая функция SQLAlchemy загружает связь отдельным запросом с условием IN?</p><input type="text" class="short-answer" data-answers="[&quot;selectinload&quot;]" placeholder="Введите ответ" autocomplete="off" spellcheck="false" aria-label="Какая функция SQLAlchemy загружает связь отдельным запросом с условием IN?"><p class="quiz-why" hidden><code>selectinload</code> обслуживает всю коллекцию одним дополнительным запросом.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="multi" data-correct="3" data-q="14" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">14</span>Что может вызвать лишние запросы к базе?</p><div class="opts"><label class="opt"><input type="checkbox" name="q145_13" value="1" data-ok><span>Отсутствие жадной загрузки для нужной связи</span></label><label class="opt"><input type="checkbox" name="q145_13" value="0" data-ok><span>Обращение к ленивой связи в цикле</span></label><label class="opt"><input type="checkbox" name="q145_13" value="4"><span>Чтение объекта по первичному ключу через <code>session.get</code></span></label><label class="opt"><input type="checkbox" name="q145_13" value="2" data-ok><span>Запрос связи для каждой строки списка</span></label><label class="opt"><input type="checkbox" name="q145_13" value="3"><span>Использование <code>selectinload</code></span></label></div><p class="quiz-why" hidden>Ленивая загрузка в цикле и есть источник N+1.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="15" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">15</span>Что задаёт сессия в SQLAlchemy?</p><div class="opts"><label class="opt"><input type="radio" name="q145_14" value="2"><span>Только права пользователя</span></label><label class="opt"><input type="radio" name="q145_14" value="0" data-ok><span>Границу транзакции и набор загруженных объектов</span></label><label class="opt"><input type="radio" name="q145_14" value="1"><span>Только имя файла базы</span></label><label class="opt"><input type="radio" name="q145_14" value="3"><span>Только схему таблиц</span></label></div><p class="quiz-why" hidden>Сессия решает, когда отправить изменения и какие объекты уже загружены.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-result" data-quiz-result hidden aria-live="polite"><span class="label">Результат теста</span><h3>Тест завершён</h3><label class="modal-name" data-student-label><span>ФИО студента</span><input type="text" data-student-name maxlength="80" autocomplete="name" placeholder="Иванов Иван Иванович"></label><p class="modal-result" data-modal-result></p><dl class="modal-times"><div><dt>Время выполнения теста</dt><dd data-test-time>00:00</dd></div><div><dt>Время просмотра лекции</dt><dd data-view-time>00:00</dd></div></dl></div></div></div>
+<div class="quiz" data-quiz><div class="quiz-who"><label class="quiz-who-label"><span>ФИО</span><input type="text" class="quiz-name" data-quiz-name maxlength="80" autocomplete="off" placeholder="Иванов Иван Иванович"></label><span class="quiz-attempts" data-quiz-attempts>две попытки на лекцию</span><span class="quiz-note" data-who-note hidden></span></div><div class="quiz-q" data-type="single" data-correct="1" data-q="1"><p class="quiz-p"><span class="quiz-no" aria-hidden="true">01</span>Что делает <code>selectinload</code>?</p><div class="opts"><label class="opt"><input type="radio" name="q145_0" value="2" autocomplete="off"><span>Удаляет связанные строки</span></label><label class="opt"><input type="radio" name="q145_0" value="0" autocomplete="off" data-ok><span>Загружает связь отдельным запросом с условием IN</span></label><label class="opt"><input type="radio" name="q145_0" value="1" autocomplete="off"><span>Запрещает ленивую загрузку навсегда</span></label><label class="opt"><input type="radio" name="q145_0" value="3" autocomplete="off"><span>Создаёт таблицу для связи</span></label></div><p class="quiz-why" hidden>Один дополнительный запрос обслуживает всю коллекцию родителей.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="multi" data-correct="3" data-q="2" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">02</span>Какие преимущества даёт ORM?</p><div class="opts"><label class="opt"><input type="checkbox" name="q145_1" value="2" autocomplete="off" data-ok><span>Строка выборки превращается в объект</span></label><label class="opt"><input type="checkbox" name="q145_1" value="4" autocomplete="off"><span>ORM отменяет необходимость знать SQL</span></label><label class="opt"><input type="checkbox" name="q145_1" value="1" autocomplete="off" data-ok><span>Параметры запросов используются по умолчанию</span></label><label class="opt"><input type="checkbox" name="q145_1" value="3" autocomplete="off"><span>Любой запрос выполняется быстрее ручного SQL</span></label><label class="opt"><input type="checkbox" name="q145_1" value="0" autocomplete="off" data-ok><span>Меньше повторяющегося кода для обычных операций</span></label></div><p class="quiz-why" hidden>ORM ускоряет разработку, но не гарантирует лучшую производительность.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="short" data-q="3" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">03</span>Как называется проблема, при которой список из N строк порождает N дополнительных запросов?</p><input type="text" class="short-answer" data-answers="[&quot;N+1&quot;, &quot;проблема N+1&quot;]" placeholder="Введите ответ" autocomplete="off" spellcheck="false" aria-label="Как называется проблема, при которой список из N строк порождает N дополнительных запросов?"><p class="quiz-why" hidden>Один запрос на список и по одному на каждую строку дают N+1 обращений.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="4" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">04</span>Что такое миграция?</p><div class="opts"><label class="opt"><input type="radio" name="q145_3" value="3" autocomplete="off"><span>Запрос на выборку всех строк</span></label><label class="opt"><input type="radio" name="q145_3" value="1" autocomplete="off"><span>Перенос данных в другой файл</span></label><label class="opt"><input type="radio" name="q145_3" value="2" autocomplete="off"><span>Копия базы на другой сервер</span></label><label class="opt"><input type="radio" name="q145_3" value="0" autocomplete="off" data-ok><span>Версионированное изменение схемы базы</span></label></div><p class="quiz-why" hidden>Миграции хранят историю изменений схемы и применяются по порядку.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="5" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">05</span>Что отображает ORM?</p><div class="opts"><label class="opt"><input type="radio" name="q145_4" value="3" autocomplete="off"><span>Пароль на хеш</span></label><label class="opt"><input type="radio" name="q145_4" value="0" autocomplete="off" data-ok><span>Класс программы на таблицу базы, а объект на строку</span></label><label class="opt"><input type="radio" name="q145_4" value="1" autocomplete="off"><span>Файл базы на файл журнала</span></label><label class="opt"><input type="radio" name="q145_4" value="2" autocomplete="off"><span>HTTP-маршрут на SQL-запрос</span></label></div><p class="quiz-why" hidden>ORM переводит объектную модель программы в реляционную модель базы.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="multi" data-correct="3" data-q="6" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">06</span>Что должно быть в модели таблицы?</p><div class="opts"><label class="opt"><input type="checkbox" name="q145_5" value="0" autocomplete="off" data-ok><span>Имя таблицы</span></label><label class="opt"><input type="checkbox" name="q145_5" value="1" autocomplete="off" data-ok><span>Колонки и их типы</span></label><label class="opt"><input type="checkbox" name="q145_5" value="3" autocomplete="off"><span>Пароль от базы данных</span></label><label class="opt"><input type="checkbox" name="q145_5" value="2" autocomplete="off" data-ok><span>Связи с другими моделями</span></label><label class="opt"><input type="checkbox" name="q145_5" value="4" autocomplete="off"><span>HTTP-маршрут API</span></label></div><p class="quiz-why" hidden>Модель описывает данные и связи, а не доступ к серверу и не маршруты.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="7" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">07</span>Что делает ленивая загрузка связи?</p><div class="opts"><label class="opt"><input type="radio" name="q145_6" value="1" autocomplete="off"><span>Читает все таблицы при старте программы</span></label><label class="opt"><input type="radio" name="q145_6" value="3" autocomplete="off"><span>Создаёт индекс на внешний ключ</span></label><label class="opt"><input type="radio" name="q145_6" value="0" autocomplete="off" data-ok><span>Читает связанные строки при первом обращении к свойству</span></label><label class="opt"><input type="radio" name="q145_6" value="2" autocomplete="off"><span>Запрещает доступ к связи</span></label></div><p class="quiz-why" hidden>Поэтому связь может вызвать дополнительный запрос неожиданно для автора кода.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="short" data-q="8" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">08</span>Как называется версионированное изменение схемы базы?</p><input type="text" class="short-answer" data-answers="[&quot;миграция&quot;]" placeholder="Введите ответ" autocomplete="off" spellcheck="false" aria-label="Как называется версионированное изменение схемы базы?"><p class="quiz-why" hidden>Миграции применяются по порядку и хранят историю изменений схемы.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="9" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">09</span>Что делает <code>Base.metadata.create_all</code>?</p><div class="opts"><label class="opt"><input type="radio" name="q145_8" value="3" autocomplete="off"><span>Обновляет колонки в существующих таблицах</span></label><label class="opt"><input type="radio" name="q145_8" value="2" autocomplete="off"><span>Удаляет таблицы перед созданием</span></label><label class="opt"><input type="radio" name="q145_8" value="0" autocomplete="off" data-ok><span>Создаёт отсутствующие таблицы, но не изменяет существующие</span></label><label class="opt"><input type="radio" name="q145_8" value="1" autocomplete="off"><span>Применяет все миграции по порядку</span></label></div><p class="quiz-why" hidden>Для изменения существующей таблицы нужна миграция.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="multi" data-correct="3" data-q="10" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">10</span>Когда ручной SQL удобнее ORM?</p><div class="opts"><label class="opt"><input type="checkbox" name="q145_9" value="1" autocomplete="off" data-ok><span>Для массового обновления большого числа строк</span></label><label class="opt"><input type="checkbox" name="q145_9" value="0" autocomplete="off" data-ok><span>Для сложного отчёта с группировкой и оконными функциями</span></label><label class="opt"><input type="checkbox" name="q145_9" value="3" autocomplete="off"><span>Для создания одного объекта</span></label><label class="opt"><input type="checkbox" name="q145_9" value="4" autocomplete="off"><span>Для чтения строки по первичному ключу</span></label><label class="opt"><input type="checkbox" name="q145_9" value="2" autocomplete="off" data-ok><span>Для запроса к специфичной возможности СУБД</span></label></div><p class="quiz-why" hidden>Сложная аналитика и массовые операции лучше видны в явном SQL.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="11" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">11</span>В чём суть проблемы N+1?</p><div class="opts"><label class="opt"><input type="radio" name="q145_10" value="3" autocomplete="off"><span>Сессия открывается N+1 раз</span></label><label class="opt"><input type="radio" name="q145_10" value="1" autocomplete="off"><span>Один запрос выполняется N раз из-за повтора</span></label><label class="opt"><input type="radio" name="q145_10" value="2" autocomplete="off"><span>Таблица содержит N+1 колонку</span></label><label class="opt"><input type="radio" name="q145_10" value="0" autocomplete="off" data-ok><span>Один запрос выбирает список, затем по запросу на каждую строку</span></label></div><p class="quiz-why" hidden>Число запросов растёт вместе с числом строк списка.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="12" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">12</span>Почему возникает <code>DetachedInstanceError</code>?</p><div class="opts"><label class="opt"><input type="radio" name="q145_11" value="2" autocomplete="off"><span>В модели не указан первичный ключ</span></label><label class="opt"><input type="radio" name="q145_11" value="1" autocomplete="off"><span>В базе закончилось место</span></label><label class="opt"><input type="radio" name="q145_11" value="0" autocomplete="off" data-ok><span>Объект используется после закрытия сессии, а связь не была загружена</span></label><label class="opt"><input type="radio" name="q145_11" value="3" autocomplete="off"><span>Запрос вернул слишком много строк</span></label></div><p class="quiz-why" hidden>После закрытия сессии догрузить связь нечем.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="short" data-q="13" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">13</span>Какая функция SQLAlchemy загружает связь отдельным запросом с условием IN?</p><input type="text" class="short-answer" data-answers="[&quot;selectinload&quot;]" placeholder="Введите ответ" autocomplete="off" spellcheck="false" aria-label="Какая функция SQLAlchemy загружает связь отдельным запросом с условием IN?"><p class="quiz-why" hidden><code>selectinload</code> обслуживает всю коллекцию одним дополнительным запросом.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="multi" data-correct="3" data-q="14" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">14</span>Что может вызвать лишние запросы к базе?</p><div class="opts"><label class="opt"><input type="checkbox" name="q145_13" value="1" autocomplete="off" data-ok><span>Отсутствие жадной загрузки для нужной связи</span></label><label class="opt"><input type="checkbox" name="q145_13" value="0" autocomplete="off" data-ok><span>Обращение к ленивой связи в цикле</span></label><label class="opt"><input type="checkbox" name="q145_13" value="4" autocomplete="off"><span>Чтение объекта по первичному ключу через <code>session.get</code></span></label><label class="opt"><input type="checkbox" name="q145_13" value="2" autocomplete="off" data-ok><span>Запрос связи для каждой строки списка</span></label><label class="opt"><input type="checkbox" name="q145_13" value="3" autocomplete="off"><span>Использование <code>selectinload</code></span></label></div><p class="quiz-why" hidden>Ленивая загрузка в цикле и есть источник N+1.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="15" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">15</span>Что задаёт сессия в SQLAlchemy?</p><div class="opts"><label class="opt"><input type="radio" name="q145_14" value="2" autocomplete="off"><span>Только права пользователя</span></label><label class="opt"><input type="radio" name="q145_14" value="0" autocomplete="off" data-ok><span>Границу транзакции и набор загруженных объектов</span></label><label class="opt"><input type="radio" name="q145_14" value="1" autocomplete="off"><span>Только имя файла базы</span></label><label class="opt"><input type="radio" name="q145_14" value="3" autocomplete="off"><span>Только схему таблиц</span></label></div><p class="quiz-why" hidden>Сессия решает, когда отправить изменения и какие объекты уже загружены.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><p class="quiz-note quiz-submit-note" data-quiz-note hidden></p><div class="quiz-result" data-quiz-result hidden aria-live="polite"><span class="label">Результат теста</span><h3>Тест завершён</h3><p class="modal-name-line">ФИО: <b data-student-name></b></p><p class="modal-result" data-modal-result></p><p class="modal-result" data-modal-wrong></p><dl class="modal-times"><div><dt>Время выполнения теста</dt><dd data-test-time>00:00</dd></div><div><dt>Время просмотра лекции</dt><dd data-view-time>00:00</dd></div></dl></div></div></div>
 </div></article><nav class="pager"><a class="" href="23-prakt-09.html"><span>← Предыдущее занятие</span>Практика 9. Выборка и изменение данных из программы</a><a class="next" style="text-align:right;margin-left:auto" href="25-prakt-10.html"><span>Следующее занятие →</span>Практика 10. Модель таблицы и запросы через ORM</a></nav></main>
 <div class="modal" data-modal="warn" hidden>
   <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="warn-title">
@@ -1566,32 +1579,131 @@ lazy load operation of attribute 'stock' cannot proceed
     q.querySelectorAll('input').forEach(function(i){ i.disabled = true; });
   }
 
+  function resetQuiz(quiz){
+    quiz.querySelectorAll('input').forEach(function(i){
+      if(i.type === 'checkbox' || i.type === 'radio') i.checked = false;
+      else i.value = '';
+      i.disabled = false;
+    });
+    quiz.querySelectorAll('.opt').forEach(function(o){ o.classList.remove('picked', 'correct'); });
+    quiz.querySelectorAll('.quiz-q').forEach(function(q){
+      q.classList.remove('ok', 'bad', 'missing');
+      delete q.dataset.answered;
+    });
+    quiz.querySelectorAll('.quiz-why').forEach(function(w){ w.hidden = true; });
+    quiz.querySelectorAll('[data-note]').forEach(function(n){ n.hidden = true; n.textContent = ''; });
+    quiz.querySelectorAll('[data-answer]').forEach(function(b){ b.hidden = false; b.disabled = false; });
+    var note = quiz.querySelector('[data-quiz-note]');
+    if(note){ note.hidden = true; note.textContent = ''; }
+    var card = quiz.querySelector('[data-quiz-result]');
+    if(card) card.hidden = true;
+    document.documentElement.classList.add('quiz-pending');
+  }
+
+  function shuffleQuestions(quiz){
+    var list = [].slice.call(quiz.querySelectorAll('.quiz-q'));
+    var anchor = quiz.querySelector('[data-quiz-note]') || null;
+    for(var i = list.length - 1; i > 0; i--){
+      var j = Math.floor(Math.random() * (i + 1));
+      var tmp = list[i]; list[i] = list[j]; list[j] = tmp;
+    }
+    list.forEach(function(q, idx){
+      var no = q.querySelector('.quiz-no');
+      if(no) no.textContent = String(idx + 1).padStart(2, '0');
+      if(anchor) quiz.insertBefore(q, anchor); else quiz.appendChild(q);
+    });
+  }
+
+  addEventListener('pageshow', function(e){ if(e.persisted) location.reload(); });
+
+  function quizStoreKey(){ return 'mdk-quiz:' + location.pathname; }
+  function readAttempts(name){
+    try { var raw = localStorage.getItem(quizStoreKey() + ':' + encodeURIComponent(name)); return raw ? JSON.parse(raw) : null; }
+    catch(e){ return null; }
+  }
+  function writeAttempts(name, data){
+    try { localStorage.setItem(quizStoreKey() + ':' + encodeURIComponent(name), JSON.stringify(data)); } catch(e){}
+  }
+  function shuffleOptions(quiz){
+    quiz.querySelectorAll('.quiz-q .opts').forEach(function(box){
+      var list = [].slice.call(box.children);
+      for(var i = list.length - 1; i > 0; i--){
+        var j = Math.floor(Math.random() * (i + 1));
+        var tmp = list[i]; list[i] = list[j]; list[j] = tmp;
+      }
+      list.forEach(function(o){ box.appendChild(o); });
+    });
+  }
+
   document.querySelectorAll('[data-quiz]').forEach(function(quiz){
+    resetQuiz(quiz);
+    shuffleQuestions(quiz);
+    shuffleOptions(quiz);
     var qs = [].slice.call(quiz.querySelectorAll('.quiz-q'));
     if(!qs.length) return;
-    document.documentElement.classList.add('quiz-pending');
-    var current = 0, right = 0, firstAt = null, lastAt = null;
+    var last = qs.length - 1;
+    var nameInput = quiz.querySelector('[data-quiz-name]');
+    var whoNote = quiz.querySelector('[data-who-note]');
+    var attemptsLabel = quiz.querySelector('[data-quiz-attempts]');
+    var right = 0, submitted = false, blocked = false, firstAt = null, lastAt = null;
     function mark(){ var now = performance.now(); if(firstAt === null) firstAt = now; lastAt = now; }
-    function showQuestion(i){
-      current = i;
-      qs[i].hidden = false;
-      if(window.__readProgress) window.__readProgress();
+    qs.forEach(function(q, i){
+      var b = q.querySelector('[data-answer]');
+      if(b) b.textContent = i === last ? 'Завершить тест' : 'Ответить';
+      q.hidden = i > 0;
+    });
+
+    function updateAttempts(){
+      if(!nameInput) return false;
+      var name = norm(nameInput.value);
+      if(!name){
+        blocked = false;
+        if(attemptsLabel){ attemptsLabel.textContent = 'две попытки на лекцию'; attemptsLabel.classList.remove('limit'); }
+        return false;
+      }
+      var data = readAttempts(name);
+      var count = data && data.count ? data.count : 0;
+      blocked = count >= 2;
+      if(attemptsLabel){
+        attemptsLabel.textContent = 'Попыток: ' + count + ' из 2' + (data && data.best != null ? ' · лучший ' + data.best + ' из ' + qs.length : '');
+        attemptsLabel.classList.toggle('limit', blocked);
+      }
+      if(whoNote){
+        whoNote.hidden = !blocked;
+        whoNote.textContent = blocked ? 'Для этого ФИО попытки закончились: 2 из 2.' : '';
+      }
+      qs.forEach(function(q){
+        var b = q.querySelector('[data-answer]');
+        if(b && !submitted) b.disabled = blocked;
+      });
+      return blocked;
     }
-    function finish(){
-      var card = quiz.querySelector('[data-quiz-result]');
-      if(!card) return;
-      var total = qs.length, pct = total ? Math.round(right / total * 100) : 0;
-      var testMs = (firstAt !== null && lastAt !== null) ? Math.max(0, lastAt - firstAt) : 0;
-      card.querySelector('[data-modal-result]').textContent = 'Правильных ответов: ' + right + ' из ' + total + ' (' + pct + '%)';
-      card.querySelector('[data-test-time]').textContent = fmt(testMs);
-      card.querySelector('[data-view-time]').textContent = fmt(viewingMs());
-      card.hidden = false;
-      document.documentElement.classList.remove('quiz-pending');
-      if(window.__readProgress) window.__readProgress();
-      window.dispatchEvent(new Event('resize'));
+    if(nameInput){
+      nameInput.addEventListener('input', updateAttempts);
+      nameInput.addEventListener('change', updateAttempts);
     }
+
+    qs.forEach(function(q, idx){
+      q.addEventListener('input', function(e){ if(e.target.matches('input')){ mark(); q.classList.remove('missing'); } });
+      q.addEventListener('change', function(e){ if(e.target.matches('input')){ mark(); paintPicked(q); q.classList.remove('missing'); } });
+      var short = q.querySelector('.short-answer');
+      if(short) short.addEventListener('keydown', function(e){ if(e.key === 'Enter'){ e.preventDefault(); mark(); } });
+      var answerBtn = q.querySelector('[data-answer]');
+      if(answerBtn) answerBtn.addEventListener('click', function(){ answer(q, idx); });
+    });
+
     function answer(q, idx){
-      if(q.dataset.answered === '1') return;
+      if(submitted) return;
+      if(nameInput && !norm(nameInput.value)){
+        if(whoNote){ whoNote.hidden = false; whoNote.textContent = 'Укажите ФИО перед началом теста.'; }
+        nameInput.focus();
+        return;
+      }
+      if(whoNote) whoNote.hidden = true;
+      if(updateAttempts()){
+        if(whoNote){ whoNote.hidden = false; whoNote.textContent = 'Для этого ФИО попытки закончились: 2 из 2.'; }
+        return;
+      }
       var note = q.querySelector('[data-note]');
       if(!hasAnswer(q)){
         if(note){ note.hidden = false; note.textContent = q.dataset.type === 'short' ? 'Введите ответ.' : 'Выберите вариант.'; }
@@ -1599,26 +1711,60 @@ lazy load operation of attribute 'stock' cannot proceed
       }
       if(note) note.hidden = true;
       mark();
-      var ok = questionCorrect(q);
-      q.dataset.answered = '1';
-      q.classList.add(ok ? 'ok' : 'bad');
-      paintChoices(q);
-      var why = q.querySelector('.quiz-why'); if(why) why.hidden = false;
-      lock(q);
-      var answerBtn = q.querySelector('[data-answer]'); if(answerBtn) answerBtn.hidden = true;
-      if(ok) right++;
-      if(idx === qs.length - 1){ finish(); }
-      else { showQuestion(idx + 1); }
+      var btn = q.querySelector('[data-answer]');
+      if(btn){ btn.disabled = true; btn.hidden = true; }
+      if(idx === last){ finish(); }
+      else { qs[idx + 1].hidden = false; if(window.__readProgress) window.__readProgress(); }
     }
-    qs.forEach(function(q, idx){
-      q.addEventListener('input', function(e){ if(e.target.matches('input')) mark(); });
-      q.addEventListener('change', function(e){ if(e.target.matches('input')){ mark(); paintPicked(q); } });
-      var answerBtn = q.querySelector('[data-answer]');
-      if(answerBtn) answerBtn.addEventListener('click', function(){ answer(q, idx); });
-      var short = q.querySelector('.short-answer');
-      if(short) short.addEventListener('keydown', function(e){ if(e.key === 'Enter'){ e.preventDefault(); answer(q, idx); } });
-    });
-    showQuestion(0);
+
+    function finish(){
+      if(submitted) return;
+      var note = quiz.querySelector('[data-quiz-note]');
+      var missing = qs.filter(function(q){ return !hasAnswer(q); });
+      if(missing.length){
+        qs.forEach(function(q){ q.classList.toggle('missing', !hasAnswer(q)); });
+        if(note){ note.hidden = false; note.textContent = 'Без ответа осталось вопросов: ' + missing.length + '. Ответьте на все и завершите тест снова.'; }
+        missing[0].scrollIntoView({block:'center', behavior:'smooth'});
+        return;
+      }
+      submitted = true;
+      if(note) note.hidden = true;
+      mark();
+      var wrong = [];
+      qs.forEach(function(q, i){
+        q.classList.remove('missing');
+        var ok = questionCorrect(q);
+        q.classList.add(ok ? 'ok' : 'bad');
+        paintPicked(q);
+        lock(q);
+        var btn = q.querySelector('[data-answer]'); if(btn) btn.hidden = true;
+        if(ok) right++; else wrong.push(i + 1);
+      });
+      var name = nameInput ? nameInput.value.trim() : '';
+      var nameKey = norm(name);
+      if(nameKey){
+        var data = readAttempts(nameKey) || {count: 0, best: 0};
+        data.count = (data.count || 0) + 1;
+        data.best = Math.max(data.best || 0, right);
+        writeAttempts(nameKey, data);
+      }
+      updateAttempts();
+      var card = quiz.querySelector('[data-quiz-result]');
+      if(!card) return;
+      var total = qs.length, pct = total ? Math.round(right / total * 100) : 0;
+      var testMs = (firstAt !== null && lastAt !== null) ? Math.max(0, lastAt - firstAt) : 0;
+      card.querySelector('[data-student-name]').textContent = name || 'не указано';
+      card.querySelector('[data-modal-result]').textContent = 'Правильных ответов: ' + right + ' из ' + total + ' (' + pct + '%)';
+      card.querySelector('[data-modal-wrong]').textContent = wrong.length
+        ? 'Вопросы с ошибками: ' + wrong.join(', ') + '. Повторите эти разделы лекции.'
+        : 'Ошибок нет.';
+      card.querySelector('[data-test-time]').textContent = fmt(testMs);
+      card.querySelector('[data-view-time]').textContent = fmt(viewingMs());
+      card.hidden = false;
+      document.documentElement.classList.remove('quiz-pending');
+      if(window.__readProgress) window.__readProgress();
+      window.dispatchEvent(new Event('resize'));
+    }
   });
 })();
 </script>
