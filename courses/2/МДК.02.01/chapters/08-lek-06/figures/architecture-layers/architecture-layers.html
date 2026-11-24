@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Слои приложения</title>
+<style>
+  :root { --paper:#faf6f3; --card:#fffdfb; --ink:#1a1916; --muted:#6b6459; --rule:#e4d8cf; --accent:#0F8A63; --soft:#E1F5EE; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .demo { background:var(--paper); border:1px solid var(--rule); border-radius:14px; padding:18px; }
+  .head { display:flex; justify-content:space-between; align-items:flex-end; gap:16px; padding-bottom:10px; border-bottom:1px solid var(--rule); }
+  .eyebrow { margin:0 0 4px; font:600 10px/1.2 Consolas,monospace; letter-spacing:.12em; text-transform:uppercase; color:var(--accent); }
+  h3 { margin:0; font-size:20px; line-height:1.2; }
+  .counter { font:11px/1.4 Consolas,monospace; color:var(--muted); white-space:nowrap; }
+  svg { display:block; width:100%; height:auto; margin-top:6px; }
+  .layer rect { fill:#fff; stroke:#2d3142; stroke-width:1.3; transition:fill .2s, stroke .2s; }
+  .layer.on rect { fill:var(--soft); stroke:var(--accent); stroke-width:2; }
+  .layer text { font-family:Consolas,monospace; font-size:9px; fill:#2d3142; text-anchor:middle; }
+  .layer .sub { font-size:7px; fill:#6b6459; }
+  .side text { font-family:Consolas,monospace; font-size:8px; fill:#2d3142; text-anchor:middle; }
+  .dep { stroke:#5b5560; stroke-width:1.4; fill:none; }
+  .status { min-height:44px; margin-top:8px; padding:10px 12px; border-radius:9px; background:var(--soft); font-size:12.5px; line-height:1.45; }
+  .status b { color:var(--accent); }
+  .controls { display:flex; gap:6px; flex-wrap:wrap; margin-top:10px; }
+  button { font:600 11.5px/1 "Segoe UI",system-ui,sans-serif; padding:8px 10px; border-radius:9px; border:1px solid var(--rule); background:var(--card); color:var(--ink); cursor:pointer; }
+  button:hover { border-color:var(--accent); color:var(--accent); }
+  button.on { background:var(--accent); border-color:var(--accent); color:#fff; }
+  @media (max-width:560px) { .demo { padding:12px; } }
+</style>
+</head>
+<body>
+<div class="demo">
+  <div class="head">
+    <div><p class="eyebrow">Архитектура · слои</p><h3>Кто на кого может ссылаться</h3></div>
+    <div class="counter">нажмите слой</div>
+  </div>
+  <svg viewBox="0 0 680 246" role="img" aria-label="Слоистая архитектура приложения">
+    <g class="side">
+      <rect x="16" y="96" width="104" height="44" rx="7" fill="#fff" stroke="#2d3142"/><text x="68" y="115">пользователь</text><text x="68" y="129" fill="#6b6459">браузер</text>
+      <rect x="562" y="96" width="102" height="44" rx="7" fill="#fff" stroke="#2d3142"/><text x="613" y="115">база</text><text x="613" y="129" fill="#6b6459">и файлы</text>
+    </g>
+
+    <g class="layer" data-l="ui"><rect x="190" y="20" width="330" height="40" rx="7"/><text x="355" y="38">представление</text><text class="sub" x="355" y="51">экраны, ввод, вывод</text></g>
+    <g class="layer" data-l="app"><rect x="190" y="70" width="330" height="40" rx="7"/><text x="355" y="88">приложение</text><text class="sub" x="355" y="101">сценарии, команды</text></g>
+    <g class="layer" data-l="domain"><rect x="190" y="120" width="330" height="40" rx="7"/><text x="355" y="138">предметная область</text><text class="sub" x="355" y="151">сущности и правила</text></g>
+    <g class="layer" data-l="infra"><rect x="190" y="170" width="330" height="40" rx="7"/><text x="355" y="188">инфраструктура</text><text class="sub" x="355" y="201">база, файлы, сеть</text></g>
+
+    <g class="dep" marker-end="url(#arw-a)">
+      <path d="M120 112h60v-72h8"/>
+      <path d="M355 60v8"/>
+      <path d="M355 110v8"/>
+      <path d="M355 160v8"/>
+      <path d="M520 190h32v-72h8"/>
+    </g>
+
+    <text x="355" y="232" text-anchor="middle" font-family="Consolas,monospace" font-size="8" fill="#0F8A63">ЗАВИСИМОСТИ ИДУТ ВНИЗ, ОБРАТНО ТОЛЬКО ЧЕРЕЗ КОНТРАКТ</text>
+    <defs>
+      <marker id="arw-a" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#5b5560"/></marker>
+    </defs>
+  </svg>
+  <div class="status" id="status"><b>Представление.</b> Принимает ввод и показывает результат. Не содержит правил расчёта и не обращается к базе напрямую.</div>
+  <div class="controls">
+    <button data-l="ui" class="on">Представление</button>
+    <button data-l="app">Приложение</button>
+    <button data-l="domain">Предметная область</button>
+    <button data-l="infra">Инфраструктура</button>
+  </div>
+</div>
+<script>
+(function () {
+  var data = {
+    ui: '<b>Представление.</b> Принимает ввод и показывает результат. Не содержит правил расчёта и не обращается к базе напрямую.',
+    app: '<b>Приложение.</b> Ведёт сценарий: проверяет права, вызывает сущности, сохраняет результат. Знает, что делать, но не как устроен экран.',
+    domain: '<b>Предметная область.</b> Сущности и правила бизнеса. Не зависит от базы, интерфейса и библиотек ввода-вывода.',
+    infra: '<b>Инфраструктура.</b> База данных, файлы, сеть, внешние службы. Реализует контракты, которые объявили верхние слои.'
+  };
+  var layers = document.querySelectorAll('.layer');
+  var buttons = document.querySelectorAll('button[data-l]');
+  var status = document.getElementById('status');
+
+  function apply(key) {
+    layers.forEach(function (l) { l.classList.toggle('on', l.dataset.l === key); });
+    buttons.forEach(function (b) { b.classList.toggle('on', b.dataset.l === key); });
+    status.innerHTML = data[key];
+  }
+  layers.forEach(function (l) { l.addEventListener('click', function () { apply(l.dataset.l); }); });
+  buttons.forEach(function (b) { b.addEventListener('click', function () { apply(b.dataset.l); }); });
+  apply('ui');
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Модели процесса</title>
+<style>
+  :root { --paper:#faf6f3; --card:#fffdfb; --ink:#1a1916; --muted:#6b6459; --rule:#e4d8cf; --accent:#0F8A63; --soft:#E1F5EE; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .demo { background:var(--paper); border:1px solid var(--rule); border-radius:14px; padding:18px; }
+  .head { display:flex; justify-content:space-between; align-items:flex-end; gap:16px; padding-bottom:10px; border-bottom:1px solid var(--rule); }
+  .eyebrow { margin:0 0 4px; font:600 10px/1.2 Consolas,monospace; letter-spacing:.12em; text-transform:uppercase; color:var(--accent); }
+  h3 { margin:0; font-size:20px; line-height:1.2; }
+  .counter { font:11px/1.4 Consolas,monospace; color:var(--muted); white-space:nowrap; }
+  svg { display:block; width:100%; height:auto; margin-top:6px; }
+  .box { fill:#fff; stroke:#2d3142; stroke-width:1.3; }
+  .hot { fill:var(--soft); stroke:var(--accent); stroke-width:1.5; }
+  .lbl { font-family:Consolas,monospace; font-size:8.5px; fill:#2d3142; text-anchor:middle; stroke:none; }
+  .sub { font-family:Consolas,monospace; font-size:7px; fill:#6b6459; text-anchor:middle; }
+  .arr { stroke:#5b5560; stroke-width:1.4; fill:none; marker-end:url(#arw-p); }
+  .dash { stroke:#b9ac9f; stroke-width:1.2; stroke-dasharray:4 3; fill:none; }
+  .status { min-height:44px; margin-top:8px; padding:10px 12px; border-radius:9px; background:var(--soft); font-size:12.5px; line-height:1.45; }
+  .status b { color:var(--accent); }
+  .controls { display:flex; gap:7px; flex-wrap:wrap; margin-top:10px; }
+  button { font:600 12px/1 "Segoe UI",system-ui,sans-serif; padding:8px 11px; border-radius:9px; border:1px solid var(--rule); background:var(--card); color:var(--ink); cursor:pointer; }
+  button:hover { border-color:var(--accent); color:var(--accent); }
+  button.on { background:var(--accent); border-color:var(--accent); color:#fff; }
+  [hidden] { display:none !important; }
+  @media (max-width:560px) { .demo { padding:12px; } }
+</style>
+</head>
+<body>
+<div class="demo">
+  <div class="head">
+    <div><p class="eyebrow">Процесс · модели</p><h3>Как расположены циклы</h3></div>
+    <div class="counter">выберите модель</div>
+  </div>
+  <svg viewBox="0 0 680 250" role="img" aria-label="Схемы водопадной, итерационной и V-модели">
+    <g id="waterfall">
+      <g class="box"><rect x="60" y="20" width="150" height="30" rx="5"/><text class="lbl" x="135" y="39">требования</text></g>
+      <g class="box"><rect x="130" y="66" width="150" height="30" rx="5"/><text class="lbl" x="205" y="85">проект</text></g>
+      <g class="box"><rect x="200" y="112" width="150" height="30" rx="5"/><text class="lbl" x="275" y="131">код</text></g>
+      <g class="box"><rect x="270" y="158" width="150" height="30" rx="5"/><text class="lbl" x="345" y="177">тесты</text></g>
+      <g class="box"><rect x="340" y="204" width="150" height="26" rx="5"/><text class="lbl" x="415" y="221">внедрение</text></g>
+      <g class="arr"><path d="M170 50l18 16"/><path d="M240 96l18 16"/><path d="M310 142l18 16"/><path d="M380 188l18 16"/></g>
+      <text class="sub" x="560" y="80">каждая фаза</text>
+      <text class="sub" x="560" y="96">заканчивается</text>
+      <text class="sub" x="560" y="112">до начала</text>
+      <text class="sub" x="560" y="128">следующей</text>
+    </g>
+
+    <g id="iter" hidden>
+      <g class="box"><rect x="40" y="70" width="150" height="34" rx="5"/><text class="lbl" x="115" y="91">планирование</text></g>
+      <g class="box"><rect x="250" y="24" width="160" height="34" rx="5"/><text class="lbl" x="330" y="45">анализ и проект</text></g>
+      <g class="box"><rect x="470" y="70" width="160" height="34" rx="5"/><text class="lbl" x="550" y="91">код и тесты</text></g>
+      <g class="box"><rect x="250" y="150" width="160" height="34" rx="5"/><text class="lbl" x="330" y="171">обзор итерации</text></g>
+      <g class="arr">
+        <path d="M190 82l52-34"/><path d="M412 44l52 30"/><path d="M550 106L420 160"/><path d="M250 162L194 104"/>
+      </g>
+      <text class="sub" x="330" y="205">каждая итерация даёт работающий инкремент</text>
+      <text class="sub" x="330" y="222">требования уточняются по обратной связи</text>
+    </g>
+
+    <g id="vmodel" hidden>
+      <g class="box"><rect x="40" y="20" width="150" height="30" rx="5"/><text class="lbl" x="115" y="39">требования</text></g>
+      <g class="box"><rect x="110" y="70" width="150" height="30" rx="5"/><text class="lbl" x="185" y="89">проект</text></g>
+      <g class="box"><rect x="180" y="120" width="150" height="30" rx="5"/><text class="lbl" x="255" y="139">код</text></g>
+      <g class="box"><rect x="330" y="120" width="150" height="30" rx="5"/><text class="lbl" x="405" y="139">модульные тесты</text></g>
+      <g class="box"><rect x="400" y="70" width="150" height="30" rx="5"/><text class="lbl" x="475" y="89">интеграция</text></g>
+      <g class="box"><rect x="470" y="20" width="150" height="30" rx="5"/><text class="lbl" x="545" y="39">приёмка</text></g>
+      <g class="arr"><path d="M190 50l18 18"/><path d="M260 100l18 18"/></g>
+      <g class="arr"><path d="M470 118l-18-18"/><path d="M540 68l-18-18"/></g>
+      <g class="dash">
+        <path d="M190 35h280"/><path d="M260 85h140"/>
+      </g>
+      <text class="sub" x="340" y="196">слева проверка требований и проекта, справа проверки кода</text>
+      <text class="sub" x="340" y="213">каждый уровень проверки соответствует уровню проектирования</text>
+    </g>
+
+    <text x="340" y="246" text-anchor="middle" font-family="Consolas,monospace" font-size="7.5" fill="#0F8A63" id="caption">ВОДОПАД: ФАЗЫ ИДУТ ПОСЛЕДОВАТЕЛЬНО</text>
+    <defs>
+      <marker id="arw-p" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#5b5560"/></marker>
+    </defs>
+  </svg>
+  <div class="status" id="status"><b>Водопад.</b> Подходит, когда требования стабильны, а заказчик редко меняет решение. Обратная связь приходит поздно.</div>
+  <div class="controls">
+    <button data-k="waterfall" class="on">Водопад</button>
+    <button data-k="iter">Итерации</button>
+    <button data-k="vmodel">V-модель</button>
+  </div>
+</div>
+<script>
+(function () {
+  var groups = { waterfall: document.getElementById('waterfall'), iter: document.getElementById('iter'), vmodel: document.getElementById('vmodel') };
+  var captions = {
+    waterfall: 'ВОДОПАД: ФАЗЫ ИДУТ ПОСЛЕДОВАТЕЛЬНО',
+    iter: 'ИТЕРАЦИИ: КОРОТКИЕ ЦИКЛЫ И ОБРАТНАЯ СВЯЗЬ',
+    vmodel: 'V-МОДЕЛЬ: ПРОВЕРКИ ПАРНЫ ПРОЕКТУ'
+  };
+  var texts = {
+    waterfall: '<b>Водопад.</b> Подходит, когда требования стабильны, а заказчик редко меняет решение. Обратная связь приходит поздно, зато этапы и документы предсказуемы.',
+    iter: '<b>Итерации.</b> Каждый цикл даёт работающий инкремент, требования уточняются по обратной связи. Риск снижается раньше, но нужен доступ к заказчику.',
+    vmodel: '<b>V-модель.</b> Требования и проект проверяются приёмочными и интеграционными тестами, код модульными. Хороша там, где важна прослеживаемость проверок.'
+  };
+  var caption = document.getElementById('caption');
+  var status = document.getElementById('status');
+  var buttons = document.querySelectorAll('button[data-k]');
+
+  function apply(key) {
+    Object.keys(groups).forEach(function (k) {
+      if (k === key) groups[k].removeAttribute('hidden');
+      else groups[k].setAttribute('hidden', '');
+    });
+    caption.textContent = captions[key];
+    status.innerHTML = texts[key];
+    buttons.forEach(function (b) { b.classList.toggle('on', b.dataset.k === key); });
+  }
+  buttons.forEach(function (b) { b.addEventListener('click', function () { apply(b.dataset.k); }); });
+  apply('waterfall');
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Две диаграммы UML</title>
+<style>
+  :root { --paper:#faf6f3; --card:#fffdfb; --ink:#1a1916; --muted:#6b6459; --rule:#e4d8cf; --accent:#0F8A63; --soft:#E1F5EE; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .demo { background:var(--paper); border:1px solid var(--rule); border-radius:14px; padding:18px; }
+  .head { display:flex; justify-content:space-between; align-items:flex-end; gap:16px; padding-bottom:10px; border-bottom:1px solid var(--rule); }
+  .eyebrow { margin:0 0 4px; font:600 10px/1.2 Consolas,monospace; letter-spacing:.12em; text-transform:uppercase; color:var(--accent); }
+  h3 { margin:0; font-size:20px; line-height:1.2; }
+  .counter { font:11px/1.4 Consolas,monospace; color:var(--muted); white-space:nowrap; }
+  svg { display:block; width:100%; height:auto; margin-top:6px; }
+  .box { fill:#fff; stroke:#2d3142; stroke-width:1.3; }
+  .lbl { font-family:Consolas,monospace; font-size:8.5px; fill:#2d3142; text-anchor:middle; }
+  .small { font-family:Consolas,monospace; font-size:6.8px; fill:#5b5560; }
+  .arr { stroke:#5b5560; stroke-width:1.2; fill:none; }
+  .status { min-height:44px; margin-top:8px; padding:10px 12px; border-radius:9px; background:var(--soft); font-size:12.5px; line-height:1.45; }
+  .status b { color:var(--accent); }
+  .controls { display:flex; gap:7px; flex-wrap:wrap; margin-top:10px; }
+  button { font:600 12px/1 "Segoe UI",system-ui,sans-serif; padding:8px 11px; border-radius:9px; border:1px solid var(--rule); background:var(--card); color:var(--ink); cursor:pointer; }
+  button:hover { border-color:var(--accent); color:var(--accent); }
+  button.on { background:var(--accent); border-color:var(--accent); color:#fff; }
+  [hidden] { display:none !important; }
+  @media (max-width:560px) { .demo { padding:12px; } }
+</style>
+</head>
+<body>
+<div class="demo">
+  <div class="head">
+    <div><p class="eyebrow">UML · две модели</p><h3>Один продукт, разные вопросы</h3></div>
+    <div class="counter">выберите диаграмму</div>
+  </div>
+  <svg viewBox="0 0 680 252" role="img" aria-label="Диаграмма прецедентов и диаграмма классов">
+    <g id="usecase">
+      <rect x="130" y="26" width="340" height="196" rx="10" fill="#fff" stroke="#2d3142"/>
+      <text x="300" y="44" text-anchor="middle" font-family="Consolas,monospace" font-size="8" fill="#5b5560">СИСТЕМА ЗАЯВОК</text>
+
+      <g class="lbl">
+        <circle cx="55" cy="90" r="9" fill="#E1F5EE" stroke="#0F8A63"/><text x="55" y="112">сотрудник</text>
+        <circle cx="545" cy="90" r="9" fill="#E1F5EE" stroke="#0F8A63"/><text x="545" y="112">администратор</text>
+      </g>
+
+      <g>
+        <ellipse cx="225" cy="80" rx="62" ry="17" fill="#fff" stroke="#2d3142"/><text class="lbl" x="225" y="83">создать заявку</text>
+        <ellipse cx="225" cy="130" rx="66" ry="17" fill="#fff" stroke="#2d3142"/><text class="lbl" x="225" y="133">просмотреть заявки</text>
+        <ellipse cx="225" cy="180" rx="62" ry="17" fill="#fff" stroke="#2d3142"/><text class="lbl" x="225" y="183">закрыть заявку</text>
+        <ellipse cx="395" cy="88" rx="48" ry="17" fill="#fff" stroke="#2d3142"/><text class="lbl" x="395" y="91">войти</text>
+        <ellipse cx="395" cy="166" rx="68" ry="17" fill="#fff" stroke="#2d3142"/><text class="lbl" x="395" y="169">назначить исполнителя</text>
+      </g>
+
+      <g class="arr">
+        <path d="M64 96l96 -8"/><path d="M64 102l96 20"/><path d="M536 96l-70 -6"/><path d="M536 120l-70 38"/>
+      </g>
+
+      <text x="300" y="238" text-anchor="middle" font-family="Consolas,monospace" font-size="7.5" fill="#0F8A63">ПРЕЦЕДЕНТЫ ПОКАЗЫВАЮТ, КТО И ЧТО ДЕЛАЕТ</text>
+    </g>
+
+    <g id="klass" hidden>
+      <g>
+        <rect class="box" x="24" y="30" width="180" height="110" rx="6"/>
+        <line class="arr" x1="24" y1="58" x2="204" y2="58"/>
+        <text class="lbl" x="114" y="48" font-size="9">Пользователь</text>
+        <text class="small" x="34" y="74">id: int</text><text class="small" x="34" y="88">имя: string</text>
+        <text class="small" x="34" y="106">войти()</text><text class="small" x="34" y="120">создатьЗаявку()</text>
+      </g>
+
+      <g>
+        <rect class="box" x="252" y="56" width="190" height="126" rx="6"/>
+        <line class="arr" x1="252" y1="84" x2="442" y2="84"/>
+        <text class="lbl" x="347" y="74" font-size="9">Заявка</text>
+        <text class="small" x="262" y="100">id: int</text><text class="small" x="262" y="114">тема: string</text><text class="small" x="262" y="128">статус: enum</text>
+        <text class="small" x="262" y="146">закрыть()</text><text class="small" x="262" y="160">назначить()</text>
+      </g>
+
+      <g>
+        <rect class="box" x="492" y="96" width="168" height="96" rx="6"/>
+        <line class="arr" x1="492" y1="124" x2="660" y2="124"/>
+        <text class="lbl" x="576" y="114" font-size="9">Комментарий</text>
+        <text class="small" x="502" y="140">текст: string</text><text class="small" x="502" y="154">дата: date</text><text class="small" x="502" y="172">добавить()</text>
+      </g>
+
+      <g class="arr">
+        <path d="M204 90h42" marker-end="url(#arw-u)"/>
+        <path d="M442 120h44" marker-end="url(#arw-u)"/>
+      </g>
+      <g font-family="Consolas,monospace" font-size="7.5" fill="#5b5560">
+        <text x="208" y="84">1</text><text x="232" y="84">0..*</text>
+        <text x="446" y="114">1</text><text x="470" y="114">0..*</text>
+      </g>
+
+      <text x="340" y="236" text-anchor="middle" font-family="Consolas,monospace" font-size="7.5" fill="#0F8A63">КЛАССЫ ПОКАЗЫВАЮТ СТРУКТУРУ И КРАТНОСТЬ СВЯЗЕЙ</text>
+      <defs>
+        <marker id="arw-u" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#5b5560"/></marker>
+      </defs>
+    </g>
+  </svg>
+  <div class="status" id="status"><b>Прецеденты.</b> Отвечают на вопрос, кто и какие цели достигает в системе. Классы здесь не нужны.</div>
+  <div class="controls">
+    <button data-k="usecase" class="on">Варианты использования</button>
+    <button data-k="klass">Классы</button>
+  </div>
+</div>
+<script>
+(function () {
+  var groups = { usecase: document.getElementById('usecase'), klass: document.getElementById('klass') };
+  var texts = {
+    usecase: '<b>Прецеденты.</b> Отвечают на вопрос, кто и какие цели достигает в системе. Классы здесь не нужны, важны акторы и границы.',
+    klass: '<b>Классы.</b> Отвечают на вопрос, из чего состоит система и как связаны части. Кратность 1 к 0..* читается без пояснений.'
+  };
+  var status = document.getElementById('status');
+  var buttons = document.querySelectorAll('button[data-k]');
+
+  function apply(key) {
+    Object.keys(groups).forEach(function (k) {
+      if (k === key) groups[k].removeAttribute('hidden');
+      else groups[k].setAttribute('hidden', '');
+    });
+    status.innerHTML = texts[key];
+    buttons.forEach(function (b) { b.classList.toggle('on', b.dataset.k === key); });
+  }
+  buttons.forEach(function (b) { b.addEventListener('click', function () { apply(b.dataset.k); }); });
+  apply('usecase');
+})();
+</script>
+</body>
+</html>

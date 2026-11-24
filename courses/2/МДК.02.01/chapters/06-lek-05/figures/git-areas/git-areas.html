@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Области Git</title>
+<style>
+  :root { --paper:#faf6f3; --card:#fffdfb; --ink:#1a1916; --muted:#6b6459; --rule:#e4d8cf; --accent:#0F8A63; --soft:#E1F5EE; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .demo { background:var(--paper); border:1px solid var(--rule); border-radius:14px; padding:18px; }
+  .head { display:flex; justify-content:space-between; align-items:flex-end; gap:16px; padding-bottom:10px; border-bottom:1px solid var(--rule); }
+  .eyebrow { margin:0 0 4px; font:600 10px/1.2 Consolas,monospace; letter-spacing:.12em; text-transform:uppercase; color:var(--accent); }
+  h3 { margin:0; font-size:20px; line-height:1.2; }
+  .counter { font:11px/1.4 Consolas,monospace; color:var(--muted); white-space:nowrap; }
+  svg { display:block; width:100%; height:auto; margin-top:6px; }
+  .zone rect { fill:#fff; stroke:#2d3142; stroke-width:1.3; transition:fill .2s, stroke .2s; }
+  .zone.on rect { fill:var(--soft); stroke:var(--accent); stroke-width:2; }
+  .zone text { font-family:Consolas,monospace; font-size:8.5px; fill:#2d3142; text-anchor:middle; }
+  .zone .sub { font-size:7px; fill:#6b6459; }
+  .flow { stroke:#5b5560; stroke-width:1.5; fill:none; opacity:.35; transition:opacity .2s, stroke .2s; }
+  .flow.on { stroke:var(--accent); opacity:1; }
+  .cmd { font-family:Consolas,monospace; font-size:8px; fill:#6b6459; text-anchor:middle; }
+  .status { min-height:44px; margin-top:8px; padding:10px 12px; border-radius:9px; background:var(--soft); font-size:12.5px; line-height:1.45; }
+  .status b { color:var(--accent); }
+  .controls { display:flex; gap:6px; flex-wrap:wrap; margin-top:10px; }
+  button { font:600 11.5px/1 "Segoe UI",system-ui,sans-serif; padding:8px 10px; border-radius:9px; border:1px solid var(--rule); background:var(--card); color:var(--ink); cursor:pointer; }
+  button:hover { border-color:var(--accent); color:var(--accent); }
+  button.on { background:var(--accent); border-color:var(--accent); color:#fff; }
+  @media (max-width:560px) { .demo { padding:12px; } }
+</style>
+</head>
+<body>
+<div class="demo">
+  <div class="head">
+    <div><p class="eyebrow">Git · области</p><h3>Путь изменения</h3></div>
+    <div class="counter">нажмите команду</div>
+  </div>
+  <svg viewBox="0 0 680 236" role="img" aria-label="Рабочий каталог, индекс, репозиторий и удалённый репозиторий">
+    <g class="zone" data-z="work"><rect x="18" y="62" width="140" height="62" rx="8"/><text x="88" y="86">рабочий</text><text x="88" y="100">каталог</text><text class="sub" x="88" y="114">файлы на диске</text></g>
+    <g class="zone" data-z="index"><rect x="186" y="62" width="130" height="62" rx="8"/><text x="251" y="86">индекс</text><text x="251" y="114" class="sub">подготовлено</text></g>
+    <g class="zone" data-z="repo"><rect x="344" y="62" width="140" height="62" rx="8"/><text x="414" y="86">репозиторий</text><text x="414" y="114" class="sub">история коммитов</text></g>
+    <g class="zone" data-z="remote"><rect x="512" y="62" width="150" height="62" rx="8"/><text x="587" y="86">удалённый</text><text x="587" y="114" class="sub">GitHub</text></g>
+
+    <g id="flows">
+      <path class="flow" id="f-add" d="M158 93h24" marker-end="url(#arw-g)"/>
+      <path class="flow" id="f-commit" d="M316 93h24" marker-end="url(#arw-g)"/>
+      <path class="flow" id="f-push" d="M484 93h24" marker-end="url(#arw-g)"/>
+      <path class="flow" id="f-pull" d="M587 128v42H88v-42" marker-end="url(#arw-g)" stroke-dasharray="5 4"/>
+      <path class="flow" id="f-checkout" d="M414 58V22H251v36" marker-end="url(#arw-g)" stroke-dasharray="5 4"/>
+    </g>
+
+    <text class="cmd" x="170" y="88">add</text>
+    <text class="cmd" x="328" y="88">commit</text>
+    <text class="cmd" x="496" y="88">push</text>
+    <text class="cmd" x="337" y="186">pull</text>
+    <text class="cmd" x="332" y="16">checkout</text>
+
+    <text x="340" y="222" text-anchor="middle" font-family="Consolas,monospace" font-size="8" fill="#0F8A63" id="caption">ADD ГОТОВИТ ИЗМЕНЕНИЯ К КОММИТУ</text>
+    <defs>
+      <marker id="arw-g" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#5b5560"/></marker>
+    </defs>
+  </svg>
+  <div class="status" id="status"><b>add.</b> Переносит выбранные изменения из рабочего каталога в индекс. Пока это только подготовка, история не меняется.</div>
+  <div class="controls">
+    <button data-c="add" class="on">add</button>
+    <button data-c="commit">commit</button>
+    <button data-c="push">push</button>
+    <button data-c="pull">pull</button>
+    <button data-c="checkout">checkout</button>
+  </div>
+</div>
+<script>
+(function () {
+  var data = {
+    add: { flow: 'f-add', zones: ['work', 'index'], cap: 'ADD ГОТОВИТ ИЗМЕНЕНИЯ К КОММИТУ', text: '<b>add.</b> Переносит выбранные изменения из рабочего каталога в индекс. Пока это только подготовка, история не меняется.' },
+    commit: { flow: 'f-commit', zones: ['index', 'repo'], cap: 'COMMIT СОХРАНЯЕТ СНИМОК В ИСТОРИИ', text: '<b>commit.</b> Записывает содержимое индекса в историю репозитория. У коммита есть автор, дата, сообщение и идентификатор.' },
+    push: { flow: 'f-push', zones: ['repo', 'remote'], cap: 'PUSH ОТПРАВЛЯЕТ КОММИТЫ НА СЕРВЕР', text: '<b>push.</b> Передаёт новые коммиты в удалённый репозиторий. Другие участники увидят их после push.' },
+    pull: { flow: 'f-pull', zones: ['remote', 'repo', 'work'], cap: 'PULL ПРИНОСИТ ЧУЖИЕ ИЗМЕНЕНИЯ', text: '<b>pull.</b> Забирает коммиты с сервера и обновляет рабочую копию. Если локальные файлы изменены, возможен конфликт.' },
+    checkout: { flow: 'f-checkout', zones: ['repo', 'work'], cap: 'CHECKOUT ВОЗВРАЩАЕТ НУЖНОЕ СОСТОЯНИЕ', text: '<b>checkout.</b> Переключает ветку или восстанавливает файлы из истории. Незакоммиченные правки при этом можно потерять.' }
+  };
+  var zones = document.querySelectorAll('.zone');
+  var flows = document.querySelectorAll('.flow');
+  var buttons = document.querySelectorAll('button[data-c]');
+  var status = document.getElementById('status');
+  var caption = document.getElementById('caption');
+
+  function apply(key) {
+    var d = data[key];
+    zones.forEach(function (z) { z.classList.toggle('on', d.zones.indexOf(z.dataset.z) !== -1); });
+    flows.forEach(function (f) { f.classList.toggle('on', f.id === d.flow); });
+    buttons.forEach(function (b) { b.classList.toggle('on', b.dataset.c === key); });
+    status.innerHTML = d.text;
+    caption.textContent = d.cap;
+  }
+  buttons.forEach(function (b) { b.addEventListener('click', function () { apply(b.dataset.c); }); });
+  apply('add');
+})();
+</script>
+</body>
+</html>

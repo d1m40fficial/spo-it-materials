@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Стоимость поздней ошибки</title>
+<style>
+  :root { --paper:#faf6f3; --card:#fffdfb; --ink:#1a1916; --muted:#6b6459; --rule:#e4d8cf; --accent:#0F8A63; --soft:#E1F5EE; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .demo { background:var(--paper); border:1px solid var(--rule); border-radius:14px; padding:18px; }
+  .head { display:flex; justify-content:space-between; align-items:flex-end; gap:16px; padding-bottom:10px; border-bottom:1px solid var(--rule); }
+  .eyebrow { margin:0 0 4px; font:600 10px/1.2 Consolas,monospace; letter-spacing:.12em; text-transform:uppercase; color:var(--accent); }
+  h3 { margin:0; font-size:20px; line-height:1.2; }
+  .counter { font:11px/1.4 Consolas,monospace; color:var(--muted); white-space:nowrap; }
+  svg { display:block; width:100%; height:auto; margin-top:6px; }
+  .bar rect { fill:#f3efe7; stroke:#2d3142; stroke-width:1.3; transition:fill .2s, stroke .2s; }
+  .bar.on rect { fill:var(--soft); stroke:var(--accent); stroke-width:2; }
+  .bar text { font-family:Consolas,monospace; text-anchor:middle; }
+  .axis { stroke:#e4d8cf; stroke-width:1; }
+  .status { min-height:44px; margin-top:8px; padding:10px 12px; border-radius:9px; background:var(--soft); font-size:12.5px; line-height:1.45; }
+  .status b { color:var(--accent); }
+  .controls { display:flex; gap:6px; flex-wrap:wrap; margin-top:10px; }
+  button { font:600 11.5px/1 "Segoe UI",system-ui,sans-serif; padding:8px 10px; border-radius:9px; border:1px solid var(--rule); background:var(--card); color:var(--ink); cursor:pointer; }
+  button:hover { border-color:var(--accent); color:var(--accent); }
+  button.on { background:var(--accent); border-color:var(--accent); color:#fff; }
+  @media (max-width:560px) { .demo { padding:12px; } }
+</style>
+</head>
+<body>
+<div class="demo">
+  <div class="head">
+    <div><p class="eyebrow">Процесс · цена ошибки</p><h3>Когда ошибку заметили</h3></div>
+    <div class="counter">условные единицы</div>
+  </div>
+  <svg viewBox="0 0 680 232" role="img" aria-label="Рост стоимости исправления ошибки по фазам">
+    <line class="axis" x1="40" y1="192" x2="650" y2="192"/>
+    <g id="bars">
+      <g class="bar" data-i="0"><rect x="45" y="170" width="70" height="22" rx="4"/><text x="80" y="164" font-size="9">1</text><text x="80" y="210" font-size="7.5">требования</text></g>
+      <g class="bar" data-i="1"><rect x="150" y="156" width="70" height="36" rx="4"/><text x="185" y="150" font-size="9">3</text><text x="185" y="210" font-size="7.5">проект</text></g>
+      <g class="bar" data-i="2"><rect x="255" y="132" width="70" height="60" rx="4"/><text x="290" y="126" font-size="9">8</text><text x="290" y="210" font-size="7.5">код</text></g>
+      <g class="bar" data-i="3"><rect x="360" y="100" width="70" height="92" rx="4"/><text x="395" y="94" font-size="9">20</text><text x="395" y="210" font-size="7.5">тесты</text></g>
+      <g class="bar" data-i="4"><rect x="465" y="64" width="70" height="128" rx="4"/><text x="500" y="58" font-size="9">50</text><text x="500" y="210" font-size="7.5">внедрение</text></g>
+      <g class="bar" data-i="5"><rect x="570" y="32" width="70" height="160" rx="4"/><text x="605" y="26" font-size="9">100</text><text x="605" y="210" font-size="7.5">сопровождение</text></g>
+    </g>
+    <text x="40" y="226" font-family="Consolas,monospace" font-size="7.5" fill="#6b6459">чем позже найдена ошибка, тем дороже исправление</text>
+  </svg>
+  <div class="status" id="status"><b>Требования.</b> Ошибку дешевле всего исправить здесь: меняется текст и модель, код ещё не написан.</div>
+  <div class="controls">
+    <button data-i="0" class="on">Требования</button>
+    <button data-i="1">Проект</button>
+    <button data-i="2">Код</button>
+    <button data-i="3">Тесты</button>
+    <button data-i="4">Внедрение</button>
+    <button data-i="5">Сопровождение</button>
+  </div>
+</div>
+<script>
+(function () {
+  var texts = [
+    '<b>Требования.</b> Ошибку дешевле всего исправить здесь: меняется текст и модель, код ещё не написан.',
+    '<b>Проект.</b> Приходится переделывать модель и решения, но код почти не затронут.',
+    '<b>Код.</b> Исправление затрагивает несколько модулей, тесты и документацию.',
+    '<b>Тесты.</b> Ошибка дошла до проверок: нужны правки кода, повторный прогон и проверка соседних функций.',
+    '<b>Внедрение.</b> Система уже у пользователей: нужны миграция данных, обучение и повторный выпуск.',
+    '<b>Сопровождение.</b> Ошибка в рабочей системе: простой, ручные обходы, срочное исправление и репутация.'
+  ];
+  var bars = document.querySelectorAll('.bar');
+  var buttons = document.querySelectorAll('button[data-i]');
+  var status = document.getElementById('status');
+
+  function apply(i) {
+    bars.forEach(function (b) { b.classList.toggle('on', b.dataset.i === String(i)); });
+    buttons.forEach(function (b) { b.classList.toggle('on', b.dataset.i === String(i)); });
+    status.innerHTML = texts[i];
+  }
+  bars.forEach(function (b) { b.addEventListener('click', function () { apply(b.dataset.i); }); });
+  buttons.forEach(function (b) { b.addEventListener('click', function () { apply(b.dataset.i); }); });
+  apply(0);
+})();
+</script>
+</body>
+</html>
