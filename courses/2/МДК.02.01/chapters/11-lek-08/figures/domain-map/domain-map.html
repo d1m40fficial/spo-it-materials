@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Границы системы</title>
+<style>
+  :root { --paper:#faf6f3; --ink:#2d3142; --muted:#5b5560; --accent:#0F8A63; --soft:#E1F5EE; --rule:rgba(45,49,66,.12); }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .frame { background:var(--paper); border:1px solid var(--rule); border-radius:12px; padding:18px 18px 14px; }
+  .eyebrow { margin:0 0 8px; font:600 9px/1.2 Consolas,monospace; letter-spacing:.16em; text-transform:uppercase; color:var(--muted); }
+  .note { margin:10px 2px 0; font:11px/1.5 Consolas,monospace; color:var(--muted); }
+  svg { display:block; width:100%; height:auto; }
+</style>
+</head>
+<body>
+<div class="frame">
+  <p class="eyebrow">Предметная область · границы</p>
+  <svg viewBox="0 0 680 262" role="img" aria-labelledby="dm-title dm-desc">
+    <title id="dm-title">Границы системы заявок</title>
+    <desc id="dm-desc">Внутри границы находятся заявка, комментарий и статус. Снаружи остаются сотрудник, техник, руководитель, каталог и почта.</desc>
+
+    <rect x="238" y="66" width="204" height="118" rx="10" fill="#E1F5EE" stroke="#0F8A63" stroke-width="1.6"/>
+    <text x="340" y="88" text-anchor="middle" font-family="Consolas,monospace" font-size="8.5" fill="#0F8A63">СИСТЕМА ЗАЯВОК</text>
+    <text x="340" y="106" text-anchor="middle" font-family="Consolas,monospace" font-size="7.5" fill="#2d3142">заявка</text>
+    <text x="340" y="122" text-anchor="middle" font-family="Consolas,monospace" font-size="7.5" fill="#2d3142">комментарий</text>
+    <text x="340" y="138" text-anchor="middle" font-family="Consolas,monospace" font-size="7.5" fill="#2d3142">статус</text>
+    <text x="340" y="160" text-anchor="middle" font-family="Consolas,monospace" font-size="7" fill="#5b5560">граница продукта</text>
+
+    <g font-family="Consolas,monospace" font-size="8" text-anchor="middle">
+      <rect x="26" y="46" width="150" height="38" rx="7" fill="#fff" stroke="#2d3142"/><text x="101" y="69">сотрудник</text>
+      <rect x="26" y="168" width="150" height="38" rx="7" fill="#fff" stroke="#2d3142"/><text x="101" y="191">техник</text>
+      <rect x="504" y="46" width="150" height="38" rx="7" fill="#fff" stroke="#2d3142"/><text x="579" y="69">руководитель</text>
+      <rect x="504" y="168" width="150" height="38" rx="7" fill="#fff" stroke="#2d3142"/><text x="579" y="191">секретарь</text>
+      <rect x="256" y="14" width="168" height="34" rx="7" fill="#fff" stroke="#b9ac9f"/><text x="340" y="35" fill="#5b5560">почта</text>
+      <rect x="256" y="206" width="168" height="34" rx="7" fill="#fff" stroke="#b9ac9f"/><text x="340" y="227" fill="#5b5560">корпоративный каталог</text>
+    </g>
+
+    <g stroke="#5b5560" stroke-width="1.3" fill="none" marker-end="url(#arw-d)">
+      <path d="M176 65l58 20"/>
+      <path d="M176 187l58-20"/>
+      <path d="M504 65l-58 20"/>
+      <path d="M504 187l-58-20"/>
+      <path d="M340 48v14"/>
+      <path d="M340 184v20"/>
+    </g>
+
+    <text x="340" y="256" text-anchor="middle" font-family="Consolas,monospace" font-size="8" fill="#0F8A63">ГРАНИЦА ОТВЕЧАЕТ: ЧТО ДЕЛАЕТ КОМАНДА, А ЧТО ОСТАЁТСЯ СНАРУЖИ</text>
+    <defs>
+      <marker id="arw-d" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#5b5560"/></marker>
+    </defs>
+  </svg>
+  <p class="note">Почта и каталог остаются внешними службами, даже если система ими пользуется.</p>
+</div>
+</body>
+</html>

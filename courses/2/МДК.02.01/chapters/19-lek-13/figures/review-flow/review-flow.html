@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Путь пул-реквеста</title>
+<style>
+  :root { --paper:#faf6f3; --ink:#2d3142; --muted:#5b5560; --accent:#0F8A63; --soft:#E1F5EE; --rule:rgba(45,49,66,.12); }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .frame { background:var(--paper); border:1px solid var(--rule); border-radius:12px; padding:18px 18px 14px; }
+  .eyebrow { margin:0 0 8px; font:600 9px/1.2 Consolas,monospace; letter-spacing:.16em; text-transform:uppercase; color:var(--muted); }
+  .note { margin:10px 2px 0; font:11px/1.5 Consolas,monospace; color:var(--muted); }
+  svg { display:block; width:100%; height:auto; }
+</style>
+</head>
+<body>
+<div class="frame">
+  <p class="eyebrow">Ревью · пул-реквест</p>
+  <svg viewBox="0 0 680 238" role="img" aria-labelledby="rv-title rv-desc">
+    <title id="rv-title">Путь пул-реквеста и чек-лист ревью</title>
+    <desc id="rv-desc">Ветка, пул-реквест, автоматические проверки, замечания и решение о слиянии.</desc>
+
+    <g font-family="Consolas,monospace" font-size="7.5" text-anchor="middle">
+      <rect x="16" y="40" width="112" height="56" rx="7" fill="#fff" stroke="#2d3142"/>
+      <text x="72" y="62">ветка</text><text x="72" y="78" fill="#5b5560">изменения</text>
+
+      <rect x="148" y="40" width="112" height="56" rx="7" fill="#fff" stroke="#2d3142"/>
+      <text x="204" y="62">пул-реквест</text><text x="204" y="78" fill="#5b5560">описание и цель</text>
+
+      <rect x="280" y="40" width="112" height="56" rx="7" fill="#E1F5EE" stroke="#0F8A63"/>
+      <text x="336" y="62">проверки</text><text x="336" y="78" fill="#5b5560">тесты и линтер</text>
+
+      <rect x="412" y="40" width="112" height="56" rx="7" fill="#fff" stroke="#2d3142"/>
+      <text x="468" y="62">ревью</text><text x="468" y="78" fill="#5b5560">замечания</text>
+
+      <rect x="544" y="40" width="120" height="56" rx="7" fill="#fff" stroke="#2d3142"/>
+      <text x="604" y="62">решение</text><text x="604" y="78" fill="#5b5560">слить или вернуть</text>
+    </g>
+
+    <g stroke="#5b5560" stroke-width="1.4" fill="none" marker-end="url(#arw-r)">
+      <path d="M128 68h16"/><path d="M260 68h16"/><path d="M392 68h16"/><path d="M524 68h16"/>
+    </g>
+
+    <rect x="16" y="122" width="648" height="92" rx="9" fill="#fff" stroke="#2d3142"/>
+    <text x="30" y="140" font-family="Consolas,monospace" font-size="7.5" letter-spacing=".1em" fill="#5b5560">ЧЕК-ЛИСТ РЕВЬЮ</text>
+    <g font-family="Consolas,monospace" font-size="7.2" fill="#2d3142">
+      <text x="30" y="158">1. Изменение решает задачу из описания</text>
+      <text x="30" y="174">2. Границы и ошибки обработаны</text>
+      <text x="30" y="190">3. Тесты покрывают новый сценарий</text>
+      <text x="350" y="158">4. Имена и функции читаются</text>
+      <text x="350" y="174">5. Нет секретов и лишних файлов</text>
+      <text x="350" y="190">6. Документация обновлена</text>
+    </g>
+
+    <text x="340" y="232" text-anchor="middle" font-family="Consolas,monospace" font-size="8" fill="#0F8A63">РЕВЬЮ ПРОВЕРЯЕТ СМЫСЛ, А НЕ ВКУС РЕВЬЮЕРА</text>
+    <defs>
+      <marker id="arw-r" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#5b5560"/></marker>
+    </defs>
+  </svg>
+  <p class="note">Замечание без приоритета и аргумента превращается в спор о вкусе.</p>
+</div>
+</body>
+</html>

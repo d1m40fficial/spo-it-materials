@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Качество кода</title>
+<style>
+  :root { --paper:#faf6f3; --ink:#2d3142; --muted:#5b5560; --accent:#0F8A63; --soft:#E1F5EE; --rule:rgba(45,49,66,.12); }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .frame { background:var(--paper); border:1px solid var(--rule); border-radius:12px; padding:18px 18px 14px; }
+  .eyebrow { margin:0 0 8px; font:600 9px/1.2 Consolas,monospace; letter-spacing:.16em; text-transform:uppercase; color:var(--muted); }
+  .note { margin:10px 2px 0; font:11px/1.5 Consolas,monospace; color:var(--muted); }
+  svg { display:block; width:100%; height:auto; }
+</style>
+</head>
+<body>
+<div class="frame">
+  <p class="eyebrow">Код · контроль качества</p>
+  <svg viewBox="0 0 680 226" role="img" aria-labelledby="cq-title cq-desc">
+    <title id="cq-title">Четыре проверки качества кода перед ревью</title>
+    <desc id="cq-desc">Имена, размер функции, сложность и линтер проверяют код до ревью.</desc>
+
+    <g font-family="Consolas,monospace" text-anchor="middle">
+      <g>
+        <rect x="18" y="34" width="145" height="82" rx="8" fill="#fff" stroke="#2d3142"/>
+        <text x="90" y="56" font-size="8.5" fill="#0F8A63">ИМЕНА</text>
+        <text x="90" y="74" font-size="7" fill="#2d3142">по смыслу</text>
+        <text x="90" y="88" font-size="7" fill="#2d3142">без сокращений</text>
+        <text x="90" y="102" font-size="6.5" fill="#5b5560">order_total, не x</text>
+      </g>
+      <g>
+        <rect x="183" y="34" width="145" height="82" rx="8" fill="#fff" stroke="#2d3142"/>
+        <text x="255" y="56" font-size="8.5" fill="#0F8A63">ФУНКЦИИ</text>
+        <text x="255" y="74" font-size="7" fill="#2d3142">одна задача</text>
+        <text x="255" y="88" font-size="7" fill="#2d3142">до 30 строк</text>
+        <text x="255" y="102" font-size="6.5" fill="#5b5560">без флагов-режимов</text>
+      </g>
+      <g>
+        <rect x="348" y="34" width="145" height="82" rx="8" fill="#fff" stroke="#2d3142"/>
+        <text x="420" y="56" font-size="8.5" fill="#0F8A63">СЛОЖНОСТЬ</text>
+        <text x="420" y="74" font-size="7" fill="#2d3142">ветвей не больше 10</text>
+        <text x="420" y="88" font-size="7" fill="#2d3142">ранний выход</text>
+        <text x="420" y="102" font-size="6.5" fill="#5b5560">вложенность до 3</text>
+      </g>
+      <g>
+        <rect x="513" y="34" width="145" height="82" rx="8" fill="#fff" stroke="#2d3142"/>
+        <text x="585" y="56" font-size="8.5" fill="#0F8A63">ЛИНТЕР</text>
+        <text x="585" y="74" font-size="7" fill="#2d3142">0 предупреждений</text>
+        <text x="585" y="88" font-size="7" fill="#2d3142">единый стиль</text>
+        <text x="585" y="102" font-size="6.5" fill="#5b5560">ruff, pylint, flake8</text>
+      </g>
+    </g>
+
+    <g stroke="#5b5560" stroke-width="1.4" fill="none" marker-end="url(#arw-q)">
+      <path d="M163 75h16"/><path d="M328 75h16"/><path d="M493 75h16"/>
+    </g>
+
+    <rect x="18" y="140" width="640" height="40" rx="8" fill="#E1F5EE" stroke="#0F8A63"/>
+    <text x="338" y="158" text-anchor="middle" font-family="Consolas,monospace" font-size="8.5" fill="#0F8A63">РЕВЬЮ И ТЕСТЫ</text>
+    <text x="338" y="172" text-anchor="middle" font-family="Consolas,monospace" font-size="7" fill="#2d3142">проверяют смысл, а не только формат</text>
+
+    <text x="340" y="206" text-anchor="middle" font-family="Consolas,monospace" font-size="8" fill="#0F8A63">АВТОМАТИКА ЛОВИТ ФОРМУ, ЧЕЛОВЕК ЛОВИТ СМЫСЛ</text>
+    <defs>
+      <marker id="arw-q" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#5b5560"/></marker>
+    </defs>
+  </svg>
+  <p class="note">Линтер не заменяет ревью: он не знает, верно ли посчитана скидка.</p>
+</div>
+</body>
+</html>

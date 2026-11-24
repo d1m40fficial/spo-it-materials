@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Merge и rebase</title>
+<style>
+  :root { --paper:#faf6f3; --card:#fffdfb; --ink:#1a1916; --muted:#6b6459; --rule:#e4d8cf; --accent:#0F8A63; --soft:#E1F5EE; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .demo { background:var(--paper); border:1px solid var(--rule); border-radius:14px; padding:18px; }
+  .head { display:flex; justify-content:space-between; align-items:flex-end; gap:16px; padding-bottom:10px; border-bottom:1px solid var(--rule); }
+  .eyebrow { margin:0 0 4px; font:600 10px/1.2 Consolas,monospace; letter-spacing:.12em; text-transform:uppercase; color:var(--accent); }
+  h3 { margin:0; font-size:20px; line-height:1.2; }
+  .counter { font:11px/1.4 Consolas,monospace; color:var(--muted); white-space:nowrap; }
+  svg { display:block; width:100%; height:auto; margin-top:6px; }
+  .line { stroke:#2d3142; stroke-width:1.6; fill:none; }
+  .feat { stroke:#0F8A63; stroke-width:1.8; fill:none; }
+  .dot { fill:#fff; stroke:#2d3142; stroke-width:1.5; }
+  .dotf { fill:#E1F5EE; stroke:#0F8A63; stroke-width:1.6; }
+  .lbl { font-family:Consolas,monospace; font-size:8px; fill:#2d3142; }
+  .mut { font-family:Consolas,monospace; font-size:7px; fill:#6b6459; }
+  .status { min-height:44px; margin-top:8px; padding:10px 12px; border-radius:9px; background:var(--soft); font-size:12.5px; line-height:1.45; }
+  .status b { color:var(--accent); }
+  .controls { display:flex; gap:7px; flex-wrap:wrap; margin-top:10px; }
+  button { font:600 12px/1 "Segoe UI",system-ui,sans-serif; padding:8px 11px; border-radius:9px; border:1px solid var(--rule); background:var(--card); color:var(--ink); cursor:pointer; }
+  button:hover { border-color:var(--accent); color:var(--accent); }
+  button.on { background:var(--accent); border-color:var(--accent); color:#fff; }
+  [hidden] { display:none !important; }
+  @media (max-width:560px) { .demo { padding:12px; } }
+</style>
+</head>
+<body>
+<div class="demo">
+  <div class="head">
+    <div><p class="eyebrow">Git · слияние</p><h3>История после слияния</h3></div>
+    <div class="counter">выберите способ</div>
+  </div>
+  <svg viewBox="0 0 680 240" role="img" aria-label="Схемы merge и rebase">
+    <g id="merge">
+      <path class="line" d="M40 160h600"/>
+      <path class="feat" d="M200 160V70h280"/>
+      <path class="feat" d="M480 70l80 90"/>
+      <circle class="dot" cx="80" cy="160" r="6"/><circle class="dot" cx="200" cy="160" r="6"/>
+      <circle class="dotf" cx="260" cy="70" r="6"/><circle class="dotf" cx="340" cy="70" r="6"/><circle class="dotf" cx="420" cy="70" r="6"/><circle class="dotf" cx="480" cy="70" r="6"/>
+      <circle class="dot" cx="560" cy="160" r="6"/><circle class="dot" cx="620" cy="160" r="6"/>
+      <text class="lbl" x="60" y="180">main</text>
+      <text class="lbl" x="250" y="56">feature</text>
+      <text class="mut" x="552" y="142">merge-коммит</text>
+      <text class="mut" x="300" y="196">история сохраняет обе линии, появляется общий коммит</text>
+    </g>
+
+    <g id="rebase" hidden>
+      <path class="line" d="M40 160h600"/>
+      <circle class="dot" cx="80" cy="160" r="6"/><circle class="dot" cx="180" cy="160" r="6"/>
+      <circle class="dotf" cx="270" cy="160" r="6"/><circle class="dotf" cx="350" cy="160" r="6"/><circle class="dotf" cx="430" cy="160" r="6"/><circle class="dotf" cx="510" cy="160" r="6"/>
+      <text class="lbl" x="60" y="180">main</text>
+      <text class="mut" x="255" y="140">переписанные коммиты feature</text>
+      <text class="mut" x="300" y="196">история линейная, но хеши коммитов изменились</text>
+    </g>
+
+    <text x="340" y="226" text-anchor="middle" font-family="Consolas,monospace" font-size="8" fill="#0F8A63" id="cap">MERGE СОХРАНЯЕТ ИСТОРИЮ ВЕТКИ</text>
+  </svg>
+  <div class="status" id="status"><b>merge.</b> Создаёт общий коммит с двумя родителями. История полная, но с дополнительной точкой слияния.</div>
+  <div class="controls">
+    <button data-k="merge" class="on">merge</button>
+    <button data-k="rebase">rebase</button>
+  </div>
+</div>
+<script>
+(function () {
+  var groups = { merge: document.getElementById('merge'), rebase: document.getElementById('rebase') };
+  var texts = {
+    merge: '<b>merge.</b> Создаёт общий коммит с двумя родителями. История полная, но с дополнительной точкой слияния.',
+    rebase: '<b>rebase.</b> Переносит коммиты ветки на новую основу и делает историю линейной. Хеши меняются, поэтому общую ветку не переписывают.'
+  };
+  var caps = { merge: 'MERGE СОХРАНЯЕТ ИСТОРИЮ ВЕТКИ', rebase: 'REBASE ПЕРЕНОСИТ КОММИТЫ НА НОВУЮ ОСНОВУ' };
+  var cap = document.getElementById('cap');
+  var status = document.getElementById('status');
+  var buttons = document.querySelectorAll('button[data-k]');
+
+  function apply(key) {
+    Object.keys(groups).forEach(function (k) {
+      if (k === key) groups[k].removeAttribute('hidden');
+      else groups[k].setAttribute('hidden', '');
+    });
+    cap.textContent = caps[key];
+    status.innerHTML = texts[key];
+    buttons.forEach(function (b) { b.classList.toggle('on', b.dataset.k === key); });
+  }
+  buttons.forEach(function (b) { b.addEventListener('click', function () { apply(b.dataset.k); }); });
+  apply('merge');
+})();
+</script>
+</body>
+</html>

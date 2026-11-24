@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Нормализация схемы данных</title>
+<style>
+  :root { --paper:#faf6f3; --ink:#2d3142; --muted:#5b5560; --accent:#0F8A63; --soft:#E1F5EE; --rule:rgba(45,49,66,.12); }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .frame { background:var(--paper); border:1px solid var(--rule); border-radius:12px; padding:18px 18px 14px; }
+  .eyebrow { margin:0 0 8px; font:600 9px/1.2 Consolas,monospace; letter-spacing:.16em; text-transform:uppercase; color:var(--muted); }
+  .note { margin:10px 2px 0; font:11px/1.5 Consolas,monospace; color:var(--muted); }
+  svg { display:block; width:100%; height:auto; }
+</style>
+</head>
+<body>
+<div class="frame">
+  <p class="eyebrow">Данные · третья нормальная форма</p>
+  <svg viewBox="0 0 680 250" role="img" aria-labelledby="er-title er-desc">
+    <title id="er-title">Одна широкая таблица и схема в третьей нормальной форме</title>
+    <desc id="er-desc">Слева таблица с повторяющимися данными исполнителя, справа три связанные таблицы без повторов.</desc>
+
+    <text x="120" y="22" text-anchor="middle" font-family="Consolas,monospace" font-size="7.5" fill="#5b5560">БЫЛО: ПОВТОРЫ И ПУСТОТЫ</text>
+    <g font-family="Consolas,monospace" font-size="6.6">
+      <rect x="12" y="32" width="216" height="150" rx="6" fill="#fff" stroke="#2d3142"/>
+      <line x1="12" y1="50" x2="228" y2="50" stroke="#2d3142"/>
+      <line x1="12" y1="72" x2="228" y2="72" stroke="#e4d8cf"/>
+      <line x1="12" y1="94" x2="228" y2="94" stroke="#e4d8cf"/>
+      <line x1="12" y1="116" x2="228" y2="116" stroke="#e4d8cf"/>
+      <line x1="12" y1="138" x2="228" y2="138" stroke="#e4d8cf"/>
+      <line x1="12" y1="160" x2="228" y2="160" stroke="#e4d8cf"/>
+      <text x="20" y="45">id | тема | сотрудник | каб. | исполнитель | тел.</text>
+      <text x="20" y="66">1 | лампа | Иванов | 214 | Петров | 11-22</text>
+      <text x="20" y="88">2 | замок | Смирнов | 310 | Петров | 11-22</text>
+      <text x="20" y="110">3 | стул | Иванов | 214 | Орлов | 33-44</text>
+      <text x="20" y="132">4 | экран | Кузнецов | 118 | нет | нет</text>
+      <text x="20" y="154">5 | ключ | Смирнов | 310 | Орлов | 33-44</text>
+    </g>
+    <text x="120" y="198" text-anchor="middle" font-family="Consolas,monospace" font-size="6.8" fill="#b23a2b">телефон повторяется, кабинет зависит от сотрудника</text>
+
+    <g stroke="#0F8A63" stroke-width="1.6" fill="none" marker-end="url(#arw-n)">
+      <path d="M236 110h34"/>
+    </g>
+
+    <text x="340" y="22" text-anchor="middle" font-family="Consolas,monospace" font-size="7.5" fill="#0F8A63">СТАЛО: ТРИ ТАБЛИЦЫ</text>
+
+    <g font-family="Consolas,monospace" font-size="6.6">
+      <rect x="278" y="32" width="172" height="54" rx="6" fill="#E1F5EE" stroke="#0F8A63"/>
+      <line x1="278" y1="48" x2="450" y2="48" stroke="#0F8A63"/>
+      <text x="286" y="43">Сотрудник</text>
+      <text x="286" y="63">id (PK) | имя | кабинет</text>
+
+      <rect x="278" y="96" width="172" height="54" rx="6" fill="#E1F5EE" stroke="#0F8A63"/>
+      <line x1="278" y1="112" x2="450" y2="112" stroke="#0F8A63"/>
+      <text x="286" y="107">Исполнитель</text>
+      <text x="286" y="127">id (PK) | имя | телефон</text>
+
+      <rect x="278" y="160" width="172" height="72" rx="6" fill="#E1F5EE" stroke="#0F8A63"/>
+      <line x1="278" y1="176" x2="450" y2="176" stroke="#0F8A63"/>
+      <text x="286" y="171">Заявка</text>
+      <text x="286" y="190">id (PK) | тема | статус</text>
+      <text x="286" y="204">сотрудник_id (FK)</text>
+      <text x="286" y="218">исполнитель_id (FK)</text>
+    </g>
+
+    <g stroke="#5b5560" stroke-width="1.2" fill="none">
+      <path d="M450 190h16v-46h-16"/>
+      <path d="M450 214h16v40h-16"/>
+    </g>
+    <text x="482" y="92" font-family="Consolas,monospace" font-size="6.5" fill="#5b5560">кабинет</text>
+    <text x="482" y="106" font-family="Consolas,monospace" font-size="6.5" fill="#5b5560">хранится один раз</text>
+    <text x="482" y="140" font-family="Consolas,monospace" font-size="6.5" fill="#5b5560">телефон</text>
+    <text x="482" y="154" font-family="Consolas,monospace" font-size="6.5" fill="#5b5560">без повторов</text>
+
+    <text x="340" y="246" text-anchor="middle" font-family="Consolas,monospace" font-size="8" fill="#0F8A63">КАЖДЫЙ ФАКТ ХРАНИТСЯ В ОДНОМ МЕСТЕ</text>
+    <defs>
+      <marker id="arw-n" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#0F8A63"/></marker>
+    </defs>
+  </svg>
+  <p class="note">Нормализация убирает повтор, из-за которого одно изменение приходится вносить в несколько строк.</p>
+</div>
+</body>
+</html>
