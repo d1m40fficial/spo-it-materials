@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Путь релиза</title>
+<style>
+  :root { --paper:#faf6f3; --ink:#2d3142; --muted:#5b5560; --accent:#0F8A63; --soft:#E1F5EE; --rule:rgba(45,49,66,.12); }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .frame { background:var(--paper); border:1px solid var(--rule); border-radius:12px; padding:18px 18px 14px; }
+  .eyebrow { margin:0 0 8px; font:600 9px/1.2 Consolas,monospace; letter-spacing:.16em; text-transform:uppercase; color:var(--muted); }
+  .note { margin:10px 2px 0; font:11px/1.5 Consolas,monospace; color:var(--muted); }
+  svg { display:block; width:100%; height:auto; }
+</style>
+</head>
+<body>
+<div class="frame">
+  <p class="eyebrow">Релиз · конвейер</p>
+  <svg viewBox="0 0 680 232" role="img" aria-labelledby="rp-title rp-desc">
+    <title id="rp-title">Конвейер релиза и semver</title>
+    <desc id="rp-desc">Коммит, тесты, сборка, версия, артефакт и установка. Версия состоит из major, minor и patch.</desc>
+
+    <g font-family="Consolas,monospace" font-size="7.2" text-anchor="middle">
+      <rect x="16" y="24" width="96" height="50" rx="7" fill="#fff" stroke="#2d3142"/><text x="64" y="44">коммит</text><text x="64" y="60" fill="#5b5560">изменение</text>
+      <rect x="124" y="24" width="96" height="50" rx="7" fill="#fff" stroke="#2d3142"/><text x="172" y="44">тесты</text><text x="172" y="60" fill="#5b5560">прогон</text>
+      <rect x="232" y="24" width="96" height="50" rx="7" fill="#E1F5EE" stroke="#0F8A63"/><text x="280" y="44">сборка</text><text x="280" y="60" fill="#5b5560">артефакт</text>
+      <rect x="340" y="24" width="96" height="50" rx="7" fill="#fff" stroke="#2d3142"/><text x="388" y="44">версия</text><text x="388" y="60" fill="#5b5560">semver</text>
+      <rect x="448" y="24" width="96" height="50" rx="7" fill="#fff" stroke="#2d3142"/><text x="496" y="44">changelog</text><text x="496" y="60" fill="#5b5560">изменения</text>
+      <rect x="556" y="24" width="106" height="50" rx="7" fill="#fff" stroke="#2d3142"/><text x="609" y="44">установка</text><text x="609" y="60" fill="#5b5560">проверка</text>
+    </g>
+
+    <g stroke="#5b5560" stroke-width="1.3" fill="none" marker-end="url(#arw-rp)">
+      <path d="M112 49h8"/><path d="M220 49h8"/><path d="M328 49h8"/><path d="M436 49h8"/><path d="M544 49h8"/>
+    </g>
+
+    <g font-family="Consolas,monospace" text-anchor="middle">
+      <rect x="60" y="112" width="140" height="52" rx="7" fill="#E1F5EE" stroke="#0F8A63"/>
+      <text x="130" y="132" font-size="9" fill="#0F8A63">MAJOR</text>
+      <text x="130" y="150" font-size="6.8" fill="#2d3142">несовместимое изменение</text>
+
+      <rect x="220" y="112" width="140" height="52" rx="7" fill="#fff" stroke="#2d3142"/>
+      <text x="290" y="132" font-size="9" fill="#2d3142">MINOR</text>
+      <text x="290" y="150" font-size="6.8" fill="#5b5560">новая возможность</text>
+
+      <rect x="380" y="112" width="140" height="52" rx="7" fill="#fff" stroke="#2d3142"/>
+      <text x="450" y="132" font-size="9" fill="#2d3142">PATCH</text>
+      <text x="450" y="150" font-size="6.8" fill="#5b5560">исправление</text>
+
+      <text x="585" y="132" font-size="8" fill="#5b5560">1.4.2</text>
+      <text x="585" y="150" font-size="6.5" fill="#5b5560">версия</text>
+    </g>
+
+    <text x="340" y="200" text-anchor="middle" font-family="Consolas,monospace" font-size="8" fill="#0F8A63">РЕЛИЗ ЭТО ВОСПРОИЗВОДИМАЯ СБОРКА, А НЕ ПАПКА НА РАБОЧЕМ СТОЛЕ</text>
+    <defs>
+      <marker id="arw-rp" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#5b5560"/></marker>
+    </defs>
+  </svg>
+  <p class="note">Номер версии сообщает пользователю, чего ждать от обновления.</p>
+</div>
+</body>
+</html>

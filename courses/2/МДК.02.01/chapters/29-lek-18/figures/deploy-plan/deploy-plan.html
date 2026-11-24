@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>План внедрения</title>
+<style>
+  :root { --paper:#faf6f3; --ink:#2d3142; --muted:#5b5560; --accent:#0F8A63; --soft:#E1F5EE; --rule:rgba(45,49,66,.12); }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .frame { background:var(--paper); border:1px solid var(--rule); border-radius:12px; padding:18px 18px 14px; }
+  .eyebrow { margin:0 0 8px; font:600 9px/1.2 Consolas,monospace; letter-spacing:.16em; text-transform:uppercase; color:var(--muted); }
+  .note { margin:10px 2px 0; font:11px/1.5 Consolas,monospace; color:var(--muted); }
+  svg { display:block; width:100%; height:auto; }
+</style>
+</head>
+<body>
+<div class="frame">
+  <p class="eyebrow">Внедрение · окружения</p>
+  <svg viewBox="0 0 680 226" role="img" aria-labelledby="dp-title dp-desc">
+    <title id="dp-title">Окружения и откат при внедрении</title>
+    <desc id="dp-desc">Разработка, тестовая среда и эксплуатация. Перед переносом делают копию, миграцию и план отката.</desc>
+
+    <g font-family="Consolas,monospace" text-anchor="middle">
+      <rect x="24" y="40" width="180" height="64" rx="8" fill="#fff" stroke="#2d3142"/>
+      <text x="114" y="64" font-size="8.5" fill="#2d3142">разработка</text>
+      <text x="114" y="80" font-size="6.8" fill="#5b5560">свои данные</text>
+      <text x="114" y="94" font-size="6.8" fill="#5b5560">можно ломать</text>
+
+      <rect x="250" y="40" width="180" height="64" rx="8" fill="#E1F5EE" stroke="#0F8A63"/>
+      <text x="340" y="64" font-size="8.5" fill="#0F8A63">тестовая среда</text>
+      <text x="340" y="80" font-size="6.8" fill="#5b5560">копия данных</text>
+      <text x="340" y="94" font-size="6.8" fill="#5b5560">проверка миграции</text>
+
+      <rect x="476" y="40" width="180" height="64" rx="8" fill="#fff" stroke="#2d3142"/>
+      <text x="566" y="64" font-size="8.5" fill="#2d3142">эксплуатация</text>
+      <text x="566" y="80" font-size="6.8" fill="#5b5560">рабочие данные</text>
+      <text x="566" y="94" font-size="6.8" fill="#5b5560">пользователи</text>
+    </g>
+
+    <g stroke="#5b5560" stroke-width="1.4" fill="none" marker-end="url(#arw-dp)">
+      <path d="M204 72h40"/><path d="M430 72h40"/>
+    </g>
+
+    <g font-family="Consolas,monospace" text-anchor="middle">
+      <rect x="24" y="136" width="196" height="50" rx="7" fill="#fff" stroke="#b9ac9f"/>
+      <text x="122" y="156" font-size="7.8" fill="#2d3142">резервная копия</text>
+      <text x="122" y="172" font-size="6.6" fill="#5b5560">до любых изменений</text>
+
+      <rect x="242" y="136" width="196" height="50" rx="7" fill="#fff" stroke="#b9ac9f"/>
+      <text x="340" y="156" font-size="7.8" fill="#2d3142">миграция данных</text>
+      <text x="340" y="172" font-size="6.6" fill="#5b5560">отдельным шагом</text>
+
+      <rect x="460" y="136" width="196" height="50" rx="7" fill="#fff" stroke="#b9ac9f"/>
+      <text x="558" y="156" font-size="7.8" fill="#2d3142">откат</text>
+      <text x="558" y="172" font-size="6.6" fill="#5b5560">проверен заранее</text>
+    </g>
+
+    <path d="M550 104v24" stroke="#0F8A63" stroke-width="1.4" fill="none" marker-end="url(#arw-dp2)"/>
+    <path d="M582 136v-24" stroke="#b23a2b" stroke-width="1.2" fill="none" stroke-dasharray="4 4" marker-end="url(#arw-dp3)"/>
+
+    <text x="340" y="214" text-anchor="middle" font-family="Consolas,monospace" font-size="8" fill="#0F8A63">ОТКАТ ГОТОВЯТ ДО ПЕРЕНОСА, А НЕ ВО ВРЕМЯ СБОЯ</text>
+    <defs>
+      <marker id="arw-dp" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#5b5560"/></marker>
+      <marker id="arw-dp2" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#0F8A63"/></marker>
+      <marker id="arw-dp3" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#b23a2b"/></marker>
+    </defs>
+  </svg>
+  <p class="note">Проверка на копии данных показывает, сколько займёт миграция и что сломается.</p>
+</div>
+</body>
+</html>
