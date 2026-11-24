@@ -560,6 +560,15 @@ QUIZ_SCRIPT = r"""
       window.dispatchEvent(new Event('resize'));
     }
   });
+
+  document.querySelectorAll('[data-quiz-guard]').forEach(function(quiz){
+    ['copy', 'cut', 'contextmenu', 'dragstart', 'selectstart'].forEach(function(type){
+      quiz.addEventListener(type, function(e){
+        if(e.target && e.target.closest && e.target.closest('input, textarea')) return;
+        e.preventDefault();
+      });
+    });
+  });
 })();
 """
 
@@ -633,7 +642,7 @@ def shuffled_questions(questions: list) -> list:
     return order
 
 
-def render_quiz(block: list, n: int, kind: str = "chapter") -> tuple:
+def render_quiz(block: list, n: int, kind: str = "chapter", guard: bool = False) -> tuple:
     """Parse Q: / + / - / = lines into an interactive, self-scoring test.
 
     A question with one `+` is single-choice, several `+` lines make it
@@ -720,12 +729,13 @@ def render_quiz(block: list, n: int, kind: str = "chapter") -> tuple:
               '<div><dt>Время выполнения теста</dt><dd data-test-time>00:00</dd></div>'
               '<div><dt>Время просмотра лекции</dt><dd data-view-time>00:00</dd></div>'
               '</dl></div>')
-    html_block = (f'\n<div class="quiz" data-quiz>'
+    guard_attr = " data-quiz-guard" if guard else ""
+    html_block = (f'\n<div class="quiz" data-quiz{guard_attr}>'
                   f'{who}{"".join(items)}{submit_box}{result}</div>\n')
     return html_block, True
 
 
-def preprocess(body: str, base: Path, figures: list, page_kind: str = "chapter"):
+def preprocess(body: str, base: Path, figures: list, page_kind: str = "chapter", guard: bool = False):
     """Turn callouts, figures, gates and quizzes into HTML blocks before Markdown runs."""
     out, lines, i, n_fig = [], body.split("\n"), 0, len(figures)
     has_quiz = False
@@ -755,7 +765,7 @@ def preprocess(body: str, base: Path, figures: list, page_kind: str = "chapter")
                 i += 1
             if not closed:
                 print("WARNING: ::gate was not closed with ::/gate; closing it at the end")
-            inner_pre, inner_quiz, inner_gate = preprocess("\n".join(block), base, figures, page_kind)
+            inner_pre, inner_quiz, inner_gate = preprocess("\n".join(block), base, figures, page_kind, guard)
             if inner_gate:
                 print("WARNING: nested gates are not supported; flatten the lecture gates")
             inner_html = md(inner_pre)
@@ -786,7 +796,7 @@ def preprocess(body: str, base: Path, figures: list, page_kind: str = "chapter")
                         block.append(""); i += 1; continue
                     break
                 block.append(lines[i]); i += 1
-            qhtml, found = render_quiz(block, i, page_kind)
+            qhtml, found = render_quiz(block, i, page_kind, guard)
             has_quiz = has_quiz or found
             out.append("")
             out.append(qhtml)
@@ -974,7 +984,7 @@ def main():
 
     figures = []
     kind = fm.get("kind", "chapter")  # chapter | notes | cheatsheet
-    pre, has_quiz, has_gate = preprocess(body, base, figures, kind)
+    pre, has_quiz, has_gate = preprocess(body, base, figures, kind, bool(fm.get("quiz_guard", True)))
     raw_html = insert_work_checklist(md(pre))
     html_body, toc = number_headings(raw_html)
     html_body = label_code_blocks(pre, html_body)

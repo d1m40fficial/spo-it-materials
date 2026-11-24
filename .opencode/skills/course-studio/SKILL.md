@@ -259,6 +259,9 @@ plan) -> chapter/lesson pages. The 09.02.07 row opens years 2, 3 and 4; 09.02.12
 - Questions and answer options are shuffled in the browser on every load, and question
   numbers are recalculated. A reload clears the answers and the name and produces a new
   order. Keep correct answers out of visible page text.
+- By default the quiz disables text selection, copy, cut, the context menu and dragging
+  for the questions and options (`data-quiz-guard`). The name and short-answer fields stay
+  normal. A lecture can opt out with `quiz_guard: false` in its front matter.
 - Do not add `Проверить ответы`, `Сбросить`, `Сдать работу`, a separate submit button or
   a second result dialog to a chapter.
 
