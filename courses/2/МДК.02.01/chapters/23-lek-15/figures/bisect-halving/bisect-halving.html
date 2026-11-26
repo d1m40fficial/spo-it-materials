@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Бисекция истории коммитов</title>
+<style>
+  :root { --paper:#faf6f3; --card:#fffdfb; --ink:#1a1916; --muted:#6b6459; --rule:#e4d8cf; --accent:#0F8A63; --soft:#E1F5EE; --warn:#B04A3A; --grey:#e9e2db; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .demo { background:var(--paper); border:1px solid var(--rule); border-radius:14px; padding:16px; }
+  .head { display:flex; justify-content:space-between; align-items:flex-end; gap:14px; padding-bottom:9px; border-bottom:1px solid var(--rule); }
+  .eyebrow { margin:0 0 4px; font:600 10px/1.2 Consolas,monospace; letter-spacing:.12em; text-transform:uppercase; color:var(--accent); }
+  h3 { margin:0; font-size:19px; line-height:1.2; }
+  .counter { font:11px/1.4 Consolas,monospace; color:var(--muted); white-space:nowrap; }
+  svg { display:block; width:100%; height:auto; margin-top:8px; }
+  .cell rect { fill:#fffdfb; stroke:#2d3142; stroke-width:1.5; transition:fill .25s, stroke .25s; }
+  .cell text { font-family:Consolas,monospace; font-size:13px; fill:#1a1916; text-anchor:middle; }
+  .cell.good rect { fill:var(--grey); stroke:#c9beb4; }
+  .cell.good text { fill:#9a9086; }
+  .cell.bad rect { fill:#f4e2dd; stroke:#d9b3a9; }
+  .cell.bad text { fill:#a06a5c; }
+  .cell.check rect { fill:var(--soft); stroke:var(--accent); stroke-width:3; }
+  .cell.check text { fill:var(--accent); font-weight:700; }
+  .cell.badcheck rect { fill:#f7e3de; stroke:var(--warn); stroke-width:3; }
+  .cell.badcheck text { fill:var(--warn); font-weight:700; }
+  .status { min-height:58px; margin-top:6px; padding:10px 12px; border-radius:9px; background:var(--soft); font-size:13px; line-height:1.45; }
+  .status b { color:var(--accent); }
+  .status .bad { color:var(--warn); }
+  .controls { display:flex; gap:7px; flex-wrap:wrap; margin-top:10px; }
+  button { font:600 12px/1 "Segoe UI",system-ui,sans-serif; padding:9px 12px; border-radius:9px; border:1px solid var(--rule); background:var(--card); color:var(--ink); cursor:pointer; }
+  button:hover { border-color:var(--accent); color:var(--accent); }
+  button.primary { background:var(--accent); border-color:var(--accent); color:#fff; }
+  button:disabled { opacity:.45; cursor:default; }
+  @media (max-width:560px) { .demo { padding:12px; } h3 { font-size:17px; } }
+</style>
+</head>
+<body>
+<div class="demo">
+  <div class="head">
+    <div><p class="eyebrow">Отладка · история</p><h3>Где появился дефект</h3></div>
+    <div class="counter" id="hint">16 коммитов, один плохой</div>
+  </div>
+
+  <svg viewBox="0 0 680 224" role="img" aria-labelledby="bh-title bh-desc">
+    <title id="bh-title">Бисекция диапазона коммитов</title>
+    <desc id="bh-desc">Шестнадцать коммитов. Каждая проверка делит оставшийся диапазон пополам и отмечает проверенный коммит.</desc>
+    <text x="34" y="26" font-size="14" font-weight="700" fill="#1a1916">v1.0</text>
+    <line x1="76" y1="21" x2="598" y2="21" stroke="#c9beb4" stroke-width="1.6" stroke-dasharray="5 4"/>
+    <text x="646" y="26" font-size="14" font-weight="700" fill="#1a1916" text-anchor="end">v1.3</text>
+    <text x="34" y="46" font-size="12" fill="#6b6459">серые коммиты исключены, светлые ещё проверяются</text>
+    <g id="cells"></g>
+    <text x="34" y="164" font-size="12" fill="#6b6459">деление: 4 проверки на 16 коммитов, 10 на 1000</text>
+    <text x="34" y="186" font-size="12" fill="#6b6459">перебор: до 16 проверок на 16 коммитов</text>
+    <text x="646" y="206" font-size="12" fill="#0F8A63" text-anchor="end" id="result">нажмите «Сделать срез»</text>
+  </svg>
+
+  <div class="status" id="status">Выберите середину диапазона: одна проверка отсекает половину истории.</div>
+  <div class="controls">
+    <button class="primary" id="step">Сделать срез</button>
+    <button id="reset">Сброс</button>
+  </div>
+</div>
+<script>
+(function () {
+  var N = 16, target = 12;
+  var low = 1, high = N, checks = 0, done = false;
+  var svg = document.getElementById('cells');
+  var status = document.getElementById('status');
+  var result = document.getElementById('result');
+  var stepBtn = document.getElementById('step');
+  var resetBtn = document.getElementById('reset');
+  var hint = document.getElementById('hint');
+
+  var W = 30, GAP = 8, X0 = 34, Y = 76, H = 44;
+
+  function build() {
+    var html = '';
+    for (var i = 1; i <= N; i++) {
+      var x = X0 + (i - 1) * (W + GAP);
+      html += '<g class="cell" data-i="' + i + '"><rect x="' + x + '" y="' + Y + '" width="' + W + '" height="' + H + '" rx="5"/>' +
+              '<text x="' + (x + W / 2) + '" y="' + (Y + 28) + '">' + i + '</text></g>';
+    }
+    svg.innerHTML = html;
+  }
+
+  function paint(checked, checkedBad) {
+    svg.querySelectorAll('.cell').forEach(function (c) {
+      var i = Number(c.dataset.i);
+      c.classList.remove('good', 'bad', 'check', 'badcheck');
+      if (i < low) c.classList.add('good');
+      if (i > high) c.classList.add('bad');
+      if (i === checked) c.classList.add(checkedBad ? 'badcheck' : 'check');
+    });
+  }
+
+  function render() {
+    hint.textContent = 'осталось ' + (high - low + 1) + ' из ' + N + ', проверок: ' + checks;
+    if (done) {
+      result.textContent = 'найден коммит ' + low + ' за ' + checks + ' проверки';
+      stepBtn.disabled = true;
+    } else {
+      result.textContent = 'нажмите «Сделать срез»';
+      stepBtn.disabled = false;
+    }
+  }
+
+  function step() {
+    if (done) return;
+    if (low >= high) {
+      done = true;
+      status.innerHTML = '<b>Коммит найден: ' + low + '.</b> Дальше история не делится. Причина внутри коммита, но диапазон уже минимален.';
+      render();
+      return;
+    }
+    var mid = Math.floor((low + high) / 2);
+    checks++;
+    var bad = mid >= target;
+    if (bad) {
+      high = mid;
+      paint(mid, true);
+      status.innerHTML = '<b>Коммит ' + mid + ' плохой.</b> Дефект уже есть, значит он появился не позже. Оставляем левую половину: ' + low + '..' + high + '.';
+    } else {
+      low = mid + 1;
+      paint(mid, false);
+      status.innerHTML = '<b>Коммит ' + mid + ' хороший.</b> Дефекта ещё нет, значит он появился позже. Оставляем правую половину: ' + low + '..' + high + '.';
+    }
+    if (low === high) {
+      done = true;
+      result.textContent = 'найден коммит ' + low + ' за ' + checks + ' проверки';
+    }
+    render();
+  }
+
+  function reset() {
+    low = 1; high = N; checks = 0; done = false;
+    build(); paint(null, false);
+    status.innerHTML = 'Выберите середину диапазона: одна проверка отсекает половину истории.';
+    result.textContent = 'нажмите «Сделать срез»';
+    stepBtn.disabled = false;
+    render();
+  }
+
+  stepBtn.addEventListener('click', step);
+  resetBtn.addEventListener('click', reset);
+  build();
+  paint(null, false);
+  render();
+})();
+</script>
+</body>
+</html>

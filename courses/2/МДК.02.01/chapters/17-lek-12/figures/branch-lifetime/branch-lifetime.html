@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ветка и время</title>
+<style>
+  :root { --paper:#faf6f3; --card:#fffdfb; --ink:#1a1916; --muted:#6b6459; --rule:#e4d8cf; --accent:#0F8A63; --soft:#E1F5EE; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .demo { background:var(--paper); border:1px solid var(--rule); border-radius:14px; padding:18px; }
+  .head { display:flex; justify-content:space-between; align-items:flex-end; gap:16px; padding-bottom:10px; border-bottom:1px solid var(--rule); }
+  .eyebrow { margin:0 0 4px; font:600 10px/1.2 Consolas,monospace; letter-spacing:.12em; text-transform:uppercase; color:var(--accent); }
+  h3 { margin:0; font-size:20px; line-height:1.2; }
+  .counter { font:11px/1.4 Consolas,monospace; color:var(--muted); white-space:nowrap; }
+  svg { display:block; width:100%; height:auto; margin-top:6px; }
+  .lbl { font-family:Consolas,monospace; font-size:8px; fill:#2d3142; }
+  .mut { font-family:Consolas,monospace; font-size:7px; fill:#6b6459; }
+  .big { font-family:Consolas,monospace; font-size:20px; font-weight:700; fill:var(--accent); }
+  .cap { font-family:Consolas,monospace; font-size:7px; fill:#6b6459; }
+  .status { min-height:64px; margin-top:8px; padding:10px 12px; border-radius:9px; background:var(--soft); font-size:12.5px; line-height:1.45; }
+  .status b { color:var(--accent); }
+  .controls { display:flex; gap:7px; flex-wrap:wrap; margin-top:10px; }
+  button { font:600 11.5px/1 "Segoe UI",system-ui,sans-serif; padding:8px 10px; border-radius:9px; border:1px solid var(--rule); background:var(--card); color:var(--ink); cursor:pointer; }
+  button:hover { border-color:var(--accent); color:var(--accent); }
+  button.on { background:var(--accent); border-color:var(--accent); color:#fff; }
+  @media (max-width:560px) { .demo { padding:12px; } }
+</style>
+</head>
+<body>
+<div class="demo">
+  <div class="head">
+    <div><p class="eyebrow">Git · ветка и время</p><h3>Сколько стоит долгая ветка</h3></div>
+    <div class="counter">пример: 4 коммита в день</div>
+  </div>
+  <svg viewBox="0 0 680 286" role="img" aria-label="Чем дольше живёт ветка, тем дальше уходит основная линия">
+    <path d="M28 196h624" stroke="#2d3142" stroke-width="2" fill="none"/>
+    <text class="lbl" x="28" y="216">main</text>
+
+    <path id="branch-path" d="M560 196V80h70" stroke="#0F8A63" stroke-width="2" fill="none"/>
+    <text class="lbl" x="560" y="66" fill="#0F8A63">feature</text>
+
+    <circle id="fork" cx="560" cy="196" r="5" fill="#E1F5EE" stroke="#0F8A63" stroke-width="2"/>
+    <text class="mut" id="fork-label" x="548" y="232">точка ветвления</text>
+
+    <g id="main-dots" fill="#2d3142"></g>
+    <g id="branch-dots" fill="#0F8A63"></g>
+
+    <g>
+      <text class="cap" x="28" y="26">РАБОЧИХ ДНЕЙ В ВЕТКЕ</text>
+      <text class="big" id="v-days" x="28" y="52">1</text>
+      <text class="cap" x="210" y="26">КОММИТОВ В MAIN ПОСЛЕ ОТВЕТВЛЕНИЯ</text>
+      <text class="big" id="v-commits" x="210" y="52">4</text>
+      <text class="cap" x="450" y="26">СТРОК В DIFF</text>
+      <text class="big" id="v-lines" x="450" y="52">60</text>
+    </g>
+
+    <rect x="28" y="244" width="624" height="30" rx="6" fill="#fff" stroke="#b9ac9f"/>
+    <text class="mut" x="40" y="263" id="cap">чем позже слияние, тем больше изменений нужно свести и проверить</text>
+  </svg>
+  <div class="status" id="status"></div>
+  <div class="controls">
+    <button data-k="d1" class="on">1 день</button>
+    <button data-k="w1">1 неделя</button>
+    <button data-k="m1">1 месяц</button>
+    <button data-k="m3">3 месяца</button>
+  </div>
+</div>
+<script>
+(function () {
+  var NS = "http://www.w3.org/2000/svg";
+  var data = {
+    d1:  { days: 1,  commits: 4,   lines: 60,   bx: 600, text: "<b>Один день.</b> Ветка короткая, основная линия почти не ушла. Конфликт маловероятен, diff читается за несколько минут." },
+    w1:  { days: 5,  commits: 20,  lines: 300,  bx: 480, text: "<b>Неделя.</b> Основная линия получила два десятка коммитов. Появляются пересечения по файлам, слияние требует внимания, но остаётся обозримым." },
+    m1:  { days: 20, commits: 80,  lines: 1200, bx: 280, text: "<b>Месяц.</b> Ветка живёт дольше, чем многие задачи. Diff вырос до тысячи строк, конфликт вероятен, а проверка требует отдельного времени." },
+    m3:  { days: 60, commits: 240, lines: 3600, bx: 80,  text: "<b>Три месяца.</b> Основная линия ушла далеко. Слияние становится проектом: нужно восстановить контекст, свести решения и заново проверить поведение." }
+  };
+  var status = document.getElementById('status');
+  var buttons = document.querySelectorAll('button[data-k]');
+  var branch = document.getElementById('branch-path');
+  var fork = document.getElementById('fork');
+  var forkLabel = document.getElementById('fork-label');
+  var mainDots = document.getElementById('main-dots');
+  var branchDots = document.getElementById('branch-dots');
+  var cap = document.getElementById('cap');
+
+  function dot(g, x, y, color) {
+    var c = document.createElementNS(NS, 'circle');
+    c.setAttribute('cx', x); c.setAttribute('cy', y); c.setAttribute('r', 3.2);
+    c.setAttribute('fill', color); c.setAttribute('stroke', '#faf6f3'); c.setAttribute('stroke-width', 1.2);
+    g.appendChild(c);
+  }
+
+  function apply(key) {
+    var d = data[key];
+    branch.setAttribute('d', 'M' + d.bx + ' 196V80h' + (650 - d.bx));
+    fork.setAttribute('cx', d.bx);
+    forkLabel.setAttribute('x', Math.max(30, d.bx - 14));
+    document.getElementById('v-days').textContent = d.days;
+    document.getElementById('v-commits').textContent = d.commits;
+    document.getElementById('v-lines').textContent = d.lines;
+    mainDots.innerHTML = ''; branchDots.innerHTML = '';
+    var shown = Math.min(12, d.commits);
+    for (var i = 1; i <= shown; i++) {
+      dot(mainDots, d.bx + (630 - d.bx) * (i / (shown + 0.4)), 196, '#2d3142');
+    }
+    for (var j = 1; j <= 4; j++) {
+      dot(branchDots, d.bx + (620 - d.bx) * (j / 5), 80, '#0F8A63');
+    }
+    cap.textContent = 'показаны не все коммиты: ' + d.commits + ' в main, около ' + d.lines + ' строк в diff';
+    status.innerHTML = d.text;
+    buttons.forEach(function (b) { b.classList.toggle('on', b.dataset.k === key); });
+  }
+  buttons.forEach(function (b) { b.addEventListener('click', function () { apply(b.dataset.k); }); });
+  apply('d1');
+})();
+</script>
+</body>
+</html>

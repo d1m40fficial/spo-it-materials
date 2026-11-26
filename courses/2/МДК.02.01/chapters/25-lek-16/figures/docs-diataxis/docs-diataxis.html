@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Четыре вида документации</title>
+<style>
+  :root { --paper:#faf6f3; --card:#fffdfb; --ink:#1a1916; --muted:#6b6459; --rule:#e4d8cf; --accent:#0F8A63; --soft:#E1F5EE; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .demo { background:var(--paper); border:1px solid var(--rule); border-radius:14px; padding:16px; }
+  .head { display:flex; justify-content:space-between; align-items:flex-end; gap:14px; padding-bottom:9px; border-bottom:1px solid var(--rule); }
+  .eyebrow { margin:0 0 4px; font:600 10px/1.2 Consolas,monospace; letter-spacing:.12em; text-transform:uppercase; color:var(--accent); }
+  h3 { margin:0; font-size:19px; line-height:1.2; }
+  .hint { font:11px/1.4 Consolas,monospace; color:var(--muted); white-space:nowrap; }
+  svg { display:block; width:100%; height:auto; margin-top:8px; }
+  .card rect { fill:#fffdfb; stroke:#2d3142; stroke-width:1.5; transition:fill .2s, stroke .2s; cursor:pointer; }
+  .card:hover rect { stroke:var(--accent); }
+  .card.on rect { fill:var(--soft); stroke:var(--accent); stroke-width:2.6; }
+  .card text { font-family:Consolas,monospace; cursor:pointer; }
+  .status { min-height:64px; margin-top:6px; padding:10px 12px; border-radius:9px; background:var(--soft); font-size:13px; line-height:1.45; }
+  .status b { color:var(--accent); }
+  .controls { display:flex; gap:7px; flex-wrap:wrap; margin-top:10px; }
+  button { font:600 12px/1 "Segoe UI",system-ui,sans-serif; padding:8px 10px; border-radius:9px; border:1px solid var(--rule); background:var(--card); color:var(--ink); cursor:pointer; }
+  button:hover { border-color:var(--accent); color:var(--accent); }
+  button.on { background:var(--accent); border-color:var(--accent); color:#fff; }
+  @media (max-width:560px) { .demo { padding:12px; } h3 { font-size:17px; } .hint { display:none; } }
+</style>
+</head>
+<body>
+<div class="demo">
+  <div class="head">
+    <div><p class="eyebrow">Документация · цель</p><h3>Что нужно читателю</h3></div>
+    <div class="hint">выберите цель чтения</div>
+  </div>
+
+  <svg viewBox="0 0 680 268" role="img" aria-labelledby="dd-title dd-desc">
+    <title id="dd-title">Четыре вида документации по цели чтения</title>
+    <desc id="dd-desc">Учебный материал, руководство, справочник и объяснение. Каждый вид отвечает на свой вопрос читателя.</desc>
+
+    <g class="card on" data-kind="tutorial">
+      <rect x="18" y="16" width="316" height="84" rx="9"/>
+      <text x="34" y="40" font-size="15" font-weight="700" fill="#0F8A63">Учебный материал</text>
+      <text x="34" y="62" font-size="12" fill="#1a1916">вопрос: как сделать первый шаг</text>
+      <text x="34" y="82" font-size="11" fill="#6b6459">быстрый старт в README</text>
+    </g>
+    <g class="card" data-kind="howto">
+      <rect x="346" y="16" width="316" height="84" rx="9"/>
+      <text x="362" y="40" font-size="15" font-weight="700" fill="#1a1916">Руководство</text>
+      <text x="362" y="62" font-size="12" fill="#1a1916">вопрос: как решить задачу</text>
+      <text x="362" y="82" font-size="11" fill="#6b6459">как закрыть заявку</text>
+    </g>
+    <g class="card" data-kind="reference">
+      <rect x="18" y="112" width="316" height="84" rx="9"/>
+      <text x="34" y="136" font-size="15" font-weight="700" fill="#1a1916">Справочник</text>
+      <text x="34" y="158" font-size="12" fill="#1a1916">вопрос: что означает параметр</text>
+      <text x="34" y="178" font-size="11" fill="#6b6459">описание API и кодов ошибок</text>
+    </g>
+    <g class="card" data-kind="explain">
+      <rect x="346" y="112" width="316" height="84" rx="9"/>
+      <text x="362" y="136" font-size="15" font-weight="700" fill="#1a1916">Объяснение</text>
+      <text x="362" y="158" font-size="12" fill="#1a1916">вопрос: почему так устроено</text>
+      <text x="362" y="178" font-size="11" fill="#6b6459">ADR и схема архитектуры</text>
+    </g>
+
+    <text x="340" y="228" font-size="12" fill="#0F8A63" text-anchor="middle">жанр выбирают до текста, а не после</text>
+    <text x="340" y="250" font-size="11" fill="#6b6459" text-anchor="middle">смешение жанров прячет нужный ответ</text>
+  </svg>
+
+  <div class="status" id="dd-status"></div>
+  <div class="controls">
+    <button data-kind="tutorial" class="on">Научиться</button>
+    <button data-kind="howto">Решить задачу</button>
+    <button data-kind="reference">Найти факт</button>
+    <button data-kind="explain">Понять решение</button>
+  </div>
+</div>
+<script>
+(function () {
+  var data = {
+    tutorial: '<b>Учебный материал.</b> Ведёт через первый успешный результат. В проекте это быстрый старт README. Ошибка: начать с архитектуры и не дать человеку запустить приложение.',
+    howto: '<b>Руководство.</b> Решает конкретную задачу и заканчивается результатом. В проекте это «Как закрыть заявку». Ошибка: описывать кнопки вместо цели пользователя.',
+    reference: '<b>Справочник.</b> Даёт точный факт без сюжета. В проекте это описание API. Ошибка: спрятать параметр в рассказе, чтобы его нельзя было найти.',
+    explain: '<b>Объяснение.</b> Показывает контекст и компромисс. В проекте это ADR. Ошибка: пересказывать код вместо причин решения.'
+  };
+  var cards = document.querySelectorAll('.card');
+  var buttons = document.querySelectorAll('button[data-kind]');
+  var status = document.getElementById('dd-status');
+
+  function show(kind) {
+    cards.forEach(function (c) { c.classList.toggle('on', c.dataset.kind === kind); });
+    buttons.forEach(function (b) { b.classList.toggle('on', b.dataset.kind === kind); });
+    status.innerHTML = data[kind];
+  }
+
+  cards.forEach(function (c) { c.addEventListener('click', function () { show(c.dataset.kind); }); });
+  buttons.forEach(function (b) { b.addEventListener('click', function () { show(b.dataset.kind); }); });
+  show('tutorial');
+})();
+</script>
+</body>
+</html>

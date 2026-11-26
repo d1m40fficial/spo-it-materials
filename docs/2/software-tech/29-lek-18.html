@@ -888,85 +888,557 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <canvas class="shader-bg" width="820" height="300" aria-hidden="true" style="background:linear-gradient(135deg,#08090D,#1D9E75 58%,#08090D)"></canvas>
 <div class="badges"><span class="pill dark">Занятие 34</span><span class="pill">Технология разработки ПО</span></div>
 <div class="hero-panel"><h1>Внедрение</h1><p class="dek">Внедрение переносит систему в рабочую среду. Разберём окружения, миграции, план и откат.</p></div>
-<div class="glyph" aria-hidden="true">Л18</div></header><section class="outcomes"><b>После этого занятия вы сможете</b><ul><li>Различать окружения разработки и эксплуатации</li><li>Планировать миграцию данных</li><li>Готовить план отката</li><li>Проверять систему после переноса</li></ul></section><nav class="toc"><b>Содержание занятия</b><ol><li><a href="#на-тестовой-работало">На тестовой работало</a></li><li><a href="#окружения">Окружения</a></li><li><a href="#миграция">Миграция</a></li><li><a href="#план-внедрения">План внедрения</a></li><li><a href="#откат">Откат</a></li><li><a href="#проверка-после-переноса">Проверка после переноса</a></li><li><a href="#общение-с-пользователями">Общение с пользователями</a></li><li><a href="#где-внедрение-ломается">Где внедрение ломается</a></li><li><a href="#итоги">Итоги</a></li></ol></nav><article class="prose"><h2 id="на-тестовой-работало"><span class="num">01</span>На тестовой работало</h2>
+<div class="glyph" aria-hidden="true">Л18</div></header><section class="outcomes"><b>После этого занятия вы сможете</b><ul><li>Различать окружения разработки и эксплуатации</li><li>Планировать миграцию данных и проверять её на копии</li><li>Выбирать стратегию переключения под цену ошибки</li><li>Готовить и проверять план отката</li><li>Проверять систему после переноса и сообщать пользователям</li></ul></section><nav class="toc"><b>Содержание занятия</b><ol><li><a href="#на-тестовой-работало">На тестовой работало</a></li><li><a href="#внедрение-это-смена-состояния">Внедрение это смена состояния</a></li><li><a href="#окружения-и-паритет">Окружения и паритет</a></li><li><a href="#миграция-данных">Миграция данных</a></li><li><a href="#стратегии-переключения">Стратегии переключения</a></li><li><a href="#откат">Откат</a></li><li><a href="#три-внедрения-которые-стали-уроками">Три внедрения, которые стали уроками</a></li><li><a href="#план-внедрения-учебной-системы">План внедрения учебной системы</a></li><li><a href="#дымовые-проверки-и-наблюдение">Дымовые проверки и наблюдение</a></li><li><a href="#чек-лист-внедрения">Чек-лист внедрения</a></li><li><a href="#итоги">Итоги</a></li><li><a href="#источники">Источники</a></li></ol></nav><article class="prose"><h2 id="на-тестовой-работало"><span class="num">01</span>На тестовой работало</h2>
 <p>Систему перенесли на рабочий сервер. Через десять минут пользователи видят пустой список: база новая, данные не перенесли. Ещё через час выясняется, что старую версию уже заменили и вернуться некуда.</p>
 <p><strong>Внедрение</strong> это перенос системы в среду, где ей пользуются. Оно включает данные, настройки, обучение и план действий при сбое.</p>
 <p>Главная мысль занятия: <strong>внедрение это отдельная работа с планом и откатом</strong>, а не копирование папки.</p>
-<h2 id="окружения"><span class="num">02</span>Окружения</h2>
+<p>Фраза «на тестовой работало» не оправдание и не объяснение. Она означает, что тестовая среда отличалась от рабочей. Возможно, в ней была другая база, другие настройки, другая версия библиотеки или просто не было пользователей с реальными данными. Внедрение начинается с вопроса: чем рабочая среда отличается от той, где систему проверяли.</p>
+<h2 id="внедрение-это-смена-состояния"><span class="num">02</span>Внедрение это смена состояния</h2>
+<p>У системы есть состояние: версия кода, конфигурация, схема данных, содержимое базы, права доступа, внешние интеграции. Внедрение переводит это состояние из старого в новое. Если хотя бы одна часть осталась старой, система может работать неправильно.</p>
+<table>
+<thead>
+<tr>
+<th>Что меняется</th>
+<th>Пример</th>
+<th>Что проверить</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>код</td>
+<td>новая версия приложения</td>
+<td>версия отображается</td>
+</tr>
+<tr>
+<td>конфигурация</td>
+<td>адрес базы, лимиты, флаги</td>
+<td>значения для рабочей среды</td>
+</tr>
+<tr>
+<td>схема данных</td>
+<td>новая таблица или поле</td>
+<td>миграция применилась</td>
+</tr>
+<tr>
+<td>данные</td>
+<td>перенос записей</td>
+<td>количество и целостность</td>
+</tr>
+<tr>
+<td>права</td>
+<td>роли и доступы</td>
+<td>пользователь видит своё</td>
+</tr>
+<tr>
+<td>интеграции</td>
+<td>внешний API, почта</td>
+<td>обмен работает</td>
+</tr>
+</tbody>
+</table>
+<p>Внедрение не равно выпуску. <strong>Выпуск</strong> делает версию доступной, <strong>внедрение</strong> ставит её в конкретную среду. Один релиз может внедряться на несколько стендов: тестовый, учебный, рабочий. Один и тот же артефакт может вести себя по-разному, если конфигурация или данные отличаются.</p>
+<p>В ITIL 4 эти работы разнесены по практикам: release management отвечает за то, чтобы версия стала доступной, deployment management за перенос и установку, change enablement за оценку и разрешение изменения <a href="https://www.peoplecert.org/browse-certifications/it-governance-and-service-management/ITIL-1/itil-4-foundation">ITIL 4 Foundation</a>. Разделение полезно: оно не даёт свалить в один шаг согласование, установку и проверку.</p>
+<p>Стандарт ISO/IEC/IEEE 12207:2026 рассматривает переход, эксплуатацию и сопровождение как процессы жизненного цикла, а не как разовую операцию после разработки <a href="https://www.iso.org/standard/90219.html">ISO/IEC/IEEE 12207:2026</a>. Внедрение входит в этот цикл и требует таких же артефактов, как проектирование или тестирование.</p>
+<h3>Внедрение как распределённая операция</h3>
+<p>Даже на одном сервере внедрение редко является одной операцией. Приложение, база, веб-сервер, планировщик задач и внешняя интеграция меняются по очереди. Между шагами система находится в промежуточном состоянии: код новый, схема старая, или наоборот.</p>
+<p>Промежуточное состояние опасно тем, что его редко проверяют. Тесты обычно запускают на согласованной версии: новый код с новой схемой. В жизни несколько минут или часов существует комбинация, которой не было ни на тестовой среде, ни в репозитории.</p>
+<p>Отсюда два практических правила.</p>
+<p>Первое: <strong>каждый шаг должен быть совместим с предыдущим и следующим</strong>. Если новый код требует новое поле, миграция выполняется до установки. Если старый код ещё работает, поле не удаляется сразу.</p>
+<p>Второе: <strong>операция должна быть повторяемой</strong>. Если установка прервалась на середине, её можно запустить снова без дублирования данных. Скрипт, который добавляет колонку, проверяет, нет ли её уже. Скрипт, который вставляет справочник, не создаёт вторую копию записей.</p>
+<p>Распределённость проявляется и во времени. Браузер пользователя может держать старую страницу, фоновая задача может работать по расписанию, а мобильный клиент может обновиться через неделю. Внедрение считается завершённым не тогда, когда команда нажала кнопку, а когда все участники перешли на новое состояние или научились с ним жить.</p>
+<h3>Почему «просто скопировать» не работает</h3>
+<p>Копирование файлов кажется простым, пока не начинаешь перечислять, что ещё нужно перенести. Кроме кода есть настройки, схема, данные, права, задания по расписанию, сертификаты, внешние адреса и зависимости.</p>
+<p>Если перенести только код, приложение запустится и упадёт на первом запросе к базе. Если перенести код и базу, но забыть про планировщик, отчёты перестанут обновляться. Если забыть про права, пользователь увидит пустой экран вместо своих данных.</p>
+<p>Поэтому внедрение начинают с инвентаризации. Список того, что меняется, важнее списка команд. Команды можно уточнить по ходу, забытую часть состояния найти гораздо труднее.</p>
+<p>У внедрения есть цена ошибки. Если система недоступна, пользователи не работают. Если потеряны данные, работа может не восстановиться вовсе. Если старая версия затёрта, откат невозможен. Поэтому план внедрения начинают не с команды установки, а с вопроса «что будет, если пойдёт не так».</p>
+<h2 id="окружения-и-паритет"><span class="num">03</span>Окружения и паритет</h2>
+<p>Окружения различаются данными, пользователями и уровнем свободы.</p>
 <table>
 <thead>
 <tr>
 <th>Окружение</th>
 <th>Данные</th>
 <th>Кто пользуется</th>
+<th>Что можно ломать</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td>разработка</td>
-<td>тестовые, можно ломать</td>
+<td>тестовые, часто выдуманные</td>
 <td>разработчики</td>
+<td>почти всё</td>
 </tr>
 <tr>
 <td>тестовая среда</td>
-<td>копия рабочих</td>
+<td>копия рабочих или синтетика</td>
 <td>тестировщики</td>
+<td>конфигурацию и данные стенда</td>
+</tr>
+<tr>
+<td>предпроизводственная</td>
+<td>копия рабочих, близкая по объёму</td>
+<td>команда и заказчик</td>
+<td>только по плану</td>
 </tr>
 <tr>
 <td>эксплуатация</td>
 <td>рабочие</td>
 <td>пользователи</td>
+<td>ничего без плана</td>
 </tr>
 </tbody>
 </table>
-<p>Тестовая среда нужна, чтобы проверить миграцию на данных, близких к рабочим. Проверка на пустой базе не покажет проблем.</p>
+<p><strong>Паритет окружений</strong> означает, что тестовая среда похожа на рабочую по важным параметрам: версия языка, версия базы, набор переменных конфигурации, схема сети, права. Полного совпадения не бывает и не нужно. Важно знать, какие различия влияют на поведение.</p>
+<p>Типичные различия, которые ломают внедрение:</p>
+<ul>
+<li>тестовая база меньше рабочей в сто раз, поэтому запрос выполняется быстро;</li>
+<li>на тестовой среде отключена почта, и ошибка отправки не видна;</li>
+<li>в рабочей среде другой часовой пояс;</li>
+<li>тестовая среда использует SQLite, рабочая MySQL;</li>
+<li>на тестовой один пользователь, в рабочей сорок одновременных сеансов;</li>
+<li>в рабочей среде включён HTTPS и другие заголовки;</li>
+<li>внешний API на тестовой отвечает заглушкой, а в рабочей требует ключ.</li>
+</ul>
+<p>Паритет не требует копировать все данные. Он требует понимать, какие свойства данных важны. Если запрос зависит от объёма, нужна копия объёма. Если от значений, нужны похожие значения. Если от прав, нужны пользователи с разными ролями.</p>
 <figure class="figure" data-fig="deploy-plan" data-one="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"><iframe title="Figure 1: deploy-plan" scrolling="no"></iframe><figcaption>Три окружения и три обязательных шага: резервная копия, миграция и откат. Откат готовят до переноса.</figcaption></figure>
 
+<p>Схема показывает три шага, но не показывает их порядок во времени. Резервная копия делается до изменений. Миграция проверяется на копии. Откат готовится и проверяется до того, как он понадобится.</p>
+<h3>Конфигурация как отдельный риск</h3>
+<p>Код и конфигурация стареют по-разному. Код лежит в репозитории, конфигурация часто живёт на сервере. Если на тестовой среде включён отладочный режим, а на рабочей нет, поведение может отличаться.</p>
+<p>Полезно разделить конфигурацию на три части:</p>
+<ul>
+<li><strong>значения, общие для всех сред</strong>: названия таблиц, формат даты, правила расчёта;</li>
+<li><strong>значения, зависящие от среды</strong>: адрес базы, порт, уровень журналирования;</li>
+<li><strong>секреты</strong>: пароли, ключи, токены.</li>
+</ul>
+<p>Общие значения хранят в репозитории. Зависящие от среды задают переменными окружения или файлом, который не попадает в артефакт. Секреты хранят отдельно и не печатают в журналах.</p>
+<p>Если конфигурация не описана, её восстановление становится археологией. Через месяц никто не помнит, почему на рабочем сервере стоит другой лимит соединений. Ещё хуже, когда этот лимит и был причиной сбоя.</p>
+<h3>Секреты и права</h3>
+<p>Внедрение часто требует повышенных прав: создать базу, изменить схему, перезапустить службу. Эти права должны быть ограничены по времени и по действию. Постоянная учётная запись с полными правами превращает любую ошибку в катастрофу.</p>
+<p>Практический минимум:</p>
+<ul>
+<li>отдельная учётная запись для внедрения;</li>
+<li>права только на нужные объекты;</li>
+<li>журнал действий;</li>
+<li>смена пароля после завершения;</li>
+<li>запрет хранить пароль в инструкции и в репозитории.</li>
+</ul>
+<p>В учебном проекте можно использовать локальную базу и упрощённые права. Принцип остаётся: действие выполняется от имени, которое можно проверить.</p>
+<h3>Тестовые данные и приватность</h3>
+<p>Копия рабочих данных полезна, но опасна. В ней могут быть имена, телефоны, адреса и другие персональные данные. Переносить такую копию на ноутбук или в общий репозиторий нельзя.</p>
+<p>Для проверки миграции достаточно обезличить данные: заменить имена, телефоны и адреса на синтетические, сохранив структуру, объём и граничные случаи. Если обезличивание невозможно, копию хранят на отдельном стенде с ограниченным доступом и удаляют после проверки.</p>
+<p>Правило простое: тестовая среда не должна содержать больше персональных данных, чем нужно для проверки. Это снижает и риск утечки, и число людей, которым нужен доступ.</p>
 <div class="gate-step" data-gate>
 <p class="gate-action"><button type="button" class="gate-btn" aria-expanded="false"><span class="gate-q" aria-hidden="true">?</span><span>Почему проверка на пустой базе не заменяет проверку на копии рабочих данных?</span></button></p>
-<div class="gate-content" hidden><h2 id="миграция"><span class="num">03</span>Миграция</h2>
-<p><strong>Миграция</strong> меняет структуру или переносит данные.</p>
-<p>Правила:</p>
+<div class="gate-content" hidden><h2 id="миграция-данных"><span class="num">04</span>Миграция данных</h2>
+<p><strong>Миграция</strong> меняет структуру или переносит данные. Она может добавить таблицу, поле, индекс, изменить тип, заполнить новые значения или объединить записи.</p>
+<p>Миграция опаснее установки кода, потому что данные нельзя пересобрать из репозитория. Код можно откатить к предыдущему коммиту. Данные, удалённые неудачным скриптом, восстанавливаются только из копии.</p>
+<h3>Правила миграции</h3>
 <ul>
 <li>миграция выполняется отдельным шагом;</li>
 <li>до миграции делают резервную копию;</li>
-<li>скрипт проверяют на копии;</li>
+<li>скрипт проверяют на копии рабочих данных;</li>
 <li>время выполнения измеряют;</li>
-<li>повторный запуск должен быть безопасен.</li>
+<li>повторный запуск должен быть безопасен;</li>
+<li>результат проверяют по количеству и целостности;</li>
+<li>обратный сценарий описан до запуска.</li>
 </ul>
-<p>Если миграция занимает час, пользователи должны знать о простое.</p>
-<h2 id="план-внедрения"><span class="num">04</span>План внедрения</h2>
-<p>План отвечает на вопросы:</p>
+<p>Отдельный шаг нужен, чтобы было понятно, что именно сломалось. Если код и миграция выполняются одной командой, ошибка может возникнуть в любом месте. Если миграция идёт отдельно, команда видит, на каком шаге остановилась.</p>
+<p><strong>Идемпотентность</strong> означает, что повторный запуск не ломает данные. Миграция, которая добавляет колонку, должна проверить, нет ли её уже. Миграция, которая вставляет справочные значения, не должна создавать дубликаты.</p>
+<h3>Проверка на копии</h3>
+<p>Копия рабочих данных нужна не для красоты отчёта. Она показывает:</p>
+<ul>
+<li>сколько времени займёт миграция на реальном объёме;</li>
+<li>какие значения нарушают новые ограничения;</li>
+<li>какие записи не помещаются в новый тип;</li>
+<li>какие индексы и блокировки появляются;</li>
+<li>что произойдёт с пробелами, регистром и кодировкой.</li>
+</ul>
+<p>На пустой базе все эти проблемы исчезают. Скрипт проходит за секунду и ничего не проверяет.</p>
+<p>Копию готовят заранее. Если база весит десятки гигабайт, копирование само по себе требует времени и места. В учебном проекте достаточно небольшой, но реалистичной выборки: несколько сотен записей с пустыми полями, длинными строками, разными ролями и граничными датами.</p>
+<h3>Пример преобразования данных</h3>
+<p>Представим учебную систему заявок. В старой версии у заявки было текстовое поле <code>author</code>, куда вписывали фамилию. В новой версии нужен справочник пользователей и внешний ключ <code>author_id</code>.</p>
+<p>Прямое преобразование выглядит так:</p>
+<table>
+<thead>
+<tr>
+<th>Было</th>
+<th>Стало</th>
+<th>Риск</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>строка <code>author</code></td>
+<td>число <code>author_id</code></td>
+<td>разные написания одной фамилии</td>
+</tr>
+<tr>
+<td>пустое значение</td>
+<td>обязательное поле</td>
+<td>старые записи не пройдут ограничение</td>
+</tr>
+<tr>
+<td>свободный текст</td>
+<td>ссылка на пользователя</td>
+<td>пользователя может не быть в справочнике</td>
+</tr>
+</tbody>
+</table>
+<p>Миграция должна не только добавить колонку, но и объяснить, что делать с записями, которые не удалось сопоставить. Варианты: создать пользователя с пометкой, оставить пустое значение и запретить публикацию, записать в журнал и продолжить. Выбор зависит от правил предметной области, а не от удобства скрипта.</p>
+<p>Проверка на копии показывает, сколько записей не сопоставилось. Если таких записей сотни, автоматическое преобразование может создать мусорный справочник. Если единицы, их можно разобрать вручную.</p>
+<h3>Совместимость старого и нового кода</h3>
+<p>Во время внедрения старая и новая версии могут работать одновременно. Пользователь с открытой вкладкой обращается к новому коду, а фоновая задача ещё работает со старой схемой. Если миграция удалила поле, старая задача падает.</p>
+<p>Безопаснее схема <strong>расширить и сжать</strong>:</p>
 <ol>
-<li>когда начинаем;</li>
-<li>кто отвечает;</li>
-<li>что делаем по шагам;</li>
-<li>как проверяем;</li>
-<li>что делаем при сбое;</li>
-<li>как сообщаем пользователям.</li>
+<li>добавить новое поле или таблицу, не удаляя старое;</li>
+<li>выпустить код, который пишет в оба места или читает новое;</li>
+<li>перенести данные;</li>
+<li>убедиться, что старый код больше не нужен;</li>
+<li>удалить старое отдельным релизом.</li>
 </ol>
-<p>Шаги записывают так, чтобы их мог выполнить другой человек. «Настроить сервер» не шаг, «установить пакет, применить конфигурацию, проверить порт» шаг.</p>
-<h2 id="откат"><span class="num">05</span>Откат</h2>
-<p><strong>Откат</strong> возвращает предыдущую версию и данные.</p>
-<p>Он должен быть:</p>
+<p>Такой порядок стоит дороже, но уменьшает риск. Он особенно полезен, когда откат должен быть быстрым. Пока старое поле существует, предыдущая версия кода может работать.</p>
+<h3>Долгая миграция</h3>
+<p>Большая миграция может занять часы. Блокировка таблицы на это время останавливает работу. Поэтому миграцию разбивают на части или выполняют в фоне.</p>
+<p>Приёмы:</p>
+<ul>
+<li>добавить поле без блокировки всей таблицы;</li>
+<li>заполнять его пакетами;</li>
+<li>создать индекс позже, отдельным шагом;</li>
+<li>переключить чтение после заполнения;</li>
+<li>удалить старое поле после проверки.</li>
+</ul>
+<p>Каждый приём усложняет план. Выбор зависит от объёма и допустимого простоя. Если система учебная и простой в выходной допустим, сложная схема не нужна. Если система работает круглосуточно, простой может стоить дороже.</p>
+<h3>Резервная копия и восстановление</h3>
+<p>Копия нужна не для отчёта, а для восстановления. Поэтому проверяют не факт создания файла, а факт восстановления.</p>
+<p>Минимальная проверка:</p>
+<ol>
+<li>сделать копию;</li>
+<li>восстановить её на отдельной базе;</li>
+<li>сравнить количество строк в ключевых таблицах;</li>
+<li>выполнить главный запрос;</li>
+<li>записать время восстановления.</li>
+</ol>
+<p>Если восстановление не проверяли, копия может оказаться пустой, неполной или несовместимой с текущей версией. История знает много случаев, когда файл резервной копии существовал, но не открывался.</p>
+<h3>Обратная миграция</h3>
+<p>Обратная миграция возвращает схему к предыдущему виду. Она нужна, если новая версия изменила структуру, а откат должен вернуть старую.</p>
+<p>Обратная миграция сложнее прямой. Данные, которые появились в новом поле, могут не иметь места в старой схеме. Удаление поля необратимо. Поэтому:</p>
+<ul>
+<li>обратную миграцию пишут вместе с прямой;</li>
+<li>проверяют на копии;</li>
+<li>понимают, какие данные будут потеряны;</li>
+<li>заранее решают, допустима ли эта потеря.</li>
+</ul>
+<p>Если потеря недопустима, откат делают не скриптом, а восстановлением копии. Это дольше и требует простоя, зато возвращает согласованное состояние.</p>
+<figure class="figure" data-fig="migration-window" data-one="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"><iframe title="Figure 2: migration-window" scrolling="no"></iframe><figcaption>Окно внедрения по шагам: подготовка, копия, миграция, проверка, переключение и наблюдение. Показаны точка невозврата и два пути отката.</figcaption></figure>
+
+<p>Схема напоминает, что окно внедрения начинается задолго до установки. Проверка копии идёт за неделю, копия и доступы за день, а наблюдение продолжается после сообщения пользователям.</p>
+<h2 id="стратегии-переключения"><span class="num">05</span>Стратегии переключения</h2>
+<p>Способ переключения влияет на масштаб сбоя и скорость возврата. Универсально лучшей стратегии нет.</p>
+<p>В книге Google о надёжности сайтов подчёркивается, что процесс развёртывания должен соответствовать профилю риска сервиса: от автоматического выпуска в тестовой среде до распространения по кластерам в течение нескольких дней <a href="https://sre.google/sre-book/release-engineering/">Google SRE, Release Engineering</a>. Это полезная рамка: стратегия выбирается не по привычке, а по цене ошибки.</p>
+<p><strong>Большой взрыв</strong> заменяет всё сразу. Просто, быстро, дёшево. При ошибке ломается вся система. Подходит для учебного стенда и небольших систем с коротким простоем.</p>
+<p><strong>Постепенное развёртывание</strong> обновляет экземпляры по одному. Часть пользователей уже на новой версии, часть на старой. Ошибка затрагивает не всех, но требует совместимости версий.</p>
+<p><strong>Синий и зелёный</strong> держит две среды: старая работает, новая готова. Трафик переключается целиком или частями. Откат быстрый, потому что старая среда ещё жива. Цена выше: нужно двойное окружение и синхронизация данных.</p>
+<p><strong>Канареечное развёртывание</strong> направляет на новую версию небольшую долю трафика. Если метрики не ухудшаются, доля растёт. Требует наблюдаемости и умения разделять трафик.</p>
+<p><strong>Флаг функции</strong> отделяет выпуск кода от включения возможности. Код уже в рабочей среде, но функция выключена. Включение и выключение не требуют новой сборки. Флаг не отменяет проверку, но уменьшает цену ошибки.</p>
+<figure class="figure" data-fig="rollout-map" data-one="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"><iframe title="Figure 3: rollout-map" scrolling="no"></iframe><figcaption>Выберите стратегию: схема показывает охват пользователей, скорость отката и условия, при которых стратегия работает.</figcaption></figure>
+
+<p>Стратегия это компромисс. Большой взрыв даёт простоту и низкую стоимость, но большую зону поражения. Канареечное развёртывание даёт малую зону, но требует метрик и инфраструктуры. Синий и зелёный дают быстрый откат, но требуют двух сред.</p>
+<h3>Флаги и совместимость</h3>
+<p>Флаг функции часто понимают как способ выключить ошибку. Это не совсем так. Флаг выключает ветку кода, но не отменяет миграцию, кэш, фоновые задачи и данные, которые уже записаны.</p>
+<p>Если новый код записал данные в новом формате, выключение флага не вернёт старый формат. Поэтому флаг применяют вместе с совместимой схемой и обратимой миграцией. Флаг уменьшает число пользователей, которые видят проблему, но не заменяет откат данных.</p>
+<p>Полезно договориться, кто и когда удаляет флаг. Флаги живут годами, если их не чистить. Старый флаг с выключенной веткой создаёт иллюзию, что код можно безопасно включить, хотя ветка уже не проверяется.</p>
+<h3>Как выбрать</h3>
+<p>На выбор влияют четыре вопроса.</p>
+<ol>
+<li>Сколько пользователей пострадает при ошибке?</li>
+<li>Как быстро можно вернуть предыдущую версию?</li>
+<li>Есть ли метрика, по которой видно ухудшение?</li>
+<li>Готова ли команда поддерживать сложность?</li>
+</ol>
+<p>Если система учебная и работает в аудитории, большой взрыв с коротким простоем может быть разумным. Если система хранит заявки сотрудников и работает весь день, лучше постепенное переключение или синий и зелёный.</p>
+<p>Стратегия не спасает от плохой миграции. Если схема несовместима, ни канареечное развёртывание, ни флаг не помогут. Сначала проверяют данные, потом выбирают способ переключения.</p>
+<h3>Порядок шагов</h3>
+<p>Типичный порядок выглядит так:</p>
+<ol>
+<li>проверить копию данных;</li>
+<li>сделать резервную копию;</li>
+<li>при необходимости остановить запись;</li>
+<li>применить миграцию;</li>
+<li>проверить схему и данные;</li>
+<li>установить новую версию;</li>
+<li>выполнить дымовые проверки;</li>
+<li>переключить трафик;</li>
+<li>наблюдать;</li>
+<li>зафиксировать результат или откатить.</li>
+</ol>
+<p>Порядок может меняться. Важно, чтобы каждый шаг имел проверку и точку возврата.</p>
+<h2 id="откат"><span class="num">06</span>Откат</h2>
+<p><strong>Откат</strong> возвращает предыдущую версию и данные. Он должен быть:</p>
 <ul>
 <li>подготовлен заранее;</li>
 <li>проверен на тестовой среде;</li>
 <li>ограничен по времени;</li>
-<li>совместим с миграцией данных.</li>
+<li>совместим с миграцией данных;</li>
+<li>понятен ответственному.</li>
 </ul>
-<p>Если новая версия изменила схему базы, простого возврата файлов недостаточно. Нужен обратный скрипт миграции или резервная копия.</p>
-<h2 id="проверка-после-переноса"><span class="num">06</span>Проверка после переноса</h2>
-<p><strong>Дымовые проверки</strong> подтверждают, что система жива:</p>
+<p>Откат бывает нескольких видов.</p>
+<table>
+<thead>
+<tr>
+<th>Вид</th>
+<th>Что возвращает</th>
+<th>Когда подходит</th>
+<th>Ограничение</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>откат кода</td>
+<td>предыдущий артефакт</td>
+<td>схема не менялась</td>
+<td>данные новой версии остаются</td>
+</tr>
+<tr>
+<td>откат конфигурации</td>
+<td>прежние настройки</td>
+<td>ошибка в значении</td>
+<td>не помогает при ошибке кода</td>
+</tr>
+<tr>
+<td>обратная миграция</td>
+<td>прежнюю схему</td>
+<td>миграция обратима</td>
+<td>возможна потеря новых данных</td>
+</tr>
+<tr>
+<td>восстановление копии</td>
+<td>данные и схему</td>
+<td>ошибка разрушила данные</td>
+<td>долго, возможна потеря изменений</td>
+</tr>
+<tr>
+<td>исправление вперёд</td>
+<td>новую версию с fix</td>
+<td>ошибка локальная</td>
+<td>требует быстрого выпуска</td>
+</tr>
+</tbody>
+</table>
+<p>Откат кода самый быстрый. Если новая версия изменила схему, одного возврата файла недостаточно. Приложение старой версии может не понять новую структуру.</p>
+<h3>Точка невозврата</h3>
+<p>После некоторых шагов откат становится дороже, чем исправление вперёд. Например, после удаления старого поля или после записи данных в новый формат. Эту точку нужно знать заранее.</p>
+<p>Если точка невозврата пройдена, план должен содержать не «откатимся», а «исправим вперёд за такое-то время». Обещание отката, которое невозможно выполнить, хуже честного плана исправления.</p>
+<h3>Проверка отката</h3>
+<p>Откат проверяют так же, как установку:</p>
+<ol>
+<li>взять предыдущий артефакт;</li>
+<li>развернуть его на копии;</li>
+<li>применить обратную миграцию или восстановить копию;</li>
+<li>пройти главный сценарий;</li>
+<li>измерить время;</li>
+<li>записать результат.</li>
+</ol>
+<p>Если откат ни разу не запускали, это не план, а надежда. Во время сбоя команда не должна изобретать команды.</p>
+<h3>Сколько стоит откат</h3>
+<p>У отката есть время и цена. Время складывается из решения, подготовки, выполнения и проверки. Решение может занять десять минут, если никто не понимает, кто отвечает. Выполнение может занять час, если предыдущий артефакт не сохранён.</p>
+<p>Цена отката включает потерянные изменения. Пользователи, которые успели создать заявки в новой версии, могут потерять их при восстановлении копии. Поэтому в плане указывают, что происходит с данными, созданными после точки отката.</p>
+<p>Иногда дешевле исправить ошибку вперёд. Это допустимо, если ошибка локальная, исправление понятно и время выпуска меньше времени отката. Решение фиксируют, чтобы потом не спорить, почему не откатились.</p></div>
+</div>
+
+<div class="gate-step" data-gate>
+<p class="gate-action"><button type="button" class="gate-btn" aria-expanded="false"><span class="gate-q" aria-hidden="true">?</span><span>Почему откат нужно проверять до внедрения, а не во время сбоя?</span></button></p>
+<div class="gate-content" hidden><h2 id="три-внедрения-которые-стали-уроками"><span class="num">07</span>Три внедрения, которые стали уроками</h2>
+<p>Ниже три случая, где внедрение пошло не по плану. Они показывают разные стороны одной темы: данные, инфраструктуру и конфигурацию.</p>
+<h3>GitLab, 2017</h3>
+<p>31 января 2017 года инженер GitLab выполнял работы на вторичной базе PostgreSQL. Нужно было восстановить репликацию. Он собирался очистить каталог данных на вторичном сервере, но выполнил команду на первичном. За одну-две секунды было удалено около 300 ГБ данных <a href="https://about.gitlab.com/blog/2017/02/10/postmortem-of-database-outage-of-january-31/">GitLab, 2017</a>.</p>
+<p>Дальше выяснилось, что резервные копии не работают так, как думали:</p>
 <ul>
-<li>страница открывается;</li>
-<li>вход работает;</li>
-<li>главный сценарий проходит;</li>
-<li>данные видны;</li>
-<li>журналы пишутся.</li>
+<li><code>pg_dump</code> запускался версией 9.2, а база работала на 9.6. Утилита завершалась с ошибкой, и копии не создавались;</li>
+<li>письма об ошибках отклонялись почтовым сервером, потому что не были настроены правила DMARC;</li>
+<li>снимки диска Azure не были включены для серверов баз данных;</li>
+<li>LVM-снимок был сделан за шесть часов до аварии и не предназначался для восстановления после катастрофы.</li>
 </ul>
-<p>Проверку выполняют сразу после переноса, до сообщения пользователям.</p>
-<h2 id="общение-с-пользователями"><span class="num">07</span>Общение с пользователями</h2>
+<p>Восстановление заняло около 18 часов. По оценке GitLab, потеряно примерно 5000 проектов, 5000 комментариев и 700 учётных записей. Данные восстановили из снимка стейджинга на 17:20 UTC.</p>
+<p>Процессные причины:</p>
+<ul>
+<li>не было владельца процедуры резервного копирования;</li>
+<li>копии не проверяли восстановлением;</li>
+<li>окружения были похожи по именам и различались недостаточно явно;</li>
+<li>миграция и восстановление выполнялись вручную без защиты от опасной команды.</li>
+</ul>
+<p>Урок: <strong>резервная копия существует тогда, когда из неё восстановились</strong>. Файл, который создаётся с ошибкой и никем не проверяется, создаёт ложное чувство защиты. Кроме того, опасные команды должны иметь защиту: подтверждение имени сервера, разные приглашения, ограничение прав.</p>
+<h3>Amazon S3, 2017</h3>
+<p>28 февраля 2017 года в регионе US-EAST-1 сотрудник S3 выполнял по плану команду, которая должна была убрать небольшое число серверов подсистемы выставления счетов. Один из параметров был введён неверно, и было удалено больше серверов, чем планировалось <a href="https://aws.amazon.com/message/41926/">AWS, 2017</a>.</p>
+<p>Удалённые серверы поддерживали подсистему индекса и подсистему размещения. Индекс хранит метаданные и расположение всех объектов S3. Без него не работают GET, LIST, PUT и DELETE. Подсистема размещения выделяет место для новых объектов. Обеим потребовалась полная перезагрузка, которая в таком масштабе не выполнялась годами.</p>
+<p>Последствия:</p>
+<ul>
+<li>S3 начал обслуживать GET, LIST и DELETE в 12:26 по времени PST, полностью восстановился к 13:18;</li>
+<li>PUT восстановился к 13:54;</li>
+<li>вместе с S3 пострадали EC2, EBS, Lambda и консоль;</li>
+<li>панель состояния AWS тоже зависела от S3, поэтому обновить статус сначала не удалось.</li>
+</ul>
+<p>Процессные причины:</p>
+<ul>
+<li>инструмент позволял удалить слишком большую долю ёмкости;</li>
+<li>не было проверки минимального уровня;</li>
+<li>полная перезагрузка подсистемы оказалась дольше, чем ожидали;</li>
+<li>панель состояния зависела от аварийного сервиса.</li>
+</ul>
+<p>Урок: <strong>у опасной операции должен быть предохранитель</strong>. Если инструмент принимает число серверов, он должен проверять нижнюю границу. Если операция затрагивает общую инфраструктуру, её влияние шире одного сервиса.</p>
+<h3>Cloudflare, 2019</h3>
+<p>2 июля 2019 года Cloudflare выпустила изменение правила WAF, которое защищает сайты от межсайтового скриптинга. В правиле оказалось регулярное выражение с катастрофическим возвратом. Оно расходовало процессор на всех узлах, обслуживающих HTTP и HTTPS, и трафик начал падать <a href="https://blog.cloudflare.com/details-of-the-cloudflare-outage-on-july-2-2019/">Cloudflare, 2019</a>.</p>
+<p>Изменение прошло обычный процесс: pull request, проверка, сборка, тесты, запрос на изменение с планом развёртывания и отката. Тесты не проверяли расход процессора. Правило разошлось по миру за секунды через систему Quicksilver, которая распространяет конфигурацию. Через три минуты после выпуска начались оповещения.</p>
+<p>Сбой длился около 27 минут. Полное отключение WAF выполнили в 14:07, трафик восстановился к 14:09. Затем WAF включили обратно в 14:52 после проверки. Откат был медленным, потому что требовал полной пересборки WAF дважды.</p>
+<p>Процессные причины:</p>
+<ul>
+<li>правило можно было выпустить глобально без поэтапной проверки;</li>
+<li>тесты не измеряли процессорное время;</li>
+<li>защита от чрезмерного возврата была удалена при предыдущем рефакторинге;</li>
+<li>откат не был достаточно быстрым;</li>
+<li>доступ к внутренним системам зависел от самого Cloudflare.</li>
+</ul>
+<p>Урок: <strong>конфигурация тоже является релизом</strong>. Изменение правила, флага или маршрута может повлиять на всех пользователей так же, как новая версия кода. Поэтапное развёртывание нужно не только для бинарных файлов.</p>
+<table>
+<thead>
+<tr>
+<th>Случай</th>
+<th>Что внедряли</th>
+<th>Что не проверили</th>
+<th>Вывод</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>GitLab</td>
+<td>восстановление базы</td>
+<td>восстановление из копии</td>
+<td>копия проверяется восстановлением</td>
+</tr>
+<tr>
+<td>AWS S3</td>
+<td>удаление серверов по плану</td>
+<td>нижнюю границу ёмкости</td>
+<td>у опасной команды нужен предохранитель</td>
+</tr>
+<tr>
+<td>Cloudflare</td>
+<td>правило WAF</td>
+<td>расход процессора и этапность</td>
+<td>конфигурация требует такого же контроля</td>
+</tr>
+</tbody>
+</table>
+<p>Во всех трёх случаях процесс формально существовал. Были планы, инструменты, ответственные. Не хватило проверки, которая соответствовала бы риску конкретного шага.</p></div>
+</div>
+
+<div class="gate-step" data-gate>
+<p class="gate-action"><button type="button" class="gate-btn" aria-expanded="false"><span class="gate-q" aria-hidden="true">?</span><span>Как перенести эти уроки на внедрение учебной системы?</span></button></p>
+<div class="gate-content" hidden><h2 id="план-внедрения-учебной-системы"><span class="num">08</span>План внедрения учебной системы</h2>
+<p>План не должен быть длинным. Он должен быть выполнимым другим человеком.</p>
+<table>
+<thead>
+<tr>
+<th>Раздел</th>
+<th>Что записать</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Цель</td>
+<td>какую версию и куда ставим</td>
+</tr>
+<tr>
+<td>Границы</td>
+<td>что меняется, что остаётся</td>
+</tr>
+<tr>
+<td>Участники</td>
+<td>кто выполняет, кто подтверждает</td>
+</tr>
+<tr>
+<td>Время</td>
+<td>окно работ и допустимый простой</td>
+</tr>
+<tr>
+<td>Шаги</td>
+<td>команды и проверки по порядку</td>
+</tr>
+<tr>
+<td>Данные</td>
+<td>копия, миграция, проверка</td>
+</tr>
+<tr>
+<td>Откат</td>
+<td>условие, шаги, время</td>
+</tr>
+<tr>
+<td>Связь</td>
+<td>как узнают пользователи</td>
+</tr>
+</tbody>
+</table>
+<p>Полезно расписать план по времени относительно начала работ.</p>
+<table>
+<thead>
+<tr>
+<th>Момент</th>
+<th>Действие</th>
+<th>Результат</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>за неделю</td>
+<td>проверить копию и миграцию</td>
+<td>известное время, известные ошибки</td>
+</tr>
+<tr>
+<td>за день</td>
+<td>сделать копию, проверить доступы</td>
+<td>копия и учётные записи готовы</td>
+</tr>
+<tr>
+<td>в начале окна</td>
+<td>остановить запись, сообщить пользователям</td>
+<td>система в известном состоянии</td>
+</tr>
+<tr>
+<td>в окне</td>
+<td>миграция, установка, проверки</td>
+<td>новая версия работает</td>
+</tr>
+<tr>
+<td>после окна</td>
+<td>наблюдение, сообщение</td>
+<td>пользователи знают, что делать</td>
+</tr>
+</tbody>
+</table>
+<p>В учебном проекте окно может занимать полчаса. Важна не длительность, а наличие всех частей: копия, миграция, проверка, откат, сообщение.</p>
+<h3>Роли</h3>
+<p>Даже в команде из трёх человек полезно назвать роли.</p>
+<ul>
+<li><strong>Ответственный за внедрение</strong> ведёт план и принимает решение об откате.</li>
+<li><strong>Ответственный за данные</strong> делает копию и проверяет миграцию.</li>
+<li><strong>Проверяющий</strong> проходит главный сценарий и фиксирует результат.</li>
+<li><strong>Связь с пользователями</strong> сообщает о работах и собирает проблемы.</li>
+</ul>
+<p>Один человек может совмещать роли, но решение об откате не должно зависеть от того, кто выполнял опасный шаг. Свежий взгляд помогает заметить ошибку.</p>
+<p>Инструменты могут поддержать эти правила. Например, в GitHub Actions среда с защитой может требовать обязательного одобрения, ограничивать ветку и хранить историю развёртываний <a href="https://docs.github.com/en/actions/deployment/about-deployments/deploying-with-github-actions">GitHub Actions, deployments</a>. Это не заменяет план, но делает выполнение плана проверяемым.</p>
+<h3>Критерии отката</h3>
+<p>Решение об откате принимают по заранее записанным условиям, а не по настроению.</p>
+<p>Примеры:</p>
+<ul>
+<li>главный сценарий не проходит после двух попыток;</li>
+<li>ошибки затрагивают больше заданной доли пользователей;</li>
+<li>данные не прошли проверку целостности;</li>
+<li>время восстановления превышает окно;</li>
+<li>обнаружена потеря данных.</li>
+</ul>
+<p>Критерии должны быть проверяемыми. «Система работает плохо» не критерий. «Пять из десяти тестовых заявок не создаются» критерий.</p>
+<h3>Сообщение пользователям</h3>
 <p>Пользователям сообщают:</p>
 <ul>
 <li>когда система будет недоступна;</li>
@@ -974,29 +1446,90 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <li>что делать, если что-то не работает;</li>
 <li>куда обращаться.</li>
 </ul>
-<p>Молчаливое внедрение превращает плановый простой в инцидент.</p>
-<h2 id="где-внедрение-ломается"><span class="num">08</span>Где внедрение ломается</h2>
-<p><strong>Нет резервной копии.</strong> Ошибка миграции уничтожает данные.</p>
-<p><strong>Проверка на пустой базе.</strong> Реальные данные ломают скрипт.</p>
-<p><strong>Нет отката.</strong> Вернуться некуда.</p>
-<p><strong>Миграция и код одним шагом.</strong> Непонятно, что именно сломалось.</p>
-<p><strong>Нет дымовых проверок.</strong> Пользователи находят ошибку раньше команды.</p>
-<p><strong>Нет сообщения.</strong> Пользователи считают, что система сломалась навсегда.</p>
-<div class="callout pitfall"><span class="label">Откат без проверки это обещание, а не план. Если его не запускали на копии, он может не сработать.</span></div>
-
-<h2 id="итоги"><span class="num">09</span>Итоги</h2>
+<p>Молчаливое внедрение превращает плановый простой в инцидент. Пользователь, который не предупреждён, считает, что система сломалась навсегда, и звонит в поддержку.</p>
+<p>Сообщение лучше отправлять до работ и повторять после. В первом сообщении есть время и план. Во втором результат и контакт.</p>
+<h3>Учебный пример: система заявок</h3>
+<p>Разберём внедрение новой версии системы заявок на учебном стенде.</p>
+<p><strong>Подготовка.</strong> Команда фиксирует, что меняется: добавляется поле «категория», меняется форма создания, обновляется справочник категорий. Планируется окно на 40 минут в конце дня, когда заявки почти не создаются.</p>
+<p><strong>Копия.</strong> За день до работ делается копия базы. Копия восстанавливается на отдельной базе, и команда проверяет, что главный сценарий на ней проходит. Время восстановления записывают.</p>
+<p><strong>Миграция.</strong> Скрипт добавляет таблицу категорий и поле в заявки. Сначала он проверяет, существует ли таблица. Затем заполняет справочник. Для старых заявок ставится категория «не указана». Скрипт запускают на копии и измеряют время.</p>
+<p><strong>Установка.</strong> В начале окна запись останавливается. Пользователям отправлено сообщение. Выполняется миграция. Проверяются количество заявок, отсутствие пустых идентификаторов и доступность справочника. Затем ставится новая версия.</p>
+<p><strong>Проверка.</strong> Проверяющий входит под двумя ролями, создаёт заявку, меняет категорию, закрывает заявку и смотрит журнал. Если сценарий не проходит, срабатывает критерий отката.</p>
+<p><strong>Наблюдение.</strong> В течение дня команда смотрит число ошибок и время ответа. На следующий день отвечает на четыре вопроса разбора.</p>
+<p>Такой план занимает одну страницу. Его можно выполнить без автора и проверить по результатам.</p>
+<h2 id="дымовые-проверки-и-наблюдение"><span class="num">09</span>Дымовые проверки и наблюдение</h2>
+<p><strong>Дымовые проверки</strong> подтверждают, что система жива:</p>
 <ul>
-<li>Окружения различаются данными и пользователями.</li>
-<li>Миграцию проверяют на копии рабочих данных.</li>
-<li>План внедрения содержит шаги, ответственных и проверки.</li>
-<li>Откат готовят и проверяют заранее.</li>
-<li>Дымовые проверки подтверждают работу после переноса.</li>
-</ul></div>
-</div>
-
-<div class="gate-step" data-gate>
-<p class="gate-action"><button type="button" class="gate-btn" aria-expanded="false"><span class="gate-q" aria-hidden="true">?</span><span>Почему откат нужно проверять до внедрения, а не во время сбоя?</span></button></p>
-<div class="gate-content" hidden><div class="quiz" data-quiz data-quiz-guard><div class="quiz-who"><label class="quiz-who-label"><span>ФИО</span><input type="text" class="quiz-name" data-quiz-name maxlength="80" autocomplete="off" placeholder="Иванов Иван Иванович"></label><span class="quiz-attempts" data-quiz-attempts>две попытки на лекцию</span><span class="quiz-note" data-who-note hidden></span></div><div class="quiz-q" data-type="single" data-correct="1" data-q="1"><p class="quiz-p"><span class="quiz-no" aria-hidden="true">01</span>Что такое дымовая проверка?</p><div class="opts"><label class="opt"><input type="radio" name="q105_0" value="3" autocomplete="off"><span>Сборка артефакта</span></label><label class="opt"><input type="radio" name="q105_0" value="2" autocomplete="off"><span>Проверка стиля</span></label><label class="opt"><input type="radio" name="q105_0" value="1" autocomplete="off"><span>Полный прогон тестов</span></label><label class="opt"><input type="radio" name="q105_0" value="0" autocomplete="off" data-ok><span>Быстрая проверка, что система жива</span></label></div><p class="quiz-why" hidden>Основные сценарии.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="short" data-q="2" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">02</span>Что делают до миграции для защиты данных?</p><input type="text" class="short-answer" data-answers="[&quot;резервная копия&quot;, &quot;бэкап&quot;]" placeholder="Введите ответ" autocomplete="off" spellcheck="false" aria-label="Что делают до миграции для защиты данных?"><p class="quiz-why" hidden>Копия данных.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="multi" data-correct="3" data-q="3" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">03</span>Какие окружения типичны?</p><div class="opts"><label class="opt"><input type="checkbox" name="q105_2" value="1" autocomplete="off" data-ok><span>Тестовая среда</span></label><label class="opt"><input type="checkbox" name="q105_2" value="3" autocomplete="off"><span>Бухгалтерия</span></label><label class="opt"><input type="checkbox" name="q105_2" value="2" autocomplete="off" data-ok><span>Эксплуатация</span></label><label class="opt"><input type="checkbox" name="q105_2" value="4" autocomplete="off"><span>Склад</span></label><label class="opt"><input type="checkbox" name="q105_2" value="0" autocomplete="off" data-ok><span>Разработка</span></label></div><p class="quiz-why" hidden>Остальное не окружения.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="4" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">04</span>Почему миграцию делают отдельным шагом?</p><div class="opts"><label class="opt"><input type="radio" name="q105_3" value="1" autocomplete="off"><span>Она быстрее</span></label><label class="opt"><input type="radio" name="q105_3" value="2" autocomplete="off"><span>Она не требует копии</span></label><label class="opt"><input type="radio" name="q105_3" value="3" autocomplete="off"><span>Её можно не проверять</span></label><label class="opt"><input type="radio" name="q105_3" value="0" autocomplete="off" data-ok><span>Понятно, что именно сломалось</span></label></div><p class="quiz-why" hidden>Разделение причин.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="5" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">05</span>Что такое откат?</p><div class="opts"><label class="opt"><input type="radio" name="q105_4" value="3" autocomplete="off"><span>Удаление проекта</span></label><label class="opt"><input type="radio" name="q105_4" value="0" autocomplete="off" data-ok><span>Возврат предыдущей версии и данных</span></label><label class="opt"><input type="radio" name="q105_4" value="2" autocomplete="off"><span>Повторная миграция</span></label><label class="opt"><input type="radio" name="q105_4" value="1" autocomplete="off"><span>Новая функция</span></label></div><p class="quiz-why" hidden>Возврат.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="short" data-q="6" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">06</span>Как называют возврат предыдущей версии?</p><input type="text" class="short-answer" data-answers="[&quot;откат&quot;, &quot;rollback&quot;]" placeholder="Введите ответ" autocomplete="off" spellcheck="false" aria-label="Как называют возврат предыдущей версии?"><p class="quiz-why" hidden>Возврат.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="7" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">07</span>Почему пользователей предупреждают заранее?</p><div class="opts"><label class="opt"><input type="radio" name="q105_6" value="2" autocomplete="off"><span>Это ускоряет миграцию</span></label><label class="opt"><input type="radio" name="q105_6" value="3" autocomplete="off"><span>Это заменяет откат</span></label><label class="opt"><input type="radio" name="q105_6" value="0" autocomplete="off" data-ok><span>Плановый простой не выглядит аварией</span></label><label class="opt"><input type="radio" name="q105_6" value="1" autocomplete="off"><span>Так требует база</span></label></div><p class="quiz-why" hidden>Ожидания.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="multi" data-correct="4" data-q="8" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">08</span>Что проверяют после переноса?</p><div class="opts"><label class="opt"><input type="checkbox" name="q105_7" value="0" autocomplete="off" data-ok><span>Страница открывается</span></label><label class="opt"><input type="checkbox" name="q105_7" value="4" autocomplete="off"><span>Цвет логотипа</span></label><label class="opt"><input type="checkbox" name="q105_7" value="3" autocomplete="off" data-ok><span>Данные видны</span></label><label class="opt"><input type="checkbox" name="q105_7" value="5" autocomplete="off"><span>Имя автора</span></label><label class="opt"><input type="checkbox" name="q105_7" value="1" autocomplete="off" data-ok><span>Вход работает</span></label><label class="opt"><input type="checkbox" name="q105_7" value="2" autocomplete="off" data-ok><span>Главный сценарий проходит</span></label></div><p class="quiz-why" hidden>Остальное не проверки.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="9" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">09</span>Чем тестовая среда отличается от эксплуатации?</p><div class="opts"><label class="opt"><input type="radio" name="q105_8" value="3" autocomplete="off"><span>Названием проекта</span></label><label class="opt"><input type="radio" name="q105_8" value="0" autocomplete="off" data-ok><span>Данными и пользователями</span></label><label class="opt"><input type="radio" name="q105_8" value="2" autocomplete="off"><span>Числом файлов</span></label><label class="opt"><input type="radio" name="q105_8" value="1" autocomplete="off"><span>Языком программирования</span></label></div><p class="quiz-why" hidden>Копия против рабочих.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="10" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">10</span>Что делают перед миграцией?</p><div class="opts"><label class="opt"><input type="radio" name="q105_9" value="1" autocomplete="off"><span>Удаляют журналы</span></label><label class="opt"><input type="radio" name="q105_9" value="0" autocomplete="off" data-ok><span>Резервную копию</span></label><label class="opt"><input type="radio" name="q105_9" value="3" autocomplete="off"><span>Отключают тесты</span></label><label class="opt"><input type="radio" name="q105_9" value="2" autocomplete="off"><span>Меняют пароли</span></label></div><p class="quiz-why" hidden>Защита данных.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="multi" data-correct="4" data-q="11" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">11</span>Какие ошибки внедрения типичны?</p><div class="opts"><label class="opt"><input type="checkbox" name="q105_10" value="2" autocomplete="off" data-ok><span>Нет отката</span></label><label class="opt"><input type="checkbox" name="q105_10" value="4" autocomplete="off"><span>Проверка на копии</span></label><label class="opt"><input type="checkbox" name="q105_10" value="1" autocomplete="off" data-ok><span>Проверка на пустой базе</span></label><label class="opt"><input type="checkbox" name="q105_10" value="0" autocomplete="off" data-ok><span>Нет резервной копии</span></label><label class="opt"><input type="checkbox" name="q105_10" value="5" autocomplete="off"><span>План отката</span></label><label class="opt"><input type="checkbox" name="q105_10" value="3" autocomplete="off" data-ok><span>Нет дымовых проверок</span></label></div><p class="quiz-why" hidden>Остальное хорошо.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="12" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">12</span>Что должно быть в плане внедрения?</p><div class="opts"><label class="opt"><input type="radio" name="q105_11" value="2" autocomplete="off"><span>Только пароль</span></label><label class="opt"><input type="radio" name="q105_11" value="1" autocomplete="off"><span>Только дата</span></label><label class="opt"><input type="radio" name="q105_11" value="3" autocomplete="off"><span>Только список файлов</span></label><label class="opt"><input type="radio" name="q105_11" value="0" autocomplete="off" data-ok><span>Шаги, ответственные и проверки</span></label></div><p class="quiz-why" hidden>Полный план.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="13" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">13</span>Зачем проверять миграцию на копии данных?</p><div class="opts"><label class="opt"><input type="radio" name="q105_12" value="3" autocomplete="off"><span>Это заменяет откат</span></label><label class="opt"><input type="radio" name="q105_12" value="2" autocomplete="off"><span>Так требует Git</span></label><label class="opt"><input type="radio" name="q105_12" value="1" autocomplete="off"><span>Копия быстрее</span></label><label class="opt"><input type="radio" name="q105_12" value="0" autocomplete="off" data-ok><span>Реальные данные выявляют проблемы</span></label></div><p class="quiz-why" hidden>Приближение к работе.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="short" data-q="14" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">14</span>Как называют быструю проверку после переноса?</p><input type="text" class="short-answer" data-answers="[&quot;дымовая&quot;, &quot;smoke&quot;]" placeholder="Введите ответ" autocomplete="off" spellcheck="false" aria-label="Как называют быструю проверку после переноса?"><p class="quiz-why" hidden>Основные сценарии.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="15" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">15</span>Что такое внедрение?</p><div class="opts"><label class="opt"><input type="radio" name="q105_14" value="1" autocomplete="off"><span>Написание кода</span></label><label class="opt"><input type="radio" name="q105_14" value="2" autocomplete="off"><span>Создание ветки</span></label><label class="opt"><input type="radio" name="q105_14" value="0" autocomplete="off" data-ok><span>Перенос системы в рабочую среду</span></label><label class="opt"><input type="radio" name="q105_14" value="3" autocomplete="off"><span>Запуск тестов</span></label></div><p class="quiz-why" hidden>Перенос к пользователям.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><p class="quiz-note quiz-submit-note" data-quiz-note hidden></p><div class="quiz-result" data-quiz-result hidden aria-live="polite"><span class="label">Результат теста</span><h3>Тест завершён</h3><p class="modal-name-line">ФИО: <b data-student-name></b></p><p class="modal-result" data-modal-result></p><p class="modal-result" data-modal-wrong></p><dl class="modal-times"><div><dt>Время выполнения теста</dt><dd data-test-time>00:00</dd></div><div><dt>Время просмотра лекции</dt><dd data-view-time>00:00</dd></div></dl></div></div></div>
+<li>страница открывается;</li>
+<li>вход работает;</li>
+<li>главный сценарий проходит;</li>
+<li>данные видны;</li>
+<li>журналы пишутся;</li>
+<li>внешняя интеграция отвечает.</li>
+</ul>
+<p>Проверку выполняют сразу после переноса, до сообщения пользователям. Если проверка не прошла, пользователи ещё не начали работу, и откат дешевле.</p>
+<h3>Что смотреть после запуска</h3>
+<p>Наблюдение после внедрения отвечает на вопросы:</p>
+<ul>
+<li>растёт ли число ошибок;</li>
+<li>не увеличилось ли время ответа;</li>
+<li>не появились ли ошибки миграции в журналах;</li>
+<li>не жалуются ли пользователи на конкретный сценарий;</li>
+<li>не выросли ли очереди и блокировки.</li>
+</ul>
+<p>DORA предлагает измерять <strong>время восстановления после неудачного развёртывания</strong> и <strong>долю неудачных изменений</strong> <a href="https://dora.dev/guides/dora-metrics/">DORA</a>. Эти метрики полезны и после учебного внедрения: они показывают, сколько времени команда тратит на возврат к работе.</p>
+<h3>Пост-внедренческий разбор</h3>
+<p>Через день полезно ответить на четыре вопроса:</p>
+<ol>
+<li>Что прошло как планировали?</li>
+<li>Что заняло больше времени?</li>
+<li>Какая проверка не сработала?</li>
+<li>Что изменим в следующем внедрении?</li>
+</ol>
+<p>Разбор не ищет виноватого. Он ищет шаг, который не дал информации.</p>
+<h3>Если окно сорвано</h3>
+<p>Иногда миграция идёт дольше окна или проверка не проходит. Решение принимают по плану, а не по надежде.</p>
+<p>Если откат возможен и укладывается в оставшееся время, выполняется откат. Если откат невозможен, система остаётся в промежуточном состоянии, и команда сообщает пользователям новое время. Промежуточное состояние должно быть безопасным: лучше ограниченный функционал, чем потеря данных.</p>
+<p>После срыва окна обязательно остаётся запись: на каком шаге остановились, какие данные изменились, что уже откатили. Без этой записи следующая попытка начнётся с догадок.</p>
+<h2 id="чек-лист-внедрения"><span class="num">10</span>Чек-лист внедрения</h2>
+<ol>
+<li>Известно, чем рабочая среда отличается от тестовой?</li>
+<li>Есть копия рабочих данных и проверено восстановление?</li>
+<li>Миграция проверена на копии и измерена по времени?</li>
+<li>Повторный запуск миграции безопасен?</li>
+<li>Предыдущий артефакт сохранён?</li>
+<li>План отката проверен на копии?</li>
+<li>Определены критерии отката?</li>
+<li>Назначены роли и ответственный за решение?</li>
+<li>Пользователи предупреждены?</li>
+<li>Дымовые проверки подготовлены?</li>
+<li>Журналы и метрики доступны после запуска?</li>
+<li>Есть контакт для сообщений о проблемах?</li>
+</ol>
+<p>Если на любой вопрос нет ответа, внедрение ещё не готово.</p>
+<h2 id="итоги"><span class="num">11</span>Итоги</h2>
+<ul>
+<li>Внедрение переводит систему в новое состояние: код, конфигурацию, данные и права.</li>
+<li>Тестовая среда помогает только тогда, когда известно, чем она отличается от рабочей.</li>
+<li>Миграцию проверяют на копии данных и измеряют по времени.</li>
+<li>Стратегия переключения выбирается по цене ошибки и скорости отката.</li>
+<li>Откат готовят и проверяют до внедрения, а не во время сбоя.</li>
+<li>Резервная копия существует тогда, когда из неё восстановились.</li>
+<li>Опасные команды и глобальные конфигурации требуют предохранителей и этапности.</li>
+<li>Дымовые проверки и сообщение пользователям являются частью внедрения.</li>
+</ul>
+<h2 id="источники"><span class="num">12</span>Источники</h2>
+<ol>
+<li>ISO/IEC/IEEE 12207:2026. Systems and software engineering. Software life cycle processes. https://www.iso.org/standard/90219.html</li>
+<li>ITIL 4 Foundation. PeopleCert, Axelos. https://www.peoplecert.org/browse-certifications/it-governance-and-service-management/ITIL-1/itil-4-foundation</li>
+<li>Google SRE. Release Engineering. https://sre.google/sre-book/release-engineering/</li>
+<li>GitLab. Postmortem of database outage of January 31, 2017. https://about.gitlab.com/blog/2017/02/10/postmortem-of-database-outage-of-january-31/</li>
+<li>Amazon Web Services. Summary of the Amazon S3 Service Disruption in the Northern Virginia Region, 2017. https://aws.amazon.com/message/41926/</li>
+<li>Cloudflare. Details of the Cloudflare outage on July 2, 2019. https://blog.cloudflare.com/details-of-the-cloudflare-outage-on-july-2-2019/</li>
+<li>GitHub Actions. Deploying with GitHub Actions. https://docs.github.com/en/actions/deployment/about-deployments/deploying-with-github-actions</li>
+<li>DORA. Software delivery performance metrics. https://dora.dev/guides/dora-metrics/</li>
+</ol>
+<div class="quiz" data-quiz data-quiz-guard><div class="quiz-who"><label class="quiz-who-label"><span>ФИО</span><input type="text" class="quiz-name" data-quiz-name maxlength="80" autocomplete="off" placeholder="Иванов Иван Иванович"></label><span class="quiz-attempts" data-quiz-attempts>две попытки на лекцию</span><span class="quiz-note" data-who-note hidden></span></div><div class="quiz-q" data-type="single" data-correct="1" data-q="1"><p class="quiz-p"><span class="quiz-no" aria-hidden="true">01</span>Что такое внедрение?</p><div class="opts"><label class="opt"><input type="radio" name="q276_0" value="1" autocomplete="off"><span>Написание кода</span></label><label class="opt"><input type="radio" name="q276_0" value="2" autocomplete="off"><span>Создание ветки Git</span></label><label class="opt"><input type="radio" name="q276_0" value="0" autocomplete="off" data-ok><span>Перенос системы в среду, где ей пользуются</span></label><label class="opt"><input type="radio" name="q276_0" value="3" autocomplete="off"><span>Запуск модульных тестов</span></label></div><p class="quiz-why" hidden>Внедрение включает данные, настройки и проверки.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="multi" data-correct="4" data-q="2" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">02</span>Какие стратегии переключения существуют?</p><div class="opts"><label class="opt"><input type="checkbox" name="q276_1" value="0" autocomplete="off" data-ok><span>Большой взрыв</span></label><label class="opt"><input type="checkbox" name="q276_1" value="3" autocomplete="off" data-ok><span>Постепенное развёртывание</span></label><label class="opt"><input type="checkbox" name="q276_1" value="4" autocomplete="off"><span>Переписывание истории Git</span></label><label class="opt"><input type="checkbox" name="q276_1" value="2" autocomplete="off" data-ok><span>Синий и зелёный</span></label><label class="opt"><input type="checkbox" name="q276_1" value="1" autocomplete="off" data-ok><span>Канареечное развёртывание</span></label><label class="opt"><input type="checkbox" name="q276_1" value="5" autocomplete="off"><span>Отключение резервных копий</span></label></div><p class="quiz-why" hidden>Остальное не стратегии внедрения.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="short" data-q="3" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">03</span>Как называют быструю проверку после переноса?</p><input type="text" class="short-answer" data-answers="[&quot;дымовая&quot;, &quot;smoke&quot;, &quot;дымовая проверка&quot;]" placeholder="Введите ответ" autocomplete="off" spellcheck="false" aria-label="Как называют быструю проверку после переноса?"><p class="quiz-why" hidden>Основные сценарии.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="4" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">04</span>Что такое откат?</p><div class="opts"><label class="opt"><input type="radio" name="q276_3" value="3" autocomplete="off"><span>Удаление проекта</span></label><label class="opt"><input type="radio" name="q276_3" value="0" autocomplete="off" data-ok><span>Возврат предыдущей версии и согласованных данных</span></label><label class="opt"><input type="radio" name="q276_3" value="2" autocomplete="off"><span>Повторная миграция</span></label><label class="opt"><input type="radio" name="q276_3" value="1" autocomplete="off"><span>Новая функция</span></label></div><p class="quiz-why" hidden>Откат возвращает рабочее состояние.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="5" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">05</span>Зачем проверять миграцию на копии рабочих данных?</p><div class="opts"><label class="opt"><input type="radio" name="q276_4" value="2" autocomplete="off"><span>Это заменяет резервное копирование</span></label><label class="opt"><input type="radio" name="q276_4" value="3" autocomplete="off"><span>Так требует Git</span></label><label class="opt"><input type="radio" name="q276_4" value="1" autocomplete="off"><span>Копия работает быстрее</span></label><label class="opt"><input type="radio" name="q276_4" value="0" autocomplete="off" data-ok><span>Реальные данные выявляют проблемы, которых нет на пустой базе</span></label></div><p class="quiz-why" hidden>Объём и значения данных влияют на результат.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="multi" data-correct="4" data-q="6" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">06</span>Что должно быть в плане внедрения?</p><div class="opts"><label class="opt"><input type="checkbox" name="q276_5" value="3" autocomplete="off" data-ok><span>Сообщение пользователям</span></label><label class="opt"><input type="checkbox" name="q276_5" value="0" autocomplete="off" data-ok><span>Шаги и проверки</span></label><label class="opt"><input type="checkbox" name="q276_5" value="5" autocomplete="off"><span>Личные заметки автора</span></label><label class="opt"><input type="checkbox" name="q276_5" value="1" autocomplete="off" data-ok><span>Ответственные</span></label><label class="opt"><input type="checkbox" name="q276_5" value="4" autocomplete="off"><span>Пароль администратора в тексте</span></label><label class="opt"><input type="checkbox" name="q276_5" value="2" autocomplete="off" data-ok><span>Критерии отката</span></label></div><p class="quiz-why" hidden>Остальное не план.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="7" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">07</span>Что показал случай Cloudflare?</p><div class="opts"><label class="opt"><input type="radio" name="q276_6" value="1" autocomplete="off"><span>Конфигурация не требует проверки</span></label><label class="opt"><input type="radio" name="q276_6" value="3" autocomplete="off"><span>Откат конфигурации невозможен</span></label><label class="opt"><input type="radio" name="q276_6" value="2" autocomplete="off"><span>Тесты всегда находят проблемы с процессором</span></label><label class="opt"><input type="radio" name="q276_6" value="0" autocomplete="off" data-ok><span>Изменение конфигурации может глобально повлиять на всех за минуты</span></label></div><p class="quiz-why" hidden>Конфигурация является частью релиза.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="8" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">08</span>Что такое дымовая проверка?</p><div class="opts"><label class="opt"><input type="radio" name="q276_7" value="3" autocomplete="off"><span>Сборка артефакта</span></label><label class="opt"><input type="radio" name="q276_7" value="2" autocomplete="off"><span>Проверка стиля кода</span></label><label class="opt"><input type="radio" name="q276_7" value="1" autocomplete="off"><span>Полный прогон всех тестов</span></label><label class="opt"><input type="radio" name="q276_7" value="0" autocomplete="off" data-ok><span>Быстрая проверка, что система жива</span></label></div><p class="quiz-why" hidden>Она выполняется сразу после переноса.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="short" data-q="9" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">09</span>Как называют возврат предыдущей версии?</p><input type="text" class="short-answer" data-answers="[&quot;откат&quot;, &quot;rollback&quot;]" placeholder="Введите ответ" autocomplete="off" spellcheck="false" aria-label="Как называют возврат предыдущей версии?"><p class="quiz-why" hidden>Возврат к рабочему состоянию.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="10" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">10</span>Что делают перед миграцией?</p><div class="opts"><label class="opt"><input type="radio" name="q276_9" value="1" autocomplete="off"><span>Удаляют журналы</span></label><label class="opt"><input type="radio" name="q276_9" value="0" autocomplete="off" data-ok><span>Резервную копию и проверку восстановления</span></label><label class="opt"><input type="radio" name="q276_9" value="3" autocomplete="off"><span>Отключают проверки</span></label><label class="opt"><input type="radio" name="q276_9" value="2" autocomplete="off"><span>Меняют пароли пользователей</span></label></div><p class="quiz-why" hidden>Без копии данные не восстановить.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="11" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">11</span>Что означает стратегия «синий и зелёный»?</p><div class="opts"><label class="opt"><input type="radio" name="q276_10" value="2" autocomplete="off"><span>Два релиза выходят одновременно</span></label><label class="opt"><input type="radio" name="q276_10" value="0" autocomplete="off" data-ok><span>Две среды, трафик переключается с одной на другую</span></label><label class="opt"><input type="radio" name="q276_10" value="3" autocomplete="off"><span>Две базы данных всегда пусты</span></label><label class="opt"><input type="radio" name="q276_10" value="1" autocomplete="off"><span>Два разработчика работают над одной задачей</span></label></div><p class="quiz-why" hidden>Старая среда остаётся для отката.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="short" data-q="12" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">12</span>Что делают до миграции для защиты данных?</p><input type="text" class="short-answer" data-answers="[&quot;резервная копия&quot;, &quot;бэкап&quot;, &quot;backup&quot;]" placeholder="Введите ответ" autocomplete="off" spellcheck="false" aria-label="Что делают до миграции для защиты данных?"><p class="quiz-why" hidden>Копия и проверка восстановления.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="multi" data-correct="4" data-q="13" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">13</span>Что проверяют после переноса?</p><div class="opts"><label class="opt"><input type="checkbox" name="q276_12" value="0" autocomplete="off" data-ok><span>Страница открывается</span></label><label class="opt"><input type="checkbox" name="q276_12" value="4" autocomplete="off"><span>Цвет логотипа</span></label><label class="opt"><input type="checkbox" name="q276_12" value="3" autocomplete="off" data-ok><span>Данные видны</span></label><label class="opt"><input type="checkbox" name="q276_12" value="5" autocomplete="off"><span>Имя автора</span></label><label class="opt"><input type="checkbox" name="q276_12" value="1" autocomplete="off" data-ok><span>Вход работает</span></label><label class="opt"><input type="checkbox" name="q276_12" value="2" autocomplete="off" data-ok><span>Главный сценарий проходит</span></label></div><p class="quiz-why" hidden>Остальное не дымовые проверки.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="14" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">14</span>Почему резервные копии GitLab не помогли?</p><div class="opts"><label class="opt"><input type="radio" name="q276_13" value="2" autocomplete="off"><span>Их удалил пользователь</span></label><label class="opt"><input type="radio" name="q276_13" value="0" autocomplete="off" data-ok><span>Их не проверяли восстановлением, и <code>pg_dump</code> завершался с ошибкой</span></label><label class="opt"><input type="radio" name="q276_13" value="1" autocomplete="off"><span>Они были зашифрованы</span></label><label class="opt"><input type="radio" name="q276_13" value="3" autocomplete="off"><span>Они хранились в Git</span></label></div><p class="quiz-why" hidden>Копии существовали только формально.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="15" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">15</span>Что стало причиной сбоя Amazon S3 в 2017 году?</p><div class="opts"><label class="opt"><input type="radio" name="q276_14" value="3" autocomplete="off"><span>Отключение электричества</span></label><label class="opt"><input type="radio" name="q276_14" value="2" autocomplete="off"><span>Ошибка в языке Python</span></label><label class="opt"><input type="radio" name="q276_14" value="1" autocomplete="off"><span>Вирус в сети</span></label><label class="opt"><input type="radio" name="q276_14" value="0" autocomplete="off" data-ok><span>Неверный параметр удалил больше серверов, чем планировалось</span></label></div><p class="quiz-why" hidden>Опасная команда не имела предохранителя.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><p class="quiz-note quiz-submit-note" data-quiz-note hidden></p><div class="quiz-result" data-quiz-result hidden aria-live="polite"><span class="label">Результат теста</span><h3>Тест завершён</h3><p class="modal-name-line">ФИО: <b data-student-name></b></p><p class="modal-result" data-modal-result></p><p class="modal-result" data-modal-wrong></p><dl class="modal-times"><div><dt>Время выполнения теста</dt><dd data-test-time>00:00</dd></div><div><dt>Время просмотра лекции</dt><dd data-view-time>00:00</dd></div></dl></div></div></div>
 </div></article><nav class="pager"><a class="" href="28-prakt-11.html"><span>← Предыдущее занятие</span>Практика 11. Выпуск версии</a><a class="next" style="text-align:right;margin-left:auto" href="30-lek-19.html"><span>Следующее занятие →</span>Лекция 19. Сопровождение и технический долг</a></nav></main>
 <div class="modal" data-modal="warn" hidden>
   <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="warn-title">

@@ -888,22 +888,137 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <canvas class="shader-bg" width="820" height="300" aria-hidden="true" style="background:linear-gradient(135deg,#08090D,#1D9E75 58%,#08090D)"></canvas>
 <div class="badges"><span class="pill dark">Занятие 35</span><span class="pill">Технология разработки ПО</span></div>
 <div class="hero-panel"><h1>Сопровождение и технический долг</h1><p class="dek">Сопровождение держит систему рабочей. Разберём инциденты, SLA, технический долг и рефакторинг.</p></div>
-<div class="glyph" aria-hidden="true">Л19</div></header><section class="outcomes"><b>После этого занятия вы сможете</b><ul><li>Различать инцидент и запрос на изменение</li><li>Объяснять влияние технического долга</li><li>Выбирать момент для рефакторинга</li><li>Оценивать работу сопровождения</li></ul></section><nav class="toc"><b>Содержание занятия</b><ol><li><a href="#система-работает-но">Система работает, но</a></li><li><a href="#инцидент-и-запрос">Инцидент и запрос</a></li><li><a href="#sla">SLA</a></li><li><a href="#диагностика-и-обход">Диагностика и обход</a></li><li><a href="#разбор-инцидента">Разбор инцидента</a></li><li><a href="#технический-долг">Технический долг</a></li><li><a href="#рефакторинг-в-сопровождении">Рефакторинг в сопровождении</a></li><li><a href="#метрики-сопровождения">Метрики сопровождения</a></li><li><a href="#где-сопровождение-ломается">Где сопровождение ломается</a></li><li><a href="#итоги">Итоги</a></li></ol></nav><article class="prose"><h2 id="система-работает-но"><span class="num">01</span>Система работает, но</h2>
+<div class="glyph" aria-hidden="true">Л19</div></header><section class="outcomes"><b>После этого занятия вы сможете</b><ul><li>Различать инцидент, запрос на обслуживание и запрос на изменение</li><li>Объяснять, как SLA задаёт порядок реакции</li><li>Проводить разбор инцидента без поиска виноватых</li><li>Оценивать технический долг и его влияние на работу</li><li>Выбирать момент для рефакторинга и измерять сопровождение</li></ul></section><nav class="toc"><b>Содержание занятия</b><ol><li><a href="#система-работает-но">Система работает, но</a></li><li><a href="#что-входит-в-сопровождение">Что входит в сопровождение</a></li><li><a href="#инцидент-запрос-и-sla">Инцидент, запрос и SLA</a></li><li><a href="#диагностика-обход-и-постмортем">Диагностика, обход и постмортем</a></li><li><a href="#технический-долг">Технический долг</a></li><li><a href="#три-случая-которые-показывают-цену-сопровождения">Три случая, которые показывают цену сопровождения</a></li><li><a href="#рефакторинг-в-сопровождении">Рефакторинг в сопровождении</a></li><li><a href="#метрики-сопровождения">Метрики сопровождения</a></li><li><a href="#чек-лист-сопровождения">Чек-лист сопровождения</a></li><li><a href="#итоги">Итоги</a></li><li><a href="#источники">Источники</a></li></ol></nav><article class="prose"><h2 id="система-работает-но"><span class="num">01</span>Система работает, но</h2>
 <p>После выпуска система работает. Пользователи просят новое поле, иногда падает отчёт, а в коде накопились обходы, о которых никто не помнит. Команда занята только срочными правками.</p>
 <p><strong>Сопровождение</strong> это работа после выпуска: исправления, поддержка пользователей, обновления и развитие.</p>
 <p>Главная мысль занятия: <strong>сопровождение это управляемая работа, а не поток случайных срочностей</strong>. Обращения нужно различать и планировать.</p>
-<h2 id="инцидент-и-запрос"><span class="num">02</span>Инцидент и запрос</h2>
-<p><strong>Инцидент</strong> это нарушение работы: система недоступна, данные потеряны, функция не работает.</p>
-<p><strong>Запрос на изменение</strong> это новая возможность или улучшение.</p>
-<p>Разница важна: инцидент обрабатывают по срочному порядку, запрос попадает в план. Если всё считать срочным, команда теряет управление.</p>
-<h2 id="sla"><span class="num">03</span>SLA</h2>
-<p><strong>SLA</strong> задаёт сроки реакции и решения по уровням важности.</p>
+<p>Обычно сопровождение представляет собой не один длинный этап, а несколько потоков работ. Один поток закрывает сбои, второй отвечает на вопросы, третий обновляет зависимости, четвёртый добавляет возможности. Если все потоки смешаны в одну очередь «сделать срочно», команда теряет представление, что важнее.</p>
+<p>Сопровождение начинается не после релиза, а до него. Если при выпуске не передали инструкцию, журналы, контакты и известные ограничения, поддержка будет восстанавливать картину по обрывкам. Передача в эксплуатацию является частью процесса, а не формальностью.</p>
+<h2 id="что-входит-в-сопровождение"><span class="num">02</span>Что входит в сопровождение</h2>
+<p>Сопровождение включает несколько видов работ. Их полезно различать, потому что у них разная срочность и разный результат.</p>
+<table>
+<thead>
+<tr>
+<th>Вид</th>
+<th>Что делает</th>
+<th>Пример</th>
+<th>Результат</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>корректирующее</td>
+<td>исправляет ошибку</td>
+<td>отчёт падает на пустом периоде</td>
+<td>исправление и тест</td>
+</tr>
+<tr>
+<td>адаптивное</td>
+<td>приспосабливает к среде</td>
+<td>обновление библиотеки, смена API</td>
+<td>совместимая версия</td>
+</tr>
+<tr>
+<td>совершенствующее</td>
+<td>улучшает поведение</td>
+<td>ускорение запроса, новый фильтр</td>
+<td>изменение и метрика</td>
+</tr>
+<tr>
+<td>профилактическое</td>
+<td>предотвращает сбой</td>
+<td>резервное копирование, мониторинг</td>
+<td>снижение риска</td>
+</tr>
+</tbody>
+</table>
+<p>Эти четыре вида описаны в своде знаний по программной инженерии и в стандартах жизненного цикла <a href="https://www.computer.org/education/bodies-of-knowledge/software-engineering/v4">SWEBOK v4</a>. Разделение помогает ответить на вопрос «что мы сейчас делаем»: лечим ошибку, подстраиваемся под среду, улучшаем продукт или предотвращаем будущую проблему.</p>
+<p>Стандарт ISO/IEC/IEEE 12207:2026 включает процессы эксплуатации и сопровождения в жизненный цикл программной системы <a href="https://www.iso.org/standard/90219.html">ISO/IEC/IEEE 12207:2026</a>. Сопровождение не является чем-то внешним по отношению к инженерии. Это такая же работа с требованиями, проверками и артефактами, как разработка.</p>
+<h3>Чем сопровождение отличается от разработки</h3>
+<p>Разработка часто начинается с чистого листа или с известной версии. Сопровождение начинается с работающей системы, у которой есть пользователи, данные и история решений.</p>
+<p>Отсюда следуют ограничения:</p>
+<ul>
+<li>нельзя остановить систему на неделю, чтобы переписать модуль;</li>
+<li>нельзя менять формат данных без миграции;</li>
+<li>нельзя игнорировать обращения пользователей на время рефакторинга;</li>
+<li>нельзя считать, что автор модуля доступен и всё помнит.</li>
+</ul>
+<p>Сопровождение требует более аккуратной работы с совместимостью. Новое поведение должно появляться постепенно, а старое должно какое-то время продолжать работать.</p>
+<h3>Почему сопровождение недооценивают</h3>
+<p>Разработку видно: появляются экраны, функции, демонстрации. Сопровождение почти не видно, пока система работает. Его ценность замечают в момент сбоя, когда выясняется, что журналов нет, копия не восстанавливается, а ответственный в отпуске.</p>
+<p>Недооценка проявляется в планировании. Команда обещает новую функцию, не оставляя времени на обновление зависимостей и разбор инцидентов. Через несколько месяцев скорость падает, потому что каждая правка требует обхода старых проблем.</p>
+<p>Сопровождение нужно планировать как отдельный поток работ. У него есть бюджет времени, приоритеты и метрики. Иначе оно занимает всё доступное время, но не даёт предсказуемого результата.</p>
+<h3>Бюджет сопровождения</h3>
+<p>Бюджет можно задать в часах или в доле времени команды. Например, договориться, что два дня в неделю уходят на инциденты, обновления и разбор, а три дня на плановые изменения. Если инцидентов больше, это видно по перерасходу, и его обсуждают, а не прячут.</p>
+<p>Бюджет не должен быть жёстким настолько, чтобы критический сбой ждал своей очереди. Он нужен как ориентир: сколько времени команда реально тратит на поддержание системы. Без ориентира сопровождение съедает время незаметно, а плановые работы постоянно переносятся.</p>
+<p>Полезно вести простой журнал: дата, тип работы, сколько времени заняло. Через месяц видно, что именно отнимает время. Часто оказывается, что значительная часть уходит не на исправления, а на ответы пользователям и повторяющиеся обходы.</p>
+<figure class="figure" data-fig="maintenance-loop" data-one="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"><iframe title="Figure 1: maintenance-loop" scrolling="no"></iframe><figcaption>Цикл сопровождения: обращение, классификация, исправление и разбор. Ниже SLA и технический долг.</figcaption></figure>
+
+<p>Схема показывает цикл, но не показывает очередь. В реальной работе несколько обращений конкурируют за одно и то же время. Классификация нужна, чтобы очередь была понятной.</p>
+<h3>Передача системы в сопровождение</h3>
+<p>Перед передачей полезно ответить на вопросы:</p>
+<ul>
+<li>где журналы и как их читать;</li>
+<li>какие проверки запускаются автоматически;</li>
+<li>как сделать резервную копию и восстановить её;</li>
+<li>какие известные ограничения и обходы;</li>
+<li>кто отвечает за внешние зависимости;</li>
+<li>как сообщить пользователям о сбое.</li>
+</ul>
+<p>Ответы не обязаны быть длинным документом. Достаточно README для поддержки и короткой записи известных проблем. Если этих ответов нет, сопровождение начинается с расследования.</p>
+<div class="gate-step" data-gate>
+<p class="gate-action"><button type="button" class="gate-btn" aria-expanded="false"><span class="gate-q" aria-hidden="true">?</span><span>Почему запрос на новую функцию нельзя обрабатывать по правилам инцидента?</span></button></p>
+<div class="gate-content" hidden><h2 id="инцидент-запрос-и-sla"><span class="num">03</span>Инцидент, запрос и SLA</h2>
+<p><strong>Инцидент</strong> это нарушение работы: система недоступна, данные потеряны, функция не работает. <strong>Запрос на обслуживание</strong> это обычная просьба: восстановить доступ, выдать отчёт, изменить настройку. <strong>Запрос на изменение</strong> это новая возможность или улучшение.</p>
+<p>Разница важна, потому что у каждого типа свой порядок.</p>
+<table>
+<thead>
+<tr>
+<th>Тип</th>
+<th>Что это</th>
+<th>Порядок</th>
+<th>Результат</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>инцидент</td>
+<td>работа нарушена</td>
+<td>срочный, по важности</td>
+<td>восстановление</td>
+</tr>
+<tr>
+<td>запрос на обслуживание</td>
+<td>стандартная операция</td>
+<td>по регламенту</td>
+<td>выполненная просьба</td>
+</tr>
+<tr>
+<td>запрос на изменение</td>
+<td>улучшение или новая функция</td>
+<td>план и оценка</td>
+<td>изменение продукта</td>
+</tr>
+<tr>
+<td>проблема</td>
+<td>причина повторяющихся инцидентов</td>
+<td>расследование</td>
+<td>устранение причины</td>
+</tr>
+</tbody>
+</table>
+<p>Если всё считать срочным, команда теряет управление. Новая функция, которую обещали в следующем месяце, не должна вытеснять восстановление доступа. Но и обратное неверно: инцидент не должен навсегда вытеснять плановое улучшение.</p>
+<p>В ITIL 4 инцидент и проблема разведены: incident management восстанавливает услугу, problem management ищет причину и предотвращает повторение <a href="https://www.peoplecert.org/browse-certifications/it-governance-and-service-management/ITIL-1/itil-4-foundation">ITIL 4 Foundation</a>. Это различие экономит время. Во время сбоя команда сначала возвращает работу, а причину разбирает позже, когда есть данные.</p>
+<h3>SLA, SLO и ожидания</h3>
+<p><strong>SLA</strong> (service level agreement) это соглашение об уровне услуги. SLA задаёт сроки реакции и решения по уровням важности. <strong>SLO</strong> (service level objective) это внутренняя цель, например «95 процентов запросов быстрее двух секунд». SLA заключают с пользователем, SLO используют внутри команды.</p>
+<p>SLA не обещает исправить всё мгновенно. Он задаёт порядок и ожидания.</p>
 <table>
 <thead>
 <tr>
 <th>Уровень</th>
 <th>Пример</th>
 <th>Реакция</th>
+<th>Решение</th>
 </tr>
 </thead>
 <tbody>
@@ -911,55 +1026,342 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <td>критический</td>
 <td>система недоступна</td>
 <td>сразу</td>
+<td>до восстановления</td>
 </tr>
 <tr>
 <td>высокий</td>
 <td>ключевая функция не работает</td>
 <td>в течение часа</td>
+<td>в тот же день</td>
 </tr>
 <tr>
 <td>средний</td>
 <td>ошибка с обходом</td>
 <td>в течение дня</td>
+<td>в плане</td>
 </tr>
 <tr>
 <td>низкий</td>
 <td>косметическая проблема</td>
 <td>в плане</td>
+<td>по приоритету</td>
 </tr>
 </tbody>
 </table>
-<p>SLA не обещает исправить всё мгновенно. Он задаёт порядок и ожидания.</p>
-<figure class="figure" data-fig="maintenance-loop" data-one="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"><iframe title="Figure 1: maintenance-loop" scrolling="no"></iframe><figcaption>Цикл сопровождения: обращение, классификация, исправление и разбор. Ниже SLA и технический долг.</figcaption></figure>
+<p>Числа в таблице примерные. В учебном проекте они могут быть другими. Важно, чтобы уровни были определены до инцидента, а не придумывались в момент сбоя.</p>
+<p>SLA без возможности измерить время бесполезен. Нужны часы, журнал обращений и отметка, когда работа восстановлена. Если время считают по памяти, соглашение превращается в пожелание.</p>
+<h3>Что делает SLA рабочим</h3>
+<p>Соглашение работает, когда его можно проверить. Полезно определить:</p>
+<ul>
+<li>кто владеет каждым уровнем важности;</li>
+<li>в какой момент запускаются и останавливаются часы;</li>
+<li>что считается восстановлением работы;</li>
+<li>какие события не входят в срок, например плановые работы;</li>
+<li>когда соглашение пересматривают.</li>
+</ul>
+<p>Без владельца SLA остаётся текстом. Без точки остановки часов время можно трактовать по-разному. Без исключений команда получает претензию за простой, который был согласован заранее.</p>
+<p>В учебном проекте достаточно договориться о трёх уровнях и записывать время в журнал обращений. Этого хватает, чтобы увидеть, где процесс не успевает.</p>
+<h3>Приоритет и важность</h3>
+<p>Важность и срочность не одно и то же. Ошибка в отчёте для бухгалтерии может быть важной, но не срочной, если отчёт нужен через неделю. Косметическая ошибка на главной странице может быть срочной, если она подрывает доверие пользователей.</p>
+<p>Приоритет складывается из влияния и срочности. Влияние отвечает на вопрос «сколько людей и процессов затронуто». Срочность отвечает на вопрос «как быстро наступит последствие».</p>
+<p>Полезно фиксировать не только уровень, но и обоснование. Через день команда сможет объяснить, почему обращение получило высокий приоритет, а не спорить о вкусах.</p>
+<h3>Эскалация</h3>
+<p>Если инцидент не решается в срок, он эскалируется. Эскалация не означает «передать и забыть». Она означает, что к работе подключается человек с большими правами или знаниями.</p>
+<p>Эскалация бывает функциональной и иерархической. Функциональная передаёт задачу специалисту. Иерархическая подключает руководителя, который может изменить приоритет или выделить ресурсы.</p>
+<p>Правила эскалации записывают заранее. Во время сбоя команда не должна искать, кому звонить.</p>
+<h3>Дежурство и передача смены</h3>
+<p>Если поддержка работает посменно, передача смены является отдельным риском. Незакрытый инцидент, незаписанный обход и забытое ограничение всплывают именно в момент передачи.</p>
+<p>Полезно оставлять короткую сводку:</p>
+<ul>
+<li>что происходит сейчас;</li>
+<li>какие обращения открыты;</li>
+<li>что уже пробовали;</li>
+<li>что нельзя делать;</li>
+<li>когда следующий контроль.</li>
+</ul>
+<p>Сводка не заменяет журнал, но помогает следующему человеку войти в контекст. Без неё дежурный начинает с чтения длинной переписки и повторяет уже проверенные гипотезы.</p>
+<h3>Очередь обращений</h3>
+<p>Очередь это не только список. У неё есть правила:</p>
+<ul>
+<li>что попадает вперёд;</li>
+<li>сколько времени можно держать обращение без ответа;</li>
+<li>кто может изменить приоритет;</li>
+<li>что делать с дубликатами;</li>
+<li>когда обращение закрывается.</li>
+</ul>
+<p>Дубликаты особенно мешают. Один сбой может породить десятки одинаковых сообщений. Если каждое считать отдельным инцидентом, команда тратит время на классификацию вместо исправления. Полезно связывать обращения с общей проблемой и сообщать пользователям, что проблема известна.</p>
+<figure class="figure" data-fig="triage-map" data-one="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"><iframe title="Figure 2: triage-map" scrolling="no"></iframe><figcaption>Выберите тип обращения: схема показывает первое действие, пример срока, ответственного и артефакт, который остаётся после работы.</figcaption></figure>
 
-<div class="gate-step" data-gate>
-<p class="gate-action"><button type="button" class="gate-btn" aria-expanded="false"><span class="gate-q" aria-hidden="true">?</span><span>Почему запрос на новую функцию нельзя обрабатывать по правилам инцидента?</span></button></p>
-<div class="gate-content" hidden><h2 id="диагностика-и-обход"><span class="num">04</span>Диагностика и обход</h2>
-<p>Сначала восстанавливают работу, потом ищут причину.</p>
-<p><strong>Обход</strong> временно снимает симптом: перезапуск, ручная операция, отключение функции.</p>
-<p>Обход фиксируют как технический долг. Иначе он остаётся навсегда.</p>
-<h2 id="разбор-инцидента"><span class="num">05</span>Разбор инцидента</h2>
-<p><strong>Постмортем</strong> разбирает инцидент без поиска виноватых:</p>
+<p>Схема подчёркивает: у разных обращений разный первый шаг. Инцидент начинается с восстановления, запрос на изменение с оценки, проблема с поиска причин.</p>
+<h3>Что делать, когда всё срочно</h3>
+<p>Иногда команда действительно получает несколько критических обращений одновременно. Тогда помогает не героизм, а порядок:</p>
+<ol>
+<li>определить, что затрагивает больше людей;</li>
+<li>восстановить минимальную работу, а не идеальное решение;</li>
+<li>сообщить пользователям, что происходит;</li>
+<li>зафиксировать, что отложено;</li>
+<li>вернуться к отложенному после стабилизации.</li>
+</ol>
+<p>Отложенное не должно исчезнуть. Если его не записать, оно вернётся как сюрприз.</p>
+<h2 id="диагностика-обход-и-постмортем"><span class="num">04</span>Диагностика, обход и постмортем</h2>
+<p>Сначала восстанавливают работу, потом ищут причину. Это не пренебрежение качеством, а порядок действий. Пользователю нужна работающая система, а не объяснение.</p>
+<p><strong>Обход</strong> временно снимает симптом: перезапуск, ручная операция, отключение функции. Обход фиксируют как технический долг. Иначе он остаётся навсегда.</p>
+<h3>Как описать инцидент</h3>
+<p>Хорошее описание отвечает на вопросы:</p>
+<ul>
+<li>что произошло;</li>
+<li>когда началось;</li>
+<li>кого затронуло;</li>
+<li>как обнаружили;</li>
+<li>что уже сделали;</li>
+<li>что известно о причине;</li>
+<li>что будет дальше.</li>
+</ul>
+<p>Описание не должно быть длинным. Во время сбоя важна скорость передачи информации, а не литературный стиль.</p>
+<p>Полезно разделять факты и гипотезы. «Система не отвечает» факт. «Вероятно, упала база» гипотеза. Если их смешать, следующая смена начнёт с неверного предположения.</p>
+<h3>Журналы и наблюдаемость</h3>
+<p>Журнал это не текст для чтения после сбоя, а источник фактов. Чтобы им пользоваться, нужны время, уровень, сообщение и контекст: идентификатор запроса, пользователь, модуль.</p>
+<p>Полезные правила:</p>
+<ul>
+<li>писать время в одном часовом поясе;</li>
+<li>не писать пароли и персональные данные;</li>
+<li>использовать уровни осмысленно;</li>
+<li>связывать запросы одним идентификатором;</li>
+<li>хранить журналы достаточно долго.</li>
+</ul>
+<p>Если в журнале только «ошибка», найти причину трудно. Если есть идентификатор запроса, можно проследить путь от входа до базы. Если есть время, можно сопоставить сбой с выпуском или изменением конфигурации.</p>
+<p>Наблюдаемость шире журналов. Она включает метрики, трассировки и проверки доступности. Для учебного проекта достаточно журнала, простой проверки «система отвечает» и счётчика ошибок. Этого хватает, чтобы не узнавать о сбое от пользователей.</p>
+<p>Важно проверять журналы до сбоя. Если формат нечитаемый или время сбито, во время инцидента будет не до настройки.</p>
+<h3>Обход и его цена</h3>
+<p>Обход полезен, когда он возвращает работу быстро. Он опасен, когда становится постоянным.</p>
+<p>Признаки опасного обхода:</p>
+<ul>
+<li>его выполняют вручную по памяти;</li>
+<li>он не записан в задаче;</li>
+<li>он скрывает ошибку от мониторинга;</li>
+<li>он требует прав, которых нет у дежурного;</li>
+<li>его нельзя отличить от нормальной работы.</li>
+</ul>
+<p>Обход без записи живёт дольше, чем проблема, которую он обходил. Через год никто не помнит, почему нельзя включать функцию или почему отчёт запускают дважды.</p>
+<h3>Постмортем</h3>
+<p><strong>Постмортем</strong> разбирает инцидент без поиска виноватых. Google описывает постмортем как письменную запись инцидента, его влияния, действий, причин и последующих мер <a href="https://sre.google/sre-book/postmortem-culture/">Google SRE, Postmortem Culture</a>.</p>
+<p>Хороший разбор отвечает на вопросы:</p>
 <ul>
 <li>что произошло;</li>
 <li>как обнаружили;</li>
 <li>сколько длилось;</li>
 <li>почему не заметили раньше;</li>
-<li>что изменим.</li>
+<li>какие условия сложились;</li>
+<li>что изменим;</li>
+<li>кто и когда проверит меры.</li>
 </ul>
-<p>Меры должны быть проверяемыми: не «быть внимательнее», а «добавить проверку и оповещение».</p>
-<h2 id="технический-долг"><span class="num">06</span>Технический долг</h2>
+<p>Меры должны быть проверяемыми. Не «быть внимательнее», а «добавить проверку и оповещение». Не «улучшить коммуникацию», а «обновить шаблон сообщения и назначить ответственного».</p>
+<p>Google выделяет типичные поводы для постмортема: заметное падение доступности, потеря данных, вмешательство дежурного, долгое восстановление, отказ мониторинга. Поводы определяют до инцидента, чтобы не спорить, нужен ли разбор.</p>
+<h3>Без виноватых</h3>
+<p>Поиск виноватого кажется быстрым объяснением. На самом деле он ухудшает систему: люди начинают скрывать ошибки и не сообщать о проблемах.</p>
+<p>Без виноватых не означает без ответственности. Ответственность остаётся за действия и сроки. Меняется вопрос: не «кто ошибся», а «какие условия позволили ошибке дойти до пользователя».</p>
+<p>Пример. Инженер выполнил опасную команду не на том сервере. Виноватый найден. Но если приглашение сервера одинаковое, права полные, а подтверждения нет, следующий инженер повторит ошибку. Системное изменение полезнее личного выговора.</p>
+<h3>Меры после разбора</h3>
+<p>Меры делят на три группы.</p>
+<ul>
+<li><strong>Предотвращение</strong>: убрать условие сбоя.</li>
+<li><strong>Обнаружение</strong>: заметить сбой раньше.</li>
+<li><strong>Смягчение</strong>: уменьшить последствия.</li>
+</ul>
+<p>Хороший набор содержит все три. Если добавить только предотвращение, следующий неизвестный сбой останется незамеченным. Если добавить только оповещение, причина сохранится.</p>
+<p>У каждой меры есть владелец и срок. Без этого разбор превращается в список пожеланий.</p>
+<h3>Известные ошибки</h3>
+<p>Повторяющийся инцидент полезно превращать в известную ошибку: описание, условие возникновения, обход и план устранения. Тогда дежурный не исследует проблему заново, а применяет проверенное решение.</p>
+<p>Известная ошибка не является оправданием, чтобы её не исправлять. Она фиксирует текущее состояние и снижает стоимость реакции. Если ошибка перестала повторяться, запись закрывают или помечают устаревшей.</p>
+<p>В учебном проекте известные ошибки можно вести в том же файле, что и ограничения. Главное, чтобы запись была рядом с инструкцией, а не в личной переписке.</p></div>
+</div>
+
+<div class="gate-step" data-gate>
+<p class="gate-action"><button type="button" class="gate-btn" aria-expanded="false"><span class="gate-q" aria-hidden="true">?</span><span>Почему метрика «число закрытых обращений» может ухудшить сопровождение?</span></button></p>
+<div class="gate-content" hidden><h2 id="технический-долг"><span class="num">05</span>Технический долг</h2>
 <p><strong>Технический долг</strong> это отложенные решения, которые усложняют работу: обходы, дублирование, устаревшие библиотеки, отсутствие тестов.</p>
-<p>Долг бывает разумным: быстрый выпуск ради срока. Проблема начинается, когда долг не возвращают.</p>
-<p>Признаки:</p>
+<p>Долг бывает разумным. Команда может сознательно выпустить простое решение ради срока, зная, что вернётся к нему. Проблема начинается, когда долг не возвращают.</p>
+<p>Мартин Фаулер предложил делить долг по двум признакам: сознательный или непреднамеренный, разумный или рискованный <a href="https://martinfowler.com/bliki/TechnicalDebtQuadrant.html">Fowler, 2009</a>. Получается четыре вида.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Разумный</th>
+<th>Рискованный</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Сознательный</td>
+<td>знаем, зачем берём, и планируем вернуть</td>
+<td>знаем, что делаем плохо, но экономим время</td>
+</tr>
+<tr>
+<td>Непреднамеренный</td>
+<td>понимаем лучшее решение только после опыта</td>
+<td>не знаем, что решение создаёт проблему</td>
+</tr>
+</tbody>
+</table>
+<p>Сознательный разумный долг похож на кредит: он ускоряет выпуск, но имеет план возврата. Сознательный рискованный долг это «быстро и грязно» без плана. Непреднамеренный разумный долг возникает, когда команда учится и позже видит лучшее решение. Непреднамеренный рискованный долг это незнание практик, которое приводит к беспорядку.</p>
+<figure class="figure" data-fig="debt-quadrant" data-one="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"><iframe title="Figure 3: debt-quadrant" scrolling="no"></iframe><figcaption>Четыре вида технического долга: сознательный и непреднамеренный, разумный и рискованный. Подписи показывают, что делать с каждым видом.</figcaption></figure>
+
+<p>Квадрант полезен для разговора, а не для ярлыков. Он помогает объяснить, почему один долг можно отложить, а другой нужно гасить срочно.</p>
+<h3>Проценты по долгу</h3>
+<p>Долг проявляется не сразу. Сначала он экономит время. Потом начинает брать проценты:</p>
 <ul>
 <li>новая функция требует правок в пяти местах;</li>
 <li>тесты падают нестабильно;</li>
 <li>обходы никто не помнит;</li>
-<li>обновление библиотеки страшно запускать.</li>
+<li>обновление библиотеки страшно запускать;</li>
+<li>новый разработчик долго не может начать работу;</li>
+<li>ошибка повторяется в разных модулях.</li>
 </ul>
-<h2 id="рефакторинг-в-сопровождении"><span class="num">07</span>Рефакторинг в сопровождении</h2>
-<p>Рефакторинг планируют как обычную работу:</p>
+<p>Проценты измеряются временем. Если каждая новая функция требует всё больше правок, долг уже влияет на скорость. Если обновление зависимости занимает неделю, долг влияет на безопасность.</p>
+<h3>Почему долг не исчезает сам</h3>
+<p>Долг не исчезает, потому что его не видно в отчёте о выпуске. Новая функция замечена, исправление ошибки замечено, а лишняя сложность остаётся в коде. Пока участок работает, у команды нет причины трогать его.</p>
+<p>Ещё одна причина: долг распределён. Один обход в обработке ошибок кажется мелочью. Пять обходов в разных модулях создают систему, которую трудно понять. Никто не принимал решения «сделать плохо», решения принимались по отдельности.</p>
+<p>Поэтому долг нужно называть и записывать. Пока он живёт только в разговорах, его нельзя сравнить с другими задачами и нельзя запланировать возврат.</p>
+<h3>Как оценивать долг</h3>
+<p>Точной суммы в рублях обычно нет. Полезны качественные оценки:</p>
+<ul>
+<li><strong>влияние</strong>: какие сценарии страдают;</li>
+<li><strong>частота</strong>: как часто приходится обходить;</li>
+<li><strong>риск</strong>: что будет при сбое;</li>
+<li><strong>стоимость возврата</strong>: сколько времени нужно на исправление.</li>
+</ul>
+<p>Простая таблица на десять строк полезнее разговора «у нас много долга». В таблице видно, что именно мешает и что даст исправление.</p>
+<table>
+<thead>
+<tr>
+<th>Участок</th>
+<th>Проблема</th>
+<th>Влияние</th>
+<th>Частота</th>
+<th>Возврат</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>отчёты</td>
+<td>дублирование запроса</td>
+<td>медленно</td>
+<td>каждый день</td>
+<td>2 дня</td>
+</tr>
+<tr>
+<td>вход</td>
+<td>пароль в коде</td>
+<td>риск утечки</td>
+<td>постоянно</td>
+<td>4 часа</td>
+</tr>
+<tr>
+<td>экспорт</td>
+<td>обход без теста</td>
+<td>падает</td>
+<td>раз в неделю</td>
+<td>1 день</td>
+</tr>
+</tbody>
+</table>
+<p>Оценки приблизительные, но они позволяют выбрать первый шаг.</p>
+<h3>Когда возвращать долг</h3>
+<p>Долг возвращают, когда:</p>
+<ul>
+<li>участок часто меняется;</li>
+<li>ошибка уже влияет на пользователей;</li>
+<li>обновление зависимости закрывает уязвимость;</li>
+<li>новый разработчик не может разобраться;</li>
+<li>дальнейшее развитие упирается в старое решение.</li>
+</ul>
+<p>Долг можно не возвращать, если участок стабилен и почти не меняется. Разумный долг в редко используемом модуле может жить долго. Это не оправдание для беспорядка, но и не повод переписывать всё подряд.</p>
+<h3>Долг и безопасность</h3>
+<p>Устаревшая зависимость это не только неудобство. Она может содержать уязвимость, которую уже используют. Чем дольше библиотека не обновляется, тем больше патчей накапливается и тем сложнее переход.</p>
+<p>Отдельная проблема это компонент, который больше не поддерживается. Apache прямо указывает, что Log4j 1 достиг конца жизни в 2015 году и уязвимости после августа 2015 года для него не проверяются <a href="https://logging.apache.org/log4j/2.x/security.html">Apache Logging Services</a>. Если такой компонент остаётся в системе, он становится постоянным риском.</p>
+<h3>Долг в документации и знаниях</h3>
+<p>Долг бывает не только в коде. Устаревшая инструкция, отсутствие схемы данных и знание, которое живёт у одного человека, тоже создают проценты.</p>
+<p>Признаки такого долга:</p>
+<ul>
+<li>установка описана в переписке;</li>
+<li>схема базы существует только в виде таблиц;</li>
+<li>решение объясняется словами «так исторически сложилось»;</li>
+<li>только один человек знает, как перезапустить систему;</li>
+<li>новый участник неделю ищет точку входа.</li>
+</ul>
+<p>Возврат долга здесь дешевле, чем кажется. Достаточно записать решение, обновить README и проверить инструкцию на другом человеке. Это не требует переписывания кода, но снижает риск остановки работ.</p>
+<h2 id="три-случая-которые-показывают-цену-сопровождения"><span class="num">06</span>Три случая, которые показывают цену сопровождения</h2>
+<h3>Equifax, 2017</h3>
+<p>В 2017 году Equifax, одна из крупнейших кредитных организаций США, допустила утечку данных примерно 147 миллионов человек. Злоумышленники использовали уязвимость CVE-2017-5638 в Apache Struts. Исправление для уязвимости было доступно с марта 2017 года, но систему не обновили <a href="https://www.ftc.gov/legal-library/browse/cases-proceedings/172-3203-equifax-inc">FTC, 2019</a>.</p>
+<p>FTC в соглашении указала на недостатки в поддержании инвентаризации систем, управлении уязвимостями и обновлении программного обеспечения. Компания согласилась выплатить не менее 575 миллионов долларов, а общая сумма могла достичь 700 миллионов.</p>
+<p>Процессные причины:</p>
+<ul>
+<li>не было полного перечня систем и версий;</li>
+<li>исправление не было применено в срок;</li>
+<li>обновление зависело от ручной координации;</li>
+<li>не хватало проверки, что все экземпляры обновлены.</li>
+</ul>
+<p>Урок: <strong>сопровождение начинается с инвентаризации</strong>. Нельзя обновить то, о существовании чего не знаешь. Список компонентов, версий и ответственных является таким же артефактом, как код.</p>
+<h3>Log4Shell, 2021</h3>
+<p>В декабре 2021 года была опубликована уязвимость CVE-2021-44228 в библиотеке Log4j. Специально сформированное значение в журналируемом поле могло запустить загрузку и выполнение кода через JNDI. Уязвимость затронула версии с 2.0-beta9 до 2.14.1 и получила максимальную оценку опасности <a href="https://www.cisa.gov/news-events/news/apache-log4j-vulnerability-guidance">CISA</a>.</p>
+<p>Log4j используется в огромном числе приложений, включая те, где о библиотеке не думали. Поэтому организациям пришлось искать компонент по всем системам, включая внутренние и не подключённые к интернету. CISA выпустила экстренную директиву для федеральных агентств и рекомендации по обнаружению.</p>
+<p>Процессные причины:</p>
+<ul>
+<li>зависимость была глубоко в цепочке и не была видна в инвентаризации;</li>
+<li>обновление требовало проверки многих приложений;</li>
+<li>старые версии оставались в системах;</li>
+<li>не было готового плана массового патчинга.</li>
+</ul>
+<p>Урок: <strong>нужен список зависимостей и план действий на случай уязвимости</strong>. SBOM и автоматическая проверка версий не гарантируют безопасность, но сокращают время поиска. Без них команда узнаёт о проблеме из новостей и ищет её вручную.</p>
+<h3>Heartbleed, 2014</h3>
+<p>В апреле 2014 года была раскрыта уязвимость CVE-2014-0160 в OpenSSL, получившая название Heartbleed. Ошибка в обработке heartbeat-расширения TLS позволяла читать память сервера порциями до 64 КБ. В утечке могли оказаться ключи, пароли и содержимое сессий <a href="https://heartbleed.com/">Heartbleed</a>.</p>
+<p>Уязвимость была внесена в декабре 2011 года и попала в выпуск OpenSSL 1.0.1 в марте 2012 года. Исправленная версия 1.0.1g вышла 7 апреля 2014 года. Атака не оставляла явных следов в журналах, поэтому нельзя было точно сказать, использовали ли её против конкретного сервера.</p>
+<p>Процессные причины:</p>
+<ul>
+<li>библиотека была широко распространена, но поддерживалась ограниченными ресурсами;</li>
+<li>обновление зависело от дистрибутивов и поставщиков;</li>
+<li>не было быстрого способа узнать, какие системы используют уязвимую версию;</li>
+<li>после исправления требовалась замена ключей и паролей.</li>
+</ul>
+<p>Урок: <strong>сопровождение инфраструктурных зависимостей это часть продукта</strong>. Если библиотека поддерживается сообществом, у неё может не быть ресурсов на своевременный аудит. Команда должна знать, какие компоненты она использует, и иметь план обновления.</p>
+<table>
+<thead>
+<tr>
+<th>Случай</th>
+<th>Что не сработало</th>
+<th>Артефакт, которого не хватило</th>
+<th>Вывод</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Equifax</td>
+<td>обновление уязвимого компонента</td>
+<td>инвентаризация и контроль версий</td>
+<td>обновляй то, что учтено</td>
+</tr>
+<tr>
+<td>Log4Shell</td>
+<td>поиск зависимости по системам</td>
+<td>SBOM и план патчинга</td>
+<td>знай свою цепочку</td>
+</tr>
+<tr>
+<td>Heartbleed</td>
+<td>оценка распространения</td>
+<td>реестр компонентов и план замены ключей</td>
+<td>сопровождай зависимости</td>
+</tr>
+</tbody>
+</table>
+<p>Общее у трёх случаев одно: знание о компоненте или уязвимости не превратилось в действие. Не хватило не информации, а процесса, который доводит её до обновления.</p></div>
+</div>
+
+<div class="gate-step" data-gate>
+<p class="gate-action"><button type="button" class="gate-btn" aria-expanded="false"><span class="gate-q" aria-hidden="true">?</span><span>Как перенести эти уроки на сопровождение учебного проекта?</span></button></p>
+<div class="gate-content" hidden><h2 id="рефакторинг-в-сопровождении"><span class="num">07</span>Рефакторинг в сопровождении</h2>
+<p>Рефакторинг меняет устройство кода, не меняя поведения. В сопровождении он нужен, чтобы снижать долг, но опасен, потому что работает с живой системой.</p>
+<p>Правила:</p>
 <ol>
 <li>выбрать участок с частыми изменениями;</li>
 <li>закрыть его тестами;</li>
@@ -967,38 +1369,128 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <li>проверить;</li>
 <li>повторить.</li>
 </ol>
-<p>Рефакторинг всего проекта сразу останавливает выпуск и не гарантирует результата.</p>
-<h2 id="метрики-сопровождения"><span class="num">08</span>Метрики сопровождения</h2>
+<p>Рефакторинг всего проекта сразу останавливает выпуск и не гарантирует результата. Большое изменение трудно проверить, а ошибка затрагивает много сценариев.</p>
+<h3>Стратегия постепенной замены</h3>
+<p>Если модуль устарел, его не обязательно переписывать целиком. Можно окружить старую реализацию новым интерфейсом и постепенно переносить вызовы. Старая часть работает, новая получает всё больше ответственности.</p>
+<p>Такой подход требует совместимости. Оба пути должны давать одинаковый результат, пока идёт переход. Проверка сравнивает результаты старого и нового модуля.</p>
+<p>Постепенная замена снижает риск, но удлиняет срок. Она подходит, когда система работает и нельзя останавливать пользователей. Для учебного проекта можно выбрать один модуль и заменить его за несколько небольших изменений.</p>
+<h3>Рефакторинг и тесты</h3>
+<p>Без тестов рефакторинг превращается в переписывание с надеждой. Тесты фиксируют поведение, которое нужно сохранить. Если тестов нет, сначала добавляют проверки на главные сценарии, затем меняют код.</p>
+<p>Тесты не обязаны быть полными. Достаточно покрыть поведение, которое затрагивает изменение. Полное покрытие перед рефакторингом может занять больше времени, чем сам рефакторинг.</p>
+<h3>Рефакторинг и выпуск</h3>
+<p>Рефакторинг в сопровождении делают вместе с обычным выпуском, а не вместо него. Изменение проходит те же проверки: ревью, тесты, установку на тестовой среде.</p>
+<p>Если рефакторинг занимает несколько выпусков, полезно договориться о границе. Например, модуль считается заменённым, когда все вызовы идут через новый интерфейс, старый код удалён, а тесты покрывают оба пути.</p>
+<p>Не стоит смешивать рефакторинг и новую функцию в одном большом изменении. Если что-то сломается, будет непонятно, что именно стало причиной. Небольшие изменения дешевле проверять и откатывать.</p>
+<h3>Долг в учебном проекте</h3>
+<p>В учебном проекте долг часто выглядит так:</p>
 <ul>
-<li>время реакции;</li>
-<li>время решения;</li>
-<li>доля повторных обращений;</li>
-<li>число инцидентов;</li>
-<li>доля обходов без плана.</li>
+<li>пароль записан в коде;</li>
+<li>запросы собраны в одном файле;</li>
+<li>нет тестов на граничные случаи;</li>
+<li>старая библиотека;</li>
+<li>обход в обработке ошибок.</li>
 </ul>
-<p>Метрика «число закрытых обращений» без учёта качества поощряет закрывать, а не решать.</p>
-<h2 id="где-сопровождение-ломается"><span class="num">09</span>Где сопровождение ломается</h2>
-<p><strong>Всё срочно.</strong> Приоритеты не работают.</p>
-<p><strong>Обход без записи.</strong> Временное решение становится постоянным.</p>
-<p><strong>Нет разбора.</strong> Один и тот же инцидент повторяется.</p>
-<p><strong>Долг не возвращают.</strong> Скорость падает с каждым выпуском.</p>
-<p><strong>Рефакторинг без тестов.</strong> Поведение меняется незаметно.</p>
-<p><strong>Виноватый вместо причины.</strong> Команда скрывает ошибки.</p>
-<div class="callout pitfall"><span class="label">Обход, который работает, легче всего забыть. Через год он становится частью системы, которую боятся менять.</span></div>
-
+<p>Не нужно исправлять всё. Выбирают один участок, который мешает следующей функции, и закрывают его. Остальное записывают в список с оценкой.</p>
+<h2 id="метрики-сопровождения"><span class="num">08</span>Метрики сопровождения</h2>
+<p>Метрика нужна, чтобы принимать решения, а не украшать отчёт. Полезны несколько показателей.</p>
+<ul>
+<li><strong>время реакции</strong>: сколько проходит до первого ответа;</li>
+<li><strong>время восстановления</strong>: сколько проходит до возврата работы;</li>
+<li><strong>доля повторных обращений</strong>: сколько проблем возвращается;</li>
+<li><strong>число инцидентов</strong>: как часто нарушается работа;</li>
+<li><strong>доля обходов без плана</strong>: сколько временных решений не имеют задачи.</li>
+</ul>
+<p>DORA добавляет метрики доставки: доля неудачных изменений, время восстановления после неудачного развёртывания и доля незапланированных переделок <a href="https://dora.dev/guides/dora-metrics/">DORA</a>. Они связывают сопровождение с качеством выпуска.</p>
+<h3>Ловушка одной метрики</h3>
+<p>Метрика «число закрытых обращений» без учёта качества поощряет закрывать, а не решать. Сотрудник может закрыть обращение без исправления, и число улучшится, а проблема останется.</p>
+<p>Похожая ловушка с временем реакции. Если считать только первый ответ, команда быстро отвечает «мы работаем» и не решает. Метрика выполнена, пользователь не получил помощи.</p>
+<p>Поэтому метрику выбирают вместе с контрметрикой. Если растёт скорость закрытия, смотрят на долю повторных обращений. Если падает время реакции, проверяют время восстановления и качество решения.</p>
+<h3>Контрметрика в поддержке</h3>
+<p>Контрметрика нужна не для наказания, а для проверки, что улучшение не достигнуто ценой другого качества. Например, команда сократила время ответа, но увеличила число повторных обращений. Формально стало лучше, фактически пользователи возвращаются с той же проблемой.</p>
+<p>Пара метрик работает лучше одной:</p>
+<table>
+<thead>
+<tr>
+<th>Основная</th>
+<th>Контрметрика</th>
+<th>Что проверяет</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>время реакции</td>
+<td>время восстановления</td>
+<td>ответ не заменяет решение</td>
+</tr>
+<tr>
+<td>число закрытых</td>
+<td>доля повторных</td>
+<td>закрытие не равно исправлению</td>
+</tr>
+<tr>
+<td>скорость выпуска</td>
+<td>доля неудачных</td>
+<td>скорость не ломает качество</td>
+</tr>
+<tr>
+<td>число обходов</td>
+<td>доля обходов с планом</td>
+<td>временное не стало постоянным</td>
+</tr>
+</tbody>
+</table>
+<p>Для учебного проекта достаточно двух пар. Главное, чтобы метрики обсуждали вместе с результатом, а не использовали как рейтинг.</p>
+<h3>Что измерять в учебном проекте</h3>
+<p>Достаточно трёх вопросов:</p>
+<ul>
+<li>сколько времени проходит от обращения до первого ответа;</li>
+<li>сколько времени проходит до восстановления работы;</li>
+<li>сколько обращений возвращается с той же проблемой.</li>
+</ul>
+<p>Эти числа можно собрать вручную в таблице. Они не требуют сложной системы и уже показывают, где процесс буксует.</p>
+<h2 id="чек-лист-сопровождения"><span class="num">09</span>Чек-лист сопровождения</h2>
+<ol>
+<li>Есть список компонентов и версий?</li>
+<li>Известно, где журналы и как их читать?</li>
+<li>Есть резервная копия и проверка восстановления?</li>
+<li>Определены уровни важности и сроки?</li>
+<li>Назначен ответственный за инциденты?</li>
+<li>Есть правило эскалации?</li>
+<li>Обходы записываются в задачи?</li>
+<li>Постмортем проводится по понятным поводам?</li>
+<li>У мер после разбора есть владелец и срок?</li>
+<li>Технический долг виден в списке?</li>
+<li>Рефакторинг закрыт тестами?</li>
+<li>Метрики не поощряют закрывать вместо решения?</li>
+</ol>
+<p>Если на вопрос нет ответа, это место для улучшения.</p>
 <h2 id="итоги"><span class="num">10</span>Итоги</h2>
 <ul>
-<li>Инцидент и запрос на изменение обрабатывают по-разному.</li>
-<li>SLA задаёт сроки по важности.</li>
+<li>Сопровождение это управляемая работа, а не остаток времени после разработки.</li>
+<li>Инцидент, запрос на обслуживание и запрос на изменение обрабатывают по-разному.</li>
+<li>SLA задаёт порядок реакции, но не обещает мгновенного решения.</li>
 <li>Сначала восстанавливают работу, потом ищут причину.</li>
-<li>Постмортем ищет причины, а не виноватых.</li>
-<li>Технический долг возвращают плановым рефакторингом.</li>
-</ul></div>
-</div>
-
-<div class="gate-step" data-gate>
-<p class="gate-action"><button type="button" class="gate-btn" aria-expanded="false"><span class="gate-q" aria-hidden="true">?</span><span>Почему метрика «число закрытых обращений» может ухудшить сопровождение?</span></button></p>
-<div class="gate-content" hidden><div class="quiz" data-quiz data-quiz-guard><div class="quiz-who"><label class="quiz-who-label"><span>ФИО</span><input type="text" class="quiz-name" data-quiz-name maxlength="80" autocomplete="off" placeholder="Иванов Иван Иванович"></label><span class="quiz-attempts" data-quiz-attempts>две попытки на лекцию</span><span class="quiz-note" data-who-note hidden></span></div><div class="quiz-q" data-type="single" data-correct="1" data-q="1"><p class="quiz-p"><span class="quiz-no" aria-hidden="true">01</span>Что задаёт SLA?</p><div class="opts"><label class="opt"><input type="radio" name="q106_0" value="2" autocomplete="off"><span>Схему базы</span></label><label class="opt"><input type="radio" name="q106_0" value="0" autocomplete="off" data-ok><span>Сроки реакции и решения по важности</span></label><label class="opt"><input type="radio" name="q106_0" value="3" autocomplete="off"><span>Число сотрудников</span></label><label class="opt"><input type="radio" name="q106_0" value="1" autocomplete="off"><span>Язык программирования</span></label></div><p class="quiz-why" hidden>Ожидания.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="2" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">02</span>Чем запрос на изменение отличается от инцидента?</p><div class="opts"><label class="opt"><input type="radio" name="q106_1" value="2" autocomplete="off"><span>Он не требует плана</span></label><label class="opt"><input type="radio" name="q106_1" value="1" autocomplete="off"><span>Он всегда срочный</span></label><label class="opt"><input type="radio" name="q106_1" value="0" autocomplete="off" data-ok><span>Это улучшение, а не нарушение работы</span></label><label class="opt"><input type="radio" name="q106_1" value="3" autocomplete="off"><span>Он не относится к системе</span></label></div><p class="quiz-why" hidden>Разный порядок.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="multi" data-correct="4" data-q="3" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">03</span>Какие метрики сопровождения полезны?</p><div class="opts"><label class="opt"><input type="checkbox" name="q106_2" value="2" autocomplete="off" data-ok><span>Повторные обращения</span></label><label class="opt"><input type="checkbox" name="q106_2" value="5" autocomplete="off"><span>Число сотрудников</span></label><label class="opt"><input type="checkbox" name="q106_2" value="3" autocomplete="off" data-ok><span>Число инцидентов</span></label><label class="opt"><input type="checkbox" name="q106_2" value="0" autocomplete="off" data-ok><span>Время реакции</span></label><label class="opt"><input type="checkbox" name="q106_2" value="4" autocomplete="off"><span>Число закрытых любой ценой</span></label><label class="opt"><input type="checkbox" name="q106_2" value="1" autocomplete="off" data-ok><span>Время решения</span></label></div><p class="quiz-why" hidden>Остальное искажает.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="short" data-q="4" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">04</span>Как называют разбор инцидента без виноватых?</p><input type="text" class="short-answer" data-answers="[&quot;постмортем&quot;, &quot;postmortem&quot;]" placeholder="Введите ответ" autocomplete="off" spellcheck="false" aria-label="Как называют разбор инцидента без виноватых?"><p class="quiz-why" hidden>Причины и меры.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="5" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">05</span>Что делают сначала при инциденте?</p><div class="opts"><label class="opt"><input type="radio" name="q106_4" value="3" autocomplete="off"><span>Меняют требования</span></label><label class="opt"><input type="radio" name="q106_4" value="0" autocomplete="off" data-ok><span>Восстанавливают работу</span></label><label class="opt"><input type="radio" name="q106_4" value="2" autocomplete="off"><span>Переписывают систему</span></label><label class="opt"><input type="radio" name="q106_4" value="1" autocomplete="off"><span>Ищут виноватого</span></label></div><p class="quiz-why" hidden>Сначала доступность.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="6" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">06</span>Что такое технический долг?</p><div class="opts"><label class="opt"><input type="radio" name="q106_5" value="1" autocomplete="off"><span>Денежный кредит</span></label><label class="opt"><input type="radio" name="q106_5" value="2" autocomplete="off"><span>Список задач</span></label><label class="opt"><input type="radio" name="q106_5" value="0" autocomplete="off" data-ok><span>Отложенные решения, усложняющие работу</span></label><label class="opt"><input type="radio" name="q106_5" value="3" autocomplete="off"><span>Число тестов</span></label></div><p class="quiz-why" hidden>Усложнение.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="short" data-q="7" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">07</span>Как называют временное решение симптома?</p><input type="text" class="short-answer" data-answers="[&quot;обход&quot;, &quot;workaround&quot;]" placeholder="Введите ответ" autocomplete="off" spellcheck="false" aria-label="Как называют временное решение симптома?"><p class="quiz-why" hidden>Временно.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="8" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">08</span>Что такое обход?</p><div class="opts"><label class="opt"><input type="radio" name="q106_7" value="2" autocomplete="off"><span>Новая функция</span></label><label class="opt"><input type="radio" name="q106_7" value="0" autocomplete="off" data-ok><span>Временное решение симптома</span></label><label class="opt"><input type="radio" name="q106_7" value="1" autocomplete="off"><span>Исправление причины</span></label><label class="opt"><input type="radio" name="q106_7" value="3" autocomplete="off"><span>План релиза</span></label></div><p class="quiz-why" hidden>Временно.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="multi" data-correct="4" data-q="9" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">09</span>Какие ошибки сопровождения типичны?</p><div class="opts"><label class="opt"><input type="checkbox" name="q106_8" value="1" autocomplete="off" data-ok><span>Обход без записи</span></label><label class="opt"><input type="checkbox" name="q106_8" value="0" autocomplete="off" data-ok><span>Всё срочно</span></label><label class="opt"><input type="checkbox" name="q106_8" value="5" autocomplete="off"><span>Разбор причин</span></label><label class="opt"><input type="checkbox" name="q106_8" value="2" autocomplete="off" data-ok><span>Нет разбора</span></label><label class="opt"><input type="checkbox" name="q106_8" value="3" autocomplete="off" data-ok><span>Долг не возвращают</span></label><label class="opt"><input type="checkbox" name="q106_8" value="4" autocomplete="off"><span>Приоритеты по важности</span></label></div><p class="quiz-why" hidden>Остальное хорошо.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="10" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">10</span>Что такое сопровождение?</p><div class="opts"><label class="opt"><input type="radio" name="q106_9" value="2" autocomplete="off"><span>Создание требований</span></label><label class="opt"><input type="radio" name="q106_9" value="0" autocomplete="off" data-ok><span>Работа с системой после выпуска</span></label><label class="opt"><input type="radio" name="q106_9" value="1" autocomplete="off"><span>Написание первой версии</span></label><label class="opt"><input type="radio" name="q106_9" value="3" autocomplete="off"><span>Выбор языка</span></label></div><p class="quiz-why" hidden>После выпуска.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="11" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">11</span>Что разбирает постмортем?</p><div class="opts"><label class="opt"><input type="radio" name="q106_10" value="3" autocomplete="off"><span>Список клиентов</span></label><label class="opt"><input type="radio" name="q106_10" value="1" autocomplete="off"><span>Виноватых</span></label><label class="opt"><input type="radio" name="q106_10" value="0" autocomplete="off" data-ok><span>Причины и меры</span></label><label class="opt"><input type="radio" name="q106_10" value="2" autocomplete="off"><span>Бюджет</span></label></div><p class="quiz-why" hidden>Без поиска виноватых.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="short" data-q="12" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">12</span>Что накапливают отложенные решения?</p><input type="text" class="short-answer" data-answers="[&quot;технический долг&quot;, &quot;tech debt&quot;]" placeholder="Введите ответ" autocomplete="off" spellcheck="false" aria-label="Что накапливают отложенные решения?"><p class="quiz-why" hidden>Усложнение.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="13" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">13</span>Как планируют рефакторинг?</p><div class="opts"><label class="opt"><input type="radio" name="q106_12" value="3" autocomplete="off"><span>Вместо релиза</span></label><label class="opt"><input type="radio" name="q106_12" value="1" autocomplete="off"><span>Сразу весь проект</span></label><label class="opt"><input type="radio" name="q106_12" value="0" autocomplete="off" data-ok><span>Небольшими участками под тестами</span></label><label class="opt"><input type="radio" name="q106_12" value="2" autocomplete="off"><span>Без тестов</span></label></div><p class="quiz-why" hidden>Постепенно.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="multi" data-correct="4" data-q="14" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">14</span>Что содержит SLA?</p><div class="opts"><label class="opt"><input type="checkbox" name="q106_13" value="3" autocomplete="off" data-ok><span>Порядок эскалации</span></label><label class="opt"><input type="checkbox" name="q106_13" value="4" autocomplete="off"><span>Пароль администратора</span></label><label class="opt"><input type="checkbox" name="q106_13" value="1" autocomplete="off" data-ok><span>Сроки реакции</span></label><label class="opt"><input type="checkbox" name="q106_13" value="2" autocomplete="off" data-ok><span>Сроки решения</span></label><label class="opt"><input type="checkbox" name="q106_13" value="5" autocomplete="off"><span>Личные планы</span></label><label class="opt"><input type="checkbox" name="q106_13" value="0" autocomplete="off" data-ok><span>Уровни важности</span></label></div><p class="quiz-why" hidden>Остальное лишнее.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="15" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">15</span>Что такое инцидент?</p><div class="opts"><label class="opt"><input type="radio" name="q106_14" value="1" autocomplete="off"><span>Новая функция</span></label><label class="opt"><input type="radio" name="q106_14" value="3" autocomplete="off"><span>План релиза</span></label><label class="opt"><input type="radio" name="q106_14" value="2" autocomplete="off"><span>Запрос на улучшение</span></label><label class="opt"><input type="radio" name="q106_14" value="0" autocomplete="off" data-ok><span>Нарушение работы системы</span></label></div><p class="quiz-why" hidden>Срочная проблема.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><p class="quiz-note quiz-submit-note" data-quiz-note hidden></p><div class="quiz-result" data-quiz-result hidden aria-live="polite"><span class="label">Результат теста</span><h3>Тест завершён</h3><p class="modal-name-line">ФИО: <b data-student-name></b></p><p class="modal-result" data-modal-result></p><p class="modal-result" data-modal-wrong></p><dl class="modal-times"><div><dt>Время выполнения теста</dt><dd data-test-time>00:00</dd></div><div><dt>Время просмотра лекции</dt><dd data-view-time>00:00</dd></div></dl></div></div></div>
+<li>Обход записывают, иначе он становится постоянной частью системы.</li>
+<li>Постмортем ищет причины и меры, а не виноватых.</li>
+<li>Технический долг бывает разным, и возвращать его нужно по влиянию и частоте.</li>
+<li>Реальные случаи показывают, что известная уязвимость без процесса обновления остаётся опасной.</li>
+<li>Рефакторинг делают небольшими шагами под тестами.</li>
+<li>Метрики сопровождения выбирают вместе с контрметриками.</li>
+</ul>
+<h2 id="источники"><span class="num">11</span>Источники</h2>
+<ol>
+<li>ISO/IEC/IEEE 12207:2026. Systems and software engineering. Software life cycle processes. https://www.iso.org/standard/90219.html</li>
+<li>ITIL 4 Foundation. PeopleCert, Axelos. https://www.peoplecert.org/browse-certifications/it-governance-and-service-management/ITIL-1/itil-4-foundation</li>
+<li>Google SRE. Postmortem Culture: Learning from Failure. https://sre.google/sre-book/postmortem-culture/</li>
+<li>DORA. Software delivery performance metrics. https://dora.dev/guides/dora-metrics/</li>
+<li>IEEE Computer Society. SWEBOK Guide v4.0. https://www.computer.org/education/bodies-of-knowledge/software-engineering/v4</li>
+<li>Fowler M. Technical Debt Quadrant, 2009. https://martinfowler.com/bliki/TechnicalDebtQuadrant.html</li>
+<li>FTC. Equifax to Pay $575 Million as Part of Settlement with FTC, CFPB, and States Related to 2017 Data Breach, 2019. https://www.ftc.gov/legal-library/browse/cases-proceedings/172-3203-equifax-inc</li>
+<li>CISA. Apache Log4j Vulnerability Guidance. https://www.cisa.gov/news-events/news/apache-log4j-vulnerability-guidance</li>
+<li>Apache Logging Services. Security. https://logging.apache.org/log4j/2.x/security.html</li>
+<li>Heartbleed Bug. https://heartbleed.com/</li>
+</ol>
+<div class="quiz" data-quiz data-quiz-guard><div class="quiz-who"><label class="quiz-who-label"><span>ФИО</span><input type="text" class="quiz-name" data-quiz-name maxlength="80" autocomplete="off" placeholder="Иванов Иван Иванович"></label><span class="quiz-attempts" data-quiz-attempts>две попытки на лекцию</span><span class="quiz-note" data-who-note hidden></span></div><div class="quiz-q" data-type="single" data-correct="1" data-q="1"><p class="quiz-p"><span class="quiz-no" aria-hidden="true">01</span>Что задаёт SLA?</p><div class="opts"><label class="opt"><input type="radio" name="q245_0" value="2" autocomplete="off"><span>Схему базы</span></label><label class="opt"><input type="radio" name="q245_0" value="0" autocomplete="off" data-ok><span>Сроки реакции и решения по уровням важности</span></label><label class="opt"><input type="radio" name="q245_0" value="3" autocomplete="off"><span>Число сотрудников</span></label><label class="opt"><input type="radio" name="q245_0" value="1" autocomplete="off"><span>Язык программирования</span></label></div><p class="quiz-why" hidden>SLA задаёт ожидания, а не обещание всё исправить.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="2" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">02</span>Чем запрос на изменение отличается от инцидента?</p><div class="opts"><label class="opt"><input type="radio" name="q245_1" value="2" autocomplete="off"><span>Он не требует плана</span></label><label class="opt"><input type="radio" name="q245_1" value="1" autocomplete="off"><span>Он всегда срочный</span></label><label class="opt"><input type="radio" name="q245_1" value="0" autocomplete="off" data-ok><span>Это улучшение, а не нарушение работы</span></label><label class="opt"><input type="radio" name="q245_1" value="3" autocomplete="off"><span>Он не относится к системе</span></label></div><p class="quiz-why" hidden>У запроса другой порядок обработки.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="multi" data-correct="4" data-q="3" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">03</span>Какие метрики сопровождения полезны?</p><div class="opts"><label class="opt"><input type="checkbox" name="q245_2" value="2" autocomplete="off" data-ok><span>Доля повторных обращений</span></label><label class="opt"><input type="checkbox" name="q245_2" value="5" autocomplete="off"><span>Число сотрудников</span></label><label class="opt"><input type="checkbox" name="q245_2" value="3" autocomplete="off" data-ok><span>Число инцидентов</span></label><label class="opt"><input type="checkbox" name="q245_2" value="0" autocomplete="off" data-ok><span>Время реакции</span></label><label class="opt"><input type="checkbox" name="q245_2" value="4" autocomplete="off"><span>Число закрытых любой ценой</span></label><label class="opt"><input type="checkbox" name="q245_2" value="1" autocomplete="off" data-ok><span>Время восстановления</span></label></div><p class="quiz-why" hidden>Остальное искажает картину.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="short" data-q="4" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">04</span>Как называют разбор инцидента без виноватых?</p><input type="text" class="short-answer" data-answers="[&quot;постмортем&quot;, &quot;postmortem&quot;]" placeholder="Введите ответ" autocomplete="off" spellcheck="false" aria-label="Как называют разбор инцидента без виноватых?"><p class="quiz-why" hidden>Причины и меры.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="5" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">05</span>Что делают сначала при инциденте?</p><div class="opts"><label class="opt"><input type="radio" name="q245_4" value="3" autocomplete="off"><span>Меняют требования</span></label><label class="opt"><input type="radio" name="q245_4" value="0" autocomplete="off" data-ok><span>Восстанавливают работу</span></label><label class="opt"><input type="radio" name="q245_4" value="2" autocomplete="off"><span>Переписывают систему</span></label><label class="opt"><input type="radio" name="q245_4" value="1" autocomplete="off"><span>Ищут виноватого</span></label></div><p class="quiz-why" hidden>Сначала доступность, потом причина.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="6" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">06</span>Что такое технический долг?</p><div class="opts"><label class="opt"><input type="radio" name="q245_5" value="1" autocomplete="off"><span>Денежный кредит</span></label><label class="opt"><input type="radio" name="q245_5" value="2" autocomplete="off"><span>Список задач</span></label><label class="opt"><input type="radio" name="q245_5" value="0" autocomplete="off" data-ok><span>Отложенные решения, усложняющие работу</span></label><label class="opt"><input type="radio" name="q245_5" value="3" autocomplete="off"><span>Число тестов</span></label></div><p class="quiz-why" hidden>Долг требует возврата.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="short" data-q="7" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">07</span>Как называют временное решение симптома?</p><input type="text" class="short-answer" data-answers="[&quot;обход&quot;, &quot;workaround&quot;]" placeholder="Введите ответ" autocomplete="off" spellcheck="false" aria-label="Как называют временное решение симптома?"><p class="quiz-why" hidden>Временно.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="8" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">08</span>Что такое обход?</p><div class="opts"><label class="opt"><input type="radio" name="q245_7" value="2" autocomplete="off"><span>Новая функция</span></label><label class="opt"><input type="radio" name="q245_7" value="0" autocomplete="off" data-ok><span>Временное решение симптома</span></label><label class="opt"><input type="radio" name="q245_7" value="1" autocomplete="off"><span>Исправление причины</span></label><label class="opt"><input type="radio" name="q245_7" value="3" autocomplete="off"><span>План релиза</span></label></div><p class="quiz-why" hidden>Обход нужно записать как долг.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="multi" data-correct="4" data-q="9" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">09</span>Какие ошибки сопровождения типичны?</p><div class="opts"><label class="opt"><input type="checkbox" name="q245_8" value="1" autocomplete="off" data-ok><span>Обход без записи</span></label><label class="opt"><input type="checkbox" name="q245_8" value="0" autocomplete="off" data-ok><span>Всё срочно</span></label><label class="opt"><input type="checkbox" name="q245_8" value="5" autocomplete="off"><span>Разбор причин</span></label><label class="opt"><input type="checkbox" name="q245_8" value="2" autocomplete="off" data-ok><span>Нет разбора</span></label><label class="opt"><input type="checkbox" name="q245_8" value="3" autocomplete="off" data-ok><span>Долг не возвращают</span></label><label class="opt"><input type="checkbox" name="q245_8" value="4" autocomplete="off"><span>Приоритеты по важности</span></label></div><p class="quiz-why" hidden>Остальное хорошо.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="10" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">10</span>Что такое сопровождение?</p><div class="opts"><label class="opt"><input type="radio" name="q245_9" value="2" autocomplete="off"><span>Создание требований</span></label><label class="opt"><input type="radio" name="q245_9" value="0" autocomplete="off" data-ok><span>Работа с системой после выпуска</span></label><label class="opt"><input type="radio" name="q245_9" value="1" autocomplete="off"><span>Написание первой версии</span></label><label class="opt"><input type="radio" name="q245_9" value="3" autocomplete="off"><span>Выбор языка программирования</span></label></div><p class="quiz-why" hidden>Сопровождение включает исправления, поддержку и развитие.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="11" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">11</span>Что разбирает постмортем?</p><div class="opts"><label class="opt"><input type="radio" name="q245_10" value="3" autocomplete="off"><span>Список клиентов</span></label><label class="opt"><input type="radio" name="q245_10" value="1" autocomplete="off"><span>Виноватых</span></label><label class="opt"><input type="radio" name="q245_10" value="0" autocomplete="off" data-ok><span>Причины и меры</span></label><label class="opt"><input type="radio" name="q245_10" value="2" autocomplete="off"><span>Бюджет</span></label></div><p class="quiz-why" hidden>Разбор ищет системные причины.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="short" data-q="12" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">12</span>Что накапливают отложенные решения?</p><input type="text" class="short-answer" data-answers="[&quot;технический долг&quot;, &quot;tech debt&quot;, &quot;technical debt&quot;]" placeholder="Введите ответ" autocomplete="off" spellcheck="false" aria-label="Что накапливают отложенные решения?"><p class="quiz-why" hidden>Усложнение работы.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="13" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">13</span>Как планируют рефакторинг?</p><div class="opts"><label class="opt"><input type="radio" name="q245_12" value="3" autocomplete="off"><span>Вместо релиза</span></label><label class="opt"><input type="radio" name="q245_12" value="1" autocomplete="off"><span>Сразу весь проект</span></label><label class="opt"><input type="radio" name="q245_12" value="0" autocomplete="off" data-ok><span>Небольшими участками под тестами</span></label><label class="opt"><input type="radio" name="q245_12" value="2" autocomplete="off"><span>Без тестов</span></label></div><p class="quiz-why" hidden>Постепенность снижает риск.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="multi" data-correct="4" data-q="14" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">14</span>Что содержит SLA?</p><div class="opts"><label class="opt"><input type="checkbox" name="q245_13" value="3" autocomplete="off" data-ok><span>Порядок эскалации</span></label><label class="opt"><input type="checkbox" name="q245_13" value="4" autocomplete="off"><span>Пароль администратора</span></label><label class="opt"><input type="checkbox" name="q245_13" value="1" autocomplete="off" data-ok><span>Сроки реакции</span></label><label class="opt"><input type="checkbox" name="q245_13" value="2" autocomplete="off" data-ok><span>Сроки решения</span></label><label class="opt"><input type="checkbox" name="q245_13" value="5" autocomplete="off"><span>Личные планы</span></label><label class="opt"><input type="checkbox" name="q245_13" value="0" autocomplete="off" data-ok><span>Уровни важности</span></label></div><p class="quiz-why" hidden>Остальное лишнее.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="15" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">15</span>Что такое инцидент?</p><div class="opts"><label class="opt"><input type="radio" name="q245_14" value="1" autocomplete="off"><span>Новая функция</span></label><label class="opt"><input type="radio" name="q245_14" value="3" autocomplete="off"><span>План релиза</span></label><label class="opt"><input type="radio" name="q245_14" value="2" autocomplete="off"><span>Запрос на улучшение</span></label><label class="opt"><input type="radio" name="q245_14" value="0" autocomplete="off" data-ok><span>Нарушение работы системы</span></label></div><p class="quiz-why" hidden>Инцидент требует восстановления работы.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><p class="quiz-note quiz-submit-note" data-quiz-note hidden></p><div class="quiz-result" data-quiz-result hidden aria-live="polite"><span class="label">Результат теста</span><h3>Тест завершён</h3><p class="modal-name-line">ФИО: <b data-student-name></b></p><p class="modal-result" data-modal-result></p><p class="modal-result" data-modal-wrong></p><dl class="modal-times"><div><dt>Время выполнения теста</dt><dd data-test-time>00:00</dd></div><div><dt>Время просмотра лекции</dt><dd data-view-time>00:00</dd></div></dl></div></div></div>
 </div></article><nav class="pager"><a class="" href="29-lek-18.html"><span>← Предыдущее занятие</span>Лекция 18. Внедрение</a><a class="next" style="text-align:right;margin-left:auto" href="31-prakt-12.html"><span>Следующее занятие →</span>Практика 12. Передача системы в эксплуатацию</a></nav></main>
 <div class="modal" data-modal="warn" hidden>
   <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="warn-title">

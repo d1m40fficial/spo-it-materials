@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Фазы и артефакты</title>
+<style>
+  :root { --paper:#faf6f3; --ink:#2d3142; --muted:#5b5560; --accent:#0F8A63; --soft:#E1F5EE; --rule:rgba(45,49,66,.12); }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .frame { background:var(--paper); border:1px solid var(--rule); border-radius:12px; padding:18px 18px 14px; }
+  .eyebrow { margin:0 0 8px; font:600 9px/1.2 Consolas,monospace; letter-spacing:.16em; text-transform:uppercase; color:var(--muted); }
+  .note { margin:10px 2px 0; font:11px/1.5 Consolas,monospace; color:var(--muted); }
+  svg { display:block; width:100%; height:auto; }
+</style>
+</head>
+<body>
+<div class="frame">
+  <p class="eyebrow">Процесс · фазы и артефакты</p>
+  <svg viewBox="0 0 680 258" role="img" aria-labelledby="af-title af-desc">
+    <title id="af-title">Фазы процесса и их артефакты</title>
+    <desc id="af-desc">Требования, проект, код, проверка и выпуск. Каждая фаза даёт артефакт, по которому следующий этап проверяет вход.</desc>
+
+    <g font-family="Consolas,monospace" text-anchor="middle">
+      <g>
+        <rect x="16" y="26" width="120" height="34" rx="6" fill="#E1F5EE" stroke="#0F8A63"/>
+        <text x="76" y="47" font-size="8" fill="#0F8A63">требования</text>
+        <rect x="16" y="68" width="120" height="58" rx="6" fill="#fff" stroke="#2d3142"/>
+        <text x="76" y="86" font-size="6.8" fill="#2d3142">истории</text>
+        <text x="76" y="100" font-size="6.8" fill="#2d3142">критерии приёмки</text>
+        <text x="76" y="114" font-size="6.8" fill="#5b5560">границы</text>
+      </g>
+      <g>
+        <rect x="146" y="26" width="120" height="34" rx="6" fill="#fff" stroke="#2d3142"/>
+        <text x="206" y="47" font-size="8" fill="#2d3142">проект</text>
+        <rect x="146" y="68" width="120" height="58" rx="6" fill="#fff" stroke="#2d3142"/>
+        <text x="206" y="86" font-size="6.8" fill="#2d3142">архитектура</text>
+        <text x="206" y="100" font-size="6.8" fill="#2d3142">модель данных</text>
+        <text x="206" y="114" font-size="6.8" fill="#5b5560">контракты</text>
+      </g>
+      <g>
+        <rect x="276" y="26" width="120" height="34" rx="6" fill="#fff" stroke="#2d3142"/>
+        <text x="336" y="47" font-size="8" fill="#2d3142">реализация</text>
+        <rect x="276" y="68" width="120" height="58" rx="6" fill="#fff" stroke="#2d3142"/>
+        <text x="336" y="86" font-size="6.8" fill="#2d3142">код</text>
+        <text x="336" y="100" font-size="6.8" fill="#2d3142">тесты</text>
+        <text x="336" y="114" font-size="6.8" fill="#5b5560">история Git</text>
+      </g>
+      <g>
+        <rect x="406" y="26" width="120" height="34" rx="6" fill="#E1F5EE" stroke="#0F8A63"/>
+        <text x="466" y="47" font-size="8" fill="#0F8A63">проверка</text>
+        <rect x="406" y="68" width="120" height="58" rx="6" fill="#fff" stroke="#2d3142"/>
+        <text x="466" y="86" font-size="6.8" fill="#2d3142">отчёт тестов</text>
+        <text x="466" y="100" font-size="6.8" fill="#2d3142">дефекты</text>
+        <text x="466" y="114" font-size="6.8" fill="#5b5560">ревью</text>
+      </g>
+      <g>
+        <rect x="536" y="26" width="128" height="34" rx="6" fill="#fff" stroke="#2d3142"/>
+        <text x="600" y="47" font-size="8" fill="#2d3142">выпуск</text>
+        <rect x="536" y="68" width="128" height="58" rx="6" fill="#fff" stroke="#2d3142"/>
+        <text x="600" y="86" font-size="6.8" fill="#2d3142">артефакт</text>
+        <text x="600" y="100" font-size="6.8" fill="#2d3142">changelog</text>
+        <text x="600" y="114" font-size="6.8" fill="#5b5560">инструкция</text>
+      </g>
+    </g>
+
+    <g stroke="#5b5560" stroke-width="1.4" fill="none" marker-end="url(#arw-af)">
+      <path d="M136 43h8"/><path d="M266 43h8"/><path d="M396 43h8"/><path d="M526 43h8"/>
+    </g>
+
+    <rect x="16" y="150" width="648" height="54" rx="8" fill="#fff" stroke="#b9ac9f"/>
+    <text x="30" y="168" font-family="Consolas,monospace" font-size="7" fill="#5b5560">ПРОСЛЕЖИВАЕМОСТЬ</text>
+    <text x="30" y="186" font-family="Consolas,monospace" font-size="7.6" fill="#2d3142">требование → проект → код → тест → выпуск</text>
+
+    <text x="340" y="232" text-anchor="middle" font-family="Consolas,monospace" font-size="6.8" fill="#0F8A63">сопровождение возвращает изменения в требования и проект</text>
+
+    <defs>
+      <marker id="arw-af" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#5b5560"/></marker>
+      <marker id="arw-af2" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#0F8A63"/></marker>
+    </defs>
+  </svg>
+  <p class="note">Артефакт нужен не для отчёта, а как вход следующей фазы. Сопровождение возвращает изменения в требования и проект.</p>
+</div>
+</body>
+</html>

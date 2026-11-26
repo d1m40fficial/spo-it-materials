@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>От потребности до проверки</title>
+<style>
+  :root { --paper:#faf6f3; --ink:#2d3142; --muted:#5b5560; --accent:#0F8A63; --soft:#E1F5EE; --rule:rgba(45,49,66,.12); }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .frame { background:var(--paper); border:1px solid var(--rule); border-radius:12px; padding:18px 18px 14px; }
+  .eyebrow { margin:0 0 8px; font:600 9px/1.2 Consolas,monospace; letter-spacing:.16em; text-transform:uppercase; color:var(--muted); }
+  .note { margin:10px 2px 0; font:11px/1.5 Consolas,monospace; color:var(--muted); }
+  svg { display:block; width:100%; height:auto; }
+</style>
+</head>
+<body>
+<div class="frame">
+  <p class="eyebrow">Требования · цепочка</p>
+  <svg viewBox="0 0 680 292" role="img" aria-labelledby="sc-title sc-desc">
+    <title id="sc-title">Цепочка от потребности до выпуска</title>
+    <desc id="sc-desc">Потребность превращается в требование, затем в историю, критерий приёмки, тест и выпуск. Изменение возвращается в требование и обновляет критерий и тест.</desc>
+
+    <g font-family="Consolas,monospace" text-anchor="middle">
+      <g>
+        <rect x="16" y="34" width="96" height="58" rx="7" fill="#fff" stroke="#2d3142"/>
+        <text x="64" y="54" font-size="8" fill="#2d3142">потребность</text>
+        <text x="64" y="70" font-size="6.4" fill="#5b5560">зачем и кому</text>
+      </g>
+      <g>
+        <rect x="126" y="34" width="96" height="58" rx="7" fill="#E1F5EE" stroke="#0F8A63"/>
+        <text x="174" y="54" font-size="8" fill="#0F8A63">требование</text>
+        <text x="174" y="70" font-size="6.4" fill="#5b5560">что и границы</text>
+      </g>
+      <g>
+        <rect x="236" y="34" width="96" height="58" rx="7" fill="#fff" stroke="#2d3142"/>
+        <text x="284" y="54" font-size="8" fill="#2d3142">история</text>
+        <text x="284" y="70" font-size="6.4" fill="#5b5560">роль, цель, ценность</text>
+      </g>
+      <g>
+        <rect x="346" y="34" width="96" height="58" rx="7" fill="#fff" stroke="#2d3142"/>
+        <text x="394" y="54" font-size="8" fill="#2d3142">критерий</text>
+        <text x="394" y="70" font-size="6.4" fill="#5b5560">наблюдаемое поведение</text>
+      </g>
+      <g>
+        <rect x="456" y="34" width="96" height="58" rx="7" fill="#E1F5EE" stroke="#0F8A63"/>
+        <text x="504" y="54" font-size="8" fill="#0F8A63">тест</text>
+        <text x="504" y="70" font-size="6.4" fill="#5b5560">доказательство</text>
+      </g>
+      <g>
+        <rect x="566" y="34" width="98" height="58" rx="7" fill="#fff" stroke="#2d3142"/>
+        <text x="615" y="54" font-size="8" fill="#2d3142">выпуск</text>
+        <text x="615" y="70" font-size="6.4" fill="#5b5560">работает у людей</text>
+      </g>
+    </g>
+
+    <g stroke="#5b5560" stroke-width="1.3" fill="none" marker-end="url(#arw-sc)">
+      <path d="M112 63h12"/><path d="M222 63h12"/><path d="M332 63h12"/><path d="M442 63h12"/><path d="M552 63h12"/>
+    </g>
+
+    <rect x="16" y="110" width="310" height="70" rx="8" fill="#fff" stroke="#cfc6bb"/>
+    <text x="30" y="128" font-family="Consolas,monospace" font-size="6.8" letter-spacing=".08em" fill="#5b5560">ФУНКЦИОНАЛЬНОЕ</text>
+    <text x="30" y="146" font-family="Consolas,monospace" font-size="7.2" fill="#2d3142">что система делает</text>
+    <text x="30" y="162" font-family="Consolas,monospace" font-size="6.6" fill="#5b5560">создать, показать, изменить, удалить</text>
+
+    <rect x="346" y="110" width="318" height="70" rx="8" fill="#fff" stroke="#cfc6bb"/>
+    <text x="360" y="128" font-family="Consolas,monospace" font-size="6.8" letter-spacing=".08em" fill="#5b5560">НЕФУНКЦИОНАЛЬНОЕ</text>
+    <text x="360" y="146" font-family="Consolas,monospace" font-size="7.2" fill="#2d3142">сколько, при каких условиях, как измеряем</text>
+    <text x="360" y="162" font-family="Consolas,monospace" font-size="6.6" fill="#5b5560">скорость, надёжность, безопасность, удобство</text>
+
+    <path d="M615 96v132H174v-32" stroke="#0F8A63" stroke-width="1.3" fill="none" stroke-dasharray="5 4" marker-end="url(#arw-sc2)"/>
+    <text x="394" y="220" text-anchor="middle" font-family="Consolas,monospace" font-size="6.8" fill="#0F8A63">изменение возвращается в требование и обновляет критерий и тест</text>
+
+    <text x="340" y="248" text-anchor="middle" font-family="Consolas,monospace" font-size="7.4" fill="#0F8A63">ТРЕБОВАНИЕ БЕЗ ПРОВЕРКИ НЕ ДАЁТ КОМАНДЕ ГРАНИЦЫ ГОТОВНОСТИ</text>
+    <text x="340" y="272" text-anchor="middle" font-family="Consolas,monospace" font-size="6.6" fill="#6b6459">один и тот же идентификатор проходит цепочку от истории до теста</text>
+
+    <defs>
+      <marker id="arw-sc" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#5b5560"/></marker>
+      <marker id="arw-sc2" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#0F8A63"/></marker>
+    </defs>
+  </svg>
+  <p class="note">Цепочка показывает, где живёт требование и что нужно обновить при изменении. Без связи с тестом требование остаётся пожеланием.</p>
+</div>
+</body>
+</html>

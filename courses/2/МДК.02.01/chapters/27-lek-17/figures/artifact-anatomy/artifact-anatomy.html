@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Состав артефакта</title>
+<style>
+  :root { --paper:#faf6f3; --ink:#2d3142; --muted:#5b5560; --accent:#0F8A63; --soft:#E1F5EE; --rule:rgba(45,49,66,.12); }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .frame { background:var(--paper); border:1px solid var(--rule); border-radius:12px; padding:18px 18px 14px; }
+  .eyebrow { margin:0 0 8px; font:600 9px/1.2 Consolas,monospace; letter-spacing:.16em; text-transform:uppercase; color:var(--muted); }
+  .note { margin:10px 2px 0; font:11px/1.5 Consolas,monospace; color:var(--muted); }
+  svg { display:block; width:100%; height:auto; }
+</style>
+</head>
+<body>
+<div class="frame">
+  <p class="eyebrow">Релиз · артефакт</p>
+  <svg viewBox="0 0 680 330" role="img" aria-labelledby="aa-title aa-desc">
+    <title id="aa-title">Что входит в артефакт и что в него не попадает</title>
+    <desc id="aa-desc">Слева обязательные части релиза, в центре проверенный артефакт, справа лишние файлы, которые нельзя передавать.</desc>
+
+    <g font-family="Consolas,monospace" text-anchor="middle">
+      <rect x="16" y="24" width="196" height="238" rx="10" fill="#fff" stroke="#0F8A63" stroke-width="1.6"/>
+      <text x="114" y="48" font-size="8" fill="#0F8A63">В АРТЕФАКТЕ</text>
+
+      <rect x="30" y="64" width="168" height="28" rx="5" fill="#E1F5EE" stroke="#0F8A63"/>
+      <text x="114" y="82" font-size="7.4" fill="#2d3142">собранный код</text>
+
+      <rect x="30" y="100" width="168" height="28" rx="5" fill="#E1F5EE" stroke="#0F8A63"/>
+      <text x="114" y="118" font-size="7.4" fill="#2d3142">конфигурация без секретов</text>
+
+      <rect x="30" y="136" width="168" height="28" rx="5" fill="#E1F5EE" stroke="#0F8A63"/>
+      <text x="114" y="154" font-size="7.4" fill="#2d3142">инструкция установки</text>
+
+      <rect x="30" y="172" width="168" height="28" rx="5" fill="#E1F5EE" stroke="#0F8A63"/>
+      <text x="114" y="190" font-size="7.4" fill="#2d3142">номер версии</text>
+
+      <rect x="30" y="208" width="168" height="28" rx="5" fill="#E1F5EE" stroke="#0F8A63"/>
+      <text x="114" y="226" font-size="7.4" fill="#2d3142">changelog и лицензия</text>
+
+      <text x="114" y="252" font-size="6.8" fill="#5b5560">плюс контрольная сумма</text>
+
+      <rect x="242" y="92" width="196" height="104" rx="12" fill="#E1F5EE" stroke="#0F8A63" stroke-width="2"/>
+      <text x="340" y="122" font-size="10" fill="#0F8A63">АРТЕФАКТ</text>
+      <text x="340" y="144" font-size="7.4" fill="#2d3142">один файл или набор</text>
+      <text x="340" y="160" font-size="7.4" fill="#2d3142">с известным содержимым</text>
+      <text x="340" y="178" font-size="7.4" fill="#5b5560">версия + сумма + происхождение</text>
+
+      <path d="M212 142h26" stroke="#0F8A63" stroke-width="1.6" fill="none" marker-end="url(#aa-arw)"/>
+      <path d="M438 142h26" stroke="#b23a2b" stroke-width="1.4" fill="none" stroke-dasharray="4 4" marker-end="url(#aa-arw2)"/>
+
+      <rect x="468" y="24" width="196" height="238" rx="10" fill="#fff" stroke="#b23a2b" stroke-width="1.4"/>
+      <text x="566" y="48" font-size="8" fill="#b23a2b">НЕ В АРТЕФАКТЕ</text>
+
+      <rect x="482" y="64" width="168" height="28" rx="5" fill="#fbeeec" stroke="#b23a2b"/>
+      <text x="566" y="82" font-size="7.4" fill="#2d3142">пароли и токены</text>
+
+      <rect x="482" y="100" width="168" height="28" rx="5" fill="#fbeeec" stroke="#b23a2b"/>
+      <text x="566" y="118" font-size="7.4" fill="#2d3142">личные данные</text>
+
+      <rect x="482" y="136" width="168" height="28" rx="5" fill="#fbeeec" stroke="#b23a2b"/>
+      <text x="566" y="154" font-size="7.4" fill="#2d3142">журналы разработки</text>
+
+      <rect x="482" y="172" width="168" height="28" rx="5" fill="#fbeeec" stroke="#b23a2b"/>
+      <text x="566" y="190" font-size="7.4" fill="#2d3142">локальные кеши</text>
+
+      <rect x="482" y="208" width="168" height="28" rx="5" fill="#fbeeec" stroke="#b23a2b"/>
+      <text x="566" y="226" font-size="7.4" fill="#2d3142">файлы вне репозитория</text>
+
+      <text x="566" y="252" font-size="6.8" fill="#5b5560">это утечка или сюрприз</text>
+
+      <text x="340" y="292" text-anchor="middle" font-size="8" fill="#0F8A63">АРТЕФАКТ ЭТО ВЫБРАННЫЙ И ПРОВЕРЕННЫЙ НАБОР, А НЕ ВСЯ РАБОЧАЯ ПАПКА</text>
+      <text x="340" y="312" text-anchor="middle" font-size="7" fill="#5b5560">Проверка состава входит в конвейер релиза до публикации.</text>
+    </g>
+
+    <defs>
+      <marker id="aa-arw" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#0F8A63"/></marker>
+      <marker id="aa-arw2" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#b23a2b"/></marker>
+    </defs>
+  </svg>
+  <p class="note">Секреты, журналы и личные данные не становятся безопасными от того, что лежат в архиве.</p>
+</div>
+</body>
+</html>

@@ -888,87 +888,463 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <canvas class="shader-bg" width="820" height="300" aria-hidden="true" style="background:linear-gradient(135deg,#08090D,#1D9E75 58%,#08090D)"></canvas>
 <div class="badges"><span class="pill dark">Занятие 24</span><span class="pill">Технология разработки ПО</span></div>
 <div class="hero-panel"><h1>Тестирование: уровни и тест-дизайн</h1><p class="dek">Тесты проверяют ожидаемое поведение на разных уровнях. Разберём классы эквивалентности, границы и покрытие.</p></div>
-<div class="glyph" aria-hidden="true">Л14</div></header><section class="outcomes"><b>После этого занятия вы сможете</b><ul><li>Различать модульные, интеграционные и приёмочные тесты</li><li>Строить тест-кейсы по классам эквивалентности</li><li>Проверять граничные значения</li><li>Оценивать покрытие и его пределы</li></ul></section><nav class="toc"><b>Содержание занятия</b><ol><li><a href="#все-тесты-зелёные">Все тесты зелёные</a></li><li><a href="#уровни-тестирования">Уровни тестирования</a></li><li><a href="#тест-дизайн">Тест-дизайн</a></li><li><a href="#структура-тест-кейса">Структура тест-кейса</a></li><li><a href="#покрытие">Покрытие</a></li><li><a href="#что-тестировать-в-первую-очередь">Что тестировать в первую очередь</a></li><li><a href="#где-тестирование-ломается">Где тестирование ломается</a></li><li><a href="#итоги">Итоги</a></li></ol></nav><article class="prose"><h2 id="все-тесты-зелёные"><span class="num">01</span>Все тесты зелёные</h2>
-<p>Проект проходит сто тестов. В рабочей системе сотрудник открывает чужую заявку: запрос не фильтрует по владельцу. Тест был, но проверял только пустой список.</p>
-<p><strong>Тестирование</strong> сравнивает ожидаемое поведение с фактическим. Тест без проверки важного условия создаёт ложное спокойствие.</p>
-<p>Главная мысль занятия: <strong>тест проверяет утверждение, а не строки кода</strong>. Сначала формулируют ожидание, потом пишут проверку.</p>
-<h2 id="уровни-тестирования"><span class="num">02</span>Уровни тестирования</h2>
+<div class="glyph" aria-hidden="true">Л14</div></header><section class="outcomes"><b>После этого занятия вы сможете</b><ul><li>Различать модульные, интеграционные, системные и приёмочные тесты</li><li>Объяснять, что тест доказывает, а что оставляет непроверенным</li><li>Строить тест-кейсы по классам эквивалентности и границам</li><li>Сокращать комбинации условий таблицей решений и попарным выбором</li><li>Оценивать покрытие и его пределы</li><li>Разбирать реальный сбой по пропущенной проверке</li></ul></section><nav class="toc"><b>Содержание занятия</b><ol><li><a href="#все-тесты-зелёные">Все тесты зелёные</a></li><li><a href="#что-доказывает-тест">Что доказывает тест</a></li><li><a href="#уровни-и-их-экономика">Уровни и их экономика</a></li><li><a href="#тест-дизайн-классы-границы-комбинации">Тест-дизайн: классы, границы, комбинации</a></li><li><a href="#покрытие-что-оно-измеряет-и-чего-не-измеряет">Покрытие: что оно измеряет и чего не измеряет</a></li><li><a href="#реальные-случаи">Реальные случаи</a></li><li><a href="#тесты-для-учебного-продукта">Тесты для учебного продукта</a></li><li><a href="#итоги">Итоги</a></li><li><a href="#источники">Источники</a></li></ol></nav><article class="prose"><h2 id="все-тесты-зелёные"><span class="num">01</span>Все тесты зелёные</h2>
+<p>Проект проходит сто тестов. Сборка зелёная, отчёт о покрытии показывает восемьдесят процентов, команда спокойна. В рабочей системе сотрудник открывает чужую заявку: запрос не фильтрует по владельцу. Тест на список заявок был, но проверял только пустой список и не смотрел, чьи строки вернулись.</p>
+<p>Код был исполнен. Поведение не было проверено.</p>
+<p><strong>Тестирование</strong> это сравнение ожидаемого поведения с фактическим. Сравнение требует трёх вещей: входа, наблюдения и эталона, с которым наблюдение сверяют. Если эталона нет, запуск программы остаётся запуском, а не проверкой.</p>
+<p>Главная мысль занятия: <strong>тест проверяет утверждение, а не строки кода</strong>. Сначала формулируют ожидание, потом пишут проверку. Обратный порядок даёт набор действий, которые заканчиваются словом «работает», потому что так решил автор.</p>
+<p>Эта мысль кажется очевидной, пока не посмотреть на типичный учебный проект. Тесты там часто появляются после кода и повторяют его структуру: отдельный тест на каждую функцию, отдельный тест на каждый класс. В результате проверено то, что написано, а не то, что нужно пользователю.</p>
+<p>Разница видна на коротком примере. Функция <code>discount(total, percent)</code> возвращает сумму со скидкой. Тест <code>assert discount(100, 10) == 90</code> подтверждает один случай. Он ничего не говорит о скидке больше ста процентов, об отрицательной сумме, о пустом значении и о том, что произойдёт при округлении копеек.</p>
+<p>Тестирование начинается с вопроса «какое утверждение я проверяю», а не с вопроса «какую функцию вызвать».</p>
+<h2 id="что-доказывает-тест"><span class="num">02</span>Что доказывает тест</h2>
+<p>Тест содержит условие, действие, наблюдение и <strong>оракул</strong>. Оракул это правило, по которому наблюдение признаётся верным или неверным. В простом случае оракул записан как ожидаемое значение. В сложном случае это инвариант: сумма строк отчёта равна сумме заказов, статус не откатывается назад, чужой пользователь не видит данные.</p>
+<p>Без оракула тест проверяет только отсутствие исключения. Такой прогон называют дымовым: он полезен как быстрая проверка сборки, но не отвечает на вопрос о поведении. Дымовой тест ловит падение приложения и пропускает неверную сумму, перепутанные права и потерянную запись.</p>
+<p>Гленфорд Майерс в книге «The Art of Software Testing» дал формулировку, которую цитируют почти все учебники: тестирование это процесс выполнения программы с намерением найти ошибку. Книга вышла в 1979 году и с тех пор переиздавалась; третье издание подготовили Кори Сандлер и Том Баджетт <a href="https://doi.org/10.1002/9781119202486">Myers и др., 2011</a>.</p>
+<p>Из этой формулировки следуют два вывода. Первый: тест, который не может упасть, не является тестом. Второй: цель тестирования не подтвердить качество, а найти расхождение. Психологически это разные задачи, и вторая требует других примеров.</p>
+<p>Стандарт ISO/IEC/IEEE 29119-1:2022 описывает тестирование как набор процессов и понятий: тест-кейс, тестовая процедура, тестовые данные, результат, инцидент <a href="https://www.iso.org/standard/81291.html">ISO/IEC/IEEE 29119-1:2022</a>. Стандарт полезен словарём и рамкой, но не говорит, какие именно случаи брать для конкретной системы. Выбор случаев остаётся инженерной работой.</p>
+<p>Свод знаний по программной инженерии SWEBOK v4 относит тестирование к отдельной области знания и связывает его с качеством, требованиями и сопровождением <a href="https://www.computer.org/education/bodies-of-knowledge/software-engineering/v4">SWEBOK v4</a>. Связь важна: тест без требования проверяет неизвестно что, а требование без теста не имеет доказательства выполнения.</p>
+<h3>Семь принципов и их цена</h3>
+<p>Программа подготовки тестировщиков ISTQB в базовом syllabus 4.0 перечисляет принципы, которые полезно держать в голове <a href="https://www.istqb.org/certifications/certified-tester-foundation-level-ctfl-v4-0">ISTQB CTFL 4.0</a>. Перескажем их применительно к учебному продукту.</p>
+<p><strong>Тестирование показывает наличие дефектов, но не их отсутствие.</strong> Даже большой набор тестов не доказывает, что дефектов нет. Он повышает уверенность и сужает неизвестность.</p>
+<p><strong>Исчерпывающее тестирование невозможно.</strong> Число входов и состояний растёт быстрее времени. Поэтому случаи выбирают по риску, а не по желанию покрыть всё.</p>
+<p><strong>Раннее тестирование дешевле.</strong> Требование, проверенное до кода, стоит минуты. То же расхождение, найденное в работе, требует миграции и объяснений.</p>
+<p><strong>Дефекты скапливаются.</strong> В небольшом числе модулей обычно сосредоточена большая часть ошибок. Если модуль уже дал три дефекта, он заслуживает дополнительных проверок.</p>
+<p><strong>Тесты изнашиваются.</strong> Один и тот же набор перестаёт находить новое, потому что программа и данные меняются. Набор нужно пересматривать, а не только пополнять.</p>
+<p><strong>Тестирование зависит от контекста.</strong> Банковский перевод и учебная заявка требуют разной строгости. Одинаковый процесс для них либо избыточен, либо опасен.</p>
+<p><strong>Отсутствие ошибок не равно пользе.</strong> Продукт может быть технически исправен и не решать задачу пользователя. Этот принцип связывает тестирование с требованиями.</p>
+<p>Принципы не заменяют план. Они объясняют, почему план не может быть полным и почему приоритет важнее количества.</p>
+<h3>Что проверяет тест</h3>
+<table>
+<thead>
+<tr>
+<th>Вопрос</th>
+<th>Ответ теста</th>
+<th>Что остаётся вне проверки</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Вернулось ли ожидаемое значение</td>
+<td>сравнение с эталоном</td>
+<td>удобство и смысл значения</td>
+</tr>
+<tr>
+<td>Не упало ли приложение</td>
+<td>отсутствие исключения</td>
+<td>неверные данные и права</td>
+</tr>
+<tr>
+<td>Выполнился ли сценарий</td>
+<td>последовательность шагов</td>
+<td>редкие сочетания условий</td>
+</tr>
+<tr>
+<td>Соблюдён ли контракт</td>
+<td>формат запроса и ответа</td>
+<td>поведение при нагрузке</td>
+</tr>
+</tbody>
+</table>
+<p>Таблица показывает границу: каждый тест отвечает на один узкий вопрос. Полнота складывается из набора вопросов, а не из размера одного теста.</p>
+<p>У теста есть ещё одно свойство, без которого он бесполезен: воспроизводимость. Если результат зависит от времени, порядка запуска или данных, оставшихся от прошлого прогона, падение нельзя объяснить и исправить. Тест, который иногда зелёный, хуже отсутствующего: он приучает не верить отчёту. Поэтому случайные данные фиксируют зерном, время подменяют явным значением, а зависимости от сети убирают на уровень интеграции.</p>
+<p>Независимость от порядка проверяется просто: запустите набор в обратном порядке и по одному файлу. Если результат изменился, тесты делят состояние. Причина обычно в общей базе, общем файле или статической переменной.</p>
+<h2 id="уровни-и-их-экономика"><span class="num">03</span>Уровни и их экономика</h2>
+<p>Уровень тестирования задаёт область проверки и цену ошибки. Чем шире область, тем реалистичнее проверка и тем дороже прогон.</p>
+<p><strong>Модульный тест</strong> проверяет функцию, класс или небольшой модуль отдельно от остальных. Он не ходит в сеть и в базу, работает с подставными объектами и занимает миллисекунды. Его сила в точности: падение сразу указывает на конкретное правило.</p>
+<p><strong>Интеграционный тест</strong> проверяет связь двух и более частей: приложение и база, обработчик и очередь, клиент и HTTP-интерфейс. Он ловит то, что модульные тесты пропускают по построению: несовпадение форматов, неправильную транзакцию, потерянную миграцию, различие кодировок.</p>
+<p><strong>Системный тест</strong> проверяет продукт целиком в среде, похожей на рабочую. Здесь появляются установка, конфигурация, права, сеть и данные, которых не было в модулях.</p>
+<p><strong>Приёмочный тест</strong> проверяет сценарий с точки зрения пользователя и критериев приёмки. Он отвечает не на вопрос «правильно ли построено», а на вопрос «то ли построено».</p>
+<p>Границы между уровнями не абсолютны. Один и тот же сценарий можно прогнать через интерфейс, через HTTP и через вызов функции. Уровень определяется не инструментом, а тем, какие части системы участвуют в проверке.</p>
 <figure class="figure" data-fig="test-levels" data-one="H4sIAAAAAAACCp1WW4/bRBR+768YZoVUUJzYuZisc5GgbCWeQAIeeJzYY+9oHY9lO+kGhLRtoYBaqV2ERB+4dftYBNvtRru0zVbiF4z/EeeMvZt0uyGUF0/mzDnfOfOdy6T7xvsfXvnks482yGY2DPuXuriQkEVBjyYjigLOPFiGPGPE3WRJyrMeHWW+0aan4ogNeY+OBb8WyySjxJVRxiNQuya8bLPn8bFwuaE3FSIikQkWGqnLQt6zECQTWcj76mG+o07UgZqpY5LfUNP8OnyPS+E+ivO73VqhfKmbZhNcCXESKTPyBTGMmMU8cdZ85tt+owMCEW05a3WvYTXruB2OMu45a61Bq2WbKGCuC3E6a+bV9ru2tkilD/sN62prYwP3ySjkThIM2OVmq9Jcr9h2pWrV3+qQL8Hz2+B1ILeNVHwuosAZyMTjiQGS4hiprICCNwG9IUsCETngdsDcrSCRo8hzsoRFacwSCKIDrIUyccYsuawDBx8+8Gj4bCjCiUM/5oHk5NMPaCWdpBkfGiNRScHcSHki/MJj1U8gFRjV3EcBqKkByCJGx4q3SSpD4ZHiGK95dmokzBOj1LHqMdwkZp6Ht7PaYFN8mnF5wyqf8EEiry3cj5ikjccYu2ObJlmPt2tWtU6uyAg8srQylJGES7u8Q0KeZeAPd+iiatl82CEZ384MTY0vk6EziiF0l6X8ZYp0MstEVCOZ8XkQlglRQvDELOOwLB1E68IgloGm4wAgPZHGIZs4g1C6Wx2iixgcmG92yCYXwWbmsFEm0aJbK0uyWyt7BlMPiyfGxAWnaY/q/FCs2m58Kis5pH21V9R8fpv8fUTym/N26NZibYMhYZu9J7d7FKm22yapN2xKEgnNRMUwoIQlghkhG/Aw5N5g0qNZaOimIfDD46mr/QNaIRTeXANi+FV33L56ro7VodpfDGOq/lrdlxoZvZwCFx7VT6B3op6oEwLQJ+owv6me5XfULL+dfz1HBcQKKkzh4E7+rZoSCGOGx+oJhpXfgv0JQBV2MCjA8Lt895zNC9A9znfRU/5NoVvt1jCS/qUiwmCxuXr01bqgRRmyyN2USY8OheeFvGQOsyfDSSAjEksRZZDEhmlW6jZptPXStMxK2yb1d3ChxBdh2KPlVKEkzRK5Bdkqxw6tnaGiSwKpbTRNSiCsVp0WccKEAYP2GVRp2X/1pmoKqQCYpZh2+yVMuzpHLQYj7UMqbiGdwDegY9Zx+wx+PgXyn586WMYFXnvd1CTg0jIrVgvLVK9nznzfX6CiGNL/QoVl2Uu4KE37yytlJSdWo/4fSFEH+V11hDV3VsG6J1DyGBrhSO2vpEaT0CxJgXUd6sVqEqtY/zc5bXMVOeeabjUl6/ZqSr4CwJl6qrk+1jy80MPjAPbP5mxoB7XgNXpvhePzQbfM1mm/9PUkONSpmeHMgXlyCM2xU0wfPV324fRkyf1PoSxo3L56DKMDJ/JOiTPF+QLXK3DKibbkmucZrWORXTRUXouOC2bAL+qB+hm+36t7BOb3ffWbugfz9r76QT0i8Lmnrqs9onbVI1Dcg9OH6g8C+rtacQ9steABAPypflS/z+8DT9o4ePm1wpcWn4lX5s78bSiqAB+Hab4DLTMFUTFB8jvA2wzfgBmO6SP9zuDcLpQW7aCqbhIAv4GsLzwVixVW1e8iDHYxxqV8bmvFP9l/ALy3vkbaCgAA"><iframe title="Figure 1: test-levels" scrolling="no"></iframe><figcaption>Пирамида уровней: много модульных тестов, меньше интеграционных, ещё меньше приёмочных. Внизу быстрые и дешёвые проверки, вверху медленные.</figcaption></figure>
 
-<p><strong>Модульный тест</strong> проверяет функцию или класс отдельно. Он быстрый и точно указывает место ошибки.</p>
-<p><strong>Интеграционный тест</strong> проверяет связь модулей: приложение и база, два сервиса, запрос и ответ.</p>
-<p><strong>Приёмочный тест</strong> проверяет сценарий целиком с точки зрения пользователя.</p>
-<p>Пирамида означает пропорцию: основа даёт быструю обратную связь, вершина подтверждает цель.</p>
+<p>Пирамида описывает пропорцию, а не запрет. Смысл в том, что основа даёт быструю обратную связь и точную локализацию, а вершина подтверждает цель. Если перевернуть пирамиду и строить продукт на одних приёмочных тестах, прогон станет медленным, а причина падения будет неясна.</p>
+<h3>Размеры тестов в терминах времени</h3>
+<p>Команда Google в блоге Testing on the Toilet предложила делить тесты по ограничениям среды, а не по названию уровня <a href="https://testing.googleblog.com/2010/12/test-sizes.html">Google Testing Blog, 2010</a>. Малый тест не имеет доступа к сети, к базе и к файловой системе, работает в одном потоке и укладывается в 60 секунд. Средний может обращаться к локальной машине и базе, но не к внешним системам, и укладывается в 300 секунд. Большой тест может всё, включая внешние системы, и получает 900 секунд и больше.</p>
+<table>
+<thead>
+<tr>
+<th>Признак</th>
+<th>Малый</th>
+<th>Средний</th>
+<th>Большой</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>сеть</td>
+<td>нет</td>
+<td>только локальная</td>
+<td>да</td>
+</tr>
+<tr>
+<td>база данных</td>
+<td>нет</td>
+<td>да</td>
+<td>да</td>
+</tr>
+<tr>
+<td>файловая система</td>
+<td>нет</td>
+<td>да</td>
+<td>да</td>
+</tr>
+<tr>
+<td>внешние системы</td>
+<td>нет</td>
+<td>не рекомендуется</td>
+<td>да</td>
+</tr>
+<tr>
+<td>несколько потоков</td>
+<td>нет</td>
+<td>да</td>
+<td>да</td>
+</tr>
+<tr>
+<td>предел, секунд</td>
+<td>60</td>
+<td>300</td>
+<td>900 и больше</td>
+</tr>
+</tbody>
+</table>
+<p>Такая классификация удобнее слов «юнит» и «интеграционный», потому что её можно проверить автоматически. Если малый тест вдруг открыл сокет, сборка падает. Ограничение превращает договорённость в правило.</p>
+<p>Цена правила тоже видна. Малые тесты требуют подставных объектов и продуманных границ модуля. Если код связан с базой напрямую, малый тест написать трудно, и команда начинает называть интеграционный тест модульным. Название меняется, скорость и точность нет.</p>
+<h3>Как это выглядит в pytest</h3>
+<p>В Python самый распространённый инструмент это pytest. Он находит файлы <code>test_*.py</code>, собирает функции <code>test_*</code>, переписывает утверждения так, чтобы при падении было видно значения, и поддерживает фикстуры для подготовки данных <a href="https://docs.pytest.org/en/stable/">pytest</a>.</p>
+<div class="codehilite" data-lang="python"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">pytest</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">app.requests</span><span class="w"> </span><span class="kn">import</span> <span class="n">can_close</span>
+
+
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">parametrize</span><span class="p">(</span><span class="s2">"role, owner, expected"</span><span class="p">,</span> <span class="p">[</span>
+    <span class="p">(</span><span class="s2">"employee"</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"employee"</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"manager"</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">),</span>
+<span class="p">])</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">test_close_permission</span><span class="p">(</span><span class="n">role</span><span class="p">,</span> <span class="n">owner</span><span class="p">,</span> <span class="n">expected</span><span class="p">):</span>
+    <span class="k">assert</span> <span class="n">can_close</span><span class="p">(</span><span class="n">role</span><span class="o">=</span><span class="n">role</span><span class="p">,</span> <span class="n">owner</span><span class="o">=</span><span class="n">owner</span><span class="p">)</span> <span class="o">==</span> <span class="n">expected</span>
+</code></pre></div>
+
+<p>Параметризация задаёт таблицу случаев в коде. Один тест, три проверки, три строки отчёта. Если менеджеру запретили закрывать чужую заявку, упадёт ровно одна строка с понятным набором значений.</p>
+<p>Запуск тоже часть дисциплины:</p>
+<div class="codehilite" data-lang="bash"><pre><span></span><code>pytest<span class="w"> </span>-q
+pytest<span class="w"> </span>-q<span class="w"> </span>-k<span class="w"> </span><span class="s2">"permission and not slow"</span>
+pytest<span class="w"> </span>-q<span class="w"> </span>-x
+</code></pre></div>
+
+<p><code>-q</code> сокращает вывод, <code>-k</code> выбирает тесты по имени, <code>-x</code> останавливается на первом падении. Для ежедневной работы полезен <code>--lf</code>, который запускает только тесты, упавшие в прошлый раз.</p>
+<h3>Подставные объекты и их цена</h3>
+<p>Модульный тест редко работает с настоящей базой и настоящей сетью. Вместо них подставляют объекты, которые ведут себя предсказуемо. Видов несколько, и путать их опасно.</p>
+<p><strong>Заглушка</strong> возвращает заранее заданное значение. Она нужна, когда тесту важен только ответ, а не вызов. <strong>Фальшивый объект</strong> это упрощённая рабочая реализация: словарь вместо базы, список вместо очереди. <strong>Мок</strong> проверяет, что вызов произошёл с нужными аргументами. <strong>Шпион</strong> записывает вызовы и позволяет проверить их после действия.</p>
+<p>Разница видна на примере. Функция отправляет письмо при закрытии заявки. Заглушка почтового клиента просто возвращает успех. Мок проверяет, что адрес получателя совпал. Шпион позволяет убедиться, что письмо отправлено ровно один раз, а не два.</p>
+<p>У подставных объектов есть цена. Тест, который проверяет вызов метода, закрепляет устройство кода, а не поведение. После рефакторинга такой тест падает, хотя продукт работает правильно. Это называют хрупкостью от моков. Чем больше моков, тем сильнее тест связан с внутренним устройством.</p>
+<p>Практическое правило: <strong>проверяйте результат, а не последовательность вызовов</strong>, если последовательность не является требованием. Требование «письмо отправлено один раз» проверять нужно. Требование «вызван метод <code>send</code> у объекта <code>mailer</code>» является деталью реализации.</p>
+<p>Второе правило: <strong>фальшивый объект лучше глубокого мока</strong>. Настоящая логика в подставной базе ловит больше ошибок, чем набор ожиданий на каждом вызове. Для учебного проекта достаточно SQLite в памяти и подменённого почтового клиента.</p>
+<p>Третье правило: <strong>интеграционный тест не должен состоять из моков</strong>. Если замоканы база, сеть и очередь, тест проверяет только склейку вызовов. Настоящий стык остаётся непроверенным.</p>
+<h3>Компромисс уровней</h3>
+<p>Модульные тесты быстрые, но слепые к сборке. Интеграционные видят стыки, но медленнее и требуют базы. Приёмочные реалистичны, но хрупки: изменение подписи кнопки ломает проверку, которая не проверяла смысл.</p>
+<p>Практическое правило: <strong>каждое правило проверяют на самом низком уровне, где его ещё видно</strong>. Право на закрытие заявки видно в функции, значит там и нужен основной тест. Сохранение в базу видно только в интеграции, значит нужен второй тест. Путь пользователя от входа до закрытия заявки проверяют один раз, а не на каждом уровне.</p>
+<p>Второе правило: <strong>дефект закрепляют на том уровне, где он проявился, и, если возможно, ещё ниже</strong>. Ошибка прав, найденная в интерфейсе, получает приёмочную проверку и модульный тест на функцию решения. Так дефект не вернётся через другой вход.</p>
 <div class="gate-step" data-gate>
-<p class="gate-action"><button type="button" class="gate-btn" aria-expanded="false"><span class="gate-q" aria-hidden="true">?</span><span>Почему приёмочных тестов делают меньше, чем модульных?</span></button></p>
-<div class="gate-content" hidden><h2 id="тест-дизайн"><span class="num">03</span>Тест-дизайн</h2>
-<p><strong>Класс эквивалентности</strong> это набор значений, для которых поведение одинаково.</p>
-<p>Для поля «тема заявки»:</p>
-<ul>
-<li>пустая строка;</li>
-<li>обычная строка;</li>
-<li>строка из одних пробелов;</li>
-<li>строка длиннее предела.</li>
-</ul>
-<p>Достаточно одного представителя класса. Проверять сто обычных строк бессмысленно.</p>
-<p><strong>Граничные значения</strong> проверяют края диапазона. Если длина от 1 до 80, проверяют 0, 1, 80 и 81.</p>
-<p>Комбинации условий быстро растут. Поэтому выбирают пары, которые чаще ломаются: пусто, максимум, неверный тип, нет прав.</p>
-<h2 id="структура-тест-кейса"><span class="num">04</span>Структура тест-кейса</h2>
-<p>Хороший тест-кейс содержит:</p>
-<ol>
-<li>название с ожидаемым результатом;</li>
-<li>предусловие;</li>
-<li>шаги;</li>
-<li>ожидаемый результат;</li>
-<li>фактический результат при прогоне.</li>
-</ol>
-<p>Пример:</p>
+<p class="gate-action"><button type="button" class="gate-btn" aria-expanded="false"><span class="gate-q" aria-hidden="true">?</span><span>Как выбрать случаи, если значений бесконечно много, а времени на прогон мало?</span></button></p>
+<div class="gate-content" hidden><h2 id="тест-дизайн-классы-границы-комбинации"><span class="num">04</span>Тест-дизайн: классы, границы, комбинации</h2>
+<p>Перебор всех значений невозможен. Поле темы принимает строку до 80 символов; число строк такой длины практически бесконечно. Четыре поля по пять классов дают 625 комбинаций, а с состояниями и ролями счёт уходит в тысячи. Тест-дизайн это способ выбрать небольшое число случаев, которые представляют большое пространство.</p>
+<p><strong>Класс эквивалентности</strong> это набор значений, для которых ожидаемое поведение одинаково. Для поля «тема заявки» классов четыре: пустая строка, обычная строка, строка из пробелов, строка длиннее предела. Достаточно одного представителя класса, потому что остальные проверяют то же правило.</p>
+<p>Проверять сто обычных строк бессмысленно. Проверять по одному представителю каждого класса разумно. Если поведение внутри класса всё-таки различается, значит класс определён неверно и его нужно разделить.</p>
+<p><strong>Граничные значения</strong> проверяют края диапазона. Если длина от 1 до 80, проверяют 0, 1, 80 и 81. Причина проста: ошибки чаще всего живут в сравнениях <code>&gt;</code>, <code>&gt;=</code>, <code>&lt;</code>, <code>&lt;=</code>. Программист пишет <code>if len(subject) &lt; 80</code>, и строка ровно из 80 символов отклоняется, хотя должна приниматься.</p>
+<p>Границы бывают не только числовыми. Для даты это последний день месяца и високосный год. Для денег это ноль, отрицательное значение и округление половины копейки. Для строки это пустая строка, строка из одного символа и символ за пределами базовой латинской таблицы.</p>
+<p>Отдельная ловушка это единицы измерения длины. В Python <code>len("ёлка")</code> равно четырём, потому что считается число символов. В базе с типом <code>varchar(4)</code> та же строка может не поместиться, если база считает байты, а буква занимает два байта. Тест на границу в приложении проходит, вставка в базу падает.</p>
+<p><strong>Таблица решений</strong> помогает, когда результат зависит от сочетания условий. Строки таблицы это комбинации, столбцы это действия. Для закрытия заявки условий два: роль и владелец.</p>
+<table>
+<thead>
+<tr>
+<th>Роль</th>
+<th>Владелец</th>
+<th>Ожидание</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>сотрудник</td>
+<td>да</td>
+<td>закрыть можно</td>
+</tr>
+<tr>
+<td>сотрудник</td>
+<td>нет</td>
+<td>отказ 403</td>
+</tr>
+<tr>
+<td>менеджер</td>
+<td>да</td>
+<td>закрыть можно</td>
+</tr>
+<tr>
+<td>менеджер</td>
+<td>нет</td>
+<td>закрыть можно</td>
+</tr>
+<tr>
+<td>гость</td>
+<td>любое</td>
+<td>отказ 401</td>
+</tr>
+</tbody>
+</table>
+<p>Таблица сразу показывает, что «менеджер и владелец» и «менеджер и не владелец» дают одинаковый результат, значит их можно объединить. Она же показывает, зачем нужна строка гостя: без неё отказ 401 остаётся непроверенным.</p>
+<p><strong>Переходы состояний</strong> проверяют не значения полей, а последовательность. Заявка проходит состояния «открыта», «в работе», «закрыта». Недопустимый переход из «закрыта» в «в работе» должен быть запрещён, даже если кнопка спрятана. Скрытая кнопка это интерфейс, а не правило.</p>
+<p><strong>Попарный выбор</strong> сокращает комбинации. Вместо всех сочетаний значений проверяют все пары значений из разных параметров. Для четырёх параметров по пять значений полный перебор даёт 625 строк, а покрывающий набор обычно укладывается в 20-30. Точное число зависит от задачи; важно, что каждая пара встречается хотя бы раз.</p>
+<p>Попарный выбор не ловит дефект, который возникает только при сочетании трёх конкретных значений. Поэтому для критичных правил комбинации добавляют вручную, а для остальных ограничиваются парами.</p>
+<p><strong>Догадка об ошибке</strong> и <strong>исследовательское тестирование</strong> дополняют формальные методы. Опытный человек проверяет то, что чаще ломается: пустые поля, двойной клик, две вкладки, возврат назад, длинную строку, эмодзи, отрицательное число, повторную отправку. Формальные методы дают систематичность, догадка даёт попадание в реальные привычки пользователей.</p>
+<figure class="figure" data-fig="test-design-lab" data-one="H4sIAAAAAAACCsVba2/b1hn+nl9xxmCwPUgyqZtlWhKWdi5aoMUGtMNWFPtAiUcSF4rUSMqXtQGaGE1WJG2wYkCBYVuX7sM+DAMUN64dO1aA/gLqH+19zzmkSIqUZLnJUKAyDw/fy/NezyX1n/zil29+8OGvdknP65vNG3X8IaZmdRuSM5RwgGo6/PSpp5F2T3Nc6jWkodfJ16Rg2NL6tCHtGXR/YDueRNq25VELpu0butdr6HTPaNM8e8gRwzI8QzPzblszaUNBIp7hmbTp/9W/8EeTu/Dfwxzxv5t86o/8S/9scn/ykPhnxD/3x/4L/6l/BqOjyX34Patv8m9v1F3vEH8JUR3b9sjHJJ8faAPqqDc7WqfaKe3AQFtzdHjudPROC58N67Z6U9GUbaWKj/2hR+F9tVUtV7ZxwBmaVL1Jy3qt3cFnrd0GtdSb8lu1W1VG0bU78LyrvFXZ3cXnfc2x1JtvyOVbpVs75A6I8zMQpWUf5F3jj4bVVVu2o1MnDyP8NcKdgwn6Iczra07XsFR5h7S09u2uYw8tXfUczXIHmgOcdwBZ03bUPc1ZZ9Jv7JAOYJ3vaH3DPFSl92nXpuTX70g599D1aD8/NHIufJ53qWN0OMeCTvs2CjVlwekxuIAiF1FVBgfEtU1DJ/w1ghG+zTuabgxdVSkPQJGBpuuonFIdCLUK6DXARDfcgakdqh2TwpvfD13P6BzmhX+ooBb4RYt6+5RaO0Qzja6VN0Bul32Qp5a+Q7raIM4GwPM8u69u41iIJxvKkJlJRA9py7H3IzATmTC6CKFalWWiyIODTaVQJG/aFpDR3Fzftmwm5Q4xqecBJ3xCXQtKkfZ3iEcPvDwzUcd2+upwABi2NZfGTcUdR0jSK8VMzQwI3kFVhWlkGhbN96jR7XkqyBLgaVjo1ExURWFillPFjLJlDg1c93sAKpOcqpa972gDTtXd60Zs1DLt9m2YjGGqKrL80x0ixNCGnr0jRM579kCthXYeaBY1I0Qs26LRVwXbmmXBXrue5g1dhAKICkbVIhKOMKrG3AvMQ5RixOzCC7knJP0ZY3Mjhm9pFt9yJS5OCwTKtByEjqcZZmg+JuJW6EIo2pXsEtFcmUKK0eHYpjsTPhgJnBsGB5pR5baMSIMYcTqtIYSEFfgMc28mH1mYJQK8awi3nAX3/CyRNAam3o20/NUeOi4MDWxwcOpERVd79h51WPpk3FPNkmkrToO734w04czFpLFcBA5ttG+je6RIzN4JgR3axlB1wYi3aZIoH+W1UC0Wyvzzn/epbmhkva8diFeVKgC/AWSCdB0GAfP/OzyLRHx7iw8HiSIRj8ClvilKZH1TlHSsOvCjG3ukDd7qNiTkJWERjQ7ibDbIh5v1QfBGpFSp6X/rn0DZvgeF+odT4j+D0nwKxfu5f1nfHDTrvVLTf8LK98XkEf6SyV3482jyACad+MfEv5wc+d9DWR+DcKVmfRP5hBxDQUA14HU8eQhNwAm0B2eTe/4J8V+yTuEYmF4gAfGt+AP/wjyH3ckb9kFDwrRfrcmkWKlJBOIMOhej35WI5hha3tRa1DSp3jpsSJ5u5ll3QfAvnbrtAAU+auiROVKsfSGTL0BNlOgYJLsAHS9BVFAPQfLP0robGB+BWhc44o8IvD6Z/Ak/BCLPwzaHQwKihNy5XP5fAM/HiPwFtkcoAUDjv0DaLwH3cyCOFmFvHgBpMBWy4OCNQUzE8xy7LOitYuKBTp8ROUeUHAHUYEZNKRDBj6kzAmJHYNARUwOpXSCdJNu09o2wDy+YAKBmAWwG6jCjgZ7dwPC8yNiWRHTN01iOaUgmhedI99OQZtOuMBiaDOo0AeuXyhKBqSVZmgZPQ1Iq4nGfZeOGtCXjBMM0G5JoELmTgwKgJqg0eQwiA15qiDm+GE/uEQVHxoAVGA2YZklQKcYlKIb8eP8J/M4DhwJ3ApzHPLBGgCyiOvYvAX/gyUaBPQMYg+MFBx9sCq+4B4HguYRVQ6LnbPR5IG4gL0tjBwgFk7dWlXhrAKKXYagnkCqD4A5Mq4byQ8KURJ6Dp6JeUmDOZnOGbrWwNUO5WC2U4rQFUd5iR8hgGScHipAPfmvwe1AUz/CrINChGLwll2L5F+YUqqkkuWhRonxkhixfCSxJtiqX4lT5wDWJKgn9+cDVAAiotg2nDZmtLczeBusoMijugC1CUwhKU1miXzGc0r8TaqV+x5BY4TNlCSmTAVjlAbiVCMCZT3lvr1ntng2UYS0iNbNiuraIpFCiqWQQqGxXlqOQIlRmpqkqteU0bdaUzGTFo18JM6SgUZovWN/QdVYUIRVCiTnidQ+y5ziDkcgySiWRmJX5Vgn5QObl1WaRItkMRN7NYuA/hZL5gNUuXvhYqQOemej/2CoFHKZ1EZpOURMt26PY20A5RZiPWRWGGqCSEP6k3DkyZQEV/ZtpIwDFDToEwioHdGWTLydfxjuWo0JYWSMZXVQ2pVoLE7pSrs6Wiq1oqdA7rTnVIoInC3EkX8t0xbl4JqIkhXJRVrIsJXqADEtlIZzwjM1uc7EJlZgJwXwvWHXHkRFrn7kDzgRWinWxtcNm8DGMPkq1mLItX9VkohDPVKs0kxUxL8w32dzsoWSaLKC8sslCVGHh8WIVO9VSY42Hz2cM9MeJhmspi5QQ/VdnkbKyfS2L1LKjKCB9DZNAC8sxXdkoM9ED/TCYA3pk1rVzC/C2+CKR/77GUYigR7hAGk0+x8XRMVA78b/DLvmCrV5GbOl0l8caX3VeBi12qj0rcvHaSTHZcEX7hq3KtZJiLTvEAtIr2zOJNwKYYtSsSl0sVbNWSHNdtJyypj0G07ENClyYKegKmEUfcMtNHkelmsqUWH/GFp98t/A1rz+fTBfbyTXoS6brCXd1dnwywvJ9MlfVlRalL6NtAnQG9zgfhDa6u8N3OsYgIouNHM4ak2Bf4CVEJUTe5IjpwZ1k8vnkzzAJpvGAi6k0raWLk4D/D0b7U8ZjxCromG8uoSOc8uQLfxIWwE8xCaAgZ2zbQoT1aSCaoJOZrfkKVp7GNsZ5ENuVKo/t2moNj2jfFRbMCWdZJgDHURxWSaf+VxGM/JM4lHF0iP8VvDqFjPkp+ijCG+UPPvvljK1TIS1WqlfE9Cr1b7qeycR0/nrmOIbISqB+PQUu6Z7C52PIPQpiBwsNRtgpdhY8uV0CrqnOfMmRhvB7gdCnIl3eqr1C761Ui9fz3tMoTHPqRncqTqVVqVTl2T2OUAPcDZfwuOQ2dfB0sSENHXP9pubs5z3d3IiiNNC8HoEJ7xXlIlFkuVeuxvQM35eL5Zn3cU9YuLGzpHz5brqEADVRyvJeqfw25Iy9PBSXVEmmIm/ViFKU3wbRl9ghSkgnXuua29McR8OqQcpzhHY2ItKEzWJFEW3RiovjSDAsWvHj5swqLM7801iWgzB9vjDSkmVqpqtRyit1NaWZojp5nCNlIqoVOy3g9RMb3pnqmSNKSqmdPJxu+y7f++CZyWvufP7JmwvCe7kL0IN3lCeT++rCk5Nr9TssHUM3gOx5+8VxPAZud/EAim/6M+OwcxWx3mMr9GPwiM8SZxyR1mzMvoZ5oufJ8h1lW5TERdKmuw5wP0anifaMWZtW5XLxWqwesHO8UQazGcWKQTUuZq1e5tYIhvo9CL4jBuKZf56hVshoS16JES4fWMp5BtpBYF2hGX2SFJGdkqWZRE30VJHOIH3zZkvYKrKyrMg/2t5NWWy3JRPWsju/MV1WapTSoUt3MTWymCdluZSLnU2KgGNW5JubuIZP74pE1708qldZr5e3S4tQnVuUQLOVoPxb3H9/dB9kWxqv0Am3iv8vJ0xDLtMFM7Ej/n/5YWvsrkKip49uW5wxCrjG4DUfD3XxiHk25WVsPAV+/IosEzryq7JMdgO18rZQygUElZR4fX7JeiV2hUEh6adJke5Ipx03lJZ3vuxChuh5g274Nxz2WvD8toAeF1a081uGPfzxIWgnEdsx2J1ZvGwnNesD2zzs2hZh14xcdm0lR2oEEptMpmftYsWz2axvchZzpMp3X59coecsI5fz+uQKU3NcLrx3wi1a33T3uJmjN4+C7b7g0o14nl5Uil+iwkuCUuSGDntu+n8Hj/oeTx74tSV2YwS8DILgHusezydHOUwu9/hhIzgmSxTPWL16xHbOJo/BV6c7zqn8g/uDwW0lcREweXVGzLYtfntIXGEJrg3VN/lnmTQCCKK7kgs/YkuHue18lITQLvhx244xgFhc7wyttmcA5fUN8jHM29McxoQ02CMhoJ9K1uqt+J0s5Ba7dgXwtZrE/3f0OlR454bl8+CAbYxnBZkHwLnYNjfXKvvYIXnUyvZQZ+5X4R7mM1EcLoPCEf9mKgLfvjwNJj0Vu+14IDXmbnbJr3qFx5SR/VixFLmLVmcLlRO2CwuTCms5Bic3tUD0m/hO8+xe73MB65PkOGHinvEFUFwd5t7hHUBxj2xmXct0mNnoPktf2J4UUIRwAwnr6zlbaL1Ek4lNa6zcF9OGMFGe/RfqlPaYd5GjjGV0QjJ+PnuBPYN/yfe8+X1HXtcjB08CY4wMgfC3c5azAtt/RVeUbKXJvRDofsG7BXSJ2Xr3PHb5DxGaejH54T/JZc6cZueHi9CpEtcG+OnYUo0Lc4VoJIEMs/PiUlyZcTTDwBr+Pui9BpDf2RGZg21wuJA7dLs97ENJKfxhSJ3D96kJnZTt3DLN9TV+l31tI/iG56gFH/FJH4Xp73fT78Vl88jnXertmhT/fOPwHX19bVplpl+J2+cLvuKz8Cv4LEyVbs/eX2eXs0WO5GoXOrazq7V7kZw6wFvHgwIrD+8arlfw7G7XpOtrtrWWgxeoj0u9AhIjjUaDBP/IgskZXLxOo9xCyq0syq2FlDkeBcOyoDX44L13EQn45CMGLp/ClS9g0/Ym/0cmMGntFVTeNeR358aNJfTVdH13DyRBlSmIvr7WNmGZASrHChk3URwFrrwAYK5/IsGNFBmoGRicmstKIlq1VCyBSiAgLpDIJ5+QtTWOPZeS/5/psgZ1GP3wzsY6/B86K1HAIYfxm+eb/N+c/Q8BY7wphDYAAA=="><iframe title="Figure 2: test-design-lab" scrolling="no"></iframe><figcaption>Выберите правило и нажмите на класс или границу: схема показывает представителей классов, края диапазона и число проверок вместо полного перебора.</figcaption></figure>
+
+<p>Схема показывает главное: дизайн тестов это не список всех значений, а несколько представителей и краёв. Хороший набор тестов читается как оглавление требований.</p>
+<h3>Сколько тестов достаточно</h3>
+<p>Ответ зависит от риска, а не от числа функций. Для учебной заявки разумный минимум выглядит так:</p>
+<table>
+<thead>
+<tr>
+<th>Что проверяем</th>
+<th>Уровень</th>
+<th>Почему</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>правило прав</td>
+<td>модульный</td>
+<td>быстро и точно</td>
+</tr>
+<tr>
+<td>сохранение и чтение</td>
+<td>интеграционный</td>
+<td>нужна база</td>
+</tr>
+<tr>
+<td>миграция схемы</td>
+<td>интеграционный</td>
+<td>ошибка видна только на данных</td>
+</tr>
+<tr>
+<td>создание и закрытие заявки</td>
+<td>системный</td>
+<td>проверяется весь путь</td>
+</tr>
+<tr>
+<td>критерий приёмки истории</td>
+<td>приёмочный</td>
+<td>подтверждает цель</td>
+</tr>
+</tbody>
+</table>
+<h3>Структура тест-кейса</h3>
+<p>Тест-кейс это проверка утверждения, а не список нажатий. Минимальная структура: имя, условие, действие, ожидаемый результат и фактический результат при прогоне.</p>
+<p>Удобно записывать в форме «дано, когда, тогда». Дано описывает состояние, когда описывает действие, тогда описывает наблюдение.</p>
 <div class="codehilite" data-lang="text"><pre><span></span><code>Название: закрытие заявки без прав возвращает ошибку
-Дано: пользователь с ролью сотрудник
-Когда: вызывает закрытие чужой заявки
+Дано: пользователь с ролью сотрудник, чужая заявка в статусе открыта
+Когда: пользователь вызывает закрытие
 Тогда: ответ 403, статус заявки не меняется
 </code></pre></div>
 
-<h2 id="покрытие"><span class="num">05</span>Покрытие</h2>
-<p><strong>Покрытие</strong> показывает, какая часть кода или требований проверена.</p>
-<ul>
-<li>покрытие строк: выполнялась ли строка;</li>
-<li>покрытие ветвей: проверены ли обе стороны условия;</li>
-<li>покрытие требований: есть ли тест на каждый критерий приёмки.</li>
-</ul>
-<p>Сто процентов покрытия не гарантируют правильность. Можно выполнить строку и не проверить результат.</p>
-<h2 id="что-тестировать-в-первую-очередь"><span class="num">06</span>Что тестировать в первую очередь</h2>
-<ul>
-<li>права доступа;</li>
-<li>пустые и максимальные значения;</li>
-<li>ошибки внешних служб;</li>
-<li>повторные действия;</li>
-<li>переходы статусов;</li>
-<li>сохранение данных.</li>
-</ul>
-<p>Эти места чаще всего приводят к потере данных или доступу к чужим данным.</p>
-<h2 id="где-тестирование-ломается"><span class="num">07</span>Где тестирование ломается</h2>
-<p><strong>Тест без утверждения.</strong> Код выполняется, но результат не сравнивается.</p>
-<p><strong>Только счастливый путь.</strong> Проверяют успешный сценарий, ошибки остаются.</p>
-<p><strong>Тест зависит от порядка.</strong> Второй тест падает после первого.</p>
-<p><strong>Медленные тесты на всё.</strong> Прогон занимает час, его перестают запускать.</p>
-<p><strong>Погоня за покрытием.</strong> Пишут тесты ради процента, а не ради проверки.</p>
-<p><strong>Нет теста на дефект.</strong> Ошибку исправили, но не закрепили проверкой.</p>
-<div class="callout pitfall"><span class="label">Тест, который никогда не падал, возможно, ничего не проверяет. Убедитесь, что при поломке он действительно краснеет.</span></div>
-
-<h2 id="итоги"><span class="num">08</span>Итоги</h2>
-<ul>
-<li>Уровни тестов различаются скоростью и областью проверки.</li>
-<li>Классы эквивалентности сокращают число случаев.</li>
-<li>Границы проверяют отдельно.</li>
-<li>Тест-кейс содержит ожидаемый результат.</li>
-<li>Покрытие полезно, но не доказывает правильность.</li>
-</ul></div>
+<p>В коде те же три части видны в arrange, act, assert. Подготовка данных, действие, проверка. Смешивать их не стоит: тест, который проверяет несколько действий подряд, при падении не говорит, какое из них сломалось.</p>
+<p>Фактический результат записывают при ручном прогоне. В автоматическом тесте его место занимает сообщение об ошибке. Если тест упал, в отчёте должны быть входные данные и полученное значение, иначе разбор начнётся с повторного запуска.</p>
+<p>Набор из двадцати таких проверок полезнее сотни тестов на геттеры. Геттер не содержит решения, значит его проверка почти ничего не говорит о продукте.</p></div>
 </div>
 
 <div class="gate-step" data-gate>
-<p class="gate-action"><button type="button" class="gate-btn" aria-expanded="false"><span class="gate-q" aria-hidden="true">?</span><span>Почему тест на успешный сценарий не заменяет проверку прав доступа?</span></button></p>
-<div class="gate-content" hidden><div class="quiz" data-quiz data-quiz-guard><div class="quiz-who"><label class="quiz-who-label"><span>ФИО</span><input type="text" class="quiz-name" data-quiz-name maxlength="80" autocomplete="off" placeholder="Иванов Иван Иванович"></label><span class="quiz-attempts" data-quiz-attempts>две попытки на лекцию</span><span class="quiz-note" data-who-note hidden></span></div><div class="quiz-q" data-type="single" data-correct="1" data-q="1"><p class="quiz-p"><span class="quiz-no" aria-hidden="true">01</span>Что сравнивает тест?</p><div class="opts"><label class="opt"><input type="radio" name="q106_0" value="2" autocomplete="off"><span>Код с документацией</span></label><label class="opt"><input type="radio" name="q106_0" value="0" autocomplete="off" data-ok><span>Ожидаемое поведение с фактическим</span></label><label class="opt"><input type="radio" name="q106_0" value="1" autocomplete="off"><span>Скорость сервера с тарифом</span></label><label class="opt"><input type="radio" name="q106_0" value="3" autocomplete="off"><span>Число строк с нормой</span></label></div><p class="quiz-why" hidden>Проверка поведения.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="2" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">02</span>Что такое класс эквивалентности?</p><div class="opts"><label class="opt"><input type="radio" name="q106_1" value="3" autocomplete="off"><span>Случайные значения</span></label><label class="opt"><input type="radio" name="q106_1" value="0" autocomplete="off" data-ok><span>Значения с одинаковым поведением</span></label><label class="opt"><input type="radio" name="q106_1" value="1" autocomplete="off"><span>Все возможные значения</span></label><label class="opt"><input type="radio" name="q106_1" value="2" autocomplete="off"><span>Только границы</span></label></div><p class="quiz-why" hidden>Один представитель.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="multi" data-correct="4" data-q="3" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">03</span>Какие уровни тестирования существуют?</p><div class="opts"><label class="opt"><input type="checkbox" name="q106_2" value="2" autocomplete="off" data-ok><span>Приёмочные</span></label><label class="opt"><input type="checkbox" name="q106_2" value="3" autocomplete="off" data-ok><span>Системные</span></label><label class="opt"><input type="checkbox" name="q106_2" value="5" autocomplete="off"><span>Цветовые</span></label><label class="opt"><input type="checkbox" name="q106_2" value="4" autocomplete="off"><span>Стилевые</span></label><label class="opt"><input type="checkbox" name="q106_2" value="0" autocomplete="off" data-ok><span>Модульные</span></label><label class="opt"><input type="checkbox" name="q106_2" value="1" autocomplete="off" data-ok><span>Интеграционные</span></label></div><p class="quiz-why" hidden>Остальное не уровни.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="short" data-q="4" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">04</span>Как называют набор значений с одинаковым поведением?</p><input type="text" class="short-answer" data-answers="[&quot;класс эквивалентности&quot;, &quot;equivalence class&quot;]" placeholder="Введите ответ" autocomplete="off" spellcheck="false" aria-label="Как называют набор значений с одинаковым поведением?"><p class="quiz-why" hidden>Один представитель.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="5" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">05</span>Что содержит тест-кейс?</p><div class="opts"><label class="opt"><input type="radio" name="q106_4" value="3" autocomplete="off"><span>Только код</span></label><label class="opt"><input type="radio" name="q106_4" value="2" autocomplete="off"><span>Только название</span></label><label class="opt"><input type="radio" name="q106_4" value="1" autocomplete="off"><span>Только шаги</span></label><label class="opt"><input type="radio" name="q106_4" value="0" autocomplete="off" data-ok><span>Ожидаемый результат</span></label></div><p class="quiz-why" hidden>Проверка результата.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="6" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">06</span>Почему 100 процентов покрытия не гарантируют правильность?</p><div class="opts"><label class="opt"><input type="radio" name="q106_5" value="1" autocomplete="off"><span>Покрытие всегда врёт</span></label><label class="opt"><input type="radio" name="q106_5" value="2" autocomplete="off"><span>Тесты слишком быстрые</span></label><label class="opt"><input type="radio" name="q106_5" value="3" autocomplete="off"><span>Код слишком короткий</span></label><label class="opt"><input type="radio" name="q106_5" value="0" autocomplete="off" data-ok><span>Строка выполнена, но результат не проверен</span></label></div><p class="quiz-why" hidden>Нужны утверждения.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="short" data-q="7" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">07</span>Что сравнивает тест с ожиданием?</p><input type="text" class="short-answer" data-answers="[&quot;результат&quot;, &quot;фактический результат&quot;]" placeholder="Введите ответ" autocomplete="off" spellcheck="false" aria-label="Что сравнивает тест с ожиданием?"><p class="quiz-why" hidden>Проверка.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="multi" data-correct="4" data-q="8" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">08</span>Что проверяют в первую очередь?</p><div class="opts"><label class="opt"><input type="checkbox" name="q106_7" value="4" autocomplete="off"><span>Цвет фона</span></label><label class="opt"><input type="checkbox" name="q106_7" value="1" autocomplete="off" data-ok><span>Максимальные значения</span></label><label class="opt"><input type="checkbox" name="q106_7" value="3" autocomplete="off" data-ok><span>Повторные действия</span></label><label class="opt"><input type="checkbox" name="q106_7" value="5" autocomplete="off"><span>Логотип</span></label><label class="opt"><input type="checkbox" name="q106_7" value="0" autocomplete="off" data-ok><span>Пустые значения</span></label><label class="opt"><input type="checkbox" name="q106_7" value="2" autocomplete="off" data-ok><span>Ошибки внешних служб</span></label></div><p class="quiz-why" hidden>Остальное не риск.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="9" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">09</span>Что проверяет модульный тест?</p><div class="opts"><label class="opt"><input type="radio" name="q106_8" value="2" autocomplete="off"><span>Только интерфейс</span></label><label class="opt"><input type="radio" name="q106_8" value="1" autocomplete="off"><span>Всю систему целиком</span></label><label class="opt"><input type="radio" name="q106_8" value="3" autocomplete="off"><span>Только базу</span></label><label class="opt"><input type="radio" name="q106_8" value="0" autocomplete="off" data-ok><span>Отдельную функцию или класс</span></label></div><p class="quiz-why" hidden>Малая область.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="10" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">10</span>Что проверяет приёмочный тест?</p><div class="opts"><label class="opt"><input type="radio" name="q106_9" value="3" autocomplete="off"><span>Стиль кода</span></label><label class="opt"><input type="radio" name="q106_9" value="0" autocomplete="off" data-ok><span>Сценарий целиком</span></label><label class="opt"><input type="radio" name="q106_9" value="1" autocomplete="off"><span>Одну строку</span></label><label class="opt"><input type="radio" name="q106_9" value="2" autocomplete="off"><span>Синтаксис</span></label></div><p class="quiz-why" hidden>Цель пользователя.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="multi" data-correct="4" data-q="11" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">11</span>Какие ошибки тестирования типичны?</p><div class="opts"><label class="opt"><input type="checkbox" name="q106_10" value="0" autocomplete="off" data-ok><span>Тест без утверждения</span></label><label class="opt"><input type="checkbox" name="q106_10" value="1" autocomplete="off" data-ok><span>Только счастливый путь</span></label><label class="opt"><input type="checkbox" name="q106_10" value="4" autocomplete="off"><span>Проверка границ</span></label><label class="opt"><input type="checkbox" name="q106_10" value="2" autocomplete="off" data-ok><span>Тест зависит от порядка</span></label><label class="opt"><input type="checkbox" name="q106_10" value="5" autocomplete="off"><span>Проверка прав</span></label><label class="opt"><input type="checkbox" name="q106_10" value="3" autocomplete="off" data-ok><span>Нет теста на дефект</span></label></div><p class="quiz-why" hidden>Остальное хорошо.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="12" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">12</span>Какие значения проверяют на границе диапазона 1..80?</p><div class="opts"><label class="opt"><input type="radio" name="q106_11" value="2" autocomplete="off"><span>1, 2, 3</span></label><label class="opt"><input type="radio" name="q106_11" value="0" autocomplete="off" data-ok><span>0, 1, 80, 81</span></label><label class="opt"><input type="radio" name="q106_11" value="1" autocomplete="off"><span>40, 41, 42</span></label><label class="opt"><input type="radio" name="q106_11" value="3" autocomplete="off"><span>100, 200</span></label></div><p class="quiz-why" hidden>Края диапазона.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="short" data-q="13" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">13</span>Какие значения проверяют на границе?</p><input type="text" class="short-answer" data-answers="[&quot;граничные&quot;, &quot;границы&quot;]" placeholder="Введите ответ" autocomplete="off" spellcheck="false" aria-label="Какие значения проверяют на границе?"><p class="quiz-why" hidden>Края диапазона.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="14" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">14</span>Что тестируют в первую очередь?</p><div class="opts"><label class="opt"><input type="radio" name="q106_13" value="1" autocomplete="off"><span>Цвет кнопок</span></label><label class="opt"><input type="radio" name="q106_13" value="0" autocomplete="off" data-ok><span>Права доступа и потерю данных</span></label><label class="opt"><input type="radio" name="q106_13" value="2" autocomplete="off"><span>Название проекта</span></label><label class="opt"><input type="radio" name="q106_13" value="3" autocomplete="off"><span>Скорость набора</span></label></div><p class="quiz-why" hidden>Риски.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="15" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">15</span>Что показывает покрытие ветвей?</p><div class="opts"><label class="opt"><input type="radio" name="q106_14" value="1" autocomplete="off"><span>Сколько файлов в проекте</span></label><label class="opt"><input type="radio" name="q106_14" value="2" autocomplete="off"><span>Сколько тестов написано</span></label><label class="opt"><input type="radio" name="q106_14" value="3" autocomplete="off"><span>Сколько авторов</span></label><label class="opt"><input type="radio" name="q106_14" value="0" autocomplete="off" data-ok><span>Проверены ли обе стороны условия</span></label></div><p class="quiz-why" hidden>Ветви условий.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><p class="quiz-note quiz-submit-note" data-quiz-note hidden></p><div class="quiz-result" data-quiz-result hidden aria-live="polite"><span class="label">Результат теста</span><h3>Тест завершён</h3><p class="modal-name-line">ФИО: <b data-student-name></b></p><p class="modal-result" data-modal-result></p><p class="modal-result" data-modal-wrong></p><dl class="modal-times"><div><dt>Время выполнения теста</dt><dd data-test-time>00:00</dd></div><div><dt>Время просмотра лекции</dt><dd data-view-time>00:00</dd></div></dl></div></div></div>
+<p class="gate-action"><button type="button" class="gate-btn" aria-expanded="false"><span class="gate-q" aria-hidden="true">?</span><span>Почему высокий процент покрытия не доказывает, что продукт готов?</span></button></p>
+<div class="gate-content" hidden><h2 id="покрытие-что-оно-измеряет-и-чего-не-измеряет"><span class="num">05</span>Покрытие: что оно измеряет и чего не измеряет</h2>
+<p><strong>Покрытие</strong> показывает, какая часть кода или требований была задействована тестами. Это измерение, а не оценка качества.</p>
+<ul>
+<li><strong>Покрытие строк</strong> отвечает, выполнялась ли каждая строка.</li>
+<li><strong>Покрытие ветвей</strong> отвечает, проверены ли обе стороны каждого условия.</li>
+<li><strong>Покрытие условий</strong> отвечает, проверялось ли каждое простое условие отдельно.</li>
+<li><strong>Покрытие требований</strong> отвечает, есть ли тест на каждый критерий приёмки.</li>
+</ul>
+<p>Разница между строками и ветвями видна на коротком примере.</p>
+<div class="codehilite" data-lang="text"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">close_request</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">user</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">user</span><span class="o">.</span><span class="n">role</span> <span class="o">==</span> <span class="s2">"manager"</span> <span class="ow">or</span> <span class="n">request</span><span class="o">.</span><span class="n">owner_id</span> <span class="o">==</span> <span class="n">user</span><span class="o">.</span><span class="n">id</span><span class="p">:</span>
+        <span class="n">request</span><span class="o">.</span><span class="n">status</span> <span class="o">=</span> <span class="s2">"closed"</span>
+        <span class="k">return</span> <span class="kc">True</span>
+    <span class="k">return</span> <span class="kc">False</span>
+</code></pre></div>
+
+<p>Тест с менеджером выполнит обе строки внутри <code>if</code> и строку <code>return False</code> не выполнит. Покрытие строк будет высоким, а вторая ветвь не проверена. Покрытие ветвей покажет пропуск.</p>
+<p>Покрытие условий строже. В условии два простых выражения, и тест с менеджером проверяет только первое. Нужен второй тест с сотрудником-владельцем и третий с сотрудником без прав. Только тогда обе стороны каждого условия увидят разные значения.</p>
+<p>Для критичных систем используют критерий MC/DC, модифицированное покрытие условий и решений. Он требует, чтобы каждое простое условие независимо влияло на результат. Критерий пришёл из авионики и описан в стандарте DO-178C; для учебного продукта он избыточен, но полезно знать, что «покрытие» это не одно число, а семейство критериев.</p>
+<p>Инструмент считает то, что умеет. В Python это <code>coverage.py</code>:</p>
+<div class="codehilite" data-lang="text"><pre><span></span><code>coverage<span class="w"> </span>run<span class="w"> </span>-m<span class="w"> </span>pytest
+coverage<span class="w"> </span>report<span class="w"> </span>-m
+coverage<span class="w"> </span>html
+</code></pre></div>
+
+<p>Отчёт покажет проценты по файлам и номера непокрытых строк. Цифра полезна как указатель на мёртвый код и на непроверенные ветви. Как цель она опасна.</p>
+<h3>Ловушка процента</h3>
+<p>Сто процентов покрытия не гарантируют правильность по трём причинам. Первая: строка может выполниться, а результат не сравниваться. Тест без утверждения увеличивает покрытие и ничего не проверяет. Вторая: тест может проверять не то условие. Он проходит по строке, но утверждение сформулировано слабо. Третья: покрытие не знает о пропущенных требованиях. Код может быть полностью покрыт тестами, которые не проверяют нужное поведение.</p>
+<p>Исследование Иноземцевой и Холмс проверило связь между покрытием и эффективностью набора тестов на проектах с открытым кодом <a href="https://doi.org/10.1145/2568225.2568271">Inozemtseva, Holmes, 2014</a>. Эффективность измеряли числом убитых мутантов, то есть искусственно внесённых дефектов, которые тесты заметили. Вывод оказался неудобным для простых метрик: сильной связи нет, а после поправки на размер набора тестов она ослабевает ещё больше. Покрытие объясняет, что тесты задели, но не объясняет, насколько хорошо они проверяют.</p>
+<p>Покрытие требований устроено иначе. Оно не считается инструментом по строкам, а ведётся таблицей: критерий приёмки, проверка, статус. Для учебной заявки таблица занимает десять строк и сразу показывает пробелы.</p>
+<table>
+<thead>
+<tr>
+<th>Требование</th>
+<th>Проверка</th>
+<th>Статус</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>сотрудник видит только свои заявки</td>
+<td>тест на двух пользователей</td>
+<td>есть</td>
+</tr>
+<tr>
+<td>тема не длиннее 80 символов</td>
+<td>границы 0, 1, 80, 81</td>
+<td>есть</td>
+</tr>
+<tr>
+<td>закрытие без прав возвращает 403</td>
+<td>таблица решений</td>
+<td>есть</td>
+</tr>
+<tr>
+<td>ответ приходит быстрее двух секунд</td>
+<td>замер при 40 сеансах</td>
+<td>нет</td>
+</tr>
+<tr>
+<td>миграция сохраняет старые заявки</td>
+<td>прогон на копии базы</td>
+<td>нет</td>
+</tr>
+</tbody>
+</table>
+<p>Две пустые строки важнее восьми заполненных. Они показывают, что именно не проверено, и превращают разговор о готовности из мнения в список.</p>
+<p><strong>Мутационное тестирование</strong> даёт более прямую меру. Инструмент вносит в код небольшое изменение: меняет <code>&gt;</code> на <code>&gt;=</code>, удаляет вызов, подменяет константу. Если тесты падают, мутант убит. Если проходят, значит изменение не замечено. Доля убитых мутантов называется mutation score. Метод дорогой, потому что каждая мутация требует прогона, но он отвечает на вопрос «тесты действительно ловят изменения».</p>
+<p>Практический вывод для учебного проекта: смотреть на покрытие ветвей и на список непокрытых требований, а не гнаться за ста процентами строк. Если покрытие растёт, а число найденных дефектов не меняется, набор тестов стал больше, но не сильнее.</p></div>
+</div>
+
+<div class="gate-step" data-gate>
+<p class="gate-action"><button type="button" class="gate-btn" aria-expanded="false"><span class="gate-q" aria-hidden="true">?</span><span>Почему три разные аварии свелись к одной пропущенной проверке?</span></button></p>
+<div class="gate-content" hidden><h2 id="реальные-случаи"><span class="num">06</span>Реальные случаи</h2>
+<p>Три случая показывают, как пропущенная проверка превращается в потерю. Первый связан с границей, второй с приёмкой, третий с диапазоном типа данных.</p>
+<h3>Heartbleed, 2014</h3>
+<p>В библиотеке OpenSSL расширение heartbeat позволяло клиенту сообщить длину полезной нагрузки и получить её обратно. Проверка длины отсутствовала: сервер читал столько байтов, сколько заявил клиент, даже если реально их было меньше. В ответ уходило до 64 килобайт памяти процесса, включая ключи и данные других соединений.</p>
+<p>Уязвимость получила номер CVE-2014-0160 и имя Heartbleed <a href="https://nvd.nist.gov/vuln/detail/CVE-2014-0160">NVD, CVE-2014-0160</a>. Исправление выпустили 7 апреля 2014 года в OpenSSL 1.0.1g. Оно добавляет проверку, что заявленная длина не больше фактической.</p>
+<p>С точки зрения тест-дизайна это классическая граница. Достаточно было одного теста с длиной в запросе больше, чем в теле, чтобы увидеть утечку. Такой тест не требует знания внутреннего устройства: он проверяет контракт «верни ровно столько, сколько я прислал».</p>
+<p>Урок: <strong>граница проверяется на входе, а не только на выходе</strong>. Если поле длины управляет чтением памяти, тест на несоответствие длины обязателен.</p>
+<h3>Healthcare.gov, 2013</h3>
+<p>Федеральный маркетплейс медицинского страхования США запустили 1 октября 2013 года. Пользователи столкнулись с ошибками регистрации и зависаниями. Отчёт Счётной палаты США GAO-14-694 установил, что CMS запустила сайт, не проверив соответствие требованиям к производительности, а оценку готовности перенесла с марта на сентябрь, то есть за несколько недель до старта <a href="https://www.gao.gov/products/gao-14-694">GAO, 2014</a>.</p>
+<p>В отчёте также сказано, что обязательства по контракту на федеральный маркетплейс выросли с 56 миллионов долларов в сентябре 2011 года до более чем 209 миллионов к февралю 2014 года. Рост суммы сам по себе не является дефектом, но он показывает цену поздних изменений требований.</p>
+<p>Проверки не покрыли путь целиком: отдельные компоненты работали, а система под реальной нагрузкой и с реальными данными не проверялась. Приёмочный тест с критерием «пользователь завершает регистрацию за разумное время» выявил бы разрыв до запуска.</p>
+<p>Урок: <strong>интеграция проверяется на пути пользователя, а не на стыке модулей в изоляции</strong>. Если сценарий ни разу не прошли от начала до конца, готовность неизвестна.</p>
+<h3>Ariane 501, 1996</h3>
+<p>Первый полёт ракеты Ariane 5 закончился разрушением через 37 секунд. Система наведения преобразовывала 64-битное число с плавающей точкой в 16-битное целое. Горизонтальная скорость новой траектории вышла за диапазон, который был допустим для Ariane 4, и преобразование вызвало переполнение.</p>
+<p>Этот случай уже разбирали как процессный: код повторно использовали без пересчёта ограничений. Здесь важен другой слой. Граница 16-битного целого со знаком заканчивается на 32767. Значение 32768 уже не помещается. Тест на границе диапазона, с парой значений 32767 и 32768, показал бы проблему до полёта.</p>
+<p>Урок: <strong>диапазон типа данных является частью контракта</strong>. Если значение приходит из внешней среды, тест обязан выйти за границу, а не оставаться в середине.</p>
+<table>
+<thead>
+<tr>
+<th>Случай</th>
+<th>Пропущенная проверка</th>
+<th>Какая проверка нужна</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Heartbleed</td>
+<td>длина в запросе больше тела</td>
+<td>тест границы на длину</td>
+</tr>
+<tr>
+<td>Healthcare.gov</td>
+<td>путь пользователя целиком под нагрузкой</td>
+<td>приёмочный и нагрузочный тест</td>
+</tr>
+<tr>
+<td>Ariane 501</td>
+<td>выход за диапазон 16-битного целого</td>
+<td>тест границы типа</td>
+</tr>
+</tbody>
+</table>
+<p>Общее у трёх случаев одно: дефект был не в сложной логике, а в проверке, которую не провели.</p>
+<h2 id="тесты-для-учебного-продукта"><span class="num">07</span>Тесты для учебного продукта</h2>
+<p>Учебный проект не требует лаборатории. Он требует дисциплины и нескольких правил.</p>
+<p><strong>Сначала риск.</strong> Проверяют права доступа, пустые и максимальные значения, ошибки внешних служб, повторные действия, переходы статусов и сохранение данных. Эти места приводят к потере данных или к доступу к чужим данным. Цвет кнопки можно обсудить на ревью.</p>
+<p><strong>Один тест, одно утверждение.</strong> Тест с пятью утверждениями падает на первом и скрывает остальные. Разделение даёт точную картину.</p>
+<p><strong>Понятное имя.</strong> <code>test_employee_cannot_close_foreign_request</code> читается лучше, чем <code>test_close_2</code>. Имя должно описывать условие и ожидание.</p>
+<p><strong>Изоляция.</strong> Тест не зависит от порядка и от данных, оставленных другим тестом. Каждый тест создаёт свои данные и убирает их после себя. Общая база между тестами приводит к падениям, которые невозможно воспроизвести.</p>
+<p><strong>Подготовка через фикстуры.</strong> pytest создаёт клиента, базу и пользователя в фикстуре. Тест получает готовое окружение и не повторяет двадцать строк настройки.</p>
+<p><strong>Проверка на дефект.</strong> Перед исправлением пишут тест, который падает. После исправления он проходит. Если тест не падал, он не проверяет дефект, а фиксирует текущее поведение.</p>
+<p><strong>Бюджет времени.</strong> Полный прогон должен укладываться в несколько минут. Медленные проверки выносят в отдельный набор и запускают перед выпуском. Набор, который идёт час, перестают запускать, и он перестаёт защищать.</p>
+<p><strong>Честность отчёта.</strong> Если тест нестабилен, его нельзя оставлять в общем наборе молча. Нестабильный тест приучает игнорировать красный цвет. Его либо исправляют, либо временно исключают с записью причины.</p>
+<h3>Тестовые данные</h3>
+<p>Данные определяют, что тест вообще способен увидеть. Набор из одной заявки на одного пользователя не проверяет фильтр по владельцу: фильтровать нечего. Нужны минимум два пользователя и по заявке у каждого.</p>
+<p>Тестовые данные удобно строить фабрикой: функция создаёт пользователя с ролью, заявку со статусом и возвращает объект. Фабрика делает тест коротким и убирает копирование словарей на двадцать строк.</p>
+<p>Данные должны быть явными. Если тест опирается на запись с идентификатором 1, он ломается, когда база заполнена другим порядком. Лучше получить идентификатор из фабрики и передать его в проверку.</p>
+<p>Данные должны быть безопасными. В тестах не используют настоящие адреса, телефоны и пароли. Случайные значения подходят, если они воспроизводимы: зерно генератора фиксируют, иначе падение невозможно повторить.</p>
+<p>Наконец, данные должны убираться. Тест, который оставляет заявку, влияет на следующий прогон. Изоляция через транзакцию с откатом или через отдельную базу на прогон дешевле, чем поиск причины, почему набор проходит только во вторник.</p>
+<h3>Чек-лист набора тестов</h3>
+<table>
+<thead>
+<tr>
+<th>Вопрос</th>
+<th>Признак хорошего ответа</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Какое требование проверяет тест</td>
+<td>ссылка на критерий приёмки или историю</td>
+</tr>
+<tr>
+<td>Что произойдёт при поломке</td>
+<td>тест падает, а не молчит</td>
+</tr>
+<tr>
+<td>Можно ли запустить отдельно</td>
+<td>да, без порядка и общих данных</td>
+</tr>
+<tr>
+<td>Сколько идёт прогон</td>
+<td>минуты, а не часы</td>
+</tr>
+<tr>
+<td>Что осталось непроверенным</td>
+<td>список известных пробелов</td>
+</tr>
+<tr>
+<td>Кто обновит тест при изменении</td>
+<td>владелец модуля</td>
+</tr>
+</tbody>
+</table>
+<p>Чек-лист не заменяет мышление. Он не даёт забыть, что зелёная сборка означает только отсутствие известных падений.</p>
+<h2 id="итоги"><span class="num">08</span>Итоги</h2>
+<ul>
+<li>Тест сравнивает ожидаемое поведение с фактическим и требует оракула.</li>
+<li>Уровни различаются областью проверки, скоростью и точностью локализации.</li>
+<li>Классы эквивалентности и границы сокращают пространство значений.</li>
+<li>Таблицы решений, переходы состояний и попарный выбор сокращают комбинации.</li>
+<li>Покрытие указывает на пробелы, но не измеряет эффективность набора.</li>
+<li>Дефект закрепляют тестом на том уровне, где он проявился.</li>
+<li>Реальные сбои чаще возникают на границе или на стыке, чем в середине логики.</li>
+</ul>
+<h2 id="источники"><span class="num">09</span>Источники</h2>
+<ol>
+<li>ISO/IEC/IEEE 29119-1:2022. Software and systems engineering. Software testing. Part 1: General concepts. https://www.iso.org/standard/81291.html</li>
+<li>IEEE Computer Society. SWEBOK Guide v4.0. https://www.computer.org/education/bodies-of-knowledge/software-engineering/v4</li>
+<li>Myers G., Sandler C., Badgett T. The Art of Software Testing, 3rd edition. Wiley, 2011. https://doi.org/10.1002/9781119202486</li>
+<li>Kaner C., Falk J., Nguyen E. Testing Computer Software, 2nd edition. Wiley, 1999. https://www.wiley.com/en-us/Testing+Computer+Software%2C+2nd+Edition-p-9780471358466</li>
+<li>pytest documentation. https://docs.pytest.org/en/stable/</li>
+<li>Inozemtseva L., Holmes R. Coverage is not strongly correlated with test suite effectiveness. ICSE 2014. https://doi.org/10.1145/2568225.2568271</li>
+<li>Google Testing Blog. Test Sizes, 2010. https://testing.googleblog.com/2010/12/test-sizes.html</li>
+<li>ISTQB. Certified Tester Foundation Level syllabus 4.0. https://www.istqb.org/certifications/certified-tester-foundation-level-ctfl-v4-0</li>
+<li>NIST. National Vulnerability Database, CVE-2014-0160. https://nvd.nist.gov/vuln/detail/CVE-2014-0160</li>
+<li>U.S. GAO. Healthcare.gov: Ineffective Planning and Oversight Practices Underscore the Need for Improved Contract Management, GAO-14-694, 2014. https://www.gao.gov/products/gao-14-694</li>
+</ol>
+<div class="quiz" data-quiz data-quiz-guard><div class="quiz-who"><label class="quiz-who-label"><span>ФИО</span><input type="text" class="quiz-name" data-quiz-name maxlength="80" autocomplete="off" placeholder="Иванов Иван Иванович"></label><span class="quiz-attempts" data-quiz-attempts>две попытки на лекцию</span><span class="quiz-note" data-who-note hidden></span></div><div class="quiz-q" data-type="single" data-correct="1" data-q="1"><p class="quiz-p"><span class="quiz-no" aria-hidden="true">01</span>Что такое класс эквивалентности?</p><div class="opts"><label class="opt"><input type="radio" name="q214_0" value="3" autocomplete="off"><span>Случайные значения</span></label><label class="opt"><input type="radio" name="q214_0" value="0" autocomplete="off" data-ok><span>Набор значений с одинаковым ожидаемым поведением</span></label><label class="opt"><input type="radio" name="q214_0" value="1" autocomplete="off"><span>Все возможные значения поля</span></label><label class="opt"><input type="radio" name="q214_0" value="2" autocomplete="off"><span>Только границы диапазона</span></label></div><p class="quiz-why" hidden>Достаточно одного представителя класса.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="short" data-q="2" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">02</span>Что измеряет доля убитых мутантов?</p><input type="text" class="short-answer" data-answers="[&quot;mutation score&quot;, &quot;мутационный счёт&quot;]" placeholder="Введите ответ" autocomplete="off" spellcheck="false" aria-label="Что измеряет доля убитых мутантов?"><p class="quiz-why" hidden>Мутант убит, если тесты заметили изменение кода.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="multi" data-correct="4" data-q="3" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">03</span>Что проверяют в первую очередь?</p><div class="opts"><label class="opt"><input type="checkbox" name="q214_2" value="4" autocomplete="off"><span>Цвет кнопок</span></label><label class="opt"><input type="checkbox" name="q214_2" value="1" autocomplete="off" data-ok><span>Пустые и максимальные значения</span></label><label class="opt"><input type="checkbox" name="q214_2" value="3" autocomplete="off" data-ok><span>Повторные действия</span></label><label class="opt"><input type="checkbox" name="q214_2" value="5" autocomplete="off"><span>Логотип на странице</span></label><label class="opt"><input type="checkbox" name="q214_2" value="0" autocomplete="off" data-ok><span>Права доступа и потерю данных</span></label><label class="opt"><input type="checkbox" name="q214_2" value="2" autocomplete="off" data-ok><span>Ошибки внешних служб</span></label></div><p class="quiz-why" hidden>Остальное редко приводит к потере данных.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="4" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">04</span>Сколько времени отводит Google малому тесту?</p><div class="opts"><label class="opt"><input type="radio" name="q214_3" value="2" autocomplete="off"><span>900 секунд</span></label><label class="opt"><input type="radio" name="q214_3" value="0" autocomplete="off" data-ok><span>60 секунд</span></label><label class="opt"><input type="radio" name="q214_3" value="3" autocomplete="off"><span>5 минут</span></label><label class="opt"><input type="radio" name="q214_3" value="1" autocomplete="off"><span>300 секунд</span></label></div><p class="quiz-why" hidden>Малый тест укладывается в 60 секунд и не ходит в сеть.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="5" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">05</span>Что сравнивает тест?</p><div class="opts"><label class="opt"><input type="radio" name="q214_4" value="2" autocomplete="off"><span>Код с документацией</span></label><label class="opt"><input type="radio" name="q214_4" value="0" autocomplete="off" data-ok><span>Ожидаемое поведение с фактическим</span></label><label class="opt"><input type="radio" name="q214_4" value="1" autocomplete="off"><span>Скорость сервера с тарифом</span></label><label class="opt"><input type="radio" name="q214_4" value="3" autocomplete="off"><span>Число строк с нормой</span></label></div><p class="quiz-why" hidden>Без эталона запуск остаётся запуском, а не проверкой.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="short" data-q="6" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">06</span>Как называют набор значений с одинаковым поведением?</p><input type="text" class="short-answer" data-answers="[&quot;класс эквивалентности&quot;, &quot;equivalence class&quot;]" placeholder="Введите ответ" autocomplete="off" spellcheck="false" aria-label="Как называют набор значений с одинаковым поведением?"><p class="quiz-why" hidden>Один представитель заменяет весь класс.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="7" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">07</span>Почему 100 процентов покрытия не гарантируют правильность?</p><div class="opts"><label class="opt"><input type="radio" name="q214_6" value="1" autocomplete="off"><span>Покрытие всегда считается неверно</span></label><label class="opt"><input type="radio" name="q214_6" value="2" autocomplete="off"><span>Тесты слишком быстрые</span></label><label class="opt"><input type="radio" name="q214_6" value="3" autocomplete="off"><span>Код слишком короткий</span></label><label class="opt"><input type="radio" name="q214_6" value="0" autocomplete="off" data-ok><span>Строка может выполниться без проверки результата</span></label></div><p class="quiz-why" hidden>Нужны утверждения и проверка требований.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="multi" data-correct="4" data-q="8" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">08</span>Какие приёмы сокращают число комбинаций?</p><div class="opts"><label class="opt"><input type="checkbox" name="q214_7" value="1" autocomplete="off" data-ok><span>Попарный выбор</span></label><label class="opt"><input type="checkbox" name="q214_7" value="0" autocomplete="off" data-ok><span>Таблица решений</span></label><label class="opt"><input type="checkbox" name="q214_7" value="4" autocomplete="off"><span>Перебор всех значений</span></label><label class="opt"><input type="checkbox" name="q214_7" value="2" autocomplete="off" data-ok><span>Переходы состояний</span></label><label class="opt"><input type="checkbox" name="q214_7" value="3" autocomplete="off" data-ok><span>Классы эквивалентности</span></label><label class="opt"><input type="checkbox" name="q214_7" value="5" autocomplete="off"><span>Отказ от границ</span></label></div><p class="quiz-why" hidden>Остальное увеличивает или ослабляет набор.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="9" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">09</span>Что сделали с длиной в Heartbleed?</p><div class="opts"><label class="opt"><input type="radio" name="q214_8" value="1" autocomplete="off"><span>Округлили длину вверх до страницы памяти</span></label><label class="opt"><input type="radio" name="q214_8" value="0" autocomplete="off" data-ok><span>Не проверили, что заявленная длина не больше фактической</span></label><label class="opt"><input type="radio" name="q214_8" value="2" autocomplete="off"><span>Ограничили длину одним байтом на клиенте</span></label><label class="opt"><input type="radio" name="q214_8" value="3" autocomplete="off"><span>Проверяли длину только после чтения памяти</span></label></div><p class="quiz-why" hidden>Проверка границы предотвратила бы утечку памяти.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="10" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">10</span>Какой тест проверяет связь приложения с базой?</p><div class="opts"><label class="opt"><input type="radio" name="q214_9" value="1" autocomplete="off"><span>Модульный</span></label><label class="opt"><input type="radio" name="q214_9" value="3" autocomplete="off"><span>Стилевой</span></label><label class="opt"><input type="radio" name="q214_9" value="0" autocomplete="off" data-ok><span>Интеграционный</span></label><label class="opt"><input type="radio" name="q214_9" value="2" autocomplete="off"><span>Приёмочный</span></label></div><p class="quiz-why" hidden>Стык двух частей проверяет интеграционный тест.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="short" data-q="11" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">11</span>Какой тест падает до исправления и проходит после?</p><input type="text" class="short-answer" data-answers="[&quot;регрессионный&quot;, &quot;regression test&quot;]" placeholder="Введите ответ" autocomplete="off" spellcheck="false" aria-label="Какой тест падает до исправления и проходит после?"><p class="quiz-why" hidden>Он закрепляет дефект и не даёт ему вернуться.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="12" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">12</span>Что такое оракул в тесте?</p><div class="opts"><label class="opt"><input type="radio" name="q214_11" value="3" autocomplete="off"><span>Сервер сборки</span></label><label class="opt"><input type="radio" name="q214_11" value="2" autocomplete="off"><span>Файл с тестовыми данными</span></label><label class="opt"><input type="radio" name="q214_11" value="1" autocomplete="off"><span>Инструмент запуска тестов</span></label><label class="opt"><input type="radio" name="q214_11" value="0" autocomplete="off" data-ok><span>Правило, по которому наблюдение признаётся верным</span></label></div><p class="quiz-why" hidden>Оракул задаёт эталон сравнения.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="multi" data-correct="4" data-q="13" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">13</span>Какие уровни тестирования существуют?</p><div class="opts"><label class="opt"><input type="checkbox" name="q214_12" value="2" autocomplete="off" data-ok><span>Системные</span></label><label class="opt"><input type="checkbox" name="q214_12" value="3" autocomplete="off" data-ok><span>Приёмочные</span></label><label class="opt"><input type="checkbox" name="q214_12" value="5" autocomplete="off"><span>Цветовые</span></label><label class="opt"><input type="checkbox" name="q214_12" value="4" autocomplete="off"><span>Стилевые</span></label><label class="opt"><input type="checkbox" name="q214_12" value="0" autocomplete="off" data-ok><span>Модульные</span></label><label class="opt"><input type="checkbox" name="q214_12" value="1" autocomplete="off" data-ok><span>Интеграционные</span></label></div><p class="quiz-why" hidden>Остальное не уровни проверки поведения.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="14" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">14</span>Что показывает покрытие ветвей?</p><div class="opts"><label class="opt"><input type="radio" name="q214_13" value="1" autocomplete="off"><span>Сколько файлов в проекте</span></label><label class="opt"><input type="radio" name="q214_13" value="2" autocomplete="off"><span>Сколько тестов написано</span></label><label class="opt"><input type="radio" name="q214_13" value="3" autocomplete="off"><span>Сколько авторов в команде</span></label><label class="opt"><input type="radio" name="q214_13" value="0" autocomplete="off" data-ok><span>Проверены ли обе стороны условия</span></label></div><p class="quiz-why" hidden>Одной выполненной строки недостаточно.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="15" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">15</span>Какие значения проверяют на границе длины 1..80?</p><div class="opts"><label class="opt"><input type="radio" name="q214_14" value="3" autocomplete="off"><span>100, 200</span></label><label class="opt"><input type="radio" name="q214_14" value="2" autocomplete="off"><span>1, 2, 3</span></label><label class="opt"><input type="radio" name="q214_14" value="1" autocomplete="off"><span>40, 41, 42</span></label><label class="opt"><input type="radio" name="q214_14" value="0" autocomplete="off" data-ok><span>0, 1, 80, 81</span></label></div><p class="quiz-why" hidden>Ошибки живут в сравнениях, поэтому проверяют края и соседние значения.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><p class="quiz-note quiz-submit-note" data-quiz-note hidden></p><div class="quiz-result" data-quiz-result hidden aria-live="polite"><span class="label">Результат теста</span><h3>Тест завершён</h3><p class="modal-name-line">ФИО: <b data-student-name></b></p><p class="modal-result" data-modal-result></p><p class="modal-result" data-modal-wrong></p><dl class="modal-times"><div><dt>Время выполнения теста</dt><dd data-test-time>00:00</dd></div><div><dt>Время просмотра лекции</dt><dd data-view-time>00:00</dd></div></dl></div></div></div>
 </div></article><nav class="pager"><a class="" href="20-prakt-07.html"><span>← Предыдущее занятие</span>Практика 7. Замечания к чужому коду</a><a class="next" style="text-align:right;margin-left:auto" href="22-prakt-08.html"><span>Следующее занятие →</span>Практика 8. Тест-кейсы и автотесты</a></nav></main>
 <div class="modal" data-modal="warn" hidden>
   <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="warn-title">

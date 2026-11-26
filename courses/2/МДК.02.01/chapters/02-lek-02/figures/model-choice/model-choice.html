@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Выбор модели по двум осям</title>
+<style>
+  :root { --paper:#faf6f3; --card:#fffdfb; --ink:#1a1916; --muted:#6b6459; --rule:#e4d8cf; --accent:#0F8A63; --soft:#E1F5EE; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .demo { background:var(--paper); border:1px solid var(--rule); border-radius:14px; padding:18px; }
+  .head { display:flex; justify-content:space-between; align-items:flex-end; gap:16px; padding-bottom:10px; border-bottom:1px solid var(--rule); }
+  .eyebrow { margin:0 0 4px; font:600 10px/1.2 Consolas,monospace; letter-spacing:.12em; text-transform:uppercase; color:var(--accent); }
+  h3 { margin:0; font-size:20px; line-height:1.2; }
+  .hint { font:11px/1.4 Consolas,monospace; color:var(--muted); white-space:nowrap; }
+  svg { display:block; width:100%; height:auto; margin-top:8px; }
+  .quad { cursor:pointer; }
+  .quad rect { fill:#fff; stroke:#cfc6bb; stroke-width:1.2; transition:fill .2s, stroke .2s; }
+  .quad:hover rect { stroke:var(--accent); }
+  .quad.on rect { fill:var(--soft); stroke:var(--accent); stroke-width:2; }
+  .quad text { font-family:Consolas,monospace; text-anchor:middle; fill:#2d3142; }
+  .quad .q-title { font-size:8.6px; }
+  .quad .q-sub { font-size:6.9px; fill:#6b6459; }
+  .axis { font-family:Consolas,monospace; font-size:7.2px; fill:#6b6459; }
+  .status { min-height:62px; margin-top:8px; padding:10px 12px; border-radius:9px; background:var(--soft); font-size:12.5px; line-height:1.45; }
+  .status b { color:var(--accent); }
+  .controls { display:flex; gap:7px; flex-wrap:wrap; margin-top:10px; }
+  button { font:600 11.5px/1.1 "Segoe UI",system-ui,sans-serif; padding:8px 10px; border-radius:9px; border:1px solid var(--rule); background:var(--card); color:var(--ink); cursor:pointer; }
+  button:hover { border-color:var(--accent); color:var(--accent); }
+  button.on { background:var(--accent); border-color:var(--accent); color:#fff; }
+  @media (max-width:560px) { .demo { padding:12px; } .head { align-items:flex-start; flex-direction:column; gap:4px; } .hint { white-space:normal; } }
+</style>
+</head>
+<body>
+<div class="demo">
+  <div class="head">
+    <div><p class="eyebrow">Модели · выбор</p><h3>Две оси и четыре решения</h3></div>
+    <div class="hint">нажмите на квадрант</div>
+  </div>
+  <svg viewBox="0 0 680 292" role="img" aria-label="Матрица выбора модели по стабильности требований и цене ошибки">
+    <text x="350" y="16" text-anchor="middle" class="axis">ЦЕНА ОШИБКИ</text>
+    <text x="24" y="140" text-anchor="middle" class="axis" transform="rotate(-90 24 140)">высокая</text>
+    <text x="24" y="226" text-anchor="middle" class="axis" transform="rotate(-90 24 226)">низкая</text>
+
+    <g class="quad" data-k="risk">
+      <rect x="80" y="34" width="270" height="96" rx="8"/>
+      <text x="215" y="60" class="q-title">спираль или итерации</text>
+      <text x="215" y="76" class="q-title">с анализом риска</text>
+      <text x="215" y="94" class="q-sub">сначала проверяем опасное</text>
+      <text x="215" y="108" class="q-sub">прототипом, потом строим</text>
+    </g>
+    <g class="quad" data-k="critical">
+      <rect x="350" y="34" width="270" height="96" rx="8"/>
+      <text x="485" y="60" class="q-title">V-модель или водопад</text>
+      <text x="485" y="76" class="q-title">с доказательствами</text>
+      <text x="485" y="94" class="q-sub">требования стабильны,</text>
+      <text x="485" y="108" class="q-sub">нужна прослеживаемость</text>
+    </g>
+    <g class="quad" data-k="change">
+      <rect x="80" y="130" width="270" height="96" rx="8"/>
+      <text x="215" y="156" class="q-title">короткие итерации</text>
+      <text x="215" y="172" class="q-title">и ранний результат</text>
+      <text x="215" y="190" class="q-sub">ошибка дешева, поэтому</text>
+      <text x="215" y="204" class="q-sub">можно быстро пробовать</text>
+    </g>
+    <g class="quad" data-k="simple">
+      <rect x="350" y="130" width="270" height="96" rx="8"/>
+      <text x="485" y="156" class="q-title">водопад или одна</text>
+      <text x="485" y="172" class="q-title">короткая итерация</text>
+      <text x="485" y="190" class="q-sub">задача понятна,</text>
+      <text x="485" y="204" class="q-sub">цена ошибки невелика</text>
+    </g>
+
+    <text x="80" y="244" class="axis">требования меняются</text>
+    <text x="620" y="244" text-anchor="end" class="axis">требования стабильны</text>
+    <text x="350" y="268" text-anchor="middle" class="axis">СТАБИЛЬНОСТЬ ТРЕБОВАНИЙ</text>
+    <text x="350" y="284" text-anchor="middle" font-family="Consolas,monospace" font-size="6.8" fill="#0F8A63">ОСИ УСЛОВНЫ: МОДЕЛЬ ВЫБИРАЮТ ПО РИСКУ, А НЕ ПО КЛЕТКЕ</text>
+  </svg>
+  <div class="status" id="status"></div>
+  <div class="controls">
+    <button data-k="risk">Изменения и высокая цена</button>
+    <button data-k="critical">Стабильность и высокая цена</button>
+    <button data-k="change">Изменения и низкая цена</button>
+    <button data-k="simple">Стабильность и низкая цена</button>
+  </div>
+</div>
+<script>
+(function () {
+  var texts = {
+    risk: '<b>Изменения и высокая цена.</b> Спираль или итерации с явным анализом риска. Сначала проверьте самое опасное прототипом, затем наращивайте продукт. Ограничение: нужна команда, которая умеет оценивать риск, иначе витки повторяются без снижения неопределённости.',
+    critical: '<b>Стабильность и высокая цена.</b> V-модель или водопад с сильными доказательствами. Требования можно зафиксировать, но каждый уровень проекта должен получить парную проверку. Ограничение: поздняя ошибка всё равно дорога, поэтому приёмочные критерии проектируются заранее.',
+    change: '<b>Изменения и низкая цена.</b> Короткие итерации и ранний работающий результат. Ошибку дешево исправить, поэтому цикл можно сделать частым. Ограничение: без доступа к заказчику итерации превращаются в формальные демонстрации.',
+    simple: '<b>Стабильность и низкая цена.</b> Водопад или одна короткая итерация. Не усложняйте процесс там, где задача понятна. Ограничение: простота задачи не отменяет проверку границ и данных.'
+  };
+  var quads = document.querySelectorAll('.quad');
+  var buttons = document.querySelectorAll('button[data-k]');
+  var status = document.getElementById('status');
+  function apply(key) {
+    quads.forEach(function (q) { q.classList.toggle('on', q.dataset.k === key); });
+    buttons.forEach(function (b) { b.classList.toggle('on', b.dataset.k === key); });
+    status.innerHTML = texts[key];
+  }
+  quads.forEach(function (q) { q.addEventListener('click', function () { apply(q.dataset.k); }); });
+  buttons.forEach(function (b) { b.addEventListener('click', function () { apply(b.dataset.k); }); });
+  apply('change');
+})();
+</script>
+</body>
+</html>

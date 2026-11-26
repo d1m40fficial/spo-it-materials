@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Окно внедрения</title>
+<style>
+  :root { --paper:#faf6f3; --ink:#2d3142; --muted:#5b5560; --accent:#0F8A63; --soft:#E1F5EE; --warn:#b23a2b; --rule:rgba(45,49,66,.12); }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .frame { background:var(--paper); border:1px solid var(--rule); border-radius:12px; padding:18px 18px 14px; }
+  .eyebrow { margin:0 0 8px; font:600 9px/1.2 Consolas,monospace; letter-spacing:.16em; text-transform:uppercase; color:var(--muted); }
+  .note { margin:10px 2px 0; font:11px/1.5 Consolas,monospace; color:var(--muted); }
+  svg { display:block; width:100%; height:auto; }
+</style>
+</head>
+<body>
+<div class="frame">
+  <p class="eyebrow">Внедрение · окно работ</p>
+  <svg viewBox="0 0 680 330" role="img" aria-labelledby="mw-title mw-desc">
+    <title id="mw-title">Окно внедрения и точки возврата</title>
+    <desc id="mw-desc">Подготовка, копия, остановка записи, миграция, проверка, переключение и наблюдение. Показаны точка невозврата и путь отката.</desc>
+
+    <line x1="40" y1="96" x2="640" y2="96" stroke="#b9ac9f" stroke-width="2"/>
+
+    <g font-family="Consolas,monospace" text-anchor="middle">
+      <circle cx="70" cy="96" r="7" fill="#E1F5EE" stroke="#0F8A63" stroke-width="1.6"/>
+      <text x="70" y="74" font-size="7" fill="#0F8A63">T-7</text>
+      <text x="70" y="122" font-size="7" fill="#2d3142">проверка</text>
+      <text x="70" y="136" font-size="7" fill="#2d3142">копии</text>
+
+      <circle cx="175" cy="96" r="7" fill="#E1F5EE" stroke="#0F8A63" stroke-width="1.6"/>
+      <text x="175" y="74" font-size="7" fill="#0F8A63">T-1</text>
+      <text x="175" y="122" font-size="7" fill="#2d3142">копия</text>
+      <text x="175" y="136" font-size="7" fill="#2d3142">и доступы</text>
+
+      <circle cx="280" cy="96" r="7" fill="#E1F5EE" stroke="#0F8A63" stroke-width="1.6"/>
+      <text x="280" y="74" font-size="7" fill="#0F8A63">T0</text>
+      <text x="280" y="122" font-size="7" fill="#2d3142">стоп записи</text>
+      <text x="280" y="136" font-size="7" fill="#2d3142">сообщение</text>
+
+      <circle cx="385" cy="96" r="7" fill="#E1F5EE" stroke="#0F8A63" stroke-width="1.6"/>
+      <text x="385" y="74" font-size="7" fill="#0F8A63">T0+</text>
+      <text x="385" y="122" font-size="7" fill="#2d3142">миграция</text>
+      <text x="385" y="136" font-size="7" fill="#2d3142">и проверка</text>
+
+      <circle cx="490" cy="96" r="7" fill="#E1F5EE" stroke="#0F8A63" stroke-width="1.6"/>
+      <text x="490" y="74" font-size="7" fill="#0F8A63">T0++</text>
+      <text x="490" y="122" font-size="7" fill="#2d3142">установка</text>
+      <text x="490" y="136" font-size="7" fill="#2d3142">и дым</text>
+
+      <circle cx="600" cy="96" r="7" fill="#E1F5EE" stroke="#0F8A63" stroke-width="1.6"/>
+      <text x="600" y="74" font-size="7" fill="#0F8A63">T+1</text>
+      <text x="600" y="122" font-size="7" fill="#2d3142">наблюдение</text>
+      <text x="600" y="136" font-size="7" fill="#2d3142">и разбор</text>
+    </g>
+
+    <g stroke="#0F8A63" stroke-width="1.4" fill="none" marker-end="url(#mw-arw)">
+      <path d="M79 96h88"/><path d="M184 96h88"/><path d="M289 96h88"/><path d="M394 96h88"/><path d="M499 96h93"/>
+    </g>
+
+    <line x1="385" y1="168" x2="385" y2="216" stroke="#b23a2b" stroke-width="1.4" stroke-dasharray="4 4"/>
+    <rect x="292" y="216" width="186" height="44" rx="6" fill="#fbeeec" stroke="#b23a2b"/>
+    <text x="385" y="234" text-anchor="middle" font-family="Consolas,monospace" font-size="7.4" fill="#b23a2b">ТОЧКА НЕВОЗВРАТА</text>
+    <text x="385" y="250" text-anchor="middle" font-family="Consolas,monospace" font-size="6.8" fill="#2d3142">после удаления старых данных</text>
+
+    <path d="M600 152v44H280v-28" stroke="#0F8A63" stroke-width="1.4" fill="none" stroke-dasharray="5 4" marker-end="url(#mw-arw)"/>
+    <text x="440" y="188" text-anchor="middle" font-family="Consolas,monospace" font-size="7" fill="#0F8A63">откат кода и конфигурации</text>
+
+    <path d="M280 216v-54" stroke="#b23a2b" stroke-width="1.2" fill="none" stroke-dasharray="4 4" marker-end="url(#mw-arw2)"/>
+    <text x="220" y="204" text-anchor="middle" font-family="Consolas,monospace" font-size="7" fill="#b23a2b">восстановление копии</text>
+
+    <rect x="40" y="278" width="600" height="34" rx="6" fill="#fff" stroke="#b9ac9f"/>
+    <text x="340" y="299" text-anchor="middle" font-family="Consolas,monospace" font-size="7.4" fill="#2d3142">Каждый шаг имеет проверку. Пока проверка не пройдена, следующий шаг не начинается.</text>
+
+    <defs>
+      <marker id="mw-arw" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#0F8A63"/></marker>
+      <marker id="mw-arw2" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#b23a2b"/></marker>
+    </defs>
+  </svg>
+  <p class="note">Откат после точки невозврата означает восстановление копии, а не возврат файлов.</p>
+</div>
+</body>
+</html>

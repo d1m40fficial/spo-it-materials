@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Include и extend</title>
+<style>
+  :root { --paper:#faf6f3; --ink:#2d3142; --muted:#5b5560; --accent:#0F8A63; --soft:#E1F5EE; --rule:rgba(45,49,66,.12); }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .frame { background:var(--paper); border:1px solid var(--rule); border-radius:12px; padding:18px 18px 14px; }
+  .eyebrow { margin:0 0 8px; font:600 9px/1.2 Consolas,monospace; letter-spacing:.16em; text-transform:uppercase; color:var(--muted); }
+  .note { margin:10px 2px 0; font:11px/1.5 Consolas,monospace; color:var(--muted); }
+  svg { display:block; width:100%; height:auto; }
+</style>
+</head>
+<body>
+<div class="frame">
+  <p class="eyebrow">UML · варианты использования</p>
+  <svg viewBox="0 0 680 258" role="img" aria-labelledby="ie-title ie-desc">
+    <title id="ie-title">Обязательное включение и необязательное расширение</title>
+    <desc id="ie-desc">Слева include: стрелка от базового прецедента к обязательному. Справа extend: стрелка от расширения к базовому, выполняется при условии.</desc>
+
+    <rect x="14" y="10" width="316" height="200" rx="10" fill="#fff" stroke="#b9ac9f"/>
+    <rect x="350" y="10" width="316" height="200" rx="10" fill="#fff" stroke="#b9ac9f"/>
+
+    <text x="172" y="30" text-anchor="middle" font-family="Consolas,monospace" font-size="9" fill="#0F8A63">include</text>
+    <text x="508" y="30" text-anchor="middle" font-family="Consolas,monospace" font-size="9" fill="#0F8A63">extend</text>
+
+    <g font-family="Consolas,monospace" text-anchor="middle">
+      <ellipse cx="172" cy="72" rx="86" ry="21" fill="#E1F5EE" stroke="#0F8A63" stroke-width="1.5"/>
+      <text x="172" y="76" font-size="8">Закрыть заявку</text>
+
+      <ellipse cx="172" cy="146" rx="86" ry="21" fill="#fff" stroke="#2d3142"/>
+      <text x="172" y="150" font-size="8">Проверить права</text>
+
+      <ellipse cx="508" cy="78" rx="86" ry="21" fill="#E1F5EE" stroke="#0F8A63" stroke-width="1.5"/>
+      <text x="508" y="82" font-size="8">Создать заявку</text>
+
+      <ellipse cx="508" cy="156" rx="86" ry="21" fill="#fff" stroke="#2d3142"/>
+      <text x="508" y="160" font-size="8">Приложить фото</text>
+    </g>
+
+    <g stroke="#5b5560" stroke-width="1.4" fill="none" marker-end="url(#arw-ie)">
+      <path d="M172 93v28"/>
+      <path d="M508 135v-32"/>
+    </g>
+
+    <text x="184" y="111" font-family="Consolas,monospace" font-size="7" fill="#5b5560">&lt;&lt;include&gt;&gt;</text>
+    <text x="520" y="123" font-family="Consolas,monospace" font-size="7" fill="#5b5560">&lt;&lt;extend&gt;&gt;</text>
+
+    <text x="172" y="186" text-anchor="middle" font-family="Consolas,monospace" font-size="7.2" fill="#0F8A63">выполняется всегда</text>
+    <text x="508" y="196" text-anchor="middle" font-family="Consolas,monospace" font-size="7.2" fill="#0F8A63">только при условии</text>
+
+    <text x="340" y="236" text-anchor="middle" font-family="Consolas,monospace" font-size="7.6" fill="#0F8A63">INCLUDE: БАЗОВЫЙ К ОБЯЗАТЕЛЬНОМУ, EXTEND: РАСШИРЕНИЕ К БАЗОВОМУ</text>
+    <text x="340" y="250" text-anchor="middle" font-family="Consolas,monospace" font-size="6.8" fill="#5b5560">уберите второй прецедент: если первый сломался, это include</text>
+
+    <defs>
+      <marker id="arw-ie" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#5b5560"/></marker>
+    </defs>
+  </svg>
+  <p class="note">Стрелка include идёт вниз, к обязательной части. Стрелка extend идёт вверх, к базовому прецеденту.</p>
+</div>
+</body>
+</html>

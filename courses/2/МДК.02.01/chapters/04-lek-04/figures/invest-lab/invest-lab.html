@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Проверка истории по INVEST</title>
+<style>
+  :root { --paper:#faf6f3; --card:#fffdfb; --ink:#1a1916; --muted:#6b6459; --rule:#e4d8cf; --accent:#0F8A63; --soft:#E1F5EE; --bad:#fdecea; --badline:#b3412f; --warn:#fff4d6; --warnline:#9a6b00; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .demo { background:var(--paper); border:1px solid var(--rule); border-radius:14px; padding:18px; }
+  .head { display:flex; justify-content:space-between; align-items:flex-end; gap:16px; padding-bottom:10px; border-bottom:1px solid var(--rule); }
+  .eyebrow { margin:0 0 4px; font:600 10px/1.2 Consolas,monospace; letter-spacing:.12em; text-transform:uppercase; color:var(--accent); }
+  h3 { margin:0; font-size:20px; line-height:1.2; }
+  .hint { font:11px/1.4 Consolas,monospace; color:var(--muted); white-space:nowrap; }
+  .story { margin:10px 0 4px; padding:10px 12px; border-radius:9px; background:#fff; border:1px solid var(--rule); font-size:12.5px; line-height:1.45; min-height:48px; }
+  .story b { color:var(--accent); }
+  svg { display:block; width:100%; height:auto; margin-top:2px; }
+  .crit rect { fill:#fff; stroke:#cfc6bb; stroke-width:1.2; transition:fill .2s, stroke .2s; }
+  .crit text { font-family:Consolas,monospace; text-anchor:middle; fill:#2d3142; }
+  .crit .letter { font-size:10px; fill:var(--accent); }
+  .crit .name { font-size:6.8px; }
+  .crit .verdict { font-size:6.2px; fill:#6b6459; }
+  .status { min-height:74px; margin-top:8px; padding:10px 12px; border-radius:9px; background:var(--soft); font-size:12.5px; line-height:1.45; }
+  .status b { color:var(--accent); }
+  .controls { display:flex; gap:7px; flex-wrap:wrap; margin-top:10px; }
+  button { font:600 11.5px/1.1 "Segoe UI",system-ui,sans-serif; padding:8px 10px; border-radius:9px; border:1px solid var(--rule); background:var(--card); color:var(--ink); cursor:pointer; }
+  button:hover { border-color:var(--accent); color:var(--accent); }
+  button.on { background:var(--accent); border-color:var(--accent); color:#fff; }
+  @media (max-width:560px) { .demo { padding:12px; } .head { align-items:flex-start; flex-direction:column; gap:4px; } .hint { white-space:normal; } }
+</style>
+</head>
+<body>
+<div class="demo">
+  <div class="head">
+    <div><p class="eyebrow">Требования · INVEST</p><h3>История под проверкой</h3></div>
+    <div class="hint">выберите историю</div>
+  </div>
+  <div class="story" id="storyText"></div>
+  <svg viewBox="0 0 680 176" role="img" aria-label="Шесть критериев INVEST с результатом проверки выбранной истории">
+    <g class="crit" data-c="I">
+      <rect x="18" y="28" width="98" height="66" rx="7"/>
+      <text x="67" y="50" class="letter">I</text>
+      <text x="67" y="66" class="name">независима</text>
+      <text x="67" y="82" class="verdict">можно планировать</text>
+    </g>
+    <g class="crit" data-c="N">
+      <rect x="128" y="28" width="98" height="66" rx="7"/>
+      <text x="177" y="50" class="letter">N</text>
+      <text x="177" y="66" class="name">обсуждаема</text>
+      <text x="177" y="82" class="verdict">детали открыты</text>
+    </g>
+    <g class="crit" data-c="V">
+      <rect x="238" y="28" width="98" height="66" rx="7"/>
+      <text x="287" y="50" class="letter">V</text>
+      <text x="287" y="66" class="name">ценна</text>
+      <text x="287" y="82" class="verdict">есть польза</text>
+    </g>
+    <g class="crit" data-c="E">
+      <rect x="348" y="28" width="98" height="66" rx="7"/>
+      <text x="397" y="50" class="letter">E</text>
+      <text x="397" y="66" class="name">оцениваема</text>
+      <text x="397" y="82" class="verdict">понятен объём</text>
+    </g>
+    <g class="crit" data-c="S">
+      <rect x="458" y="28" width="98" height="66" rx="7"/>
+      <text x="507" y="50" class="letter">S</text>
+      <text x="507" y="66" class="name">мала</text>
+      <text x="507" y="82" class="verdict">один цикл</text>
+    </g>
+    <g class="crit" data-c="T">
+      <rect x="568" y="28" width="94" height="66" rx="7"/>
+      <text x="615" y="50" class="letter">T</text>
+      <text x="615" y="66" class="name">проверяема</text>
+      <text x="615" y="82" class="verdict">есть критерий</text>
+    </g>
+
+    <text x="340" y="120" text-anchor="middle" font-family="Consolas,monospace" font-size="7" fill="#5b5560">ЗЕЛЁНЫЙ: КРИТЕРИЙ ВЫПОЛНЕН · ЖЁЛТЫЙ: НУЖНО УТОЧНИТЬ · КРАСНЫЙ: ИСТОРИЮ НАДО МЕНЯТЬ</text>
+    <text x="340" y="146" text-anchor="middle" font-family="Consolas,monospace" font-size="7.4" fill="#0F8A63">INVEST ЭТО ФИЛЬТР, А НЕ ГАРАНТИЯ ХОРОШЕЙ ИСТОРИИ</text>
+    <text x="340" y="166" text-anchor="middle" font-family="Consolas,monospace" font-size="6.6" fill="#6b6459">после проверки всё равно нужен разговор с заказчиком</text>
+  </svg>
+  <div class="status" id="status"></div>
+  <div class="controls">
+    <button data-k="export" class="on">Выгрузка в Excel</button>
+    <button data-k="button">Кнопка без цели</button>
+    <button data-k="module">Модуль целиком</button>
+  </div>
+</div>
+<script>
+(function () {
+  var data = {
+    export: {
+      story: '<b>Как администратор, я хочу выгружать заявки в Excel, чтобы готовить отчёт.</b>',
+      verdicts: { I:['ok','можно планировать'], N:['ok','детали открыты'], V:['ok','есть польза'], E:['ok','понятен объём'], S:['ok','один цикл'], T:['warn','нужен критерий'] },
+      status: '<b>История в целом рабочая.</b> Роль и ценность названы, объём понятен. Подводит проверяемость: пока не сказано, какие столбцы, за какой период и что считается ошибкой выгрузки. Добавьте критерий приёмки, и история станет готова к работе.'
+    },
+    button: {
+      story: '<b>Как разработчик, я хочу кнопку, чтобы было удобно.</b>',
+      verdicts: { I:['ok','можно планировать'], N:['bad','нечего обсуждать'], V:['bad','польза не названа'], E:['bad','объём неясен'], S:['ok','один цикл'], T:['bad','нет проверки'] },
+      status: '<b>История слабая.</b> Роль названа, но ценность получает не пользователь, а автор пожелания. Непонятно, какую задачу решает кнопка, что происходит после нажатия и как проверить результат. Это задача реализации, а не пользовательская история.'
+    },
+    module: {
+      story: '<b>Сделать модуль заявок с отчётами, правами, уведомлениями и экспортом.</b>',
+      verdicts: { I:['bad','зависит от всего'], N:['bad','решения закрыты'], V:['bad','ценность размыта'], E:['bad','оценить нельзя'], S:['bad','на месяцы'], T:['bad','нет критерия'] },
+      status: '<b>Это тема, а не история.</b> Внутри несколько ролей, правил и результатов. Нужно разрезать по шагам сценария или по правилам: сначала создание заявки и список, затем назначение, закрытие, отчёт. Каждый срез должен давать пользователю проверяемую ценность.'
+    }
+  };
+  var storyText = document.getElementById('storyText');
+  var status = document.getElementById('status');
+  var crits = document.querySelectorAll('.crit');
+  var buttons = document.querySelectorAll('button[data-k]');
+  var style = { ok:['#E1F5EE','#0F8A63'], warn:['#fff4d6','#9a6b00'], bad:['#fdecea','#b3412f'] };
+
+  function apply(key) {
+    var d = data[key];
+    storyText.innerHTML = d.story;
+    status.innerHTML = d.status;
+    crits.forEach(function (c) {
+      var v = d.verdicts[c.dataset.c];
+      var rect = c.querySelector('rect');
+      var verdict = c.querySelector('.verdict');
+      rect.setAttribute('fill', style[v[0]][0]);
+      rect.setAttribute('stroke', style[v[0]][1]);
+      verdict.textContent = v[1];
+      verdict.setAttribute('fill', style[v[0]][1]);
+    });
+    buttons.forEach(function (b) { b.classList.toggle('on', b.dataset.k === key); });
+  }
+  buttons.forEach(function (b) { b.addEventListener('click', function () { apply(b.dataset.k); }); });
+  apply('export');
+})();
+</script>
+</body>
+</html>

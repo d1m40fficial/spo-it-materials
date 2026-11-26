@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Нормальные формы</title>
+<style>
+  :root { --paper:#faf6f3; --card:#fffdfb; --ink:#2d3142; --muted:#5b5560; --accent:#0F8A63; --soft:#E1F5EE; --rule:#e4d8cf; --bad:#b23a2b; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .demo { background:var(--paper); border:1px solid var(--rule); border-radius:14px; padding:18px; }
+  .head { display:flex; justify-content:space-between; align-items:flex-end; gap:16px; padding-bottom:10px; border-bottom:1px solid var(--rule); }
+  .eyebrow { margin:0 0 4px; font:600 10px/1.2 Consolas,monospace; letter-spacing:.12em; text-transform:uppercase; color:var(--accent); }
+  h3 { margin:0; font-size:19px; line-height:1.2; }
+  .hint { font:11px/1.4 Consolas,monospace; color:var(--muted); white-space:nowrap; }
+  svg { display:block; width:100%; height:auto; margin-top:6px; }
+  .nf { display:none; }
+  .nf.on { display:block; }
+  .status { min-height:52px; margin-top:6px; padding:10px 12px; border-radius:9px; background:var(--soft); font-size:12.5px; line-height:1.45; }
+  .status b { color:var(--accent); }
+  .controls { display:flex; gap:7px; flex-wrap:wrap; margin-top:10px; }
+  button { font:600 11.5px/1 "Segoe UI",system-ui,sans-serif; padding:8px 12px; border-radius:9px; border:1px solid var(--rule); background:var(--card); color:var(--ink); cursor:pointer; }
+  button:hover { border-color:var(--accent); color:var(--accent); }
+  button.on { background:var(--accent); border-color:var(--accent); color:#fff; }
+  @media (max-width:560px) { .demo { padding:12px; } .hint { display:none; } }
+</style>
+</head>
+<body>
+<div class="demo">
+  <div class="head">
+    <div><p class="eyebrow">Данные · нормализация</p><h3>Где спрятан повтор</h3></div>
+    <div class="hint">выберите форму</div>
+  </div>
+  <svg viewBox="0 0 680 300" role="img" aria-label="Нарушения первой, второй и третьей нормальной формы">
+    <g class="nf on" data-nf="1">
+      <text x="30" y="26" font-family="Consolas,monospace" font-size="9" fill="#0F8A63">1НФ: одно значение в ячейке</text>
+      <g font-family="Consolas,monospace" font-size="7">
+        <rect x="30" y="42" width="400" height="88" rx="6" fill="#fff" stroke="#2d3142"/>
+        <line x1="30" y1="60" x2="430" y2="60" stroke="#2d3142"/>
+        <line x1="30" y1="82" x2="430" y2="82" stroke="#e4d8cf"/>
+        <line x1="30" y1="104" x2="430" y2="104" stroke="#e4d8cf"/>
+        <text x="38" y="55" fill="#5b5560">id | тема | телефоны исполнителя</text>
+        <text x="38" y="76">1 | лампа | 11-22, 33-44</text>
+        <text x="38" y="98">2 | замок | 11-22</text>
+        <text x="38" y="120">3 | стул | 33-44</text>
+        <rect x="132" y="64" width="120" height="18" fill="#f7e3df" stroke="#b23a2b"/>
+        <text x="140" y="76" fill="#b23a2b">два значения в одной ячейке</text>
+      </g>
+      <text x="452" y="56" font-family="Consolas,monospace" font-size="7" fill="#b23a2b">НАРУШЕНИЕ</text>
+      <text x="452" y="74" font-family="Consolas,monospace" font-size="6.6" fill="#5b5560">список нельзя фильтровать,</text>
+      <text x="452" y="88" font-family="Consolas,monospace" font-size="6.6" fill="#5b5560">сравнивать и обновлять</text>
+      <text x="452" y="108" font-family="Consolas,monospace" font-size="6.6" fill="#0F8A63">РЕШЕНИЕ</text>
+      <text x="452" y="122" font-family="Consolas,monospace" font-size="6.6" fill="#5b5560">отдельная таблица телефонов</text>
+      <text x="340" y="170" text-anchor="middle" font-family="Consolas,monospace" font-size="7" fill="#5b5560">ячейка хранит атомарное значение</text>
+    </g>
+
+    <g class="nf" data-nf="2">
+      <text x="30" y="26" font-family="Consolas,monospace" font-size="9" fill="#0F8A63">2НФ: зависимость от всего ключа</text>
+      <g font-family="Consolas,monospace" font-size="7">
+        <rect x="30" y="42" width="420" height="88" rx="6" fill="#fff" stroke="#2d3142"/>
+        <line x1="30" y1="60" x2="450" y2="60" stroke="#2d3142"/>
+        <line x1="30" y1="82" x2="450" y2="82" stroke="#e4d8cf"/>
+        <line x1="30" y1="104" x2="450" y2="104" stroke="#e4d8cf"/>
+        <text x="38" y="55" fill="#0F8A63">заявка | исполнитель | тема | часы</text>
+        <text x="38" y="76">1 | Петров | лампа | 2</text>
+        <text x="38" y="98">1 | Орлов | лампа | 1</text>
+        <text x="38" y="120">2 | Петров | замок | 3</text>
+        <text x="252" y="55" fill="#5b5560">ключ из двух столбцов</text>
+        <rect x="186" y="64" width="74" height="44" fill="#f7e3df" stroke="#b23a2b"/>
+        <text x="190" y="76" fill="#b23a2b">тема зависит</text>
+        <text x="190" y="88" fill="#b23a2b">только от</text>
+        <text x="190" y="100" fill="#b23a2b">заявки</text>
+      </g>
+      <text x="470" y="56" font-family="Consolas,monospace" font-size="7" fill="#b23a2b">НАРУШЕНИЕ</text>
+      <text x="470" y="74" font-family="Consolas,monospace" font-size="6.6" fill="#5b5560">часть ключа определяет</text>
+      <text x="470" y="88" font-family="Consolas,monospace" font-size="6.6" fill="#5b5560">неключевой атрибут</text>
+      <text x="470" y="108" font-family="Consolas,monospace" font-size="6.6" fill="#0F8A63">РЕШЕНИЕ</text>
+      <text x="470" y="122" font-family="Consolas,monospace" font-size="6.6" fill="#5b5560">тема переходит в заявку</text>
+      <text x="340" y="170" text-anchor="middle" font-family="Consolas,monospace" font-size="7" fill="#5b5560">атрибут зависит от ключа целиком, а не от его части</text>
+    </g>
+
+    <g class="nf" data-nf="3">
+      <text x="30" y="26" font-family="Consolas,monospace" font-size="9" fill="#0F8A63">3НФ: никаких цепочек зависимостей</text>
+      <g font-family="Consolas,monospace" font-size="7">
+        <rect x="30" y="42" width="300" height="88" rx="6" fill="#fff" stroke="#2d3142"/>
+        <line x1="30" y1="60" x2="330" y2="60" stroke="#2d3142"/>
+        <line x1="30" y1="82" x2="330" y2="82" stroke="#e4d8cf"/>
+        <line x1="30" y1="104" x2="330" y2="104" stroke="#e4d8cf"/>
+        <text x="38" y="55" fill="#5b5560">заявка | сотрудник | кабинет</text>
+        <text x="38" y="76">1 | Иванов | 214</text>
+        <text x="38" y="98">2 | Смирнов | 310</text>
+        <text x="38" y="120">3 | Иванов | 214</text>
+        <rect x="184" y="64" width="70" height="18" fill="#f7e3df" stroke="#b23a2b"/>
+        <text x="190" y="76" fill="#b23a2b">кабинет</text>
+        <rect x="334" y="42" width="180" height="60" rx="6" fill="#E1F5EE" stroke="#0F8A63"/>
+        <text x="342" y="57" fill="#0F8A63">сотрудник | кабинет</text>
+        <text x="342" y="76" fill="#2d3142">Иванов | 214</text>
+        <text x="342" y="92" fill="#2d3142">Смирнов | 310</text>
+        <path d="M312 73h20" stroke="#0F8A63" stroke-width="1.3" fill="none" marker-end="url(#arw-nf)"/>
+      </g>
+      <text x="30" y="158" font-family="Consolas,monospace" font-size="6.6" fill="#b23a2b">кабинет зависит от сотрудника, а не от заявки</text>
+      <text x="30" y="174" font-family="Consolas,monospace" font-size="6.6" fill="#0F8A63">кабинет хранится один раз, в таблице сотрудника</text>
+    </g>
+
+    <text x="340" y="212" text-anchor="middle" font-family="Consolas,monospace" font-size="8" fill="#0F8A63">НОРМАЛИЗАЦИЯ УБИРАЕТ ПРИЧИНУ ПОВТОРА, А НЕ ЕГО СИМПТОМ</text>
+    <defs>
+      <marker id="arw-nf" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#0F8A63"/></marker>
+    </defs>
+  </svg>
+  <div class="status" id="status"></div>
+  <div class="controls">
+    <button data-nf="1" class="on">1НФ</button>
+    <button data-nf="2">2НФ</button>
+    <button data-nf="3">3НФ</button>
+  </div>
+</div>
+<script>
+(function () {
+  var data = {
+    '1': '<b>1НФ.</b> В ячейке одно значение. Список телефонов через запятую нарушает правило: его нельзя нормально фильтровать, сравнивать и обновлять.',
+    '2': '<b>2НФ.</b> Неключевой атрибут зависит от всего ключа. Если тема определяется только номером заявки, она не должна лежать в таблице строк заявки.',
+    '3': '<b>3НФ.</b> Неключевой атрибут не зависит от другого неключевого. Кабинет зависит от сотрудника, поэтому хранится в таблице сотрудника.'
+  };
+  var groups = document.querySelectorAll('.nf');
+  var buttons = document.querySelectorAll('button[data-nf]');
+  var status = document.getElementById('status');
+
+  function apply(n) {
+    groups.forEach(function (g) { g.classList.toggle('on', g.dataset.nf === n); });
+    buttons.forEach(function (b) { b.classList.toggle('on', b.dataset.nf === n); });
+    status.innerHTML = data[n];
+  }
+  buttons.forEach(function (b) { b.addEventListener('click', function () { apply(b.dataset.nf); }); });
+  apply('1');
+})();
+</script>
+</body>
+</html>

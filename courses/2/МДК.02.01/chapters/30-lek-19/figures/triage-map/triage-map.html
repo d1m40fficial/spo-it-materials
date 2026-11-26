@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Маршрут обращения</title>
+<style>
+  :root { --paper:#faf6f3; --card:#fffdfb; --ink:#1a1916; --muted:#6b6459; --rule:#e4d8cf; --accent:#0F8A63; --soft:#E1F5EE; --warn:#b23a2b; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .demo { background:var(--paper); border:1px solid var(--rule); border-radius:14px; padding:18px; }
+  .head { display:flex; justify-content:space-between; align-items:flex-end; gap:16px; padding-bottom:10px; border-bottom:1px solid var(--rule); }
+  .eyebrow { margin:0 0 4px; font:600 10px/1.2 Consolas,monospace; letter-spacing:.12em; text-transform:uppercase; color:var(--accent); }
+  h3 { margin:0; font-size:19px; line-height:1.2; }
+  .hint { font:11px/1.4 Consolas,monospace; color:var(--muted); white-space:nowrap; }
+  svg { display:block; width:100%; height:auto; margin-top:8px; }
+  .status { min-height:66px; margin-top:8px; padding:10px 12px; border-radius:9px; background:var(--soft); font-size:12.5px; line-height:1.45; }
+  .status b { color:var(--accent); }
+  .controls { display:flex; gap:7px; flex-wrap:wrap; margin-top:10px; }
+  button { font:600 11.5px/1 "Segoe UI",system-ui,sans-serif; padding:8px 10px; border-radius:9px; border:1px solid var(--rule); background:var(--card); color:var(--ink); cursor:pointer; }
+  button:hover { border-color:var(--accent); color:var(--accent); }
+  button.on { background:var(--accent); border-color:var(--accent); color:#fff; }
+  @media (max-width:560px) { .demo { padding:12px; } .head { align-items:flex-start; flex-direction:column; gap:4px; } .hint { white-space:normal; } }
+</style>
+</head>
+<body>
+<div class="demo">
+  <div class="head">
+    <div><p class="eyebrow">Сопровождение · маршрут</p><h3>Что делать первым</h3></div>
+    <div class="hint">выберите тип обращения</div>
+  </div>
+  <svg viewBox="0 0 680 246" role="img" aria-labelledby="tm-title tm-desc">
+    <title id="tm-title">Маршрут разных типов обращений</title>
+    <desc id="tm-desc">Критический инцидент, высокий, средний и запрос на изменение. Показаны первое действие, пример срока и результат.</desc>
+
+    <g font-family="Consolas,monospace">
+      <rect x="20" y="20" width="196" height="94" rx="9" fill="#fff" stroke="#b23a2b" stroke-width="1.6"/>
+      <text x="118" y="42" text-anchor="middle" font-size="8" fill="#b23a2b">ПЕРВОЕ ДЕЙСТВИЕ</text>
+      <text x="118" y="66" text-anchor="middle" font-size="8.4" fill="#2d3142" id="tm-action">восстановить работу</text>
+      <text x="118" y="86" text-anchor="middle" font-size="7" fill="#5b5560" id="tm-sub">не искать причину сразу</text>
+      <text x="118" y="102" text-anchor="middle" font-size="7" fill="#5b5560" id="tm-sub2">сообщить пользователям</text>
+
+      <path d="M222 67h34" stroke="#0F8A63" stroke-width="1.8" fill="none" marker-end="url(#tm-arw)"/>
+
+      <rect x="262" y="20" width="156" height="94" rx="9" fill="#E1F5EE" stroke="#0F8A63" stroke-width="1.8"/>
+      <text x="340" y="42" text-anchor="middle" font-size="8" fill="#0F8A63">СРОК В ПРИМЕРЕ</text>
+      <text x="340" y="70" text-anchor="middle" font-size="13" fill="#0F8A63" id="tm-time">сразу</text>
+      <text x="340" y="90" text-anchor="middle" font-size="7" fill="#2d3142" id="tm-time2">до восстановления</text>
+      <text x="340" y="106" text-anchor="middle" font-size="6.5" fill="#5b5560">числа не норма</text>
+
+      <path d="M424 67h34" stroke="#0F8A63" stroke-width="1.8" fill="none" marker-end="url(#tm-arw)"/>
+
+      <rect x="464" y="20" width="196" height="94" rx="9" fill="#fff" stroke="#b9ac9f"/>
+      <text x="562" y="42" text-anchor="middle" font-size="8" fill="#5b5560">РЕЗУЛЬТАТ</text>
+      <text x="562" y="66" text-anchor="middle" font-size="8.4" fill="#2d3142" id="tm-out">работа восстановлена</text>
+      <text x="562" y="86" text-anchor="middle" font-size="7" fill="#5b5560" id="tm-doc">запись инцидента</text>
+      <text x="562" y="102" text-anchor="middle" font-size="7" fill="#5b5560">и разбор позже</text>
+    </g>
+
+    <g font-family="Consolas,monospace" font-size="7.4" fill="#2d3142">
+      <text x="24" y="146">КТО ВЕДЁТ</text>
+      <text x="24" y="164" id="tm-owner">дежурный и ответственный за инцидент</text>
+      <text x="24" y="190">ЧТО ОСТАЁТСЯ</text>
+      <text x="24" y="208" id="tm-artifact">описание, время, меры</text>
+    </g>
+
+    <text x="340" y="236" text-anchor="middle" font-family="Consolas,monospace" font-size="7.6" fill="#0F8A63">Тип обращения задаёт первый шаг, а не важность человека.</text>
+
+    <defs>
+      <marker id="tm-arw" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#0F8A63"/></marker>
+    </defs>
+  </svg>
+  <div class="status" id="tm-status"><b>Критический инцидент.</b> Система недоступна. Сначала восстанавливают работу и сообщают пользователям, причину ищут после стабилизации.</div>
+  <div class="controls">
+    <button data-k="crit" class="on">Критический инцидент</button>
+    <button data-k="high">Высокий инцидент</button>
+    <button data-k="mid">Средний инцидент</button>
+    <button data-k="change">Запрос на изменение</button>
+  </div>
+</div>
+<script>
+(function () {
+  var data = {
+    crit: {
+      action: 'восстановить работу', sub: 'не искать причину сразу', sub2: 'сообщить пользователям',
+      time: 'сразу', time2: 'до восстановления',
+      out: 'работа восстановлена', doc: 'запись инцидента',
+      owner: 'дежурный и ответственный за инцидент',
+      artifact: 'описание, время, меры',
+      status: '<b>Критический инцидент.</b> Система недоступна. Сначала восстанавливают работу и сообщают пользователям, причину ищут после стабилизации.'
+    },
+    high: {
+      action: 'взять в работу', sub: 'проверить обход', sub2: 'назначить владельца',
+      time: 'в течение часа', time2: 'решение в тот же день',
+      out: 'функция работает', doc: 'запись и задача',
+      owner: 'дежурный и владелец модуля',
+      artifact: 'обход или исправление',
+      status: '<b>Высокий инцидент.</b> Ключевая функция не работает, но система доступна. Сначала возвращают функцию, затем устраняют причину.'
+    },
+    mid: {
+      action: 'запланировать', sub: 'проверить влияние', sub2: 'предложить обход',
+      time: 'в течение дня', time2: 'в плане работ',
+      out: 'ошибка закрыта', doc: 'задача и тест',
+      owner: 'владелец модуля',
+      artifact: 'исправление и проверка',
+      status: '<b>Средний инцидент.</b> Есть обход, работа не остановлена. Обращение попадает в план, а не вытесняет критические.'
+    },
+    change: {
+      action: 'оценить', sub: 'проверить пользу', sub2: 'согласовать приоритет',
+      time: 'по плану', time2: 'без срочности',
+      out: 'решение принято', doc: 'запрос и оценка',
+      owner: 'владелец продукта и команда',
+      artifact: 'план изменения',
+      status: '<b>Запрос на изменение.</b> Это улучшение, а не сбой. Его оценивают, ставят в очередь и выпускают по обычному процессу.'
+    }
+  };
+  var buttons = document.querySelectorAll('button[data-k]');
+  var action = document.getElementById('tm-action');
+  var sub = document.getElementById('tm-sub');
+  var sub2 = document.getElementById('tm-sub2');
+  var time = document.getElementById('tm-time');
+  var time2 = document.getElementById('tm-time2');
+  var out = document.getElementById('tm-out');
+  var doc = document.getElementById('tm-doc');
+  var owner = document.getElementById('tm-owner');
+  var artifact = document.getElementById('tm-artifact');
+  var status = document.getElementById('tm-status');
+
+  function apply(key) {
+    var d = data[key];
+    buttons.forEach(function (b) { b.classList.toggle('on', b.dataset.k === key); });
+    action.textContent = d.action;
+    sub.textContent = d.sub;
+    sub2.textContent = d.sub2;
+    time.textContent = d.time;
+    time2.textContent = d.time2;
+    out.textContent = d.out;
+    doc.textContent = d.doc;
+    owner.textContent = d.owner;
+    artifact.textContent = d.artifact;
+    status.innerHTML = d.status;
+  }
+  buttons.forEach(function (b) { b.addEventListener('click', function () { apply(b.dataset.k); }); });
+  apply('crit');
+})();
+</script>
+</body>
+</html>

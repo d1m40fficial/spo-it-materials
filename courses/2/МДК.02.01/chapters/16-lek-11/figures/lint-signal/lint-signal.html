@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Точки проверки</title>
+<style>
+  :root { --paper:#faf6f3; --ink:#2d3142; --muted:#5b5560; --accent:#0F8A63; --soft:#E1F5EE; --rule:rgba(45,49,66,.12); }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .frame { background:var(--paper); border:1px solid var(--rule); border-radius:12px; padding:18px 18px 14px; }
+  .eyebrow { margin:0 0 8px; font:600 9px/1.2 Consolas,monospace; letter-spacing:.16em; text-transform:uppercase; color:var(--muted); }
+  .note { margin:10px 2px 0; font:11px/1.5 Consolas,monospace; color:var(--muted); }
+  svg { display:block; width:100%; height:auto; }
+</style>
+</head>
+<body>
+<div class="frame">
+  <p class="eyebrow">Код · статический анализ</p>
+  <svg viewBox="0 0 680 262" role="img" aria-labelledby="ls-title ls-desc">
+    <title id="ls-title">Четыре точки показа предупреждений</title>
+    <desc id="ls-desc">Чем позже и строже показывается предупреждение, тем выше требование к его точности.</desc>
+
+    <g font-family="Consolas,monospace" text-anchor="middle">
+      <g>
+        <rect x="16" y="30" width="150" height="86" rx="8" fill="#fff" stroke="#2d3142"/>
+        <text x="91" y="52" font-size="9" fill="#0F8A63">РЕДАКТОР</text>
+        <text x="91" y="72" font-size="7.5" fill="#2d3142">подсказка рядом</text>
+        <text x="91" y="88" font-size="7.5" fill="#2d3142">со строкой кода</text>
+        <text x="91" y="106" font-size="7" fill="#5b5560">можно игнорировать</text>
+      </g>
+      <g>
+        <rect x="180" y="30" width="150" height="86" rx="8" fill="#fff" stroke="#2d3142"/>
+        <text x="255" y="52" font-size="9" fill="#0F8A63">РЕВЬЮ</text>
+        <text x="255" y="72" font-size="7.5" fill="#2d3142">видит ревьюер</text>
+        <text x="255" y="88" font-size="7.5" fill="#2d3142">рядом с diff</text>
+        <text x="255" y="106" font-size="7" fill="#5b5560">нужно объяснить отказ</text>
+      </g>
+      <g>
+        <rect x="344" y="30" width="150" height="86" rx="8" fill="#E1F5EE" stroke="#0F8A63"/>
+        <text x="419" y="52" font-size="9" fill="#0F8A63">ПЕРЕД КОММИТОМ</text>
+        <text x="419" y="72" font-size="7.5" fill="#2d3142">блокирует отправку</text>
+        <text x="419" y="88" font-size="7.5" fill="#2d3142">проверка изменений</text>
+        <text x="419" y="106" font-size="7" fill="#5b5560">обход только явно</text>
+      </g>
+      <g>
+        <rect x="508" y="30" width="156" height="86" rx="8" fill="#fff" stroke="#2d3142"/>
+        <text x="586" y="52" font-size="9" fill="#0F8A63">КОМПИЛЯТОР</text>
+        <text x="586" y="72" font-size="7.5" fill="#2d3142">ломает сборку</text>
+        <text x="586" y="88" font-size="7.5" fill="#2d3142">для всех сразу</text>
+        <text x="586" y="106" font-size="7" fill="#5b5560">только безошибочные</text>
+      </g>
+    </g>
+
+    <g stroke="#5b5560" stroke-width="1.4" fill="none" marker-end="url(#arw-ls)">
+      <path d="M167 73h10"/><path d="M331 73h10"/><path d="M495 73h10"/>
+    </g>
+
+    <text x="16" y="142" font-family="Consolas,monospace" font-size="7" fill="#5b5560">ТЕРПИМОСТЬ К ЛОЖНЫМ СРАБАТЫВАНИЯМ ПАДАЕТ</text>
+    <path d="M16 158h648" stroke="#e4d8cf" stroke-width="8" stroke-linecap="round"/>
+    <path d="M16 158h648" stroke="#0F8A63" stroke-width="2" stroke-linecap="round"/>
+    <circle cx="60" cy="158" r="5" fill="#fff" stroke="#0F8A63" stroke-width="2"/>
+    <circle cx="250" cy="158" r="5" fill="#fff" stroke="#0F8A63" stroke-width="2"/>
+    <circle cx="440" cy="158" r="5" fill="#E1F5EE" stroke="#0F8A63" stroke-width="2"/>
+    <circle cx="620" cy="158" r="5" fill="#fff" stroke="#0F8A63" stroke-width="2"/>
+
+    <rect x="16" y="180" width="648" height="50" rx="8" fill="#fff" stroke="#b9ac9f"/>
+    <text x="30" y="199" font-family="Consolas,monospace" font-size="7.2" fill="#5b5560">ОПЫТ GOOGLE</text>
+    <text x="30" y="217" font-family="Consolas,monospace" font-size="8" fill="#2d3142">более 100 анализаторов, около 5 процентов эффективных ложных срабатываний</text>
+    <text x="350" y="217" font-family="Consolas,monospace" font-size="8" fill="#2d3142">критерий для нового правила: меньше 10 процентов</text>
+
+    <text x="340" y="252" text-anchor="middle" font-family="Consolas,monospace" font-size="8" fill="#0F8A63">ЧЕМ СТРОЖЕ ТОЧКА, ТЕМ ДОРОЖЕ ОШИБКА ИНСТРУМЕНТА</text>
+    <defs>
+      <marker id="arw-ls" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#5b5560"/></marker>
+    </defs>
+  </svg>
+  <p class="note">Предупреждение, которое никто не исправляет, не отличается от отсутствия предупреждения. Поэтому важна не число правил, а доля действий после них.</p>
+</div>
+</body>
+</html>

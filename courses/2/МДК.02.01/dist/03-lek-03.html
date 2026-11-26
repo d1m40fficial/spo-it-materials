@@ -888,72 +888,224 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <canvas class="shader-bg" width="820" height="300" aria-hidden="true" style="background:linear-gradient(135deg,#08090D,#1D9E75 58%,#08090D)"></canvas>
 <div class="badges"><span class="pill dark">Занятие 3</span><span class="pill">Технология разработки ПО</span></div>
 <div class="hero-panel"><h1>Agile, Scrum и Kanban</h1><p class="dek">Agile задаёт ценности и короткие циклы, Scrum добавляет роли и события. Разберём спринт, бэклог и доску Kanban.</p></div>
-<div class="glyph" aria-hidden="true">Л3</div></header><section class="outcomes"><b>После этого занятия вы сможете</b><ul><li>Различать ценности Agile и практики Scrum</li><li>Описывать спринт от планирования до ретроспективы</li><li>Определять роли Scrum</li><li>Сравнивать Scrum и Kanban по управлению потоком</li></ul></section><nav class="toc"><b>Содержание занятия</b><ol><li><a href="#требования-меняются">Требования меняются</a></li><li><a href="#ценности-agile">Ценности Agile</a></li><li><a href="#scrum-роли-и-артефакты">Scrum: роли и артефакты</a></li><li><a href="#спринт-по-шагам">Спринт по шагам</a></li><li><a href="#kanban">Kanban</a></li><li><a href="#сравнение">Сравнение</a></li><li><a href="#где-agile-ломается">Где Agile ломается</a></li><li><a href="#итоги">Итоги</a></li></ol></nav><article class="prose"><h2 id="требования-меняются"><span class="num">01</span>Требования меняются</h2>
+<div class="glyph" aria-hidden="true">Л3</div></header><section class="outcomes"><b>После этого занятия вы сможете</b><ul><li>Различать ценности Agile и практики Scrum</li><li>Описывать спринт от планирования до ретроспективы</li><li>Определять роли Scrum</li><li>Сравнивать Scrum и Kanban по управлению потоком</li><li>Объяснять, почему лимит незавершённой работы меняет поведение команды</li></ul></section><nav class="toc"><b>Содержание занятия</b><ol><li><a href="#требования-меняются">Требования меняются</a></li><li><a href="#что-такое-agile">Что такое Agile</a></li><li><a href="#scrum-роли-артефакты-события">Scrum: роли, артефакты, события</a></li><li><a href="#kanban-поток-и-лимиты">Kanban: поток и лимиты</a></li><li><a href="#что-подтверждают-исследования-и-случаи">Что подтверждают исследования и случаи</a></li><li><a href="#где-agile-ломается">Где Agile ломается</a></li><li><a href="#как-внедрить-практику-в-учебной-команде">Как внедрить практику в учебной команде</a></li><li><a href="#итоги">Итоги</a></li><li><a href="#источники">Источники</a></li></ol></nav><article class="prose"><h2 id="требования-меняются"><span class="num">01</span>Требования меняются</h2>
 <p>В начале года заказчик описал систему учёта заявок. К весне выяснилось, что часть заявок приходит по почте, а отчёт нужен не за месяц, а за неделю. Документ требований устарел, но работа продолжается.</p>
 <p><strong>Agile</strong> это набор ценностей для работы в условиях изменений. Он не отменяет план, а делает его коротким и проверяемым.</p>
 <p><strong>Scrum</strong> и <strong>Kanban</strong> это две практики, которые по-разному организуют поток работ. Их часто путают с Agile, хотя Agile шире.</p>
 <p>Главная мысль занятия: <strong>практика нужна для решения, а не для ритуала</strong>. Ежедневная встреча без препятствий и ретроспектива без изменений не помогают.</p>
-<h2 id="ценности-agile"><span class="num">02</span>Ценности Agile</h2>
-<p>Agile manifesto формулирует четыре предпочтения:</p>
+<p>Продолжение разговора о моделях важно начать с разграничения. Модель процесса отвечает на вопрос «как устроен цикл». Agile отвечает на вопрос «какие ценности мы сохраняем, когда цикл меняется». Scrum и Kanban отвечают на вопрос «какие конкретные правила и артефакты делают работу видимой».</p>
+<p>Если смешать эти уровни, получается путаница. Команда говорит «мы Agile», но не может назвать, как принимает решения. Или говорит «мы Scrum», но не имеет владельца продукта и не проводит обзор. Или говорит «мы Kanban», но на доске нет лимитов и политик.</p>
+<h2 id="что-такое-agile"><span class="num">02</span>Что такое Agile</h2>
+<p>В 2001 году группа из семнадцати практиков опубликовала «Манифест гибкой разработки программного обеспечения». Документ короткий: четыре ценности и двенадцать принципов. Его авторы не создавали универсальную методику. Они фиксировали предпочтения, которые считали более полезными для работы в изменчивой среде <a href="https://agilemanifesto.org/">Agile Manifesto</a>.</p>
+<h3>Манифест и его границы</h3>
+<p>Четыре ценности сформулированы как сравнение:</p>
 <ul>
 <li>люди и взаимодействие важнее процессов и инструментов;</li>
 <li>работающий продукт важнее исчерпывающей документации;</li>
 <li>сотрудничество с заказчиком важнее согласования договора;</li>
 <li>готовность к изменениям важнее следования плану.</li>
 </ul>
-<p>«Важнее» не значит «отменяет». Документация и план нужны, но они не должны останавливать работу.</p>
-<h2 id="scrum-роли-и-артефакты"><span class="num">03</span>Scrum: роли и артефакты</h2>
+<p>Слово «важнее» не означает «отменяет». Документация, договор и план сохраняют ценность. Манифест говорит, что при конфликте приоритет у левой части. Если документация мешает людям договориться, документация становится проблемой, а не целью.</p>
+<p>Это тонкость, которую часто теряют. Команда, которая вообще отказалась от документации, не стала Agile. Она просто перенесла знание в головы и переписку. Команда, которая вообще отказалась от плана, не стала быстрее. Она потеряла возможность сравнивать обещанное и сделанное.</p>
+<h3>Двенадцать принципов на практике</h3>
+<p>Принципы манифеста переводят ценности в поведение. Полезно прочитать их как вопросы к команде.</p>
+<p><strong>Ранняя и непрерывная поставка ценности.</strong> Заказчик получает работающий продукт часто, а не один раз в конце. Вопрос: когда пользователь в последний раз видел работающую функцию?</p>
+<p><strong>Доброжелательное отношение к изменениям.</strong> Изменение требования не считается сбоем процесса. Вопрос: что команда делает, когда требование меняется в середине цикла?</p>
+<p><strong>Частая поставка.</strong> Работающий продукт поставляется с разной периодичностью, от недель до месяцев. Вопрос: сколько времени проходит от готового изменения до пользователя?</p>
+<p><strong>Совместная работа заказчика и разработчиков.</strong> Они работают вместе ежедневно. Вопрос: кто со стороны заказчика доступен команде в течение недели?</p>
+<p><strong>Мотивированные люди.</strong> Проект строится вокруг людей, которым доверяют. Вопрос: может ли команда принять техническое решение без трёх согласований?</p>
+<p><strong>Личное общение.</strong> Очный разговор эффективнее документа. Вопрос: где команда обсуждает сложный вопрос, в чате или на встрече с обсуждением?</p>
+<p><strong>Работающий продукт как мера прогресса.</strong> Слайды и проценты готовности не заменяют проверяемый результат. Вопрос: что можно показать и проверить сегодня?</p>
+<p><strong>Устойчивый темп.</strong> Команда работает в ритме, который можно поддерживать. Вопрос: сколько часов переработки накопилось за месяц?</p>
+<p><strong>Техническое совершенство и хороший проект.</strong> Качество поддерживает скорость. Вопрос: растёт ли сложность изменений или остаётся управляемой?</p>
+<p><strong>Простота.</strong> Команда не делает лишнюю работу. Вопрос: какая функция не нужна пользователю уже сейчас?</p>
+<p><strong>Самоорганизация.</strong> Решения распределены в команде. Вопрос: кто решает, как делать работу, и не ждёт ли команда указаний?</p>
+<p><strong>Рефлексия и настройка.</strong> Команда регулярно пересматривает своё поведение. Вопрос: какое изменение процесса было принято за последние две недели?</p>
+<p>Принципы не требуют специального инструмента. Они требуют решений. Именно поэтому Agile нельзя «купить» вместе с трекером задач.</p>
+<h3>Agile не равен отсутствию плана</h3>
+<p>Распространённое заблуждение: Agile это работа без плана и документации. На практике всё наоборот. Короткий цикл требует более точных договорённостей, потому что у команды меньше времени на исправление.</p>
+<p>План в Agile не исчезает. Он становится многоуровневым:</p>
+<ul>
+<li><strong>видение продукта</strong> отвечает, зачем он нужен;</li>
+<li><strong>бэклог</strong> задаёт порядок работ;</li>
+<li><strong>цель цикла</strong> объясняет, что будет достигнуто за две недели;</li>
+<li><strong>план задач</strong> показывает, как команда дойдёт до цели;</li>
+<li><strong>критерии готовности</strong> фиксируют, что считается законченным.</li>
+</ul>
+<p>Чем короче цикл, тем важнее ясность цели. Если цель размыта, команда каждый день выбирает новую работу и не доводит ни одну до конца.</p>
+<h3>Agile и договор</h3>
+<p>Манифест говорит о сотрудничестве с заказчиком важнее согласования договора. Это не значит, что договор не нужен. Это значит, что договор не должен мешать уточнять требования.</p>
+<p>У проекта есть четыре ограничения: объём, время, стоимость и качество. Нельзя зафиксировать все четыре и при этом ожидать изменений. Если объём зафиксирован, а требования меняются, придётся двигать время, стоимость или качество. Если время и стоимость зафиксированы, придётся менять объём.</p>
+<p>Гибкий договор обычно фиксирует время и стоимость команды, а объём уточняет по приоритету. Заказчик покупает не список функций, а возможность получать наиболее ценную работу в рамках бюджета. Это требует доверия и прозрачности: заказчик видит бэклог и результат каждого цикла.</p>
+<p>Жёсткий договор с фиксированным объёмом тоже возможен. Но тогда изменения проходят через процедуру, а не через ежедневные переговоры. Смешивать две модели опасно: команда обещает гибкость, а договор требует фиксированный список. В результате либо страдает качество, либо появляются неоплаченные переработки.</p>
+<p>Практический вопрос к проекту: что мы готовы менять, когда узнаем новое? Если ответ «ничего», это водопад в договоре. Если ответ «объём, но не срок и не бюджет», это итерационная работа с фиксированным бюджетом. Если ответ «всё», у проекта нет ограничений и нет управления.</p>
+<figure class="figure" data-fig="sprint-cycle" data-one="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"><iframe title="Figure 1: sprint-cycle" scrolling="no"></iframe><figcaption>Слева цикл спринта из четырёх событий, справа доска Kanban с ограничением задач в работе. Спринт длится одну-две недели.</figcaption></figure>
+
+<div class="gate-step" data-gate>
+<p class="gate-action"><button type="button" class="gate-btn" aria-expanded="false"><span class="gate-q" aria-hidden="true">?</span><span>Почему Scrum добавляет к ценностям роли, артефакты и события?</span></button></p>
+<div class="gate-content" hidden><h2 id="scrum-роли-артефакты-события"><span class="num">03</span>Scrum: роли, артефакты, события</h2>
+<p>Scrum это лёгкий фреймворк, который помогает людям, командам и организациям создавать ценность через адаптивные решения сложных задач. В Scrum Guide 2020 подчёркнуто: фреймворк намеренно неполный, он задаёт только необходимые правила, а конкретные практики команда добавляет сама <a href="https://scrumguides.org/scrum-guide.html">Scrum Guide, 2020</a>.</p>
+<h3>Откуда взялся Scrum</h3>
+<p>Название и идея пришли из статьи Такеути и Нонаки 1986 года о разработке новых продуктов. Авторы сравнивали два способа работы: эстафету, где этапы передаются последовательно, и регби, где команда движется вместе и передаёт мяч внутри команды. Для сложной разработки они считали ближе второй образ.</p>
+<p>В 1995 году Кен Швабер и Джефф Сазерленд представили Scrum на конференции OOPSLA. Первая версия Scrum Guide появилась в 2010 году, а версия 2020 года уточнила роли, события и обязательства артефактов. История важна не для дат. Она объясняет, почему в Scrum команда целая, а не набор отдельных исполнителей, и почему цель спринта принадлежит команде, а не приходит сверху как список задач.</p>
+<p>Метафора регби не означает хаос. В регби есть правила, позиции и цель. Scrum тоже требует правил: кто ведёт бэклог, когда происходит обзор, что считается готовым. Без правил метафора превращается в оправдание беспорядка.</p>
+<h3>Эмпиризм и три опоры</h3>
+<p>Scrum основан на эмпиризме: знание приходит из опыта, решения принимаются по наблюдаемым фактам. Второй источник это бережливое мышление: убирать лишнее и фокусироваться на существенном.</p>
+<p>Эмпиризм держится на трёх опорах.</p>
+<p><strong>Прозрачность.</strong> Работа и её состояние видны и команде, и получателям результата. Если бэклог ведут в личной таблице, прозрачности нет.</p>
+<p><strong>Инспекция.</strong> Артефакты и прогресс регулярно проверяются. Если проверка превращается в отчёт для начальника, она теряет смысл.</p>
+<p><strong>Адаптация.</strong> Если обнаружено отклонение, процесс или продукт меняется. Инспекция без адаптации бесполезна.</p>
+<p>Эти три опоры объясняют, почему события Scrum существуют. Каждое событие создаёт момент, когда команда может увидеть факты и что-то изменить. Если событие проводят, но ничего не меняют, остаётся ритуал.</p>
+<p>Пять ценностей Scrum: commitment, focus, openness, respect, courage. На русский их переводят как обязательность, фокус, открытость, уважение и смелость. Ценности не заменяют правила. Они объясняют, почему правила работают: без открытости проблемы скрываются, без смелости команда не говорит о риске.</p>
+<h3>Роли как зоны ответственности</h3>
+<p>В Scrum Team три зоны ответственности. В русскоязычной литературе их часто называют ролями, хотя точнее говорить об ответственности.</p>
 <table>
 <thead>
 <tr>
 <th>Роль</th>
-<th>Ответственность</th>
+<th>За что отвечает</th>
+<th>Что производит</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td>владелец продукта</td>
 <td>ценность и порядок бэклога</td>
+<td>цель продукта, приоритеты, понятные элементы бэклога</td>
 </tr>
 <tr>
 <td>скрам-мастер</td>
-<td>процесс и устранение препятствий</td>
+<td>процесс и эффективность команды</td>
+<td>работающие события, устранённые препятствия, обучение</td>
 </tr>
 <tr>
-<td>команда</td>
-<td>результат спринта</td>
+<td>разработчики</td>
+<td>создание инкремента</td>
+<td>работающий продукт, план спринта, качество</td>
 </tr>
 </tbody>
 </table>
-<p>Артефакты:</p>
-<ul>
-<li><strong>бэклог продукта</strong>: все известные истории в порядке ценности;</li>
-<li><strong>бэклог спринта</strong>: истории, взятые в текущий цикл;</li>
-<li><strong>инкремент</strong>: работающий результат спринта.</li>
-</ul>
-<p>Бэклог продукта не замораживают. Владелец продукта может уточнять порядок, но команда не меняет состав спринта без решения.</p>
-<h2 id="спринт-по-шагам"><span class="num">04</span>Спринт по шагам</h2>
-<p><strong>Планирование.</strong> Команда выбирает истории из бэклога и формулирует цель спринта.</p>
-<p><strong>Ежедневная встреча.</strong> Короткая синхронизация: что сделано, что дальше, что мешает.</p>
-<p><strong>Работа и проверка.</strong> История считается готовой, когда выполнены критерии приёмки и определение готовности.</p>
-<p><strong>Обзор.</strong> Команда показывает инкремент и собирает замечания.</p>
-<p><strong>Ретроспектива.</strong> Команда разбирает, как работала, и выбирает одно улучшение.</p>
-<figure class="figure" data-fig="sprint-cycle" data-one="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"><iframe title="Figure 1: sprint-cycle" scrolling="no"></iframe><figcaption>Слева цикл спринта из четырёх событий, справа доска Kanban с ограничением задач в работе. Спринт длится одну-две недели.</figcaption></figure>
+<p><strong>Владелец продукта</strong> отвечает за максимизацию ценности. Он один человек, а не комитет. Он может делегировать работу, но ответственность остаётся на нём. Он заказывает элементы бэклога, объясняет цель продукта и принимает решения о порядке.</p>
+<p><strong>Скрам-мастер</strong> отвечает за то, чтобы Scrum работал как задумано, и за эффективность команды. Он не командует разработчиками и не распределяет задачи. Он помогает убрать препятствия, обучает команду и организации, следит за соблюдением событий и таймбоксов.</p>
+<p><strong>Разработчики</strong> отвечают за создание полезного инкремента каждый спринт. Они сами решают, как превратить элементы бэклога в инкремент. Они ведут план спринта, соблюдают определение готовности и адаптируют план по ходу.</p>
+<p>Команда кросс-функциональна: в ней есть все навыки, нужные для создания ценности. Команда самоуправляема: она сама решает, кто что делает, когда и как. Обычно в Scrum Team десять или меньше человек. Если людей больше, коммуникация усложняется, и команду делят на несколько команд с общей целью продукта.</p>
+<h3>Артефакты и обязательства</h3>
+<p>У Scrum три артефакта, и у каждого есть обязательство, которое делает артефакт прозрачным.</p>
+<p><strong>Бэклог продукта</strong> это упорядоченный список всего, что нужно для улучшения продукта. Обязательство бэклога это <strong>цель продукта</strong>: будущее состояние продукта, к которому команда стремится. Без цели бэклог превращается в список пожеланий.</p>
+<p><strong>Бэклог спринта</strong> состоит из цели спринта, выбранных элементов бэклога и плана их выполнения. Обязательство это <strong>цель спринта</strong>: одно объяснение, зачем текущий спринт ценен. Цель даёт команде фокус и позволяет согласовывать объём, не теряя смысл.</p>
+<p><strong>Инкремент</strong> это конкретный шаг к цели продукта. Он должен быть полезным и проверенным. Обязательство инкремента это <strong>определение готовности</strong>: формальное описание качества, при котором элемент считается завершённым.</p>
+<p>Определение готовности часто недооценивают. Без него «готово» означает «код написан». С ним «готово» означает «код прошёл ревью, тесты зелёные, документация обновлена, функция работает в тестовой среде». Разница проявляется в конце спринта, когда команда пытается показать инкремент.</p>
+<h3>Пять событий и таймбоксы</h3>
+<p>Спринт это контейнер для остальных событий. Он длится один месяц или меньше. Внутри спринта происходят планирование, ежедневные встречи, обзор и ретроспектива.</p>
+<table>
+<thead>
+<tr>
+<th>Событие</th>
+<th>Цель</th>
+<th>Таймбокс для месячного спринта</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>планирование</td>
+<td>определить цель и план спринта</td>
+<td>до 8 часов</td>
+</tr>
+<tr>
+<td>ежедневная встреча</td>
+<td>проверить прогресс к цели и адаптировать план</td>
+<td>15 минут</td>
+</tr>
+<tr>
+<td>обзор</td>
+<td>показать результат и собрать обратную связь</td>
+<td>до 4 часов</td>
+</tr>
+<tr>
+<td>ретроспектива</td>
+<td>улучшить качество и эффективность</td>
+<td>до 3 часов</td>
+</tr>
+</tbody>
+</table>
+<p>Для более коротких спринтов события обычно короче. Таймбокс это максимум, а не обязательная длительность. Смысл в том, чтобы событие не разрасталось и не заменяло работу.</p>
+<p><strong>Планирование</strong> отвечает на три вопроса: почему спринт ценен, что можно сделать, как это сделать. Владелец продукта предлагает цель, разработчики выбирают элементы и планируют работу. Результат это цель спринта и бэклог спринта.</p>
+<p><strong>Ежедневная встреча</strong> нужна разработчикам, чтобы проверить прогресс к цели и скорректировать план на следующий день. Это не отчёт перед руководителем. Формат может быть любым, если он ведёт к действующему плану.</p>
+<p><strong>Обзор</strong> это рабочая сессия с заинтересованными сторонами. Команда показывает результат, обсуждает изменения среды и вместе решает, что делать дальше. Бэклог может измениться по итогам обзора.</p>
+<p><strong>Ретроспектива</strong> посвящена тому, как команда работала. Она разбирает людей, взаимодействия, процессы, инструменты и определение готовности. Результат это одно или несколько улучшений, которые попадут в следующий спринт.</p>
+<p><strong>Спринт</strong> заканчивается, даже если работа не завершена. Незавершённые элементы возвращаются в бэклог продукта. Это не наказание, а честная фиксация факта.</p>
+<p>В течение спринта нельзя делать изменения, которые угрожают цели спринта. Качество не должно снижаться. Бэклог продукта уточняется по необходимости. Объём может уточняться и пересматриваться вместе с владельцем продукта, если команда узнала что-то новое.</p>
+<h3>Спринт по шагам</h3>
+<p><strong>Планирование.</strong> Команда выбирает истории из бэклога и формулирует цель спринта. Хорошая цель объясняет пользу, а не перечисляет задачи.</p>
+<p><strong>Ежедневная встреча.</strong> Короткая синхронизация: что сделано, что дальше, что мешает. Если препятствие не решается на встрече, его фиксируют и убирают отдельно.</p>
+<p><strong>Работа и проверка.</strong> История считается готовой, когда выполнены критерии приёмки и определение готовности. Незаконченная работа не попадает в инкремент.</p>
+<p><strong>Обзор.</strong> Команда показывает инкремент и собирает замечания. Замечания превращаются в элементы бэклога, а не в устные обещания.</p>
+<p><strong>Ретроспектива.</strong> Команда разбирает, как работала, и выбирает одно улучшение. Улучшение должно быть проверяемым: что изменим, как узнаем, что помогло.</p>
+<h3>Цель спринта и переговоры об объёме</h3>
+<p>Цель спринта это не список задач. Список задач отвечает, что делать. Цель отвечает, зачем спринт нужен пользователю.</p>
+<p>Плохая цель: «сделать экран списка, фильтр и экспорт». Это перечень работ. Хорошая цель: «сотрудник может найти свои заявки за период и выгрузить их для отчёта». Она объясняет результат и оставляет команде свободу в выборе задач.</p>
+<p>Цель помогает, когда объём не помещается. Команда не молча вычёркивает половину работы, а спрашивает: что можно убрать, не разрушая цель? Например, выгрузку можно отложить, если поиск и просмотр уже дают сотруднику результат. Если убрать поиск, цель теряется.</p>
+<p>Переговоры об объёме внутри спринта разрешены. Scrum Guide говорит, что объём может уточняться и пересматриваться с владельцем продукта по мере узнавания. Запрещены изменения, которые угрожают цели спринта, и снижение качества.</p>
+<p>Это тонкая граница. Команда может заменить одну историю другой, если новая лучше служит цели. Команда не может каждый день брать новую срочную задачу и называть это гибкостью. В последнем случае цель исчезает, а инкремент не собирается.</p>
+<figure class="figure" data-fig="scrum-events" data-one="H4sIAAAAAAACCr1aa2/b1hn+3l9xxmCwPVi0qFtlyjK2di5WoMUGtMNWFP1AiUcSZ4rUSMqOVwSwnaZpl95SLFuBoenafuiAfYjrRIsTxw6wX0D+oz3vOYfUjbLrFdiHSOK5vJfnvZzn0Nn4yS9//fKbb/1mi/Wivrv5wgZ9Mdfyuk0tGGo0wC0bX30eWazds4KQR01tGHUKdS0d9qw+b2o7Dt8d+EGksbbvRdzDsl3HjnpNm+84bV4QD6vM8ZzIsdxC2LZc3jRISORELt+Mv47P4++TO8lhfJJ8ypKD+HmyH5/EZxg42liTi17YCKM9+mbMDHw/Yu+yQmFgDXhgXutYnVqn3MBA2wpsPHc6dqdFz463bV4zLGPdqNFjfxhxzNdatUp1nQaCocvNa7xi19sderbabdhvXiu+Uv9FTUgM/Q6et4xXqltbDXYD6n8G1S3/eiF0/uR4XbPlBzYPChiR04TjKhbYe1jXt4Ku45nFBmtZ7e1u4A8924wCywsHVgBNDUDm+oG5YwXLwtqVBusAxELH6jvunqm9wbs+Z799VVsN98KI9wtDZzXE9kLIA6cjNeo27/tk1FiFlCfggURpomkMrrPQdx2byWlyPpstBJbtDEPTqAzgyMCybXLOqA+UWzqlA5TYTjhwrT2z43LM/GEYRk5nr6ACb8ItBLzFo13OvQazXKfrFRzYHYoNBe7ZDda1BqZRm1AD8KLI75tGkQYzQOVYvtHCJL7HW4G/O4EzKzJhP2Fo1opFRiLXDL3EXvY9iLHC1b7v+cLMBnN5FEETPZGzulHi/QaL+PWoIGLU8YO+ORwAxLYV8ulYyUxRlvTKU7EWEUR6cLMkPHIdjxd63On2IhO2pIA6HmWxMNUwhJmVXDMn1YoMhtbdHlAVlnPT83cDayClhjvdiSC1XL+9jcVUgEC3+NMGU2ZYw8hvKJMLkT8wx4HmO5DQHgYhlA58GMmD8UzA28Jox3VFnTVYGAX+NoqoZJeNSil9Liid5K3AErXveybtY3opXFXL6Hcm3Oz5OzxIVSi5OWhjqe57U6bIVVSrK40FO2fsqo99ooCrQKR1lxcGkReW1+4Bl75j2y7GJA6p66lAPRMnkqCulybB1cOp2ZouSkFKSjuTWBtGVjSkxX3ESMWtLhbPxi0rV6QbM0oTVaSqel0MzfYHhdfYFqOkV+cTtlKdNqhF+bGoFHRqBYHvhnO9gsr+ReEqdQJKWVPm7YQ3sgOQnNYQ5e+l9SFK2SDjUCUGu7QtpoDUCY/iIjwubouzaNHZspLXsPNqRZqvMvrdVHsuaguhlDJ0gcKcNdnKy0XLOiWJP+9z27HYct+6rgqhWgM6K1CQHiJZKsmczfr+XCtHMgSRCqbtUDFSgUPjsO/JYFdSCbLRTbesoG+5NHvjhY01dbJvrCnKQYcnvmxnh7VRhGFTI+M0OvsnB2m1GJTDmxuDdEYdDNrmG+1g2Gf/eUykYoJjbKwNNjd6ZWIeGdVg8QmLR/HD+HxuMVZurJGGTFdmAlzTNuOz+Cj+d/wMqw/jEaPHKRnxKNs+/kGdmpjTS/71pkYHV61eZKV6TWOoHrAqp9/VmBU4VsG1WtxtavHXyS0Y+EwKn6BIZHlyOx4lh1C3n9xNbk1rf8IEDClUom9CZ7mosb2mVoJGSde0WglDsuybWrUES7DMwBg1p6amWJCmWikGJE3SpnorduhVbU0pE70VUio1oYy+JvpsU5tvtNq4HzW1eqZbqaKQfRX/I/4i/jL+BtwQ4vM11UpX01TTx7qqrSrqArqeAkWCeBQ/QVBHyb7JMPKIgGcIxCg5SD5N3gf+8SllD0aw/KPkAwp4jmm1ciVDYeI0Qb569o+3Nnkf6k+Tj+ay43F8lHyI3PwQWYokYcl7cOJpcjM5SK2UZnaz8tnRmG1FVmG7qaGBex4agsqeyfypC2eMYiVLIKNcm0igmkygepoME0gYRRklo4TNSisV0nMAeQSoT2D/eXwsf0+jmSelvJ5JCSHlEWq4TiVxJOrg+LLtlOrj7RmOFNLvk4+RBaeQ8nD+YjKO8Fp38wIMbQsxnQfQWP8RCJZq+QiO0IhGQADpCvzQiaiB5bqfSZhGz6hSIpOTN5PDy7ZOI5eGL+uAp2QK5HxC+Yc+BLtEhVwBu4BTk8zJvuqPAK9SygcPPRPVcp7sL/A725eTcJXLEy7bPgMbwEY97ovmPsrOImrg+5B4KKNIeB4nn8aPrwgfWvM8elUjD73SD0OvWq/koUcO4AhC4VKhwJGn4vQ5ni6VPDk5aJYvRzPbPlO+N1G8N5Pb1IVl92CibM+prtGwD3JKNwUwO9hUT5072Mpp1/V8Dx0ZzHUb3Avtu6kNA3f5mhXsgoKujAEfWFGPYfZ148UKA8I9YxLRbLZcvmi2sj47O456tgg1yYxarQ0SUWJGnZVqrAzSXPoBx3Vp2is1bVthzwoCCxCXWXmhs6WVucO+XJTUwlivXPVYq80f+LMd7ZyJDFGH8/tzdGj6UJs5rUrGOOFrRmme7ozPVbDmCezanXat1ZpzlbaR2PL/Qjem3z80Nb1Y5/15FvJd/E18nwnacz/+PL6H7wf4/AZU6EEuz0iNqhavZtSLeiXTLu+0kz3RVHVEHZ1qW9DO2R4/YqINqNpD1yLuvbAxmDOlKUR+nLwHhjJedUb7sP8jGfJnghQ8Su7kul6uKFZbL85wLHllvyogpTwCej++G/8L+H8R32Pgod/Gf8UnIvSX+O/xA4bw3Iv/iX9fYsGDVRZ/RovuZdP3sfO7+ACfn02nqs07YVb8stqYg2KTdZYW4O9k8tbT51+pBKaGzTu/h9Hix1vAQmN+4Ij3sfS6R8MFyXf3urhPiqtqKK4dq2BK5VW6fswm3houPVLFYqNK/z+rFP6zVuFCpWDDPXKnO3tHlK8sNGGy+j2+y00uTF9bpLck9f5hngajDhdwVLklf7+igMiKHHp20caU/yBtMm5y8Xpx4CMJFx7G4+0KifQrbAfOAOm43Bl64jrPllfYu1i3YwWimELWFM+MpXiYbGmjtRATHco2Wfw3uHmb2A0jVikQOJtq2qs47WHfOTHPc8yfyUs4scVTYkCKjD+F3Kc6i7+V3EAwoxOMnqCPHNNdTF502Zvc6mPZ57j/3qJ+ZbKFd6MLKT5kfA3Uz+MnQsEd/D4RlOwT6n64VsFC8oyEQP5jpSY+QdE/B/Ifk0/xs+SmbHMndFF8LDme4iaK5v05uSvv9Yd0yQTJo9gdSM73DF6gy5LsE2Hnkb60KmIgckoFICevJCaHovsCLxWLr1SERmSQRFZ29YdioWjCTzNHBEDCTaw6HIdXbZRRz48IAQWySp+AEBtuy5kG7BL7ZHRHdH+eOlfUC40DQYmP4mcFgkbIhs2MqJ16PBanDpKH7BbWjrWlQXpOSTUR4eTmdGIIK55MiFMXlambTHptmcoH4VJyVyoZCfb+CAaQDwIj8Z5AvDs4lal/rN4YHMrkphy7Jfw+E2lxJAJ8kgZX1r2Kblb7aRDpAk/wZsWRe4MYaxyJN0JM/o6fYC35f0qOSZAleHRwi6QYFySF/lS+08iP87jkhE5ZPg9F3X6AtD6DNXeIg1O5yLoayUzLGoVcIJGRgCR3ZqK0+C6kHD0XhSV6h1Q3U2lUDhNpMFPbzwV0jyV0MhJSCSXBE6Kb8fFMAKcz7UP15nA2k8fRRFdWwVzYmVVwv83uLycp6xHtUyYpKbkCSbosZnM4P5IMW73ROhOBIonIAfpmc9erJ6tCpQyexB5Fh39HghYiE4/zXgVMdtrJWMi2IaDdJ8gps9OWAzuno5AX5Zm7nr6EANxoqENMvL/GIWb77WEfHET/45AHe29wF7cEP/iF6y4v6XxnaSVdL4/KS3bIRW/LE/id8Wb155KJvV0ebbmcfr6096q9vCRXyB3ZmWsNBu7e8jbfW1FnrTBa7/jBltXuTZzNDr23d3RBYF5zwkiP/G7X5ctLvre0igkyKOSRvs2azSYjgQ12Q+hK/7aQJ7VFUluLpLYulCr90R3PAwN88/XX4LugDW9j2Tu0hP4IcYk7lm1v7QAh0s0hZ3mp7TrtbeieYiUKpgkvpR3Klkv9u5qa1gI1cnYpZUMUyRsry/gEGVVkCkUt/5yxJv+jxX8B92KubnkhAAA="><iframe title="Figure 2: scrum-events" scrolling="no"></iframe><figcaption>Нажимайте события спринта: для каждого показаны цель, участники, таймбокс и типичный сбой. Схема помогает отличить обзор продукта от ретроспективы процесса.</figcaption></figure></div>
+</div>
 
 <div class="gate-step" data-gate>
-<p class="gate-action"><button type="button" class="gate-btn" aria-expanded="false"><span class="gate-q" aria-hidden="true">?</span><span>Почему обзор спринта и ретроспектива решают разные задачи?</span></button></p>
-<div class="gate-content" hidden><h2 id="kanban"><span class="num">05</span>Kanban</h2>
-<p><strong>Kanban</strong> управляет потоком задач через доску. Колонки показывают этапы, карточки перемещаются слева направо.</p>
-<p>Главный инструмент Kanban это <strong>лимит незавершённой работы</strong> (WIP). Если в колонке «в работе» лимит две задачи, третью нельзя начать, пока одну не закончат.</p>
-<p>Что даёт Kanban:</p>
+<p class="gate-action"><button type="button" class="gate-btn" aria-expanded="false"><span class="gate-q" aria-hidden="true">?</span><span>Почему лимит незавершённой работы меняет поведение команды?</span></button></p>
+<div class="gate-content" hidden><h2 id="kanban-поток-и-лимиты"><span class="num">04</span>Kanban: поток и лимиты</h2>
+<p><strong>Kanban</strong> это стратегия оптимизации потока ценности через процесс. В Kanban Guide 2025 определены три практики: определить и визуализировать workflow, активно управлять элементами работы, улучшать workflow <a href="https://kanbanguides.org/english/">Kanban Guide, 2025</a>.</p>
+<h3>От Тойоты к работе со знанием</h3>
+<p>Канбан в переводе с японского означает «сигнальная карточка». Подход вырос из производственной системы Toyota, где карточки регулировали пополнение запасов: следующий участок подавал сигнал предыдущему, когда ему нужна была деталь. Это механизм вытягивания, а не проталкивания.</p>
+<p>В работе со знанием Kanban начали применять позже. Kanban Guide связывает распространение практик с командой в Corbis в 2006 году. С тех пор подход используют не только в разработке, но и в поддержке, финансах, здравоохранении и других областях, где важна пропускная способность.</p>
+<p>Переносить заводскую метафору буквально не стоит. На заводе детали одинаковы, а задачи в разработке разные. Поэтому Kanban для знаний делает упор не на карточки, а на политику потока: какие состояния проходит работа, когда считается начатой и законченной, сколько элементов можно держать в работе одновременно.</p>
+<h3>Как работает вытягивание</h3>
+<p><strong>Kanban</strong> управляет потоком задач через доску. Колонки показывают этапы, карточки перемещаются слева направо. Но доска сама по себе ничего не меняет. Доска без правил даёт только картинку.</p>
+<p>Главный инструмент Kanban это <strong>лимит незавершённой работы</strong> (WIP). Если в колонке «в работе» лимит две задачи, третью нельзя начать, пока одну не закончат. Команда не проталкивает работу в узкое место, а ждёт сигнала о свободной мощности.</p>
+<p>Это меняет поведение:</p>
 <ul>
-<li>видно, где скапливаются задачи;</li>
-<li>ограничение WIP уменьшает переключения;</li>
-<li>время прохождения задачи можно измерить;</li>
-<li>изменения приоритета не ломают цикл.</li>
+<li>люди реже переключаются между задачами;</li>
+<li>узкое место становится видимым;</li>
+<li>«начато» перестаёт быть способом показать занятость;</li>
+<li>команда вынуждена помогать на загруженном участке, а не начинать новое.</li>
 </ul>
-<p>Kanban не требует спринтов и ролей Scrum. Его можно ввести в текущий поток работ.</p>
-<h2 id="сравнение"><span class="num">06</span>Сравнение</h2>
+<p>Лимит WIP не увеличивает число людей и не отменяет зависимость от внешних согласований. Он делает ограничение явным. Если лимит стоит, а работа не движется, причина в политике, а не в карточках.</p>
+<h3>Закон Литтла</h3>
+<p>У потока есть простая арифметика. Закон Литтла связывает среднее число элементов в системе, пропускную способность и время прохождения:</p>
+<p><strong>средний WIP = throughput × cycle time</strong></p>
+<p>Если команда в среднем завершает четыре задачи в неделю, а в работе держит восемь, среднее время прохождения равно двум неделям. Если ограничить WIP до четырёх, при той же пропускной способности время прохождения станет около одной недели <a href="https://doi.org/10.1287/opre.9.3.383">Little, 1961</a>.</p>
+<p>Формула полезна как диагностика, но у неё есть условия:</p>
+<ul>
+<li>значения средние, а не гарантия для каждой задачи;</li>
+<li>система должна быть устойчивой;</li>
+<li>throughput не обязан оставаться прежним при изменении WIP;</li>
+<li>разные типы задач могут иметь разное время.</li>
+</ul>
+<p>Отсюда практический вывод: если время прохождения растёт, смотрят не только на скорость работы, но и на объём незавершённого. Иногда команда работает быстрее, но держит столько задач, что очередь съедает выигрыш.</p>
+<h3>Метрики потока</h3>
+<p>Kanban Guide требует четыре обязательные метрики:</p>
+<ul>
+<li><strong>WIP</strong>: число начатых и не завершённых элементов;</li>
+<li><strong>throughput</strong>: число завершённых элементов за единицу времени;</li>
+<li><strong>work item age</strong>: сколько времени текущий элемент находится в работе;</li>
+<li><strong>cycle time</strong>: сколько времени прошло от старта до завершения.</li>
+</ul>
+<p>Дополнительно используют <strong>service level expectation</strong> (SLE): прогноз, за который должна завершиться работа. Например, «85 процентов элементов завершаются за восемь дней или меньше». SLE опирается на историю, а не на обещание.</p>
+<p>Метрики нужны для решений. Если cycle time растёт, а throughput нет, проблема в потоке. Если work item age у одной карточки больше остальных, она застряла. Если WIP постоянно выше лимита, правила не соблюдаются.</p>
+<h3>Политики и ожидание уровня сервиса</h3>
+<p>Доска показывает состояния, но не объясняет правила перехода. Без правил карточка может месяцами лежать в колонке «проверка», а команда будет считать, что работа идёт.</p>
+<p><strong>Определение workflow</strong> фиксирует:</p>
+<ul>
+<li>что считается единицей работы;</li>
+<li>где работа начинается и где заканчивается;</li>
+<li>какие состояния она проходит;</li>
+<li>как контролируется WIP;</li>
+<li>какие правила действуют в каждом состоянии;</li>
+<li>какой уровень сервиса команда обещает.</li>
+</ul>
+<p>Пример правила: «карточка не попадает в проверку, пока не приложены критерии приёмки и результат запуска тестов». Пример другого правила: «если карточка в проверке дольше двух дней, она считается заблокированной и выносится на обсуждение».</p>
+<p><strong>Ожидание уровня сервиса</strong> (SLE) это прогноз времени завершения с вероятностью. Например: «85 процентов задач завершаются за восемь рабочих дней или меньше». SLE не обещает каждую задачу за восемь дней. Он говорит, какую долю команда успевает обслужить.</p>
+<p>SLE полезен тем, что заменяет давление «сделайте быстрее» на разговор о данных. Если задача выходит за SLE, команда смотрит, где она застряла, а не ищет виноватого.</p>
+<h3>Scrum и Kanban</h3>
 <table>
 <thead>
 <tr>
@@ -970,49 +1122,206 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 </tr>
 <tr>
 <td>Роли</td>
-<td>три роли</td>
+<td>три зоны ответственности</td>
 <td>специальных ролей нет</td>
 </tr>
 <tr>
 <td>Ограничение</td>
-<td>состав спринта</td>
+<td>состав спринта и цель</td>
 <td>лимит WIP</td>
 </tr>
 <tr>
 <td>Изменения</td>
-<td>между спринтами</td>
-<td>в любой момент</td>
+<td>между спринтами, с защитой цели</td>
+<td>в любой момент по политике</td>
 </tr>
 <tr>
 <td>Метрика</td>
-<td>цель спринта</td>
-<td>время прохождения</td>
+<td>цель спринта, инкремент</td>
+<td>cycle time, throughput, WIP</td>
+</tr>
+<tr>
+<td>Обратная связь</td>
+<td>обзор и ретроспектива</td>
+<td>регулярный обзор доски и SLE</td>
 </tr>
 </tbody>
 </table>
-<p>В учебном проекте удобно начать с Kanban: он проще и сразу показывает заторы. Scrum добавляют, когда нужен ритм демонстраций.</p>
-<h2 id="где-agile-ломается"><span class="num">07</span>Где Agile ломается</h2>
-<p><strong>Ритуалы без решений.</strong> Встречи проводят, но препятствия не устраняют.</p>
-<p><strong>Владелец продукта отсутствует.</strong> Бэклог ведёт команда, ценность не проверяет никто.</p>
-<p><strong>Спринт меняют каждый день.</strong> Цель теряется, инкремент не собирается.</p>
-<p><strong>Нет определения готовности.</strong> Историю считают готовой без тестов и документации.</p>
-<p><strong>Доска без лимита.</strong> Все задачи «в работе», время прохождения растёт.</p>
-<p><strong>Agile как отказ от плана.</strong> Планирование заменяют разговорами.</p>
-<div class="callout pitfall"><span class="label">Agile не отменяет дисциплину. Короткий цикл требует более точных договорённостей, а не меньших.</span></div>
-
-<h2 id="итоги"><span class="num">08</span>Итоги</h2>
+<p>Scrum и Kanban не конкурируют. Scrum задаёт ритм и ответственность, Kanban делает поток видимым и ограничивает очередь. Гибрид часто называют Scrumban: спринт или регулярный ритм остаётся, а внутри команда использует WIP-лимиты и метрики потока.</p>
+<p>В учебном проекте удобно начать с Kanban: он проще и сразу показывает заторы. Scrum добавляют, когда нужен ритм демонстраций и явная цель на две недели.</p>
+<h3>Scrumban и измерение в учебной команде</h3>
+<p>Scrumban это не отдельный стандарт, а способ сочетать ритм Scrum с потоком Kanban. Команда сохраняет цель спринта и обзор, но внутри спринта использует WIP-лимиты, политику состояний и метрики потока.</p>
+<p>Пример для команды из четырёх человек:</p>
 <ul>
-<li>Agile задаёт ценности, Scrum и Kanban дают практики.</li>
-<li>В Scrum есть роли, артефакты и события спринта.</li>
-<li>Обзор показывает продукт, ретроспектива улучшает процесс.</li>
-<li>Kanban ограничивает незавершённую работу и измеряет поток.</li>
-<li>Практика работает, когда приводит к решениям.</li>
-</ul></div>
+<li>доска: «готова к работе», «в работе» (лимит 6), «проверка» (лимит 3), «готово»;</li>
+<li>спринт: две недели;</li>
+<li>цель: сотрудник может создать заявку и увидеть её в списке;</li>
+<li>ежедневная встреча: 10 минут, смотрят на заблокированные задачи и на возраст карточек;</li>
+<li>обзор: в конце спринта, по сценарию;</li>
+<li>ретроспектива: одно изменение процесса.</li>
+</ul>
+<p>Через две недели команда считает:</p>
+<table>
+<thead>
+<tr>
+<th>Показатель</th>
+<th>Значение</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>завершено задач</td>
+<td>11</td>
+</tr>
+<tr>
+<td>средний WIP</td>
+<td>5,4</td>
+</tr>
+<tr>
+<td>throughput</td>
+<td>5,5 задачи в неделю</td>
+</tr>
+<tr>
+<td>среднее cycle time</td>
+<td>около 1 недели</td>
+</tr>
+<tr>
+<td>задач, вернувшихся с проверки</td>
+<td>3</td>
+</tr>
+</tbody>
+</table>
+<p>Числа показывают не «скорость команды», а состояние потока. Если cycle time растёт при том же throughput, работа дольше стоит в очереди. Если растёт доля возвратов, проблема в критериях приёмки или определении готовности. Если WIP выше лимита, правила нарушаются.</p>
+<p>Метрики не стоит сравнивать с другими командами. У них другие задачи, другой опыт и другой Definition of Workflow. Сравнение полезно только с собой в прошлом периоде.</p>
+<figure class="figure" data-fig="flow-lab" data-one="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"><iframe title="Figure 3: flow-lab" scrolling="no"></iframe><figcaption>Двигайте ползунок лимита WIP: при фиксированной пропускной способности модель Литтла показывает, как меняется время прохождения. Числа условные, важна зависимость.</figcaption></figure></div>
 </div>
 
 <div class="gate-step" data-gate>
-<p class="gate-action"><button type="button" class="gate-btn" aria-expanded="false"><span class="gate-q" aria-hidden="true">?</span><span>Почему лимит незавершённой работы ускоряет поток, хотя запрещает начинать новые задачи?</span></button></p>
-<div class="gate-content" hidden><div class="quiz" data-quiz data-quiz-guard><div class="quiz-who"><label class="quiz-who-label"><span>ФИО</span><input type="text" class="quiz-name" data-quiz-name maxlength="80" autocomplete="off" placeholder="Иванов Иван Иванович"></label><span class="quiz-attempts" data-quiz-attempts>две попытки на лекцию</span><span class="quiz-note" data-who-note hidden></span></div><div class="quiz-q" data-type="single" data-correct="1" data-q="1"><p class="quiz-p"><span class="quiz-no" aria-hidden="true">01</span>Что делает скрам-мастер?</p><div class="opts"><label class="opt"><input type="radio" name="q105_0" value="2" autocomplete="off"><span>Ставит оценки</span></label><label class="opt"><input type="radio" name="q105_0" value="3" autocomplete="off"><span>Ведёт бюджет</span></label><label class="opt"><input type="radio" name="q105_0" value="1" autocomplete="off"><span>Пишет весь код</span></label><label class="opt"><input type="radio" name="q105_0" value="0" autocomplete="off" data-ok><span>Помогает процессу и убирает препятствия</span></label></div><p class="quiz-why" hidden>Процесс и препятствия.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="2" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">02</span>Что такое инкремент?</p><div class="opts"><label class="opt"><input type="radio" name="q105_1" value="2" autocomplete="off"><span>Отчёт о встрече</span></label><label class="opt"><input type="radio" name="q105_1" value="3" autocomplete="off"><span>План на год</span></label><label class="opt"><input type="radio" name="q105_1" value="0" autocomplete="off" data-ok><span>Работающий результат спринта</span></label><label class="opt"><input type="radio" name="q105_1" value="1" autocomplete="off"><span>Список всех требований</span></label></div><p class="quiz-why" hidden>Часть продукта.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="multi" data-correct="3" data-q="3" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">03</span>Какие роли есть в Scrum?</p><div class="opts"><label class="opt"><input type="checkbox" name="q105_2" value="0" autocomplete="off" data-ok><span>Владелец продукта</span></label><label class="opt"><input type="checkbox" name="q105_2" value="1" autocomplete="off" data-ok><span>Скрам-мастер</span></label><label class="opt"><input type="checkbox" name="q105_2" value="4" autocomplete="off"><span>Прокурор</span></label><label class="opt"><input type="checkbox" name="q105_2" value="2" autocomplete="off" data-ok><span>Команда</span></label><label class="opt"><input type="checkbox" name="q105_2" value="3" autocomplete="off"><span>Аудитор</span></label></div><p class="quiz-why" hidden>Три роли.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="short" data-q="4" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">04</span>Что ограничивает число задач в работе?</p><input type="text" class="short-answer" data-answers="[&quot;WIP&quot;, &quot;лимит WIP&quot;]" placeholder="Введите ответ" autocomplete="off" spellcheck="false" aria-label="Что ограничивает число задач в работе?"><p class="quiz-why" hidden>Незавершённая работа.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="5" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">05</span>Что ограничивает Kanban?</p><div class="opts"><label class="opt"><input type="radio" name="q105_4" value="2" autocomplete="off"><span>Длину спринта</span></label><label class="opt"><input type="radio" name="q105_4" value="0" autocomplete="off" data-ok><span>Число задач в работе</span></label><label class="opt"><input type="radio" name="q105_4" value="1" autocomplete="off"><span>Число сотрудников</span></label><label class="opt"><input type="radio" name="q105_4" value="3" autocomplete="off"><span>Число встреч</span></label></div><p class="quiz-why" hidden>Лимит WIP.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="6" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">06</span>Что такое Agile?</p><div class="opts"><label class="opt"><input type="radio" name="q105_5" value="1" autocomplete="off"><span>Конкретная доска задач</span></label><label class="opt"><input type="radio" name="q105_5" value="3" autocomplete="off"><span>Метод тестирования</span></label><label class="opt"><input type="radio" name="q105_5" value="2" autocomplete="off"><span>Язык программирования</span></label><label class="opt"><input type="radio" name="q105_5" value="0" autocomplete="off" data-ok><span>Набор ценностей для работы в изменениях</span></label></div><p class="quiz-why" hidden>Agile шире практик.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="short" data-q="7" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">07</span>Какое событие улучшает процесс команды?</p><input type="text" class="short-answer" data-answers="[&quot;ретроспектива&quot;, &quot;retrospective&quot;]" placeholder="Введите ответ" autocomplete="off" spellcheck="false" aria-label="Какое событие улучшает процесс команды?"><p class="quiz-why" hidden>Разбор работы.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="8" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">08</span>Кто отвечает за порядок бэклога продукта?</p><div class="opts"><label class="opt"><input type="radio" name="q105_7" value="3" autocomplete="off"><span>Заказчик по договору</span></label><label class="opt"><input type="radio" name="q105_7" value="2" autocomplete="off"><span>Тестировщик</span></label><label class="opt"><input type="radio" name="q105_7" value="0" autocomplete="off" data-ok><span>Владелец продукта</span></label><label class="opt"><input type="radio" name="q105_7" value="1" autocomplete="off"><span>Скрам-мастер</span></label></div><p class="quiz-why" hidden>Порядок задаёт ценность.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="multi" data-correct="4" data-q="9" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">09</span>Какие проблемы типичны для Agile?</p><div class="opts"><label class="opt"><input type="checkbox" name="q105_8" value="5" autocomplete="off"><span>Слишком редкие изменения</span></label><label class="opt"><input type="checkbox" name="q105_8" value="2" autocomplete="off" data-ok><span>Спринт меняют каждый день</span></label><label class="opt"><input type="checkbox" name="q105_8" value="3" autocomplete="off" data-ok><span>Нет определения готовности</span></label><label class="opt"><input type="checkbox" name="q105_8" value="4" autocomplete="off"><span>Слишком стабильные требования</span></label><label class="opt"><input type="checkbox" name="q105_8" value="0" autocomplete="off" data-ok><span>Ритуалы без решений</span></label><label class="opt"><input type="checkbox" name="q105_8" value="1" autocomplete="off" data-ok><span>Нет владельца продукта</span></label></div><p class="quiz-why" hidden>Остальное не проблемы.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="10" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">10</span>Что происходит на ретроспективе?</p><div class="opts"><label class="opt"><input type="radio" name="q105_9" value="3" autocomplete="off"><span>Считают бюджет</span></label><label class="opt"><input type="radio" name="q105_9" value="2" autocomplete="off"><span>Пишут тесты</span></label><label class="opt"><input type="radio" name="q105_9" value="1" autocomplete="off"><span>Заказчик принимает продукт</span></label><label class="opt"><input type="radio" name="q105_9" value="0" autocomplete="off" data-ok><span>Команда улучшает свой процесс</span></label></div><p class="quiz-why" hidden>Улучшение работы.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="11" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">11</span>Что происходит на обзоре спринта?</p><div class="opts"><label class="opt"><input type="radio" name="q105_10" value="1" autocomplete="off"><span>Разбирают процесс команды</span></label><label class="opt"><input type="radio" name="q105_10" value="0" autocomplete="off" data-ok><span>Показывают инкремент и собирают замечания</span></label><label class="opt"><input type="radio" name="q105_10" value="2" autocomplete="off"><span>Выбирают истории на год</span></label><label class="opt"><input type="radio" name="q105_10" value="3" autocomplete="off"><span>Настраивают сервер</span></label></div><p class="quiz-why" hidden>Демонстрация результата.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="multi" data-correct="4" data-q="12" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">12</span>Какие события входят в спринт?</p><div class="opts"><label class="opt"><input type="checkbox" name="q105_11" value="1" autocomplete="off" data-ok><span>Ежедневная встреча</span></label><label class="opt"><input type="checkbox" name="q105_11" value="5" autocomplete="off"><span>Инвентаризация</span></label><label class="opt"><input type="checkbox" name="q105_11" value="2" autocomplete="off" data-ok><span>Обзор</span></label><label class="opt"><input type="checkbox" name="q105_11" value="4" autocomplete="off"><span>Годовой отчёт</span></label><label class="opt"><input type="checkbox" name="q105_11" value="3" autocomplete="off" data-ok><span>Ретроспектива</span></label><label class="opt"><input type="checkbox" name="q105_11" value="0" autocomplete="off" data-ok><span>Планирование</span></label></div><p class="quiz-why" hidden>Остальное не события.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="13" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">13</span>Чем Kanban отличается от Scrum?</p><div class="opts"><label class="opt"><input type="radio" name="q105_12" value="3" autocomplete="off"><span>Не имеет задач</span></label><label class="opt"><input type="radio" name="q105_12" value="0" autocomplete="off" data-ok><span>Работает непрерывным потоком без спринтов</span></label><label class="opt"><input type="radio" name="q105_12" value="2" autocomplete="off"><span>Запрещает изменения</span></label><label class="opt"><input type="radio" name="q105_12" value="1" autocomplete="off"><span>Не использует доску</span></label></div><p class="quiz-why" hidden>Поток вместо цикла.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="short" data-q="14" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">14</span>Как называется результат спринта?</p><input type="text" class="short-answer" data-answers="[&quot;инкремент&quot;, &quot;increment&quot;]" placeholder="Введите ответ" autocomplete="off" spellcheck="false" aria-label="Как называется результат спринта?"><p class="quiz-why" hidden>Работающая часть.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="15" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">15</span>Почему доска без лимита WIP теряет смысл?</p><div class="opts"><label class="opt"><input type="radio" name="q105_14" value="2" autocomplete="off"><span>Колонки исчезают</span></label><label class="opt"><input type="radio" name="q105_14" value="3" autocomplete="off"><span>Задачи нельзя создать</span></label><label class="opt"><input type="radio" name="q105_14" value="0" autocomplete="off" data-ok><span>Все задачи в работе, поток стоит</span></label><label class="opt"><input type="radio" name="q105_14" value="1" autocomplete="off"><span>Карточки не видны</span></label></div><p class="quiz-why" hidden>Переключения растут.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><p class="quiz-note quiz-submit-note" data-quiz-note hidden></p><div class="quiz-result" data-quiz-result hidden aria-live="polite"><span class="label">Результат теста</span><h3>Тест завершён</h3><p class="modal-name-line">ФИО: <b data-student-name></b></p><p class="modal-result" data-modal-result></p><p class="modal-result" data-modal-wrong></p><dl class="modal-times"><div><dt>Время выполнения теста</dt><dd data-test-time>00:00</dd></div><div><dt>Время просмотра лекции</dt><dd data-view-time>00:00</dd></div></dl></div></div></div>
+<p class="gate-action"><button type="button" class="gate-btn" aria-expanded="false"><span class="gate-q" aria-hidden="true">?</span><span>Почему Sentinel и Healthcare.gov дают разные выводы об Agile?</span></button></p>
+<div class="gate-content" hidden><h2 id="что-подтверждают-исследования-и-случаи"><span class="num">05</span>Что подтверждают исследования и случаи</h2>
+<p>Практики Agile окружены сильными утверждениями: «в два раза быстрее», «всегда качественнее», «без Agile проект обречён». Полезно отделять подтверждённое от маркетинга.</p>
+<h3>Что говорит систематический обзор</h3>
+<p>Dybå и Dingsøyr в 2008 году опубликовали систематический обзор эмпирических исследований Agile. Они собрали исследования по продуктивности, качеству, удовлетворённости и другим эффектам. Общий вывод: положительные свидетельства есть, но доказательная база ограничена. Большая часть работ это отдельные случаи и опросы, а не контролируемые эксперименты. Результаты зависят от контекста, опыта команды и способа внедрения <a href="https://doi.org/10.1016/j.infsof.2008.01.006">Dybå, Dingsøyr, 2008</a>.</p>
+<p>Это не аргумент против Agile. Это аргумент против универсальных обещаний. Если команда внедряет практику, ей нужно измерять свой результат, а не сравнивать себя с рекламным кейсом.</p>
+<h3>DORA и метрики доставки</h3>
+<p>Исследовательская программа DORA измеряет доставку программного обеспечения по пяти показателям: время доставки изменения, частота развёртывания, время восстановления после неудачного развёртывания, доля неудачных изменений и доля переделок. В отчётах DORA есть важный вывод: скорость и стабильность не являются неизбежным компромиссом. Команды, которые хорошо работают по одним показателям, часто хорошо работают и по другим <a href="https://dora.dev/guides/dora-metrics-four-keys/">DORA</a>.</p>
+<p>Оговорка: DORA это наблюдательное исследование, а не лабораторный эксперимент. Оно показывает корреляции и практики успешных команд, но не доказывает, что копирование практик даст тот же результат. Метрики также легко испортить: если измерять только частоту развёртывания, команда начнёт дробить выпуски без пользы.</p>
+<h3>FBI Sentinel</h3>
+<p>История Sentinel начинается с провала Virtual Case File. После закрытия VCF в 2005 году ФБР заключило контракт на новую систему управления делами. Первоначальный план предполагал четыре фазы, общая оценка составляла около 425 млн долларов, завершение в декабре 2009 года. К 2010 году проект отставал, стоимость выросла до 451 млн долларов, а функциональность вызывала вопросы <a href="https://oig.justice.gov/archives/reports/FBI/a1101.pdf">DOJ OIG, 2010</a>.</p>
+<p>ФБР изменило подход: взяло управление на себя, сократило роль подрядчика и перешло к инкрементальной разработке с элементами Agile. Система была развёрнута по частям, с проверкой на пользователях. Sentinel 1.0 заработал в июле 2012 года. Институт SEI разбирает этот случай как пример успеха после двух неудачных попыток построить систему стоимостью около 300 млн долларов <a href="https://www.sei.cmu.edu/library/agile-project-success-and-failure-the-story-of-the-fbi-sentinel-program/">SEI</a>.</p>
+<p>Что здесь сработало:</p>
+<ul>
+<li>руководство приняло ответственность за продукт;</li>
+<li>работа была разбита на проверяемые прибавки;</li>
+<li>пользователи видели результат до финального запуска;</li>
+<li>команда могла менять план по фактам.</li>
+</ul>
+<p>Что не стоит преувеличивать: Sentinel не был чистым Scrum с самого начала. Это была инкрементальная поставка с элементами Agile. Урок не в том, что «Scrum спас проект», а в том, что ранняя проверка и управление со стороны заказчика изменили исход.</p>
+<h3>Healthcare.gov</h3>
+<p>В 2013 году запуск федерального рынка медицинского страхования в США превратился в публичный сбой: многие пользователи не могли зарегистрироваться и выбрать план. GAO в отчёте 2014 года указало, что CMS разрабатывала систему без эффективного планирования и надзора. Ключевые технические требования были неизвестны, когда выдавались заказы: число поддерживаемых штатов, состав участников и число потенциальных пользователей. Контракты с возмещением затрат увеличивали риск. Проверка готовности была перенесена с марта на сентябрь 2013 года, за несколько недель до запуска. Система была запущена без подтверждения, что она выполняет требования к производительности <a href="https://www.gao.gov/products/gao-14-694">GAO, 2014</a>.</p>
+<p>Обязательства по контракту выросли: по федеральному рынку с 56 млн долларов в сентябре 2011 года до более 209 млн к февралю 2014 года, по хабу данных с 30 млн до почти 85 млн.</p>
+<p>С точки зрения процесса это важный контрпример. CMS использовала инкрементальный подход, но он не заменил инженерные требования, интеграционное тестирование и управление риском. Название подхода не создаёт обратную связь. Её создают конкретные проверки и решения.</p>
+<h3>Toyota и Corbis</h3>
+<p>Канбан вырос из производственной системы Toyota, где карточки и лимиты управляли потоком материалов. В разработке программного обеспечения практика получила вторую жизнь в 2006 году в команде Corbis, а затем распространилась на другие организации. Kanban Guide подчёркивает: подход работает с любым workflow, но требует явного определения работы, политик и метрик.</p>
+<p>Урок здесь не «копируйте Toyota». Урок в том, что лимит и сигнал вытягивания меняют поведение системы. На заводе сигнал означает «нужна деталь». В команде сигнал означает «есть свободная мощность, можно взять следующую задачу». Без явного сигнала люди начинают работу по привычке, а не по возможности.</p>
+<h3>Ограничения доказательств</h3>
+<p>У кейсов Agile есть три типичные проблемы.</p>
+<p><strong>Выжившие.</strong> О успешных внедрениях пишут чаще, чем о неудачных. Команда, которая вернулась к водопаду, редко публикует рассказ.</p>
+<p><strong>Разные определения.</strong> Одна статья называет Agile ежедневные встречи, другая полную смену структуры компании. Сравнивать результаты трудно.</p>
+<p><strong>Самоотчёт.</strong> Многие данные собраны опросами участников. Удовлетворённость командой важна, но она не равна ценности для пользователя.</p>
+<p>Поэтому кейс нужен не как рецепт, а как проверка механизма. Sentinel показывает, что ранняя поставка меняет исход. Healthcare.gov показывает, что ранняя поставка без требований и проверок не спасает. Оба случая полезны вместе.</p></div>
+</div>
+
+<div class="gate-step" data-gate>
+<p class="gate-action"><button type="button" class="gate-btn" aria-expanded="false"><span class="gate-q" aria-hidden="true">?</span><span>Почему практика ломается без владельца продукта и определения готовности?</span></button></p>
+<div class="gate-content" hidden><h2 id="где-agile-ломается"><span class="num">06</span>Где Agile ломается</h2>
+<p><strong>Ритуалы без решений.</strong> Встречи проводят, но препятствия не устраняют. Ежедневная встреча превращается в отчёт, ретроспектива в жалобы.</p>
+<p><strong>Владелец продукта отсутствует.</strong> Бэклог ведёт команда, ценность не проверяет никто. Приоритеты меняются по громкости голоса.</p>
+<p><strong>Спринт меняют каждый день.</strong> Цель теряется, инкремент не собирается. Команда честно работает, но не может сказать, что именно закончила.</p>
+<p><strong>Нет определения готовности.</strong> Историю считают готовой без тестов и документации. В конце спринта выясняется, что показывать нечего.</p>
+<p><strong>Доска без лимита.</strong> Все задачи «в работе», время прохождения растёт. Доска показывает занятость, а не поток.</p>
+<p><strong>Agile как отказ от плана.</strong> Планирование заменяют разговорами. Команда не может объяснить, что будет через месяц.</p>
+<p><strong>Скорость как цель.</strong> Метрику velocity начинают сравнивать между командами и требовать роста. Люди дробят задачи и завышают оценки.</p>
+<p><strong>Показная автономия.</strong> Команде говорят, что она самоуправляема, но каждое решение утверждает руководитель. Ответственность остаётся размытой.</p>
+<p><strong>Копирование чужой практики.</strong> Команда переносит доску, стендапы и ретроспективы, но не меняет политику приоритетов и качество требований.</p>
+<div class="callout pitfall"><span class="label">Agile не отменяет дисциплину. Короткий цикл требует более точных договорённостей, а не меньших.</span></div>
+
+<h2 id="как-внедрить-практику-в-учебной-команде"><span class="num">07</span>Как внедрить практику в учебной команде</h2>
+<p>Не начинайте с покупки инструмента. Начните с трёх договорённостей.</p>
+<ol>
+<li><strong>Что считается работой.</strong> Опишите, из каких состояний состоит задача: идея, готова к работе, в работе, проверка, готово. Для каждого состояния задайте условие перехода.</li>
+<li><strong>Сколько работы можно держать одновременно.</strong> Поставьте лимит на колонку «в работе». Для команды из четырёх человек разумно начать с двух-трёх задач на человека, а не с десяти.</li>
+<li><strong>Когда команда встречается и что решает.</strong> Ежедневная встреча на десять минут, обзор раз в две недели, ретроспектива после обзора. У каждого события есть результат, а не только продолжительность.</li>
+</ol>
+<p>Дальше добавьте артефакты.</p>
+<table>
+<thead>
+<tr>
+<th>Артефакт</th>
+<th>Что фиксирует</th>
+<th>Как проверить</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>цель спринта</td>
+<td>зачем нужен цикл</td>
+<td>можно объяснить одной фразой</td>
+</tr>
+<tr>
+<td>бэклог спринта</td>
+<td>выбранные истории и план</td>
+<td>у каждой истории есть критерий</td>
+</tr>
+<tr>
+<td>определение готовности</td>
+<td>качество инкремента</td>
+<td>пункты проверяемы</td>
+</tr>
+<tr>
+<td>доска</td>
+<td>состояния и лимиты</td>
+<td>лимит соблюдается</td>
+</tr>
+<tr>
+<td>журнал ретроспективы</td>
+<td>улучшение и результат</td>
+<td>изменение попало в работу</td>
+</tr>
+</tbody>
+</table>
+<p>Полезно измерять три вещи:</p>
+<ul>
+<li>сколько времени задача идёт от старта до готовности;</li>
+<li>сколько задач завершается за неделю;</li>
+<li>сколько задач возвращается с проверки.</li>
+</ul>
+<p>Эти числа не нужны для отчёта. Они нужны, чтобы увидеть, помогло ли изменение. Если cycle time вырос, а throughput нет, ищите очередь и блокировки. Если доля возвратов растёт, проверьте критерии приёмки и определение готовности.</p>
+<h2 id="итоги"><span class="num">08</span>Итоги</h2>
+<ul>
+<li>Agile задаёт ценности, Scrum и Kanban дают практики.</li>
+<li>Манифест не отменяет план и документацию, а меняет приоритет при конфликте.</li>
+<li>В Scrum есть три зоны ответственности, три артефакта и пять событий.</li>
+<li>Цель спринта защищает фокус, а определение готовности защищает качество.</li>
+<li>Обзор показывает продукт, ретроспектива улучшает процесс.</li>
+<li>Kanban ограничивает незавершённую работу и измеряет поток.</li>
+<li>Закон Литтла объясняет связь WIP, пропускной способности и времени прохождения.</li>
+<li>Кейсы Sentinel и Healthcare.gov показывают, что практика работает только вместе с требованиями, проверками и ответственностью.</li>
+</ul>
+<h2 id="источники"><span class="num">09</span>Источники</h2>
+<ol>
+<li>Beck K. et al. Manifesto for Agile Software Development. 2001. https://agilemanifesto.org/</li>
+<li>Schwaber K., Sutherland J. The Scrum Guide. 2020. https://scrumguides.org/scrum-guide.html</li>
+<li>Vacanti D., Coleman J. et al. The Kanban Guide. 2025. https://kanbanguides.org/english/</li>
+<li>Takeuchi H., Nonaka I. The New New Product Development Game. Harvard Business Review, 1986. https://hbr.org/1986/01/the-new-new-product-development-game</li>
+<li>Little J. D. C. A Proof for the Queuing Formula: L = λW. Operations Research, 1961. https://doi.org/10.1287/opre.9.3.383</li>
+<li>Dybå T., Dingsøyr T. Empirical Studies of Agile Software Development: A Systematic Review. Information and Software Technology, 2008. https://doi.org/10.1016/j.infsof.2008.01.006</li>
+<li>U.S. Government Accountability Office. Healthcare.gov: Ineffective Planning and Oversight Practices Underscore the Need for Improved Contract Management. GAO-14-694, 2014. https://www.gao.gov/products/gao-14-694</li>
+<li>U.S. Department of Justice, Office of the Inspector General. Status of the Federal Bureau of Investigation’s Implementation of the Sentinel Project. Report 11-01, 2010. https://oig.justice.gov/archives/reports/FBI/a1101.pdf</li>
+<li>Software Engineering Institute. Agile Project Success and Failure: The Story of the FBI Sentinel Program. https://www.sei.cmu.edu/library/agile-project-success-and-failure-the-story-of-the-fbi-sentinel-program/</li>
+<li>DORA. Software Delivery Performance Metrics. https://dora.dev/guides/dora-metrics-four-keys/</li>
+</ol>
+<div class="quiz" data-quiz data-quiz-guard><div class="quiz-who"><label class="quiz-who-label"><span>ФИО</span><input type="text" class="quiz-name" data-quiz-name maxlength="80" autocomplete="off" placeholder="Иванов Иван Иванович"></label><span class="quiz-attempts" data-quiz-attempts>две попытки на лекцию</span><span class="quiz-note" data-who-note hidden></span></div><div class="quiz-q" data-type="single" data-correct="1" data-q="1"><p class="quiz-p"><span class="quiz-no" aria-hidden="true">01</span>Чему учит случай Healthcare.gov?</p><div class="opts"><label class="opt"><input type="radio" name="q192_0" value="2" autocomplete="off"><span>Достаточно купить новый трекер</span></label><label class="opt"><input type="radio" name="q192_0" value="3" autocomplete="off"><span>Контракт важнее работающей системы</span></label><label class="opt"><input type="radio" name="q192_0" value="0" autocomplete="off" data-ok><span>Инкрементальность не заменяет требования, интеграцию и проверку</span></label><label class="opt"><input type="radio" name="q192_0" value="1" autocomplete="off"><span>Agile всегда приводит к сбою</span></label></div><p class="quiz-why" hidden>Подход был инкрементальным, но ключевые требования и проверки остались неопределёнными.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="multi" data-correct="4" data-q="2" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">02</span>Какие события входят в спринт?</p><div class="opts"><label class="opt"><input type="checkbox" name="q192_1" value="1" autocomplete="off" data-ok><span>Ежедневная встреча</span></label><label class="opt"><input type="checkbox" name="q192_1" value="5" autocomplete="off"><span>Инвентаризация</span></label><label class="opt"><input type="checkbox" name="q192_1" value="2" autocomplete="off" data-ok><span>Обзор</span></label><label class="opt"><input type="checkbox" name="q192_1" value="4" autocomplete="off"><span>Годовой отчёт</span></label><label class="opt"><input type="checkbox" name="q192_1" value="3" autocomplete="off" data-ok><span>Ретроспектива</span></label><label class="opt"><input type="checkbox" name="q192_1" value="0" autocomplete="off" data-ok><span>Планирование</span></label></div><p class="quiz-why" hidden>Спринт является контейнером для четырёх событий; пятое событие это сам спринт.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="short" data-q="3" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">03</span>Что ограничивает число задач в работе?</p><input type="text" class="short-answer" data-answers="[&quot;WIP&quot;, &quot;лимит WIP&quot;]" placeholder="Введите ответ" autocomplete="off" spellcheck="false" aria-label="Что ограничивает число задач в работе?"><p class="quiz-why" hidden>Лимит незавершённой работы создаёт вытягивание и уменьшает переключения.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="4" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">04</span>Что происходит на обзоре спринта?</p><div class="opts"><label class="opt"><input type="radio" name="q192_3" value="1" autocomplete="off"><span>Разбирают процесс команды</span></label><label class="opt"><input type="radio" name="q192_3" value="0" autocomplete="off" data-ok><span>Показывают инкремент и собирают обратную связь</span></label><label class="opt"><input type="radio" name="q192_3" value="2" autocomplete="off"><span>Выбирают истории на год</span></label><label class="opt"><input type="radio" name="q192_3" value="3" autocomplete="off"><span>Настраивают сервер</span></label></div><p class="quiz-why" hidden>Обзор посвящён продукту и следующим решениям, а не процессу.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="5" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">05</span>Что такое Agile?</p><div class="opts"><label class="opt"><input type="radio" name="q192_4" value="1" autocomplete="off"><span>Конкретная доска задач</span></label><label class="opt"><input type="radio" name="q192_4" value="3" autocomplete="off"><span>Метод тестирования</span></label><label class="opt"><input type="radio" name="q192_4" value="2" autocomplete="off"><span>Язык программирования</span></label><label class="opt"><input type="radio" name="q192_4" value="0" autocomplete="off" data-ok><span>Набор ценностей для работы в условиях изменений</span></label></div><p class="quiz-why" hidden>Agile шире любой практики и не задаёт готовый набор событий.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="multi" data-correct="4" data-q="6" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">06</span>Какие метрики потока обязательны в Kanban?</p><div class="opts"><label class="opt"><input type="checkbox" name="q192_5" value="1" autocomplete="off" data-ok><span>Throughput</span></label><label class="opt"><input type="checkbox" name="q192_5" value="2" autocomplete="off" data-ok><span>Work item age</span></label><label class="opt"><input type="checkbox" name="q192_5" value="5" autocomplete="off"><span>Story points</span></label><label class="opt"><input type="checkbox" name="q192_5" value="3" autocomplete="off" data-ok><span>Cycle time</span></label><label class="opt"><input type="checkbox" name="q192_5" value="0" autocomplete="off" data-ok><span>WIP</span></label><label class="opt"><input type="checkbox" name="q192_5" value="4" autocomplete="off"><span>Velocity</span></label></div><p class="quiz-why" hidden>Kanban Guide требует четыре метрики потока; velocity и story points не входят в обязательный набор.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="7" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">07</span>Что происходит на ретроспективе?</p><div class="opts"><label class="opt"><input type="radio" name="q192_6" value="3" autocomplete="off"><span>Считают бюджет</span></label><label class="opt"><input type="radio" name="q192_6" value="2" autocomplete="off"><span>Пишут тесты</span></label><label class="opt"><input type="radio" name="q192_6" value="1" autocomplete="off"><span>Заказчик принимает продукт</span></label><label class="opt"><input type="radio" name="q192_6" value="0" autocomplete="off" data-ok><span>Команда улучшает свой процесс</span></label></div><p class="quiz-why" hidden>Ретроспектива разбирает, как команда работала, и выбирает улучшение.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="8" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">08</span>Сколько может длиться спринт?</p><div class="opts"><label class="opt"><input type="radio" name="q192_7" value="2" autocomplete="off"><span>Не меньше квартала</span></label><label class="opt"><input type="radio" name="q192_7" value="1" autocomplete="off"><span>Ровно полгода</span></label><label class="opt"><input type="radio" name="q192_7" value="3" autocomplete="off"><span>Пока не закончится весь бэклог</span></label><label class="opt"><input type="radio" name="q192_7" value="0" autocomplete="off" data-ok><span>Один месяц или меньше</span></label></div><p class="quiz-why" hidden>Короткий спринт даёт больше циклов обучения и ограничивает риск.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="short" data-q="9" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">09</span>Как называется обязательство по качеству для инкремента?</p><input type="text" class="short-answer" data-answers="[&quot;определение готовности&quot;, &quot;definition of done&quot;]" placeholder="Введите ответ" autocomplete="off" spellcheck="false" aria-label="Как называется обязательство по качеству для инкремента?"><p class="quiz-why" hidden>Определение готовности фиксирует, когда элемент действительно завершён.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="10" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">10</span>Кто отвечает за порядок бэклога продукта?</p><div class="opts"><label class="opt"><input type="radio" name="q192_9" value="3" autocomplete="off"><span>Заказчик по договору</span></label><label class="opt"><input type="radio" name="q192_9" value="2" autocomplete="off"><span>Тестировщик</span></label><label class="opt"><input type="radio" name="q192_9" value="0" autocomplete="off" data-ok><span>Владелец продукта</span></label><label class="opt"><input type="radio" name="q192_9" value="1" autocomplete="off"><span>Скрам-мастер</span></label></div><p class="quiz-why" hidden>Порядок задаёт ценность, поэтому ответственность у одного человека.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="11" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">11</span>За что отвечает скрам-мастер?</p><div class="opts"><label class="opt"><input type="radio" name="q192_10" value="3" autocomplete="off"><span>За приёмку продукта</span></label><label class="opt"><input type="radio" name="q192_10" value="1" autocomplete="off"><span>За написание всего кода</span></label><label class="opt"><input type="radio" name="q192_10" value="0" autocomplete="off" data-ok><span>За процесс и эффективность команды</span></label><label class="opt"><input type="radio" name="q192_10" value="2" autocomplete="off"><span>За бюджет проекта</span></label></div><p class="quiz-why" hidden>Скрам-мастер помогает процессу и убирает препятствия, но не командует разработчиками.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="short" data-q="12" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">12</span>Какое событие улучшает процесс команды?</p><input type="text" class="short-answer" data-answers="[&quot;ретроспектива&quot;, &quot;retrospective&quot;]" placeholder="Введите ответ" autocomplete="off" spellcheck="false" aria-label="Какое событие улучшает процесс команды?"><p class="quiz-why" hidden>Ретроспектива завершает спринт и выбирает улучшение процесса.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="13" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">13</span>Что связывает закон Литтла?</p><div class="opts"><label class="opt"><input type="radio" name="q192_12" value="1" autocomplete="off"><span>Бюджет, срок и число людей</span></label><label class="opt"><input type="radio" name="q192_12" value="2" autocomplete="off"><span>Число тестов и число дефектов</span></label><label class="opt"><input type="radio" name="q192_12" value="3" autocomplete="off"><span>Скорость интернета и размер файла</span></label><label class="opt"><input type="radio" name="q192_12" value="0" autocomplete="off" data-ok><span>WIP, пропускную способность и время прохождения</span></label></div><p class="quiz-why" hidden>Средний WIP равен произведению throughput на cycle time.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="multi" data-correct="3" data-q="14" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">14</span>Какие артефакты есть в Scrum?</p><div class="opts"><label class="opt"><input type="checkbox" name="q192_13" value="3" autocomplete="off"><span>Диаграмма Ганта</span></label><label class="opt"><input type="checkbox" name="q192_13" value="2" autocomplete="off" data-ok><span>Инкремент</span></label><label class="opt"><input type="checkbox" name="q192_13" value="1" autocomplete="off" data-ok><span>Бэклог спринта</span></label><label class="opt"><input type="checkbox" name="q192_13" value="4" autocomplete="off"><span>Годовой бюджет</span></label><label class="opt"><input type="checkbox" name="q192_13" value="0" autocomplete="off" data-ok><span>Бэклог продукта</span></label></div><p class="quiz-why" hidden>Три артефакта связаны с целью продукта, целью спринта и определением готовности.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="15" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">15</span>Что создаёт лимит WIP?</p><div class="opts"><label class="opt"><input type="radio" name="q192_14" value="3" autocomplete="off"><span>Отказ от метрик</span></label><label class="opt"><input type="radio" name="q192_14" value="0" autocomplete="off" data-ok><span>Вытягивание: новая работа начинается при свободной мощности</span></label><label class="opt"><input type="radio" name="q192_14" value="2" autocomplete="off"><span>Ускорение за счёт переработок</span></label><label class="opt"><input type="radio" name="q192_14" value="1" autocomplete="off"><span>Запрет на любые изменения</span></label></div><p class="quiz-why" hidden>Лимит делает очередь видимой и заставляет ждать сигнала о свободной мощности.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><p class="quiz-note quiz-submit-note" data-quiz-note hidden></p><div class="quiz-result" data-quiz-result hidden aria-live="polite"><span class="label">Результат теста</span><h3>Тест завершён</h3><p class="modal-name-line">ФИО: <b data-student-name></b></p><p class="modal-result" data-modal-result></p><p class="modal-result" data-modal-wrong></p><dl class="modal-times"><div><dt>Время выполнения теста</dt><dd data-test-time>00:00</dd></div><div><dt>Время просмотра лекции</dt><dd data-view-time>00:00</dd></div></dl></div></div></div>
 </div></article><nav class="pager"><a class="" href="02-lek-02.html"><span>← Предыдущее занятие</span>Лекция 2. Модели процесса</a><a class="next" style="text-align:right;margin-left:auto" href="04-lek-04.html"><span>Следующее занятие →</span>Лекция 4. Требования и user stories</a></nav></main>
 <div class="modal" data-modal="warn" hidden>
   <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="warn-title">

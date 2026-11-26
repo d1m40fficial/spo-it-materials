@@ -888,21 +888,192 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <canvas class="shader-bg" width="820" height="300" aria-hidden="true" style="background:linear-gradient(135deg,#08090D,#1D9E75 58%,#08090D)"></canvas>
 <div class="badges"><span class="pill dark">Занятие 9</span><span class="pill">Технология разработки ПО</span></div>
 <div class="hero-panel"><h1>Архитектура приложения</h1><p class="dek">Архитектура задаёт крупные части системы и правила связей. Разберём слои, связность, связанность и контракты.</p></div>
-<div class="glyph" aria-hidden="true">Л6</div></header><section class="outcomes"><b>После этого занятия вы сможете</b><ul><li>Различать связность и связанность модулей</li><li>Раскладывать приложение на слои</li><li>Задавать направление зависимостей</li><li>Описывать контракт компонента</li></ul></section><nav class="toc"><b>Содержание занятия</b><ol><li><a href="#одна-кнопка-и-неделя-работы">Одна кнопка и неделя работы</a></li><li><a href="#связность-и-связанность">Связность и связанность</a></li><li><a href="#слои">Слои</a></li><li><a href="#контракты">Контракты</a></li><li><a href="#клиент-сервер-и-mvc">Клиент-сервер и MVC</a></li><li><a href="#монолит-и-микросервисы">Монолит и микросервисы</a></li><li><a href="#где-архитектура-ломается">Где архитектура ломается</a></li><li><a href="#итоги">Итоги</a></li></ol></nav><article class="prose"><h2 id="одна-кнопка-и-неделя-работы"><span class="num">01</span>Одна кнопка и неделя работы</h2>
+<div class="glyph" aria-hidden="true">Л6</div></header><section class="outcomes"><b>После этого занятия вы сможете</b><ul><li>Различать связность и связанность модулей</li><li>Раскладывать приложение на слои</li><li>Задавать направление зависимостей</li><li>Описывать контракт компонента</li><li>Описывать архитектуру для разных читателей</li><li>Выбирать между монолитом и сервисами по условиям задачи</li></ul></section><nav class="toc"><b>Содержание занятия</b><ol><li><a href="#одна-кнопка-и-неделя-работы">Одна кнопка и неделя работы</a></li><li><a href="#что-решает-архитектура">Что решает архитектура</a></li><li><a href="#связность-и-связанность">Связность и связанность</a></li><li><a href="#слои">Слои</a></li><li><a href="#контракты">Контракты</a></li><li><a href="#клиент-сервер-и-mvc">Клиент-сервер и MVC</a></li><li><a href="#монолит-и-сервисы">Монолит и сервисы</a></li><li><a href="#реальные-случаи">Реальные случаи</a></li><li><a href="#как-описать-архитектуру">Как описать архитектуру</a></li><li><a href="#где-архитектура-ломается">Где архитектура ломается</a></li><li><a href="#чек-лист-архитектуры-учебного-продукта">Чек-лист архитектуры учебного продукта</a></li><li><a href="#итоги">Итоги</a></li><li><a href="#источники">Источники</a></li></ol></nav><article class="prose"><h2 id="одна-кнопка-и-неделя-работы"><span class="num">01</span>Одна кнопка и неделя работы</h2>
 <p>Нужно добавить поле в форму заявки. Правка занимает день, но выясняется, что проверка ввода размазана по трём экранам, запрос к базе написан прямо в обработчике кнопки, а тест падает из-за общего состояния.</p>
+<p>Формально задача маленькая. Фактически она затрагивает интерфейс, проверку, хранение и тесты одновременно. Причина не в авторе правки, а в том, как устроены связи между частями.</p>
 <p><strong>Архитектура</strong> это крупные решения о частях системы и правилах их взаимодействия. Она отвечает не на вопрос «какой код», а на вопрос «где что находится и кто на кого может ссылаться».</p>
-<p>Главная мысль занятия: <strong>архитектура нужна, чтобы изменение в одном месте не ломало десять других</strong>. Она задаёт границы до появления кода.</p>
-<h2 id="связность-и-связанность"><span class="num">02</span>Связность и связанность</h2>
-<p><strong>Связность</strong> внутри модуля: насколько его части решают одну задачу. Высокая связность это хорошо.</p>
-<p><strong>Связанность</strong> между модулями: насколько они зависят друг от друга. Низкая связанность это хорошо.</p>
+<p>Главная мысль занятия: <strong>архитектура нужна, чтобы изменение в одном месте не ломало десять других</strong>. Она задаёт границы до появления кода, а не описывает его после.</p>
+<p>У архитектуры есть неприятное свойство: её решения дорого менять. Переименовать переменную можно за минуту, перенести проверку из интерфейса в модель за час, а разделить монолит на службы за месяцы. Поэтому архитектурные решения принимают рано и фиксируют явно.</p>
+<p>Есть две крайности, и обе встречаются в учебных проектах. Первая это отсутствие архитектуры: код растёт стихийно, каждый экран обращается к базе напрямую, общие функции складывают в один файл. Вторая это архитектура не по размеру задачи: четыре слоя, три интерфейса и фабрика фабрик для программы, которая хранит список заявок в одном файле. Первая крайность мешает изменениям, вторая мешает начать.</p>
+<p>Полезный ориентир: архитектура должна окупать себя. Если правило требует больше времени на поддержку, чем экономит на изменениях, оно лишнее. Это не значит, что правила не нужны. Это значит, что их количество связано с числом людей, сроком жизни кода и ценой ошибки.</p>
+<p>Архитектура проявляется не в том, что разрешено, а в том, что запрещено. Запрет «модуль предметной области не импортирует драйвер базы» звучит как ограничение свободы, но именно он позволяет заменить базу. Запрет «экран не вызывает репозиторий напрямую» позволяет добавить второй канал без копирования правил. Хороший запрет объясняет, какую возможность он сохраняет.</p>
+<h2 id="что-решает-архитектура"><span class="num">02</span>Что решает архитектура</h2>
+<p>Стандарт ISO/IEC/IEEE 42010:2022 описывает архитектуру через набор понятий. Система имеет <strong>заинтересованных лиц</strong> с их <strong>вопросами</strong>. Архитектурное описание отвечает на эти вопросы через <strong>представления</strong>, а каждое представление строится по <strong>точке зрения</strong>, которая задаёт правила и язык описания <a href="https://www.iso.org/standard/74393.html">ISO/IEC/IEEE 42010:2022</a>.</p>
+<p>Формулировка кажется бюрократической, но за ней стоит простая мысль: одна и та же система описывается по-разному для разных читателей. Разработчику нужны модули и зависимости, администратору размещение и резервное копирование, заказчику внешние системы и сценарии. Одна схема на все вопросы не отвечает.</p>
+<table>
+<thead>
+<tr>
+<th>Читатель</th>
+<th>Вопрос</th>
+<th>Что нужно показать</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>разработчик</td>
+<td>куда добавлять функцию</td>
+<td>модули, слои, зависимости</td>
+</tr>
+<tr>
+<td>администратор</td>
+<td>что и где запускается</td>
+<td>узлы, базы, сетевые связи</td>
+</tr>
+<tr>
+<td>заказчик</td>
+<td>с чем система обменивается</td>
+<td>контекст и внешние службы</td>
+</tr>
+<tr>
+<td>тестировщик</td>
+<td>что проверять на стыках</td>
+<td>контракты и границы</td>
+</tr>
+</tbody>
+</table>
+<p>Набор представлений должен быть согласован: одно и то же имя означает одно и то же, границы на схемах совпадают. Если на схеме контекста система называется «сервис заявок», а на схеме компонентов «модуль обращений», читатель начинает искать разницу там, где её нет. Согласованность имён дешевле, чем согласованность кода, и её стоит поддерживать с первого рисунка.</p>
+<p>Архитектура отличается от проектирования уровнем решения. Проектирование отвечает, как устроен модуль внутри: какие функции, какие структуры данных. Архитектура отвечает, какие модули существуют и как они соединены. Граница размыта, но практический критерий есть: архитектурное решение трудно отменить и оно затрагивает несколько команд.</p>
+<p><strong>Нефункциональные требования</strong> почти всегда определяют архитектуру сильнее, чем функциональные. Требование «список заявок открывается за две секунды при сорока пользователях» влияет на индексы, кеш и способ загрузки. Требование «данные не покидают колледж» влияет на выбор облака. Требование «система обновляется без простоя» влияет на схему выпуска.</p>
+<p>Полезно разделять решения по цене отмены.</p>
+<table>
+<thead>
+<tr>
+<th>Решение</th>
+<th>Цена отмены</th>
+<th>Когда фиксировать</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>язык и библиотеки</td>
+<td>средняя</td>
+<td>до первого кода</td>
+</tr>
+<tr>
+<td>слои и границы модулей</td>
+<td>высокая</td>
+<td>до реализации сценариев</td>
+</tr>
+<tr>
+<td>схема данных</td>
+<td>очень высокая</td>
+<td>до появления реальных данных</td>
+</tr>
+<tr>
+<td>способ развёртывания</td>
+<td>средняя</td>
+<td>до первого выпуска</td>
+</tr>
+<tr>
+<td>стиль интерфейса</td>
+<td>низкая</td>
+<td>в любой момент</td>
+</tr>
+</tbody>
+</table>
+<p>Строки с высокой ценой отмены объясняют, почему архитектуру обсуждают на бумаге. На бумаге стрелка стоит ноль. В коде та же стрелка стоит недели работы.</p>
+<h3>Сценарий качества</h3>
+<p>Нефункциональное требование полезно превратить в <strong>сценарий качества</strong>: кто действует, что происходит, какой ответ ожидается и по какой мере он оценивается.</p>
+<p>Пример для системы заявок: сорок сотрудников одновременно открывают список; система отвечает за две секунды; при превышении записывается предупреждение в журнал. Здесь есть источник нагрузки, событие, ожидаемая реакция и измеримая мера.</p>
+<p>Сценарий помогает принимать решения. Если мера задана, видно, нужен ли кеш, индекс или отдельный сервер. Если меры нет, спорят о вкусах: «кажется, медленно» против «кажется, нормально».</p>
+<p>Типичные характеристики, которые проверяют сценариями: время ответа, доступность, восстановление после сбоя, безопасность доступа, удобство изменения. Каждая из них влияет на архитектуру по-своему. Доступность требует резервирования, безопасность требует границ доверия, удобство изменения требует слабой связанности.</p>
+<h2 id="связность-и-связанность"><span class="num">03</span>Связность и связанность</h2>
+<p>Два термина описывают противоположные направления.</p>
+<p><strong>Связность</strong> (cohesion) описывает, насколько части одного модуля решают одну задачу. Высокая связность это хорошо: модуль имеет одну причину для изменения.</p>
+<p><strong>Связанность</strong> (coupling) описывает, насколько модули зависят друг от друга. Низкая связанность это хорошо: изменение в одном модуле не требует правок в других.</p>
 <p>Пример:</p>
 <ul>
-<li>модуль расчёта скидки с полями заказа и функцией расчёта имеет высокую связность;</li>
-<li>если тот же модуль сам печатает чек и отправляет письмо, связность падает, а связанность растёт.</li>
+<li>модуль расчёта скидки принимает строку заказа и возвращает сумму, у него высокая связность;</li>
+<li>если тот же модуль сам печатает чек, отправляет письмо и пишет журнал, связность падает, а связанность растёт.</li>
 </ul>
-<p>Правило простое: <strong>много причин для изменения в одном модуле это плохо</strong>. Если модуль меняется из-за интерфейса, базы и бизнес-правил, он соберёт все ошибки.</p>
-<h2 id="слои"><span class="num">03</span>Слои</h2>
-<p>Слоистая архитектура делит приложение по ответственности:</p>
+<p>Правило простое: <strong>много причин для изменения в одном модуле это плохо</strong>. Если модуль меняется из-за интерфейса, базы и бизнес-правил, он собирает все ошибки сразу.</p>
+<p>Связность и связанность не бинарные свойства. Их удобно раскладывать по уровням.</p>
+<table>
+<thead>
+<tr>
+<th>Уровень связности</th>
+<th>Признак</th>
+<th>Оценка</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>функциональная</td>
+<td>все части нужны для одной задачи</td>
+<td>лучшая</td>
+</tr>
+<tr>
+<td>последовательная</td>
+<td>выход одной части это вход другой</td>
+<td>хорошая</td>
+</tr>
+<tr>
+<td>временная</td>
+<td>части объединены моментом запуска</td>
+<td>слабая</td>
+</tr>
+<tr>
+<td>логическая</td>
+<td>части выбираются по условию</td>
+<td>слабая</td>
+</tr>
+<tr>
+<td>случайная</td>
+<td>части не связаны ничем</td>
+<td>худшая</td>
+</tr>
+</tbody>
+</table>
+<p>Связанность тоже имеет градации.</p>
+<table>
+<thead>
+<tr>
+<th>Вид связанности</th>
+<th>Что передаётся</th>
+<th>Оценка</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>по данным</td>
+<td>только нужные значения</td>
+<td>лучшая</td>
+</tr>
+<tr>
+<td>по структуре</td>
+<td>целая запись, хотя нужны два поля</td>
+<td>средняя</td>
+</tr>
+<tr>
+<td>по управлению</td>
+<td>флаг, который меняет поведение чужого модуля</td>
+<td>плохая</td>
+</tr>
+<tr>
+<td>по общей глобальной области</td>
+<td>общее состояние</td>
+<td>плохая</td>
+</tr>
+<tr>
+<td>по внутренностям</td>
+<td>прямой доступ к чужим полям</td>
+<td>худшая</td>
+</tr>
+</tbody>
+</table>
+<p>Типичный признак связанности по управлению: функция принимает параметр <code>режим</code> и в зависимости от него делает разное. Такой параметр означает, что решение о поведении принимает вызывающий код, а не сам модуль.</p>
+<p>Пример. Функция <code>сохранить(заявка, печатать_чек)</code> внутри решает, печатать ли чек. Формально это удобно: один вызов вместо двух. Фактически модуль хранения знает о печати, а вызывающий код управляет его поведением. Если чек понадобится печатать в другом месте, придётся менять сигнатуру или дублировать ветку.</p>
+<p>Разделение простое: <code>сохранить(заявка)</code> и отдельный вызов печати в сценарии. Модуль хранения перестаёт зависеть от печати, а сценарий решает, что делать после сохранения. Кода стало на две строки больше, связей меньше.</p>
+<p>Похожая история с общей глобальной областью: конфигурация, текущий пользователь и соединение с базой, доступные из любого места. Сначала это экономит передачу параметров, потом мешает тестам, потому что каждый тест зависит от общего состояния. Явная передача зависимости длиннее, но предсказуемее.</p>
+<p>Связность проверяют вопросом «сколько причин для изменения у этого модуля». Если модуль называется <code>работа_с_заявкой</code> и внутри есть проверка прав, расчёт срока и отправка письма, причин три. Разделение на три модуля не украшает схему, а уменьшает число причин. Иногда разделение делают постепенно: сначала выносят отправку письма, потом проверку прав, и только затем трогают расчёт.</p>
+<p>Для больших систем используют числовые оценки. <strong>Входящая связанность</strong> (afferent coupling) это число модулей, которые зависят от данного. <strong>Исходящая связанность</strong> (efferent coupling) это число модулей, от которых зависит данный. Отношение <code>I = исходящие / (входящие + исходящие)</code> называют <strong>нестабильностью</strong>: ноль означает, что от модуля зависят многие и он должен быть устойчивым, единица означает, что модуль зависит от многих и его можно менять свободно. Метрика не заменяет суждение, но показывает опасные места: устойчивый модуль с высокой исходящей связанностью тянет за собой всю систему.</p>
+<p>Откуда берётся хорошая граница? Классический ответ дал Дэвид Парнас в 1972 году. Он предложил разбивать систему не по шагам обработки, а по <strong>скрываемым решениям</strong>: модуль прячет решение, которое скорее всего изменится. Если алгоритм расчёта может поменяться, его прячут за интерфейсом. Если формат хранения может поменяться, его прячут в инфраструктуре <a href="https://doi.org/10.1145/361598.361623">Parnas, 1972</a>.</p>
+<p>Связанность можно оценивать и по факту изменений. Если одна задача за месяц потребовала правок в семи модулях, эти модули связаны сильнее, чем кажется по схеме. Наблюдение за историей коммитов даёт более честную картину, чем рисунок зависимостей: схема показывает замысел, история показывает практику.</p>
+<p>Это важнее, чем «модуль на одну функцию». Принцип «одна функция на файл» ничего не говорит о том, что именно скрыто. Принцип Парнаса говорит: граница проводится там, где ожидается изменение.</p>
+<div class="gate-step" data-gate>
+<p class="gate-action"><button type="button" class="gate-btn" aria-expanded="false"><span class="gate-q" aria-hidden="true">?</span><span>Почему модуль, который меняется по трём причинам, хуже трёх модулей по одной?</span></button></p>
+<div class="gate-content" hidden><h2 id="слои"><span class="num">04</span>Слои</h2>
+<p>Слоистая архитектура делит приложение по ответственности.</p>
 <table>
 <thead>
 <tr>
@@ -932,46 +1103,235 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <p>Зависимости идут сверху вниз: представление вызывает приложение, приложение использует предметную область, инфраструктура реализует хранение.</p>
 <figure class="figure" data-fig="architecture-layers" data-one="H4sIAAAAAAACCt1ZW2/b1h1/z6c4YzBYHnSjbpGpC9Z2LlagxQa0w1YUfaDII4kzRXIkZVsbAiROsq5ztzTFigTZlrXZw1724HRxo9xcoJ+A+kb7/c85lChbviR7GwKYPJf/5fe/U2n/4Cc/e+uDD3++yYbxyO1eatODuaY36GjhWKMNbtp4jHhsMmtohhGPO9o47heaWrrtmSPe0bYdvhP4Yawxy/di7uHajmPHw47Ntx2LF8QizxzPiR3TLUSW6fKOTkxiJ3Z5N/k6eZ4cJVOWfDe7lkzF4tvkMHmZTGe32yV56VI7iif0ZMwIfT9mv2OFQmAGPDQu981+o19tYcMyQxvrft/u92jteFvGZd3UN/QGLUfjmOO80WvU6hu0EY5dblzmNbtp9WltWhb0Ny6X326+0RAcI7+P9ab+dn1zs8WuQvyPILrn7xYi57eONzB6fmjzsIAdeUx2zOOCPcG9kRkOHM8ot1jPtLYGoT/2bCMOTS8KzBCSWjCZ64fGthnmhLbrLdaHEQt9c+S4E0N7nw98zn7xjpaPJlHMR4Wxk49AXoh46PSlxKLNRz4ptRAh+QnzgKNU0dCDXRb5rmMzeUzg56eF0LSdcWTotQBAAtO2CZzeDBSsIoUDhNhOFLjmxOi7HCe/Hkex058UlOMNwILDezze4dxrMdN1Bl7Bgd6RIChwz26xgRkYeiMjBsaLY39k6GXanBtU7q1WWqjEJ7wX+jsZO7MyE/qTDY1GucyIZUkvVthbvgc2ZpQf+Z4v1Gwxl8cxJNGKwBb1Ch+1WMx344LwUd8PR8Y4gBEtM+LLvpKRojQZVpd8LTyI8OBGRSByHY8XhtwZDGMDuijtLXgK4kEptNV1oWltpaZZySKIIXhnCMMK5bnh+TuhGUjG0fYg46ee61tbuEw5CAOXf9hiShNzHPstpXUh9gOjMfc1CKFYyC1Ks77juiKnWiyKQ38LCVOxq3qtkq4LinkRCSPshjz3PYPoWLES5dU1es/yL/rekgiJjvJtfS7pmK2X5FWWlCWvKVOmybPKkAvXbIg4EdhSOMLzpmcNYeuRY9suXxJRjMa9VIRgcWXBIi0p4nrk2PzVFWq+gkI2D8A7dUe9V683yifcUVPsPN9L6aLYjMcRBSt8ruKgJjImEwfNpQqACGZ6JZOYqlAI+50oOcp9C1R6pVg/mQO1+rJCZNdTs6tI1SX03ehE+aFKIqJWFBdKAUPmQQaNLCrEpzdGRfHSfBPVQSflSjo7t86m5miSNcqnWePsOnvcVtSs1ld1AGscRtgKfIcKRFZ5Y+hvi5KhpK+02amGlDyKwgYntJnfPJ+1LAbE8ccjbjsmy43MXRV2CMRgdx0C0q40DyQRQ1dB1i6pVt4uqRmDuiUetrPNLORH1NGIWKNmn92k22JTbnfbQXqiOoHWTT6fXZvdwuCwhwHi2WxvdgMjxQH7/gmbXZdTRrsUdNvDaje5jztHDFPGAUue4eQ/tHohZ4/ZHu7j3z5oDsDlM7xjFAFZu0SS5zqkCqhiDgXADxxeSBVSqU/nZIsXqtM0Or3p73Y06lyNZplVag2NIdYxVjmjgcbM0DELrtnjbkdL5yTosgetbjP8WQV21RiVmm2QKkw1Sm1iW9RhqKFD+qSjbeAhRzhNL9c01TE6Wg3vIa5d0URl6WgUCZqqO1jJuqWVum1R/XCz0RQMdb0O03wHjZ7PPkue4PkN2RXaYY0RD7dP0lQ25mJkeQWLR4RwdgMsDmfXFOFxEPVG5SSKyv+EQq9mYDyCh58kByfUTi+t0nvKZjdB9hR497Nqt0uD7qVjrhHdRmO2GcP1GLkdrbtw0EZZCKmU59iq1XIGWznFllG/Wq8LomqTnAALHiaPZRDBDc9liCSHS3jSKBn3tCyHOsb22Z8Qa/BC8nK2n2fg8A3c+ZjekC7iPeVE2M6EZgbBCmxXXgdbM8W2FPgXQ6WXCdb12e8F0YFgMs3LqvCCgMJc+xcGZfsj0/FW4NJfy2l61mtQB7VJKIn0P0IoUn26ThXqQkDrEuiN2afgcSRiAJ9d6suLooGsd3BhqI7XD81VSF/Lhbrw4RRxdVNkOcG6hlyfV7aLQKyQL9MUzWeyLk+1+DBrqRWph7lKo+FhCw0Q3ypIvtDNXTbDnYK5vqiWgRkPGQ7fg0cxQ1SGjfJ24Upl2ASqE3egGMP5qWe6ftbhaZR1krxRHlYry5IzoI6bt1JFDcxMlB1NjpRadkbtaCeHVG0xziHP5rVNfiPD2HeTz5MvkntoT/eSvyUP8HyY3GNY/CX5Z/KQ4ezvWNxFQj1I7iRf4fZD7DxgeDxI/pr8O7lPi38lX+Lsy+QuozUuPBRX7ycPl+qlzfvR3BzSU8yBRYSPUt/9UoZeM13/VIUf9Vbe/5Uo/Xj5EMbRmB864jcL+h5CLAe+OxlgRBLTVyQ6c541WTVPHXoOXo7cFMUlKSI1f6ofhpztwfEBRk67mlBYvXfbvW7yj9NqcrFd6nWZOJ+KHSpHNJ2kZVcmL96eUcSLAiwvCI5PkD1osGJc2CsyGFVMJKCj9okiOSVWmdxnKvE+md0hIsH9JYio1IijTyV7GodQH5lKtEMxRhGj2e3kBZL1z8XFnLM0JclBPp1G1ESe6XTpTR8F9HSzwCqCcjUb0VWUzY71grPI0rqdij2z1p7FSFVFxPwZlWzBQFkqfURW6ASI9lx/7Fn0Ic1yGKdxD6O4EME6YsnY2DHY2v9p+KzlBUS4MoPxmDsVui8E9jtyZM+28KeGVI6GzUPB+zCr74EaWZZgH+uNomkczW6peef26ba5KyDgGCSfyC+LxzTeys+HPCE8UsYgWz9jECTCAupBZbaYqlLsMh6XXXxGTCprfH1ecyejT2F0qAJsB8qt1C3pBraEU4/ozyMZFFCemvKeMOJNqPGUCAVnYkU6TImAPkLmkZUcFBYDIcQoUCI3FKYz8kOBuSPbOJmSpjAMnLNbq3u6GEQJ0h9kbIgPL3D8FoG3D4xfQbkDoSg5TsQBTXcvhQcOhOB9OfGR76DMfhq2f4TXpemmTAXSrYwM+iArrgHb1ZbKUTEjRchS27fGI7SW4m/GPJy8z11MSX74huvm1uQvSmvrKY2sBucQyUsfyTLz8YJY/YaSoR3weNPl9Prm5B07tyZvEAVI5nUFyeVOclt8sq4KitS82PfDTdMaZgqQSx/0blHU5nedKC7G/mDg8tya763lcUAqRTwuuqzT6TDiiC99oV/6o8Mqrj3i2juNa+9MrhJR0fE8dPcP3nuX0OP6R7j1Md2gHyfOg2Pa9uY2bESyOfjk1izXsbYge6n0KjtlUEo9lC7n4ns1Mb1TxMjTtbFDXry6nsNfjBiqVyBb5C8oJfmfOf8FHMejMd0ZAAA="><iframe title="Figure 1: architecture-layers" scrolling="no"></iframe><figcaption>Нажимайте слои: показывается ответственность и правило зависимостей. Стрелки идут от представления к инфраструктуре.</figcaption></figure>
 
-<p>Обратное движение возможно через <strong>контракт</strong>: интерфейс, который объявлен сверху, а реализован снизу. Предметная область не должна знать, что данные лежат в SQLite, а не в файле.</p>
-<div class="gate-step" data-gate>
-<p class="gate-action"><button type="button" class="gate-btn" aria-expanded="false"><span class="gate-q" aria-hidden="true">?</span><span>Почему представление не должно обращаться к базе напрямую, даже если так короче?</span></button></p>
-<div class="gate-content" hidden><h2 id="контракты"><span class="num">04</span>Контракты</h2>
+<p>Правило направленных зависимостей звучит просто, но нарушается постоянно. Причины две: так короче и так быстрее. Экран, который сам делает запрос к таблице, экономит один слой. Через месяц появляется второй канал: отчёт, API или фоновая задача. Правило, записанное в обработчике кнопки, в новом канале отсутствует, и поведение расходится.</p>
+<p>Обратное движение возможно через <strong>контракт</strong>: интерфейс объявлен в предметной области, а реализован в инфраструктуре. Предметная область не знает, что данные лежат в SQLite, а не в файле. Такой приём называют инверсией зависимостей: направление вызова остаётся прежним, а направление знания о конкретной реализации меняется.</p>
+<figure class="figure" data-fig="dependency-rule" data-one="H4sIAAAAAAACCrVY7W/bRBj/vr/icIXUojiJHdt13aQSjE0ggQCNt328xJfEqmNHZ6dtQEjbOiRehvYCaAONAdsHviDRlZZ2G80k/oLzf8Tz3DlpsqYvK+yL7Xvu7nl+z+s95+pLr79z9v2L754j7bQTLp2p4ouENGrVNN7TkMCoD68OSylptClPWFrTemlTd7UhOaIdVtNWArbajXmqkUYcpSyCZauBn7ZrPlsJGkyXgwIJoiANaKgnDRqymoFM0iAN2ZL4ObskNsSm2BVPxICIHTXILgPhbzHILmdXxLZ4VC2p5WeqSdrHNyEej+OUfEp0vUu7jHszTdp0mpVFIATRsjdj+hXDMnHY6aXM92bsum07ZSTQRgOQejPl8+6rjtyRxE0YnzPO2+fO4Zj3QubxVp3OWnbBWig4TqFomHM4tUp55M3Qim1VmovkM0DyCqCox2t6EnwSRC2vHnOfcR0oahqNW4AFfh/WdShvBZEHMOq0sdzicS/yvZTTKOlSDqAWwY5hzL0VymelIiCzCZbVm7QThH1Pu8BaMSMfvKkVkn6Sso7eCwoJbNcTxoMcULHJwTmIal+GYihNBSwVRs/orpEkDgOfqGlUezSrc+oHvcQzzC5o0qW+j9oZLuxRD6uba1hkfVbn8eqYfqRMXJxG7J5TLpOF7lrJKJrkbByBRJoUOnEUg9INtkhClqYgD0coomg4rLNIUraW6tI0zZh3vF4XoDdowiZNJJ07l+OI4pTtgzDKgBLAk3KOwzAkCHsqiMOYJistYOkHSTekfa8exo3lRSLDGgSUX14kbRa02qlHe2mMO6qlPESrpTyL0PXw8oMV0gChSU2T/tEwiqvdIS23obYkbmSXss8hBzDyH2dXsnVMEfLPzvTs2K2WupITAsV0fC1eq2noAMctE3Pe0giPIem0oNPSCOUB1UNaZ2HI/Hq/pvlcl6lF4MNnSUOiAm6KGPj7KwDZLyB/B9BsZ19kN8We2Mu+FttE7CpkT+XMl+MzhwDOk1kKQqFDOQqA+BVrwZCr3J5dz64Q4LIJAsA42TqBzz1gulMkWEKy68hePCLweAjGG4gtXC5XqMX5zgNI1X6w9BZw2AZ4e2Ijuy75AIoNRJxdU2y/Aimb4gk8YR1oDUpekVyvYonKLhcU7Sq6S+67lK2PORAW/QklTgrbAN4SGrIqVkuo+NIZZZDWeMLXtIOxqqnUoFGjHfOa1gl8P2S532A/Z42UQAiY4Pm+eqmSDJ+ulodrTatgYMAyRyPNIAxrWl7+NJKkPF6GgMnr45Cg51wggbTSSBpCQWkG8gZxlq0p/FANgYdbtEb8c3ZLyvxiS0YDOvgJjNBV2xAZwC43xEFV5s2TqtJsNsf0UEfBEaAXKgdAK5TyVBJ/nRCfYZZfEEDDMg5BeHTgHgfYcV8UYHdhCuAj0mOIVHIrtfaT4dhoHGGM4ghyA4r/MhwmLIKS0uPh7Azlq7rP5/YTpEvTNoHZt42yRWx3xbDGFJmYNMrOUbO2NTY7HbTqEw6CtiZB59M+TaDZ4hQMaJPKFMTmvEkso22aINhq66Y5If2kwp1pnF0X1HVDl7jAc4y+4Ei6riaeETZ0e6VsKrcbpnZ8+RqLC6fojkIsh7sEkbwNZfYa1MfrEwE8rpvq5g7oNs2UlXFThkHEyJoB1Ars7sMHJu2aOSSYSHCmOvX/KcsVW5mqMlYrFsz91LNdlXrzz5t61kJegZ/JvOcqFIfwdKxDvZY7YungeUjEbZQEBf6xPPSPEjA/f6wAOM+fylZiIB7PzhXwfB9AK4DXhz3slrJrs3OH1buh0Y2KczqrP89RONTJsO0DnjhhBZzGbb58vInQzU/BQDuyfRzIE+wRufDeW0HKjuPvVk7Gf6J3mdIGnb6S26eu5KAEAd9+uOAcXqPscq6o4Z6+Rg2hT6R6klK4AU+xzoQpnjW4aTrTS8apwY1ScRO67x0Ig010z1Z2E/2U98sF7ID3VM5ghw537ofY1ctv1ZHhemy5R3uy9ckyPKr6VllpgtnznzWZ3z/J91vF2+KGuCXuwJXgjrgr7sH7vvidwOA7cVncJ0CBxwNJvid+EL/BzC34+lbcI+JHXHcbtn0vfhJ/wBMZ3BUPJpXxWTMZBZQKOXkdUcE2jMKPVIy6w/Ebed0AyJw1P5aFAz4uglE0EvNA/gnBK6EGZ2kc9ltxRLpxEKWJvJsViEsqBbyjPasynL0lJWIYx0OAcLFcaU3eGfG+qy0dcQGC7hUuOZsk+wZq8AC8OYBluxgOsAASd52oOoQ1Fe9Ju7KqQjRsqTAg8ugY/Z+B4AE2eWUZQMjIyYeStCHLAc7Js/sxRtZmLgfF4tYNGXnQ7hflpRV0C1bwld+QS+p31L+P4FBPnxIAAA=="><iframe title="Figure 2: dependency-rule" scrolling="no"></iframe><figcaption>Слева разрешённое направление зависимостей, справа запрещённый обход через слой. Внизу показан порт: предметная область объявляет интерфейс, инфраструктура его реализует.</figcaption></figure>
+
+<p>Проверка слоёв не требует специального инструмента. Достаточно правила в ревью: файл из папки <code>domain</code> не может импортировать файл из папки <code>infra</code>. Если импорт появился, значит, граница протекла.</p>
+<p>Как выглядит починка протечки. Экран вызывал <code>db.query("select * from requests")</code>. Правильный путь: экран вызывает сценарий, сценарий вызывает метод репозитория, репозиторий выполняет запрос. На первый взгляд добавлено два звена. На практике выигрыш появляется, когда нужен второй канал: API, отчёт или фоновая задача. Все три вызывают тот же сценарий и получают те же правила.</p>
+<p>Если протечек много, помогает простое упражнение: нарисовать стрелки импортов между папками и посмотреть, какие пересекают границы снизу вверх. Такая схема строится по факту, а не по замыслу, и быстро показывает расхождение.</p>
+<p>У слоёв есть цена. Каждый слой добавляет вызов, преобразование и файл. Для программы на двести строк четыре слоя это лишняя работа. Разумный минимум для учебного продукта: представление, приложение и хранение, с бизнес-правилами внутри приложения или отдельной небольшой модели. Больше слоёв добавляют, когда появляется вторая причина для их существования.</p>
+<p>Отдельный вопрос это проверки. Проверка формата принадлежит интерфейсу: поле обязательно, длина не больше ста символов, дата в правильном виде. Проверка правила принадлежит модели: нельзя закрыть заявку без комментария, нельзя назначить исполнителя из другого кабинета. Если правило живёт только в форме, оно исчезает в API. Если правило живёт в модели, форма может проверить его ещё раз для быстрой подсказки, но источником истины остаётся модель.</p>
+<p>Дублирование проверки в двух местах допустимо и даже полезно, если роли разные: интерфейс даёт быструю обратную связь, модель защищает данные. Плохо, когда правило существует только в одном месте и это место не модель.</p>
+<p>Есть и промежуточный вариант: <strong>модульный монолит</strong>. Код живёт в одном приложении, но разделён на модули с явными интерфейсами. Модули не могут обращаться к внутренностям друг друга. Это даёт часть выгод слоёв без сетевой сложности.</p>
+<h2 id="контракты"><span class="num">05</span>Контракты</h2>
 <p><strong>Контракт</strong> описывает, что компонент принимает, что возвращает и какие ошибки возможны. По контракту можно заменить реализацию, не меняя вызывающий код.</p>
 <p>Пример контракта:</p>
 <div class="codehilite" data-lang="text"><pre><span></span><code>создатьЗаявку(тема, описание, кабинет) -&gt; номер заявки
 ошибки: пустая тема, неизвестный кабинет, нет прав
 </code></pre></div>
 
-<p>Контракт не описывает, как именно сохраняется заявка. Это решение инфраструктуры.</p>
-<h2 id="клиент-сервер-и-mvc"><span class="num">05</span>Клиент-сервер и MVC</h2>
+<p>Хороший контракт отвечает на пять вопросов:</p>
+<ul>
+<li>какие входные данные обязательны;</li>
+<li>какие ограничения на значения;</li>
+<li>что возвращается при успехе;</li>
+<li>какие ошибки возможны и чем они различаются;</li>
+<li>можно ли повторять операцию без побочного эффекта.</li>
+</ul>
+<p>Последний пункт про <strong>идемпотентность</strong>. Если создание заявки повторить дважды из-за сбоя сети, появится две заявки. Если контракт обещает идемпотентность, повтор с тем же идентификатором вернёт прежний результат. Для учебного проекта это можно не реализовывать, но нужно понимать, где возникает проблема.</p>
+<p>Ошибки в контракте стоит разделять по смыслу, а не по коду ответа. Ошибка ввода означает, что данные неверны и повтор не поможет. Ошибка доступа означает, что прав нет. Временная ошибка означает, что повтор через минуту может сработать. Если все три случая возвращают одно и то же сообщение «ошибка», вызывающий код не может выбрать поведение.</p>
+<p>Контракт меняется вместе с системой. Безопасный путь: добавить необязательное поле, не менять смысл существующих. Опасный путь: изменить тип или смысл поля, на которое уже опираются. В учебном проекте достаточно правила: перед изменением контракта найти всех вызывающих и обновить их в том же коммите.</p>
+<p>Размер контракта тоже решение. Широкий контракт с десятком параметров трудно вызывать и легко перепутать аргументы. Узкий контракт проще проверить, но может потребовать несколько вызовов. Практический ориентир: если функция принимает больше четырёх параметров, часть из них, скорее всего, образует отдельную структуру.</p>
+<p>Контракт не обязан быть интерфейсом в языке. Это может быть описание конечной точки API, схема сообщения или набор тестов. Важно, чтобы обещание было записано и проверялось. Устный контракт работает, пока рядом находится человек, который его помнит.</p>
+<p>Контракт не описывает, как именно сохраняется заявка. Это решение инфраструктуры. Поэтому замена SQLite на серверную базу не должна менять вызовы в приложении.</p>
+<p>Проверяют контракт <strong>контрактными тестами</strong>: вызывают компонент с граничными значениями и сверяют ошибки. Такой тест переживает смену реализации, потому что проверяет обещание, а не внутренности.</p></div>
+</div>
+
+<div class="gate-step" data-gate>
+<p class="gate-action"><button type="button" class="gate-btn" aria-expanded="false"><span class="gate-q" aria-hidden="true">?</span><span>Что сломается, если экран начнёт читать таблицу базы напрямую?</span></button></p>
+<div class="gate-content" hidden><h2 id="клиент-сервер-и-mvc"><span class="num">06</span>Клиент-сервер и MVC</h2>
 <p><strong>Клиент-сервер</strong> делит систему на клиента и сервер. Клиент показывает интерфейс и отправляет запросы, сервер хранит данные и выполняет правила.</p>
 <p><strong>MVC</strong> делит интерфейс на модель, представление и контроллер. Модель хранит данные и правила, представление показывает, контроллер принимает ввод.</p>
-<p>Эти схемы не заменяют слои, а уточняют их. В небольшом приложении достаточно трёх слоёв и одного контроллера на сценарий.</p>
-<h2 id="монолит-и-микросервисы"><span class="num">06</span>Монолит и микросервисы</h2>
+<p>Эти схемы не заменяют слои, а уточняют их. Важно не путать уровни: MVC это способ организовать интерфейс, а не описание всей системы. В небольшом приложении достаточно трёх слоёв и одного контроллера на сценарий. Если модель MVC начинает содержать запросы к базе и отправку писем, она перестала быть моделью интерфейса и стала всем сразу.</p>
+<p>Есть и практическая ловушка: в учебных фреймворках контроллер часто оказывается местом, куда складывают всё. Тогда проверка прав, расчёт и запись в базу живут в одном обработчике. Формально это MVC, фактически это отсутствие слоёв.</p>
+<p>Второе ограничение MVC в том, что он ничего не говорит о хранении и транзакциях. Два контроллера могут писать в одни таблицы разными путями, и согласованность держится на удаче. Поэтому MVC дополняют слоем приложения, где сценарий описан целиком: проверить права, изменить заявку, записать историю. Контроллер тогда только переводит запрос в вызов сценария.</p>
+<p>Разница видна на ошибках. Если правило живёт в контроллере, его приходится повторять в каждом новом канале. Если правило живёт в сценарии, новый канал получает его бесплатно. Это тот же аргумент, что и со слоями, только на уровне интерфейса.</p>
+<h2 id="монолит-и-сервисы"><span class="num">07</span>Монолит и сервисы</h2>
 <p><strong>Монолит</strong> это одно приложение с общей сборкой. Его проще запустить, отладить и развернуть. Для учебного продукта монолит обычно правильный выбор.</p>
 <p><strong>Микросервисы</strong> делят систему на независимые службы. Они помогают при больших командах и разной нагрузке, но добавляют сетевые ошибки, распределённые транзакции и сложность сопровождения.</p>
-<p>Начинать с микросервисов ради моды значит платить за сложность до появления причин.</p>
-<h2 id="где-архитектура-ломается"><span class="num">07</span>Где архитектура ломается</h2>
-<p><strong>Правила в интерфейсе.</strong> Проверка бизнес-правила живёт в обработчике кнопки и не работает в API.</p>
-<p><strong>Слой протекает.</strong> Экран обращается к таблице базы напрямую.</p>
-<p><strong>Общий модуль всего.</strong> В <code>utils</code> складывают всё, и он меняется от любой задачи.</p>
-<p><strong>Циклические зависимости.</strong> Модули ссылаются друг на друга, заменить один нельзя.</p>
-<p><strong>Микросервисы без причин.</strong> Команда тратит время на сеть и согласованность.</p>
-<div class="callout pitfall"><span class="label">Архитектура не обязана быть красивой на схеме. Она должна объяснять, куда добавлять новую функцию и что при этом не придётся менять.</span></div>
+<p>У сетевого взаимодействия есть свойства, которые легко забыть. Их называют <strong>заблуждениями распределённых вычислений</strong>: сеть надёжна, задержка равна нулю, пропускная способность бесконечна, сеть безопасна, топология не меняется, администратор один, стоимость передачи нулевая, сеть однородна. Каждое утверждение ложно хотя бы иногда. В монолите вызов функции не может «не дойти», а в сервисах это обычная ситуация.</p>
+<p>Второй фактор это <strong>закон Конвея</strong>: структура системы повторяет структуру коммуникаций организации <a href="http://www.melconway.com/Home/Committees_Paper.html">Conway, 1968</a>. Если две группы почти не общаются, их модули тоже будут слабо связаны, и наоборот. Закон не предписывает, как делить систему, но объясняет, почему деление по командам часто важнее технической красоты.</p>
+<figure class="figure" data-fig="monolith-choice" data-one="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"><iframe title="Figure 3: monolith-choice" scrolling="no"></iframe><figcaption>Выберите условия работы: размер команды, режим выпуска и нагрузку. Схема покажет подходящую форму и цену каждого варианта.</figcaption></figure>
 
-<h2 id="итоги"><span class="num">08</span>Итоги</h2>
+<table>
+<thead>
+<tr>
+<th>Условие</th>
+<th>Монолит</th>
+<th>Сервисы</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>команда до пяти человек</td>
+<td>проще</td>
+<td>лишняя работа</td>
+</tr>
+<tr>
+<td>общая база и транзакции</td>
+<td>естественно</td>
+<td>требует согласования</td>
+</tr>
+<tr>
+<td>независимые выпуски частей</td>
+<td>сложнее</td>
+<td>основная выгода</td>
+</tr>
+<tr>
+<td>разная нагрузка на части</td>
+<td>масштабируется целиком</td>
+<td>масштабируется точечно</td>
+</tr>
+<tr>
+<td>поиск дефекта</td>
+<td>один журнал</td>
+<td>нужна трассировка</td>
+</tr>
+<tr>
+<td>стоимость инфраструктуры</td>
+<td>ниже</td>
+<td>выше</td>
+</tr>
+</tbody>
+</table>
+<p>Микросервисы окупаются, когда есть несколько команд, которым нужны независимые выпуски, и когда части системы действительно имеют разную нагрузку. Если этих условий нет, сеть добавляет стоимость без выгоды.</p>
+<p>Отдельная проблема это данные. В монолите две операции можно объединить в транзакцию: списание и запись истории либо происходят вместе, либо не происходят. В сервисах каждая служба владеет своей базой, и общая транзакция невозможна. Приходится проектировать компенсации: если второй шаг не удался, первый отменяется отдельной операцией. Это не запрет, а цена, которую нужно назвать заранее.</p>
+<p>Есть и промежуточный путь: несколько служб только там, где есть настоящая граница, остальное в одном приложении. Такая схема сложнее монолита, но дешевле полного разделения. Она требует дисциплины: если службы читают одни таблицы, независимыми они не стали.</p>
+<p>Развёртывание меняет и работу команды. В монолите выпуск один на всех: чтобы отправить свою правку, нужно, чтобы была готова чужая. В сервисах выпуски независимы, но появляется обязанность следить за совместимостью контрактов. Независимость не бесплатна, она переходит из координации людей в координацию версий.</p>
+<p>Для учебного проекта это важное наблюдение. Пока над системой работают два-три человека, координация выпусков почти ничего не стоит, а совместимость контрактов требует времени. Поэтому монолит чаще оказывается дешевле не потому, что он «правильнее», а потому, что команда маленькая.</p>
+<p>Начинать с микросервисов ради моды значит платить за сложность до появления причин. Начинать с монолита и выделять службы по мере роста тоже нормально, если границы модулей уже проведены. Модульный монолит позволяет выделить часть позже, потому что зависимости уже направлены.</p>
+<h2 id="реальные-случаи"><span class="num">08</span>Реальные случаи</h2>
+<p>Два случая показывают, что выбор формы зависит от условий, а не от общих лозунгов.</p>
+<h3>Segment: от 140 служб к одной, 2018</h3>
+<p>Компания Segment построила обработку событий как набор микросервисов: каждая интеграция с внешней системой была отдельной службой. Со временем служб стало больше 140. Общие библиотеки расходились по версиям, изменение библиотеки требовало проверки десятков служб, а тесты занимали до часа.</p>
+<p>В публикации 2018 года инженер компании описывает результат: три инженера почти всё время поддерживали систему, скорость разработки упала, число дефектов выросло. Команда собрала службы в одно приложение. Операционная нагрузка перестала расти с каждой новой интеграцией, а тесты и выпуск упростились <a href="https://www.twilio.com/en-us/blog/developers/best-practices/goodbye-microservices">Segment, 2018</a>.</p>
+<p>Урок не в том, что микросервисы плохи. Урок в том, что границы проводили по числу интеграций, а не по силам команды. Сеть и независимые выпуски не давали выгоды, потому что выпускала всё одна небольшая команда.</p>
+<h3>Prime Video: мониторинг на монолите, 2023</h3>
+<p>Сервис проверки качества видео в Prime Video был распределённым: оркестрация, несколько функций и хранилищ. Команда перенесла его в одно приложение и опубликовала разбор: инфраструктурные расходы снизились более чем на 90 процентов, а система продолжила обрабатывать тысячи потоков <a href="https://web.archive.org/web/20240717095641/https://www.primevideotech.com/video-streaming/scaling-up-the-prime-video-audio-video-monitoring-service-and-reducing-costs-by-90">Prime Video, 2023</a>.</p>
+<p>Важная оговорка: речь идёт об одном сервисе мониторинга, а не обо всей платформе. Публикация вызвала спор, и критики справедливо заметили, что случай не доказывает вред микросервисов вообще. Он показывает другое: если у части системы высокая связность данных и низкая потребность в независимом масштабировании, распределение добавляет стоимость.</p>
+<table>
+<thead>
+<tr>
+<th>Случай</th>
+<th>Условия</th>
+<th>Решение</th>
+<th>Результат</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Segment, 2018</td>
+<td>одна небольшая команда, 140 служб</td>
+<td>свести в одно приложение</td>
+<td>ниже операционная нагрузка</td>
+</tr>
+<tr>
+<td>Prime Video, 2023</td>
+<td>один сервис, тесная работа с данными</td>
+<td>монолит вместо распределения</td>
+<td>расходы ниже на 90 процентов</td>
+</tr>
+</tbody>
+</table>
+<p>Общее в двух случаях одно: форму выбирали по условиям, а не по названию. И в обоих случаях решение пересмотрели, когда условия изменились.</p>
+<p>Оба случая стоит читать с поправкой на отбор. Компании публикуют истории, которые подтверждают их решение, а неудачные переезды обсуждают реже. Поэтому из двух публикаций нельзя вывести правило «монолит лучше сервисов». Можно вывести более скромное: у распределения есть операционная цена, и она проявляется тем сильнее, чем меньше команда и чем теснее связаны данные.</p>
+<p>Третья крайность описана в эссе «Big Ball of Mud». Авторы называют такую структуру, где границы стёрты, а код растёт слоями заплаток, распространённой на практике <a href="https://www.laputan.org/mud/">Foote, Yoder, 1997</a>. Это не архитектурный стиль, а результат отсутствия решений: каждый следующий разработчик выбирает самый быстрый путь, и через год быстрый путь проходит через всё.</p></div>
+</div>
+
+<div class="gate-step" data-gate>
+<p class="gate-action"><button type="button" class="gate-btn" aria-expanded="false"><span class="gate-q" aria-hidden="true">?</span><span>Почему схема, которая показывает всё сразу, не отвечает ни на один вопрос?</span></button></p>
+<div class="gate-content" hidden><h2 id="как-описать-архитектуру"><span class="num">09</span>Как описать архитектуру</h2>
+<p>Описание нужно не для отчёта, а для ответа на вопросы читателя. Модель C4 предлагает четыре уровня, каждый для своей аудитории <a href="https://c4model.com">C4 model</a>:</p>
+<ul>
+<li><strong>контекст</strong>: система и внешние участники;</li>
+<li><strong>контейнеры</strong>: приложение, база, браузер, внешние службы;</li>
+<li><strong>компоненты</strong>: крупные части внутри контейнера;</li>
+<li><strong>код</strong>: классы и функции, нужны редко.</li>
+</ul>
+<p>Для учебного проекта достаточно первых двух уровней и одной схемы компонентов. Четвёртый уровень быстро устаревает и почти никогда не нужен целиком.</p>
+<p>Второй инструмент это <strong>ADR</strong>, запись архитектурного решения. Формат короткий: контекст, решение, причина, последствия. В лекции о процессе он уже встречался. Здесь важно, что ADR фиксирует не только выбор, но и отвергнутые варианты. Через год вопрос «почему не взяли серверную базу» получит ответ без археологии.</p>
+<p>Пример записи для учебного продукта:</p>
+<div class="codehilite" data-lang="text"><pre><span></span><code>Контекст: система заявок, одна команда, до 40 пользователей, один сервер.
+Решение: одно приложение, модули ui, app, domain, infra.
+Причина: общая база и простые транзакции, нет отдельной команды сопровождения.
+Отвергнуто: две службы, потому что независимых выпусков пока нет.
+Последствия: масштабируется целиком, разделение потребует вынести модуль.
+</code></pre></div>
+
+<p>Такая запись занимает десять строк и отвечает на вопросы, которые обычно задают через год. Она же защищает от повторного обсуждения того же решения каждые полгода.</p>
+<p>Хорошая схема отвечает на один вопрос. Проверить это просто: сформулируйте вопрос, на который схема должна ответить, и посмотрите, есть ли на ней ответ. Если схема показывает всё сразу, она не отвечает ни на что.</p>
+<p>Чего на архитектурной схеме быть не должно: полей класса, приватных методов, каждой таблицы базы и каждой кнопки. Это детали другого уровня. Они не помогают понять, где проходит граница, зато создают ощущение полноты. Полная схема быстро устаревает, потому что любая правка кода требует её обновления.</p>
+<p>Полезный чек-лист схемы:</p>
+<ul>
+<li>есть граница системы;</li>
+<li>подписаны внешние участники;</li>
+<li>у стрелок есть направление и смысл;</li>
+<li>указаны технологии там, где это важно;</li>
+<li>нет деталей, которые не нужны для вопроса;</li>
+<li>есть дата и автор.</li>
+</ul>
+<p>Последний пункт часто забывают. Схема без даты через полгода становится источником ложных сведений.</p>
+<h2 id="где-архитектура-ломается"><span class="num">10</span>Где архитектура ломается</h2>
+<p><strong>Правила в интерфейсе.</strong> Проверка бизнес-правила живёт в обработчике кнопки и не работает в API.</p>
+<p><strong>Слой протекает.</strong> Экран обращается к таблице базы напрямую. Сначала это одна кнопка, потом пять.</p>
+<p><strong>Общий модуль всего.</strong> В <code>utils</code> складывают всё, и он меняется от любой задачи. Такой модуль становится обязательной зависимостью для всех.</p>
+<p><strong>Циклические зависимости.</strong> Модули ссылаются друг на друга, заменить один нельзя.</p>
+<p><strong>Микросервисы без причин.</strong> Команда тратит время на сеть и согласованность, не получая независимых выпусков.</p>
+<p><strong>Архитектура ради схемы.</strong> Диаграмма красивая, но на вопрос «куда добавить функцию» не отвечает.</p>
+<p><strong>Скрытая общая база.</strong> Две службы читают одни таблицы, поэтому независимыми они не стали.</p>
+<p><strong>Решения без записи.</strong> Через год никто не помнит, почему выбрано именно так, и всё меняют заново.</p>
+<p><strong>Схема без границы.</strong> На рисунке видны классы, но непонятно, что входит в систему, а что внешнее.</p>
+<p><strong>Служба ради названия.</strong> Отдельный процесс запущен, но данные общие, выпуски совместные и выгоды нет.</p>
+<p><strong>Контракт без ошибок.</strong> Описан успешный ответ, а поведение при сбое каждый вызывающий придумывает сам.</p>
+<p>Общая причина у этих ошибок одна: решение принято, но не записано и не проверено. Архитектура существует не в документе, а в правилах, которые соблюдают. Если правило нельзя проверить, оно постепенно исчезает.</p>
+<div class="callout pitfall"><span class="label">Архитектура не обязана быть красивой на схеме. Она должна объяснять, куда добавлять новую функцию и что при этом не придётся менять.</span></div></div>
+</div>
+
+<div class="gate-step" data-gate>
+<p class="gate-action"><button type="button" class="gate-btn" aria-expanded="false"><span class="gate-q" aria-hidden="true">?</span><span>Почему перед первой строкой кода стоит проверить границы модулей?</span></button></p>
+<div class="gate-content" hidden><h2 id="чек-лист-архитектуры-учебного-продукта"><span class="num">11</span>Чек-лист архитектуры учебного продукта</h2>
+<p>Перед реализацией стоит ответить на десять вопросов.</p>
+<ol>
+<li>Какие части системы можно назвать и чем каждая отвечает?</li>
+<li>Какие зависимости разрешены, а какие запрещены?</li>
+<li>Где живут бизнес-правила и можно ли их проверить без интерфейса?</li>
+<li>Что скрыто за контрактами и что можно заменить?</li>
+<li>Какая схема данных и кто её владелец?</li>
+<li>Какие нефункциональные требования важны и как их проверить?</li>
+<li>Какие внешние системы и что будет при их недоступности?</li>
+<li>Как система разворачивается и где хранятся настройки?</li>
+<li>Какие решения уже приняты и где они записаны?</li>
+<li>Что произойдёт с системой, если команда вырастет вдвое?</li>
+</ol>
+<p>Ответы не обязаны быть длинными. Достаточно таблицы на одну страницу и двух схем. Главное, чтобы ответы существовали до того, как код закрепит случайный вариант.</p>
+<p>Проверку удобно превратить в короткое упражнение на десять минут. Один участник называет функцию, другой показывает, через какой сценарий она проходит. Если ответ «экран вызывает базу напрямую», граница уже нарушена. Если ответ «сценарий вызывает модель, модель вызывает репозиторий», правило работает.</p>
+<p>Второе упражнение: назвать изменение, которое потребует правки в трёх местах. Если такое изменение находится, архитектура ещё не готова к росту. Если нет, возможно, система слишком мала, чтобы обсуждать слои, и это нормально.</p>
+<h2 id="итоги"><span class="num">12</span>Итоги</h2>
 <ul>
 <li>Архитектура задаёт части системы и правила связей.</li>
 <li>Высокая связность и низкая связанность упрощают изменения.</li>
 <li>Слои разделяют интерфейс, сценарии, правила и хранение.</li>
+<li>Направление зависимостей важнее числа слоёв.</li>
 <li>Контракт позволяет заменить реализацию.</li>
-<li>Монолит проще для небольшого продукта.</li>
-</ul></div>
-</div>
-
-<div class="gate-step" data-gate>
-<p class="gate-action"><button type="button" class="gate-btn" aria-expanded="false"><span class="gate-q" aria-hidden="true">?</span><span>Почему общий модуль полезных функций со временем становится источником ошибок?</span></button></p>
-<div class="gate-content" hidden><div class="quiz" data-quiz data-quiz-guard><div class="quiz-who"><label class="quiz-who-label"><span>ФИО</span><input type="text" class="quiz-name" data-quiz-name maxlength="80" autocomplete="off" placeholder="Иванов Иван Иванович"></label><span class="quiz-attempts" data-quiz-attempts>две попытки на лекцию</span><span class="quiz-note" data-who-note hidden></span></div><div class="quiz-q" data-type="single" data-correct="1" data-q="1"><p class="quiz-p"><span class="quiz-no" aria-hidden="true">01</span>Куда идут зависимости в слоистой архитектуре?</p><div class="opts"><label class="opt"><input type="radio" name="q106_0" value="2" autocomplete="off"><span>В обе стороны без правил</span></label><label class="opt"><input type="radio" name="q106_0" value="1" autocomplete="off"><span>Снизу вверх</span></label><label class="opt"><input type="radio" name="q106_0" value="0" autocomplete="off" data-ok><span>Сверху вниз</span></label><label class="opt"><input type="radio" name="q106_0" value="3" autocomplete="off"><span>По кругу</span></label></div><p class="quiz-why" hidden>От интерфейса к хранению.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="short" data-q="2" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">02</span>Как называется зависимость между модулями?</p><input type="text" class="short-answer" data-answers="[&quot;связанность&quot;, &quot;coupling&quot;]" placeholder="Введите ответ" autocomplete="off" spellcheck="false" aria-label="Как называется зависимость между модулями?"><p class="quiz-why" hidden>Между модулями.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="multi" data-correct="4" data-q="3" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">03</span>Какие признаки хорошей архитектуры?</p><div class="opts"><label class="opt"><input type="checkbox" name="q106_2" value="0" autocomplete="off" data-ok><span>Высокая связность</span></label><label class="opt"><input type="checkbox" name="q106_2" value="3" autocomplete="off" data-ok><span>Контракты между частями</span></label><label class="opt"><input type="checkbox" name="q106_2" value="4" autocomplete="off"><span>Все правила в интерфейсе</span></label><label class="opt"><input type="checkbox" name="q106_2" value="2" autocomplete="off" data-ok><span>Понятное направление зависимостей</span></label><label class="opt"><input type="checkbox" name="q106_2" value="5" autocomplete="off"><span>Циклические зависимости</span></label><label class="opt"><input type="checkbox" name="q106_2" value="1" autocomplete="off" data-ok><span>Низкая связанность</span></label></div><p class="quiz-why" hidden>Остальное плохо.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="4" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">04</span>Что задаёт архитектура?</p><div class="opts"><label class="opt"><input type="radio" name="q106_3" value="3" autocomplete="off"><span>Цвет интерфейса</span></label><label class="opt"><input type="radio" name="q106_3" value="0" autocomplete="off" data-ok><span>Крупные части системы и правила связей</span></label><label class="opt"><input type="radio" name="q106_3" value="2" autocomplete="off"><span>Число тестов</span></label><label class="opt"><input type="radio" name="q106_3" value="1" autocomplete="off"><span>Имена переменных</span></label></div><p class="quiz-why" hidden>Крупные решения.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="5" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">05</span>Что такое контракт компонента?</p><div class="opts"><label class="opt"><input type="radio" name="q106_4" value="2" autocomplete="off"><span>Список файлов</span></label><label class="opt"><input type="radio" name="q106_4" value="1" autocomplete="off"><span>Текст лицензии</span></label><label class="opt"><input type="radio" name="q106_4" value="3" autocomplete="off"><span>Пароль доступа</span></label><label class="opt"><input type="radio" name="q106_4" value="0" autocomplete="off" data-ok><span>Описание входа, выхода и ошибок</span></label></div><p class="quiz-why" hidden>Граница компонента.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="multi" data-correct="4" data-q="6" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">06</span>Какие слои типичны для приложения?</p><div class="opts"><label class="opt"><input type="checkbox" name="q106_5" value="0" autocomplete="off" data-ok><span>Представление</span></label><label class="opt"><input type="checkbox" name="q106_5" value="4" autocomplete="off"><span>Бухгалтерия</span></label><label class="opt"><input type="checkbox" name="q106_5" value="2" autocomplete="off" data-ok><span>Предметная область</span></label><label class="opt"><input type="checkbox" name="q106_5" value="5" autocomplete="off"><span>Склад</span></label><label class="opt"><input type="checkbox" name="q106_5" value="3" autocomplete="off" data-ok><span>Инфраструктура</span></label><label class="opt"><input type="checkbox" name="q106_5" value="1" autocomplete="off" data-ok><span>Приложение</span></label></div><p class="quiz-why" hidden>Остальное не слои.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="7" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">07</span>Что такое связанность?</p><div class="opts"><label class="opt"><input type="radio" name="q106_6" value="1" autocomplete="off"><span>Число функций в модуле</span></label><label class="opt"><input type="radio" name="q106_6" value="2" autocomplete="off"><span>Скорость работы</span></label><label class="opt"><input type="radio" name="q106_6" value="0" autocomplete="off" data-ok><span>Зависимость между модулями</span></label><label class="opt"><input type="radio" name="q106_6" value="3" autocomplete="off"><span>Размер базы</span></label></div><p class="quiz-why" hidden>Между модулями.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="short" data-q="8" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">08</span>Что описывает вход, выход и ошибки компонента?</p><input type="text" class="short-answer" data-answers="[&quot;контракт&quot;, &quot;интерфейс&quot;]" placeholder="Введите ответ" autocomplete="off" spellcheck="false" aria-label="Что описывает вход, выход и ошибки компонента?"><p class="quiz-why" hidden>Граница компонента.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="9" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">09</span>Почему бизнес-правило в интерфейсе это ошибка?</p><div class="opts"><label class="opt"><input type="radio" name="q106_8" value="3" autocomplete="off"><span>Оно требует базы</span></label><label class="opt"><input type="radio" name="q106_8" value="2" autocomplete="off"><span>Его нельзя протестировать</span></label><label class="opt"><input type="radio" name="q106_8" value="0" autocomplete="off" data-ok><span>Оно не работает в другом канале</span></label><label class="opt"><input type="radio" name="q106_8" value="1" autocomplete="off"><span>Оно слишком сложное</span></label></div><p class="quiz-why" hidden>Правило должно жить в модели.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="10" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">10</span>Что такое связность модуля?</p><div class="opts"><label class="opt"><input type="radio" name="q106_9" value="1" autocomplete="off"><span>Сколько модулей он вызывает</span></label><label class="opt"><input type="radio" name="q106_9" value="2" autocomplete="off"><span>Сколько строк кода содержит</span></label><label class="opt"><input type="radio" name="q106_9" value="0" autocomplete="off" data-ok><span>Насколько его части решают одну задачу</span></label><label class="opt"><input type="radio" name="q106_9" value="3" autocomplete="off"><span>Сколько у него авторов</span></label></div><p class="quiz-why" hidden>Внутри модуля.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="multi" data-correct="4" data-q="11" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">11</span>Какие ошибки архитектуры типичны?</p><div class="opts"><label class="opt"><input type="checkbox" name="q106_10" value="1" autocomplete="off" data-ok><span>Слой протекает</span></label><label class="opt"><input type="checkbox" name="q106_10" value="3" autocomplete="off" data-ok><span>Циклические зависимости</span></label><label class="opt"><input type="checkbox" name="q106_10" value="5" autocomplete="off"><span>Разделение слоёв</span></label><label class="opt"><input type="checkbox" name="q106_10" value="4" autocomplete="off"><span>Явные контракты</span></label><label class="opt"><input type="checkbox" name="q106_10" value="0" autocomplete="off" data-ok><span>Правила в интерфейсе</span></label><label class="opt"><input type="checkbox" name="q106_10" value="2" autocomplete="off" data-ok><span>Общий модуль всего</span></label></div><p class="quiz-why" hidden>Остальное хорошо.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="12" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">12</span>Какая связанность считается хорошей?</p><div class="opts"><label class="opt"><input type="radio" name="q106_11" value="1" autocomplete="off"><span>Высокая</span></label><label class="opt"><input type="radio" name="q106_11" value="0" autocomplete="off" data-ok><span>Низкая</span></label><label class="opt"><input type="radio" name="q106_11" value="3" autocomplete="off"><span>Нулевая всегда</span></label><label class="opt"><input type="radio" name="q106_11" value="2" autocomplete="off"><span>Любая</span></label></div><p class="quiz-why" hidden>Меньше зависимостей.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="13" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">13</span>Что делает слой представления?</p><div class="opts"><label class="opt"><input type="radio" name="q106_12" value="2" autocomplete="off"><span>Считает налоги</span></label><label class="opt"><input type="radio" name="q106_12" value="1" autocomplete="off"><span>Хранит данные</span></label><label class="opt"><input type="radio" name="q106_12" value="3" autocomplete="off"><span>Управляет транзакциями</span></label><label class="opt"><input type="radio" name="q106_12" value="0" autocomplete="off" data-ok><span>Принимает ввод и показывает результат</span></label></div><p class="quiz-why" hidden>Интерфейс.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="short" data-q="14" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">14</span>Как называется единство задач внутри модуля?</p><input type="text" class="short-answer" data-answers="[&quot;связность&quot;, &quot;cohesion&quot;]" placeholder="Введите ответ" autocomplete="off" spellcheck="false" aria-label="Как называется единство задач внутри модуля?"><p class="quiz-why" hidden>Внутри модуля.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="15" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">15</span>Чем монолит проще микросервисов?</p><div class="opts"><label class="opt"><input type="radio" name="q106_14" value="3" autocomplete="off"><span>Он не требует тестов</span></label><label class="opt"><input type="radio" name="q106_14" value="0" autocomplete="off" data-ok><span>Одна сборка и один процесс</span></label><label class="opt"><input type="radio" name="q106_14" value="2" autocomplete="off"><span>В нём нет базы</span></label><label class="opt"><input type="radio" name="q106_14" value="1" autocomplete="off"><span>Он всегда быстрее</span></label></div><p class="quiz-why" hidden>Меньше сетевой сложности.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><p class="quiz-note quiz-submit-note" data-quiz-note hidden></p><div class="quiz-result" data-quiz-result hidden aria-live="polite"><span class="label">Результат теста</span><h3>Тест завершён</h3><p class="modal-name-line">ФИО: <b data-student-name></b></p><p class="modal-result" data-modal-result></p><p class="modal-result" data-modal-wrong></p><dl class="modal-times"><div><dt>Время выполнения теста</dt><dd data-test-time>00:00</dd></div><div><dt>Время просмотра лекции</dt><dd data-view-time>00:00</dd></div></dl></div></div></div>
+<li>Монолит проще для небольшого продукта, сервисы требуют условий.</li>
+<li>Описание архитектуры делают под конкретный вопрос читателя.</li>
+<li>Решение фиксируют в ADR вместе с причиной.</li>
+</ul>
+<h2 id="источники"><span class="num">13</span>Источники</h2>
+<ol>
+<li>ISO/IEC/IEEE 42010:2022. Software, systems and enterprise. Architecture description. https://www.iso.org/standard/74393.html</li>
+<li>Parnas D. On the Criteria To Be Used in Decomposing Systems into Modules. Communications of the ACM, 1972. https://doi.org/10.1145/361598.361623</li>
+<li>IEEE Computer Society. SWEBOK Guide v4.0. https://www.computer.org/education/bodies-of-knowledge/software-engineering/v4</li>
+<li>Brown S. The C4 model for visualising software architecture. https://c4model.com</li>
+<li>Fowler M. Presentation Domain Data Layering. https://martinfowler.com/bliki/PresentationDomainDataLayering.html</li>
+<li>Fowler M., Lewis J. Microservices. https://martinfowler.com/articles/microservices.html</li>
+<li>Conway M. How Do Committees Invent? Datamation, 1968. http://www.melconway.com/Home/Committees_Paper.html</li>
+<li>Noonan A. Goodbye Microservices. Segment, 2018. https://www.twilio.com/en-us/blog/developers/best-practices/goodbye-microservices</li>
+<li>Prime Video Tech. Scaling up the Prime Video audio/video monitoring service and reducing costs by 90%, 2023. https://web.archive.org/web/20240717095641/https://www.primevideotech.com/video-streaming/scaling-up-the-prime-video-audio-video-monitoring-service-and-reducing-costs-by-90</li>
+<li>Foote B., Yoder J. Big Ball of Mud, 1997. https://www.laputan.org/mud/</li>
+</ol>
+<div class="quiz" data-quiz data-quiz-guard><div class="quiz-who"><label class="quiz-who-label"><span>ФИО</span><input type="text" class="quiz-name" data-quiz-name maxlength="80" autocomplete="off" placeholder="Иванов Иван Иванович"></label><span class="quiz-attempts" data-quiz-attempts>две попытки на лекцию</span><span class="quiz-note" data-who-note hidden></span></div><div class="quiz-q" data-type="single" data-correct="1" data-q="1"><p class="quiz-p"><span class="quiz-no" aria-hidden="true">01</span>Почему бизнес-правило в интерфейсе это ошибка?</p><div class="opts"><label class="opt"><input type="radio" name="q150_0" value="3" autocomplete="off"><span>Оно требует базы</span></label><label class="opt"><input type="radio" name="q150_0" value="2" autocomplete="off"><span>Его нельзя протестировать</span></label><label class="opt"><input type="radio" name="q150_0" value="0" autocomplete="off" data-ok><span>Оно не работает в другом канале</span></label><label class="opt"><input type="radio" name="q150_0" value="1" autocomplete="off"><span>Оно слишком сложное</span></label></div><p class="quiz-why" hidden>Правило должно жить в модели.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="short" data-q="2" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">02</span>Как называется зависимость между модулями?</p><input type="text" class="short-answer" data-answers="[&quot;связанность&quot;, &quot;coupling&quot;]" placeholder="Введите ответ" autocomplete="off" spellcheck="false" aria-label="Как называется зависимость между модулями?"><p class="quiz-why" hidden>Между модулями.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="3" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">03</span>Какая связанность считается хорошей?</p><div class="opts"><label class="opt"><input type="radio" name="q150_2" value="1" autocomplete="off"><span>Высокая</span></label><label class="opt"><input type="radio" name="q150_2" value="0" autocomplete="off" data-ok><span>Низкая</span></label><label class="opt"><input type="radio" name="q150_2" value="3" autocomplete="off"><span>Нулевая всегда</span></label><label class="opt"><input type="radio" name="q150_2" value="2" autocomplete="off"><span>Любая</span></label></div><p class="quiz-why" hidden>Меньше зависимостей.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="multi" data-correct="3" data-q="4" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">04</span>Что даёт принцип Парнаса?</p><div class="opts"><label class="opt"><input type="checkbox" name="q150_3" value="1" autocomplete="off" data-ok><span>Модуль прячет то, что может измениться</span></label><label class="opt"><input type="checkbox" name="q150_3" value="4" autocomplete="off"><span>Все данные хранятся глобально</span></label><label class="opt"><input type="checkbox" name="q150_3" value="2" autocomplete="off" data-ok><span>Интерфейс важнее реализации</span></label><label class="opt"><input type="checkbox" name="q150_3" value="3" autocomplete="off"><span>Модуль равен одной функции</span></label><label class="opt"><input type="checkbox" name="q150_3" value="0" autocomplete="off" data-ok><span>Границу проводят по скрываемому решению</span></label></div><p class="quiz-why" hidden>Остальное не следует из принципа.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="5" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">05</span>Чем монолит проще микросервисов?</p><div class="opts"><label class="opt"><input type="radio" name="q150_4" value="3" autocomplete="off"><span>Он не требует тестов</span></label><label class="opt"><input type="radio" name="q150_4" value="0" autocomplete="off" data-ok><span>Одна сборка и один процесс</span></label><label class="opt"><input type="radio" name="q150_4" value="2" autocomplete="off"><span>В нём нет базы</span></label><label class="opt"><input type="radio" name="q150_4" value="1" autocomplete="off"><span>Он всегда быстрее</span></label></div><p class="quiz-why" hidden>Меньше сетевой сложности.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="6" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">06</span>Что такое связность модуля?</p><div class="opts"><label class="opt"><input type="radio" name="q150_5" value="1" autocomplete="off"><span>Сколько модулей он вызывает</span></label><label class="opt"><input type="radio" name="q150_5" value="2" autocomplete="off"><span>Сколько строк кода содержит</span></label><label class="opt"><input type="radio" name="q150_5" value="0" autocomplete="off" data-ok><span>Насколько его части решают одну задачу</span></label><label class="opt"><input type="radio" name="q150_5" value="3" autocomplete="off"><span>Сколько у него авторов</span></label></div><p class="quiz-why" hidden>Внутри модуля.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="short" data-q="7" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">07</span>Что фиксирует контекст, решение, причину и последствия?</p><input type="text" class="short-answer" data-answers="[&quot;ADR&quot;, &quot;architecture decision record&quot;]" placeholder="Введите ответ" autocomplete="off" spellcheck="false" aria-label="Что фиксирует контекст, решение, причину и последствия?"><p class="quiz-why" hidden>Запись архитектурного решения.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="8" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">08</span>Что такое связанность?</p><div class="opts"><label class="opt"><input type="radio" name="q150_7" value="1" autocomplete="off"><span>Число функций в модуле</span></label><label class="opt"><input type="radio" name="q150_7" value="2" autocomplete="off"><span>Скорость работы</span></label><label class="opt"><input type="radio" name="q150_7" value="0" autocomplete="off" data-ok><span>Зависимость между модулями</span></label><label class="opt"><input type="radio" name="q150_7" value="3" autocomplete="off"><span>Размер базы</span></label></div><p class="quiz-why" hidden>Между модулями.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="multi" data-correct="4" data-q="9" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">09</span>Какие признаки хорошей архитектуры?</p><div class="opts"><label class="opt"><input type="checkbox" name="q150_8" value="0" autocomplete="off" data-ok><span>Высокая связность</span></label><label class="opt"><input type="checkbox" name="q150_8" value="3" autocomplete="off" data-ok><span>Контракты между частями</span></label><label class="opt"><input type="checkbox" name="q150_8" value="4" autocomplete="off"><span>Все правила в интерфейсе</span></label><label class="opt"><input type="checkbox" name="q150_8" value="2" autocomplete="off" data-ok><span>Понятное направление зависимостей</span></label><label class="opt"><input type="checkbox" name="q150_8" value="5" autocomplete="off"><span>Циклические зависимости</span></label><label class="opt"><input type="checkbox" name="q150_8" value="1" autocomplete="off" data-ok><span>Низкая связанность</span></label></div><p class="quiz-why" hidden>Остальное плохо.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="10" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">10</span>Что задаёт архитектура?</p><div class="opts"><label class="opt"><input type="radio" name="q150_9" value="3" autocomplete="off"><span>Цвет интерфейса</span></label><label class="opt"><input type="radio" name="q150_9" value="0" autocomplete="off" data-ok><span>Крупные части системы и правила связей</span></label><label class="opt"><input type="radio" name="q150_9" value="2" autocomplete="off"><span>Число тестов</span></label><label class="opt"><input type="radio" name="q150_9" value="1" autocomplete="off"><span>Имена переменных</span></label></div><p class="quiz-why" hidden>Крупные решения, которые дорого менять.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="11" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">11</span>Что такое контракт компонента?</p><div class="opts"><label class="opt"><input type="radio" name="q150_10" value="2" autocomplete="off"><span>Список файлов</span></label><label class="opt"><input type="radio" name="q150_10" value="1" autocomplete="off"><span>Текст лицензии</span></label><label class="opt"><input type="radio" name="q150_10" value="3" autocomplete="off"><span>Пароль доступа</span></label><label class="opt"><input type="radio" name="q150_10" value="0" autocomplete="off" data-ok><span>Описание входа, выхода и ошибок</span></label></div><p class="quiz-why" hidden>Граница компонента.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="multi" data-correct="4" data-q="12" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">12</span>Какие слои типичны для приложения?</p><div class="opts"><label class="opt"><input type="checkbox" name="q150_11" value="0" autocomplete="off" data-ok><span>Представление</span></label><label class="opt"><input type="checkbox" name="q150_11" value="4" autocomplete="off"><span>Бухгалтерия</span></label><label class="opt"><input type="checkbox" name="q150_11" value="2" autocomplete="off" data-ok><span>Предметная область</span></label><label class="opt"><input type="checkbox" name="q150_11" value="5" autocomplete="off"><span>Склад</span></label><label class="opt"><input type="checkbox" name="q150_11" value="3" autocomplete="off" data-ok><span>Инфраструктура</span></label><label class="opt"><input type="checkbox" name="q150_11" value="1" autocomplete="off" data-ok><span>Приложение</span></label></div><p class="quiz-why" hidden>Остальное не слои.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="13" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">13</span>Что делает слой представления?</p><div class="opts"><label class="opt"><input type="radio" name="q150_12" value="2" autocomplete="off"><span>Считает налоги</span></label><label class="opt"><input type="radio" name="q150_12" value="1" autocomplete="off"><span>Хранит данные</span></label><label class="opt"><input type="radio" name="q150_12" value="3" autocomplete="off"><span>Управляет транзакциями</span></label><label class="opt"><input type="radio" name="q150_12" value="0" autocomplete="off" data-ok><span>Принимает ввод и показывает результат</span></label></div><p class="quiz-why" hidden>Интерфейс.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="short" data-q="14" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">14</span>Как называется единство задач внутри модуля?</p><input type="text" class="short-answer" data-answers="[&quot;связность&quot;, &quot;cohesion&quot;]" placeholder="Введите ответ" autocomplete="off" spellcheck="false" aria-label="Как называется единство задач внутри модуля?"><p class="quiz-why" hidden>Внутри модуля.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="15" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">15</span>Куда идут зависимости в слоистой архитектуре?</p><div class="opts"><label class="opt"><input type="radio" name="q150_14" value="2" autocomplete="off"><span>В обе стороны без правил</span></label><label class="opt"><input type="radio" name="q150_14" value="1" autocomplete="off"><span>Снизу вверх</span></label><label class="opt"><input type="radio" name="q150_14" value="0" autocomplete="off" data-ok><span>Сверху вниз</span></label><label class="opt"><input type="radio" name="q150_14" value="3" autocomplete="off"><span>По кругу</span></label></div><p class="quiz-why" hidden>От интерфейса к хранению.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><p class="quiz-note quiz-submit-note" data-quiz-note hidden></p><div class="quiz-result" data-quiz-result hidden aria-live="polite"><span class="label">Результат теста</span><h3>Тест завершён</h3><p class="modal-name-line">ФИО: <b data-student-name></b></p><p class="modal-result" data-modal-result></p><p class="modal-result" data-modal-wrong></p><dl class="modal-times"><div><dt>Время выполнения теста</dt><dd data-test-time>00:00</dd></div><div><dt>Время просмотра лекции</dt><dd data-view-time>00:00</dd></div></dl></div></div></div>
 </div></article><nav class="pager"><a class="" href="07-prakt-02.html"><span>← Предыдущее занятие</span>Практика 2. История проекта в коммитах</a><a class="next" style="text-align:right;margin-left:auto" href="09-lek-07.html"><span>Следующее занятие →</span>Лекция 7. UML: варианты использования и классы</a></nav></main>
 <div class="modal" data-modal="warn" hidden>
   <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="warn-title">

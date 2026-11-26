@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Переписать или отменить</title>
+<style>
+  :root { --paper:#faf6f3; --card:#fffdfb; --ink:#1a1916; --muted:#6b6459; --rule:#e4d8cf; --accent:#0F8A63; --soft:#E1F5EE; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .demo { background:var(--paper); border:1px solid var(--rule); border-radius:14px; padding:18px; }
+  .head { display:flex; justify-content:space-between; align-items:flex-end; gap:16px; padding-bottom:10px; border-bottom:1px solid var(--rule); }
+  .eyebrow { margin:0 0 4px; font:600 10px/1.2 Consolas,monospace; letter-spacing:.12em; text-transform:uppercase; color:var(--accent); }
+  h3 { margin:0; font-size:20px; line-height:1.2; }
+  .counter { font:11px/1.4 Consolas,monospace; color:var(--muted); white-space:nowrap; }
+  svg { display:block; width:100%; height:auto; margin-top:6px; }
+  .opt .card { fill:#fff; stroke:#2d3142; stroke-width:1.3; transition:fill .2s, stroke .2s; }
+  .opt.on .card { fill:var(--soft); stroke:var(--accent); stroke-width:2; }
+  .opt { cursor:pointer; }
+  .opt text { font-family:Consolas,monospace; fill:#2d3142; text-anchor:middle; }
+  .opt .t { font-size:9px; }
+  .opt .c { font-size:6.4px; fill:#6b6459; }
+  .node { fill:#fff; stroke:#2d3142; stroke-width:1.3; }
+  .opt.on .node { stroke:#0F8A63; }
+  .node.new { fill:#E1F5EE; stroke:#0F8A63; }
+  .lnk { stroke:#5b5560; stroke-width:1.2; fill:none; }
+  .status { min-height:56px; margin-top:8px; padding:10px 12px; border-radius:9px; background:var(--soft); font-size:12.5px; line-height:1.45; }
+  .status b { color:var(--accent); }
+  .controls { display:flex; gap:7px; flex-wrap:wrap; margin-top:10px; }
+  button { font:600 11.5px/1 "Segoe UI",system-ui,sans-serif; padding:8px 10px; border-radius:9px; border:1px solid var(--rule); background:var(--card); color:var(--ink); cursor:pointer; }
+  button:hover { border-color:var(--accent); color:var(--accent); }
+  button.on { background:var(--accent); border-color:var(--accent); color:#fff; }
+  @media (max-width:560px) { .demo { padding:12px; } }
+</style>
+</head>
+<body>
+<div class="demo">
+  <div class="head">
+    <div><p class="eyebrow">Git · история</p><h3>Переписать или отменить</h3></div>
+    <div class="counter">выберите операцию</div>
+  </div>
+  <svg viewBox="0 0 680 186" role="img" aria-label="Четыре операции с историей и их влияние на хеши">
+    <g class="opt on" data-k="amend">
+      <rect class="card" x="14" y="12" width="158" height="118" rx="9"/>
+      <text class="t" x="93" y="32">amend</text>
+      <g class="lnk"><path d="M40 78h20"/><path d="M76 78h20"/></g>
+      <circle class="node" cx="34" cy="78" r="7"/>
+      <circle class="node" cx="70" cy="78" r="7"/>
+      <circle class="node new" cx="106" cy="78" r="7"/>
+      <circle class="node" cx="138" cy="78" r="7" stroke-dasharray="3 2" fill="none"/>
+      <text class="c" x="93" y="104">последний коммит</text>
+      <text class="c" x="93" y="115">заменён новым</text>
+    </g>
+    <g class="opt" data-k="rebase">
+      <rect class="card" x="180" y="12" width="158" height="118" rx="9"/>
+      <text class="t" x="259" y="32">rebase</text>
+      <g class="lnk"><path d="M206 70h20"/><path d="M242 70h20"/><path d="M206 92h20"/></g>
+      <circle class="node" cx="200" cy="70" r="7"/>
+      <circle class="node" cx="236" cy="70" r="7"/>
+      <circle class="node new" cx="272" cy="70" r="7"/>
+      <circle class="node" cx="272" cy="92" r="7" fill="#E1F5EE" stroke="#0F8A63"/>
+      <text class="c" x="259" y="110">цепочка перенесена</text>
+      <text class="c" x="259" y="121">на новую базу</text>
+    </g>
+    <g class="opt" data-k="revert">
+      <rect class="card" x="346" y="12" width="158" height="118" rx="9"/>
+      <text class="t" x="425" y="32">revert</text>
+      <g class="lnk"><path d="M368 78h18"/><path d="M402 78h18"/><path d="M436 78h18"/></g>
+      <circle class="node" cx="362" cy="78" r="7"/>
+      <circle class="node" cx="396" cy="78" r="7"/>
+      <circle class="node" cx="430" cy="78" r="7"/>
+      <circle class="node new" cx="464" cy="78" r="7"/>
+      <text class="c" x="425" y="104">добавлена отмена</text>
+      <text class="c" x="425" y="115">без переписывания</text>
+    </g>
+    <g class="opt" data-k="filter">
+      <rect class="card" x="512" y="12" width="154" height="118" rx="9"/>
+      <text class="t" x="589" y="32">filter-repo</text>
+      <g class="lnk"><path d="M534 78h18"/><path d="M568 78h18"/></g>
+      <circle class="node new" cx="528" cy="78" r="7"/>
+      <circle class="node new" cx="562" cy="78" r="7"/>
+      <circle class="node new" cx="596" cy="78" r="7"/>
+      <text class="c" x="589" y="104">изменены все хеши</text>
+      <text class="c" x="589" y="115">и вся история</text>
+    </g>
+    <text x="340" y="160" text-anchor="middle" font-family="Consolas,monospace" font-size="7.4" fill="#0F8A63">ПЕРЕЗАПИСЬ МЕНЯЕТ ХЕШИ, ОТМЕНА ДОБАВЛЯЕТ КОММИТ</text>
+  </svg>
+  <div class="status" id="status"></div>
+  <div class="controls">
+    <button data-k="amend" class="on">amend</button>
+    <button data-k="rebase">rebase</button>
+    <button data-k="revert">revert</button>
+    <button data-k="filter">filter-repo</button>
+  </div>
+</div>
+<script>
+(function () {
+  var data = {
+    amend: '<b>amend.</b> Заменяет последний коммит новым. Хеш меняется. Пока коммит не отправлен, это дешёвая правка сообщения или забытого файла. Если коммит уже у других, они получат расхождение.',
+    rebase: '<b>rebase.</b> Переносит коммиты ветки на новую базу. Хеши всех перенесённых коммитов меняются. Полезно до отправки, опасно после: у коллег останется старая цепочка.',
+    revert: '<b>revert.</b> Добавляет новый коммит, который отменяет изменения выбранного. История не переписывается, поэтому это безопасный способ отменить опубликованное.',
+    filter: '<b>filter-repo.</b> Переписывает всю историю, например удаляет секрет из старых коммитов. Меняются все хеши. Нужно согласие команды и смена самого секрета.'
+  };
+  var opts = document.querySelectorAll('.opt');
+  var buttons = document.querySelectorAll('button[data-k]');
+  var status = document.getElementById('status');
+  function apply(key) {
+    opts.forEach(function (o) { o.classList.toggle('on', o.dataset.k === key); });
+    buttons.forEach(function (b) { b.classList.toggle('on', b.dataset.k === key); });
+    status.innerHTML = data[key];
+  }
+  opts.forEach(function (o) { o.addEventListener('click', function () { apply(o.dataset.k); }); });
+  buttons.forEach(function (b) { b.addEventListener('click', function () { apply(b.dataset.k); }); });
+  apply('amend');
+})();
+</script>
+</body>
+</html>

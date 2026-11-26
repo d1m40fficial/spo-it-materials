@@ -888,54 +888,109 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <canvas class="shader-bg" width="820" height="300" aria-hidden="true" style="background:linear-gradient(135deg,#08090D,#1D9E75 58%,#08090D)"></canvas>
 <div class="badges"><span class="pill dark">Занятие 10</span><span class="pill">Технология разработки ПО</span></div>
 <div class="hero-panel"><h1>UML: варианты использования и классы</h1><p class="dek">Диаграмму выбирают по вопросу, а не по привычке. Разберём прецеденты, классы, связи и кратность.</p></div>
-<div class="glyph" aria-hidden="true">Л7</div></header><section class="outcomes"><b>После этого занятия вы сможете</b><ul><li>Строить диаграмму прецедентов с акторами и границей</li><li>Описывать классы, атрибуты и связи</li><li>Читать кратность и тип связи</li><li>Выбирать диаграмму под вопрос о системе</li></ul></section><nav class="toc"><b>Содержание занятия</b><ol><li><a href="#диаграмма-отвечает-на-вопрос">Диаграмма отвечает на вопрос</a></li><li><a href="#виды-диаграмм">Виды диаграмм</a></li><li><a href="#варианты-использования">Варианты использования</a></li><li><a href="#классы">Классы</a></li><li><a href="#связи-и-кратность">Связи и кратность</a></li><li><a href="#последовательность">Последовательность</a></li><li><a href="#где-моделирование-ломается">Где моделирование ломается</a></li><li><a href="#итоги">Итоги</a></li></ol></nav><article class="prose"><h2 id="диаграмма-отвечает-на-вопрос"><span class="num">01</span>Диаграмма отвечает на вопрос</h2>
+<div class="glyph" aria-hidden="true">Л7</div></header><section class="outcomes"><b>После этого занятия вы сможете</b><ul><li>Строить диаграмму прецедентов с акторами и границей</li><li>Описывать классы, атрибуты и связи</li><li>Читать кратность и тип связи</li><li>Выбирать диаграмму под вопрос о системе</li><li>Отличать include от extend по направлению связи</li><li>Описывать сценарий прецедента словами, а не только рисунком</li></ul></section><nav class="toc"><b>Содержание занятия</b><ol><li><a href="#диаграмма-отвечает-на-вопрос">Диаграмма отвечает на вопрос</a></li><li><a href="#нотация-и-метод">Нотация и метод</a></li><li><a href="#варианты-использования">Варианты использования</a></li><li><a href="#классы">Классы</a></li><li><a href="#последовательность">Последовательность</a></li><li><a href="#от-модели-к-данным">От модели к данным</a></li><li><a href="#согласованность-моделей">Согласованность моделей</a></li><li><a href="#что-подтверждают-исследования">Что подтверждают исследования</a></li><li><a href="#реальные-случаи">Реальные случаи</a></li><li><a href="#где-моделирование-ломается">Где моделирование ломается</a></li><li><a href="#чек-лист-модели">Чек-лист модели</a></li><li><a href="#итоги">Итоги</a></li><li><a href="#источники">Источники</a></li></ol></nav><article class="prose"><h2 id="диаграмма-отвечает-на-вопрос"><span class="num">01</span>Диаграмма отвечает на вопрос</h2>
 <p>На встрече показывают красивую диаграмму классов и спрашивают: «Кто создаёт заявку и что видит руководитель?». По классам этого не видно: они показывают структуру, но не цели пользователей.</p>
+<p>Ошибка не в диаграмме, а в выборе. Для вопроса «кто и что делает» нужна диаграмма вариантов использования. Для вопроса «из чего состоит система» нужны классы. Для вопроса «как проходит вызов» нужна последовательность.</p>
 <p><strong>UML</strong> это набор нотаций для моделей. Диаграмму выбирают по вопросу: кто и что делает, из чего состоит система, как проходит вызов.</p>
 <p>Главная мысль занятия: <strong>модель нужна для ответа, а не для отчёта</strong>. Если диаграмма не помогает принять решение, она лишняя.</p>
-<h2 id="виды-диаграмм"><span class="num">02</span>Виды диаграмм</h2>
+<h2 id="нотация-и-метод"><span class="num">02</span>Нотация и метод</h2>
+<p>UML появился в середине девяностых, когда три популярных метода моделирования объединили общую нотацию. Гради Буч описывал классы и объекты, Джеймс Рамбо строил объектное моделирование, Ивар Якобсон предложил варианты использования. К 1997 году появилась версия 1.1, которую приняла организация OMG. Современная версия 2.5.1 опубликована в 2017 году и остаётся основой нотации <a href="https://www.omg.org/spec/UML/2.5.1/">OMG UML 2.5.1</a>.</p>
+<p>Объединение дало важный побочный эффект. Нотация стала общей, а методы остались разными. Мартин Фаулер сформулировал это коротко: UML это язык для описания, а не процесс разработки <a href="https://martinfowler.com/books/uml.html">Fowler, UML Distilled</a>. Из этого следуют три практических вывода.</p>
+<p>Первый: диаграмма не решает, что моделировать. Решение принимает человек, исходя из вопроса.</p>
+<p>Второй: диаграмма не заменяет текст. Связи и кратность показывают структуру, но правило «заявку закрывает только назначенный исполнитель» в рисунок не помещается.</p>
+<p>Третий: полнота не является целью. Модель на сорок листов может быть правильной и бесполезной, потому что её никто не прочитает.</p>
+<p>В UML 2.5.1 четырнадцать видов диаграмм: семь структурных и семь поведенческих. Учить все не нужно. Для учебного проекта достаточно четырёх, и даже они используются не одновременно.</p>
+<p>Четырнадцать видов не означают четырнадцать обязательных артефактов. Полный набор диаграмм стоит дорого: каждая требует времени, согласования и обновления. Если модель не обновляют, она быстро начинает противоречить коду и приносит больше вреда, чем пользы. Поэтому набор сокращают до тех, которые отвечают на реальные вопросы команды.</p>
 <table>
 <thead>
 <tr>
 <th>Вопрос</th>
 <th>Диаграмма</th>
+<th>Тип</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td>кто и какие цели достигает</td>
 <td>варианты использования</td>
+<td>поведенческая</td>
 </tr>
 <tr>
 <td>из чего состоит система</td>
 <td>классы</td>
+<td>структурная</td>
 </tr>
 <tr>
 <td>как проходит сценарий во времени</td>
 <td>последовательность</td>
+<td>поведенческая</td>
 </tr>
 <tr>
 <td>как система меняет состояние</td>
 <td>состояний</td>
+<td>поведенческая</td>
 </tr>
 </tbody>
 </table>
-<p>Структурные диаграммы показывают состав, поведенческие показывают изменение во времени.</p>
-<h2 id="варианты-использования"><span class="num">03</span>Варианты использования</h2>
+<figure class="figure" data-fig="uml-map" data-one="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"><iframe title="Figure 1: uml-map" scrolling="no"></iframe><figcaption>Переключайте диаграммы: прецеденты показывают акторов и цели, классы показывают структуру и кратность. Обе модели описывают учебную систему заявок.</figcaption></figure>
+
+<p>Структурные диаграммы показывают состав, поведенческие показывают изменение во времени. Это деление полезно держать в голове: оно объясняет, почему одна диаграмма не может ответить на все вопросы.</p>
+<p>Выбор диаграммы удобно делать в два шага. Сначала сформулировать вопрос словами: «кто пользуется системой и зачем», «какие данные нужны», «в каком порядке идут вызовы». Затем выбрать вид, который на этот вопрос отвечает. Если вопрос не формулируется, диаграмма не нужна.</p>
+<p>Второй шаг это выбор читателя. Заказчику прецеденты понятнее классов. Разработчику классы полезнее прецедентов. Тестировщику нужны и прецеденты, и последовательность, потому что первые задают сценарии, вторая показывает порядок.</p>
+<p>Инструмент не влияет на смысл. Модель можно нарисовать в редакторе схем, на доске или на листе бумаги. Важно, чтобы обозначения читались одинаково: эллипс это прецедент, прямоугольник с тремя отделениями это класс, ромб у конца линии это агрегация или композиция. Если команда договорилась о значении фигур, дальше спорить о них не нужно.</p>
+<div class="gate-step" data-gate>
+<p class="gate-action"><button type="button" class="gate-btn" aria-expanded="false"><span class="gate-q" aria-hidden="true">?</span><span>Почему диаграмма классов не отвечает на вопрос «кто создаёт заявку»?</span></button></p>
+<div class="gate-content" hidden><h2 id="варианты-использования"><span class="num">03</span>Варианты использования</h2>
 <p><strong>Актор</strong> это роль снаружи системы. <strong>Прецедент</strong> это цель, которую актор достигает в системе.</p>
-<p>Элементы:</p>
+<p>Элементы диаграммы:</p>
 <ul>
 <li>акторы: сотрудник, администратор;</li>
 <li>граница системы: прямоугольник с названием;</li>
 <li>прецеденты: эллипсы внутри границы;</li>
 <li>связи: линии от актора к прецеденту.</li>
 </ul>
-<p><strong>include</strong> означает обязательное включение: «закрыть заявку» включает «проверить права».</p>
-<p><strong>extend</strong> означает необязательное расширение: «приложить фото» расширяет «создать заявку».</p>
-<p>Граница системы показывает, что входит в продукт, а что остаётся снаружи.</p>
-<figure class="figure" data-fig="uml-map" data-one="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"><iframe title="Figure 1: uml-map" scrolling="no"></iframe><figcaption>Переключайте диаграммы: прецеденты показывают акторов и цели, классы показывают структуру и кратность. Обе модели описывают учебную систему заявок.</figcaption></figure>
+<p>Граница системы показывает, что входит в продукт, а что остаётся снаружи. Она же защищает от типичной ошибки: поместить внутрь границы базу данных или почтовый сервер. База и почта это внешние участники или инфраструктура, но не цели пользователя.</p>
+<p>Акторы могут обобщаться. «Сотрудник» и «руководитель» оба являются «пользователем системы», если общие прецеденты у них одинаковые. Обобщение акторов уменьшает число линий: общие прецеденты рисуют один раз от общего актора, особые от частных. Злоупотреблять этим не стоит, потому что иерархия акторов быстро становится второй иерархией должностей.</p>
+<p>Полезно различать актора и канал. Один и тот же сотрудник может работать через браузер и через мобильное приложение. Это не два актора, а два канала одного актора, если цели совпадают. Если цели разные, например «заполнить заявку с телефона» и «согласовать заявку в кабинете», это уже разные прецеденты.</p>
+<h3>Прецедент и функция</h3>
+<p>Прецедент отвечает на вопрос «какой цели достигает актор», функция отвечает на вопрос «что умеет система». Разница видна на примере.</p>
+<p>Функции системы: создать запись, обновить поле, отправить уведомление. Прецеденты: «создать заявку», «взять заявку в работу», «закрыть заявку».</p>
+<p>Функция «обновить поле» не является целью пользователя. Она может быть шагом внутри прецедента, но на диаграмме прецедентов ей не место, если только система не является редактором таблиц.</p>
+<p>Проверка: можно ли объяснить прецедент одним предложением с глаголом результата. «Создать заявку» можно. «Нажать кнопку сохранить» нельзя, потому что результат это не заявка, а нажатие.</p>
+<h3>Пример описания</h3>
+<p>Для прецедента «создать заявку» описание может выглядеть так:</p>
+<ul>
+<li>актор: сотрудник;</li>
+<li>триггер: сотрудник открывает форму;</li>
+<li>основной поток: заполнить тему и описание, выбрать кабинет, сохранить, получить номер;</li>
+<li>альтернатива: сохранить черновик без кабинета;</li>
+<li>исключение: пустая тема, неизвестный кабинет, нет прав.</li>
+</ul>
+<p>Такое описание занимает десять строк и отвечает на вопросы, которые рисунок не покрывает. Его можно проверять на встрече и превращать в тесты. Диаграмма остаётся навигацией, текст становится содержанием.</p>
+<p>Основной поток это счастливый путь. Альтернативы это законные варианты: заявка без вложения, повторная отправка. Исключения это ошибки: нет прав, нет связи, данные устарели.</p>
+<p>Именно исключения чаще всего пропускают. На рисунке прецедент выглядит как одно действие, а в жизни он имеет пять путей завершения.</p>
+<h3>Уровни цели</h3>
+<p>Не каждый прецедент одинаков по масштабу. Алистер Кокберн предложил различать три уровня: обзорный, уровень цели пользователя и подфункция. Обзорный описывает работу организации целиком, уровень цели пользователя описывает законченную задачу одного актора, подфункция описывает шаг, который сам по себе не даёт ценности.</p>
+<p>Пример для системы заявок:</p>
+<ul>
+<li>обзорный: «обработать обращения сотрудников за месяц»;</li>
+<li>цель пользователя: «создать заявку»;</li>
+<li>подфункция: «проверить права на кабинет».</li>
+</ul>
+<p>Смешение уровней на одной диаграмме делает её нечитаемой. Обзорный прецедент рядом с подфункцией выглядит как равный, хотя масштаб разный.</p>
+<h3>Include и extend</h3>
+<p>Две связи вызывают больше всего путаницы.</p>
+<p><strong>include</strong> означает обязательное включение: базовый прецедент всегда выполняет включённый. Стрелка идёт от базового к включаемому, с пометкой <code>&lt;&lt;include&gt;&gt;</code>. Пример: «закрыть заявку» включает «проверить права».</p>
+<p><strong>extend</strong> означает необязательное расширение: расширяющий прецедент выполняется только при условии и добавляет поведение к базовому. Стрелка идёт от расширения к базовому, с пометкой <code>&lt;&lt;extend&gt;&gt;</code>. Пример: «приложить фото» расширяет «создать заявку», но только если пользователь решил приложить файл.</p>
+<figure class="figure" data-fig="include-extend" data-one="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"><iframe title="Figure 2: include-extend" scrolling="no"></iframe><figcaption>Слева обязательное включение: стрелка от базового прецедента к включаемому. Справа необязательное расширение: стрелка от расширения к базовому и условие выполнения.</figcaption></figure>
+
+<p>Направление стрелки это не формальность. Оно отвечает на вопрос «что от чего зависит». При include базовый прецедент знает о включаемом: без проверки прав закрытие не происходит. При extend базовый прецедент не знает о расширении: создание заявки работает и без фото.</p>
+<p>Проверочный вопрос простой: если убрать второй прецедент, сломается ли первый? Если да, это include. Если нет, это extend.</p>
+<p>Есть и третий случай: два прецедента просто похожи, и один является частным вариантом другого. Тогда используют обобщение, а не include. Например, «оплатить картой» и «оплатить переводом» обобщают «оплатить заказ».</p></div>
+</div>
 
 <div class="gate-step" data-gate>
-<p class="gate-action"><button type="button" class="gate-btn" aria-expanded="false"><span class="gate-q" aria-hidden="true">?</span><span>Почему актор это роль, а не конкретный сотрудник по фамилии?</span></button></p>
+<p class="gate-action"><button type="button" class="gate-btn" aria-expanded="false"><span class="gate-q" aria-hidden="true">?</span><span>Почему у связи на диаграмме классов ставят число с двух сторон?</span></button></p>
 <div class="gate-content" hidden><h2 id="классы"><span class="num">04</span>Классы</h2>
 <p><strong>Класс</strong> описывает тип объектов: атрибуты и операции.</p>
 <div class="codehilite" data-lang="text"><pre><span></span><code>Заявка
@@ -946,9 +1001,64 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 + назначить(исполнитель): void
 </code></pre></div>
 
-<p>Атрибуты хранят состояние, операции задают поведение. Видимость <code>+</code> означает открытый доступ, <code>-</code> закрытый.</p>
-<h2 id="связи-и-кратность"><span class="num">05</span>Связи и кратность</h2>
-<p><strong>Ассоциация</strong> соединяет классы. <strong>Кратность</strong> показывает, сколько объектов участвует в связи.</p>
+<p>Атрибуты хранят состояние, операции задают поведение. Видимость <code>+</code> означает открытый доступ, <code>-</code> закрытый, <code>#</code> защищённый.</p>
+<p>Кроме простых классов на диаграмме встречаются:</p>
+<ul>
+<li><strong>абстрактный класс</strong>: не имеет экземпляров, задаёт общий тип;</li>
+<li><strong>интерфейс</strong>: набор операций без реализации;</li>
+<li><strong>перечисление</strong>: фиксированный набор значений, например статус заявки;</li>
+<li><strong>ассоциативный класс</strong>: хранит данные самой связи, например оценку студента за курс.</li>
+</ul>
+<p>Последний случай важен. Если оценка относится не к студенту и не к курсу, а к паре «студент и курс», её нельзя повесить ни на один из классов. Тогда создают ассоциативный класс, связанный с самой линией.</p>
+<h3>Связи</h3>
+<table>
+<thead>
+<tr>
+<th>Связь</th>
+<th>Смысл</th>
+<th>Обозначение</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ассоциация</td>
+<td>объекты знают друг о друге</td>
+<td>линия</td>
+</tr>
+<tr>
+<td>агрегация</td>
+<td>часть может жить отдельно</td>
+<td>полый ромб у целого</td>
+</tr>
+<tr>
+<td>композиция</td>
+<td>часть не живёт без целого</td>
+<td>заполненный ромб у целого</td>
+</tr>
+<tr>
+<td>наследование</td>
+<td>общий тип и уточнение</td>
+<td>стрелка с полым треугольником</td>
+</tr>
+<tr>
+<td>зависимость</td>
+<td>временное использование</td>
+<td>пунктирная стрелка</td>
+</tr>
+<tr>
+<td>реализация</td>
+<td>класс выполняет интерфейс</td>
+<td>пунктир с полым треугольником</td>
+</tr>
+</tbody>
+</table>
+<p>Разница между агрегацией и композицией не в языке, а во владении жизненным циклом. Строка заказа не существует без заказа: это композиция. Сотрудник существует без кабинета: это агрегация или обычная ассоциация.</p>
+<p>Наследование показывает общий тип. Если <code>СрочнаяЗаявка</code> наследует <code>Заявка</code>, она получает атрибуты и операции и может добавить свои. Наследование стоит применять, когда действительно есть отношение «является». Если отношение «содержит» или «использует», нужна ассоциация или зависимость.</p>
+<p>Пример ошибки. Хотят отличать срочные заявки и делают отдельный класс <code>СрочнаяЗаявка</code>. Но отличие только в значении поля <code>приоритет</code>. Нового поведения нет, значит, наследование ничего не даёт и добавляет вторую сущность в код и в базу. Достаточно атрибута.</p>
+<p>Обратный пример. <code>Сотрудник</code> и <code>Подрядчик</code> оба являются <code>Исполнителем</code>, у обоих есть принять работу и закрыть заявку. Здесь наследование оправдано: общий тип используется в связях, а частные классы добавляют данные.</p>
+<p>Правило простое: наследование вводят, когда общий тип нужен в другом месте модели. Если общий тип нигде не используется, это просто два похожих класса.</p>
+<h3>Кратность</h3>
+<p><strong>Кратность</strong> показывает, сколько объектов участвует в связи.</p>
 <table>
 <thead>
 <tr>
@@ -973,34 +1083,244 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <td>1..*</td>
 <td>один или много</td>
 </tr>
+<tr>
+<td>2..5</td>
+<td>от двух до пяти</td>
+</tr>
 </tbody>
 </table>
-<p>Пример: пользователь создаёт от нуля до многих заявок, каждая заявка принадлежит одному пользователю. На диаграмме: <code>1</code> со стороны пользователя и <code>0..*</code> со стороны заявки.</p>
-<p><strong>Композиция</strong> означает, что часть не существует без целого. <strong>Наследование</strong> показывает общий тип и уточнение.</p>
-<h2 id="последовательность"><span class="num">06</span>Последовательность</h2>
+<p>Главное правило: число стоит у конца линии и относится к классу на этом конце. Оно отвечает на вопрос «сколько объектов этого класса связано с одним объектом на другом конце».</p>
+<p>Пример: пользователь создаёт от нуля до многих заявок, каждая заявка принадлежит одному пользователю. На диаграмме у конца пользователя стоит <code>1</code>, у конца заявки <code>0..*</code>. Читается так: одна заявка связана ровно с одним пользователем, один пользователь связан с любым числом заявок.</p>
+<figure class="figure" data-fig="multiplicity-lab" data-one="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"><iframe title="Figure 3: multiplicity-lab" scrolling="no"></iframe><figcaption>Выберите пример: схема покажет кратность на обоих концах связи и объяснит, что означает каждое число.</figcaption></figure>
+
+<p>Ошибка новичка в том, что число ставят «рядом с тем, о ком думают». Формулировка «у пользователя много заявок» подталкивает написать <code>*</code> у пользователя, хотя правильное место у заявок. Проверка: подставьте один объект с противоположного конца и посчитайте.</p>
+<p>Второй частый случай это необязательность. Заявка может быть без исполнителя, значит у конца исполнителя стоит <code>0..1</code>, а не <code>1</code>. Такая деталь меняет схему базы: внешний ключ допускает пустое значение.</p>
+<p>Третий случай это связь многие ко многим. Один студент посещает много курсов, у одного курса много студентов. На диаграмме классов допустима прямая связь <code>*</code> к <code>*</code>, но в схеме данных появится таблица связи. Об этом стоит помнить при переходе от модели к базе.</p>
+<h3>Что показывает классовая модель</h3>
+<p>Классы отвечают на вопросы:</p>
+<ul>
+<li>какие сущности есть в системе;</li>
+<li>какие данные хранит каждая;</li>
+<li>какие операции над ней выполняют;</li>
+<li>как сущности связаны и в каком количестве.</li>
+</ul>
+<p>Классы не отвечают на вопросы «кто инициирует действие», «в каком порядке», «что видит пользователь». Для этого нужны другие диаграммы. Попытка запихнуть сценарий в классовую модель приводит к методам вида <code>обработатьНажатиеКнопки</code>, что смешивает уровни.</p>
+<h3>Пример модели заявок</h3>
+<p>Небольшая модель учебной системы может состоять из четырёх классов.</p>
+<p><code>Пользователь</code> хранит идентификатор, имя и роль. <code>Заявка</code> хранит тему, описание, статус и ссылку на автора. <code>Комментарий</code> хранит текст, дату и ссылку на заявку. <code>Кабинет</code> хранит номер и корпус.</p>
+<p>Связи:</p>
+<ul>
+<li>пользователь <code>1</code> связан с заявками <code>0..*</code>;</li>
+<li>заявка <code>1</code> связана с комментариями <code>0..*</code>;</li>
+<li>кабинет <code>1</code> связан с заявками <code>0..*</code>;</li>
+<li>заявка <code>0..1</code> связана с пользователем в роли исполнителя.</li>
+</ul>
+<p>Последняя строка показывает, что исполнитель необязателен. Если бы поставили <code>1</code>, пришлось бы назначать исполнителя в момент создания, что противоречит процессу.</p>
+<h3>Атрибуты и операции</h3>
+<p>Атрибут описывает данные, операция описывает действие. Полезно задавать типы: <code>id: int</code>, <code>дата: date</code>, <code>статус: Статус</code>. Тип это часть контракта класса, он помогает заметить ошибку раньше.</p>
+<p>Видимость задаёт границу:</p>
+<ul>
+<li><code>-</code> закрытый атрибут, доступен только внутри класса;</li>
+<li><code>+</code> открытая операция, доступна снаружи;</li>
+<li><code>#</code> защищённый, доступен наследникам.</li>
+</ul>
+<p>На учебной диаграмме достаточно двух: закрытые данные и открытые операции. Это отражает идею инкапсуляции: снаружи видно, что класс умеет, но не как он устроен.</p>
+<p><strong>Статические</strong> атрибуты и операции помечают подчёркиванием. Они относятся к классу целиком, а не к объекту. Например, счётчик созданных заявок логичнее хранить как статический, если он не принадлежит ни одной заявке.</p>
+<p>Операции называют по результату, а не по способу. <code>закрыть()</code> лучше, чем <code>установитьСтатусЗакрыта()</code>, потому что первое скрывает детали, а второе раскрывает их. <code>назначить(исполнитель)</code> лучше, чем <code>записатьИсполнителяВПоле()</code>. Имя операции это часть контракта класса, и по нему вызывающий код понимает, что произойдёт.</p>
+<h3>Навигация и зависимость</h3>
+<p>Стрелка на конце ассоциации показывает направление навигации: кто кого видит. Если заявка знает о комментариях, а комментарий не знает о заявке, навигация односторонняя. Это важное решение: оно влияет на код и на схему базы.</p>
+<p>Зависимость рисуют пунктиром со стрелкой. Она означает, что один класс использует другой временно, например передаёт его в параметре. Зависимость слабее ассоциации, но её тоже полезно показывать, если она влияет на сборку или на порядок инициализации.</p></div>
+</div>
+
+<div class="gate-step" data-gate>
+<p class="gate-action"><button type="button" class="gate-btn" aria-expanded="false"><span class="gate-q" aria-hidden="true">?</span><span>Почему композиция сильнее обычной ассоциации?</span></button></p>
+<div class="gate-content" hidden><h2 id="последовательность"><span class="num">05</span>Последовательность</h2>
 <p><strong>Диаграмма последовательности</strong> показывает обмен сообщениями во времени: кто кому и в каком порядке вызывает операцию.</p>
-<p>Она отвечает на вопрос «как проходит сценарий», когда классы уже известны. Для учебного проекта достаточно одной диаграммы на главный сценарий.</p>
-<h2 id="где-моделирование-ломается"><span class="num">07</span>Где моделирование ломается</h2>
+<p>Элементы:</p>
+<ul>
+<li>участники сверху, каждый со своей линией жизни;</li>
+<li>сообщения стрелками, сверху вниз по времени;</li>
+<li>активация, показывающая, что участник выполняет работу;</li>
+<li>фрагменты <code>alt</code>, <code>loop</code>, <code>opt</code> для условий и циклов.</li>
+</ul>
+<p>Диаграмма отвечает на вопрос «как проходит сценарий», когда классы уже известны. Для учебного проекта достаточно одной диаграммы на главный сценарий и одной на сценарий с ошибкой.</p>
+<p>Ценность последовательности в том, что она показывает порядок и ответственность. Видно, кто вызывает проверку прав, кто пишет в базу, кто формирует ответ. Если проверка прав вызывается после записи, это видно на рисунке и заметно в коде.</p>
+<p>Ограничение тоже важное: диаграмма показывает один сценарий. Она не описывает все ветки сразу, и это нормально. Для веток используют фрагменты или отдельные диаграммы.</p>
+<h3>Пример сценария</h3>
+<p>Сценарий «закрыть заявку» на диаграмме последовательности выглядит так:</p>
+<ol>
+<li>сотрудник отправляет команду закрытия;</li>
+<li>интерфейс вызывает сценарий;</li>
+<li>сценарий запрашивает заявку у репозитория;</li>
+<li>сценарий проверяет права;</li>
+<li>сценарий меняет статус и сохраняет;</li>
+<li>репозиторий подтверждает запись;</li>
+<li>интерфейс показывает результат.</li>
+</ol>
+<p>На рисунке это семь стрелок между пятью участниками. Видно, что проверка прав стоит до записи, а сохранение одно. Если проверка окажется после сохранения, схема покажет это сразу.</p>
+<p>Фрагмент <code>alt</code> используют для ветки: права есть или прав нет. Фрагмент <code>loop</code> для повтора, например повторной попытки записи. Фрагмент <code>opt</code> для необязательного шага, например отправки уведомления.</p>
+<h3>Что проверять по диаграмме</h3>
+<p>Полезно смотреть на три вещи.</p>
+<p>Первое: порядок. Проверка, изменение и запись должны идти в правильной последовательности. Если запись идёт раньше проверки, ошибка почти гарантирована.</p>
+<p>Второе: ответственность. Каждый шаг выполняет один участник. Если сценарий и проверяет права, и форматирует ответ, и пишет в базу, это признак смешения слоёв.</p>
+<p>Третье: ошибки. На диаграмме должен быть хотя бы один путь с ошибкой. Сценарий без ошибок описывает счастливый путь и скрывает половину работы.</p>
+<p>Чего диаграмма не показывает: время выполнения, объём данных и параллельность. Стрелка не говорит, что вызов длится две секунды. Для этих вопросов нужны замеры и отдельные схемы нагрузки. Путать модель поведения с моделью производительности не стоит.</p>
+<h3>Состояния</h3>
+<p><strong>Диаграмма состояний</strong> показывает, как объект меняет состояние и какие переходы разрешены. Для заявки это полезно: «новая», «в работе», «закрыта», «отклонена». Диаграмма отвечает на вопрос, можно ли перейти из состояния в состояние и что происходит при переходе.</p>
+<p>Она хорошо сочетается с классами: класс задаёт данные, состояния задают допустимые значения и переходы. Если правило «закрыть можно только из работы» записано в диаграмме, его проще проверить в коде и тестах.</p>
+<h2 id="от-модели-к-данным"><span class="num">06</span>От модели к данным</h2>
+<p>Диаграмма классов почти напрямую переходит в схему базы. Это удобно и опасно одновременно.</p>
+<p>Удобно потому, что правила перехода простые:</p>
+<table>
+<thead>
+<tr>
+<th>Модель</th>
+<th>Схема данных</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>класс</td>
+<td>таблица</td>
+</tr>
+<tr>
+<td>атрибут</td>
+<td>столбец</td>
+</tr>
+<tr>
+<td><code>1</code> к <code>0..*</code></td>
+<td>внешний ключ на стороне многих</td>
+</tr>
+<tr>
+<td><code>0..1</code></td>
+<td>внешний ключ, допускающий пустое значение</td>
+</tr>
+<tr>
+<td><code>*</code> к <code>*</code></td>
+<td>отдельная таблица связи</td>
+</tr>
+<tr>
+<td>ассоциативный класс</td>
+<td>таблица связи с дополнительными столбцами</td>
+</tr>
+<tr>
+<td>композиция</td>
+<td>внешний ключ с каскадным удалением</td>
+</tr>
+</tbody>
+</table>
+<p>Опасно потому, что модель описывает поведение, а таблица только хранение. Наследование в модели может превратиться в одну таблицу с типом, в несколько таблиц или в общую таблицу с ссылками. Все три варианта допустимы, выбор зависит от запросов и объёма данных.</p>
+<p>Пример с ассоциативным классом. Курсы и студенты связаны многие ко многим, а оценка относится к паре. В модели появляется класс «Оценка» на линии связи. В базе появляется таблица с идентификатором студента, идентификатором курса и значением оценки. Без ассоциативного класса пришлось бы добавить оценку в студента или в курс, и смысл потерялся бы.</p>
+<p>Проверка перед переходом к базе: у каждой связи есть кратность, у каждой кратности понятно правило, а у каждого правила есть ограничение в схеме. Если модель говорит <code>1..*</code>, а в таблице внешний ключ допускает пустое значение, модель и база расходятся.</p>
+<p>Отдельно про ключи. В модели класс может не показывать идентификатор, если он не нужен для понимания. В базе идентификатор нужен почти всегда. Это не противоречие: модель отвечает на вопрос о связях, база отвечает на вопрос о хранении. Добавлять <code>id</code> в каждую диаграмму стоит только тогда, когда он важен для связи.</p>
+<p>Нормализация тоже начинается с модели. Если один класс хранит список строк в одном атрибуте, в базе появится либо текст, либо отдельная таблица. Модель подсказывает, что список это отдельная сущность, но не диктует форму хранения.</p>
+<h2 id="согласованность-моделей"><span class="num">07</span>Согласованность моделей</h2>
+<p>Несколько диаграмм одной системы должны говорить одно и то же. Это труднее, чем кажется.</p>
+<p>Имена расходятся первыми. На диаграмме прецедентов «заявка», на диаграмме классов «обращение», в коде <code>request</code>. Читатель начинает искать разницу. Лечится глоссарием: список терминов с определениями и синонимами, которые запрещены.</p>
+<p>Второе расхождение это состав. На диаграмме классов есть класс «Кабинет», а на диаграмме прецедентов нет ни одной цели, связанной с кабинетом. Возможно, класс лишний, а возможно, прецедент пропущен. Вопрос полезен в обе стороны.</p>
+<p>Третье расхождение это поведение. Прецедент обещает закрытие с комментарием, а в последовательности комментарий не передаётся. Такое расхождение обнаруживается только чтением двух моделей рядом.</p>
+<p>Практический минимум: одна диаграмма прецедентов, одна диаграмма классов, одна последовательность на главный сценарий и глоссарий на одну страницу. Этого достаточно, чтобы поймать большинство расхождений до кода.</p>
+<p>Прослеживаемость помогает удерживать связь между моделями. Достаточно таблицы из четырёх столбцов: требование, прецедент, класс, проверка. Для учебного проекта хватает десяти строк. Если требование меняется, таблица показывает, какие прецеденты и классы затронуты, а какие тесты нужно обновить.</p>
+<p>Такая таблица не заменяет модели, но связывает их. Без неё каждая диаграмма живёт отдельно, и расхождения обнаруживаются уже в коде.</p>
+<h2 id="что-подтверждают-исследования"><span class="num">08</span>Что подтверждают исследования</h2>
+<p>Моделирование окружено верой в пользу, но проверять её начали не сразу. Несколько работ дают полезную картину.</p>
+<p>Мариан Петре провела интервью с пятьюдесятью разработчиками из пятидесяти компаний и описала пять способов использования UML. Вывод: нотацию применяют выборочно, часто для обсуждения и эскизов, а не для полной спецификации <a href="https://doi.org/10.1109/ICSE.2013.6606618">Petre, 2013</a>.</p>
+<p>Опрос Добинга и Парсонса показал похожее: чаще всего используют диаграммы прецедентов и классов, а UML служит прежде всего для общения внутри команды, а не для генерации кода <a href="https://doi.org/10.1145/1125944.1125949">Dobing, Parsons, 2006</a>.</p>
+<p>Более поздняя работа Рагурамана и соавторов сравнила 143 проекта на GitHub с моделями UML и без них. Разница в числе дефектов оказалась небольшой, хотя статистически значимой: проекты с моделями имели меньше дефектов <a href="https://cmustrudel.github.io/papers/msr19uml.pdf">Raghuraman et al., 2019</a>.</p>
+<p>Как читать эти результаты. Во-первых, корреляция не доказывает причину: возможно, команды, которые вообще рисуют модели, более организованы. Во-вторых, эффект небольшой, поэтому обещать чудо от одной диаграммы нельзя. В-третьих, исследования не отменяют главного: модель полезна, когда отвечает на вопрос, и бесполезна, когда рисуется для отчёта.</p>
+<p>Есть и контролируемые эксперименты. В обзоре литературы упомянуты опыты, где студенты решали сложные задачи с моделями UML и без них: при достаточном времени на обучение модели повышали функциональную корректность последующих изменений. Отдельное исследование промышленной Java-системы показало, что классы, для которых существовали модели, имели меньшую плотность дефектов, чем классы без моделей.</p>
+<p>Эти результаты не стоит складывать в одно число. Условия разные, задачи разные, а измеряют иногда дефекты, иногда корректность изменений. Общий вывод скромный: моделирование помогает, если им пользуются осознанно. Оно не спасает от плохих требований и не заменяет тесты.</p>
+<p>Измерить пользу модели трудно и по другой причине. Модель влияет на решения, а решения влияют на код через много шагов. Выделить вклад одного рисунка в успех проекта почти невозможно. Поэтому исследования дают направление, а не гарантию, и в отчёте по учебному проекту лучше описывать конкретное решение, принятое по модели, чем ссылаться на средние числа.</p></div>
+</div>
+
+<div class="gate-step" data-gate>
+<p class="gate-action"><button type="button" class="gate-btn" aria-expanded="false"><span class="gate-q" aria-hidden="true">?</span><span>Почему полная модель на сорок листов не помогает команде?</span></button></p>
+<div class="gate-content" hidden><h2 id="реальные-случаи"><span class="num">09</span>Реальные случаи</h2>
+<h3>Лондонская скорая помощь, 1992</h3>
+<p>26 октября 1992 года в Лондоне включили автоматизированную систему диспетчеризации. Система должна была принимать вызовы, назначать машины и отслеживать их положение. В первые дни время ответа выросло до неприемлемого, а 4 ноября система упала из-за ошибки в программе: автоматический переход на резервный сервер не был проверен. Служба вернулась к ручной работе.</p>
+<p>Комиссия, расследовавшая случай, отметила несколько причин. Программное обеспечение было неполным, не настроенным и недостаточно проверенным. Устойчивость оборудования под полной нагрузкой не проверяли. Но среди выводов есть фраза, прямо относящаяся к моделированию: никто не попытался предусмотреть последствия неточных или неполных данных, которые получает система, включая опоздавшие сообщения о статусе и положении машин <a href="https://www.eis.mdx.ac.uk/research/SFC/Cases/LAS_report.pdf">Report of the Inquiry, 1993</a>.</p>
+<p>Иными словами, модель описывала счастливый путь: данные приходят вовремя и верны. Реальность дала исключения, для которых не было ни сценария, ни запасного процесса. На диаграмме прецедентов такой случай выглядит как один эллипс «назначить машину», а в жизни он имеет десятки вариантов завершения.</p>
+<p>Урок для моделирования: описывайте не только цель, но и условия её достижения. Если система зависит от внешних данных, в описании прецедента должны быть строки о том, что происходит при их отсутствии, задержке и ошибке.</p>
+<p>Что дала бы более полная модель? На диаграмме прецедентов появились бы отдельные цели «уточнить положение машины» и «обработать вызов без адреса». В описании главного прецедента появились бы альтернативы: данных о машине нет, данные устарели, связь с машиной потеряна. На диаграмме последовательности стал бы виден запасной путь через диспетчера.</p>
+<p>Ни одна из этих моделей не гарантирует успех. Но они делают исключения видимыми до запуска, а не после. Именно этого не хватило системе 1992 года.</p>
+<h3>Объединение нотаций, 1994-1997</h3>
+<p>История UML тоже поучительна. Три метода объединили нотацию, чтобы клиенты не выбирали между тремя языками. Нотация стала общей, а методы, то есть последовательность работ и правила выбора артефактов, остались у каждого свои.</p>
+<p>Результат виден до сих пор: можно нарисовать диаграмму классов, но не знать, зачем она нужна и что делать с полученной моделью. Наличие обозначений не создаёт метода. Поэтому в учебной работе полезно начинать не с выбора диаграммы, а с вопроса, на который нужен ответ.</p>
+<table>
+<thead>
+<tr>
+<th>Случай</th>
+<th>Что пропустили</th>
+<th>Чему учит</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Лондонская скорая, 1992</td>
+<td>условия и исключения в модели</td>
+<td>прецедент описывают вместе с альтернативами</td>
+</tr>
+<tr>
+<td>Объединение нотаций</td>
+<td>метод вместо только нотации</td>
+<td>диаграмма без вопроса бесполезна</td>
+</tr>
+</tbody>
+</table>
+<p>Общий вывод из обоих случаев: модель проверяют на данных и исключениях, а не на красоте обозначений. Структура без проверки сценариев создаёт ложное чувство порядка, а порядок в нотации не равен порядку в работе системы.</p>
+<h2 id="где-моделирование-ломается"><span class="num">10</span>Где моделирование ломается</h2>
 <p><strong>Диаграмма ради диаграммы.</strong> Модель нарисована, но решения по ней не принимали.</p>
 <p><strong>Смешение уровней.</strong> На одной схеме и экраны, и таблицы базы, и классы.</p>
 <p><strong>Нет кратности.</strong> Непонятно, сколько объектов в связи.</p>
 <p><strong>Актор внутри системы.</strong> В роли записан модуль или база.</p>
 <p><strong>Прецедент равен кнопке.</strong> «Нажать кнопку» это не цель пользователя.</p>
+<p><strong>Include вместо обобщения.</strong> Обязательное включение используют там, где есть частный случай.</p>
+<p><strong>Стрелка extend не в ту сторону.</strong> Расширение указывает на базовый прецедент, а не наоборот.</p>
+<p><strong>Модель без текста.</strong> Кратность есть, а правила, исключений и условий нет.</p>
+<p><strong>Наследование вместо ассоциации.</strong> Класс «Срочная заявка» наследует «Заявку», хотя отличается только значением поля. Наследование здесь добавляет класс без нового поведения.</p>
+<p><strong>Класс на каждую таблицу.</strong> Модель копирует схему базы и не описывает поведение, ради которого её строили.</p>
+<p>Общая причина у этих ошибок одна: модель рисуют, не сформулировав вопрос. Обозначения при этом могут быть безупречными.</p>
 <div class="callout pitfall"><span class="label">Диаграмма без подписей кратности читается по-разному. Один и тот же ромб можно понять как «много» и как «ровно один».</span></div>
 
-<h2 id="итоги"><span class="num">08</span>Итоги</h2>
+<h2 id="чек-лист-модели"><span class="num">11</span>Чек-лист модели</h2>
+<p>Перед сдачей модели полезно ответить на девять вопросов.</p>
+<p>Модель проверяют не по количеству элементов, а по способности ответить на вопрос. Поэтому чек-лист начинается с вопроса, а не с обозначений.</p>
+<ol>
+<li>На какой вопрос отвечает эта диаграмма?</li>
+<li>Кто читатель и хватает ли ему обозначений?</li>
+<li>Есть ли граница системы и что осталось снаружи?</li>
+<li>Все ли акторы являются ролями, а не людьми и модулями?</li>
+<li>Для каждого прецедента описан основной поток и исключения?</li>
+<li>Правильно ли направлены include и extend?</li>
+<li>У каждой связи есть кратность с двух сторон?</li>
+<li>Отличается ли композиция от агрегации по жизненному циклу?</li>
+<li>Можно ли по модели объяснить решение, не открывая код?</li>
+</ol>
+<p>Если на первый вопрос нет ответа, остальные не имеют смысла. Диаграмма без вопроса превращается в украшение.</p>
+<h2 id="итоги"><span class="num">12</span>Итоги</h2>
 <ul>
-<li>Диаграмму выбирают по вопросу.</li>
+<li>Диаграмму выбирают по вопросу, а не по привычке.</li>
+<li>UML это нотация, а не процесс разработки.</li>
 <li>Прецеденты показывают акторов, цели и границы.</li>
+<li>Include обязателен и идёт от базового прецедента, extend необязателен и идёт к базовому.</li>
 <li>Классы показывают структуру, атрибуты и операции.</li>
-<li>Кратность задаёт число объектов в связи.</li>
+<li>Кратность стоит у конца связи и относится к классу на этом конце.</li>
 <li>Последовательность показывает сценарий во времени.</li>
-</ul></div>
-</div>
-
-<div class="gate-step" data-gate>
-<p class="gate-action"><button type="button" class="gate-btn" aria-expanded="false"><span class="gate-q" aria-hidden="true">?</span><span>Чем include отличается от extend на диаграмме прецедентов?</span></button></p>
-<div class="gate-content" hidden><div class="quiz" data-quiz data-quiz-guard><div class="quiz-who"><label class="quiz-who-label"><span>ФИО</span><input type="text" class="quiz-name" data-quiz-name maxlength="80" autocomplete="off" placeholder="Иванов Иван Иванович"></label><span class="quiz-attempts" data-quiz-attempts>две попытки на лекцию</span><span class="quiz-note" data-who-note hidden></span></div><div class="quiz-q" data-type="single" data-correct="1" data-q="1"><p class="quiz-p"><span class="quiz-no" aria-hidden="true">01</span>Что задаёт кратность?</p><div class="opts"><label class="opt"><input type="radio" name="q106_0" value="2" autocomplete="off"><span>Число таблиц</span></label><label class="opt"><input type="radio" name="q106_0" value="3" autocomplete="off"><span>Число акторов</span></label><label class="opt"><input type="radio" name="q106_0" value="1" autocomplete="off"><span>Число методов класса</span></label><label class="opt"><input type="radio" name="q106_0" value="0" autocomplete="off" data-ok><span>Число объектов в связи</span></label></div><p class="quiz-why" hidden>Сколько объектов.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="short" data-q="2" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">02</span>Как называется роль снаружи системы?</p><input type="text" class="short-answer" data-answers="[&quot;актор&quot;, &quot;actor&quot;]" placeholder="Введите ответ" autocomplete="off" spellcheck="false" aria-label="Как называется роль снаружи системы?"><p class="quiz-why" hidden>Пользователь роли.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="3" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">03</span>Что означает include?</p><div class="opts"><label class="opt"><input type="radio" name="q106_2" value="1" autocomplete="off"><span>Необязательное расширение</span></label><label class="opt"><input type="radio" name="q106_2" value="3" autocomplete="off"><span>Связь многие ко многим</span></label><label class="opt"><input type="radio" name="q106_2" value="0" autocomplete="off" data-ok><span>Обязательное включение прецедента</span></label><label class="opt"><input type="radio" name="q106_2" value="2" autocomplete="off"><span>Наследование классов</span></label></div><p class="quiz-why" hidden>Обязательная часть.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="multi" data-correct="4" data-q="4" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">04</span>Какие связи используются в UML?</p><div class="opts"><label class="opt"><input type="checkbox" name="q106_3" value="0" autocomplete="off" data-ok><span>Ассоциация</span></label><label class="opt"><input type="checkbox" name="q106_3" value="1" autocomplete="off" data-ok><span>Композиция</span></label><label class="opt"><input type="checkbox" name="q106_3" value="5" autocomplete="off"><span>Нормализация</span></label><label class="opt"><input type="checkbox" name="q106_3" value="4" autocomplete="off"><span>Индексация</span></label><label class="opt"><input type="checkbox" name="q106_3" value="3" autocomplete="off" data-ok><span>Зависимость</span></label><label class="opt"><input type="checkbox" name="q106_3" value="2" autocomplete="off" data-ok><span>Наследование</span></label></div><p class="quiz-why" hidden>Остальное из данных.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="5" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">05</span>Что означает кратность 0..*?</p><div class="opts"><label class="opt"><input type="radio" name="q106_4" value="2" autocomplete="off"><span>Один или много</span></label><label class="opt"><input type="radio" name="q106_4" value="0" autocomplete="off" data-ok><span>Ноль или много объектов</span></label><label class="opt"><input type="radio" name="q106_4" value="1" autocomplete="off"><span>Ровно один</span></label><label class="opt"><input type="radio" name="q106_4" value="3" autocomplete="off"><span>Ровно два</span></label></div><p class="quiz-why" hidden>Много.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="6" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">06</span>Что означает extend?</p><div class="opts"><label class="opt"><input type="radio" name="q106_5" value="3" autocomplete="off"><span>Ассоциацию</span></label><label class="opt"><input type="radio" name="q106_5" value="2" autocomplete="off"><span>Композицию</span></label><label class="opt"><input type="radio" name="q106_5" value="1" autocomplete="off"><span>Обязательное включение</span></label><label class="opt"><input type="radio" name="q106_5" value="0" autocomplete="off" data-ok><span>Необязательное расширение</span></label></div><p class="quiz-why" hidden>Расширение.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="short" data-q="7" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">07</span>Что означает кратность «много»?</p><input type="text" class="short-answer" data-answers="[&quot;0..*&quot;, &quot;звездочка&quot;]" placeholder="Введите ответ" autocomplete="off" spellcheck="false" aria-label="Что означает кратность «много»?"><p class="quiz-why" hidden>Ноль или много.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="8" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">08</span>Почему актор это не фамилия сотрудника?</p><div class="opts"><label class="opt"><input type="radio" name="q106_7" value="3" autocomplete="off"><span>Так принято в UML</span></label><label class="opt"><input type="radio" name="q106_7" value="2" autocomplete="off"><span>Актор должен быть модулем</span></label><label class="opt"><input type="radio" name="q106_7" value="0" autocomplete="off" data-ok><span>Роль может выполнять любой человек</span></label><label class="opt"><input type="radio" name="q106_7" value="1" autocomplete="off"><span>Фамилии не бывают акторами</span></label></div><p class="quiz-why" hidden>Роль, а не личность.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="multi" data-correct="4" data-q="9" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">09</span>Какие элементы есть на диаграмме прецедентов?</p><div class="opts"><label class="opt"><input type="checkbox" name="q106_8" value="2" autocomplete="off" data-ok><span>Граница системы</span></label><label class="opt"><input type="checkbox" name="q106_8" value="5" autocomplete="off"><span>Индексы</span></label><label class="opt"><input type="checkbox" name="q106_8" value="1" autocomplete="off" data-ok><span>Прецеденты</span></label><label class="opt"><input type="checkbox" name="q106_8" value="3" autocomplete="off" data-ok><span>Связи</span></label><label class="opt"><input type="checkbox" name="q106_8" value="4" autocomplete="off"><span>Таблицы</span></label><label class="opt"><input type="checkbox" name="q106_8" value="0" autocomplete="off" data-ok><span>Акторы</span></label></div><p class="quiz-why" hidden>Остальное из базы.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="10" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">10</span>Что такое актор?</p><div class="opts"><label class="opt"><input type="radio" name="q106_9" value="1" autocomplete="off"><span>Конкретный сотрудник</span></label><label class="opt"><input type="radio" name="q106_9" value="2" autocomplete="off"><span>Таблица базы</span></label><label class="opt"><input type="radio" name="q106_9" value="0" autocomplete="off" data-ok><span>Роль снаружи системы</span></label><label class="opt"><input type="radio" name="q106_9" value="3" autocomplete="off"><span>Модуль программы</span></label></div><p class="quiz-why" hidden>Роль.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="11" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">11</span>Что показывает диаграмма прецедентов?</p><div class="opts"><label class="opt"><input type="radio" name="q106_10" value="1" autocomplete="off"><span>Из каких таблиц состоит база</span></label><label class="opt"><input type="radio" name="q106_10" value="0" autocomplete="off" data-ok><span>Кто и какие цели достигает в системе</span></label><label class="opt"><input type="radio" name="q106_10" value="3" autocomplete="off"><span>Как проходит вызов во времени</span></label><label class="opt"><input type="radio" name="q106_10" value="2" autocomplete="off"><span>Какие классы наследуются</span></label></div><p class="quiz-why" hidden>Акторы и цели.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="short" data-q="12" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">12</span>Какая диаграмма показывает сценарий во времени?</p><input type="text" class="short-answer" data-answers="[&quot;последовательности&quot;, &quot;sequence&quot;]" placeholder="Введите ответ" autocomplete="off" spellcheck="false" aria-label="Какая диаграмма показывает сценарий во времени?"><p class="quiz-why" hidden>Обмен сообщениями.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="13" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">13</span>Что показывает диаграмма классов?</p><div class="opts"><label class="opt"><input type="radio" name="q106_12" value="1" autocomplete="off"><span>Цели пользователей</span></label><label class="opt"><input type="radio" name="q106_12" value="2" autocomplete="off"><span>Порядок сообщений</span></label><label class="opt"><input type="radio" name="q106_12" value="3" autocomplete="off"><span>План релиза</span></label><label class="opt"><input type="radio" name="q106_12" value="0" autocomplete="off" data-ok><span>Структуру: классы, атрибуты, связи</span></label></div><p class="quiz-why" hidden>Структура.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="multi" data-correct="4" data-q="14" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">14</span>Какие ошибки моделирования типичны?</p><div class="opts"><label class="opt"><input type="checkbox" name="q106_13" value="2" autocomplete="off" data-ok><span>Нет кратности</span></label><label class="opt"><input type="checkbox" name="q106_13" value="0" autocomplete="off" data-ok><span>Диаграмма ради отчёта</span></label><label class="opt"><input type="checkbox" name="q106_13" value="5" autocomplete="off"><span>Ясная граница</span></label><label class="opt"><input type="checkbox" name="q106_13" value="3" autocomplete="off" data-ok><span>Актор внутри системы</span></label><label class="opt"><input type="checkbox" name="q106_13" value="4" autocomplete="off"><span>Подписанная кратность</span></label><label class="opt"><input type="checkbox" name="q106_13" value="1" autocomplete="off" data-ok><span>Смешение уровней</span></label></div><p class="quiz-why" hidden>Остальное хорошо.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="15" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">15</span>Что показывает диаграмма последовательности?</p><div class="opts"><label class="opt"><input type="radio" name="q106_14" value="2" autocomplete="off"><span>Границы системы</span></label><label class="opt"><input type="radio" name="q106_14" value="0" autocomplete="off" data-ok><span>Обмен сообщениями во времени</span></label><label class="opt"><input type="radio" name="q106_14" value="3" autocomplete="off"><span>Схему базы</span></label><label class="opt"><input type="radio" name="q106_14" value="1" autocomplete="off"><span>Структуру классов</span></label></div><p class="quiz-why" hidden>Сценарий.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><p class="quiz-note quiz-submit-note" data-quiz-note hidden></p><div class="quiz-result" data-quiz-result hidden aria-live="polite"><span class="label">Результат теста</span><h3>Тест завершён</h3><p class="modal-name-line">ФИО: <b data-student-name></b></p><p class="modal-result" data-modal-result></p><p class="modal-result" data-modal-wrong></p><dl class="modal-times"><div><dt>Время выполнения теста</dt><dd data-test-time>00:00</dd></div><div><dt>Время просмотра лекции</dt><dd data-view-time>00:00</dd></div></dl></div></div></div>
+<li>Модель проверяют вопросом читателя, а не числом листов.</li>
+</ul>
+<h2 id="источники"><span class="num">13</span>Источники</h2>
+<ol>
+<li>OMG. Unified Modeling Language 2.5.1, 2017. https://www.omg.org/spec/UML/2.5.1/</li>
+<li>Fowler M. UML Distilled. https://martinfowler.com/books/uml.html</li>
+<li>Petre M. UML in practice. ICSE, 2013. https://doi.org/10.1109/ICSE.2013.6606618</li>
+<li>Dobing B., Parsons J. How UML is used. Communications of the ACM, 2006. https://doi.org/10.1145/1125944.1125949</li>
+<li>Raghuraman A., Ho-Quang T., Chaudron M., Serebrenik A., Vasilescu B. Does UML Modeling Associate with Lower Defect Proneness? MSR, 2019. https://cmustrudel.github.io/papers/msr19uml.pdf</li>
+<li>Page D., Williams P., Boyd D. Report of the Inquiry into the London Ambulance Service, 1993. https://www.eis.mdx.ac.uk/research/SFC/Cases/LAS_report.pdf</li>
+<li>Software Forensics Centre. The London Ambulance Service case. https://eis.mdx.ac.uk/research/SFC/Cases/LAS.html</li>
+<li>IEEE Computer Society. SWEBOK Guide v4.0. https://www.computer.org/education/bodies-of-knowledge/software-engineering/v4</li>
+<li>Booch G., Rumbaugh J., Jacobson I. The Unified Modeling Language User Guide. Addison-Wesley.</li>
+</ol>
+<div class="quiz" data-quiz data-quiz-guard><div class="quiz-who"><label class="quiz-who-label"><span>ФИО</span><input type="text" class="quiz-name" data-quiz-name maxlength="80" autocomplete="off" placeholder="Иванов Иван Иванович"></label><span class="quiz-attempts" data-quiz-attempts>две попытки на лекцию</span><span class="quiz-note" data-who-note hidden></span></div><div class="quiz-q" data-type="single" data-correct="1" data-q="1"><p class="quiz-p"><span class="quiz-no" aria-hidden="true">01</span>Что означает кратность 0..*?</p><div class="opts"><label class="opt"><input type="radio" name="q201_0" value="2" autocomplete="off"><span>Один или много</span></label><label class="opt"><input type="radio" name="q201_0" value="0" autocomplete="off" data-ok><span>Ноль или много объектов</span></label><label class="opt"><input type="radio" name="q201_0" value="1" autocomplete="off"><span>Ровно один</span></label><label class="opt"><input type="radio" name="q201_0" value="3" autocomplete="off"><span>Ровно два</span></label></div><p class="quiz-why" hidden>Много.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="short" data-q="2" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">02</span>Какая диаграмма показывает сценарий во времени?</p><input type="text" class="short-answer" data-answers="[&quot;последовательности&quot;, &quot;sequence&quot;]" placeholder="Введите ответ" autocomplete="off" spellcheck="false" aria-label="Какая диаграмма показывает сценарий во времени?"><p class="quiz-why" hidden>Обмен сообщениями.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="multi" data-correct="3" data-q="3" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">03</span>Что подтверждают исследования UML?</p><div class="opts"><label class="opt"><input type="checkbox" name="q201_2" value="2" autocomplete="off" data-ok><span>UML чаще служит для общения</span></label><label class="opt"><input type="checkbox" name="q201_2" value="4" autocomplete="off"><span>UML заменяет процесс</span></label><label class="opt"><input type="checkbox" name="q201_2" value="3" autocomplete="off"><span>Полная модель всегда лучше</span></label><label class="opt"><input type="checkbox" name="q201_2" value="0" autocomplete="off" data-ok><span>Модели используют выборочно</span></label><label class="opt"><input type="checkbox" name="q201_2" value="1" autocomplete="off" data-ok><span>Эффект на дефекты небольшой</span></label></div><p class="quiz-why" hidden>Остальное не следует из работ.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="4" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">04</span>Что показал случай лондонской скорой помощи 1992 года?</p><div class="opts"><label class="opt"><input type="radio" name="q201_3" value="1" autocomplete="off"><span>Что UML ускоряет разработку</span></label><label class="opt"><input type="radio" name="q201_3" value="3" autocomplete="off"><span>Что резервный сервер решает проблему</span></label><label class="opt"><input type="radio" name="q201_3" value="0" autocomplete="off" data-ok><span>Модель не описывала неточные данные и исключения</span></label><label class="opt"><input type="radio" name="q201_3" value="2" autocomplete="off"><span>Что диаграммы классов заменяют тесты</span></label></div><p class="quiz-why" hidden>Исключения нужно описывать до запуска.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="5" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">05</span>Что задаёт кратность?</p><div class="opts"><label class="opt"><input type="radio" name="q201_4" value="2" autocomplete="off"><span>Число таблиц</span></label><label class="opt"><input type="radio" name="q201_4" value="3" autocomplete="off"><span>Число акторов</span></label><label class="opt"><input type="radio" name="q201_4" value="1" autocomplete="off"><span>Число методов класса</span></label><label class="opt"><input type="radio" name="q201_4" value="0" autocomplete="off" data-ok><span>Число объектов в связи</span></label></div><p class="quiz-why" hidden>Сколько объектов.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="short" data-q="6" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">06</span>Как называется роль снаружи системы?</p><input type="text" class="short-answer" data-answers="[&quot;актор&quot;, &quot;actor&quot;]" placeholder="Введите ответ" autocomplete="off" spellcheck="false" aria-label="Как называется роль снаружи системы?"><p class="quiz-why" hidden>Пользователь роли.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="7" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">07</span>Что показывает диаграмма последовательности?</p><div class="opts"><label class="opt"><input type="radio" name="q201_6" value="2" autocomplete="off"><span>Границы системы</span></label><label class="opt"><input type="radio" name="q201_6" value="0" autocomplete="off" data-ok><span>Обмен сообщениями во времени</span></label><label class="opt"><input type="radio" name="q201_6" value="3" autocomplete="off"><span>Схему базы</span></label><label class="opt"><input type="radio" name="q201_6" value="1" autocomplete="off"><span>Структуру классов</span></label></div><p class="quiz-why" hidden>Сценарий.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="multi" data-correct="4" data-q="8" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">08</span>Какие элементы есть на диаграмме прецедентов?</p><div class="opts"><label class="opt"><input type="checkbox" name="q201_7" value="2" autocomplete="off" data-ok><span>Граница системы</span></label><label class="opt"><input type="checkbox" name="q201_7" value="5" autocomplete="off"><span>Индексы</span></label><label class="opt"><input type="checkbox" name="q201_7" value="1" autocomplete="off" data-ok><span>Прецеденты</span></label><label class="opt"><input type="checkbox" name="q201_7" value="3" autocomplete="off" data-ok><span>Связи</span></label><label class="opt"><input type="checkbox" name="q201_7" value="4" autocomplete="off"><span>Таблицы</span></label><label class="opt"><input type="checkbox" name="q201_7" value="0" autocomplete="off" data-ok><span>Акторы</span></label></div><p class="quiz-why" hidden>Остальное из базы.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="9" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">09</span>Что означает include?</p><div class="opts"><label class="opt"><input type="radio" name="q201_8" value="1" autocomplete="off"><span>Необязательное расширение</span></label><label class="opt"><input type="radio" name="q201_8" value="3" autocomplete="off"><span>Связь многие ко многим</span></label><label class="opt"><input type="radio" name="q201_8" value="0" autocomplete="off" data-ok><span>Обязательное включение прецедента</span></label><label class="opt"><input type="radio" name="q201_8" value="2" autocomplete="off"><span>Наследование классов</span></label></div><p class="quiz-why" hidden>Обязательная часть.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="10" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">10</span>Что показывает диаграмма классов?</p><div class="opts"><label class="opt"><input type="radio" name="q201_9" value="1" autocomplete="off"><span>Цели пользователей</span></label><label class="opt"><input type="radio" name="q201_9" value="2" autocomplete="off"><span>Порядок сообщений</span></label><label class="opt"><input type="radio" name="q201_9" value="3" autocomplete="off"><span>План релиза</span></label><label class="opt"><input type="radio" name="q201_9" value="0" autocomplete="off" data-ok><span>Структуру: классы, атрибуты, связи</span></label></div><p class="quiz-why" hidden>Структура.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="short" data-q="11" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">11</span>Что означает кратность «много»?</p><input type="text" class="short-answer" data-answers="[&quot;0..*&quot;, &quot;звездочка&quot;]" placeholder="Введите ответ" autocomplete="off" spellcheck="false" aria-label="Что означает кратность «много»?"><p class="quiz-why" hidden>Ноль или много.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="12" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">12</span>Куда идёт стрелка extend?</p><div class="opts"><label class="opt"><input type="radio" name="q201_11" value="1" autocomplete="off"><span>От базового к расширению</span></label><label class="opt"><input type="radio" name="q201_11" value="2" autocomplete="off"><span>Между акторами</span></label><label class="opt"><input type="radio" name="q201_11" value="3" autocomplete="off"><span>От границы к актору</span></label><label class="opt"><input type="radio" name="q201_11" value="0" autocomplete="off" data-ok><span>От расширения к базовому прецеденту</span></label></div><p class="quiz-why" hidden>Расширение указывает на базовый прецедент.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="multi" data-correct="4" data-q="13" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">13</span>Какие связи используются в UML?</p><div class="opts"><label class="opt"><input type="checkbox" name="q201_12" value="0" autocomplete="off" data-ok><span>Ассоциация</span></label><label class="opt"><input type="checkbox" name="q201_12" value="1" autocomplete="off" data-ok><span>Композиция</span></label><label class="opt"><input type="checkbox" name="q201_12" value="5" autocomplete="off"><span>Нормализация</span></label><label class="opt"><input type="checkbox" name="q201_12" value="4" autocomplete="off"><span>Индексация</span></label><label class="opt"><input type="checkbox" name="q201_12" value="3" autocomplete="off" data-ok><span>Зависимость</span></label><label class="opt"><input type="checkbox" name="q201_12" value="2" autocomplete="off" data-ok><span>Наследование</span></label></div><p class="quiz-why" hidden>Остальное из данных.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="14" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">14</span>Что показывает диаграмма прецедентов?</p><div class="opts"><label class="opt"><input type="radio" name="q201_13" value="1" autocomplete="off"><span>Из каких таблиц состоит база</span></label><label class="opt"><input type="radio" name="q201_13" value="0" autocomplete="off" data-ok><span>Кто и какие цели достигает в системе</span></label><label class="opt"><input type="radio" name="q201_13" value="3" autocomplete="off"><span>Как проходит вызов во времени</span></label><label class="opt"><input type="radio" name="q201_13" value="2" autocomplete="off"><span>Какие классы наследуются</span></label></div><p class="quiz-why" hidden>Акторы и цели.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="15" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">15</span>Что такое актор?</p><div class="opts"><label class="opt"><input type="radio" name="q201_14" value="1" autocomplete="off"><span>Конкретный сотрудник</span></label><label class="opt"><input type="radio" name="q201_14" value="2" autocomplete="off"><span>Таблица базы</span></label><label class="opt"><input type="radio" name="q201_14" value="0" autocomplete="off" data-ok><span>Роль снаружи системы</span></label><label class="opt"><input type="radio" name="q201_14" value="3" autocomplete="off"><span>Модуль программы</span></label></div><p class="quiz-why" hidden>Роль.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><p class="quiz-note quiz-submit-note" data-quiz-note hidden></p><div class="quiz-result" data-quiz-result hidden aria-live="polite"><span class="label">Результат теста</span><h3>Тест завершён</h3><p class="modal-name-line">ФИО: <b data-student-name></b></p><p class="modal-result" data-modal-result></p><p class="modal-result" data-modal-wrong></p><dl class="modal-times"><div><dt>Время выполнения теста</dt><dd data-test-time>00:00</dd></div><div><dt>Время просмотра лекции</dt><dd data-view-time>00:00</dd></div></dl></div></div></div>
 </div></article><nav class="pager"><a class="" href="08-lek-06.html"><span>← Предыдущее занятие</span>Лекция 6. Архитектура приложения</a><a class="next" style="text-align:right;margin-left:auto" href="10-prakt-03.html"><span>Следующее занятие →</span>Практика 3. Модель учебного продукта в UML</a></nav></main>
 <div class="modal" data-modal="warn" hidden>
   <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="warn-title">

@@ -888,23 +888,84 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <canvas class="shader-bg" width="820" height="300" aria-hidden="true" style="background:linear-gradient(135deg,#08090D,#1D9E75 58%,#08090D)"></canvas>
 <div class="badges"><span class="pill dark">Занятие 14</span><span class="pill">Технология разработки ПО</span></div>
 <div class="hero-panel"><h1>Проектирование данных</h1><p class="dek">Схема данных определяет скорость запросов и целостность. Разберём ER-модель, третью нормальную форму, ключи и индексы.</p></div>
-<div class="glyph" aria-hidden="true">Л9</div></header><section class="outcomes"><b>После этого занятия вы сможете</b><ul><li>Строить ER-модель с сущностями и связями</li><li>Приводить таблицы к третьей нормальной форме</li><li>Выбирать первичные и внешние ключи</li><li>Объяснять цену индекса</li></ul></section><nav class="toc"><b>Содержание занятия</b><ol><li><a href="#телефон-в-каждой-строке">Телефон в каждой строке</a></li><li><a href="#сущности-и-связи">Сущности и связи</a></li><li><a href="#ключи">Ключи</a></li><li><a href="#нормальные-формы">Нормальные формы</a></li><li><a href="#индексы">Индексы</a></li><li><a href="#транзакции">Транзакции</a></li><li><a href="#денормализация">Денормализация</a></li><li><a href="#где-схема-ломается">Где схема ломается</a></li><li><a href="#итоги">Итоги</a></li></ol></nav><article class="prose"><h2 id="телефон-в-каждой-строке"><span class="num">01</span>Телефон в каждой строке</h2>
-<p>В таблице заявок у каждой строки записан телефон исполнителя. Пока исполнитель один, всё работает. Когда у него меняется номер, приходится править пять строк, а одну забывают.</p>
-<p><strong>Схема данных</strong> задаёт таблицы, ключи и связи. От неё зависит, какие запросы будут быстрыми и какие ошибки станет невозможно записать.</p>
-<p>Главная мысль занятия: <strong>каждый факт хранится в одном месте</strong>. Нормализация нужна не для красоты схемы, а чтобы изменение не приходилось повторять.</p>
-<h2 id="сущности-и-связи"><span class="num">02</span>Сущности и связи</h2>
-<p><strong>ER-модель</strong> показывает сущности и связи между ними.</p>
+<div class="glyph" aria-hidden="true">Л9</div></header><section class="outcomes"><b>После этого занятия вы сможете</b><ul><li>Строить ER-модель с сущностями и связями</li><li>Приводить таблицы к третьей нормальной форме</li><li>Выбирать первичные и внешние ключи</li><li>Объяснять цену индекса и денормализации</li><li>Проверять целостность данных ограничениями и транзакциями</li></ul></section><nav class="toc"><b>Содержание занятия</b><ol><li><a href="#телефон-в-каждой-строке">Телефон в каждой строке</a></li><li><a href="#три-уровня-модели-данных">Три уровня модели данных</a></li><li><a href="#сущности-атрибуты-и-связи">Сущности, атрибуты и связи</a></li><li><a href="#ключи">Ключи</a></li><li><a href="#нормальные-формы">Нормальные формы</a></li><li><a href="#денормализация">Денормализация</a></li><li><a href="#индексы">Индексы</a></li><li><a href="#транзакции-и-целостность">Транзакции и целостность</a></li><li><a href="#реальные-случаи">Реальные случаи</a></li><li><a href="#как-читать-чужую-схему">Как читать чужую схему</a></li><li><a href="#схема-для-учебного-проекта">Схема для учебного проекта</a></li><li><a href="#чек-лист-схемы-данных">Чек-лист схемы данных</a></li><li><a href="#итоги">Итоги</a></li><li><a href="#источники">Источники</a></li></ol></nav><article class="prose"><h2 id="телефон-в-каждой-строке"><span class="num">01</span>Телефон в каждой строке</h2>
+<p>В таблице заявок у каждой строки записан телефон исполнителя. Пока исполнитель один, всё работает. Когда у него меняется номер, приходится править пять строк, а одну забывают. Через месяц в отчёте появляются два телефона одного человека, и никто не знает, какой настоящий.</p>
+<p><strong>Схема данных</strong> задаёт таблицы, ключи и связи. От неё зависит, какие запросы будут быстрыми, какие ошибки станет невозможно записать и сколько работы потребует изменение правила.</p>
+<p>Главная мысль занятия: <strong>каждый факт хранится в одном месте</strong>. Нормализация нужна не для красоты схемы, а чтобы изменение не приходилось повторять. Индекс нужен не для галочки, а чтобы конкретный запрос укладывался в бюджет времени.</p>
+<p>Схема это компромисс между тремя силами. Целостность требует ограничений и связей. Скорость чтения требует индексов и иногда повторов. Скорость записи требует меньшего числа индексов и проверок. Не существует схемы, которая одновременно оптимальна для всего. Есть схема, подходящая под известные запросы и правила.</p>
+<h2 id="три-уровня-модели-данных"><span class="num">02</span>Три уровня модели данных</h2>
+<p>Одну и ту же базу описывают на трёх уровнях.</p>
+<p><strong>Концептуальный уровень</strong> отвечает на вопрос «какие объекты важны и как они связаны». Здесь нет типов столбцов и имён таблиц. Есть заявка, сотрудник, исполнитель и правила: сотрудник создаёт много заявок, заявка назначается одному исполнителю.</p>
+<p><strong>Логический уровень</strong> превращает модель в таблицы и связи, выбирает ключи и ограничения. Появляются отношения «один ко многим», «многие ко многим» и правила уникальности.</p>
+<p><strong>Физический уровень</strong> описывает конкретную СУБД: типы данных, индексы, размещение файлов, стратегию резервного копирования. Здесь появляются <code>INTEGER</code>, <code>VARCHAR</code>, <code>TIMESTAMP</code> и индексы B-tree.</p>
+<p>Смешивание уровней приводит к спорам не о том. На концептуальном уровне бессмысленно спрашивать, сколько байт занимает номер. На физическом поздно выяснять, что у заявки может быть несколько исполнителей.</p>
+<p>Реляционную модель предложил Эдгар Кодд в 1970 году: данные представлены отношениями, а доступ к ним не зависит от физического расположения строк <a href="https://doi.org/10.1145/362384.362685">Codd, 1970</a>. Модель «сущность-связь» предложил Питер Чен в 1976 году как способ проектировать данные ближе к пониманию человека <a href="https://doi.org/10.1145/320434.320440">Chen, 1976</a>. Обе работы объясняют, почему схему проектируют до написания SQL.</p>
+<h3>Зачем модель, если есть SQL</h3>
+<p>SQL позволяет создать таблицу за минуту. Проблема не в скорости создания, а в стоимости изменения. Переименовать столбец в учебной базе легко. Разделить таблицу с миллионом строк, перенести данные и обновить все запросы уже нет.</p>
+<p>Модель даёт возможность проверить решение до того, как оно станет дорогим. На схеме видно, что заявка и исполнитель связаны многие ко многим, а значит, нужна таблица связи. В коде это выяснится, когда появится вторая запись об исполнителе и придётся менять структуру.</p>
+<h2 id="сущности-атрибуты-и-связи"><span class="num">03</span>Сущности, атрибуты и связи</h2>
+<p><strong>Сущность</strong> это объект, о котором хранят данные. В ER-модели сущность изображают прямоугольником, атрибуты списком внутри или рядом, связи линиями.</p>
+<table>
+<thead>
+<tr>
+<th>Понятие</th>
+<th>Пример</th>
+<th>Что означает</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Сущность</td>
+<td>Заявка</td>
+<td>объект учёта</td>
+</tr>
+<tr>
+<td>Атрибут</td>
+<td>тема</td>
+<td>свойство сущности</td>
+</tr>
+<tr>
+<td>Связь</td>
+<td>сотрудник создаёт заявку</td>
+<td>отношение между сущностями</td>
+</tr>
+<tr>
+<td>Кратность</td>
+<td>один ко многим</td>
+<td>сколько объектов с каждой стороны</td>
+</tr>
+<tr>
+<td>Обязательность</td>
+<td>заявка без исполнителя</td>
+<td>может ли связь отсутствовать</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Кратность</strong> отвечает на вопрос «сколько». Один сотрудник создаёт много заявок. Одна заявка назначается одному исполнителю. Один исполнитель получает много заявок. Если исполнителей может быть несколько, связь становится «многие ко многим», и появляется промежуточная таблица.</p>
+<p><strong>Обязательность</strong> отвечает на вопрос «должна ли связь существовать». Новая заявка может быть без исполнителя, пока диспетчер её не назначил. Значит, внешний ключ исполнителя допускает пустое значение. Комментарий без заявки существовать не может, значит, связь обязательна с обеих сторон.</p>
+<p><strong>Ассоциативная сущность</strong> появляется там, где у связи есть собственные атрибуты. Заявка и исполнитель связаны, но у назначения есть дата, роль и признак основного исполнителя. Эти атрибуты принадлежат не заявке и не исполнителю, а связи. Значит, нужна таблица назначений.</p>
+<p><strong>Слабая сущность</strong> зависит от родителя. Комментарий не имеет смысла без заявки. Его ключ может включать номер заявки, а удаление заявки удаляет комментарии.</p>
+<h3>Как читать ER-модель</h3>
+<p>Читать схему удобно по вопросам:</p>
 <ul>
-<li><strong>Сущность</strong>: заявка, сотрудник, исполнитель.</li>
-<li><strong>Атрибут</strong>: тема, имя, телефон.</li>
-<li><strong>Связь</strong>: сотрудник создаёт заявки.</li>
-<li><strong>Кратность</strong>: один сотрудник, много заявок.</li>
+<li>какие сущности существуют независимо;</li>
+<li>какие зависят от других;</li>
+<li>где стоит ключ;</li>
+<li>какая кратность у каждой связи;</li>
+<li>какие связи обязательны;</li>
+<li>какие атрибуты есть у самой связи.</li>
 </ul>
-<p>Каждая сущность становится таблицей, атрибуты становятся столбцами.</p>
-<h2 id="ключи"><span class="num">03</span>Ключи</h2>
-<p><strong>Первичный ключ</strong> однозначно определяет строку. Это может быть номер или составной ключ.</p>
-<p><strong>Внешний ключ</strong> ссылается на первичный ключ другой таблицы и обеспечивает целостность.</p>
-<p>Пример:</p>
+<p>Если на схеме есть линия без подписи кратности, модель неполная. «Сотрудник связан с заявкой» может означать один ко многим, многие ко многим и даже один к одному. Без кратности нельзя написать запрос и нельзя проверить данные.</p>
+<p>Если связь изображена, но в таблицах нет внешнего ключа, модель расходится с реализацией. Схема обещает целостность, которой нет.</p>
+<p>Схема ниже показывает, как один и тот же набор данных выглядит до и после устранения повторов.</p>
+<figure class="figure" data-fig="er-normal" data-one="H4sIAAAAAAACCrVYW2/jxhV+318xpVFgtxAlkaJompYEtOkuEgRFA7RFkqeCEimJMEUKJOW1kxRY73Z7QbZxEiStu81uGvfysg/1ujXsri8B+guG/yjfGV6sC23H3c2DRM6ZmXPOfHPOd4bT+t6Pf/raz9996zYbxiOvc6NFD+ZZ/qAthROJBI5l4zFyYov1hlYYOXFbmsR92ZBysW+NnLa07jp3x0EYS6wX+LHjY9hd146HbdtZd3uOLBoV5vpu7FqeHPUsz2krpCR2Y8/p8Cf8LLnHT/geP+ZH/JDvJb/hR8k2S7aSh/yAnyQfMv4f9J7y0+TD5GGrls670YriTXoyZoZBELP3mSyPrbETmkt9q6/3G6sQuP6auaTaDUVTqTmaxI5tLjW7zaZeJ4HV68Flc6l+x/ihLmZEQR/t28qd5u3b1A4nnmOGg651U2tWtJWKrleqinprlf0Kln8Aq91gQ47c91x/YHaD0HZCGZK0m1CtYIC9iXEjKxy4vgmzXau3NgiDiW+bcWj50dgK4cQqAPSC0Fy3wpvCcdjoA1K5b41cb9OUfuYMAof94g2pEm1GsTOSJ24lwnQ5ckK3n1qs9kPsCnl1biNVKKCBytRHUxlvsCjwXJul3bTMolcOLdudRKaijrGSsWXbtDrFwJz0TxtnK6w6m043DO5OrY/VmUHd5Lup1+tsZbxRU6oqey3wYdGKKqPAD7DonrPKPCeOYY9aZKKq6M5olcXORiwLaPpBODInY7jesyJnFiKxmdlGVP0gds6dUOrwEs6zeuaHoggnmqVOXKQ0Wh9Ape1GY8/aNLte0FtbZSKeYaD+/VU2dNzBMDatSRzQjFYtC8lWLUsf2no8bHed9WA0aktifySK2tY4l2UYSh3+WR7n/ID975Al95EZB/h/hHxAR5EoySO09ihJfp0LW7Wx0EpOU07+KNhoS7QZulFnarMusTBA5knuaCAxK3Qt2bO6juc5dncTLoSySCuGF9uJesJDaEuFrn0+Al4+RT7CPEt+h0S9x8/4i9SX+3DtOWUxMniP8aMiham1P7UayP67uJ4zCIv1HBR5Lvwgn3I3Uv/4V7B0wPfJj1nDyRbjX0PbPuRQlmwnHyW/B7WcoH+LgCzYhESMpGL8MYRHmHMAf7YrjKRwZS8zgVdaELRuE0kV2zRtnKjqOeYfzjhAb9VWjdzu3MhgRYAz7I+iYl8Av6pKadBbfm8YhG1p5No2sJ4mgLa0GLvZANAPdna52kTb9by2lDEcUPqEP+N/4U9Nxr/Evn3Kd/H/V/6M8R2S/A0okmSXPwPecCCDe3Atw3pVz+IFU0Only1NrKyBR1oPJFXRpSxl0C0iEuP0wud+vy+xKA6DNejMSFuqFYo913fYhpJpxpM0bKgEngGBmgquMX9ZnZtPgmK+o9lGr3/Z/BVtbj4JrjFfITxmFAjJdTQ0jHkNJLmOBn0eRCG5WEMeuVngak2pgxryARN5Q4n+ASXJGeVL8kDwxBF/ASFxBH9epbeyfHuUqziuTgfiokEdoaaQlmPoO4Eessh3KEkFheyjqSoaCb8UZHMvEyqKrKqX6zZwtlFp5qHQfZY6/pUgjnuF9oZS/7+0KwrysSHwwcQH/PhCx59C7XFurSFr2hWKkWMdmpj8gb8QjHVKWh7DxiFUH4AUcycN6iDR/eLlCt1NTeo00/07Bo/+9hJELnW7VRt0yrlPWTFeAfnpVaMgkq7asNSu1EkDCotEUQEms0VBbN8WEX0amojTFBix+/siSo+oiVguCWkquOnqcsYsciY9S+ZJJGfsp1QLpvMDH87jqLKGaub4qGqT0Lu5ZIV3Zf/WOZOOrXjI0PkTtaFj7+rDhpYnokBzFs6G9h2Vkmw5HVEqPs6KyS6KyA4Tgk8g2uH/PK8gr6yEqMvGfA1RiKPzGoLYnCsh6bFdWtiLEgZMleNFyzhUo/JBDKgZlykoEsTQUwZMoZkLj4uyKptEeII2b7715i3BiPjK2S5IMo/EGTxLYFnRv0tYFEWdw0VIvj0wSn0ZyOyUkf0V6Cjqcik8s/l8FTyikJXhQ++vAJ9lfR6fZf1a+CzjK5j/iY7OoJspQrlo/Ep9GpWZgkuHUCoqydYVStQ6+HyRzX5Jeu+8eeuq2QoqZHn9LtMwxVJT9JgdTRfoUZ2hx0UWBM4MGAwVfV3W9KGMs1KtfBTKKI3S6tODFguQZqRH1BX1uqWm5Jxdmrml5pS6/vL2kodpoacNSD9qzrCXMM+E/PByD6hUvLQHpclYbo8Y6aURLv+wmi06C8VQ019BNTQWa+FjFL4/4nP9Gf8z439H4zHfZfwfqIof8ycoh7soCf9i/FOcijDqCf6/YPwL/rkoop/PoGU7/aiI4/RQIL50xXEgPya8nWaJkbdfz7gMywud/jsgNfHyLpYusSB0xT0c3UtIndY48DYHgc/GgevHkbgUqDCDNSp0OTC/tFqnVUtN5GmT+9eqReuD2YsLunSRLrnBe0ApIQJSHKymtq5CrH4o02CqemfFhv6bn6WxfEovpO0E+34qfkf43Bbf5EfJwzTe8+DfF5cJ4sCGTwmcQEUebpFmcbmAZ3rsFrcVVXFXgpW56/TILmlq6VXoN8sgp6YbFQAA"><iframe title="Figure 1: er-normal" scrolling="no"></iframe><figcaption>Слева широкая таблица с повторяющимися телефоном и кабинетом, справа три таблицы в третьей нормальной форме.</figcaption></figure>
+
+<h2 id="ключи"><span class="num">04</span>Ключи</h2>
+<p><strong>Первичный ключ</strong> однозначно определяет строку. Он не меняется, не пустеет и не повторяется.</p>
+<p><strong>Кандидатный ключ</strong> это любой набор столбцов, который мог бы быть первичным. Табельный номер и адрес электронной почты могут быть кандидатами. Один из них выбирают первичным, остальные получают ограничение уникальности.</p>
+<p><strong>Суррогатный ключ</strong> создаёт система: последовательность, UUID, автоинкремент. <strong>Естественный ключ</strong> берут из области: номер договора, код изделия, табельный номер. Суррогатный ключ устойчив, но ничего не значит для человека. Естественный понятен, но может измениться.</p>
+<p><strong>Составной ключ</strong> состоит из нескольких столбцов. В таблице назначений ключом может быть пара «заявка, исполнитель». Тогда одна и та же пара не повторится, а разные исполнители одной заявки допустимы.</p>
+<p><strong>Внешний ключ</strong> ссылается на ключ другой таблицы и обеспечивает целостность связи. База не даст сохранить заявку с несуществующим сотрудником, если ограничение включено.</p>
 <div class="codehilite" data-lang="sql"><pre><span></span><code><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">employee</span><span class="w"> </span><span class="p">(</span>
 <span class="w">    </span><span class="n">id</span><span class="w"> </span><span class="nb">INTEGER</span><span class="w"> </span><span class="k">PRIMARY</span><span class="w"> </span><span class="k">KEY</span><span class="p">,</span>
 <span class="w">    </span><span class="n">name</span><span class="w"> </span><span class="nb">TEXT</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span>
@@ -914,68 +975,427 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">request</span><span class="w"> </span><span class="p">(</span>
 <span class="w">    </span><span class="n">id</span><span class="w"> </span><span class="nb">INTEGER</span><span class="w"> </span><span class="k">PRIMARY</span><span class="w"> </span><span class="k">KEY</span><span class="p">,</span>
 <span class="w">    </span><span class="n">subject</span><span class="w"> </span><span class="nb">TEXT</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span>
-<span class="w">    </span><span class="n">employee_id</span><span class="w"> </span><span class="nb">INTEGER</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="k">REFERENCES</span><span class="w"> </span><span class="n">employee</span><span class="p">(</span><span class="n">id</span><span class="p">)</span>
+<span class="w">    </span><span class="n">employee_id</span><span class="w"> </span><span class="nb">INTEGER</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="k">REFERENCES</span><span class="w"> </span><span class="n">employee</span><span class="p">(</span><span class="n">id</span><span class="p">),</span>
+<span class="w">    </span><span class="n">assignee_id</span><span class="w"> </span><span class="nb">INTEGER</span><span class="w"> </span><span class="k">REFERENCES</span><span class="w"> </span><span class="n">employee</span><span class="p">(</span><span class="n">id</span><span class="p">)</span>
 <span class="p">);</span>
 </code></pre></div>
 
-<p>База не даст сохранить заявку с несуществующим сотрудником.</p>
-<h2 id="нормальные-формы"><span class="num">04</span>Нормальные формы</h2>
-<p><strong>Первая нормальная форма</strong>: в ячейке одно значение. Список телефонов через запятую нарушает 1НФ.</p>
-<p><strong>Вторая нормальная форма</strong>: каждый неключевой атрибут зависит от всего первичного ключа, а не от его части.</p>
-<p><strong>Третья нормальная форма</strong>: неключевой атрибут не зависит от другого неключевого атрибута.</p>
-<figure class="figure" data-fig="er-normal" data-one="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"><iframe title="Figure 1: er-normal" scrolling="no"></iframe><figcaption>Слева широкая таблица с повторяющимися телефоном и кабинетом, справа три таблицы в третьей нормальной форме.</figcaption></figure>
-
-<p>В примере телефон зависит от исполнителя, а кабинет от сотрудника. В одной таблице они создают повтор и аномалии:</p>
-<ul>
-<li><strong>вставки</strong>: нельзя добавить исполнителя без заявки;</li>
-<li><strong>обновления</strong>: телефон меняется в нескольких строках;</li>
-<li><strong>удаления</strong>: вместе с последней заявкой исчезает исполнитель.</li>
-</ul>
+<p>В примере у заявки два внешних ключа: автор и исполнитель. Оба ссылаются на сотрудника, но означают разные роли. Если назвать оба <code>employee_id</code>, запрос станет двусмысленным. В полной схеме исполнитель может быть отдельной сущностью, если у него есть собственные атрибуты: специализация, телефон, график.</p>
+<h3>NULL и уникальность</h3>
+<p>Пустое значение это не ноль и не пустая строка. <code>NULL</code> означает «значение неизвестно или отсутствует». Поэтому <code>NULL</code> не равен другому <code>NULL</code>, а сравнение требует <code>IS NULL</code>.</p>
+<p>Ограничение уникальности и <code>NULL</code> взаимодействуют по-разному в разных СУБД. В PostgreSQL несколько строк с <code>NULL</code> в уникальном столбце обычно допустимы, потому что неизвестные значения не считаются равными. Если нужно запретить более одного пустого значения, используют частичный индекс или отдельное ограничение.</p>
+<p>Пустое значение в обязательном поле это ошибка модели. Если исполнитель может быть не назначен, поле необязательное. Если не может, ставят <code>NOT NULL</code> и объясняют, кто назначает исполнителя при создании.</p>
+<h3>Ключ и идентичность</h3>
+<p>Ключ отвечает за уникальность строки, но не за её смысл. Два сотрудника с одинаковым именем остаются разными строками, если у них разные идентификаторы. Это нормально: идентификатор не обязан быть понятным человеку.</p>
+<p>Ошибка начинается там, где естественный ключ выбирают ради удобства отчёта. Номер заявки из бумажного журнала может повторяться после объединения отделов. Электронная почта меняется при смене фамилии. Телефон переходит к другому сотруднику. Суррогатный ключ снимает эту нагрузку, а человекочитаемый номер остаётся отдельным атрибутом.</p>
+<h3>Когда естественный ключ меняется</h3>
+<p>Естественный ключ может измениться по правилам области: сотрудник меняет фамилию, подразделение получает новый код, договор перезаключают. Если такой ключ используется в связях, изменение приходится проводить по всем таблицам.</p>
+<p><code>ON UPDATE CASCADE</code> обновляет ссылки автоматически, но не отменяет вопрос, нужно ли менять ключ. Иногда проще оставить старый код как исторический и завести новый, чем переписывать связи.</p>
+<p>Для учебного проекта правило простое: суррогатный ключ для связей, естественный номер как отдельный атрибут с ограничением уникальности. Тогда изменение номера не ломает ссылки.</p>
 <div class="gate-step" data-gate>
-<p class="gate-action"><button type="button" class="gate-btn" aria-expanded="false"><span class="gate-q" aria-hidden="true">?</span><span>Почему телефон исполнителя нельзя хранить в каждой строке таблицы заявок?</span></button></p>
-<div class="gate-content" hidden><h2 id="индексы"><span class="num">05</span>Индексы</h2>
-<p><strong>Индекс</strong> ускоряет поиск по столбцу, но занимает место и замедляет вставку.</p>
+<p class="gate-action"><button type="button" class="gate-btn" aria-expanded="false"><span class="gate-q" aria-hidden="true">?</span><span>Что произойдёт с таблицей, если один факт хранится в двух местах?</span></button></p>
+<div class="gate-content" hidden><h2 id="нормальные-формы"><span class="num">05</span>Нормальные формы</h2>
+<p>Нормализация это последовательность правил, которые убирают повторение фактов. Каждая нормальная форма отвечает на свой тип зависимости.</p>
+<p><strong>Первая нормальная форма (1НФ)</strong> требует, чтобы в ячейке было одно значение. Список телефонов через запятую нарушает 1НФ: его невозможно нормально фильтровать, сравнивать и обновлять. Правильное решение: отдельная таблица телефонов или одно поле на один телефон.</p>
+<p><strong>Вторая нормальная форма (2НФ)</strong> требует, чтобы каждый неключевой атрибут зависел от всего первичного ключа, а не от его части. Она важна для составных ключей. Если ключ таблицы это пара «заявка, исполнитель», а тема заявки зависит только от номера заявки, тема хранится не там.</p>
+<p><strong>Третья нормальная форма (3НФ)</strong> требует, чтобы неключевой атрибут не зависел от другого неключевого атрибута. Если в заявке хранится сотрудник и его кабинет, кабинет зависит от сотрудника, а не от заявки. Изменение кабинета потребует правки всех заявок сотрудника.</p>
+<p><strong>Нормальная форма Бойса-Кодда</strong> усиливает 3НФ для случаев, когда в таблице несколько перекрывающихся кандидатных ключей. Для учебного проекта достаточно знать, что 3НФ не всегда последняя ступень, но в большинстве схем её хватает.</p>
+<h3>Аномалии</h3>
+<p>Повторение фактов создаёт три вида аномалий.</p>
+<p><strong>Аномалия вставки.</strong> Нельзя добавить исполнителя, пока у него нет заявки. Данные о человеке зависят от события, которого ещё не было.</p>
+<p><strong>Аномалия обновления.</strong> Телефон меняется в нескольких строках. Если обновить не все, в базе появляются два разных телефона одного человека.</p>
+<p><strong>Аномалия удаления.</strong> Вместе с последней заявкой исчезает исполнитель. Удаление события стирает справочные данные.</p>
+<p>Нормализация устраняет причины аномалий, а не их последствия. Можно поставить триггер, который обновляет телефон во всех строках, но это лечение симптома. Проще хранить телефон один раз.</p>
+<figure class="figure" data-fig="nf-explorer" data-one="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"><iframe title="Figure 2: nf-explorer" scrolling="no"></iframe><figcaption>Нажимайте 1НФ, 2НФ и 3НФ: схема показывает, какое правило нарушает таблица и что именно нужно вынести в отдельную таблицу.</figcaption></figure>
+
+<h3>Что нормализация не делает</h3>
+<p>Нормализация не требует дробить всё до бесконечности. Она убирает зависимость неключевых атрибутов, а не любые повторения. Две одинаковые строки в разных таблицах могут быть нормальны, если они описывают разные факты.</p>
+<p>Нормализация не гарантирует скорость. Она уменьшает избыточность и аномалии, но сложные отчёты могут требовать многих соединений. Именно поэтому после измерения появляются индексы, материализованные представления и иногда сознательная денормализация.</p>
+<p>Нормализация не заменяет ограничения. Даже идеальная 3НФ допускает отрицательную сумму, пустое имя и заявку, закрытую без комментария. Целостность обеспечивают ключи, <code>NOT NULL</code>, <code>CHECK</code>, внешние ключи и транзакции.</p>
+<h3>Пример приведения</h3>
+<table>
+<thead>
+<tr>
+<th>Шаг</th>
+<th>Таблица</th>
+<th>Что не так</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Исходно</td>
+<td>заявка, тема, сотрудник, кабинет, исполнитель, телефоны</td>
+<td>список в ячейке, повтор кабинета и телефона</td>
+</tr>
+<tr>
+<td>1НФ</td>
+<td>телефоны вынесены в отдельную таблицу</td>
+<td>кабинет зависит от сотрудника</td>
+</tr>
+<tr>
+<td>2НФ</td>
+<td>ключ и зависимости пересобраны</td>
+<td>тема и кабинет зависят не от ключа целиком</td>
+</tr>
+<tr>
+<td>3НФ</td>
+<td>сотрудник, исполнитель, заявка, телефон</td>
+<td>повтор устранён</td>
+</tr>
+</tbody>
+</table>
+<p>В этом примере появляются четыре таблицы. Сотрудник хранит имя и кабинет. Исполнитель хранит специализацию и телефон. Заявка ссылается на сотрудника и исполнителя. Телефон исполнителя хранится один раз.</p>
+<p>Число таблиц выросло, но число мест, где нужно менять один факт, сократилось до одного. Это и есть цель нормализации.</p>
+<h2 id="денормализация"><span class="num">06</span>Денормализация</h2>
+<p><strong>Денормализация</strong> это сознательное повторение данных ради скорости или простоты. Она не отменяет нормализацию, а добавляет к ней решение с ценой.</p>
+<p>Типичные случаи:</p>
+<ul>
+<li>отчёт строится по миллиону строк и требует соединения пяти таблиц;</li>
+<li>список заявок показывает имя исполнителя, а соединение на каждом запросе слишком дорого;</li>
+<li>счётчик комментариев нужен на каждом экране;</li>
+<li>внешняя система требует плоский файл.</li>
+</ul>
+<p>Денормализация оправдана, когда измерена медленная выборка, данные редко меняются и есть правило синхронизации копий. Без измерения это преждевременное усложнение.</p>
+<p>Цена денормализации:</p>
+<ul>
+<li>появляется второе место, где хранится факт;</li>
+<li>нужен механизм обновления копии;</li>
+<li>возможны расхождения при сбое;</li>
+<li>усложняется миграция;</li>
+<li>тесты должны проверять синхронизацию.</li>
+</ul>
+<p><strong>Материализованное представление</strong> это компромисс: база хранит результат запроса и обновляет его по расписанию или по команде. Чтение быстрое, но данные могут отставать. Для отчёта за прошлый месяц это нормально. Для остатка на складе, возможно, нет.</p>
+<p><strong>Кэш</strong> в приложении работает похоже, но живёт вне базы. Он быстрее, но сложнее в инвалидации. Если кэш не сбрасывается при изменении, пользователь видит старое значение и не понимает почему.</p>
+<p>Пример со счётчиком комментариев. Нормализованная схема считает <code>COUNT(*)</code> при каждом открытии списка. Это честно, но дорого при тысяче заявок. Денормализованный счётчик в заявке ускоряет список, однако требует обновления в той же транзакции, что и вставка комментария. Если обновление забыть, число расходится. Если обновлять отдельным заданием, расхождение становится видимым на несколько минут.</p>
+<p>Компромисс выбирают по требованию: допустимо ли кратковременное расхождение. Для счётчика комментариев обычно да, для остатка на складе нет.</p>
+<p>Правило простое: сначала нормализованная схема и измерение, затем индекс, затем материализованное представление, затем денормализация. Обратный порядок приводит к схеме, которую никто не может объяснить.</p>
+<h2 id="индексы"><span class="num">07</span>Индексы</h2>
+<p><strong>Индекс</strong> это дополнительная структура, которая ускоряет поиск по столбцу. Чаще всего это B-tree: сбалансированное дерево, где поиск занимает логарифмическое время от числа строк.</p>
 <p>Индекс ставят на:</p>
 <ul>
-<li>первичный ключ (обычно создаётся сам);</li>
+<li>первичный ключ, обычно он создаётся автоматически;</li>
 <li>внешний ключ, по которому часто соединяют таблицы;</li>
-<li>столбец фильтра или сортировки в частом запросе.</li>
+<li>столбец фильтра или сортировки в частом запросе;</li>
+<li>набор столбцов, который используется вместе.</li>
 </ul>
-<p>Индекс на каждый столбец бесполезен: база выбирает один путь, а обновление схемы становится дороже.</p>
-<h2 id="транзакции"><span class="num">06</span>Транзакции</h2>
-<p><strong>Транзакция</strong> объединяет несколько изменений в одно целое. Либо выполняются все, либо ни одного.</p>
-<p>Перевод заявки в статус «выполнена» и запись комментария должны происходить вместе. Иначе заявка закрыта, а объяснения нет.</p>
-<p>Свойства транзакции описывают аббревиатурой ACID: атомарность, согласованность, изоляция, долговечность.</p>
-<h2 id="денормализация"><span class="num">07</span>Денормализация</h2>
-<p>Иногда повтор добавляют сознательно: ради скорости отчёта или простоты запроса.</p>
-<p>Денормализация оправдана, когда:</p>
+<p>Индекс на каждый столбец бесполезен. База выбирает один путь выполнения, а обновление схемы становится дороже. Кроме того, индекс занимает место и требует обслуживания.</p>
+<h3>Как индекс влияет на запись</h3>
+<p>Каждая вставка, обновление и удаление меняет не только таблицу, но и все индексы, где встречается изменённый столбец. Чем больше индексов, тем дороже запись. На таблице заявок с пятью индексами вставка может быть заметно медленнее, чем с одним.</p>
+<p>Индекс также занимает диск и память. В PostgreSQL обновление строки создаёт новую версию, а старые версии очищаются отдельным процессом. Поэтому частые обновления индексированного столбца увеличивают нагрузку на очистку <a href="https://www.postgresql.org/docs/current/indexes.html">PostgreSQL, 2026</a>.</p>
+<h3>Селективность и порядок столбцов</h3>
+<p><strong>Селективность</strong> показывает, какая доля строк проходит по условию. Индекс по статусу заявки, где 90 процентов строк имеют статус «закрыта», полезен меньше, чем индекс по номеру заявки.</p>
+<p>В составном индексе важен порядок столбцов. Индекс <code>(employee_id, created_at)</code> помогает запросу «заявки сотрудника за период», потому что сначала фильтруется сотрудник, затем дата. Индекс <code>(created_at, employee_id)</code> для этого запроса менее удобен: дата не указана точно.</p>
+<p><strong>Покрывающий индекс</strong> содержит все столбцы, нужные запросу. База может ответить по индексу, не читая таблицу. Это ускоряет чтение, но увеличивает размер индекса и стоимость записи.</p>
+<p><strong>Частичный индекс</strong> строится только по части строк. Например, индекс по незакрытым заявкам. Он меньше и быстрее, если запросы почти всегда работают с открытыми заявками.</p>
+<h3>Как проверить, что индекс нужен</h3>
+<ol>
+<li>Записать запрос и его цель.</li>
+<li>Посмотреть план выполнения.</li>
+<li>Замерить время на реальном объёме данных.</li>
+<li>Добавить индекс.</li>
+<li>Повторить замер.</li>
+<li>Проверить, как изменилась запись.</li>
+</ol>
+<p>Без замера решение превращается в веру. Иногда база не использует индекс, потому что таблица маленькая или условие возвращает почти все строки. Иногда использует, но проигрывает из-за случайного доступа к строкам.</p>
+<h3>Что показывает план запроса</h3>
+<p><code>EXPLAIN</code> показывает, как СУБД собирается выполнять запрос: какие таблицы читает, какие индексы использует, сколько строк ожидает. <code>EXPLAIN ANALYZE</code> выполняет запрос и добавляет фактические числа.</p>
+<p>Полезно смотреть на:</p>
 <ul>
-<li>измерена медленная выборка;</li>
-<li>данные редко меняются;</li>
-<li>есть правило синхронизации копий.</li>
+<li>тип доступа: последовательное чтение или индекс;</li>
+<li>ожидаемое и фактическое число строк;</li>
+<li>стоимость соединения;</li>
+<li>сортировку и агрегацию.</li>
 </ul>
-<p>Без измерения это преждевременное усложнение.</p>
-<h2 id="где-схема-ломается"><span class="num">08</span>Где схема ломается</h2>
-<p><strong>Список в ячейке.</strong> Телефоны через запятую невозможно нормально фильтровать.</p>
-<p><strong>Нет внешних ключей.</strong> В заявке остаётся сотрудник, которого удалили.</p>
-<p><strong>Дублирование факта.</strong> Кабинет хранится и в сотруднике, и в заявке.</p>
-<p><strong>Индекс на всё.</strong> Запись замедляется, выигрыш неясен.</p>
-<p><strong>Нет транзакции.</strong> Часть изменений сохранилась, часть потерялась.</p>
-<div class="callout pitfall"><span class="label">Третья нормальная форма не требует дробить всё до бесконечности. Она убирает зависимость неключевых атрибутов друг от друга, а не любые повторения.</span></div>
+<p>Если ожидание сильно расходится с фактом, статистика устарела или запрос написан так, что оценка невозможна. Тогда обновляют статистику и переписывают условие.</p>
+<p>Индекс не обязан использоваться. Для маленькой таблицы последовательное чтение дешевле. Для условия, которое возвращает почти все строки, индекс тоже проигрывает. Решение принимают по плану и времени, а не по наличию индекса в схеме.</p>
+<h3>Целостность и внешние ключи</h3>
+<p>Внешний ключ не только связывает таблицы, но и защищает от сирот. В SQLite внешние ключи по умолчанию отключены для совместимости: их нужно включать командой <code>PRAGMA foreign_keys = ON</code> для каждого соединения <a href="https://www.sqlite.org/foreignkeys.html">SQLite, 2026</a>. Если этого не сделать, ограничение будет объявлено, но не проверено.</p>
+<p>Это пример общей проблемы: <strong>объявленное ограничение не равно работающему</strong>. Перед проверкой схемы нужно убедиться, что СУБД действительно применяет правила. В PostgreSQL внешние ключи работают по умолчанию, но их поведение при удалении зависит от <code>ON DELETE</code>.</p>
+<p>Варианты поведения:</p>
+<ul>
+<li><code>RESTRICT</code> запрещает удаление родителя;</li>
+<li><code>CASCADE</code> удаляет дочерние строки;</li>
+<li><code>SET NULL</code> обнуляет ссылку;</li>
+<li><code>SET DEFAULT</code> ставит значение по умолчанию;</li>
+<li><code>NO ACTION</code> откладывает проверку до конца команды.</li>
+</ul>
+<p>Выбор зависит от смысла. Если удаляют сотрудника, заявки нельзя удалять: история нужна. Правильнее запретить удаление или пометить сотрудника неактивным. Если удаляют черновик заявки, комментарии можно удалить каскадом.</p></div>
+</div>
 
-<h2 id="итоги"><span class="num">09</span>Итоги</h2>
+<div class="gate-step" data-gate>
+<p class="gate-action"><button type="button" class="gate-btn" aria-expanded="false"><span class="gate-q" aria-hidden="true">?</span><span>Почему индекс, который ускоряет один отчёт, может замедлить приём заявок?</span></button></p>
+<div class="gate-content" hidden><h2 id="транзакции-и-целостность"><span class="num">08</span>Транзакции и целостность</h2>
+<p><strong>Транзакция</strong> объединяет несколько изменений в одно целое. Либо выполняются все, либо ни одного.</p>
+<p>Перевод заявки в статус «выполнена» и запись комментария должны происходить вместе. Иначе заявка закрыта, а объяснения нет. Если запись комментария не удалась, статус тоже должен откатиться.</p>
+<p>Свойства транзакции описывают аббревиатурой ACID:</p>
 <ul>
-<li>ER-модель показывает сущности, атрибуты и связи.</li>
-<li>Первичный ключ определяет строку, внешний обеспечивает целостность.</li>
-<li>Третья нормальная форма убирает повтор и аномалии.</li>
-<li>Индекс ускоряет чтение и замедляет запись.</li>
-<li>Транзакция сохраняет изменения целиком.</li>
+<li><strong>атомарность</strong>: всё или ничего;</li>
+<li><strong>согласованность</strong>: данные переходят из одного допустимого состояния в другое;</li>
+<li><strong>изоляция</strong>: параллельные транзакции не видят незавершённых изменений друг друга;</li>
+<li><strong>долговечность</strong>: после подтверждения изменение сохраняется.</li>
+</ul>
+<h3>Уровни изоляции</h3>
+<p>Стандарт SQL описывает несколько уровней изоляции. Чем выше уровень, тем меньше аномалий и тем больше блокировок или проверок.</p>
+<p><strong>Read uncommitted</strong> допускает чтение незавершённых данных. <strong>Read committed</strong> видит только подтверждённые строки, но повторное чтение может дать другой результат. <strong>Repeatable read</strong> сохраняет стабильный снимок данных в транзакции. <strong>Serializable</strong> делает результат эквивалентным последовательному выполнению.</p>
+<p>Потерянное обновление возникает, когда две транзакции читают одно значение и записывают каждая своё. Одна перезаписывает результат другой. Решение: блокировка строки, версия записи или атомарный <code>UPDATE</code> с условием.</p>
+<p>Фантомное чтение возникает, когда между двумя запросами появляются новые строки, подходящие под условие. Отчёт, который строит два запроса, может увидеть разные наборы.</p>
+<p>Для учебного проекта достаточно знать уровень по умолчанию своей СУБД и уметь объяснить, почему операция закрытия заявки должна быть одной транзакцией.</p>
+<h3>Пример закрытия заявки</h3>
+<p>Закрытие заявки включает три изменения: статус, комментарий и запись в журнале. Все три должны выполняться в одной транзакции.</p>
+<div class="codehilite" data-lang="text"><pre><span></span><code><span class="k">BEGIN</span><span class="p">;</span>
+<span class="k">UPDATE</span><span class="w"> </span><span class="n">request</span><span class="w"> </span><span class="k">SET</span><span class="w"> </span><span class="n">status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'closed'</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">42</span><span class="w"> </span><span class="k">AND</span><span class="w"> </span><span class="n">status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'done'</span><span class="p">;</span>
+<span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="k">comment</span><span class="w"> </span><span class="p">(</span><span class="n">request_id</span><span class="p">,</span><span class="w"> </span><span class="n">author_id</span><span class="p">,</span><span class="w"> </span><span class="n">body</span><span class="p">,</span><span class="w"> </span><span class="n">created_at</span><span class="p">)</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="mi">42</span><span class="p">,</span><span class="w"> </span><span class="mi">7</span><span class="p">,</span><span class="w"> </span><span class="s1">'Работа принята'</span><span class="p">,</span><span class="w"> </span><span class="s1">'2026-11-26'</span><span class="p">);</span>
+<span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">audit_log</span><span class="w"> </span><span class="p">(</span><span class="n">entity</span><span class="p">,</span><span class="w"> </span><span class="n">entity_id</span><span class="p">,</span><span class="w"> </span><span class="n">action</span><span class="p">,</span><span class="w"> </span><span class="k">at</span><span class="p">)</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="s1">'request'</span><span class="p">,</span><span class="w"> </span><span class="mi">42</span><span class="p">,</span><span class="w"> </span><span class="s1">'closed'</span><span class="p">,</span><span class="w"> </span><span class="s1">'2026-11-26'</span><span class="p">);</span>
+<span class="k">COMMIT</span><span class="p">;</span>
+</code></pre></div>
+
+<p>Если комментарий не записался, <code>ROLLBACK</code> вернёт статус. Если транзакция подтверждена, все три факта видны одновременно. Проверка <code>status = 'done'</code> не даёт закрыть заявку из недопустимого состояния, даже если два пользователя нажали кнопку одновременно.</p>
+<h3>Ограничения и проверки в приложении</h3>
+<p>Проверка в приложении удобна для сообщений. Ограничение в базе надёжно для целостности. Нужны обе.</p>
+<p>Приложение проверяет:</p>
+<ul>
+<li>заполнено ли поле;</li>
+<li>допустим ли формат;</li>
+<li>хватает ли прав;</li>
+<li>понятно ли сообщение пользователю.</li>
+</ul>
+<p>База проверяет:</p>
+<ul>
+<li>уникальность ключа;</li>
+<li>существование внешней ссылки;</li>
+<li>обязательность поля;</li>
+<li>допустимость значения через <code>CHECK</code>.</li>
+</ul>
+<p>Если проверка есть только в приложении, её обойдёт другой клиент, скрипт или ошибка в коде. Если только в базе, пользователь получит техническое сообщение. Поэтому правило живёт в одном месте, а проверки на двух уровнях ссылаются на него.</p>
+<h3>Идемпотентность</h3>
+<p>Повторная отправка формы не должна создавать вторую заявку. <strong>Идемпотентность</strong> означает, что повтор операции даёт тот же результат, что и один вызов.</p>
+<p>Способы:</p>
+<ul>
+<li>уникальный ключ запроса, который клиент присылает вместе с данными;</li>
+<li>проверка существующей записи перед вставкой в той же транзакции;</li>
+<li>блокировка на время создания;</li>
+<li>состояние «создаётся» с ограничением уникальности.</li>
+</ul>
+<p>Без идемпотентности двойное нажатие кнопки создаёт дубль, а повтор после таймаута создаёт второй дубль. Пользователь видит две заявки и не понимает, какая настоящая.</p>
+<h2 id="реальные-случаи"><span class="num">09</span>Реальные случаи</h2>
+<h3>Horizon, Великобритания</h3>
+<p>Почтовая сеть использовала систему Horizon для учёта операций в отделениях. Сбои в данных приводили к тому, что баланс отделения не сходился. Руководство считало данные системы истинными, а недостачу приписывало субпочтмейстерам.</p>
+<p>Высокий суд в деле Bates против Post Office в 2019 году установил, что Horizon содержал ошибки, дефекты и недостатки, и что они могли приводить к расхождениям в бухгалтерских записях <a href="https://www.judiciary.uk/wp-content/uploads/2019/12/bates-v-post-office-judgment.pdf">Bates v Post Office, 2019</a>. Сотни людей были привлечены к ответственности на основании данных, которые не были проверены независимо.</p>
+<p>Что пошло не так с данными:</p>
+<ul>
+<li>система считалась единственным источником истины без сверки;</li>
+<li>ошибки в транзакциях не отделялись от ошибок пользователя;</li>
+<li>журнал не давал достаточных доказательств для разбора;</li>
+<li>отсутствовала независимая проверка расхождений.</li>
+</ul>
+<p>Урок: <strong>целостность данных это не только ограничения в базе</strong>. Если модель не различает сбой системы и ошибку человека, ограничения могут быть идеальными, а выводы неверными. Нужны сверка, журнал и возможность восстановить ход операции.</p>
+<h3>Phoenix, Канада</h3>
+<p>Канадское правительство заменило устаревшую систему расчёта зарплаты системой Phoenix. В отчёте 2017 года аудитор генерала описал масштаб: более 80 тысяч правил из 105 коллективных договоров, 34 кадровые системы и более 200 доработанных программ <a href="https://publications.gc.ca/site/eng/9.845567/publication.html">OAG Canada, 2017</a>. Через полтора года после запуска более 150 тысяч сотрудников имели необработанные запросы по оплате, а сумма ошибок к июню 2017 года оценивалась в 523 млн канадских долларов.</p>
+<p>Причина не сводилась к «медленной базе». Модель данных должна была представлять правила разных договоров, надбавки, удержания и историю изменений. Правила пытались закодировать в программах, а не описать данными. В результате изменение одного договора требовало правки кода, а ошибки было трудно объяснить.</p>
+<p>Урок: <strong>если правило часто меняется, его место может быть в данных, а не в коде</strong>. Но перенос правила в данные требует модели: таблица ставок, условий, периодов действия и приоритетов. Без модели гибкость превращается в хаос.</p>
+<table>
+<thead>
+<tr>
+<th>Случай</th>
+<th>Проблема данных</th>
+<th>Цена</th>
+<th>Вывод</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Horizon</td>
+<td>данные считались истинными без сверки</td>
+<td>сотни несправедливых обвинений</td>
+<td>нужен независимый контроль</td>
+</tr>
+<tr>
+<td>Phoenix</td>
+<td>правила закодированы без модели</td>
+<td>сотни миллионов долларов ошибок</td>
+<td>правило меняется, модель должна это выдерживать</td>
+</tr>
+</tbody>
+</table>
+<h2 id="как-читать-чужую-схему"><span class="num">10</span>Как читать чужую схему</h2>
+<p>Схему читают по слоям, а не по списку таблиц.</p>
+<p>Качество данных описывают не одним словом «хорошие». ISO/IEC 25012 выделяет характеристики, среди которых полнота, точность, согласованность, актуальность и прослеживаемость <a href="https://www.iso.org/standard/35736.html">ISO/IEC 25012:2008</a>. Для схемы это означает: недостаточно, чтобы поле было заполнено. Нужно знать, откуда значение, когда оно обновлялось и совпадает ли с источником.</p>
+<ol>
+<li>Найти главные сущности и их ключи.</li>
+<li>Определить связи и кратность.</li>
+<li>Проверить обязательность и поведение при удалении.</li>
+<li>Найти ограничения уникальности и <code>CHECK</code>.</li>
+<li>Посмотреть индексы и самые частые запросы.</li>
+<li>Проверить, как схема менялась: миграции и версии.</li>
+</ol>
+<p>Полезно задать вопросы:</p>
+<ul>
+<li>какая таблица самая большая;</li>
+<li>какие запросы выполняются чаще всего;</li>
+<li>где хранится история изменений;</li>
+<li>что произойдёт при удалении сотрудника;</li>
+<li>можно ли восстановить ход операции;</li>
+<li>какие поля допускают <code>NULL</code> и почему.</li>
+</ul>
+<p><strong>Миграция</strong> это изменение схемы с сохранением данных. Она должна быть версионируемой и обратимой, если это возможно. Миграция, которая добавляет обязательный столбец без значения по умолчанию, сломает существующие строки. Миграция, которая переименовывает столбец, сломает старый код.</p>
+<p>Проверка миграции включает:</p>
+<ul>
+<li>прогон на копии данных;</li>
+<li>оценку времени и блокировок;</li>
+<li>план отката;</li>
+<li>проверку приложения после изменения.</li>
 </ul></div>
 </div>
 
 <div class="gate-step" data-gate>
-<p class="gate-action"><button type="button" class="gate-btn" aria-expanded="false"><span class="gate-q" aria-hidden="true">?</span><span>Почему индекс по каждому столбцу не делает базу быстрее?</span></button></p>
-<div class="gate-content" hidden><div class="quiz" data-quiz data-quiz-guard><div class="quiz-who"><label class="quiz-who-label"><span>ФИО</span><input type="text" class="quiz-name" data-quiz-name maxlength="80" autocomplete="off" placeholder="Иванов Иван Иванович"></label><span class="quiz-attempts" data-quiz-attempts>две попытки на лекцию</span><span class="quiz-note" data-who-note hidden></span></div><div class="quiz-q" data-type="single" data-correct="1" data-q="1"><p class="quiz-p"><span class="quiz-no" aria-hidden="true">01</span>Что задаёт схема данных?</p><div class="opts"><label class="opt"><input type="radio" name="q105_0" value="2" autocomplete="off"><span>Число сотрудников</span></label><label class="opt"><input type="radio" name="q105_0" value="0" autocomplete="off" data-ok><span>Таблицы, ключи и связи</span></label><label class="opt"><input type="radio" name="q105_0" value="3" autocomplete="off"><span>План релиза</span></label><label class="opt"><input type="radio" name="q105_0" value="1" autocomplete="off"><span>Цвет интерфейса</span></label></div><p class="quiz-why" hidden>Основа хранения.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="2" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">02</span>Что означает атомарность транзакции?</p><div class="opts"><label class="opt"><input type="radio" name="q105_1" value="3" autocomplete="off"><span>Транзакция не блокирует</span></label><label class="opt"><input type="radio" name="q105_1" value="1" autocomplete="off"><span>Изменения выполняются по очереди</span></label><label class="opt"><input type="radio" name="q105_1" value="2" autocomplete="off"><span>Транзакция всегда быстрая</span></label><label class="opt"><input type="radio" name="q105_1" value="0" autocomplete="off" data-ok><span>Выполняются все изменения или ни одного</span></label></div><p class="quiz-why" hidden>Целостность.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="multi" data-correct="3" data-q="3" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">03</span>Какие ключи используются в схеме?</p><div class="opts"><label class="opt"><input type="checkbox" name="q105_2" value="1" autocomplete="off" data-ok><span>Внешний</span></label><label class="opt"><input type="checkbox" name="q105_2" value="4" autocomplete="off"><span>Сетевой</span></label><label class="opt"><input type="checkbox" name="q105_2" value="2" autocomplete="off" data-ok><span>Составной</span></label><label class="opt"><input type="checkbox" name="q105_2" value="3" autocomplete="off"><span>Цветовой</span></label><label class="opt"><input type="checkbox" name="q105_2" value="0" autocomplete="off" data-ok><span>Первичный</span></label></div><p class="quiz-why" hidden>Остальное не ключи.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="short" data-q="4" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">04</span>Сколько значений должно быть в ячейке по 1НФ?</p><input type="text" class="short-answer" data-answers="[&quot;одно&quot;, &quot;1&quot;]" placeholder="Введите ответ" autocomplete="off" spellcheck="false" aria-label="Сколько значений должно быть в ячейке по 1НФ?"><p class="quiz-why" hidden>Атомарность.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="5" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">05</span>Что убирает третья нормальная форма?</p><div class="opts"><label class="opt"><input type="radio" name="q105_4" value="1" autocomplete="off"><span>Все связи между таблицами</span></label><label class="opt"><input type="radio" name="q105_4" value="0" autocomplete="off" data-ok><span>Зависимость неключевого атрибута от неключевого</span></label><label class="opt"><input type="radio" name="q105_4" value="2" autocomplete="off"><span>Первичные ключи</span></label><label class="opt"><input type="radio" name="q105_4" value="3" autocomplete="off"><span>Индексы</span></label></div><p class="quiz-why" hidden>Устраняет повтор.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="6" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">06</span>Что делает внешний ключ?</p><div class="opts"><label class="opt"><input type="radio" name="q105_5" value="3" autocomplete="off"><span>Удаляет дубли</span></label><label class="opt"><input type="radio" name="q105_5" value="2" autocomplete="off"><span>Шифрует данные</span></label><label class="opt"><input type="radio" name="q105_5" value="1" autocomplete="off"><span>Ускоряет любой запрос</span></label><label class="opt"><input type="radio" name="q105_5" value="0" autocomplete="off" data-ok><span>Ссылается на ключ другой таблицы</span></label></div><p class="quiz-why" hidden>Целостность связи.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="short" data-q="7" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">07</span>Как называют объединение изменений в одно целое?</p><input type="text" class="short-answer" data-answers="[&quot;транзакция&quot;, &quot;transaction&quot;]" placeholder="Введите ответ" autocomplete="off" spellcheck="false" aria-label="Как называют объединение изменений в одно целое?"><p class="quiz-why" hidden>Всё или ничего.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="multi" data-correct="4" data-q="8" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">08</span>Какие ошибки схемы типичны?</p><div class="opts"><label class="opt"><input type="checkbox" name="q105_7" value="1" autocomplete="off" data-ok><span>Нет внешних ключей</span></label><label class="opt"><input type="checkbox" name="q105_7" value="0" autocomplete="off" data-ok><span>Список в ячейке</span></label><label class="opt"><input type="checkbox" name="q105_7" value="5" autocomplete="off"><span>Внешние ключи</span></label><label class="opt"><input type="checkbox" name="q105_7" value="4" autocomplete="off"><span>Атомарные значения</span></label><label class="opt"><input type="checkbox" name="q105_7" value="2" autocomplete="off" data-ok><span>Дублирование факта</span></label><label class="opt"><input type="checkbox" name="q105_7" value="3" autocomplete="off" data-ok><span>Нет транзакции</span></label></div><p class="quiz-why" hidden>Остальное хорошо.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="9" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">09</span>Что ускоряет индекс?</p><div class="opts"><label class="opt"><input type="radio" name="q105_8" value="2" autocomplete="off"><span>Удаление таблиц</span></label><label class="opt"><input type="radio" name="q105_8" value="0" autocomplete="off" data-ok><span>Поиск и соединение по столбцу</span></label><label class="opt"><input type="radio" name="q105_8" value="3" autocomplete="off"><span>Резервное копирование</span></label><label class="opt"><input type="radio" name="q105_8" value="1" autocomplete="off"><span>Вставку строк</span></label></div><p class="quiz-why" hidden>Ускоряет чтение.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="10" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">10</span>Что требует первая нормальная форма?</p><div class="opts"><label class="opt"><input type="radio" name="q105_9" value="1" autocomplete="off"><span>Один индекс на таблицу</span></label><label class="opt"><input type="radio" name="q105_9" value="2" autocomplete="off"><span>Один внешний ключ</span></label><label class="opt"><input type="radio" name="q105_9" value="3" autocomplete="off"><span>Один автор</span></label><label class="opt"><input type="radio" name="q105_9" value="0" autocomplete="off" data-ok><span>Одно значение в ячейке</span></label></div><p class="quiz-why" hidden>Атомарность.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="multi" data-correct="4" data-q="11" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">11</span>Какие аномалии бывают без нормализации?</p><div class="opts"><label class="opt"><input type="checkbox" name="q105_10" value="1" autocomplete="off" data-ok><span>Обновления</span></label><label class="opt"><input type="checkbox" name="q105_10" value="4" autocomplete="off"><span>Ускорение чтения</span></label><label class="opt"><input type="checkbox" name="q105_10" value="3" autocomplete="off" data-ok><span>Повтор данных</span></label><label class="opt"><input type="checkbox" name="q105_10" value="5" autocomplete="off"><span>Сжатие базы</span></label><label class="opt"><input type="checkbox" name="q105_10" value="2" autocomplete="off" data-ok><span>Удаления</span></label><label class="opt"><input type="checkbox" name="q105_10" value="0" autocomplete="off" data-ok><span>Вставки</span></label></div><p class="quiz-why" hidden>Остальное не аномалии.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="12" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">12</span>Что замедляет индекс?</p><div class="opts"><label class="opt"><input type="radio" name="q105_11" value="1" autocomplete="off"><span>Чтение</span></label><label class="opt"><input type="radio" name="q105_11" value="0" autocomplete="off" data-ok><span>Вставку и обновление</span></label><label class="opt"><input type="radio" name="q105_11" value="2" autocomplete="off"><span>Сортировку</span></label><label class="opt"><input type="radio" name="q105_11" value="3" autocomplete="off"><span>Соединение</span></label></div><p class="quiz-why" hidden>Плата за индекс.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="13" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">13</span>Что такое транзакция?</p><div class="opts"><label class="opt"><input type="radio" name="q105_12" value="2" autocomplete="off"><span>Резервная копия</span></label><label class="opt"><input type="radio" name="q105_12" value="3" autocomplete="off"><span>Индекс</span></label><label class="opt"><input type="radio" name="q105_12" value="0" autocomplete="off" data-ok><span>Несколько изменений как одно целое</span></label><label class="opt"><input type="radio" name="q105_12" value="1" autocomplete="off"><span>Один запрос SELECT</span></label></div><p class="quiz-why" hidden>Всё или ничего.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="short" data-q="14" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">14</span>Как называется ключ, определяющий строку?</p><input type="text" class="short-answer" data-answers="[&quot;первичный&quot;, &quot;primary key&quot;]" placeholder="Введите ответ" autocomplete="off" spellcheck="false" aria-label="Как называется ключ, определяющий строку?"><p class="quiz-why" hidden>Уникальность.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="15" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">15</span>Что такое первичный ключ?</p><div class="opts"><label class="opt"><input type="radio" name="q105_14" value="1" autocomplete="off"><span>Любое числовое поле</span></label><label class="opt"><input type="radio" name="q105_14" value="3" autocomplete="off"><span>Индекс</span></label><label class="opt"><input type="radio" name="q105_14" value="0" autocomplete="off" data-ok><span>Поле, однозначно определяющее строку</span></label><label class="opt"><input type="radio" name="q105_14" value="2" autocomplete="off"><span>Внешняя ссылка</span></label></div><p class="quiz-why" hidden>Уникальность строки.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><p class="quiz-note quiz-submit-note" data-quiz-note hidden></p><div class="quiz-result" data-quiz-result hidden aria-live="polite"><span class="label">Результат теста</span><h3>Тест завершён</h3><p class="modal-name-line">ФИО: <b data-student-name></b></p><p class="modal-result" data-modal-result></p><p class="modal-result" data-modal-wrong></p><dl class="modal-times"><div><dt>Время выполнения теста</dt><dd data-test-time>00:00</dd></div><div><dt>Время просмотра лекции</dt><dd data-view-time>00:00</dd></div></dl></div></div></div>
+<p class="gate-action"><button type="button" class="gate-btn" aria-expanded="false"><span class="gate-q" aria-hidden="true">?</span><span>Какие ограничения нужно поставить до того, как схема попадёт в код?</span></button></p>
+<div class="gate-content" hidden><h2 id="схема-для-учебного-проекта"><span class="num">11</span>Схема для учебного проекта</h2>
+<p>Для системы заявок достаточно пяти таблиц.</p>
+<div class="codehilite" data-lang="text"><pre><span></span><code><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">employee</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="n">id</span><span class="w"> </span><span class="nb">INTEGER</span><span class="w"> </span><span class="k">PRIMARY</span><span class="w"> </span><span class="k">KEY</span><span class="p">,</span>
+<span class="w">    </span><span class="n">name</span><span class="w"> </span><span class="nb">TEXT</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span>
+<span class="w">    </span><span class="n">room</span><span class="w"> </span><span class="nb">TEXT</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span>
+<span class="w">    </span><span class="n">department</span><span class="w"> </span><span class="nb">TEXT</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span>
+<span class="p">);</span>
+
+<span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">assignee</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="n">id</span><span class="w"> </span><span class="nb">INTEGER</span><span class="w"> </span><span class="k">PRIMARY</span><span class="w"> </span><span class="k">KEY</span><span class="p">,</span>
+<span class="w">    </span><span class="n">name</span><span class="w"> </span><span class="nb">TEXT</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span>
+<span class="w">    </span><span class="n">phone</span><span class="w"> </span><span class="nb">TEXT</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span>
+<span class="w">    </span><span class="n">skill</span><span class="w"> </span><span class="nb">TEXT</span>
+<span class="p">);</span>
+
+<span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">request</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="n">id</span><span class="w"> </span><span class="nb">INTEGER</span><span class="w"> </span><span class="k">PRIMARY</span><span class="w"> </span><span class="k">KEY</span><span class="p">,</span>
+<span class="w">    </span><span class="n">subject</span><span class="w"> </span><span class="nb">TEXT</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span>
+<span class="w">    </span><span class="n">body</span><span class="w"> </span><span class="nb">TEXT</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span>
+<span class="w">    </span><span class="n">status</span><span class="w"> </span><span class="nb">TEXT</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="k">CHECK</span><span class="w"> </span><span class="p">(</span><span class="n">status</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span><span class="s1">'new'</span><span class="p">,</span><span class="s1">'assigned'</span><span class="p">,</span><span class="s1">'done'</span><span class="p">,</span><span class="s1">'closed'</span><span class="p">,</span><span class="s1">'cancelled'</span><span class="p">)),</span>
+<span class="w">    </span><span class="n">created_at</span><span class="w"> </span><span class="nb">TEXT</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span>
+<span class="w">    </span><span class="n">employee_id</span><span class="w"> </span><span class="nb">INTEGER</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="k">REFERENCES</span><span class="w"> </span><span class="n">employee</span><span class="p">(</span><span class="n">id</span><span class="p">),</span>
+<span class="w">    </span><span class="n">assignee_id</span><span class="w"> </span><span class="nb">INTEGER</span><span class="w"> </span><span class="k">REFERENCES</span><span class="w"> </span><span class="n">assignee</span><span class="p">(</span><span class="n">id</span><span class="p">)</span>
+<span class="p">);</span>
+
+<span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="k">comment</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="n">id</span><span class="w"> </span><span class="nb">INTEGER</span><span class="w"> </span><span class="k">PRIMARY</span><span class="w"> </span><span class="k">KEY</span><span class="p">,</span>
+<span class="w">    </span><span class="n">request_id</span><span class="w"> </span><span class="nb">INTEGER</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="k">REFERENCES</span><span class="w"> </span><span class="n">request</span><span class="p">(</span><span class="n">id</span><span class="p">)</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="k">DELETE</span><span class="w"> </span><span class="k">CASCADE</span><span class="p">,</span>
+<span class="w">    </span><span class="n">author_id</span><span class="w"> </span><span class="nb">INTEGER</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="k">REFERENCES</span><span class="w"> </span><span class="n">employee</span><span class="p">(</span><span class="n">id</span><span class="p">),</span>
+<span class="w">    </span><span class="n">body</span><span class="w"> </span><span class="nb">TEXT</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span>
+<span class="w">    </span><span class="n">created_at</span><span class="w"> </span><span class="nb">TEXT</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span>
+<span class="p">);</span>
+
+<span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="k">assignment</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="n">request_id</span><span class="w"> </span><span class="nb">INTEGER</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="k">REFERENCES</span><span class="w"> </span><span class="n">request</span><span class="p">(</span><span class="n">id</span><span class="p">)</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="k">DELETE</span><span class="w"> </span><span class="k">CASCADE</span><span class="p">,</span>
+<span class="w">    </span><span class="n">assignee_id</span><span class="w"> </span><span class="nb">INTEGER</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="k">REFERENCES</span><span class="w"> </span><span class="n">assignee</span><span class="p">(</span><span class="n">id</span><span class="p">),</span>
+<span class="w">    </span><span class="n">assigned_at</span><span class="w"> </span><span class="nb">TEXT</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span>
+<span class="w">    </span><span class="k">PRIMARY</span><span class="w"> </span><span class="k">KEY</span><span class="w"> </span><span class="p">(</span><span class="n">request_id</span><span class="p">,</span><span class="w"> </span><span class="n">assignee_id</span><span class="p">)</span>
+<span class="p">);</span>
+</code></pre></div>
+
+<p>В этой схеме есть ключи, внешние ключи, проверка статуса и каскадное удаление комментариев. Таблица <code>assignment</code> нужна, если у заявки может быть несколько исполнителей. Если всегда один, достаточно поля <code>assignee_id</code> в заявке.</p>
+<p>Индексы для начала:</p>
+<ul>
+<li><code>request(status)</code> для списка открытых заявок;</li>
+<li><code>request(employee_id)</code> для заявок сотрудника;</li>
+<li><code>comment(request_id)</code> для комментариев заявки;</li>
+<li><code>assignment(assignee_id)</code> для загрузки исполнителя.</li>
+</ul>
+<p>Каждый индекс должен отвечать на конкретный запрос. Индекс «на всякий случай» занимает место и замедляет запись.</p>
+<h3>Порядок работы</h3>
+<ol>
+<li>Выписать сущности и связи.</li>
+<li>Выбрать ключи.</li>
+<li>Проверить 1НФ, 2НФ и 3НФ.</li>
+<li>Добавить ограничения.</li>
+<li>Написать три-пять реальных запросов.</li>
+<li>Добавить индексы под эти запросы.</li>
+<li>Проверить план и время.</li>
+<li>Описать миграцию.</li>
+</ol>
+<p>Порядок важен: индексы появляются после запросов, а не до. Иначе они отражают догадки, а не работу.</p>
+<h3>Проверка на данных</h3>
+<p>Схему проверяют не только на пустой базе. Нужны данные, которые ломают наивную модель:</p>
+<ul>
+<li>сотрудник без кабинета;</li>
+<li>заявка без исполнителя;</li>
+<li>два исполнителя у одной заявки;</li>
+<li>закрытая заявка без комментария;</li>
+<li>сотрудник, уволенный после создания заявки.</li>
+</ul>
+<p>Если схема выдерживает эти случаи и правила объясняют поведение, она готова к реализации.</p>
+<h2 id="чек-лист-схемы-данных"><span class="num">12</span>Чек-лист схемы данных</h2>
+<table>
+<thead>
+<tr>
+<th>Пункт</th>
+<th>Проверка</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Сущности</td>
+<td>у каждой есть ключ и жизненный цикл</td>
+</tr>
+<tr>
+<td>Связи</td>
+<td>кратность указана и совпадает с внешними ключами</td>
+</tr>
+<tr>
+<td>1НФ</td>
+<td>в ячейке одно значение</td>
+</tr>
+<tr>
+<td>2НФ</td>
+<td>нет зависимости от части составного ключа</td>
+</tr>
+<tr>
+<td>3НФ</td>
+<td>нет зависимости неключевого атрибута от неключевого</td>
+</tr>
+<tr>
+<td>Ограничения</td>
+<td><code>NOT NULL</code>, <code>UNIQUE</code>, <code>CHECK</code>, внешние ключи включены</td>
+</tr>
+<tr>
+<td>Удаление</td>
+<td>поведение <code>ON DELETE</code> объяснено</td>
+</tr>
+<tr>
+<td>Индексы</td>
+<td>есть запрос, который они ускоряют</td>
+</tr>
+<tr>
+<td>Транзакции</td>
+<td>критичные операции целостны</td>
+</tr>
+<tr>
+<td>Миграция</td>
+<td>есть план и проверка на копии</td>
+</tr>
+</tbody>
+</table>
+<h2 id="итоги"><span class="num">13</span>Итоги</h2>
+<ul>
+<li>Схема данных задаёт таблицы, ключи, связи и ограничения.</li>
+<li>ER-модель показывает сущности и кратность, а не экраны.</li>
+<li>Первичный ключ определяет строку, внешний обеспечивает целостность.</li>
+<li>Третья нормальная форма убирает зависимость неключевых атрибутов друг от друга.</li>
+<li>Денормализация допустима после измерения и требует синхронизации.</li>
+<li>Индекс ускоряет чтение и замедляет запись, поэтому его выбирают под запрос.</li>
+<li>Транзакция сохраняет изменения целиком, а ограничения защищают данные от обхода.</li>
+<li>Реальные сбои данных часто связаны с неверной моделью и отсутствием сверки, а не с синтаксисом SQL.</li>
+</ul>
+<h2 id="источники"><span class="num">14</span>Источники</h2>
+<ol>
+<li>Codd E. F. A Relational Model of Data for Large Shared Data Banks. Communications of the ACM, 1970. https://doi.org/10.1145/362384.362685</li>
+<li>Chen P. P. The Entity-Relationship Model: Toward a Unified View of Data. ACM Transactions on Database Systems, 1976. https://doi.org/10.1145/320434.320440</li>
+<li>ISO/IEC 9075-1:2023. Information technology. Database languages SQL. Part 1: Framework. https://www.iso.org/standard/76583.html</li>
+<li>ISO/IEC 25012:2008. Software engineering. Data quality model. https://www.iso.org/standard/35736.html</li>
+<li>PostgreSQL Global Development Group. Documentation, Chapter 11. Indexes. https://www.postgresql.org/docs/current/indexes.html</li>
+<li>SQLite. Foreign Key Support. https://www.sqlite.org/foreignkeys.html</li>
+<li>Bates and others v Post Office Ltd [2019] EWHC 3408 (QB), judgment. https://www.judiciary.uk/wp-content/uploads/2019/12/bates-v-post-office-judgment.pdf</li>
+<li>Office of the Auditor General of Canada. Report 1, Phoenix Pay Problems, 2017. https://publications.gc.ca/site/eng/9.845567/publication.html</li>
+</ol>
+<div class="quiz" data-quiz data-quiz-guard><div class="quiz-who"><label class="quiz-who-label"><span>ФИО</span><input type="text" class="quiz-name" data-quiz-name maxlength="80" autocomplete="off" placeholder="Иванов Иван Иванович"></label><span class="quiz-attempts" data-quiz-attempts>две попытки на лекцию</span><span class="quiz-note" data-who-note hidden></span></div><div class="quiz-q" data-type="single" data-correct="1" data-q="1"><p class="quiz-p"><span class="quiz-no" aria-hidden="true">01</span>Что убирает третья нормальная форма?</p><div class="opts"><label class="opt"><input type="radio" name="q224_0" value="1" autocomplete="off"><span>Все связи между таблицами</span></label><label class="opt"><input type="radio" name="q224_0" value="0" autocomplete="off" data-ok><span>Зависимость неключевого атрибута от неключевого</span></label><label class="opt"><input type="radio" name="q224_0" value="2" autocomplete="off"><span>Первичные ключи</span></label><label class="opt"><input type="radio" name="q224_0" value="3" autocomplete="off"><span>Индексы</span></label></div><p class="quiz-why" hidden>Устраняет повтор факта.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="short" data-q="2" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">02</span>Сколько значений должно быть в ячейке по 1НФ?</p><input type="text" class="short-answer" data-answers="[&quot;одно&quot;, &quot;1&quot;]" placeholder="Введите ответ" autocomplete="off" spellcheck="false" aria-label="Сколько значений должно быть в ячейке по 1НФ?"><p class="quiz-why" hidden>Атомарность.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="3" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">03</span>Что происходит при добавлении индекса?</p><div class="opts"><label class="opt"><input type="radio" name="q224_2" value="1" autocomplete="off"><span>Чтение всегда замедляется</span></label><label class="opt"><input type="radio" name="q224_2" value="3" autocomplete="off"><span>Таблица удаляется</span></label><label class="opt"><input type="radio" name="q224_2" value="2" autocomplete="off"><span>Данные перестают проверяться</span></label><label class="opt"><input type="radio" name="q224_2" value="0" autocomplete="off" data-ok><span>Запись становится дороже</span></label></div><p class="quiz-why" hidden>Каждый индекс нужно обновлять.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="multi" data-correct="4" data-q="4" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">04</span>Какие аномалии бывают без нормализации?</p><div class="opts"><label class="opt"><input type="checkbox" name="q224_3" value="1" autocomplete="off" data-ok><span>Обновления</span></label><label class="opt"><input type="checkbox" name="q224_3" value="4" autocomplete="off"><span>Ускорение чтения</span></label><label class="opt"><input type="checkbox" name="q224_3" value="3" autocomplete="off" data-ok><span>Повтор данных</span></label><label class="opt"><input type="checkbox" name="q224_3" value="5" autocomplete="off"><span>Сжатие базы</span></label><label class="opt"><input type="checkbox" name="q224_3" value="2" autocomplete="off" data-ok><span>Удаления</span></label><label class="opt"><input type="checkbox" name="q224_3" value="0" autocomplete="off" data-ok><span>Вставки</span></label></div><p class="quiz-why" hidden>Остальное не аномалии.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="5" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">05</span>Что делает внешний ключ?</p><div class="opts"><label class="opt"><input type="radio" name="q224_4" value="3" autocomplete="off"><span>Удаляет дубли</span></label><label class="opt"><input type="radio" name="q224_4" value="2" autocomplete="off"><span>Шифрует данные</span></label><label class="opt"><input type="radio" name="q224_4" value="1" autocomplete="off"><span>Ускоряет любой запрос</span></label><label class="opt"><input type="radio" name="q224_4" value="0" autocomplete="off" data-ok><span>Ссылается на ключ другой таблицы</span></label></div><p class="quiz-why" hidden>Целостность связи.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="6" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">06</span>Почему данные Horizon привели к несправедливым обвинениям?</p><div class="opts"><label class="opt"><input type="radio" name="q224_5" value="2" autocomplete="off"><span>Таблицы не привели к первой нормальной форме</span></label><label class="opt"><input type="radio" name="q224_5" value="0" autocomplete="off" data-ok><span>Система считалась истинной без независимой сверки</span></label><label class="opt"><input type="radio" name="q224_5" value="1" autocomplete="off"><span>В базе не было внешних ключей</span></label><label class="opt"><input type="radio" name="q224_5" value="3" autocomplete="off"><span>Индексы занимали слишком много места</span></label></div><p class="quiz-why" hidden>Ошибки системы принимали за ошибки людей.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="short" data-q="7" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">07</span>Как называют объединение изменений в одно целое?</p><input type="text" class="short-answer" data-answers="[&quot;транзакция&quot;, &quot;transaction&quot;]" placeholder="Введите ответ" autocomplete="off" spellcheck="false" aria-label="Как называют объединение изменений в одно целое?"><p class="quiz-why" hidden>Всё или ничего.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="multi" data-correct="4" data-q="8" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">08</span>Какие меры обеспечивают целостность?</p><div class="opts"><label class="opt"><input type="checkbox" name="q224_7" value="5" autocomplete="off"><span>Ручная правка файлов</span></label><label class="opt"><input type="checkbox" name="q224_7" value="2" autocomplete="off" data-ok><span>Ограничение CHECK</span></label><label class="opt"><input type="checkbox" name="q224_7" value="3" autocomplete="off" data-ok><span>Транзакция</span></label><label class="opt"><input type="checkbox" name="q224_7" value="4" autocomplete="off"><span>Отказ от ограничений</span></label><label class="opt"><input type="checkbox" name="q224_7" value="0" autocomplete="off" data-ok><span>Первичный ключ</span></label><label class="opt"><input type="checkbox" name="q224_7" value="1" autocomplete="off" data-ok><span>Внешний ключ</span></label></div><p class="quiz-why" hidden>Остальное разрушает целостность.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="9" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">09</span>Что такое первичный ключ?</p><div class="opts"><label class="opt"><input type="radio" name="q224_8" value="1" autocomplete="off"><span>Любое числовое поле</span></label><label class="opt"><input type="radio" name="q224_8" value="3" autocomplete="off"><span>Индекс</span></label><label class="opt"><input type="radio" name="q224_8" value="0" autocomplete="off" data-ok><span>Набор столбцов, однозначно определяющий строку</span></label><label class="opt"><input type="radio" name="q224_8" value="2" autocomplete="off"><span>Внешняя ссылка</span></label></div><p class="quiz-why" hidden>Уникальность строки.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="10" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">10</span>Что ускоряет индекс?</p><div class="opts"><label class="opt"><input type="radio" name="q224_9" value="2" autocomplete="off"><span>Удаление таблиц</span></label><label class="opt"><input type="radio" name="q224_9" value="0" autocomplete="off" data-ok><span>Поиск и соединение по столбцу</span></label><label class="opt"><input type="radio" name="q224_9" value="3" autocomplete="off"><span>Резервное копирование</span></label><label class="opt"><input type="radio" name="q224_9" value="1" autocomplete="off"><span>Вставку строк</span></label></div><p class="quiz-why" hidden>Ускоряет чтение.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="short" data-q="11" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">11</span>Как называется ключ, определяющий строку?</p><input type="text" class="short-answer" data-answers="[&quot;первичный&quot;, &quot;primary key&quot;]" placeholder="Введите ответ" autocomplete="off" spellcheck="false" aria-label="Как называется ключ, определяющий строку?"><p class="quiz-why" hidden>Уникальность строки.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="12" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">12</span>Что такое транзакция?</p><div class="opts"><label class="opt"><input type="radio" name="q224_11" value="2" autocomplete="off"><span>Резервная копия</span></label><label class="opt"><input type="radio" name="q224_11" value="3" autocomplete="off"><span>Индекс</span></label><label class="opt"><input type="radio" name="q224_11" value="0" autocomplete="off" data-ok><span>Несколько изменений как одно целое</span></label><label class="opt"><input type="radio" name="q224_11" value="1" autocomplete="off"><span>Один запрос SELECT</span></label></div><p class="quiz-why" hidden>Всё или ничего.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="multi" data-correct="4" data-q="13" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">13</span>Какие ошибки схемы типичны?</p><div class="opts"><label class="opt"><input type="checkbox" name="q224_12" value="1" autocomplete="off" data-ok><span>Нет внешних ключей</span></label><label class="opt"><input type="checkbox" name="q224_12" value="0" autocomplete="off" data-ok><span>Список в ячейке</span></label><label class="opt"><input type="checkbox" name="q224_12" value="5" autocomplete="off"><span>Включённые внешние ключи</span></label><label class="opt"><input type="checkbox" name="q224_12" value="4" autocomplete="off"><span>Атомарные значения</span></label><label class="opt"><input type="checkbox" name="q224_12" value="2" autocomplete="off" data-ok><span>Дублирование факта</span></label><label class="opt"><input type="checkbox" name="q224_12" value="3" autocomplete="off" data-ok><span>Нет транзакции</span></label></div><p class="quiz-why" hidden>Остальное признаки хорошей схемы.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="14" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">14</span>Что требует первая нормальная форма?</p><div class="opts"><label class="opt"><input type="radio" name="q224_13" value="1" autocomplete="off"><span>Один индекс на таблицу</span></label><label class="opt"><input type="radio" name="q224_13" value="2" autocomplete="off"><span>Один внешний ключ</span></label><label class="opt"><input type="radio" name="q224_13" value="3" autocomplete="off"><span>Один автор</span></label><label class="opt"><input type="radio" name="q224_13" value="0" autocomplete="off" data-ok><span>Одно значение в ячейке</span></label></div><p class="quiz-why" hidden>Атомарность значения.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="15" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">15</span>Что означает атомарность транзакции?</p><div class="opts"><label class="opt"><input type="radio" name="q224_14" value="3" autocomplete="off"><span>Транзакция не блокирует</span></label><label class="opt"><input type="radio" name="q224_14" value="1" autocomplete="off"><span>Изменения выполняются по очереди</span></label><label class="opt"><input type="radio" name="q224_14" value="2" autocomplete="off"><span>Транзакция всегда быстрая</span></label><label class="opt"><input type="radio" name="q224_14" value="0" autocomplete="off" data-ok><span>Выполняются все изменения или ни одного</span></label></div><p class="quiz-why" hidden>Целостность операции.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><p class="quiz-note quiz-submit-note" data-quiz-note hidden></p><div class="quiz-result" data-quiz-result hidden aria-live="polite"><span class="label">Результат теста</span><h3>Тест завершён</h3><p class="modal-name-line">ФИО: <b data-student-name></b></p><p class="modal-result" data-modal-result></p><p class="modal-result" data-modal-wrong></p><dl class="modal-times"><div><dt>Время выполнения теста</dt><dd data-test-time>00:00</dd></div><div><dt>Время просмотра лекции</dt><dd data-view-time>00:00</dd></div></dl></div></div></div>
 </div></article><nav class="pager"><a class="" href="11-lek-08.html"><span>← Предыдущее занятие</span>Лекция 8. Предметная область и границы системы</a><a class="next" style="text-align:right;margin-left:auto" href="13-prakt-04.html"><span>Следующее занятие →</span>Практика 4. Схема данных учебного продукта</a></nav></main>
 <div class="modal" data-modal="warn" hidden>
   <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="warn-title">

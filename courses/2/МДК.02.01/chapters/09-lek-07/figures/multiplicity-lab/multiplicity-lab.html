@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Кратность связи</title>
+<style>
+  :root { --paper:#faf6f3; --card:#fffdfb; --ink:#1a1916; --muted:#6b6459; --rule:#e4d8cf; --accent:#0F8A63; --soft:#E1F5EE; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .demo { background:var(--paper); border:1px solid var(--rule); border-radius:14px; padding:18px; }
+  .head { display:flex; justify-content:space-between; align-items:flex-end; gap:16px; padding-bottom:10px; border-bottom:1px solid var(--rule); }
+  .eyebrow { margin:0 0 4px; font:600 10px/1.2 Consolas,monospace; letter-spacing:.12em; text-transform:uppercase; color:var(--accent); }
+  h3 { margin:0; font-size:20px; line-height:1.2; }
+  .counter { font:11px/1.4 Consolas,monospace; color:var(--muted); white-space:nowrap; }
+  svg { display:block; width:100%; height:auto; margin-top:6px; }
+  .box { fill:#fff; stroke:#2d3142; stroke-width:1.3; }
+  .lbl { font-family:Consolas,monospace; font-size:9px; fill:#2d3142; text-anchor:middle; }
+  .mult { font-family:Consolas,monospace; font-size:9px; fill:#0F8A63; text-anchor:middle; }
+  .hint { font-family:Consolas,monospace; font-size:7px; fill:#6b6459; }
+  .status { min-height:62px; margin-top:8px; padding:10px 12px; border-radius:9px; background:var(--soft); font-size:12.5px; line-height:1.45; }
+  .status b { color:var(--accent); }
+  .controls { display:flex; gap:7px; flex-wrap:wrap; margin-top:10px; }
+  button { font:600 11.5px/1 "Segoe UI",system-ui,sans-serif; padding:8px 10px; border-radius:9px; border:1px solid var(--rule); background:var(--card); color:var(--ink); cursor:pointer; }
+  button:hover { border-color:var(--accent); color:var(--accent); }
+  button.on { background:var(--accent); border-color:var(--accent); color:#fff; }
+  @media (max-width:560px) { .demo { padding:12px; } }
+</style>
+</head>
+<body>
+<div class="demo">
+  <div class="head">
+    <div><p class="eyebrow">UML · классы</p><h3>Что означает число у конца связи</h3></div>
+    <div class="counter">выберите пример</div>
+  </div>
+  <svg viewBox="0 0 680 196" role="img" aria-label="Пример связи с кратностью на двух концах">
+    <rect class="box" x="40" y="62" width="200" height="58" rx="6"/>
+    <text class="lbl" x="140" y="96" id="nA">Пользователь</text>
+
+    <rect class="box" x="440" y="62" width="200" height="58" rx="6"/>
+    <text class="lbl" x="540" y="96" id="nB">Заявка</text>
+
+    <line x1="240" y1="91" x2="440" y2="91" stroke="#5b5560" stroke-width="1.4"/>
+
+    <text class="mult" x="258" y="82" id="mA">1</text>
+    <text class="mult" x="422" y="82" id="mB">0..*</text>
+
+    <text class="hint" x="258" y="110" text-anchor="middle">сколько таких</text>
+    <text class="hint" x="258" y="121" text-anchor="middle">на одну справа</text>
+    <text class="hint" x="422" y="110" text-anchor="middle">сколько таких</text>
+    <text class="hint" x="422" y="121" text-anchor="middle">на одну слева</text>
+
+    <text x="340" y="160" text-anchor="middle" font-family="Consolas,monospace" font-size="7.4" fill="#0F8A63">ЧИСЛО ОТНОСИТСЯ К КЛАССУ НА СВОЁМ КОНЦЕ</text>
+    <text x="340" y="178" text-anchor="middle" class="hint">подставьте один объект с другой стороны и посчитайте</text>
+  </svg>
+  <div class="status" id="status"></div>
+  <div class="controls">
+    <button data-k="user" class="on">Пользователь и заявки</button>
+    <button data-k="order">Заказ и строки</button>
+    <button data-k="exec">Заявка и исполнитель</button>
+    <button data-k="room">Сотрудник и кабинет</button>
+  </div>
+</div>
+<script>
+(function () {
+  var data = {
+    user: { a: 'Пользователь', b: 'Заявка', ma: '1', mb: '0..*',
+      text: '<b>Пользователь и заявки.</b> У конца заявки стоит 0..*, потому что у пользователя может не быть ни одной заявки. У конца пользователя стоит 1: каждая заявка имеет ровно одного автора.' },
+    order: { a: 'Заказ', b: 'Строка заказа', ma: '1', mb: '1..*',
+      text: '<b>Заказ и строки.</b> Заказ без строк не имеет смысла, поэтому 1..*. Строка принадлежит ровно одному заказу, поэтому 1. Это композиция: строки не живут отдельно.' },
+    exec: { a: 'Заявка', b: 'Сотрудник', ma: '0..*', mb: '0..1',
+      text: '<b>Заявка и исполнитель.</b> У сотрудника много заявок, поэтому 0..* у заявки. У заявки не больше одного исполнителя, поэтому 0..1: заявка может ждать назначения.' },
+    room: { a: 'Сотрудник', b: 'Кабинет', ma: '0..*', mb: '1',
+      text: '<b>Сотрудник и кабинет.</b> В кабинете работает много сотрудников, поэтому 0..*. Сотрудник привязан ровно к одному кабинету, поэтому 1.' }
+  };
+  var buttons = document.querySelectorAll('button[data-k]');
+  var status = document.getElementById('status');
+  var nA = document.getElementById('nA'), nB = document.getElementById('nB');
+  var mA = document.getElementById('mA'), mB = document.getElementById('mB');
+  function apply(key) {
+    var d = data[key];
+    nA.textContent = d.a; nB.textContent = d.b;
+    mA.textContent = d.ma; mB.textContent = d.mb;
+    status.innerHTML = d.text;
+    buttons.forEach(function (b) { b.classList.toggle('on', b.dataset.k === key); });
+  }
+  buttons.forEach(function (b) { b.addEventListener('click', function () { apply(b.dataset.k); }); });
+  apply('user');
+})();
+</script>
+</body>
+</html>

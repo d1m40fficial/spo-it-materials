@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Приоритеты замечаний</title>
+<style>
+  :root { --paper:#faf6f3; --ink:#2d3142; --muted:#5b5560; --accent:#0F8A63; --soft:#E1F5EE; --rule:rgba(45,49,66,.12); }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .frame { background:var(--paper); border:1px solid var(--rule); border-radius:12px; padding:18px 18px 14px; }
+  .eyebrow { margin:0 0 8px; font:600 9px/1.2 Consolas,monospace; letter-spacing:.16em; text-transform:uppercase; color:var(--muted); }
+  .note { margin:10px 2px 0; font:11px/1.5 Consolas,monospace; color:var(--muted); }
+  svg { display:block; width:100%; height:auto; }
+</style>
+</head>
+<body>
+<div class="frame">
+  <p class="eyebrow">Ревью · приоритет</p>
+  <svg viewBox="0 0 680 292" role="img" aria-labelledby="ps-title ps-desc">
+    <title id="ps-title">Четыре уровня замечаний</title>
+    <desc id="ps-desc">Блокер, существенное, незначительное и вопрос. У каждого свой пример и действие автора.</desc>
+
+    <g font-family="Consolas,monospace">
+      <text x="16" y="24" font-size="7" fill="#5b5560">УРОВЕНЬ</text>
+      <text x="150" y="24" font-size="7" fill="#5b5560">ПРИМЕР</text>
+      <text x="470" y="24" font-size="7" fill="#5b5560">ЧТО ДЕЛАЕТ АВТОР</text>
+
+      <rect x="16" y="34" width="648" height="52" rx="8" fill="#fff" stroke="#9A3412"/>
+      <text x="28" y="56" font-size="9" fill="#9A3412">БЛОКЕР</text>
+      <text x="28" y="72" font-size="7" fill="#5b5560">сливать нельзя</text>
+      <text x="150" y="56" font-size="7.5" fill="#2d3142">запрос не фильтрует по сотруднику</text>
+      <text x="150" y="72" font-size="7" fill="#5b5560">чужие заявки видны пользователю</text>
+      <text x="470" y="56" font-size="7.5" fill="#2d3142">исправить до слияния</text>
+      <text x="470" y="72" font-size="7" fill="#5b5560">и добавить тест на две роли</text>
+
+      <rect x="16" y="94" width="648" height="52" rx="8" fill="#fff" stroke="#B45309"/>
+      <text x="28" y="116" font-size="9" fill="#B45309">СУЩЕСТВЕННОЕ</text>
+      <text x="28" y="132" font-size="7" fill="#5b5560">ошибка есть</text>
+      <text x="150" y="116" font-size="7.5" fill="#2d3142">не обработан пустой ответ базы</text>
+      <text x="150" y="132" font-size="7" fill="#5b5560">сценарий редкий, но реальный</text>
+      <text x="470" y="116" font-size="7.5" fill="#2d3142">исправить в этом изменении</text>
+      <text x="470" y="132" font-size="7" fill="#5b5560">или объяснить, почему позже</text>
+
+      <rect x="16" y="154" width="648" height="52" rx="8" fill="#fff" stroke="#2d3142"/>
+      <text x="28" y="176" font-size="9" fill="#2d3142">НЕЗНАЧИТЕЛЬНОЕ</text>
+      <text x="28" y="192" font-size="7" fill="#5b5560">можно улучшить</text>
+      <text x="150" y="176" font-size="7.5" fill="#2d3142">имя переменной короче, чем нужно</text>
+      <text x="150" y="192" font-size="7" fill="#5b5560">читается, но требует контекста</text>
+      <text x="470" y="176" font-size="7.5" fill="#2d3142">исправить, если есть время</text>
+      <text x="470" y="192" font-size="7" fill="#5b5560">не блокирует слияние</text>
+
+      <rect x="16" y="214" width="648" height="52" rx="8" fill="#E1F5EE" stroke="#0F8A63"/>
+      <text x="28" y="236" font-size="9" fill="#0F8A63">ВОПРОС</text>
+      <text x="28" y="252" font-size="7" fill="#5b5560">нужно понять</text>
+      <text x="150" y="236" font-size="7.5" fill="#2d3142">почему выбран этот индекс</text>
+      <text x="150" y="252" font-size="7" fill="#5b5560">решение может быть верным</text>
+      <text x="470" y="236" font-size="7.5" fill="#2d3142">ответить и продолжить</text>
+      <text x="470" y="252" font-size="7" fill="#5b5560">не требовать правку</text>
+    </g>
+
+    <text x="340" y="284" text-anchor="middle" font-family="Consolas,monospace" font-size="8" fill="#0F8A63">БЕЗ УРОВНЯ АВТОР УГАДЫВАЕТ, ЧТО ОБЯЗАТЕЛЬНО</text>
+  </svg>
+  <p class="note">Уровень ставит ревьюер, но оспорить его может автор. Важно, чтобы решение было записано в пул-реквесте, а не осталось в устной беседе.</p>
+</div>
+</body>
+</html>

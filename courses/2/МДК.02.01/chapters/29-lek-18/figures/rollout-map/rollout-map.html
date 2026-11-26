@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Стратегии переключения</title>
+<style>
+  :root { --paper:#faf6f3; --card:#fffdfb; --ink:#1a1916; --muted:#6b6459; --rule:#e4d8cf; --accent:#0F8A63; --soft:#E1F5EE; --warn:#b23a2b; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .demo { background:var(--paper); border:1px solid var(--rule); border-radius:14px; padding:18px; }
+  .head { display:flex; justify-content:space-between; align-items:flex-end; gap:16px; padding-bottom:10px; border-bottom:1px solid var(--rule); }
+  .eyebrow { margin:0 0 4px; font:600 10px/1.2 Consolas,monospace; letter-spacing:.12em; text-transform:uppercase; color:var(--accent); }
+  h3 { margin:0; font-size:19px; line-height:1.2; }
+  .hint { font:11px/1.4 Consolas,monospace; color:var(--muted); white-space:nowrap; }
+  svg { display:block; width:100%; height:auto; margin-top:8px; }
+  .status { min-height:66px; margin-top:8px; padding:10px 12px; border-radius:9px; background:var(--soft); font-size:12.5px; line-height:1.45; }
+  .status b { color:var(--accent); }
+  .controls { display:flex; gap:7px; flex-wrap:wrap; margin-top:10px; }
+  button { font:600 11.5px/1 "Segoe UI",system-ui,sans-serif; padding:8px 10px; border-radius:9px; border:1px solid var(--rule); background:var(--card); color:var(--ink); cursor:pointer; }
+  button:hover { border-color:var(--accent); color:var(--accent); }
+  button.on { background:var(--accent); border-color:var(--accent); color:#fff; }
+  .bar { transition:width .25s ease; }
+  @media (max-width:560px) { .demo { padding:12px; } .head { align-items:flex-start; flex-direction:column; gap:4px; } .hint { white-space:normal; } }
+</style>
+</head>
+<body>
+<div class="demo">
+  <div class="head">
+    <div><p class="eyebrow">Внедрение · стратегия</p><h3>Кого затронет ошибка</h3></div>
+    <div class="hint">выберите способ переключения</div>
+  </div>
+  <svg viewBox="0 0 680 250" role="img" aria-labelledby="rm-title rm-desc">
+    <title id="rm-title">Стратегии переключения и зона поражения</title>
+    <desc id="rm-desc">Большой взрыв, постепенное развёртывание, синий и зелёный, канареечный выпуск. Показаны охват, скорость отката и условия.</desc>
+
+    <g font-family="Consolas,monospace" font-size="8" fill="#5b5560">
+      <text x="24" y="24">ОХВАТ ПОЛЬЗОВАТЕЛЕЙ ПРИ ОШИБКЕ</text>
+      <text x="500" y="24">СКОРОСТЬ ОТКАТА</text>
+    </g>
+
+    <rect x="24" y="38" width="440" height="20" rx="10" fill="#fff" stroke="#e4d8cf"/>
+    <rect id="rm-bar" class="bar" x="24" y="38" width="440" height="20" rx="10" fill="#b23a2b"/>
+    <text x="480" y="52" font-family="Consolas,monospace" font-size="8" fill="#2d3142" id="rm-speed">часы</text>
+
+    <g font-family="Consolas,monospace" font-size="8" fill="#2d3142">
+      <text x="24" y="88">охват</text>
+      <text x="24" y="106" id="rm-scope">все пользователи сразу</text>
+      <text x="24" y="132">условия</text>
+      <text x="24" y="150" id="rm-cond">резервная копия и короткий простой</text>
+      <text x="24" y="176">когда подходит</text>
+      <text x="24" y="194" id="rm-when">учебный стенд, небольшая система</text>
+    </g>
+
+    <rect x="500" y="80" width="156" height="112" rx="9" fill="#E1F5EE" stroke="#0F8A63"/>
+    <text x="578" y="102" text-anchor="middle" font-family="Consolas,monospace" font-size="8" fill="#0F8A63" id="rm-name">БОЛЬШОЙ ВЗРЫВ</text>
+    <text x="578" y="126" text-anchor="middle" font-family="Consolas,monospace" font-size="7.2" fill="#2d3142" id="rm-l1">просто и дёшево</text>
+    <text x="578" y="144" text-anchor="middle" font-family="Consolas,monospace" font-size="7.2" fill="#2d3142" id="rm-l2">одна среда</text>
+    <text x="578" y="162" text-anchor="middle" font-family="Consolas,monospace" font-size="7.2" fill="#2d3142" id="rm-l3">ошибка видна сразу</text>
+
+    <text x="340" y="232" text-anchor="middle" font-family="Consolas,monospace" font-size="7.6" fill="#0F8A63">Стратегию выбирают по цене ошибки, а не по моде.</text>
+  </svg>
+  <div class="status" id="rm-status"><b>Большой взрыв.</b> Всё заменяется сразу. Ошибка затрагивает всех, зато план простой, а среда одна.</div>
+  <div class="controls">
+    <button data-k="big" class="on">Большой взрыв</button>
+    <button data-k="rolling">Постепенно</button>
+    <button data-k="blue">Синий и зелёный</button>
+    <button data-k="canary">Канареечный</button>
+  </div>
+</div>
+<script>
+(function () {
+  var data = {
+    big: {
+      width: 440, speed: 'часы', name: 'БОЛЬШОЙ ВЗРЫВ',
+      scope: 'все пользователи сразу', cond: 'резервная копия и короткий простой',
+      when: 'учебный стенд, небольшая система',
+      l1: 'просто и дёшево', l2: 'одна среда', l3: 'ошибка видна сразу',
+      status: '<b>Большой взрыв.</b> Всё заменяется сразу. Ошибка затрагивает всех, зато план простой, а среда одна.'
+    },
+    rolling: {
+      width: 250, speed: 'минуты', name: 'ПОСТЕПЕННО',
+      scope: 'часть экземпляров', cond: 'совместимость версий и балансировка',
+      when: 'несколько серверов, общий трафик',
+      l1: 'ошибка не у всех', l2: 'две версии рядом', l3: 'нужна совместимость',
+      status: '<b>Постепенное развёртывание.</b> Экземпляры обновляются по одному. Ошибка затрагивает часть пользователей, но старая и новая версии должны понимать общие данные.'
+    },
+    blue: {
+      width: 180, speed: 'секунды', name: 'СИНИЙ И ЗЕЛЁНЫЙ',
+      scope: 'переключение трафика', cond: 'две среды и синхронизация данных',
+      when: 'рабочая система с допустимым дублированием',
+      l1: 'быстрый возврат', l2: 'старая среда жива', l3: 'дороже в поддержке',
+      status: '<b>Синий и зелёный.</b> Новая среда готова рядом, трафик переключается целиком. Откат быстрый, потому что старая среда ещё работает, но содержание двух сред стоит дороже.'
+    },
+    canary: {
+      width: 70, speed: 'минуты', name: 'КАНАРЕЕЧНЫЙ',
+      scope: 'малая доля трафика', cond: 'метрики и разделение трафика',
+      when: 'крупный продукт с наблюдаемостью',
+      l1: 'малая зона', l2: 'нужны метрики', l3: 'постепенный рост',
+      status: '<b>Канареечный выпуск.</b> На новую версию идёт малая доля трафика. Ошибка видна по метрикам раньше, чем затронет всех, но нужна инфраструктура разделения трафика.'
+    }
+  };
+  var buttons = document.querySelectorAll('button[data-k]');
+  var bar = document.getElementById('rm-bar');
+  var speed = document.getElementById('rm-speed');
+  var scope = document.getElementById('rm-scope');
+  var cond = document.getElementById('rm-cond');
+  var when = document.getElementById('rm-when');
+  var name = document.getElementById('rm-name');
+  var l1 = document.getElementById('rm-l1');
+  var l2 = document.getElementById('rm-l2');
+  var l3 = document.getElementById('rm-l3');
+  var status = document.getElementById('rm-status');
+
+  function apply(key) {
+    var d = data[key];
+    buttons.forEach(function (b) { b.classList.toggle('on', b.dataset.k === key); });
+    bar.setAttribute('width', d.width);
+    bar.setAttribute('fill', d.width > 300 ? '#b23a2b' : (d.width > 120 ? '#c98a2b' : '#0F8A63'));
+    speed.textContent = d.speed;
+    scope.textContent = d.scope;
+    cond.textContent = d.cond;
+    when.textContent = d.when;
+    name.textContent = d.name;
+    l1.textContent = d.l1;
+    l2.textContent = d.l2;
+    l3.textContent = d.l3;
+    status.innerHTML = d.status;
+  }
+  buttons.forEach(function (b) { b.addEventListener('click', function () { apply(b.dataset.k); }); });
+  apply('big');
+})();
+</script>
+</body>
+</html>

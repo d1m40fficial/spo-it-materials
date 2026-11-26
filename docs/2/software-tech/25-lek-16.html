@@ -888,102 +888,345 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <canvas class="shader-bg" width="820" height="300" aria-hidden="true" style="background:linear-gradient(135deg,#08090D,#1D9E75 58%,#08090D)"></canvas>
 <div class="badges"><span class="pill dark">Занятие 29</span><span class="pill">Технология разработки ПО</span></div>
 <div class="hero-panel"><h1>Документирование</h1><p class="dek">Документация отвечает на вопросы читателя. Разберём README, описание API, руководство и ADR.</p></div>
-<div class="glyph" aria-hidden="true">Л16</div></header><section class="outcomes"><b>После этого занятия вы сможете</b><ul><li>Выбирать вид документа под читателя</li><li>Писать README с установкой и запуском</li><li>Описывать конечные точки API</li><li>Фиксировать решение в ADR</li></ul></section><nav class="toc"><b>Содержание занятия</b><ol><li><a href="#запустите-как-нибудь">«Запустите как-нибудь»</a></li><li><a href="#виды-документов">Виды документов</a></li><li><a href="#readme">README</a></li><li><a href="#api">API</a></li><li><a href="#руководство-пользователя">Руководство пользователя</a></li><li><a href="#adr">ADR</a></li><li><a href="#changelog">Changelog</a></li><li><a href="#где-документация-ломается">Где документация ломается</a></li><li><a href="#итоги">Итоги</a></li></ol></nav><article class="prose"><h2 id="запустите-как-нибудь"><span class="num">01</span>«Запустите как-нибудь»</h2>
-<p>Новый разработчик открывает проект. В README одна строка: «Запустите как-нибудь». В коде нет описания API, а решение «почему выбрали SQLite» помнит только ушедший сотрудник.</p>
-<p><strong>Документация</strong> это ответы на вопросы, которые возникают у читателя. Документ нужен не для отчёта, а для конкретного вопроса.</p>
-<p>Главная мысль занятия: <strong>документ выбирают по читателю и вопросу</strong>. Один файл на все случаи быстро устаревает.</p>
-<h2 id="виды-документов"><span class="num">02</span>Виды документов</h2>
-<figure class="figure" data-fig="docs-map" data-one="H4sIAAAAAAACCq1XS2/bRhC+51dsaRRIC1EiKYlWKMmAGytpgLYJ0vbQ44pc0oT5EEhKtloUsGM0KZCgbosWCPpwWufQQ4FAeag27NgB+guW/6gzS0q2aitSgBws7s7uzszON/PtuPHOys2rn31xq0VWE99butTAD/Fo4DSlqCuhgFELPj5LKDFXaRSzpCl1E1uuSSNxQH3WlHouW++EUSIRMwwSFsC2dddKVpsW67kmk8WkQNzATVzqybFJPdZUUUniJh5b4r/wQbqZ3uEDwl/wE36YbvOXfMiPUZTe5Qf8oFHKtl5qxEkfv4QYURgm5Csiyx3aYZGxYFNbt8t1ELjBmrGgWWW1ouHU7ybMMhaq7WpVV1BATRO8NBaUa7VlXZyIQxvmLfVatdXCedT1mBE5bXq5Ui1UrhR0vVBUtffq5Guw/D5YbYcbcux+6QaO0Q4ji0UySLJlDGQBNlh92OfTyHEDA8y2qbnmRGE3sIwkokHcoRE4UYeYeWFk9Gh0WTgONmyIomxT3/X6hvQpc0JGPr8hFeJ+nDBf7rqFGI7LMYtcO7NYtCMAAr06tZEpFKEBlZmPhtrZIHHouRbJlvGa41U5opbbjQ1V68BNOtSy8HZqDc5kP5VOfsMi67N2FK6fuR9RSA2X0XdDVxRypbNRUosauRoGYJHGBT8MQri0yerEY0kC9nCGJoqqzvw6SdhGIovQ2GHkG90OuG7SmE2GSICZA1EMwoSdOqEq4CU4T5TcD1UVTlQvdGKa0rjngErLjTse7RttLzTX6kSkMBhQ3q2TVeY6q4lBu0mIJxqlPCUbpbxiEHr4WG6PmGA0bkoCHwmzttEZyfIYSkv8p4tyPt0h/+6T9B6MUHIH1o7SB41SR2hBJ7HsPgg3mhIGX68pRCvXJBKFUFyS6zsSoZFLZY+2mecxq91vSpYvizIiMLBYbAqPQFsmdK3THeDVj1B3L9L7U0uS8Ff85P8OfjcuVKEYjYz0ZgZvt5ZXPm6h0iO4YbrJB3xf/D7lJ+kd1MYP+aBAwOYr0LwFK8cgG5LlWzdGp2B+LOw9x5MwOsFvAbSBl4dw8hn8vUi3YAVG41PgLoaQ74sdI493CmR55fZ4Ex5/KYyKux8g8wUO80JnvOUZeDVMvyk2SnilpUvZVZ2zZduUzmdcHmzcOhrBOGJmQgBDFaCDY1pFynINhooi5bnWlBZ1QBa2wS7b9bymlHOVROIkCtcA8ZzMpNIZ5VhRqLysCOUVUC6cBOKCE7VidawtP5zDAyDCyemKdG1C0eJYTca5kDx5qI5zMJ5jpkzBepaxxdqEMb14GoOM0cEcqOGHJN0WmA9ys5CX6QOEEBAf8Ff5qpBO2myUnNdio5W1NwTHtu0zyORRuQgZDTF5PTSjmEIBTA3VSM3cwFxYQTPVzwNFFutN0LiV3sc6FlU4hKhns2/B9lMA7ODNMKhU9HMYqPpbwaBSrc2LAf+DP4ZuZRfIcRdo+0++h6OpcRtpnhuWKRQ108AcwAAcd5HAsdXK6PtgFhxz8JWKGOR4lN9STeR1r5b12TWxcnsWfajVypzBn6D+mWoXlTlpCbQOkfyGEOth/piJCsEa3OFHORQAPTDikL9Mt9+sMso5O01AUX5LUOSFPw8WVz9c/uR666Ob16eHbqRtbkjyp3a2xjnQSO8hzyH17WetDIyOBE3BI4GCfwD3bSLIahPsQgcG4mk0dVogZ5zJUkPTABDRzNLAXA2jpuS7lgU91cwOYSLE595mIJxdIJ/H/Df+M/+d7xHgnr/5D/whsNL3/AkKHvFdwv8CyR5I9mDbr/wJ4Q+J4KtHsG8XOOvx6ZWgd+05k20pttRgaxcggAQ91/3hmz7IgSHibR+TPeFP0/v4xqJg/Bhj5iOX4RMgEv1YPPuQ6DgcjhtI8URspTtF0eJCb+X28JP30qXsn9T/ADymMjy1DgAA"><iframe title="Figure 1: docs-map" scrolling="no"></iframe><figcaption>Карта документации: README для разработчика, API для интегратора, руководство для пользователя, ADR для команды, changelog для всех.</figcaption></figure>
-
+<div class="glyph" aria-hidden="true">Л16</div></header><section class="outcomes"><b>После этого занятия вы сможете</b><ul><li>Выбирать вид документа под читателя и его вопрос</li><li>Писать README, который доводит до первого запуска</li><li>Описывать конечные точки API как контракт</li><li>Фиксировать решение в ADR с контекстом и последствиями</li><li>Вести changelog, понятный пользователю</li><li>Проверять документацию на свежесть и полноту</li></ul></section><nav class="toc"><b>Содержание занятия</b><ol><li><a href="#запустите-как-нибудь">«Запустите как-нибудь»</a></li><li><a href="#документация-как-ответ-на-вопрос">Документация как ответ на вопрос</a></li><li><a href="#четыре-вида-по-цели">Четыре вида по цели</a></li><li><a href="#readme-и-первый-запуск">README и первый запуск</a></li><li><a href="#api-как-контракт">API как контракт</a></li><li><a href="#руководство-пользователя">Руководство пользователя</a></li><li><a href="#adr-почему-так-решили">ADR: почему так решили</a></li><li><a href="#changelog-что-изменилось">Changelog: что изменилось</a></li><li><a href="#реальные-случаи">Реальные случаи</a></li><li><a href="#документация-учебного-продукта">Документация учебного продукта</a></li><li><a href="#итоги">Итоги</a></li><li><a href="#источники">Источники</a></li></ol></nav><article class="prose"><h2 id="запустите-как-нибудь"><span class="num">01</span>«Запустите как-нибудь»</h2>
+<p>Новый разработчик открывает проект. В README одна строка: «Запустите как-нибудь». В коде нет описания API, а решение «почему выбрали SQLite» помнит только ушедший сотрудник. Первый день уходит на чтение конфигурации, второй на догадки о версии Python, третий на выяснение, что база должна быть создана вручную.</p>
+<p>Проект работает. Знание о том, как его запустить, существует. Но оно хранится в голове автора и в переписке, а не в документе.</p>
+<p><strong>Документация</strong> это ответы на вопросы, которые возникают у читателя. Документ нужен не для отчёта, а для конкретного вопроса: как установить, как вызвать, что изменилось, почему так решили.</p>
+<p>Главная мысль занятия: <strong>документ выбирают по читателю и вопросу</strong>. Один файл на все случаи быстро устаревает, потому что пытается быть учебником, справочником и дневником одновременно.</p>
+<p>Документация кажется вторичной по сравнению с кодом. Это ошибка. Для нового человека документ является интерфейсом к проекту. Если интерфейс врёт, код не помогает: его ещё нужно найти и понять.</p>
+<p>Второй читатель документа это сам автор через полгода. Он забудет, почему выбрал формат, где лежит конфигурация и что означает странная проверка. Запись решения экономит не только чужое время, но и своё.</p>
+<p>У документации есть цена. Её пишут, проверяют, обновляют и хранят. Если писать всё подряд, время уходит на текст, который никто не читает. Поэтому важнее не объём, а попадание в вопрос.</p>
+<h2 id="документация-как-ответ-на-вопрос"><span class="num">02</span>Документация как ответ на вопрос</h2>
+<p>У любого документа есть три параметра: читатель, вопрос и момент чтения. Читатель может быть новым разработчиком, интегратором, пользователем, администратором или будущим членом команды. Вопрос может быть «как начать», «как сделать», «что означает параметр», «почему так устроено». Момент может быть первым запуском, работой, разбором инцидента или приёмкой.</p>
+<p>Смена любого параметра меняет документ. Новый разработчик спрашивает «с чего начать». Интегратор спрашивает «какой код вернётся при ошибке». Пользователь спрашивает «как закрыть заявку». Команда через год спрашивает «почему отказались от серверной базы».</p>
+<p>Стандарт ISO/IEC/IEEE 26514:2022 описывает проектирование и разработку информации для пользователей: как определять аудиторию, задачи и структуру документа <a href="https://www.iso.org/standard/77451.html">ISO/IEC/IEEE 26514:2022</a>. Он не задаёт шаблон README, но задаёт рамку: документ начинается с аудитории и задачи, а не с желания автора что-то рассказать.</p>
+<h3>Документ как артефакт</h3>
+<p>В процессе разработки документ является таким же артефактом, как тест или сборка. У него есть владелец, версия и критерий готовности.</p>
+<p>Владелец не обязательно автор. README обычно поддерживает тот, кто отвечает за сборку. Описание API поддерживает владелец сервиса. Руководство пользователя поддерживает продуктовая команда или поддержка. Если владельца нет, документ живёт до первого изменения.</p>
+<p>Критерий готовности формулируют через читателя. README готов, когда человек с чистого компьютера проходит установку по тексту и получает работающее приложение. Описание API готово, когда интегратор может собрать запрос по примеру и понять ошибку по коду ответа.</p>
+<p>Версия важна не меньше. Документ без версии нельзя сопоставить с продуктом. Через полгода никто не знает, относится ли инструкция к текущей сборке или к прошлогодней.</p>
+<h3>Документация рядом с кодом</h3>
+<p>Документ удобно хранить там же, где код. Тогда он проходит то же ревью, попадает в ту же историю и обновляется тем же коммитом. Этот подход называют docs-as-code.</p>
+<p>У него есть цена: документацию нужно собирать и проверять как код. Ссылки ломаются, разметка ошибается, примеры устаревают. Зато исчезает разрыв между версией продукта и версией текста.</p>
+<p>Противоположный подход, отдельный сайт документации, удобен для больших продуктов с редакторами и переводом. Для учебного проекта он чаще вредит: сайт живёт отдельно, обновляется редко и быстро расходится с репозиторием.</p>
+<p>Практическое правило: <strong>документ лежит рядом с тем, что описывает</strong>. README в корне, описание API рядом с сервисом, ADR в папке решений, changelog в корне.</p>
+<h3>Сколько стоит документация</h3>
+<p>Документация расходует время трижды: на написание, на проверку и на поддержку. Если не считать эти затраты, документ появляется один раз и остаётся в том виде, в каком был написан.</p>
+<p>Полезно оценивать не объём, а число отвеченных вопросов. README, который снимает десять вопросов новичка, полезнее тридцати страниц архитектурных рассуждений, которые никто не открывает.</p>
+<p>Правило повторного вопроса помогает выбрать, что документировать. Если один и тот же вопрос задали дважды, ответ стоит записать. Если вопрос задают в третий раз, документ нужно поставить туда, где вопрос возникает: в README, в шаблон задачи или в сообщение об ошибке.</p>
+<p>Документация имеет обратную сторону: её нужно поддерживать. Поэтому лучше меньше документов, но с владельцем и датой проверки, чем много файлов без ответственного. «Документационный долг» это не метафора: устаревший текст требует времени на опровержение и портит доверие к остальным документам.</p>
+<h3>Почему документация устаревает</h3>
+<p>Документация устаревает по трём причинам. Первая: код изменился, а текст остался. Вторая: текст был неверным с самого начала, но его никто не проверял. Третья: изменился читатель, а документ продолжают писать для прежней аудитории.</p>
+<p>Первая причина самая частая. Её лечат не героическими усилиями, а процессом: изменение поведения и изменение документа идут в одном коммите или в одной задаче. Проверка на ревью спрашивает не «обновил ли ты документацию», а «какой документ теперь врёт».</p>
+<p>Вторая причина опаснее. Неверный текст выглядит убедительно. По нему действуют уверенно и получают ошибку. Устаревшая документация хуже отсутствующей: отсутствие заставляет искать, а ложный текст заставляет ошибаться.</p>
+<p>Третья причина заметна в учебных проектах. README пишут для преподавателя, а пользуется им следующая группа. Формулировки «сдайте отчёт» остаются, хотя читателю нужно «запустите тесты».</p>
+<h2 id="четыре-вида-по-цели"><span class="num">03</span>Четыре вида по цели</h2>
+<p>Полезную рамку предложил Даниэле Прокида в проекте Diátaxis. Он делит документацию по двум осям: изучение против работы и практика против теории. Получаются четыре вида: учебный материал, руководство по задаче, справочник и объяснение <a href="https://diataxis.fr/">Diátaxis</a>.</p>
 <table>
 <thead>
 <tr>
-<th>Документ</th>
-<th>Читатель</th>
-<th>Вопрос</th>
+<th>Вид</th>
+<th>Вопрос читателя</th>
+<th>Форма</th>
+<th>Пример в проекте</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>README</td>
-<td>новый разработчик</td>
-<td>как установить и запустить</td>
-</tr>
-<tr>
-<td>API</td>
-<td>интегратор</td>
-<td>какой запрос и какой ответ</td>
+<td>учебный материал</td>
+<td>как сделать первый шаг</td>
+<td>последовательные уроки</td>
+<td>быстрый старт в README</td>
 </tr>
 <tr>
 <td>руководство</td>
-<td>пользователь</td>
-<td>как выполнить задачу</td>
+<td>как решить задачу</td>
+<td>шаги для конкретной цели</td>
+<td>«Как закрыть заявку»</td>
 </tr>
 <tr>
-<td>ADR</td>
-<td>команда</td>
-<td>почему так решили</td>
+<td>справочник</td>
+<td>что означает параметр</td>
+<td>точное описание без сюжета</td>
+<td>описание API</td>
 </tr>
 <tr>
-<td>changelog</td>
-<td>все</td>
-<td>что изменилось в версии</td>
+<td>объяснение</td>
+<td>почему так устроено</td>
+<td>контекст и компромиссы</td>
+<td>ADR, схема архитектуры</td>
 </tr>
 </tbody>
 </table>
-<p>Документ может быть коротким. Главное, чтобы он отвечал на вопрос и был актуален.</p>
+<p>Рамка полезна тем, что запрещает смешивать жанры. Учебник с длинным объяснением архитектуры перестаёт быть учебником. Справочник с историями о том, как автор пришёл к решению, перестаёт быть справочником.</p>
+<figure class="figure" data-fig="docs-map" data-one="H4sIAAAAAAACCq1XS2/bRhC+51dsaRRIC1EiKYlWKMmAGytpgLYJ0vbQ44pc0oT5EEhKtloUsGM0KZCgbosWCPpwWufQQ4FAeag27NgB+guW/6gzS0q2aitSgBws7s7uzszON/PtuPHOys2rn31xq0VWE99butTAD/Fo4DSlqCuhgFELPj5LKDFXaRSzpCl1E1uuSSNxQH3WlHouW++EUSIRMwwSFsC2dddKVpsW67kmk8WkQNzATVzqybFJPdZUUUniJh5b4r/wQbqZ3uEDwl/wE36YbvOXfMiPUZTe5Qf8oFHKtl5qxEkfv4QYURgm5Csiyx3aYZGxYFNbt8t1ELjBmrGgWWW1ouHU7ybMMhaq7WpVV1BATRO8NBaUa7VlXZyIQxvmLfVatdXCedT1mBE5bXq5Ui1UrhR0vVBUtffq5Guw/D5YbYcbcux+6QaO0Q4ji0UySLJlDGQBNlh92OfTyHEDA8y2qbnmRGE3sIwkokHcoRE4UYeYeWFk9Gh0WTgONmyIomxT3/X6hvQpc0JGPr8hFeJ+nDBf7rqFGI7LMYtcO7NYtCMAAr06tZEpFKEBlZmPhtrZIHHouRbJlvGa41U5opbbjQ1V68BNOtSy8HZqDc5kP5VOfsMi67N2FK6fuR9RSA2X0XdDVxRypbNRUosauRoGYJHGBT8MQri0yerEY0kC9nCGJoqqzvw6SdhGIovQ2GHkG90OuG7SmE2GSICZA1EMwoSdOqEq4CU4T5TcD1UVTlQvdGKa0rjngErLjTse7RttLzTX6kSkMBhQ3q2TVeY6q4lBu0mIJxqlPCUbpbxiEHr4WG6PmGA0bkoCHwmzttEZyfIYSkv8p4tyPt0h/+6T9B6MUHIH1o7SB41SR2hBJ7HsPgg3mhIGX68pRCvXJBKFUFyS6zsSoZFLZY+2mecxq91vSpYvizIiMLBYbAqPQFsmdK3THeDVj1B3L9L7U0uS8Ff85P8OfjcuVKEYjYz0ZgZvt5ZXPm6h0iO4YbrJB3xf/D7lJ+kd1MYP+aBAwOYr0LwFK8cgG5LlWzdGp2B+LOw9x5MwOsFvAbSBl4dw8hn8vUi3YAVG41PgLoaQ74sdI493CmR55fZ4Ex5/KYyKux8g8wUO80JnvOUZeDVMvyk2SnilpUvZVZ2zZduUzmdcHmzcOhrBOGJmQgBDFaCDY1pFynINhooi5bnWlBZ1QBa2wS7b9bymlHOVROIkCtcA8ZzMpNIZ5VhRqLysCOUVUC6cBOKCE7VidawtP5zDAyDCyemKdG1C0eJYTca5kDx5qI5zMJ5jpkzBepaxxdqEMb14GoOM0cEcqOGHJN0WmA9ys5CX6QOEEBAf8Ff5qpBO2myUnNdio5W1NwTHtu0zyORRuQgZDTF5PTSjmEIBTA3VSM3cwFxYQTPVzwNFFutN0LiV3sc6FlU4hKhns2/B9lMA7ODNMKhU9HMYqPpbwaBSrc2LAf+DP4ZuZRfIcRdo+0++h6OpcRtpnhuWKRQ108AcwAAcd5HAsdXK6PtgFhxz8JWKGOR4lN9STeR1r5b12TWxcnsWfajVypzBn6D+mWoXlTlpCbQOkfyGEOth/piJCsEa3OFHORQAPTDikL9Mt9+sMso5O01AUX5LUOSFPw8WVz9c/uR666Ob16eHbqRtbkjyp3a2xjnQSO8hzyH17WetDIyOBE3BI4GCfwD3bSLIahPsQgcG4mk0dVogZ5zJUkPTABDRzNLAXA2jpuS7lgU91cwOYSLE595mIJxdIJ/H/Df+M/+d7xHgnr/5D/whsNL3/AkKHvFdwv8CyR5I9mDbr/wJ4Q+J4KtHsG8XOOvx6ZWgd+05k20pttRgaxcggAQ91/3hmz7IgSHibR+TPeFP0/v4xqJg/Bhj5iOX4RMgEv1YPPuQ6DgcjhtI8URspTtF0eJCb+X28JP30qXsn9T/ADymMjy1DgAA"><iframe title="Figure 1: docs-map" scrolling="no"></iframe><figcaption>Карта документации: README для разработчика, API для интегратора, руководство для пользователя, ADR для команды, changelog для всех.</figcaption></figure>
+
+<p>В проекте виды часто совмещены. README содержит и учебный материал, и короткий справочник команд. Это нормально, если части разделены заголовками и читатель понимает, где он находится.</p>
+<p>Опасность совмещения в том, что один жанр вытесняет другой. Автор увлекается объяснением, и новый человек не находит команду запуска. Или наоборот: остаётся список команд без объяснения, почему они такие.</p>
 <div class="gate-step" data-gate>
 <p class="gate-action"><button type="button" class="gate-btn" aria-expanded="false"><span class="gate-q" aria-hidden="true">?</span><span>Почему README для разработчика и руководство для пользователя нельзя заменить одним документом?</span></button></p>
-<div class="gate-content" hidden><h2 id="readme"><span class="num">03</span>README</h2>
-<p>README содержит:</p>
+<div class="gate-content" hidden><h2 id="readme-и-первый-запуск"><span class="num">04</span>README и первый запуск</h2>
+<p>README это первый документ, который читают в репозитории. Его задача узкая: довести человека до работающего приложения и объяснить, где искать дальше.</p>
+<p>Хороший README отвечает на вопросы по порядку:</p>
 <ol>
-<li>назначение проекта;</li>
-<li>требования к окружению;</li>
-<li>установку;</li>
-<li>запуск;</li>
-<li>проверку работы;</li>
-<li>структуру папок;</li>
-<li>известные ограничения.</li>
+<li>Что это за проект и какую задачу решает.</li>
+<li>Какие требования к окружению.</li>
+<li>Как установить зависимости.</li>
+<li>Как создать и заполнить базу.</li>
+<li>Как запустить приложение.</li>
+<li>Как проверить, что всё работает.</li>
+<li>Где лежат основные папки.</li>
+<li>Какие известные ограничения.</li>
 </ol>
-<p>Команды должны быть скопированы и проверены. Если написано <code>pip install -r requirements.txt</code>, файл обязан существовать.</p>
-<p>README не пересказывает весь код. Он доводит до первого успешного запуска.</p>
-<h2 id="api"><span class="num">04</span>API</h2>
-<p>Описание API включает:</p>
+<p>Порядок не случаен. Человек читает сверху вниз и на каждом шаге должен получить результат. Если установка начинается с описания архитектуры, читатель уходит раньше, чем дойдёт до команды.</p>
+<h3>Проверка с чистого листа</h3>
+<p>Главный критерий README это воспроизводимость на чистом окружении. Автор проверяет текст на своей машине, где уже установлены зависимости, создана база и настроены переменные. У нового человека этого нет.</p>
+<p>Проверка выглядит так: новая папка, новая виртуальная среда, чистый клон репозитория. Все команды берутся из README и выполняются буквально. Каждая ошибка означает, что документ чего-то не сказал.</p>
+<p>Проверку полезно делать перед каждым выпуском. Это дешевле, чем помогать новому человеку в чате. В команде из двух человек роль нового человека может выполнять коллега, который ещё не запускал проект.</p>
+<h3>Команды должны работать</h3>
+<p>Команда в README это обещание. Если написано <code>pip install -r requirements.txt</code>, файл обязан существовать. Если написано <code>python app.py</code>, файл обязан запускаться из указанной папки.</p>
+<p>Типичные ошибки:</p>
 <ul>
-<li>адрес и метод;</li>
-<li>параметры;</li>
-<li>формат тела;</li>
-<li>успешный ответ;</li>
-<li>коды ошибок;</li>
-<li>пример запроса и ответа.</li>
+<li>команда требует пакета, которого нет в списке зависимостей;</li>
+<li>путь указан от другой папки;</li>
+<li>версия Python не совпадает;</li>
+<li>база не создана, а приложение ожидает таблицы;</li>
+<li>переменная окружения не описана;</li>
+<li>пример содержит пароль, который нельзя публиковать.</li>
 </ul>
-<p>Пример:</p>
-<div class="codehilite" data-lang="text"><pre><span></span><code>GET /api/requests?status=open
-200: [{"id": 1, "subject": "Лампа", "status": "open"}]
-401: нет токена
-403: нет прав
+<p>Каждая ошибка ломает первый запуск. Человек не обязан быть внимательнее автора.</p>
+<h3>Что писать про окружение</h3>
+<p>Требования к окружению описывают явно: версия Python, менеджер пакетов, база данных, необходимые системные библиотеки. Если проект использует SQLite, это стоит сказать: отдельный сервер не нужен. Если нужен MySQL, указывают версию и способ запуска.</p>
+<p>Хорошая практика дать две команды: установка и проверка. Проверка может быть тестом или коротким скриптом, который печатает версию и подключается к базе.</p>
+<div class="codehilite" data-lang="text"><pre><span></span><code>python<span class="w"> </span>-m<span class="w"> </span>venv<span class="w"> </span>.venv
+.venv<span class="se">\S</span>cripts<span class="se">\a</span>ctivate
+pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>requirements.txt
+python<span class="w"> </span>-m<span class="w"> </span>pytest<span class="w"> </span>-q
 </code></pre></div>
 
-<p>Описание без примеров заставляет интегратора угадывать.</p>
-<h2 id="руководство-пользователя"><span class="num">05</span>Руководство пользователя</h2>
-<p>Руководство пишут по сценариям, а не по кнопкам. «Как создать заявку» лучше, чем «Описание формы».</p>
-<p>Для каждого сценария:</p>
+<p>Для Linux и macOS активация выглядит иначе. Если проект учебный и кроссплатформенный, в README приводят оба варианта. Если только Windows, это тоже пишут явно, чтобы не тратить время на догадки.</p>
+<h3>Раздел «если что-то пошло не так»</h3>
+<p>Первый запуск редко проходит идеально. Хороший README содержит короткий раздел с типичными сбоями: симптом, причина, действие.</p>
+<table>
+<thead>
+<tr>
+<th>Симптом</th>
+<th>Частая причина</th>
+<th>Что сделать</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>порт занят</td>
+<td>запущен другой экземпляр</td>
+<td>остановить процесс или сменить порт</td>
+</tr>
+<tr>
+<td>модуль не найден</td>
+<td>не активирована среда</td>
+<td>активировать окружение и установить зависимости</td>
+</tr>
+<tr>
+<td>таблица не существует</td>
+<td>не выполнена миграция</td>
+<td>создать базу и применить схему</td>
+</tr>
+<tr>
+<td>неверная кодировка</td>
+<td>файл сохранён в другой кодировке</td>
+<td>сохранить в UTF-8</td>
+</tr>
+<tr>
+<td>отказ доступа к базе</td>
+<td>не задан путь или пароль</td>
+<td>проверить переменные окружения</td>
+</tr>
+</tbody>
+</table>
+<p>Раздел не должен превращаться в форум. Пять-семь самых частых случаев достаточно. Остальное ищут в журнале и в трекере.</p>
+<p>Полезно указать, куда писать при проблеме: issue в репозитории, чат команды или почта. Это экономит время и не оставляет человека одного с ошибкой.</p>
+<h3>README и документация кода</h3>
+<p>README не заменяет комментарии и docstring. Он объясняет, как пользоваться проектом снаружи. Docstring объясняет, что делает функция и какие у неё аргументы.</p>
+<p>В Python договорённости о docstring описаны в PEP 257 <a href="https://peps.python.org/pep-0257/">PEP 257</a>. Короткая строка после определения функции, затем пустая строка и подробности. Стиль не так важен, как наличие и актуальность.</p>
+<div class="codehilite" data-lang="text"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">close_request</span><span class="p">(</span><span class="n">request_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">user</span><span class="p">:</span> <span class="n">User</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Закрыть заявку от имени пользователя.</span>
+
+<span class="sd">    Проверяет право: менеджер или владелец заявки.</span>
+<span class="sd">    """</span>
+</code></pre></div>
+
+<p>Docstring нужен тому, кто вызывает функцию из кода. README нужен тому, кто запускает проект. Руководство нужно тому, кто пользуется интерфейсом. Это три разных читателя.</p>
+<figure class="figure" data-fig="docs-diataxis" data-one="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"><iframe title="Figure 2: docs-diataxis" scrolling="no"></iframe><figcaption>Нажмите на цель чтения: схема покажет вид документа, его вопрос и типичную ошибку. Карточки соответствуют четырём видам по цели.</figcaption></figure>
+
+<p>Схема помогает выбрать жанр до того, как начат текст. Если цель не формулируется, документ лучше не писать: он превратится в смесь.</p></div>
+</div>
+
+<div class="gate-step" data-gate>
+<p class="gate-action"><button type="button" class="gate-btn" aria-expanded="false"><span class="gate-q" aria-hidden="true">?</span><span>Что делает описание API контрактом, а не пересказом кода?</span></button></p>
+<div class="gate-content" hidden><h2 id="api-как-контракт"><span class="num">05</span>API как контракт</h2>
+<p>Описание API это не рассказ о функциях, а контракт обмена. Интегратору нужно знать, какой запрос отправить, что придёт в ответ, какие ошибки возможны и что они означают.</p>
+<p>Минимальный набор для каждой конечной точки:</p>
 <ul>
-<li>что нужно до начала;</li>
-<li>шаги;</li>
-<li>ожидаемый результат;</li>
-<li>что делать при ошибке.</li>
+<li>метод и путь;</li>
+<li>параметры пути, запроса и заголовков;</li>
+<li>формат тела;</li>
+<li>успешный ответ с примером;</li>
+<li>коды ошибок и условия их возникновения;</li>
+<li>ограничения: размер, частота, права.</li>
 </ul>
-<p>Скриншоты помогают, но не заменяют текст. Они устаревают быстрее.</p>
-<h2 id="adr"><span class="num">06</span>ADR</h2>
-<p><strong>ADR</strong> фиксирует архитектурное решение: контекст, варианты, выбранный вариант, последствия.</p>
 <p>Пример:</p>
-<blockquote>
-<p>Контекст: нужна база без отдельного сервера. Решение: SQLite. Последствия: простая установка, ограничение на одновременную запись.</p>
-</blockquote>
-<p>Через год ADR объясняет, почему решение было разумным в тех условиях.</p>
-<h2 id="changelog"><span class="num">07</span>Changelog</h2>
-<p><strong>Changelog</strong> перечисляет изменения по версиям. Читатель понимает, что сломается при обновлении.</p>
+<div class="codehilite" data-lang="text"><pre><span></span><code>GET /api/requests?status=open&amp;limit=20
+200: {"items": [{"id": 1, "subject": "Лампа", "status": "open"}], "next": null}
+401: нет или истёк токен
+403: нет прав на список
+422: недопустимый статус
+</code></pre></div>
+
+<p>Пример важнее описания. По схеме <code>{"items": [...], "next": null}</code> интегратор понимает, что список постраничный, а пустая страница возвращает пустой массив, а не ошибку. Без примера он будет угадывать.</p>
+<h3>Формальное описание</h3>
+<p>Для HTTP API используют OpenAPI Specification. Спецификация 3.1.1 описывает структуру документа: пути, операции, схемы данных, ответы и безопасность <a href="https://spec.openapis.org/oas/v3.1.1.html">OpenAPI 3.1.1</a>.</p>
+<p>Формальное описание даёт три выгоды. Его можно проверить на соответствие коду. По нему генерируют клиентов и документацию. Оно служит основой для тестов контракта.</p>
+<p>Цена тоже есть. Спецификация требует дисциплины: при изменении ответа нужно обновить схему, иначе она начнёт врать. Если спецификацию пишут отдельно от кода, она устаревает так же, как обычный текст.</p>
+<p>Разумный компромисс для учебного проекта: спецификация как источник истины для контракта, примеры в ней, а серверная проверка соответствия хотя бы для главных ответов.</p>
+<h3>Ошибки как часть контракта</h3>
+<p>Ошибки описывают так же подробно, как успешные ответы. Интегратор должен знать, что делать при 401, 403, 404, 409 и 422.</p>
+<table>
+<thead>
+<tr>
+<th>Код</th>
+<th>Когда</th>
+<th>Что делать клиенту</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>400</td>
+<td>тело не разбирается</td>
+<td>исправить запрос</td>
+</tr>
+<tr>
+<td>401</td>
+<td>нет токена</td>
+<td>обновить токен</td>
+</tr>
+<tr>
+<td>403</td>
+<td>нет прав</td>
+<td>не повторять</td>
+</tr>
+<tr>
+<td>404</td>
+<td>объект не найден</td>
+<td>показать пустое состояние</td>
+</tr>
+<tr>
+<td>409</td>
+<td>конфликт версий</td>
+<td>перечитать и повторить</td>
+</tr>
+<tr>
+<td>422</td>
+<td>данные не прошли проверку</td>
+<td>показать поля с ошибкой</td>
+</tr>
+<tr>
+<td>500</td>
+<td>сбой сервера</td>
+<td>повторить с задержкой</td>
+</tr>
+</tbody>
+</table>
+<p>Различие между 400 и 422 важно. 400 означает, что запрос не удалось разобрать. 422 означает, что запрос разобран, но данные неверны. Клиент обрабатывает их по-разному.</p>
+<p>Формат ошибки тоже часть контракта. Полезно возвращать стабильную структуру: код, сообщение для человека и список полей с ошибками. Тогда клиент показывает сообщение, не разбирая текст, а проверка форм подсвечивает конкретное поле.</p>
+<h3>Аутентификация, идемпотентность, пагинация</h3>
+<p>Три вещи в API ломают интеграцию чаще всего, и все три должны быть в описании.</p>
+<p><strong>Аутентификация.</strong> Где передаётся токен, какой заголовок, что означает истечение срока. Различие 401 и 403 описано выше: 401 говорит «представься», 403 говорит «тебе нельзя».</p>
+<p><strong>Идемпотентность.</strong> Повторная отправка запроса не должна создавать вторую заявку, если клиент повторил запрос после таймаута. Для этого используют ключ идемпотентности в заголовке. В описании указывают, сколько времени ключ хранится и что вернётся при повторе.</p>
+<p><strong>Пагинация.</strong> Клиент должен знать, как получить следующую страницу и когда остановиться. Курсор надёжнее номера страницы при изменении данных: новая запись не сдвигает выдачу. В ответе полезно поле <code>next</code>, как в примере выше.</p>
+<p>Если этих деталей нет, интегратор придумает свои. Его решение может оказаться несовместимым с сервером, и виноватым будет описание.</p>
+<h3>Версии и совместимость</h3>
+<p>API меняется. Новое поле в ответе обычно безопасно, удаление поля ломает клиента. Изменение типа с числа на строку ломает почти всегда.</p>
+<p>Поэтому контракт версионируют. Версия может быть в пути (<code>/api/v2/requests</code>), в заголовке или в самом сервисе. Способ выбирают один и придерживаются его.</p>
+<p>Документация обязана указывать, что изменилось между версиями. Без этого интегратор узнаёт о несовместимом изменении из падения в работе.</p>
+<h3>Сгенерированное и рукописное</h3>
+<p>Документацию можно генерировать из кода и схем. Генерация хороша для справочника: список параметров и типов всегда совпадает с реализацией. Рукописный текст лучше для объяснения: зачем нужна конечная точка и как выбрать между двумя похожими.</p>
+<p>Практика проста: справочную часть генерируют, объяснения пишут руками и держат рядом. Попытка сгенерировать смысл даёт текст без смысла.</p>
+<h2 id="руководство-пользователя"><span class="num">06</span>Руководство пользователя</h2>
+<p>Руководство нужно человеку, который выполняет работу, а не изучает систему. Его единица это задача, а не экран. «Как закрыть заявку» полезнее, чем «Описание формы закрытия».</p>
+<p>Для каждого сценария достаточно пяти частей: что нужно до начала, шаги, ожидаемый результат, что делать при ошибке и куда обратиться. Шаги пишут глаголами: «нажмите», «выберите», «введите». Термины берут из интерфейса, иначе пользователь ищет кнопку, которой нет.</p>
+<table>
+<thead>
+<tr>
+<th>Сценарий</th>
+<th>Предусловие</th>
+<th>Результат</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>создать заявку</td>
+<td>пользователь вошёл в систему</td>
+<td>заявка в статусе открыта</td>
+</tr>
+<tr>
+<td>найти заявку</td>
+<td>есть хотя бы одна заявка</td>
+<td>список с фильтром</td>
+</tr>
+<tr>
+<td>закрыть заявку</td>
+<td>роль позволяет закрытие</td>
+<td>статус закрыта, запись в истории</td>
+</tr>
+</tbody>
+</table>
+<p>Скриншоты помогают, но устаревают быстрее текста. Если интерфейс меняется часто, лучше описывать смысл шага и подписывать элементы, чем показывать устаревшую копию экрана. Снимок уместен там, где положение элемента трудно описать словами.</p>
+<p>Ошибки описывают с точки зрения пользователя. Не «ошибка 422», а «поле темы слишком длинное, сократите до 80 символов». Технический код можно указать рядом, но не вместо объяснения.</p>
+<p>Руководство не должно превращаться в учебник. Пользователю не нужна история решения, ему нужен результат. Если хочется объяснить, почему система устроена именно так, для этого есть отдельный вид документа.</p></div>
+</div>
+
+<div class="gate-step" data-gate>
+<p class="gate-action"><button type="button" class="gate-btn" aria-expanded="false"><span class="gate-q" aria-hidden="true">?</span><span>Почему решение и изменение фиксируют отдельно от кода?</span></button></p>
+<div class="gate-content" hidden><h2 id="adr-почему-так-решили"><span class="num">07</span>ADR: почему так решили</h2>
+<p><strong>ADR</strong>, architecture decision record, фиксирует архитектурное решение: контекст, варианты, выбор и последствия. Формат предложил Майкл Нигард в 2011 году <a href="https://cognitect.com/blog/2011/11/15/documenting-architecture-decisions">Nygard, 2011</a>.</p>
+<p>Структура короткая:</p>
+<ul>
+<li>заголовок и дата;</li>
+<li>статус: предложено, принято, заменено;</li>
+<li>контекст: какие силы действуют;</li>
+<li>решение: что выбрали;</li>
+<li>последствия: что станет проще, что сложнее.</li>
+</ul>
+<p>Пример:</p>
+<div class="codehilite" data-lang="text"><pre><span></span><code>ADR 3. Хранение данных в SQLite
+Статус: принято, 2026-02-10
+Контекст: учебный продукт, один сервер, до 40 пользователей,
+нет администратора базы, установка должна быть простой.
+Решение: SQLite в файле рядом с приложением.
+Последствия: простая установка и резервная копия файлом;
+ограниченная параллельная запись; переход на серверную
+базу потребует миграции.
+</code></pre></div>
+
+<p>ADR объясняет не «что», а «почему». Код показывает, что выбрали. ADR показывает, какие варианты рассматривали и чем заплатили.</p>
+<h3>Когда писать ADR</h3>
+<p>ADR пишут, когда решение трудно отменить или когда его будут пересматривать. Выбор базы, способ аутентификации, формат обмена, схема развёртывания подходят. Выбор имени переменной не подходит.</p>
+<p>Признак: если через год новый человек спросит «почему так», ответ должен быть в репозитории, а не в чьей-то памяти.</p>
+<p>ADR не переписывают задним числом. Если решение изменилось, пишут новый документ со статусом «заменяет ADR 3». Старый остаётся историей. Иначе теряется причина, по которой прошлое решение казалось разумным.</p>
+<p>Полезен индекс: список ADR с номерами, заголовками и статусами. Он занимает десять строк и позволяет найти нужное решение без поиска по файлам.</p>
+<h3>ADR, RFC и журнал решений</h3>
+<p>Три формата легко перепутать.</p>
+<p><strong>RFC</strong> это предложение для обсуждения. Он описывает варианты и собирает замечания до решения. RFC может закончиться ничем.</p>
+<p><strong>ADR</strong> это запись о принятом решении. Он короткий, фиксирует контекст и последствия, не пересказывает обсуждение.</p>
+<p><strong>Журнал решений</strong> это список ADR или коротких записей: дата, вопрос, выбор. Он нужен для навигации, а не для чтения подряд.</p>
+<p>В учебной команде достаточно ADR и журнала. RFC полезен, если решение затрагивает несколько команд и требует согласования. Для выбора библиотеки в проекте из трёх человек хватит одной страницы ADR.</p>
+<h3>Последствия важнее решения</h3>
+<p>Раздел последствий часто пишут формально: «плюсы и минусы». Польза появляется, когда последствия конкретны.</p>
+<p>Плохо: «SQLite может не подойти при росте нагрузки».</p>
+<p>Хорошо: «одновременная запись блокируется; при 40 пользователях это допустимо, при 400 понадобится серверная база; резервная копия делается копированием файла и требует остановки записи».</p>
+<p>Конкретность позволяет принять решение позже, когда условия изменятся. Она же показывает, что автор понимал цену выбора.</p>
+<h2 id="changelog-что-изменилось"><span class="num">08</span>Changelog: что изменилось</h2>
+<p><strong>Changelog</strong> перечисляет изменения по версиям так, чтобы читатель понял, что затронет его при обновлении. Формат Keep a Changelog задаёт простые правила: версия, дата, категории, понятные формулировки <a href="https://keepachangelog.com/en/1.1.0/">Keep a Changelog 1.1.0</a>.</p>
 <p>Категории:</p>
 <ul>
 <li>добавлено;</li>
@@ -992,29 +1235,119 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <li>удалено;</li>
 <li>безопасность.</li>
 </ul>
-<p>Changelog не равен списку коммитов. В него попадают изменения, важные пользователю.</p>
-<h2 id="где-документация-ломается"><span class="num">08</span>Где документация ломается</h2>
-<p><strong>Документ ради отчёта.</strong> Написан один раз и не обновляется.</p>
-<p><strong>Команды не проверены.</strong> Установка не работает с чистого листа.</p>
-<p><strong>Нет читателя.</strong> Непонятно, кому адресован текст.</p>
-<p><strong>Скриншоты вместо текста.</strong> Интерфейс изменился, инструкция устарела.</p>
-<p><strong>Нет примеров API.</strong> Интегратор угадывает формат.</p>
-<p><strong>Решение без контекста.</strong> Через год непонятно, почему так сделали.</p>
-<div class="callout pitfall"><span class="label">Устаревшая документация хуже отсутствующей: по ней действуют уверенно и получают ошибку.</span></div>
+<p>Запись пишут для пользователя, а не для автора коммита. «Исправлен баг в обработчике» ничего не говорит. «Заявка с кавычкой в теме больше не теряется» говорит.</p>
+<h3>Changelog не равен git log</h3>
+<p>История коммитов описывает, как менялся код. Changelog описывает, что изменилось для пользователя. Это разные аудитории и разный уровень детализации.</p>
+<p>В git log может быть двадцать коммитов про рефакторинг, которые не меняют поведение. В changelog они не попадают. В git log может быть один коммит с несовместимым изменением, который в changelog занимает отдельный раздел.</p>
+<p>Автоматическая генерация из коммитов экономит время, но требует дисциплины сообщений. Если сообщения написаны для себя, changelog получится нечитаемым.</p>
+<h3>Breaking changes</h3>
+<p>Изменение, которое ломает совместимость, указывают отдельно и объясняют, что делать. Недостаточно написать «удалён параметр <code>status</code>». Нужно сказать, чем его заменить и как мигрировать.</p>
+<p>Для версий используют семантическое версионирование: major меняется при несовместимом изменении, minor при добавлении совместимой функции, patch при исправлении. Связь между версией и changelog делает обновление предсказуемым.</p>
+<figure class="figure" data-fig="changelog-anatomy" data-one="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"><iframe title="Figure 3: changelog-anatomy" scrolling="no"></iframe><figcaption>Разметка записи changelog: версия и дата, категории, формулировка для пользователя, отдельный блок несовместимых изменений и ссылка на сравнение версий.</figcaption></figure>
 
-<h2 id="итоги"><span class="num">09</span>Итоги</h2>
-<ul>
-<li>Документ выбирают по читателю и вопросу.</li>
-<li>README доводит до первого запуска.</li>
-<li>API описывают с примерами и ошибками.</li>
-<li>Руководство строят по сценариям.</li>
-<li>ADR и changelog сохраняют решения и изменения.</li>
-</ul></div>
+<p>Схема показывает, что запись читается как ответ на вопрос «что мне делать при обновлении». Если ответа нет, запись неполная.</p></div>
 </div>
 
 <div class="gate-step" data-gate>
-<p class="gate-action"><button type="button" class="gate-btn" aria-expanded="false"><span class="gate-q" aria-hidden="true">?</span><span>Почему список коммитов не заменяет changelog?</span></button></p>
-<div class="gate-content" hidden><div class="quiz" data-quiz data-quiz-guard><div class="quiz-who"><label class="quiz-who-label"><span>ФИО</span><input type="text" class="quiz-name" data-quiz-name maxlength="80" autocomplete="off" placeholder="Иванов Иван Иванович"></label><span class="quiz-attempts" data-quiz-attempts>две попытки на лекцию</span><span class="quiz-note" data-who-note hidden></span></div><div class="quiz-q" data-type="single" data-correct="1" data-q="1"><p class="quiz-p"><span class="quiz-no" aria-hidden="true">01</span>Почему команды в README нужно проверять?</p><div class="opts"><label class="opt"><input type="radio" name="q107_0" value="2" autocomplete="off"><span>Они на английском</span></label><label class="opt"><input type="radio" name="q107_0" value="0" autocomplete="off" data-ok><span>Они могут не работать с чистого листа</span></label><label class="opt"><input type="radio" name="q107_0" value="1" autocomplete="off"><span>Они слишком длинные</span></label><label class="opt"><input type="radio" name="q107_0" value="3" autocomplete="off"><span>Их нельзя копировать</span></label></div><p class="quiz-why" hidden>Проверка установки.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="2" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">02</span>Что содержит changelog?</p><div class="opts"><label class="opt"><input type="radio" name="q107_1" value="2" autocomplete="off"><span>Пароли</span></label><label class="opt"><input type="radio" name="q107_1" value="1" autocomplete="off"><span>Все коммиты подряд</span></label><label class="opt"><input type="radio" name="q107_1" value="0" autocomplete="off" data-ok><span>Изменения, важные пользователю</span></label><label class="opt"><input type="radio" name="q107_1" value="3" autocomplete="off"><span>Список сотрудников</span></label></div><p class="quiz-why" hidden>История версий.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="multi" data-correct="4" data-q="3" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">03</span>Какие ошибки документации типичны?</p><div class="opts"><label class="opt"><input type="checkbox" name="q107_2" value="1" autocomplete="off" data-ok><span>Команды не проверены</span></label><label class="opt"><input type="checkbox" name="q107_2" value="3" autocomplete="off" data-ok><span>Скриншоты вместо текста</span></label><label class="opt"><input type="checkbox" name="q107_2" value="5" autocomplete="off"><span>Проверенный запуск</span></label><label class="opt"><input type="checkbox" name="q107_2" value="4" autocomplete="off"><span>Примеры API</span></label><label class="opt"><input type="checkbox" name="q107_2" value="0" autocomplete="off" data-ok><span>Документ ради отчёта</span></label><label class="opt"><input type="checkbox" name="q107_2" value="2" autocomplete="off" data-ok><span>Нет читателя</span></label></div><p class="quiz-why" hidden>Остальное хорошо.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="short" data-q="4" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">04</span>Для кого пишут руководство пользователя?</p><input type="text" class="short-answer" data-answers="[&quot;пользователь&quot;, &quot;для пользователя&quot;]" placeholder="Введите ответ" autocomplete="off" spellcheck="false" aria-label="Для кого пишут руководство пользователя?"><p class="quiz-why" hidden>Сценарии задач.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="5" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">05</span>Чем changelog отличается от git log?</p><div class="opts"><label class="opt"><input type="radio" name="q107_4" value="1" autocomplete="off"><span>Он длиннее</span></label><label class="opt"><input type="radio" name="q107_4" value="2" autocomplete="off"><span>Он хранит код</span></label><label class="opt"><input type="radio" name="q107_4" value="0" autocomplete="off" data-ok><span>Changelog говорит о важном для пользователя</span></label><label class="opt"><input type="radio" name="q107_4" value="3" autocomplete="off"><span>Он автоматический</span></label></div><p class="quiz-why" hidden>Разная аудитория.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="6" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">06</span>Для кого README?</p><div class="opts"><label class="opt"><input type="radio" name="q107_5" value="1" autocomplete="off"><span>Для пользователя</span></label><label class="opt"><input type="radio" name="q107_5" value="2" autocomplete="off"><span>Для бухгалтера</span></label><label class="opt"><input type="radio" name="q107_5" value="0" autocomplete="off" data-ok><span>Для нового разработчика</span></label><label class="opt"><input type="radio" name="q107_5" value="3" autocomplete="off"><span>Для провайдера</span></label></div><p class="quiz-why" hidden>Первый запуск.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="multi" data-correct="5" data-q="7" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">07</span>Какие документы полезны в проекте?</p><div class="opts"><label class="opt"><input type="checkbox" name="q107_6" value="2" autocomplete="off" data-ok><span>Руководство</span></label><label class="opt"><input type="checkbox" name="q107_6" value="0" autocomplete="off" data-ok><span>README</span></label><label class="opt"><input type="checkbox" name="q107_6" value="6" autocomplete="off"><span>Личные заметки</span></label><label class="opt"><input type="checkbox" name="q107_6" value="4" autocomplete="off" data-ok><span>Changelog</span></label><label class="opt"><input type="checkbox" name="q107_6" value="5" autocomplete="off"><span>Прайс оборудования</span></label><label class="opt"><input type="checkbox" name="q107_6" value="1" autocomplete="off" data-ok><span>API</span></label><label class="opt"><input type="checkbox" name="q107_6" value="3" autocomplete="off" data-ok><span>ADR</span></label></div><p class="quiz-why" hidden>Остальное не документация продукта.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="8" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">08</span>Что содержит ADR?</p><div class="opts"><label class="opt"><input type="radio" name="q107_7" value="3" autocomplete="off"><span>Прайс</span></label><label class="opt"><input type="radio" name="q107_7" value="2" autocomplete="off"><span>Скриншоты</span></label><label class="opt"><input type="radio" name="q107_7" value="1" autocomplete="off"><span>Список коммитов</span></label><label class="opt"><input type="radio" name="q107_7" value="0" autocomplete="off" data-ok><span>Контекст, варианты, решение и последствия</span></label></div><p class="quiz-why" hidden>Архитектурное решение.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="short" data-q="9" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">09</span>Что перечисляет изменения по версиям?</p><input type="text" class="short-answer" data-answers="[&quot;changelog&quot;, &quot;журнал изменений&quot;]" placeholder="Введите ответ" autocomplete="off" spellcheck="false" aria-label="Что перечисляет изменения по версиям?"><p class="quiz-why" hidden>История версий.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="10" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">10</span>Зачем нужна документация?</p><div class="opts"><label class="opt"><input type="radio" name="q107_9" value="2" autocomplete="off"><span>Заменять тесты</span></label><label class="opt"><input type="radio" name="q107_9" value="3" autocomplete="off"><span>Хранить пароли</span></label><label class="opt"><input type="radio" name="q107_9" value="0" autocomplete="off" data-ok><span>Отвечать на вопросы читателя</span></label><label class="opt"><input type="radio" name="q107_9" value="1" autocomplete="off"><span>Увеличивать объём проекта</span></label></div><p class="quiz-why" hidden>Польза для читателя.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="11" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">11</span>Почему устаревшая документация опасна?</p><div class="opts"><label class="opt"><input type="radio" name="q107_10" value="1" autocomplete="off"><span>Она занимает место</span></label><label class="opt"><input type="radio" name="q107_10" value="2" autocomplete="off"><span>Она слишком короткая</span></label><label class="opt"><input type="radio" name="q107_10" value="3" autocomplete="off"><span>Она не переведена</span></label><label class="opt"><input type="radio" name="q107_10" value="0" autocomplete="off" data-ok><span>По ней действуют и получают ошибку</span></label></div><p class="quiz-why" hidden>Ложная уверенность.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="multi" data-correct="4" data-q="12" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">12</span>Что входит в README?</p><div class="opts"><label class="opt"><input type="checkbox" name="q107_11" value="1" autocomplete="off" data-ok><span>Установка</span></label><label class="opt"><input type="checkbox" name="q107_11" value="3" autocomplete="off" data-ok><span>Проверка</span></label><label class="opt"><input type="checkbox" name="q107_11" value="5" autocomplete="off"><span>Список клиентов</span></label><label class="opt"><input type="checkbox" name="q107_11" value="2" autocomplete="off" data-ok><span>Запуск</span></label><label class="opt"><input type="checkbox" name="q107_11" value="0" autocomplete="off" data-ok><span>Назначение</span></label><label class="opt"><input type="checkbox" name="q107_11" value="4" autocomplete="off"><span>Пароль администратора</span></label></div><p class="quiz-why" hidden>Остальное лишнее.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="short" data-q="13" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">13</span>Как называют документ с архитектурным решением?</p><input type="text" class="short-answer" data-answers="[&quot;ADR&quot;, &quot;architecture decision record&quot;]" placeholder="Введите ответ" autocomplete="off" spellcheck="false" aria-label="Как называют документ с архитектурным решением?"><p class="quiz-why" hidden>Решение и контекст.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="14" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">14</span>Что описывает API?</p><div class="opts"><label class="opt"><input type="radio" name="q107_13" value="1" autocomplete="off"><span>Установку проекта</span></label><label class="opt"><input type="radio" name="q107_13" value="3" autocomplete="off"><span>Дизайн экрана</span></label><label class="opt"><input type="radio" name="q107_13" value="0" autocomplete="off" data-ok><span>Запросы, ответы и ошибки</span></label><label class="opt"><input type="radio" name="q107_13" value="2" autocomplete="off"><span>Правила бизнеса</span></label></div><p class="quiz-why" hidden>Контракт интеграции.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="15" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">15</span>Как строят руководство пользователя?</p><div class="opts"><label class="opt"><input type="radio" name="q107_14" value="1" autocomplete="off"><span>По кнопкам</span></label><label class="opt"><input type="radio" name="q107_14" value="0" autocomplete="off" data-ok><span>По сценариям</span></label><label class="opt"><input type="radio" name="q107_14" value="3" autocomplete="off"><span>По авторам</span></label><label class="opt"><input type="radio" name="q107_14" value="2" autocomplete="off"><span>По файлам</span></label></div><p class="quiz-why" hidden>Задачи пользователя.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><p class="quiz-note quiz-submit-note" data-quiz-note hidden></p><div class="quiz-result" data-quiz-result hidden aria-live="polite"><span class="label">Результат теста</span><h3>Тест завершён</h3><p class="modal-name-line">ФИО: <b data-student-name></b></p><p class="modal-result" data-modal-result></p><p class="modal-result" data-modal-wrong></p><dl class="modal-times"><div><dt>Время выполнения теста</dt><dd data-test-time>00:00</dd></div><div><dt>Время просмотра лекции</dt><dd data-view-time>00:00</dd></div></dl></div></div></div>
+<p class="gate-action"><button type="button" class="gate-btn" aria-expanded="false"><span class="gate-q" aria-hidden="true">?</span><span>Почему документация решает исход инцидента?</span></button></p>
+<div class="gate-content" hidden><h2 id="реальные-случаи"><span class="num">09</span>Реальные случаи</h2>
+<p>Документация редко выглядит причиной аварии. Но три случая показывают, что её отсутствие или неточность меняют последствия.</p>
+<h3>Equifax, 2017</h3>
+<p>В 2017 году злоумышленники получили данные около 147,9 миллиона потребителей из системы кредитного бюро Equifax. Уязвимость в Apache Struts была известна, исправление вышло в марте 2017 года, а атака продолжалась с мая по июль.</p>
+<p>Отчёт комитета Палаты представителей США по надзору и правительственной реформе, опубликованный в декабре 2018 года, разбирает не только пропущенное обновление, но и управление: неполную инвентаризацию систем, отсутствие единой картины того, где работает уязвимое программное обеспечение, и слабый контроль обновлений <a href="https://oversight.house.gov/wp-content/uploads/2018/12/Equifax-Report.pdf">U.S. House, 2018</a>.</p>
+<p>Инвентаризация это документ. Если в организации нет списка систем, версий и владельцев, вопрос «где у нас Struts» решается обходом серверов. Пока обход идёт, уязвимость остаётся открытой.</p>
+<p>Отчёт отдельно отмечает разрыв между знанием и действием. Исправление было доступно за два месяца до атаки, но организация не смогла быстро определить, где именно используется уязвимая версия, и не провела проверку полноты обновления.</p>
+<p>Урок: <strong>документация инфраструктуры является частью безопасности</strong>. Список компонентов, версий и ответственных нужен не для отчёта, а для реакции на уязвимость.</p>
+<h3>left-pad, 2016</h3>
+<p>В марте 2016 года автор небольшого пакета <code>left-pad</code> удалил его из реестра npm вместе с 272 другими своими пакетами. Пакет напрямую или через зависимости использовали многие проекты. В течение нескольких минут после удаления посыпались сотни отказов в минуту, потому что сборочные цепочки не могли получить зависимость.</p>
+<p>Компания npm описала события в блоге: потребовалось около 2,5 часа, чтобы восстановить работоспособность, а одну из версий пришлось публиковать заново из резервной копии, потому что часть проектов требовала конкретную версию <code>0.0.3</code> <a href="https://blog.npmjs.org/post/141577284765/kik-left-pad-and-npm">npm, 2016</a>.</p>
+<p>Причина масштаба не в сложности пакета, а в контракте зависимостей. Проекты не знали полный список своих зависимостей и не имели плана на исчезновение пакета. Когда он пропал, не осталось документа, по которому можно быстро понять, что именно сломалось.</p>
+<p>Урок: <strong>зависимости тоже документируют</strong>. Файл блокировки версий, список критичных библиотек и запись о причине выбора снижают панику при исчезновении или смене зависимости.</p>
+<h3>Log4Shell, 2021</h3>
+<p>В декабре 2021 года обнаружили уязвимость CVE-2021-44228 в библиотеке Log4j, которую используют миллионы приложений на Java. Агентство по кибербезопасности США CISA выпустило совместное предупреждение с перечнем уязвимых версий и мер <a href="https://www.cisa.gov/news-events/cybersecurity-advisories/aa21-356a">CISA, 2021</a>.</p>
+<p>В предупреждении указан диапазон: версии с 2.0-beta9 по 2.12.1 и с 2.13.0 по 2.15.0. Этого недостаточно, чтобы найти уязвимость в своей системе. Нужно знать, какие приложения используют Log4j и какие версии в них входят.</p>
+<p>Быстрее отвечали те, у кого была инвентаризация зависимостей. Без неё библиотеку искали по исходникам, контейнерам и спискам установленного программного обеспечения.</p>
+<p>Для такой инвентаризации используют перечень компонентов сборки, часто называемый SBOM. Это машиночитаемый список библиотек и версий, который собирается вместе с продуктом. Без него вопрос об уязвимой зависимости решается вручную, а ручной обход не масштабируется.</p>
+<p>Урок: <strong>точность документации измеряется скоростью ответа на вопрос</strong>. Если на вопрос «используем ли мы уязвимую версию» нельзя ответить за час, документация не выполняет свою работу.</p>
+<table>
+<thead>
+<tr>
+<th>Случай</th>
+<th>Чего не хватило</th>
+<th>Что помогает</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Equifax</td>
+<td>инвентаризации систем и версий</td>
+<td>реестр компонентов и владельцев</td>
+</tr>
+<tr>
+<td>left-pad</td>
+<td>фиксации зависимостей</td>
+<td>файл блокировки и список критичных пакетов</td>
+</tr>
+<tr>
+<td>Log4Shell</td>
+<td>карты зависимостей</td>
+<td>автоматический список версий</td>
+</tr>
+</tbody>
+</table>
+<p>Общее у трёх случаев одно: документ нужен не для проверки, а для действия под давлением.</p>
+<h2 id="документация-учебного-продукта"><span class="num">10</span>Документация учебного продукта</h2>
+<p>Учебный проект не требует многотомного руководства. Ему нужен минимальный комплект, который отвечает на вопросы читателей.</p>
+<p><strong>README.</strong> Назначение, требования, установка, запуск, проверка, структура, ограничения. Одна страница.</p>
+<p><strong>Описание API.</strong> Пять-семь конечных точек с примерами, ошибками и правами. Одна страница или файл OpenAPI.</p>
+<p><strong>Руководство пользователя.</strong> Три-пять сценариев: создать заявку, найти, закрыть, сменить статус, выйти. Без описания каждой кнопки.</p>
+<p><strong>ADR.</strong> Два-три решения: база, аутентификация, формат обмена. По одной странице.</p>
+<p><strong>Changelog.</strong> Одна запись на версию, категории и понятные формулировки.</p>
+<p>Этого достаточно, чтобы новый человек запустил проект, интегратор собрал запрос, пользователь выполнил задачу, а команда поняла решения.</p>
+<p>Комплект проверяют по вопросам, а не по числу страниц. Может ли человек, не видевший проект, запустить его за один вечер? Может ли интегратор собрать запрос без переписки с автором? Понимает ли пользователь, что делать при ошибке? Находит ли команда причину решения через год? Если на все четыре вопроса есть ответ, документация работает.</p>
+<h3>Как поддерживать свежесть</h3>
+<p>Свежесть обеспечивают три привычки.</p>
+<p>Первая: документ меняют в том же коммите, что и поведение. Ревью проверяет, не остался ли текст неверным.</p>
+<p>Вторая: у каждого документа есть владелец и дата последней проверки. Дата не гарантирует правду, но показывает, когда текст читали.</p>
+<p>Третья: команды и примеры проверяют автоматически, где возможно. README можно прогнать в чистом контейнере, примеры API отправить в тест контракта, ссылки проверить сборкой.</p>
+<h3>Ревью документации</h3>
+<p>Документ проверяют так же, как код. Ревью смотрит на четыре вещи: читателя, полноту, точность и свежесть.</p>
+<p>Читатель проверяется вопросом «кто это откроет и что он уже знает». Если текст предполагает знание, которого у читателя нет, начало нужно переписать.</p>
+<p>Полнота проверяется прохождением сценария. Человек берёт документ и выполняет шаги, не заглядывая в код. Каждый пропуск становится задачей.</p>
+<p>Точность проверяется запуском команд и сверкой примеров с текущей версией. Ссылки проверяет сборка, команды проверяет человек или скрипт.</p>
+<p>Свежесть проверяется датой и диффом. Если поведение изменилось, а документ нет, ревью должно это заметить. Автоматическая проверка не понимает смысл, поэтому последнее слово остаётся за человеком.</p>
+<h3>Что писать не нужно</h3>
+<p>Не нужно пересказывать код. Комментарий, который повторяет строку, бесполезен. Не нужно описывать очевидные кнопки. Не нужно хранить пароли и токены. Не нужно писать документ «для отчёта», если у него нет читателя.</p>
+<p>Документация это инструмент, а не доказательство трудолюбия. Лучше короткий README, который работает, чем тридцать страниц, которые никто не открывает.</p>
+<h3>Один источник истины</h3>
+<p>Копия документа устаревает быстрее оригинала. Если пример запроса продублирован в README, в руководстве и в описании API, при изменении формата обновят один из трёх. Остальные начнут врать.</p>
+<p>Правило простое: у факта есть одно место, остальные ссылаются на него. Список полей живёт в спецификации, README даёт ссылку. Команда запуска живёт в README, руководство ссылается на раздел.</p>
+<p>Ссылки тоже требуют дисциплины. Якорь меняется вместе с заголовком, и ссылка ломается. Проверка ссылок в сборке ловит это раньше читателя.</p>
+<h2 id="итоги"><span class="num">11</span>Итоги</h2>
+<ul>
+<li>Документ выбирают по читателю, вопросу и моменту чтения.</li>
+<li>Четыре вида документа различаются целью: научить, помочь, описать, объяснить.</li>
+<li>README доводит до первого запуска и проверяется на чистом окружении.</li>
+<li>API описывают как контракт с примерами и ошибками.</li>
+<li>ADR сохраняет контекст и последствия решения.</li>
+<li>Changelog говорит пользователю, что изменилось, а не пересказывает коммиты.</li>
+<li>Документация зависимостей и систем нужна для реакции на инцидент.</li>
+<li>Свежесть поддерживается процессом, а не разовой акцией.</li>
+</ul>
+<h2 id="источники"><span class="num">12</span>Источники</h2>
+<ol>
+<li>ISO/IEC/IEEE 26514:2022. Software and systems engineering. Design and development of information for users. https://www.iso.org/standard/77451.html</li>
+<li>Procida D. Diátaxis: a systematic approach to technical documentation authoring. https://diataxis.fr/</li>
+<li>Keep a Changelog 1.1.0. https://keepachangelog.com/en/1.1.0/</li>
+<li>OpenAPI Initiative. OpenAPI Specification 3.1.1. https://spec.openapis.org/oas/v3.1.1.html</li>
+<li>Python. PEP 257: Docstring Conventions. https://peps.python.org/pep-0257/</li>
+<li>Nygard M. Documenting Architecture Decisions, 2011. https://cognitect.com/blog/2011/11/15/documenting-architecture-decisions</li>
+<li>Winters T., Manshreck T., Wright H. Software Engineering at Google, chapter 10: Documentation. https://abseil.io/resources/swe-book/html/ch10.html</li>
+<li>U.S. House Committee on Oversight and Government Reform. The Equifax Data Breach, 2018. https://oversight.house.gov/wp-content/uploads/2018/12/Equifax-Report.pdf</li>
+<li>CISA. Mitigating Log4Shell and Other Log4j-Related Vulnerabilities, AA21-356A, 2021. https://www.cisa.gov/news-events/cybersecurity-advisories/aa21-356a</li>
+<li>npm. kik, left-pad, and npm, 2016. https://blog.npmjs.org/post/141577284765/kik-left-pad-and-npm</li>
+</ol>
+<div class="quiz" data-quiz data-quiz-guard><div class="quiz-who"><label class="quiz-who-label"><span>ФИО</span><input type="text" class="quiz-name" data-quiz-name maxlength="80" autocomplete="off" placeholder="Иванов Иван Иванович"></label><span class="quiz-attempts" data-quiz-attempts>две попытки на лекцию</span><span class="quiz-note" data-who-note hidden></span></div><div class="quiz-q" data-type="single" data-correct="1" data-q="1"><p class="quiz-p"><span class="quiz-no" aria-hidden="true">01</span>Какой вид документа отвечает на вопрос «почему так решили»?</p><div class="opts"><label class="opt"><input type="radio" name="q231_0" value="2" autocomplete="off"><span>Учебный материал</span></label><label class="opt"><input type="radio" name="q231_0" value="3" autocomplete="off"><span>Changelog</span></label><label class="opt"><input type="radio" name="q231_0" value="0" autocomplete="off" data-ok><span>Объяснение, например ADR</span></label><label class="opt"><input type="radio" name="q231_0" value="1" autocomplete="off"><span>Справочник API</span></label></div><p class="quiz-why" hidden>Объяснение хранит контекст и компромисс, а справочник даёт только факт.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="short" data-q="2" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">02</span>Как называют документ с архитектурным решением?</p><input type="text" class="short-answer" data-answers="[&quot;ADR&quot;, &quot;architecture decision record&quot;]" placeholder="Введите ответ" autocomplete="off" spellcheck="false" aria-label="Как называют документ с архитектурным решением?"><p class="quiz-why" hidden>Контекст, решение и последствия.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="3" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">03</span>Что содержит changelog?</p><div class="opts"><label class="opt"><input type="radio" name="q231_2" value="2" autocomplete="off"><span>Пароли и токены</span></label><label class="opt"><input type="radio" name="q231_2" value="1" autocomplete="off"><span>Все коммиты подряд</span></label><label class="opt"><input type="radio" name="q231_2" value="0" autocomplete="off" data-ok><span>Изменения, важные пользователю</span></label><label class="opt"><input type="radio" name="q231_2" value="3" autocomplete="off"><span>Список сотрудников</span></label></div><p class="quiz-why" hidden>История версий пишется для читателя.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="multi" data-correct="4" data-q="4" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">04</span>Что входит в README?</p><div class="opts"><label class="opt"><input type="checkbox" name="q231_3" value="1" autocomplete="off" data-ok><span>Установка и запуск</span></label><label class="opt"><input type="checkbox" name="q231_3" value="3" autocomplete="off" data-ok><span>Известные ограничения</span></label><label class="opt"><input type="checkbox" name="q231_3" value="5" autocomplete="off"><span>Список клиентов</span></label><label class="opt"><input type="checkbox" name="q231_3" value="2" autocomplete="off" data-ok><span>Проверка работы</span></label><label class="opt"><input type="checkbox" name="q231_3" value="0" autocomplete="off" data-ok><span>Назначение проекта</span></label><label class="opt"><input type="checkbox" name="q231_3" value="4" autocomplete="off"><span>Пароль администратора</span></label></div><p class="quiz-why" hidden>Остальное лишнее или опасно.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="5" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">05</span>Чем changelog отличается от git log?</p><div class="opts"><label class="opt"><input type="radio" name="q231_4" value="1" autocomplete="off"><span>Он всегда длиннее</span></label><label class="opt"><input type="radio" name="q231_4" value="2" autocomplete="off"><span>Он хранит исходный код</span></label><label class="opt"><input type="radio" name="q231_4" value="0" autocomplete="off" data-ok><span>Changelog говорит о важном для пользователя</span></label><label class="opt"><input type="radio" name="q231_4" value="3" autocomplete="off"><span>Он создаётся автоматически</span></label></div><p class="quiz-why" hidden>У них разные читатели и уровень детализации.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="6" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">06</span>Какой код ответа означает, что запрос разобран, но данные неверны?</p><div class="opts"><label class="opt"><input type="radio" name="q231_5" value="1" autocomplete="off"><span>400</span></label><label class="opt"><input type="radio" name="q231_5" value="2" autocomplete="off"><span>401</span></label><label class="opt"><input type="radio" name="q231_5" value="3" autocomplete="off"><span>500</span></label><label class="opt"><input type="radio" name="q231_5" value="0" autocomplete="off" data-ok><span>422</span></label></div><p class="quiz-why" hidden>400 означает, что тело не удалось разобрать, а 422 относится к проверке данных.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="short" data-q="7" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">07</span>Что перечисляет изменения по версиям?</p><input type="text" class="short-answer" data-answers="[&quot;changelog&quot;, &quot;журнал изменений&quot;]" placeholder="Введите ответ" autocomplete="off" spellcheck="false" aria-label="Что перечисляет изменения по версиям?"><p class="quiz-why" hidden>История версий для пользователя.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="multi" data-correct="5" data-q="8" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">08</span>Какие документы полезны в учебном проекте?</p><div class="opts"><label class="opt"><input type="checkbox" name="q231_7" value="3" autocomplete="off" data-ok><span>ADR</span></label><label class="opt"><input type="checkbox" name="q231_7" value="4" autocomplete="off" data-ok><span>Changelog</span></label><label class="opt"><input type="checkbox" name="q231_7" value="5" autocomplete="off"><span>Прайс оборудования</span></label><label class="opt"><input type="checkbox" name="q231_7" value="2" autocomplete="off" data-ok><span>Руководство пользователя</span></label><label class="opt"><input type="checkbox" name="q231_7" value="0" autocomplete="off" data-ok><span>README</span></label><label class="opt"><input type="checkbox" name="q231_7" value="6" autocomplete="off"><span>Личные заметки</span></label><label class="opt"><input type="checkbox" name="q231_7" value="1" autocomplete="off" data-ok><span>Описание API</span></label></div><p class="quiz-why" hidden>Остальное не документация продукта.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="9" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">09</span>Почему устаревшая документация опасна?</p><div class="opts"><label class="opt"><input type="radio" name="q231_8" value="1" autocomplete="off"><span>Она занимает место на диске</span></label><label class="opt"><input type="radio" name="q231_8" value="2" autocomplete="off"><span>Она слишком короткая</span></label><label class="opt"><input type="radio" name="q231_8" value="3" autocomplete="off"><span>Она не переведена</span></label><label class="opt"><input type="radio" name="q231_8" value="0" autocomplete="off" data-ok><span>По ней действуют уверенно и получают ошибку</span></label></div><p class="quiz-why" hidden>Ложная уверенность хуже отсутствия текста.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="10" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">10</span>Почему в Equifax не удалось быстро закрыть уязвимость?</p><div class="opts"><label class="opt"><input type="radio" name="q231_9" value="2" autocomplete="off"><span>Уязвимость была неизвестна</span></label><label class="opt"><input type="radio" name="q231_9" value="3" autocomplete="off"><span>Отключился интернет</span></label><label class="opt"><input type="radio" name="q231_9" value="1" autocomplete="off"><span>Не существовало исправления</span></label><label class="opt"><input type="radio" name="q231_9" value="0" autocomplete="off" data-ok><span>Не было полной инвентаризации систем и версий</span></label></div><p class="quiz-why" hidden>Без карты систем вопрос «где у нас уязвимая версия» решается обходом.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="multi" data-correct="4" data-q="11" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">11</span>Какие ошибки документации типичны?</p><div class="opts"><label class="opt"><input type="checkbox" name="q231_10" value="1" autocomplete="off" data-ok><span>Непроверенные команды</span></label><label class="opt"><input type="checkbox" name="q231_10" value="3" autocomplete="off" data-ok><span>Скриншоты вместо текста</span></label><label class="opt"><input type="checkbox" name="q231_10" value="5" autocomplete="off"><span>Проверенный запуск</span></label><label class="opt"><input type="checkbox" name="q231_10" value="4" autocomplete="off"><span>Примеры API</span></label><label class="opt"><input type="checkbox" name="q231_10" value="0" autocomplete="off" data-ok><span>Документ ради отчёта</span></label><label class="opt"><input type="checkbox" name="q231_10" value="2" autocomplete="off" data-ok><span>Отсутствие читателя</span></label></div><p class="quiz-why" hidden>Остальное помогает читателю.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="12" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">12</span>Что содержит ADR?</p><div class="opts"><label class="opt"><input type="radio" name="q231_11" value="3" autocomplete="off"><span>Прайс оборудования</span></label><label class="opt"><input type="radio" name="q231_11" value="2" autocomplete="off"><span>Скриншоты интерфейса</span></label><label class="opt"><input type="radio" name="q231_11" value="1" autocomplete="off"><span>Список коммитов</span></label><label class="opt"><input type="radio" name="q231_11" value="0" autocomplete="off" data-ok><span>Контекст, варианты, решение и последствия</span></label></div><p class="quiz-why" hidden>Решение объясняют через контекст и цену.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="13" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">13</span>Что является единицей руководства пользователя?</p><div class="opts"><label class="opt"><input type="radio" name="q231_12" value="1" autocomplete="off"><span>Кнопка интерфейса</span></label><label class="opt"><input type="radio" name="q231_12" value="2" autocomplete="off"><span>Файл проекта</span></label><label class="opt"><input type="radio" name="q231_12" value="0" autocomplete="off" data-ok><span>Задача или сценарий</span></label><label class="opt"><input type="radio" name="q231_12" value="3" autocomplete="off"><span>Коммит в репозитории</span></label></div><p class="quiz-why" hidden>Руководство отвечает на вопрос «как выполнить задачу».</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="short" data-q="14" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">14</span>Для кого пишут руководство пользователя?</p><input type="text" class="short-answer" data-answers="[&quot;пользователь&quot;, &quot;для пользователя&quot;]" placeholder="Введите ответ" autocomplete="off" spellcheck="false" aria-label="Для кого пишут руководство пользователя?"><p class="quiz-why" hidden>Сценарии его задач.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="15" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">15</span>Зачем нужна документация?</p><div class="opts"><label class="opt"><input type="radio" name="q231_14" value="2" autocomplete="off"><span>Заменять тесты</span></label><label class="opt"><input type="radio" name="q231_14" value="3" autocomplete="off"><span>Хранить пароли</span></label><label class="opt"><input type="radio" name="q231_14" value="0" autocomplete="off" data-ok><span>Отвечать на вопрос конкретного читателя</span></label><label class="opt"><input type="radio" name="q231_14" value="1" autocomplete="off"><span>Увеличивать объём проекта</span></label></div><p class="quiz-why" hidden>Документ без читателя и вопроса бесполезен.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><p class="quiz-note quiz-submit-note" data-quiz-note hidden></p><div class="quiz-result" data-quiz-result hidden aria-live="polite"><span class="label">Результат теста</span><h3>Тест завершён</h3><p class="modal-name-line">ФИО: <b data-student-name></b></p><p class="modal-result" data-modal-result></p><p class="modal-result" data-modal-wrong></p><dl class="modal-times"><div><dt>Время выполнения теста</dt><dd data-test-time>00:00</dd></div><div><dt>Время просмотра лекции</dt><dd data-view-time>00:00</dd></div></dl></div></div></div>
 </div></article><nav class="pager"><a class="" href="24-prakt-09.html"><span>← Предыдущее занятие</span>Практика 9. Поиск дефекта по журналу</a><a class="next" style="text-align:right;margin-left:auto" href="26-prakt-10.html"><span>Следующее занятие →</span>Практика 10. Комплект документации</a></nav></main>
 <div class="modal" data-modal="warn" hidden>
   <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="warn-title">

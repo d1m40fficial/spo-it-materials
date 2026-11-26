@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Форма приложения под условия</title>
+<style>
+  :root { --paper:#faf6f3; --card:#fffdfb; --ink:#1a1916; --muted:#6b6459; --rule:#e4d8cf; --accent:#0F8A63; --soft:#E1F5EE; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .demo { background:var(--paper); border:1px solid var(--rule); border-radius:14px; padding:18px; }
+  .head { display:flex; justify-content:space-between; align-items:flex-end; gap:16px; padding-bottom:10px; border-bottom:1px solid var(--rule); }
+  .eyebrow { margin:0 0 4px; font:600 10px/1.2 Consolas,monospace; letter-spacing:.12em; text-transform:uppercase; color:var(--accent); }
+  h3 { margin:0; font-size:20px; line-height:1.2; }
+  .counter { font:11px/1.4 Consolas,monospace; color:var(--muted); white-space:nowrap; }
+  svg { display:block; width:100%; height:auto; margin-top:6px; }
+  .col { cursor:pointer; }
+  .col rect { fill:#fff; stroke:#2d3142; stroke-width:1.3; transition:fill .2s, stroke .2s; }
+  .col.on rect { fill:var(--soft); stroke:var(--accent); stroke-width:2; }
+  .col text { font-family:Consolas,monospace; font-size:7.6px; fill:#2d3142; text-anchor:middle; }
+  .col .big { font-size:9px; }
+  .col .pick { font-size:7.6px; fill:#0F8A63; }
+  .status { min-height:56px; margin-top:8px; padding:10px 12px; border-radius:9px; background:var(--soft); font-size:12.5px; line-height:1.45; }
+  .status b { color:var(--accent); }
+  .controls { display:flex; gap:7px; flex-wrap:wrap; margin-top:10px; }
+  button { font:600 11.5px/1 "Segoe UI",system-ui,sans-serif; padding:8px 10px; border-radius:9px; border:1px solid var(--rule); background:var(--card); color:var(--ink); cursor:pointer; }
+  button:hover { border-color:var(--accent); color:var(--accent); }
+  button.on { background:var(--accent); border-color:var(--accent); color:#fff; }
+  @media (max-width:560px) { .demo { padding:12px; } }
+</style>
+</head>
+<body>
+<div class="demo">
+  <div class="head">
+    <div><p class="eyebrow">Архитектура · форма</p><h3>Монолит, модули или службы</h3></div>
+    <div class="counter">выберите условия</div>
+  </div>
+  <svg viewBox="0 0 680 210" role="img" aria-label="Три набора условий и подходящая форма приложения">
+    <g class="col on" data-k="small">
+      <rect x="20" y="20" width="200" height="128" rx="9"/>
+      <text x="120" y="42" class="big">учебный продукт</text>
+      <text x="120" y="62">3-5 человек</text>
+      <text x="120" y="78">общая база</text>
+      <text x="120" y="94">один выпуск</text>
+      <text x="120" y="116" class="pick">монолит</text>
+    </g>
+    <g class="col" data-k="grow">
+      <rect x="240" y="20" width="200" height="128" rx="9"/>
+      <text x="340" y="42" class="big">продукт растёт</text>
+      <text x="340" y="62">8-15 человек</text>
+      <text x="340" y="78">две команды</text>
+      <text x="340" y="94">общие данные</text>
+      <text x="340" y="116" class="pick">модульный монолит</text>
+    </g>
+    <g class="col" data-k="many">
+      <rect x="460" y="20" width="200" height="128" rx="9"/>
+      <text x="560" y="42" class="big">несколько команд</text>
+      <text x="560" y="62">независимые выпуски</text>
+      <text x="560" y="78">разная нагрузка</text>
+      <text x="560" y="94">свои данные</text>
+      <text x="560" y="116" class="pick">службы по границам</text>
+    </g>
+    <text x="340" y="176" text-anchor="middle" font-family="Consolas,monospace" font-size="7.4" fill="#0F8A63">ФОРМУ ВЫБИРАЮТ ПО УСЛОВИЯМ, А НЕ ПО НАЗВАНИЮ</text>
+    <text x="340" y="194" text-anchor="middle" font-family="Consolas,monospace" font-size="6.8" fill="#6b6459">каждая форма оставляет путь к следующей</text>
+  </svg>
+  <div class="status" id="status"></div>
+  <div class="controls">
+    <button data-k="small" class="on">Учебный продукт</button>
+    <button data-k="grow">Продукт растёт</button>
+    <button data-k="many">Несколько команд</button>
+  </div>
+</div>
+<script>
+(function () {
+  var data = {
+    small: '<b>Монолит.</b> Одна сборка, один выпуск, общая база. Слои и контракты внутри важны, сеть не нужна. Разделение позже возможно, если модули уже имеют явные границы.',
+    grow: '<b>Модульный монолит.</b> Код в одном приложении, но модули общаются через интерфейсы и не заглядывают внутрь друг друга. Это даёт границы без операционной цены сети.',
+    many: '<b>Службы по границам.</b> Выгода появляется при независимых выпусках и разной нагрузке. Цена: сетевые сбои, совместимость контрактов, отсутствие общей транзакции.'
+  };
+  var cols = document.querySelectorAll('.col');
+  var buttons = document.querySelectorAll('button[data-k]');
+  var status = document.getElementById('status');
+  function apply(key) {
+    cols.forEach(function (c) { c.classList.toggle('on', c.dataset.k === key); });
+    buttons.forEach(function (b) { b.classList.toggle('on', b.dataset.k === key); });
+    status.innerHTML = data[key];
+  }
+  cols.forEach(function (c) { c.addEventListener('click', function () { apply(c.dataset.k); }); });
+  buttons.forEach(function (b) { b.addEventListener('click', function () { apply(b.dataset.k); }); });
+  apply('small');
+})();
+</script>
+</body>
+</html>

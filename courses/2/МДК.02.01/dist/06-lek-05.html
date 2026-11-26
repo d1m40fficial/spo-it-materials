@@ -888,20 +888,106 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <canvas class="shader-bg" width="820" height="300" aria-hidden="true" style="background:linear-gradient(135deg,#08090D,#1D9E75 58%,#08090D)"></canvas>
 <div class="badges"><span class="pill dark">Занятие 7</span><span class="pill">Технология разработки ПО</span></div>
 <div class="hero-panel"><h1>Git: репозиторий и история</h1><p class="dek">Git хранит снимки состояния и позволяет вернуться к любому из них. Разберём индекс, коммиты, ветки и удалённый репозиторий.</p></div>
-<div class="glyph" aria-hidden="true">Л5</div></header><section class="outcomes"><b>После этого занятия вы сможете</b><ul><li>Объяснять разницу между рабочим каталогом, индексом и репозиторием</li><li>Делать осмысленные коммиты и читать историю</li><li>Исключать из репозитория лишние и секретные файлы</li><li>Отличать локальную работу от отправки на сервер</li></ul></section><nav class="toc"><b>Содержание занятия</b><ol><li><a href="#final_v2_final">final_v2_final</a></li><li><a href="#снимки-а-не-разница-файлов">Снимки, а не разница файлов</a></li><li><a href="#три-области-и-сервер">Три области и сервер</a></li><li><a href="#основные-команды">Основные команды</a></li><li><a href="#что-не-коммитят">Что не коммитят</a></li><li><a href="#ветки">Ветки</a></li><li><a href="#где-работа-с-git-ломается">Где работа с Git ломается</a></li><li><a href="#итоги">Итоги</a></li></ol></nav><article class="prose"><h2 id="final_v2_final"><span class="num">01</span>final_v2_final</h2>
-<p>В папке проекта лежат файлы <code>отчёт.docx</code>, <code>отчёт_новый.docx</code>, <code>отчёт_новый_исправленный.docx</code> и <code>отчёт_финал.docx</code>. Непонятно, какой из них последний, что изменилось и можно ли вернуть вчерашнюю версию.</p>
-<p><strong>Система контроля версий</strong> хранит историю изменений и позволяет перейти к любому сохранённому состоянию. <strong>Git</strong> это распределённая система: полная история есть у каждого участника.</p>
-<p>Главная мысль занятия: <strong>коммит это снимок законченного изменения с объяснением</strong>. Пока изменение не закоммичено, оно живёт только на диске и легко теряется.</p>
-<h2 id="снимки-а-не-разница-файлов"><span class="num">02</span>Снимки, а не разница файлов</h2>
-<p>Git хранит состояние проекта в коммитах. У коммита есть:</p>
+<div class="glyph" aria-hidden="true">Л5</div></header><section class="outcomes"><b>После этого занятия вы сможете</b><ul><li>Объяснять разницу между рабочим каталогом, индексом и репозиторием</li><li>Делать осмысленные коммиты и читать историю</li><li>Исключать из репозитория лишние и секретные файлы</li><li>Отличать локальную работу от отправки на сервер</li><li>Объяснять, как хеши связывают коммиты в проверяемую цепочку</li><li>Выбирать между исправлением истории и обратным коммитом</li></ul></section><nav class="toc"><b>Содержание занятия</b><ol><li><a href="#final_v2_final">final_v2_final</a></li><li><a href="#что-спрашивают-у-истории">Что спрашивают у истории</a></li><li><a href="#снимки-а-не-разница-файлов">Снимки, а не разница файлов</a></li><li><a href="#три-области-и-сервер">Три области и сервер</a></li><li><a href="#индекс-как-инструмент-отбора">Индекс как инструмент отбора</a></li><li><a href="#анатомия-коммита">Анатомия коммита</a></li><li><a href="#ветка-это-указатель">Ветка это указатель</a></li><li><a href="#что-не-коммитят">Что не коммитят</a></li><li><a href="#удалённый-репозиторий">Удалённый репозиторий</a></li><li><a href="#где-работа-с-git-ломается">Где работа с Git ломается</a></li><li><a href="#реальные-случаи">Реальные случаи</a></li><li><a href="#как-читать-историю">Как читать историю</a></li><li><a href="#когда-история-мешает">Когда история мешает</a></li><li><a href="#цена-истории">Цена истории</a></li><li><a href="#чек-лист-работы-с-историей">Чек-лист работы с историей</a></li><li><a href="#итоги">Итоги</a></li><li><a href="#источники">Источники</a></li></ol></nav><article class="prose"><h2 id="final_v2_final"><span class="num">01</span>final_v2_final</h2>
+<p>В папке проекта лежат файлы <code>отчёт.docx</code>, <code>отчёт_новый.docx</code>, <code>отчёт_новый_исправленный.docx</code> и <code>отчёт_финал.docx</code>. Через неделю появляется <code>отчёт_финал_2.docx</code>, и никто не может сказать, какая версия ушла руководителю и что именно поменялось между второй и четвёртой.</p>
+<p>Имена файлов плохо хранят историю. Они отвечают на вопрос «как назвал автор», но не на вопросы «что изменилось», «кто изменил», «почему» и «можно ли вернуть вчерашнее состояние». Копия создаёт новую сущность, но не связь между версиями: по двум документам нельзя понять, какой из них произошёл от какого.</p>
+<p><strong>Система контроля версий</strong> хранит историю изменений и позволяет перейти к любому сохранённому состоянию. <strong>Git</strong> это распределённая система: полная история есть у каждого участника, а не только на сервере.</p>
+<p>Главная мысль занятия: <strong>коммит это снимок законченного изменения с объяснением</strong>. Пока изменение не закоммичено, оно живёт только на диске и исчезает вместе с диском, переустановкой системы или случайным удалением папки.</p>
+<p>У истории есть три потребителя, и все три важны. Первый это автор через месяц: он забыл, зачем менял функцию. Второй это коллега, который видит чужой код впервые. Третий это инструмент: поиск дефекта, сравнение версий, автоматическая сборка. Инструменту всё равно, насколько красиво назван файл, ему нужна структура.</p>
+<h2 id="что-спрашивают-у-истории"><span class="num">02</span>Что спрашивают у истории</h2>
+<p>История полезна, если отвечает на пять вопросов:</p>
 <ul>
-<li>идентификатор (хеш);</li>
-<li>автор и дата;</li>
-<li>сообщение;</li>
-<li>ссылка на предыдущий коммит.</li>
+<li>что изменилось в этой версии;</li>
+<li>кто и когда это сделал;</li>
+<li>почему было принято такое решение;</li>
+<li>какая версия работала в прошлый вторник;</li>
+<li>можно ли отменить одно изменение, не отменяя соседние.</li>
 </ul>
-<p>История это цепочка коммитов. По ней видно, что и когда менялось.</p>
-<h2 id="три-области-и-сервер"><span class="num">03</span>Три области и сервер</h2>
+<p>Именованные копии отвечают максимум на первый вопрос, да и то приблизительно. Полноценная система контроля версий добавляет авторство, время, связь версий и возможность сравнения.</p>
+<p>Способы хранения истории различаются по устройству. Первые системы хранили дельты: полный файл плюс цепочку изменений. Дельта экономит место, но восстановление дальней версии требует последовательного применения всех правок. Git пошёл другим путём и хранит снимки: каждый коммит ссылается на полное состояние дерева проекта. Экономия достигается не сжатием дельт, а повторным использованием неизменённых объектов.</p>
+<table>
+<thead>
+<tr>
+<th>Подход</th>
+<th>Что хранит</th>
+<th>Цена</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>копии по именам</td>
+<td>полные файлы</td>
+<td>дубликаты, нет связи версий</td>
+</tr>
+<tr>
+<td>дельты</td>
+<td>базовую версию и правки</td>
+<td>медленное восстановление дальней версии</td>
+</tr>
+<tr>
+<td>снимки с общими объектами</td>
+<td>состояние дерева и ссылки на объекты</td>
+<td>нужна аккуратная сборка мусора</td>
+</tr>
+</tbody>
+</table>
+<p>Историческое развитие шло от локальных систем к централизованным, затем к распределённым. Централизованная система удобна тем, что номер версии один для всех. Распределённая удобна тем, что коммит не требует сети, а история не зависит от доступности сервера. Плата за это: у каждого участника копия всей истории, а значит, и все ошибки прошлого тоже копируются.</p>
+<p>Для учебной команды распределённость даёт конкретную выгоду. Можно работать без интернета, делать эксперименты в отдельной ветке и показывать результат до отправки. Можно сравнить свою работу с серверной, не меняя общую версию. Но распределённость требует дисциплины: если каждый коммитит как придётся, плохая история размножается по всем клонам.</p>
+<h3>История как журнал решений</h3>
+<p>Разбор дефекта обычно начинается не с кода, а с вопроса «когда это сломалось». Представим, что форма заявки перестала принимать пустую тему: раньше проверка стояла в интерфейсе, потом её перенесли в модель, и один из экранов остался без проверки.</p>
+<p>Без истории пришлось бы читать весь код формы и сравнивать поведение вручную. С историей порядок другой: <code>git log -- форма.py</code> показывает коммиты, которые трогали файл, <code>git show</code> показывает конкретную правку, <code>git log -S "пустая тема"</code> находит коммит, где строка появилась или исчезла. Дальше видно, какое решение приняли и что при этом забыли.</p>
+<p>Такая работа требует, чтобы коммиты были связными. Если правка проверки, перенос в модель и переименование поля попали в один коммит на сорок файлов, поиск снова превращается в чтение. История не заменяет отладку, но сокращает пространство поиска.</p>
+<p>У истории есть и вторая роль: она хранит объяснения. Коммит с телом сообщения отвечает на вопрос «почему», который код обычно не содержит. Через год это единственный источник, потому что обсуждение в чате потерялось, а задача закрыта.</p>
+<h2 id="снимки-а-не-разница-файлов"><span class="num">03</span>Снимки, а не разница файлов</h2>
+<p>Коммит в Git это объект с полями:</p>
+<ul>
+<li>идентификатор, вычисленный из содержимого;</li>
+<li>автор и дата авторства;</li>
+<li>сообщение;</li>
+<li>ссылка на дерево файлов;</li>
+<li>ссылка на родительский коммит (или на два родителя после слияния).</li>
+</ul>
+<p>Дерево это список имён, режимов доступа и ссылок на объекты. Содержимое файла хранится отдельным объектом. Такая схема из трёх уровней позволяет переиспользовать всё, что не изменилось: если в новом коммите поменялся один файл, остальные записи дерева указывают на те же объекты, что и раньше.</p>
+<p>Git хранит четыре вида объектов.</p>
+<table>
+<thead>
+<tr>
+<th>Объект</th>
+<th>Что содержит</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>blob</td>
+<td>содержимое файла без имени</td>
+</tr>
+<tr>
+<td>tree</td>
+<td>имена, режимы и ссылки на blob или другие tree</td>
+</tr>
+<tr>
+<td>commit</td>
+<td>автора, сообщение, ссылку на tree и родителей</td>
+</tr>
+<tr>
+<td>tag</td>
+<td>аннотированную метку со ссылкой на объект</td>
+</tr>
+</tbody>
+</table>
+<p>Имя объекта это хеш его содержимого. Git берёт заголовок вида <code>blob 42</code>, добавляет нулевой байт, содержимое и считает SHA-1. Поэтому одинаковое содержимое всегда даёт одинаковый хеш, а любое изменение содержимого даёт другой. Имя файла в хеш не входит: переименование не создаёт новый blob.</p>
+<figure class="figure" data-fig="git-objects" data-one="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"><iframe title="Figure 1: git-objects" scrolling="no"></iframe><figcaption>Схема объектов одного коммита: коммит ссылается на дерево, дерево на файлы, а неизменённые файлы переходят в следующий коммит той же ссылкой.</figcaption></figure>
+
+<p>Из устройства следуют четыре свойства, которые важно понимать, а не запоминать.</p>
+<p><strong>История только дописывается.</strong> Коммит нельзя отредактировать, потому что его имя вычислено из содержимого. Можно создать новый коммит с исправленным содержимым, но это будет другой объект с другим хешем. Старый останется в истории, пока на него есть ссылка.</p>
+<p><strong>Повторы не занимают места дважды.</strong> Один и тот же файл, попавший в десять коммитов, хранится один раз. Поэтому снимки не так расточительны, как кажется.</p>
+<p><strong>Хеш проверяет целостность.</strong> Если файл на диске повреждён, Git заметит несовпадение. Если кто-то изменил старый коммит, изменится его хеш, а значит, и хеши всех потомков.</p>
+<p><strong>Идентификатор не является номером версии.</strong> Он не говорит, что было раньше, а что позже. Порядок задают ссылки между коммитами, а не значение хеша.</p>
+<p>Последнее свойство объясняет, почему в Git нет глобальной нумерации ревизий. Два независимых репозитория могут содержать одинаковый коммит с одинаковым идентификатором, и это нормально: содержимое совпало. В централизованной системе такой ситуации не бывает, потому что номер выдаёт сервер.</p>
+<p>Есть и обратная сторона. Хеш зависит от алгоритма. Пока алгоритм устойчив к подбору коллизий, имя объекта означает именно это содержимое. Когда алгоритм слабеет, свойство ломается, и об этом ниже, в разделе о реальных случаях.</p>
+<p>Отдельно стоит сказать про упаковку. Сначала объекты лежат отдельными файлами, затем Git собирает их в пакеты и сжимает. Упаковка не меняет модель: коммит по-прежнему ссылается на дерево, дерево на объекты. Меняется только способ хранения на диске. Сборка мусора удаляет объекты, на которые больше нет ссылок, поэтому коммит без ссылки рано или поздно исчезает. Именно поэтому reflog работает ограниченное время, а не бесконечно.</p>
+<h2 id="три-области-и-сервер"><span class="num">04</span>Три области и сервер</h2>
+<p>Работа в Git проходит через четыре места.</p>
 <table>
 <thead>
 <tr>
@@ -928,94 +1014,442 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 </tr>
 </tbody>
 </table>
-<figure class="figure" data-fig="git-areas" data-one="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"><iframe title="Figure 1: git-areas" scrolling="no"></iframe><figcaption>Нажимайте команды: подсвечивается путь изменения между рабочим каталогом, индексом, репозиторием и сервером.</figcaption></figure>
+<p><code>git add</code> записывает содержимое файла в объектную базу и обновляет запись в индексе. <code>git commit</code> собирает из индекса дерево, создаёт коммит и передвигает указатель текущей ветки. <code>git push</code> отправляет коммиты на сервер. <code>git pull</code> забирает чужие изменения и вливает их в текущую ветку.</p>
+<figure class="figure" data-fig="git-areas" data-one="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"><iframe title="Figure 2: git-areas" scrolling="no"></iframe><figcaption>Нажимайте команды: подсвечивается путь изменения между рабочим каталогом, индексом, репозиторием и сервером.</figcaption></figure>
 
-<p>Команда <code>git add</code> переносит изменение в индекс, <code>git commit</code> сохраняет индекс в историю, <code>git push</code> отправляет коммиты на сервер, <code>git pull</code> забирает чужие изменения.</p>
-<p>Индекс нужен, чтобы собрать один осмысленный коммит из нескольких правок и не тащить в него случайные файлы.</p>
-<div class="gate-step" data-gate>
-<p class="gate-action"><button type="button" class="gate-btn" aria-expanded="false"><span class="gate-q" aria-hidden="true">?</span><span>Зачем нужен индекс, если можно сразу сохранять все изменения в коммит?</span></button></p>
-<div class="gate-content" hidden><h2 id="основные-команды"><span class="num">04</span>Основные команды</h2>
+<p>Индекс часто вызывает недоумение: зачем ещё одна промежуточная область, если можно сохранить всё сразу. Причина в том, что коммит должен быть собран, а не просто взят с диска. Между «я поработал» и «я сохранил версию» есть шаг выбора: что именно войдёт в этот коммит.</p>
+<p><code>git status</code> сравнивает три состояния и показывает расхождения: рабочий каталог против индекса, индекс против последнего коммита. Отсюда три разных вопроса и три разных ответа.</p>
 <table>
 <thead>
 <tr>
 <th>Команда</th>
-<th>Что делает</th>
+<th>Что сравнивает</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>git diff</code></td>
+<td>рабочий каталог и индекс</td>
+</tr>
+<tr>
+<td><code>git diff --cached</code></td>
+<td>индекс и последний коммит</td>
+</tr>
+<tr>
+<td><code>git diff HEAD</code></td>
+<td>рабочий каталог и последний коммит</td>
+</tr>
+</tbody>
+</table>
+<p>Пустой вывод <code>git diff</code> при непустом <code>git status</code> означает, что изменения уже подготовлены, но ещё не закоммичены. Это не ошибка, а признак того, что следующий шаг это <code>git commit</code>.</p>
+<p>Основные команды удобно держать рядом с вопросами, на которые они отвечают.</p>
+<table>
+<thead>
+<tr>
+<th>Команда</th>
+<th>Вопрос</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td><code>git init</code></td>
-<td>создаёт репозиторий в папке</td>
+<td>как начать историю в папке</td>
 </tr>
 <tr>
 <td><code>git status</code></td>
-<td>показывает состояние файлов</td>
+<td>что сейчас происходит</td>
 </tr>
 <tr>
 <td><code>git add файл</code></td>
-<td>готовит файл к коммиту</td>
+<td>что войдёт в следующий коммит</td>
 </tr>
 <tr>
 <td><code>git commit -m "сообщение"</code></td>
-<td>сохраняет снимок</td>
+<td>как зафиксировать выбранное</td>
 </tr>
 <tr>
-<td><code>git log --oneline</code></td>
-<td>показывает историю</td>
+<td><code>git log --oneline --graph</code></td>
+<td>как выглядит история</td>
 </tr>
 <tr>
-<td><code>git diff</code></td>
-<td>показывает изменения</td>
+<td><code>git show</code></td>
+<td>что именно изменил коммит</td>
+</tr>
+<tr>
+<td><code>git restore файл</code></td>
+<td>как вернуть файл к сохранённому состоянию</td>
 </tr>
 <tr>
 <td><code>git remote add origin адрес</code></td>
-<td>связывает с сервером</td>
+<td>куда отправлять</td>
 </tr>
 <tr>
 <td><code>git push</code></td>
-<td>отправляет коммиты</td>
+<td>как отдать коммиты</td>
 </tr>
 <tr>
 <td><code>git pull</code></td>
-<td>забирает изменения</td>
+<td>как забрать чужие</td>
 </tr>
 </tbody>
 </table>
-<p>Сообщение коммита отвечает на вопрос «что изменено», а не «что делал». «Добавить проверку пустой темы заявки» лучше, чем «правки».</p>
-<h2 id="что-не-коммитят"><span class="num">05</span>Что не коммитят</h2>
-<p>В репозиторий не попадают:</p>
+<p>Этих команд достаточно для большинства учебных задач. Остальное это уточнения: как отменить, как сравнить, как найти.</p>
+<div class="gate-step" data-gate>
+<p class="gate-action"><button type="button" class="gate-btn" aria-expanded="false"><span class="gate-q" aria-hidden="true">?</span><span>Зачем Git хранит снимки целиком, если дельты экономят место?</span></button></p>
+<div class="gate-content" hidden><h2 id="индекс-как-инструмент-отбора"><span class="num">05</span>Индекс как инструмент отбора</h2>
+<p>Индекс это файл со списком путей, режимов и хешей объектов. Он описывает не «что на диске», а «что попадёт в следующий коммит». Разница между этими двумя описаниями и есть инструмент.</p>
+<p>Представим, что в одном файле сделаны три правки: переименована переменная, исправлена ошибка в проверке и добавлен комментарий. Если закоммитить файл целиком, в истории появится один коммит с тремя причинами изменения. Если ошибка через месяц вернётся, будет непонятно, какая правка её внесла.</p>
+<p><code>git add -p</code> позволяет выбрать фрагменты и собрать из них отдельные коммиты. Сначала коммитится исправление ошибки, затем переименование, затем комментарий. История становится читаемой, а откат одного изменения не задевает остальные.</p>
+<p>У индекса есть цена: появляется дополнительный шаг и соблазн ошибиться. Новичок часто делает <code>git add .</code> и отправляет в коммит всё, включая временные файлы. Польза появляется только при осознанном отборе.</p>
+<p>Критерий хорошего коммита простой: его можно описать одним предложением без союза «и». «Добавить проверку пустой темы» это коммит. «Добавить проверку, поправить вёрстку и обновить зависимости» это три коммита, которые случайно оказались рядом.</p>
+<p>Пример отбора. В файле <code>service.py</code> исправлена ошибка и заодно переименована функция. Порядок действий:</p>
+<div class="codehilite" data-lang="text"><pre><span></span><code>git add -p service.py
+git commit -m "Исправить проверку пустой темы"
+git add service.py
+git commit -m "Переименовать create в create_request"
+</code></pre></div>
+
+<p>Первый коммит можно отменить, не затрагивая второй. Если бы обе правки попали в один коммит, откат вернул бы и старое имя функции, и ошибку.</p>
+<p>У коммита как единицы есть четыре роли:</p>
+<ul>
+<li>единица отката: <code>git revert</code> отменяет одно изменение;</li>
+<li>единица ревью: коллега видит один связный замысел;</li>
+<li>единица поиска: <code>git bisect</code> проверяет состояние на каждом шаге;</li>
+<li>единица объяснения: <code>git blame</code> показывает, кто и зачем менял строку.</li>
+</ul>
+<p>Если коммит смешивает пять задач, все четыре роли ломаются одновременно.</p>
+<h2 id="анатомия-коммита"><span class="num">06</span>Анатомия коммита</h2>
+<p>Сообщение коммита отвечает на вопрос «что изменено», а не «что делал автор». «Правки» и «fix» не отвечают ни на один вопрос, кроме факта работы.</p>
+<p>Практическая схема: первая строка до пятидесяти символов, в повелительном наклонении, без точки. Пустая строка. Затем, если нужно, абзац с причиной: почему изменение понадобилось, что было сломано, какое ограничение учтено.</p>
+<table>
+<thead>
+<tr>
+<th>Плохо</th>
+<th>Лучше</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>fix</td>
+<td>Исправить расчёт скидки для пустой корзины</td>
+</tr>
+<tr>
+<td>update</td>
+<td>Добавить поле кабинета в форму заявки</td>
+</tr>
+<tr>
+<td>правки</td>
+<td>Ограничить список заявок текущим пользователем</td>
+</tr>
+<tr>
+<td>всё</td>
+<td>Вынести проверку темы в отдельную функцию</td>
+</tr>
+</tbody>
+</table>
+<p>Формулировка в повелительном наклонении удобна тем, что коммит читается как команда: «примени этот коммит, и система получит такое свойство». Это не литературная придирка, а способ проверить, что коммит делает одно действие.</p>
+<p>Тело сообщения нужно не всегда. Оно необходимо, когда причина не очевидна из кода: обход ограничения внешней библиотеки, временное решение, решение, принятое после обсуждения. Через год именно этот абзац отвечает на вопрос «почему здесь так странно».</p>
+<p>Ссылка на задачу в сообщении связывает историю кода с историей решений. В учебном проекте достаточно номера Issue или короткой пометки вроде <code>Refs #12</code>. Это дешевле, чем специальная система, и заметно ускоряет разбор.</p>
+<p>Отдельный слой это <strong>подпись</strong>. Аннотированная метка и коммит могут быть подписаны ключом. Подпись подтверждает авторство, а хеш подтверждает целостность. Это разные свойства, и путать их нельзя: хеш говорит, что содержимое не изменилось, подпись говорит, кто его заверил.</p>
+<h2 id="ветка-это-указатель"><span class="num">07</span>Ветка это указатель</h2>
+<p>Ветка в Git это не копия папки и не отдельный каталог. Это файл с именем ветки и хешем коммита. Создание ветки записывает сорок один байт, поэтому ветки дешёвые и их не жалко.</p>
+<p><code>HEAD</code> это указатель на текущую ветку. Когда HEAD указывает на ветку, новый коммит передвигает именно её. Когда HEAD указывает прямо на коммит, получается <strong>отсоединённое состояние</strong>: коммиты создаются, но ни одна ветка на них не указывает. После переключения такие коммиты можно потерять, хотя они ещё какое-то время остаются в журнале ссылок.</p>
+<p><strong>Reflog</strong> это локальный журнал перемещений ссылок: переключений, сбросов, слияний. Он не передаётся на сервер и не входит в историю проекта, но помогает спасти работу после ошибочного <code>reset</code> или неудачного слияния. Это первое место, куда смотрят при потере коммита.</p>
+<p>Дешёвые ветки меняют стиль работы. Ветка под задачу позволяет экспериментировать, не трогая основную версию, и удалить неудачный опыт одной командой. Обратная сторона: если ветки живут месяцами, они расходятся, и слияние превращается в отдельный проект. Подробно слияние разберём в следующей лекции; сейчас важно, что ветка это имя для линии работы, а не копия файлов.</p>
+<p>Отсюда практическое правило: ветка живёт столько, сколько живёт задача. Пока задача в работе, ветка нужна. После слияния она не несёт информации, кроме путаницы.</p>
+<p>Пример спасательной операции. Во время просмотра старого коммита сделана правка и создан новый коммит. Затем выполнено переключение на основную ветку. Коммит исчез из виду, потому что на него не указывает ни одна ветка. <code>git reflog</code> показывает последние перемещения HEAD, по журналу находится хеш, и команда <code>git switch -c fix-from-old</code> возвращает работу в именованную ветку.</p>
+<p>Это не отменяет правила: перед экспериментом лучше сразу создать ветку. reflog это страховка, а не рабочий приём. Он также не помогает, если репозиторий потерян целиком: журнал лежит внутри <code>.git</code> и не копируется на сервер.</p></div>
+</div>
+
+<div class="gate-step" data-gate>
+<p class="gate-action"><button type="button" class="gate-btn" aria-expanded="false"><span class="gate-q" aria-hidden="true">?</span><span>Что произойдёт с историей, если переписать коммит, который уже получили другие?</span></button></p>
+<div class="gate-content" hidden><h2 id="что-не-коммитят"><span class="num">08</span>Что не коммитят</h2>
+<p>Репозиторий это не папка проекта целиком, а набор исходников и настроек, нужных для воспроизведения результата. Всё остальное либо восстанавливается, либо не должно быть общим.</p>
+<p>Не попадают в репозиторий:</p>
 <ul>
 <li>пароли, ключи и токены;</li>
-<li>виртуальные окружения и зависимости;</li>
-<li>собранные файлы и архивы;</li>
-<li>временные файлы редактора;</li>
-<li>базы данных с реальными данными.</li>
+<li>виртуальные окружения и скачанные зависимости;</li>
+<li>собранные файлы, архивы и установщики;</li>
+<li>временные файлы редактора и системы;</li>
+<li>базы данных с реальными данными;</li>
+<li>большие двоичные файлы, которые не являются частью продукта.</li>
 </ul>
-<p>Список исключений задаёт <code>.gitignore</code>. Если секрет уже попал в историю, недостаточно удалить файл: он останется в старых коммитах, ключ нужно сменить.</p>
-<h2 id="ветки"><span class="num">06</span>Ветки</h2>
-<p><strong>Ветка</strong> это отдельная линия истории. В ней можно делать изменения, не затрагивая основную версию. После проверки ветку сливают с основной.</p>
-<p>Ветки позволяют вести параллельные задачи и проверять изменения до попадания в общую версию. Подробно слияние разберём позже.</p>
-<h2 id="где-работа-с-git-ломается"><span class="num">07</span>Где работа с Git ломается</h2>
-<p><strong>Один огромный коммит.</strong> В нём смешаны правки по разным задачам, историю нельзя прочитать.</p>
-<p><strong>Сообщение «fix».</strong> Через месяц непонятно, что исправлено.</p>
-<p><strong>Секрет в репозитории.</strong> Пароль остаётся в истории, даже если файл удалён.</p>
-<p><strong>Коммит чужих файлов.</strong> В репозиторий попадают настройки редактора и собранные архивы.</p>
-<p><strong>Работа без веток.</strong> Все изменения сразу в основной версии, проверить их отдельно нельзя.</p>
-<div class="callout pitfall"><span class="label">Git не заменяет резервную копию. Он хранит историю кода, но сервер может быть недоступен, а база данных в репозиторий не входит.</span></div>
+<p>Список исключений задаёт <code>.gitignore</code>. Он работает по шаблонам: имя файла, шаблон с звёздочкой, каталог с косой чертой на конце. Порядок важен: последнее подходящее правило побеждает, поэтому восклицательный знак может вернуть файл в набор.</p>
+<table>
+<thead>
+<tr>
+<th>Шаблон</th>
+<th>Что исключает</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>venv/</code></td>
+<td>каталог виртуального окружения целиком</td>
+</tr>
+<tr>
+<td><code>*.log</code></td>
+<td>все файлы журналов</td>
+</tr>
+<tr>
+<td><code>__pycache__/</code></td>
+<td>кеш байт-кода</td>
+</tr>
+<tr>
+<td><code>config.local.*</code></td>
+<td>локальные настройки</td>
+</tr>
+<tr>
+<td><code>build/</code></td>
+<td>каталог сборки</td>
+</tr>
+</tbody>
+</table>
+<p>Проверить, почему файл игнорируется, помогает <code>git check-ignore -v имя</code>. Команда показывает, какое правило сработало. Без неё поиск причины превращается в угадывание.</p>
+<p>Есть важное ограничение: <code>.gitignore</code> действует только на неотслеживаемые файлы. Если файл уже был закоммичен, добавление шаблона ничего не изменит: Git продолжит следить за изменениями. Сначала нужно убрать файл из индекса командой <code>git rm --cached</code>, затем закоммитить удаление.</p>
+<p>С секретами сложнее. Если пароль попал в коммит, он остался в истории, даже если файл удалён следующим коммитом. Любой, кто клонирует репозиторий, получит старую версию. Поэтому порядок действий такой:</p>
+<ol>
+<li>сменить сам секрет, считать его скомпрометированным;</li>
+<li>убрать файл из текущей версии;</li>
+<li>при необходимости очистить историю специальным инструментом;</li>
+<li>согласовать перезапись с командой.</li>
+</ol>
+<p>Третий шаг меняет идентификаторы коммитов. Если репозиторий уже разошёлся по клонам, перезапись создаёт две несовместимые истории. Поэтому очистка истории это операция для команды, а не личная.</p>
+<div class="callout pitfall"><span class="label">Git не заменяет резервную копию. Он хранит историю кода, но сервер может быть недоступен, а база данных в репозиторий не входит. Копия репозитория на другом носителе остаётся отдельной задачей.</span></div>
 
-<h2 id="итоги"><span class="num">08</span>Итоги</h2>
+<h2 id="удалённый-репозиторий"><span class="num">09</span>Удалённый репозиторий</h2>
+<p>Удалённый репозиторий это имя и адрес: <code>origin</code> и URL. Локально Git хранит <strong>ссылки на удалённые ветки</strong>, например <code>origin/main</code>. Это не сама удалённая ветка, а запомненное состояние: где она была в прошлый раз, когда Git с ней общался.</p>
+<p><code>git fetch</code> обновляет эти ссылки, не трогая рабочий каталог. <code>git pull</code> делает то же самое и сразу вливает изменения в текущую ветку. Разница принципиальна: fetch безопасен и позволяет сначала посмотреть, что пришло, а pull меняет файлы.</p>
+<p><code>git push</code> не просто копирует файлы. Он проверяет, что отправляемая история продолжает удалённую: удалённая ветка должна быть предком локальной. Если на сервере появились коммиты, которых нет локально, отправка отклоняется. Это защита от случайной потери чужой работы.</p>
+<p>Отклонить может и сервер по своим правилам: запрет прямой записи в основную ветку, обязательное ревью, защита от удаления. Такие правила полезны, потому что переносят проверку из памяти человека в настройку.</p>
+<p>Принудительная отправка <code>git push --force</code> отключает проверку и переписывает удалённую ветку. Более безопасный вариант <code>--force-with-lease</code> отправляет только если удалённая ветка находится там, где ожидалось. Если кто-то успел отправить свой коммит, операция откажется выполняться.</p>
+<table>
+<thead>
+<tr>
+<th>Команда</th>
+<th>Что делает</th>
+<th>Риск</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>git fetch</code></td>
+<td>обновляет ссылки на удалённые ветки</td>
+<td>нет</td>
+</tr>
+<tr>
+<td><code>git pull</code></td>
+<td>забирает и вливает</td>
+<td>конфликт, неожиданное изменение файлов</td>
+</tr>
+<tr>
+<td><code>git push</code></td>
+<td>отправляет свои коммиты</td>
+<td>отклонение при расхождении</td>
+</tr>
+<tr>
+<td><code>git push --force-with-lease</code></td>
+<td>переписывает удалённую ветку с проверкой</td>
+<td>потеря чужих коммитов при неверной оценке</td>
+</tr>
+</tbody>
+</table>
+<p>Рабочий цикл команды выглядит примерно так:</p>
+<div class="codehilite" data-lang="text"><pre><span></span><code>git switch -c task/12-empty-theme
+git add -p
+git commit -m "Добавить проверку пустой темы"
+git fetch origin
+git switch main
+git pull
+git switch task/12-empty-theme
+git rebase main
+git push -u origin task/12-empty-theme
+</code></pre></div>
+
+<p>Ветка задачи уходит на сервер, там открывается пул-реквест, коллега читает diff, после одобрения изменение попадает в основную ветку. Основная ветка защищена, поэтому случайная отправка в неё невозможна.</p>
+<p>У схемы есть цена: шагов больше, чем при работе напрямую. Выгода появляется, когда над проектом работают хотя бы два человека. Проверка до слияния дешевле, чем разбор сломанной основной ветки и поиск виноватого коммита.</p>
+<p>Есть и промежуточный вариант для одиночной работы: ветка задачи, но без пул-реквеста. Она всё равно полезна, потому что отделяет эксперимент от готовой версии и позволяет сравнить результат перед слиянием.</p>
+<h2 id="где-работа-с-git-ломается"><span class="num">10</span>Где работа с Git ломается</h2>
+<p><strong>Один огромный коммит.</strong> В нём смешаны правки по разным задачам, историю нельзя прочитать, откат затрагивает лишнее.</p>
+<p><strong>Сообщение «fix».</strong> Через месяц непонятно, что исправлено и зачем.</p>
+<p><strong>Секрет в репозитории.</strong> Пароль остаётся в истории, даже если файл удалён. Единственное надёжное действие это смена секрета.</p>
+<p><strong>Коммит чужих файлов.</strong> В репозиторий попадают настройки редактора, кеш и собранные архивы. Каждый участник получает лишние мегабайты и лишние конфликты.</p>
+<p><strong>Работа без веток.</strong> Все изменения сразу в основной версии, проверить их отдельно нельзя.</p>
+<p><strong>Переписывание общей истории.</strong> <code>rebase</code> или <code>amend</code> для коммитов, которые уже у других, ломает их клоны.</p>
+<p><strong>Отсоединённое состояние без понимания.</strong> Коммиты создаются, но не попадают ни в одну ветку.</p>
+<p><strong>История как свалка.</strong> Каждый шаг сохраняется отдельно, включая промежуточные поломки. Такую историю трудно читать, а поиск дефекта даёт ложные срабатывания.</p>
+<h2 id="реальные-случаи"><span class="num">11</span>Реальные случаи</h2>
+<p>Теория о хешах становится понятной, когда видно, какую задачу она решает на практике. Ниже два случая с документальными источниками.</p>
+<h3>Взлом kernel.org, 2011</h3>
+<p>В августе 2011 года неизвестный получил root-доступ к основному серверу kernel.org. Это тот самый сервер, откуда разработчики и пользователи берут исходники ядра Linux. Ситуация выглядит катастрофической: злоумышленник с полными правами может изменить файлы, а значит, и подсунуть код в ядро.</p>
+<p>Linux Foundation опубликовала разбор, в котором объяснила, почему исходники всё же удалось проверить. Ядро ведётся в Git. Каждый коммит связан с предыдущим через хеш, а состояние дерева связано с хешами файлов. Поэтому любое изменение старого файла меняет хеш дерева и всех последующих коммитов. Проверив хеш релиза, можно убедиться, что содержимое совпадает с тем, что видели разработчики.</p>
+<p>В публикации приведён конкретный пример: хеш релиза 3.0 равен <code>02f8c6aee8df3cdc935e9bdd4f2d020306035dbe</code>. Если кто-то предъявит ядро 3.0 с другим хешем, это сразу видно. Хеш-цепочка не мешает атаке, но делает подмену обнаружимой.</p>
+<p>Урок двойной. Во-первых, целостность и доступность это разные свойства: сервер можно скомпрометировать, а содержимое всё равно проверить. Во-вторых, проверка работает только пока есть независимый источник ожидаемого хеша. После инцидента проект усилил практику подписанных меток, чтобы доверие опиралось на ключи разработчиков, а не на сервер.</p>
+<h3>Коллизия SHA-1, 2017</h3>
+<p>23 февраля 2017 года группа исследователей опубликовала практическую коллизию SHA-1: два разных PDF-файла с одинаковым хешем. Атака получила название SHAttered. Вычисление заняло огромные ресурсы, но результат был воспроизводим, а значит, алгоритм перестал быть надёжной основой для идентификации содержимого.</p>
+<p>Для Git это прямой риск. Если два разных объекта имеют одинаковый хеш, имя перестаёт означать содержимое. Злоумышленник мог бы подменить файл, сохранив идентификатор.</p>
+<p>Ответ Git был быстрым. Версия 2.13.0 перешла на усиленную реализацию SHA-1, которая обнаруживает коллизии, построенные методом SHAttered. Параллельно проект начал планировать переход на SHA-256: документ о переходе описывает цели, ограничения и совместимость старого и нового форматов. Экспериментальная поддержка репозиториев с SHA-256 появилась в версии 2.29.0.</p>
+<p>Урок для любой системы, которая использует хеши: алгоритм это расходуемый ресурс. Пока он устойчив, схема работает. Когда устойчивость падает, нужен план миграции, а не только заплатка. Практический вывод для учебного проекта проще: не строить идентификаторы на самодельных хешах и не считать, что «одинаковый хеш» доказывает что-то навсегда.</p>
+<table>
+<thead>
+<tr>
+<th>Случай</th>
+<th>Что проверяли</th>
+<th>Что показал</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>kernel.org, 2011</td>
+<td>целостность исходников после root-доступа</td>
+<td>хеш-цепочка делает подмену обнаружимой</td>
+</tr>
+<tr>
+<td>SHAttered, 2017</td>
+<td>стойкость SHA-1</td>
+<td>алгоритм стареет, нужен план перехода</td>
+</tr>
+</tbody>
+</table>
+<h2 id="как-читать-историю"><span class="num">12</span>Как читать историю</h2>
+<p>История нужна не для отчёта, а для ответа на конкретный вопрос. Поэтому команды выбирают под вопрос.</p>
+<table>
+<thead>
+<tr>
+<th>Вопрос</th>
+<th>Команда</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>что менялось в последних коммитах</td>
+<td><code>git log --oneline</code></td>
+</tr>
+<tr>
+<td>как выглядит ветвление</td>
+<td><code>git log --graph --oneline --all</code></td>
+</tr>
+<tr>
+<td>что именно изменил коммит</td>
+<td><code>git show хеш</code></td>
+</tr>
+<tr>
+<td>когда появилась строка</td>
+<td><code>git log -S "текст"</code></td>
+</tr>
+<tr>
+<td>кто менял строку</td>
+<td><code>git blame файл</code></td>
+</tr>
+<tr>
+<td>какой коммит внёс дефект</td>
+<td><code>git bisect</code></td>
+</tr>
+<tr>
+<td>где была ветка до ошибки</td>
+<td><code>git reflog</code></td>
+</tr>
+</tbody>
+</table>
+<p><code>git bisect</code> заслуживает отдельного упоминания. Это двоичный поиск по истории: вы отмечаете хороший и плохой коммиты, Git предлагает средний, вы проверяете и сужаете диапазон. Для тысячи коммитов достаточно около десяти проверок, потому что каждый шаг делит диапазон пополам. Метод работает только при одном условии: коммиты должны быть небольшими и работоспособными. Если в истории половина коммитов не собирается, поиск теряет смысл.</p>
+<p><code>git blame</code> показывает автора последнего изменения строки, а не автора идеи. Это инструмент для вопроса «когда и в каком коммите», а не для поиска виноватого. В учебной команде это различие стоит проговорить заранее.</p>
+<p>Полезны и фильтры: <code>git log --since="2 weeks ago"</code>, <code>git log --author="Иванов"</code>, <code>git log --stat</code>. Они отвечают на вопросы «что происходило в последние две недели» и «какие файлы затронул этот автор». Фильтр не меняет историю, он только сужает выборку.</p></div>
+</div>
+
+<div class="gate-step" data-gate>
+<p class="gate-action"><button type="button" class="gate-btn" aria-expanded="false"><span class="gate-q" aria-hidden="true">?</span><span>Что теряет команда, когда переписывает общую историю?</span></button></p>
+<div class="gate-content" hidden><h2 id="когда-история-мешает"><span class="num">13</span>Когда история мешает</h2>
+<p>Подробная история полезна для разбора, но у неё есть цена. Двести коммитов вида «промежуточный вариант» на одну функцию не помогают, а мешают: <code>git bisect</code> проверяет состояния, которые никогда не должны были работать, а <code>git log</code> превращается в дневник.</p>
+<p>Отсюда две стратегии, и выбор между ними это компромисс.</p>
+<p><strong>Линейная история.</strong> Ветка задачи перед слиянием переписывается: коммиты упорядочиваются, промежуточные склеиваются, сообщения приводятся к одному виду. Плюс: основная ветка читается как список законченных изменений. Минус: теряется ход работы, а переписывание требует аккуратности и силы воли.</p>
+<p><strong>История как есть.</strong> Слияния сохраняют ветвление и контекст: видно, что задача шла параллельно, видно, где она ответвилась. Плюс: ничего не теряется. Минус: граф становится сложным, а шумные коммиты остаются навсегда.</p>
+<figure class="figure" data-fig="git-rewrite" data-one="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"><iframe title="Figure 3: git-rewrite" scrolling="no"></iframe><figcaption>Нажимайте операции: amend и rebase меняют хеши, revert добавляет новый коммит, filter-repo переписывает всю историю. Внизу объясняется, что видит команда.</figcaption></figure>
+
+<p>Разумное правило для учебной команды: основная ветка это запись принятых решений, ветка задачи это черновик. В черновике можно переписывать сколько угодно, пока он не отправлен. После слияния история основной ветки не переписывается, потому что её уже получили другие.</p>
+<p>Второй компромисс касается размера коммита. Мелкие коммиты точнее отвечают на вопрос «что изменилось», но требуют больше времени на сообщения и проверки. Крупные экономят время сейчас и забирают его позже, при разборе. Для учебного проекта достаточно правила: один коммит это одно законченное изменение, после которого проект собирается.</p>
+<p>Третий компромисс это долгоживущие ветки. Ветка на месяц расходится с основной и превращает слияние в отдельную задачу. Короткая ветка стоит дешевле, но требует чаще интегрировать. Практика проста: если ветка живёт дольше недели, стоит проверить, не разбита ли задача на слишком крупную часть.</p>
+<h2 id="цена-истории"><span class="num">14</span>Цена истории</h2>
+<p>У истории есть цена, и она не только в диске.</p>
+<p><strong>Размер.</strong> Каждый клон получает всю историю. Файл на двести мегабайт, попавший в коммит, останется в истории навсегда и размножится по всем клонам. Поэтому большие двоичные файлы хранят отдельно, а в репозиторий кладут ссылку.</p>
+<p><strong>Время.</strong> Слишком мелкие коммиты увеличивают число объектов и затрудняют чтение. Слишком крупные лишают точности. Разумная граница это законченное изменение, после которого проект остаётся работоспособным.</p>
+<p><strong>Ответственность.</strong> История фиксирует авторство. Это полезно для разбора и неприятно, если команда использует её для поиска виноватых. Инструмент не должен становиться инструментом давления, иначе люди начнут прятать изменения.</p>
+<p><strong>Согласованность.</strong> Пока история общая, её нужно беречь. Перезапись, принудительная отправка и удаление веток на сервере затрагивают всех. Поэтому в команде нужны простые правила: что можно переписывать, что нельзя, кто имеет право отправлять в основную ветку.</p>
+<p>Эти правила не требуют тяжёлого регламента. Достаточно одной страницы: основная ветка защищена, изменения идут через ветку задачи, история после отправки не переписывается, секреты не коммитятся. Такая страница экономит больше времени, чем любой набор хитрых команд.</p>
+<h2 id="чек-лист-работы-с-историей"><span class="num">15</span>Чек-лист работы с историей</h2>
+<p>Перед коммитом полезно ответить на восемь вопросов.</p>
+<ol>
+<li>Что именно входит в этот коммит и описано ли это одним предложением?</li>
+<li>Нет ли в изменениях секретов, паролей и токенов?</li>
+<li>Не попали ли в индекс собранные файлы и кеш?</li>
+<li>Понятно ли сообщение человеку, который не участвовал в работе?</li>
+<li>Собирается ли проект после этого коммита?</li>
+<li>Проходят ли тесты, которые есть в проекте?</li>
+<li>Не переписываю ли я коммиты, которые уже получили другие?</li>
+<li>Можно ли отменить это изменение одной командой?</li>
+</ol>
+<p>Минимальный набор привычек учебной команды:</p>
+<table>
+<thead>
+<tr>
+<th>Привычка</th>
+<th>Зачем</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ветка под задачу</td>
+<td>изоляция эксперимента</td>
+</tr>
+<tr>
+<td>маленькие коммиты</td>
+<td>откат и поиск дефекта</td>
+</tr>
+<tr>
+<td>осмысленное сообщение</td>
+<td>чтение истории через месяц</td>
+</tr>
+<tr>
+<td><code>.gitignore</code> с первого дня</td>
+<td>отсутствие мусора и секретов</td>
+</tr>
+<tr>
+<td>просмотр <code>git diff --cached</code></td>
+<td>контроль содержимого коммита</td>
+</tr>
+<tr>
+<td>отправка после проверки</td>
+<td>общая ветка остаётся рабочей</td>
+</tr>
+</tbody>
+</table>
+<h2 id="итоги"><span class="num">16</span>Итоги</h2>
 <ul>
-<li>Git хранит историю снимков проекта.</li>
+<li>Git хранит историю снимков, а не набор копий файлов.</li>
+<li>Коммит ссылается на дерево и на родителя, поэтому история образует проверяемую цепочку.</li>
 <li>Изменение проходит через рабочий каталог, индекс и репозиторий.</li>
-<li>Коммит делают по законченному изменению с понятным сообщением.</li>
-<li><code>.gitignore</code> исключает лишние и секретные файлы.</li>
-<li>Ветки позволяют вести параллельные изменения.</li>
-</ul></div>
+<li>Индекс позволяет собрать один осмысленный коммит из нескольких правок.</li>
+<li><code>.gitignore</code> исключает лишние файлы, но не отменяет отслеживание уже добавленных.</li>
+<li>Секрет, попавший в историю, считается скомпрометированным.</li>
+<li>Ветка это указатель, а не копия проекта.</li>
+<li>Переписывать можно только ту историю, которую ещё никто не получил.</li>
+</ul>
+<h2 id="источники"><span class="num">17</span>Источники</h2>
+<ol>
+<li>Chacon S., Straub B. Pro Git, 2nd edition. https://git-scm.com/book/en/v2</li>
+<li>Git. Glossary. https://git-scm.com/docs/gitglossary</li>
+<li>Git. hash-function-transition. https://git-scm.com/docs/hash-function-transition</li>
+<li>Git. git-commit Documentation. https://git-scm.com/docs/git-commit</li>
+<li>Git. gitignore Documentation. https://git-scm.com/docs/gitignore</li>
+<li>Stevens M., Bursztein E., Karpman P., Albertini A., Markov Y. The first collision for full SHA-1, 2017. https://shattered.io/static/shattered.pdf</li>
+<li>Git. Release Notes 2.13.0. https://github.com/git/git/blob/v2.13.0/Documentation/RelNotes/2.13.0.txt</li>
+<li>The Linux Foundation. The Cracking of Kernel.org, 2011. https://www.linuxfoundation.org/blog/blog/the-cracking-of-kernel-org</li>
+<li>GitHub Docs. Removing sensitive data from a repository. https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/removing-sensitive-data-from-a-repository</li>
+</ol></div>
 </div>
 
 <div class="gate-step" data-gate>
 <p class="gate-action"><button type="button" class="gate-btn" aria-expanded="false"><span class="gate-q" aria-hidden="true">?</span><span>Почему удаления файла с паролем недостаточно, если он уже был закоммичен?</span></button></p>
-<div class="gate-content" hidden><div class="quiz" data-quiz data-quiz-guard><div class="quiz-who"><label class="quiz-who-label"><span>ФИО</span><input type="text" class="quiz-name" data-quiz-name maxlength="80" autocomplete="off" placeholder="Иванов Иван Иванович"></label><span class="quiz-attempts" data-quiz-attempts>две попытки на лекцию</span><span class="quiz-note" data-who-note hidden></span></div><div class="quiz-q" data-type="single" data-correct="1" data-q="1"><p class="quiz-p"><span class="quiz-no" aria-hidden="true">01</span>Что делает git commit?</p><div class="opts"><label class="opt"><input type="radio" name="q106_0" value="2" autocomplete="off"><span>Создаёт удалённый репозиторий</span></label><label class="opt"><input type="radio" name="q106_0" value="0" autocomplete="off" data-ok><span>Сохраняет индекс в историю</span></label><label class="opt"><input type="radio" name="q106_0" value="3" autocomplete="off"><span>Показывает разницу</span></label><label class="opt"><input type="radio" name="q106_0" value="1" autocomplete="off"><span>Забирает изменения с сервера</span></label></div><p class="quiz-why" hidden>Снимок в истории.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="2" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">02</span>Что такое ветка?</p><div class="opts"><label class="opt"><input type="radio" name="q106_1" value="3" autocomplete="off"><span>Список файлов</span></label><label class="opt"><input type="radio" name="q106_1" value="2" autocomplete="off"><span>Сообщение коммита</span></label><label class="opt"><input type="radio" name="q106_1" value="0" autocomplete="off" data-ok><span>Отдельная линия истории</span></label><label class="opt"><input type="radio" name="q106_1" value="1" autocomplete="off"><span>Копия всего проекта на диск</span></label></div><p class="quiz-why" hidden>Параллельная работа.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="multi" data-correct="4" data-q="3" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">03</span>Какие ошибки работы с Git типичны?</p><div class="opts"><label class="opt"><input type="checkbox" name="q106_2" value="2" autocomplete="off" data-ok><span>Секрет в репозитории</span></label><label class="opt"><input type="checkbox" name="q106_2" value="1" autocomplete="off" data-ok><span>Сообщение «fix»</span></label><label class="opt"><input type="checkbox" name="q106_2" value="4" autocomplete="off"><span>Понятное сообщение коммита</span></label><label class="opt"><input type="checkbox" name="q106_2" value="0" autocomplete="off" data-ok><span>Один огромный коммит</span></label><label class="opt"><input type="checkbox" name="q106_2" value="3" autocomplete="off" data-ok><span>Коммит чужих файлов</span></label><label class="opt"><input type="checkbox" name="q106_2" value="5" autocomplete="off"><span>Отдельная ветка на задачу</span></label></div><p class="quiz-why" hidden>Остальное не ошибки.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="short" data-q="4" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">04</span>Куда попадают изменения после git add?</p><input type="text" class="short-answer" data-answers="[&quot;индекс&quot;, &quot;staging&quot;]" placeholder="Введите ответ" autocomplete="off" spellcheck="false" aria-label="Куда попадают изменения после git add?"><p class="quiz-why" hidden>Подготовленные изменения.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="5" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">05</span>Что показывает git status?</p><div class="opts"><label class="opt"><input type="radio" name="q106_4" value="2" autocomplete="off"><span>Разницу между ветками</span></label><label class="opt"><input type="radio" name="q106_4" value="1" autocomplete="off"><span>Историю всех коммитов</span></label><label class="opt"><input type="radio" name="q106_4" value="0" autocomplete="off" data-ok><span>Состояние файлов и индекса</span></label><label class="opt"><input type="radio" name="q106_4" value="3" autocomplete="off"><span>Адрес сервера</span></label></div><p class="quiz-why" hidden>Текущее состояние.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="6" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">06</span>Зачем нужен .gitignore?</p><div class="opts"><label class="opt"><input type="radio" name="q106_5" value="2" autocomplete="off"><span>Шифрует репозиторий</span></label><label class="opt"><input type="radio" name="q106_5" value="1" autocomplete="off"><span>Ускоряет компиляцию</span></label><label class="opt"><input type="radio" name="q106_5" value="3" autocomplete="off"><span>Создаёт резервную копию</span></label><label class="opt"><input type="radio" name="q106_5" value="0" autocomplete="off" data-ok><span>Исключает лишние и секретные файлы</span></label></div><p class="quiz-why" hidden>Список исключений.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="multi" data-correct="4" data-q="7" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">07</span>Что можно узнать по git log?</p><div class="opts"><label class="opt"><input type="checkbox" name="q106_6" value="3" autocomplete="off" data-ok><span>Порядок изменений</span></label><label class="opt"><input type="checkbox" name="q106_6" value="2" autocomplete="off" data-ok><span>Сообщение коммита</span></label><label class="opt"><input type="checkbox" name="q106_6" value="5" autocomplete="off"><span>Пароль администратора</span></label><label class="opt"><input type="checkbox" name="q106_6" value="0" autocomplete="off" data-ok><span>Автора коммита</span></label><label class="opt"><input type="checkbox" name="q106_6" value="4" autocomplete="off"><span>Содержимое базы данных</span></label><label class="opt"><input type="checkbox" name="q106_6" value="1" autocomplete="off" data-ok><span>Дату коммита</span></label></div><p class="quiz-why" hidden>Остальное не в истории.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="8" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">08</span>Что делает git add?</p><div class="opts"><label class="opt"><input type="radio" name="q106_7" value="1" autocomplete="off"><span>Отправляет изменения на сервер</span></label><label class="opt"><input type="radio" name="q106_7" value="0" autocomplete="off" data-ok><span>Готовит изменения к коммиту</span></label><label class="opt"><input type="radio" name="q106_7" value="2" autocomplete="off"><span>Удаляет историю</span></label><label class="opt"><input type="radio" name="q106_7" value="3" autocomplete="off"><span>Создаёт ветку</span></label></div><p class="quiz-why" hidden>Переносит в индекс.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="short" data-q="9" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">09</span>Какой файл задаёт исключения для Git?</p><input type="text" class="short-answer" data-answers="[&quot;.gitignore&quot;, &quot;gitignore&quot;]" placeholder="Введите ответ" autocomplete="off" spellcheck="false" aria-label="Какой файл задаёт исключения для Git?"><p class="quiz-why" hidden>Список игнорируемых файлов.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="10" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">10</span>Что хранит Git?</p><div class="opts"><label class="opt"><input type="radio" name="q106_9" value="1" autocomplete="off"><span>Только последнюю версию файлов</span></label><label class="opt"><input type="radio" name="q106_9" value="0" autocomplete="off" data-ok><span>Историю снимков проекта</span></label><label class="opt"><input type="radio" name="q106_9" value="3" autocomplete="off"><span>Базу данных приложения</span></label><label class="opt"><input type="radio" name="q106_9" value="2" autocomplete="off"><span>Пароли пользователей</span></label></div><p class="quiz-why" hidden>История коммитов.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="11" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">11</span>Что делает git push?</p><div class="opts"><label class="opt"><input type="radio" name="q106_10" value="1" autocomplete="off"><span>Сохраняет файлы на диск</span></label><label class="opt"><input type="radio" name="q106_10" value="3" autocomplete="off"><span>Отменяет коммит</span></label><label class="opt"><input type="radio" name="q106_10" value="2" autocomplete="off"><span>Показывает журнал</span></label><label class="opt"><input type="radio" name="q106_10" value="0" autocomplete="off" data-ok><span>Отправляет коммиты на сервер</span></label></div><p class="quiz-why" hidden>Обмен с сервером.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="multi" data-correct="4" data-q="12" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">12</span>Что попадает в репозиторий?</p><div class="opts"><label class="opt"><input type="checkbox" name="q106_11" value="1" autocomplete="off" data-ok><span>Тесты</span></label><label class="opt"><input type="checkbox" name="q106_11" value="3" autocomplete="off" data-ok><span>Конфигурация без секретов</span></label><label class="opt"><input type="checkbox" name="q106_11" value="5" autocomplete="off"><span>Виртуальное окружение</span></label><label class="opt"><input type="checkbox" name="q106_11" value="4" autocomplete="off"><span>Пароли и токены</span></label><label class="opt"><input type="checkbox" name="q106_11" value="0" autocomplete="off" data-ok><span>Исходный код</span></label><label class="opt"><input type="checkbox" name="q106_11" value="2" autocomplete="off" data-ok><span>Документация</span></label></div><p class="quiz-why" hidden>Остальное исключают.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="13" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">13</span>Почему сообщение «fix» плохое?</p><div class="opts"><label class="opt"><input type="radio" name="q106_12" value="3" autocomplete="off"><span>Содержит глагол</span></label><label class="opt"><input type="radio" name="q106_12" value="1" autocomplete="off"><span>Слишком длинное</span></label><label class="opt"><input type="radio" name="q106_12" value="0" autocomplete="off" data-ok><span>Не объясняет, что изменено</span></label><label class="opt"><input type="radio" name="q106_12" value="2" autocomplete="off"><span>Написано по-английски</span></label></div><p class="quiz-why" hidden>Сообщение должно быть понятным.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="short" data-q="14" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">14</span>Какая команда показывает историю кратко?</p><input type="text" class="short-answer" data-answers="[&quot;git log --oneline&quot;, &quot;git log&quot;]" placeholder="Введите ответ" autocomplete="off" spellcheck="false" aria-label="Какая команда показывает историю кратко?"><p class="quiz-why" hidden>Список коммитов.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="15" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">15</span>Что такое коммит?</p><div class="opts"><label class="opt"><input type="radio" name="q106_14" value="2" autocomplete="off"><span>Копия проекта на сервере</span></label><label class="opt"><input type="radio" name="q106_14" value="1" autocomplete="off"><span>Любое сохранение файла</span></label><label class="opt"><input type="radio" name="q106_14" value="3" autocomplete="off"><span>Список задач</span></label><label class="opt"><input type="radio" name="q106_14" value="0" autocomplete="off" data-ok><span>Снимок законченного изменения</span></label></div><p class="quiz-why" hidden>Снимок с сообщением.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><p class="quiz-note quiz-submit-note" data-quiz-note hidden></p><div class="quiz-result" data-quiz-result hidden aria-live="polite"><span class="label">Результат теста</span><h3>Тест завершён</h3><p class="modal-name-line">ФИО: <b data-student-name></b></p><p class="modal-result" data-modal-result></p><p class="modal-result" data-modal-wrong></p><dl class="modal-times"><div><dt>Время выполнения теста</dt><dd data-test-time>00:00</dd></div><div><dt>Время просмотра лекции</dt><dd data-view-time>00:00</dd></div></dl></div></div></div>
+<div class="gate-content" hidden><div class="quiz" data-quiz data-quiz-guard><div class="quiz-who"><label class="quiz-who-label"><span>ФИО</span><input type="text" class="quiz-name" data-quiz-name maxlength="80" autocomplete="off" placeholder="Иванов Иван Иванович"></label><span class="quiz-attempts" data-quiz-attempts>две попытки на лекцию</span><span class="quiz-note" data-who-note hidden></span></div><div class="quiz-q" data-type="single" data-correct="1" data-q="1"><p class="quiz-p"><span class="quiz-no" aria-hidden="true">01</span>Зачем нужен reflog?</p><div class="opts"><label class="opt"><input type="radio" name="q106_0" value="2" autocomplete="off"><span>Сравнить две ветки</span></label><label class="opt"><input type="radio" name="q106_0" value="3" autocomplete="off"><span>Проверить права доступа</span></label><label class="opt"><input type="radio" name="q106_0" value="0" autocomplete="off" data-ok><span>Найти прежнее положение ссылок после ошибки</span></label><label class="opt"><input type="radio" name="q106_0" value="1" autocomplete="off"><span>Отправить историю на сервер</span></label></div><p class="quiz-why" hidden>Локальный журнал перемещений ссылок.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="short" data-q="2" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">02</span>Как называется область подготовленных изменений?</p><input type="text" class="short-answer" data-answers="[&quot;индекс&quot;, &quot;staging&quot;, &quot;staging area&quot;]" placeholder="Введите ответ" autocomplete="off" spellcheck="false" aria-label="Как называется область подготовленных изменений?"><p class="quiz-why" hidden>Между рабочим каталогом и коммитом.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="multi" data-correct="4" data-q="3" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">03</span>Что делает коммит хорошим?</p><div class="opts"><label class="opt"><input type="checkbox" name="q106_2" value="0" autocomplete="off" data-ok><span>Содержит одно законченное изменение</span></label><label class="opt"><input type="checkbox" name="q106_2" value="4" autocomplete="off"><span>Смешивает несколько задач</span></label><label class="opt"><input type="checkbox" name="q106_2" value="2" autocomplete="off" data-ok><span>Оставляет проект работоспособным</span></label><label class="opt"><input type="checkbox" name="q106_2" value="5" autocomplete="off"><span>Включает собранные архивы</span></label><label class="opt"><input type="checkbox" name="q106_2" value="1" autocomplete="off" data-ok><span>Имеет понятное сообщение</span></label><label class="opt"><input type="checkbox" name="q106_2" value="3" autocomplete="off" data-ok><span>Не содержит секретов</span></label></div><p class="quiz-why" hidden>Остальное затрудняет историю.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="4" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">04</span>Что делает git add с файлом?</p><div class="opts"><label class="opt"><input type="radio" name="q106_3" value="3" autocomplete="off"><span>Удаляет файл из истории</span></label><label class="opt"><input type="radio" name="q106_3" value="2" autocomplete="off"><span>Создаёт новую ветку</span></label><label class="opt"><input type="radio" name="q106_3" value="1" autocomplete="off"><span>Отправляет файл на сервер</span></label><label class="opt"><input type="radio" name="q106_3" value="0" autocomplete="off" data-ok><span>Записывает объект и обновляет индекс</span></label></div><p class="quiz-why" hidden>Подготовка к коммиту.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="5" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">05</span>Что проверяет git push перед отправкой?</p><div class="opts"><label class="opt"><input type="radio" name="q106_4" value="1" autocomplete="off"><span>Что все тесты прошли</span></label><label class="opt"><input type="radio" name="q106_4" value="0" autocomplete="off" data-ok><span>Что удалённая ветка является предком локальной</span></label><label class="opt"><input type="radio" name="q106_4" value="3" autocomplete="off"><span>Что автор указал электронную почту</span></label><label class="opt"><input type="radio" name="q106_4" value="2" autocomplete="off"><span>Что в коммите нет секретов</span></label></div><p class="quiz-why" hidden>Защита от потери чужих коммитов.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="short" data-q="6" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">06</span>Как называется локальный журнал перемещений ссылок?</p><input type="text" class="short-answer" data-answers="[&quot;reflog&quot;, &quot;git reflog&quot;]" placeholder="Введите ответ" autocomplete="off" spellcheck="false" aria-label="Как называется локальный журнал перемещений ссылок?"><p class="quiz-why" hidden>Помогает спасти потерянные коммиты.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="7" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">07</span>Что кроме снимка дерева хранит коммит?</p><div class="opts"><label class="opt"><input type="radio" name="q106_6" value="2" autocomplete="off"><span>Список задач проекта</span></label><label class="opt"><input type="radio" name="q106_6" value="1" autocomplete="off"><span>Содержимое базы данных</span></label><label class="opt"><input type="radio" name="q106_6" value="3" autocomplete="off"><span>Адрес удалённого сервера</span></label><label class="opt"><input type="radio" name="q106_6" value="0" autocomplete="off" data-ok><span>Ссылку на родительский коммит</span></label></div><p class="quiz-why" hidden>Родитель связывает коммиты в цепочку.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="8" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">08</span>Почему одинаковый файл в десяти коммитах не занимает место десять раз?</p><div class="opts"><label class="opt"><input type="radio" name="q106_7" value="3" autocomplete="off"><span>Git удаляет старые копии</span></label><label class="opt"><input type="radio" name="q106_7" value="1" autocomplete="off"><span>Git сжимает каждый коммит отдельно</span></label><label class="opt"><input type="radio" name="q106_7" value="2" autocomplete="off"><span>Файл хранится только на сервере</span></label><label class="opt"><input type="radio" name="q106_7" value="0" autocomplete="off" data-ok><span>Одинаковое содержимое даёт один объект</span></label></div><p class="quiz-why" hidden>Имя объекта вычисляется из содержимого.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="multi" data-correct="3" data-q="9" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">09</span>Какие действия переписывают историю?</p><div class="opts"><label class="opt"><input type="checkbox" name="q106_8" value="1" autocomplete="off" data-ok><span>rebase</span></label><label class="opt"><input type="checkbox" name="q106_8" value="3" autocomplete="off"><span>revert</span></label><label class="opt"><input type="checkbox" name="q106_8" value="4" autocomplete="off"><span>tag</span></label><label class="opt"><input type="checkbox" name="q106_8" value="2" autocomplete="off" data-ok><span>filter-repo</span></label><label class="opt"><input type="checkbox" name="q106_8" value="0" autocomplete="off" data-ok><span>amend</span></label></div><p class="quiz-why" hidden>Обратный коммит добавляет новое изменение.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="10" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">10</span>Что делает git bisect?</p><div class="opts"><label class="opt"><input type="radio" name="q106_9" value="3" autocomplete="off"><span>Показывает автора каждой строки</span></label><label class="opt"><input type="radio" name="q106_9" value="0" autocomplete="off" data-ok><span>Двоичным поиском находит коммит с дефектом</span></label><label class="opt"><input type="radio" name="q106_9" value="1" autocomplete="off"><span>Сортирует коммиты по дате</span></label><label class="opt"><input type="radio" name="q106_9" value="2" autocomplete="off"><span>Удаляет старые ветки</span></label></div><p class="quiz-why" hidden>Каждый шаг делит диапазон пополам.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="11" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">11</span>Файл уже отслеживается, его добавили в .gitignore. Что изменится?</p><div class="opts"><label class="opt"><input type="radio" name="q106_10" value="3" autocomplete="off"><span>Git удалит файл при следующем коммите</span></label><label class="opt"><input type="radio" name="q106_10" value="1" autocomplete="off"><span>Файл исчезнет из истории</span></label><label class="opt"><input type="radio" name="q106_10" value="2" autocomplete="off"><span>Файл перестанет сохраняться на диск</span></label><label class="opt"><input type="radio" name="q106_10" value="0" autocomplete="off" data-ok><span>Ничего, файл продолжит отслеживаться</span></label></div><p class="quiz-why" hidden>Игнорирование действует на неотслеживаемые файлы.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="multi" data-correct="4" data-q="12" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">12</span>Какие объекты хранит Git?</p><div class="opts"><label class="opt"><input type="checkbox" name="q106_11" value="5" autocomplete="off"><span>Remote</span></label><label class="opt"><input type="checkbox" name="q106_11" value="0" autocomplete="off" data-ok><span>Blob</span></label><label class="opt"><input type="checkbox" name="q106_11" value="3" autocomplete="off" data-ok><span>Tag</span></label><label class="opt"><input type="checkbox" name="q106_11" value="4" autocomplete="off"><span>Index</span></label><label class="opt"><input type="checkbox" name="q106_11" value="1" autocomplete="off" data-ok><span>Tree</span></label><label class="opt"><input type="checkbox" name="q106_11" value="2" autocomplete="off" data-ok><span>Commit</span></label></div><p class="quiz-why" hidden>Индекс и удалённый репозиторий не объекты истории.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="13" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">13</span>Чем git diff --cached отличается от git diff?</p><div class="opts"><label class="opt"><input type="radio" name="q106_12" value="3" autocomplete="off"><span>Показывает историю авторов</span></label><label class="opt"><input type="radio" name="q106_12" value="1" autocomplete="off"><span>Сравнивает две удалённые ветки</span></label><label class="opt"><input type="radio" name="q106_12" value="2" autocomplete="off"><span>Показывает только имена файлов</span></label><label class="opt"><input type="radio" name="q106_12" value="0" autocomplete="off" data-ok><span>Сравнивает индекс с последним коммитом</span></label></div><p class="quiz-why" hidden>Обычный diff смотрит рабочий каталог.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="short" data-q="14" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">14</span>Какая команда переписывает удалённую ветку с проверкой её ожидаемого состояния?</p><input type="text" class="short-answer" data-answers="[&quot;git push --force-with-lease&quot;, &quot;--force-with-lease&quot;]" placeholder="Введите ответ" autocomplete="off" spellcheck="false" aria-label="Какая команда переписывает удалённую ветку с проверкой её ожидаемого состояния?"><p class="quiz-why" hidden>Проверка защищает чужие коммиты.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="15" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">15</span>Что показал случай kernel.org в 2011 году?</p><div class="opts"><label class="opt"><input type="radio" name="q106_14" value="3" autocomplete="off"><span>Резервная копия заменяет историю</span></label><label class="opt"><input type="radio" name="q106_14" value="0" autocomplete="off" data-ok><span>Хеш-цепочка позволяет проверить целостность исходников</span></label><label class="opt"><input type="radio" name="q106_14" value="2" autocomplete="off"><span>Пароли в репозитории безопасны</span></label><label class="opt"><input type="radio" name="q106_14" value="1" autocomplete="off"><span>Git защищает сервер от взлома</span></label></div><p class="quiz-why" hidden>Подмена становится обнаружимой.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><p class="quiz-note quiz-submit-note" data-quiz-note hidden></p><div class="quiz-result" data-quiz-result hidden aria-live="polite"><span class="label">Результат теста</span><h3>Тест завершён</h3><p class="modal-name-line">ФИО: <b data-student-name></b></p><p class="modal-result" data-modal-result></p><p class="modal-result" data-modal-wrong></p><dl class="modal-times"><div><dt>Время выполнения теста</dt><dd data-test-time>00:00</dd></div><div><dt>Время просмотра лекции</dt><dd data-view-time>00:00</dd></div></dl></div></div></div>
 </div></article><nav class="pager"><a class="" href="05-prakt-01.html"><span>← Предыдущее занятие</span>Практика 1. Паспорт требований учебного продукта</a><a class="next" style="text-align:right;margin-left:auto" href="07-prakt-02.html"><span>Следующее занятие →</span>Практика 2. История проекта в коммитах</a></nav></main>
 <div class="modal" data-modal="warn" hidden>
   <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="warn-title">

@@ -888,89 +888,475 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <canvas class="shader-bg" width="820" height="300" aria-hidden="true" style="background:linear-gradient(135deg,#08090D,#1D9E75 58%,#08090D)"></canvas>
 <div class="badges"><span class="pill dark">Занятие 27</span><span class="pill">Технология разработки ПО</span></div>
 <div class="hero-panel"><h1>Отладка и дефекты</h1><p class="dek">Отладка сужает причину по фактам. Разберём воспроизведение, журналы, bisect и оформление дефекта.</p></div>
-<div class="glyph" aria-hidden="true">Л15</div></header><section class="outcomes"><b>После этого занятия вы сможете</b><ul><li>Воспроизводить дефект по шагам</li><li>Сужать причину по журналам</li><li>Использовать историю коммитов</li><li>Оформлять дефект с ожиданием и фактом</li></ul></section><nav class="toc"><b>Содержание занятия</b><ol><li><a href="#у-меня-не-воспроизводится">«У меня не воспроизводится»</a></li><li><a href="#воспроизведение">Воспроизведение</a></li><li><a href="#факты">Факты</a></li><li><a href="#гипотеза-и-проверка">Гипотеза и проверка</a></li><li><a href="#bisect">Bisect</a></li><li><a href="#исправление">Исправление</a></li><li><a href="#оформление-дефекта">Оформление дефекта</a></li><li><a href="#где-отладка-ломается">Где отладка ломается</a></li><li><a href="#итоги">Итоги</a></li></ol></nav><article class="prose"><h2 id="у-меня-не-воспроизводится"><span class="num">01</span>«У меня не воспроизводится»</h2>
-<p>Пользователь пишет, что заявка не сохраняется. Разработчик открывает систему, создаёт заявку, всё работает. Через час выясняется: ошибка возникает, когда тема содержит кавычку, а пользователь работает в другом браузере.</p>
-<p><strong>Дефект</strong> это расхождение между ожидаемым и фактическим поведением. Пока дефект не воспроизведён, причина остаётся догадкой.</p>
-<p>Главная мысль занятия: <strong>отладка это проверка гипотез, а не перебор строк</strong>. Каждый шаг должен сужать область поиска.</p>
-<h2 id="воспроизведение"><span class="num">02</span>Воспроизведение</h2>
-<p>Сначала фиксируют условия:</p>
+<div class="glyph" aria-hidden="true">Л15</div></header><section class="outcomes"><b>После этого занятия вы сможете</b><ul><li>Различать ошибку, дефект и отказ</li><li>Воспроизводить дефект по шагам и сокращать условия</li><li>Сужать причину по журналам и трассировке</li><li>Проверять гипотезы и использовать историю коммитов</li><li>Оформлять дефект с ожиданием, фактом и важностью</li><li>Разбирать инцидент без поиска виноватого</li></ul></section><nav class="toc"><b>Содержание занятия</b><ol><li><a href="#у-меня-не-воспроизводится">«У меня не воспроизводится»</a></li><li><a href="#ошибка-дефект-и-отказ">Ошибка, дефект и отказ</a></li><li><a href="#воспроизведение-и-минимизация">Воспроизведение и минимизация</a></li><li><a href="#факты-журналы-и-трассировки">Факты: журналы и трассировки</a></li><li><a href="#гипотезы-и-бисекция">Гипотезы и бисекция</a></li><li><a href="#исправление-и-закрепление">Исправление и закрепление</a></li><li><a href="#оформление-дефекта">Оформление дефекта</a></li><li><a href="#реальные-случаи">Реальные случаи</a></li><li><a href="#отладка-в-учебном-проекте">Отладка в учебном проекте</a></li><li><a href="#итоги">Итоги</a></li><li><a href="#источники">Источники</a></li></ol></nav><article class="prose"><h2 id="у-меня-не-воспроизводится"><span class="num">01</span>«У меня не воспроизводится»</h2>
+<p>Пользователь пишет, что заявка не сохраняется. Разработчик открывает систему, создаёт заявку с темой «Не работает лампа», нажимает «Сохранить», видит зелёное сообщение и закрывает обращение с пометкой «не подтвердилось». Через день пользователь пишет снова. Выясняется, что он работает в другом браузере, вставляет тему из Word с неразрывным пробелом, а заявка содержит кавычку.</p>
+<p>Дефект был. Не было условий, при которых его видно.</p>
+<p><strong>Дефект</strong> это расхождение между ожидаемым и фактическим поведением. Пока дефект не воспроизведён, причина остаётся догадкой, а исправление становится угадыванием.</p>
+<p>Главная мысль занятия: <strong>отладка это проверка гипотез, а не перебор строк</strong>. Каждый шаг должен уменьшать область поиска. Если после часа работы область не сузилась, работа была не отладкой, а просмотром кода.</p>
+<p>Отладка отличается от тестирования по цели. Тест отвечает, есть ли расхождение. Отладка отвечает, почему оно возникло. Смешивать их опасно: тестировщик, который сразу лезет исправлять, теряет доказательство, а разработчик, который «поправил и проверил руками», теряет проверку.</p>
+<h2 id="ошибка-дефект-и-отказ"><span class="num">02</span>Ошибка, дефект и отказ</h2>
+<p>Три слова часто используют как синонимы, но в инженерии они означают разные вещи. Различие помогает спорить о причине, а не о людях.</p>
+<p><strong>Ошибка</strong> (error) это действие человека, которое приводит к неверному результату. Например, разработчик неверно понял правило и написал <code>&gt;=</code> вместо <code>&gt;</code>.</p>
+<p><strong>Дефект</strong> (defect, fault) это недостаток в артефакте: в коде, требовании, конфигурации или документе. Ошибка человека оставляет дефект в файле.</p>
+<p><strong>Отказ</strong> (failure) это наблюдаемое неверное поведение системы. Пользователь видит отказ, а в коде ему соответствует дефект, а дефекту ошибка.</p>
+<p>Цепочка не всегда линейна. Один дефект может давать разные отказы, а один отказ может складываться из нескольких дефектов. Ошибка в требовании может породить дефект в коде, который проявится только при определённых данных.</p>
+<table>
+<thead>
+<tr>
+<th>Понятие</th>
+<th>Где живёт</th>
+<th>Пример</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ошибка</td>
+<td>в решении человека</td>
+<td>неверно поняли правило прав</td>
+</tr>
+<tr>
+<td>дефект</td>
+<td>в артефакте</td>
+<td>в запросе нет фильтра по владельцу</td>
+</tr>
+<tr>
+<td>отказ</td>
+<td>в поведении системы</td>
+<td>сотрудник видит чужую заявку</td>
+</tr>
+</tbody>
+</table>
+<p>Различие важно для отчёта. «Пользователь ошибается» не является описанием дефекта. «Запрос возвращает чужие заявки при роли сотрудник» является.</p>
+<p>Стандарт ISO/IEC/IEEE 29119-1:2022 связывает эти понятия через процесс тестирования и инцидент <a href="https://www.iso.org/standard/81291.html">ISO/IEC/IEEE 29119-1:2022</a>. Инцидент это событие, требующее расследования. Не каждый инцидент оказывается дефектом: иногда причина в данных, окружении или ожиданиях пользователя.</p>
+<h3>Почему дефекты любят границы</h3>
+<p>Дефекты распределены неравномерно. Они скапливаются в сложных условиях, на границах диапазонов, в обработке ошибок и в местах, которые меняли много раз. Причина в том, что именно там меньше всего ясности и больше всего предположений.</p>
+<p>Если модуль уже дал три дефекта, вероятность четвёртого в нём выше среднего. Это не мистика, а следствие сложности и истории изменений. Поэтому при отладке полезно смотреть не только на место отказа, но и на соседние ветви того же модуля.</p>
+<p>Второй источник дефектов это стыки. Два компонента по отдельности работают, а вместе передают дату в разных форматах, единицы измерения или кодировку. Модульные тесты такие расхождения не видят по построению.</p>
+<h2 id="воспроизведение-и-минимизация"><span class="num">03</span>Воспроизведение и минимизация</h2>
+<p>Воспроизведение это повтор отказа по описанным условиям. Без него нельзя ни доказать дефект, ни проверить исправление.</p>
+<p>Сначала фиксируют условия. Полный список длиннее, чем кажется:</p>
 <ul>
-<li>версия и окружение;</li>
-<li>данные пользователя;</li>
+<li>версия приложения и коммит;</li>
+<li>версия языка и библиотек;</li>
+<li>операционная система и браузер;</li>
+<li>роль и права пользователя;</li>
+<li>данные, на которых возник отказ;</li>
 <li>последовательность действий;</li>
-<li>время и идентификатор запроса.</li>
+<li>время и часовой пояс;</li>
+<li>идентификатор запроса или сеанса;</li>
+<li>нагрузка и число одновременных пользователей.</li>
 </ul>
-<p>Если дефект не воспроизводится, условие ещё не найдено. «Иногда» означает, что не хватает фактора: данные, роль, нагрузка, браузер.</p>
-<h2 id="факты"><span class="num">03</span>Факты</h2>
-<p>Источники фактов:</p>
+<p>Не все пункты нужны каждый раз, но пропущенный пункт часто и есть причина. «Иногда» почти всегда означает, что не хватает одного фактора: данных, роли, порядка, времени или нагрузки.</p>
+<p>Полезно различать воспроизводимость по частоте. Дефект, который повторяется каждый раз, называется детерминированным. Дефект, который возникает через раз, называется нестабильным или плавающим. Для второго указывают не только шаги, но и оценку частоты: «3 из 10 попыток», «каждый второй запуск», «только после 40 одновременных запросов».</p>
+<h3>Сокращение условий</h3>
+<p>Воспроизведение часто даёт слишком большой пример: файл на двести строк, последовательность из тридцати действий, набор из тысячи записей. С таким примером трудно понять причину. Пример нужно сокращать, сохраняя отказ.</p>
+<p>Андреас Зеллер описал приём <strong>дельта-отладки</strong> в статье «Yesterday, my program worked. Today, it does not. Why?» <a href="https://doi.org/10.1145/318774.318946">Zeller, 1999</a>. Идея проста: вход делят на части и проверяют, сохраняется ли отказ без каждой части. Части, которые можно убрать, убирают. Процесс повторяют, пока вход не станет минимальным.</p>
+<p>Вручную это выглядит так. Есть текстовый файл, на котором парсер падает. Убираем половину строк. Если падение осталось, половину можно выбросить. Если исчезло, возвращаем и делим меньшую часть. За несколько шагов от двухсот строк остаются три, и в них видна настоящая причина: пустая строка перед закрывающей кавычкой.</p>
+<p>Сокращение полезно по трём причинам. Оно уменьшает объём чтения. Оно отделяет существенные условия от случайных. Оно даёт готовый тест-кейс: минимальный пример, который можно добавить в набор проверок.</p>
+<p>Инструменты дельта-отладки существуют для кода, конфигураций и запросов. Но принцип важнее инструмента: <strong>не изучайте большой пример, пока не попробовали его уменьшить</strong>.</p>
+<h3>Что спросить у пользователя</h3>
+<p>Пользователь описывает не систему, а своё впечатление. Задача поддержки превратить впечатление в условия.</p>
+<p>Полезные вопросы:</p>
 <ul>
-<li>журнал приложения;</li>
-<li>журнал веб-сервера;</li>
-<li>трассировка стека;</li>
-<li>состояние базы;</li>
-<li>сетевой запрос в браузере.</li>
+<li>что именно было сделано, по шагам, без обобщений;</li>
+<li>что ожидалось и что произошло;</li>
+<li>когда это случилось, с точностью до минут;</li>
+<li>в каком браузере и на каком устройстве;</li>
+<li>повторяется ли, и как часто;</li>
+<li>можно ли приложить снимок экрана и идентификатор запроса;</li>
+<li>какие данные были введены, без пароля и личных сведений.</li>
 </ul>
+<p>Вопрос «что вы нажимали» раздражает, но без него шаги восстанавливают догадками. Вопрос «пришлите идентификатор» экономит час поиска по журналу.</p>
+<p>Если пользователь не может дать данные, их получают из журнала по времени и логину. Это ещё одна причина, по которой журнал должен хранить время и идентификатор.</p>
+<h3>Если дефект не повторяется</h3>
+<p>Нестабильный дефект требует другого подхода. Вместо одного запуска делают серию и считают частоту. Затем меняют по одному условию: браузер, роль, набор данных, нагрузку, порядок действий.</p>
+<p>Полезно усилить проявление. Если отказ связан с гонкой потоков, увеличивают число параллельных запросов. Если с таймаутом, замедляют внешнюю службу. Если с кэшем, очищают его между попытками. Цель не в том, чтобы «поймать» дефект навсегда, а в том, чтобы получить устойчивое воспроизведение для проверки гипотезы.</p>
+<p>Есть отдельная ловушка: инструмент наблюдения меняет поведение. Под отладчиком гонка исчезает, потому что меняются задержки. В логе с подробным выводом дефект не повторяется, потому что вывод замедляет выполнение. Такие дефекты называют гейзенбагами. Лечение то же: меньше влиять на систему, больше измерять снаружи.</p>
 <figure class="figure" data-fig="debug-flow" data-one="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"><iframe title="Figure 1: debug-flow" scrolling="no"></iframe><figcaption>Порядок отладки: воспроизвести, собрать факты, выдвинуть гипотезу, проверить, исправить. Если гипотеза не подтвердилась, возврат к фактам.</figcaption></figure>
 
-<p>Журнал должен содержать время, уровень, сообщение и идентификатор запроса. Без идентификатора события разных пользователей смешиваются.</p>
+<p>Схема показывает цикл, а не прямую линию. Возврат к фактам это нормальный шаг, а не признак неудачи. Плохая отладка отличается тем, что цикл не сужается.</p>
 <div class="gate-step" data-gate>
-<p class="gate-action"><button type="button" class="gate-btn" aria-expanded="false"><span class="gate-q" aria-hidden="true">?</span><span>Почему «у меня не воспроизводится» не является ответом на дефект?</span></button></p>
-<div class="gate-content" hidden><h2 id="гипотеза-и-проверка"><span class="num">04</span>Гипотеза и проверка</h2>
-<p><strong>Гипотеза</strong> это проверяемое предположение: «ошибка возникает при пустом поле», «запрос падает на кавычке», «дефект появился после коммита с новой проверкой».</p>
-<p>Проверка должна дать однозначный ответ. Если гипотеза не подтвердилась, её отбрасывают и возвращаются к фактам.</p>
-<h2 id="bisect"><span class="num">05</span>Bisect</h2>
-<p><strong>git bisect</strong> находит коммит, после которого поведение изменилось. Он делит историю пополам и отмечает хорошие и плохие версии.</p>
+<p class="gate-action"><button type="button" class="gate-btn" aria-expanded="false"><span class="gate-q" aria-hidden="true">?</span><span>Какие факты нужны, чтобы гипотеза перестала быть догадкой?</span></button></p>
+<div class="gate-content" hidden><h2 id="факты-журналы-и-трассировки"><span class="num">04</span>Факты: журналы и трассировки</h2>
+<p>Гипотеза без факта превращается в спор. Факты дают журналы, трассировки, метрики и состояние данных.</p>
+<p><strong>Журнал приложения</strong> отвечает, что делала программа. Хороший журнал содержит время, уровень, сообщение, идентификатор запроса и контекст: пользователь, маршрут, длительность. Без идентификатора события разных запросов перемешиваются, и восстановить последовательность невозможно.</p>
+<p><strong>Журнал веб-сервера</strong> отвечает, какой запрос пришёл и какой код вернулся. Он не знает о внутренней логике, но показывает, был ли запрос вообще и сколько он длился.</p>
+<p><strong>Трассировка стека</strong> отвечает, где именно упал код. Она полезна при исключении и почти бесполезна при неверном результате: программа не упала, значит стека нет.</p>
+<p><strong>Метрики</strong> отвечают, насколько поведение отличается от обычного. Время ответа, число ошибок, размер очереди и использование памяти показывают масштаб и начало отклонения.</p>
+<p><strong>Состояние базы</strong> отвечает, что осталось после действия. Запись могла не создаться, создаться дважды или создаться с неверным владельцем. Без проверки данных причина остаётся предположением.</p>
+<h3>Как устроен полезный журнал</h3>
+<p>В Python стандартный модуль <code>logging</code> даёт уровни, обработчики и форматирование <a href="https://docs.python.org/3/library/logging.html">Python logging</a>. Уровни помогают отделить шум от события.</p>
+<table>
+<thead>
+<tr>
+<th>Уровень</th>
+<th>Когда использовать</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>DEBUG</td>
+<td>подробности для разработки</td>
+</tr>
+<tr>
+<td>INFO</td>
+<td>значимые шаги: запрос принят, заявка создана</td>
+</tr>
+<tr>
+<td>WARNING</td>
+<td>неожиданное, но работа продолжается</td>
+</tr>
+<tr>
+<td>ERROR</td>
+<td>операция не выполнена</td>
+</tr>
+<tr>
+<td>CRITICAL</td>
+<td>система не может работать</td>
+</tr>
+</tbody>
+</table>
+<p>Уровень это не украшение. Если всё писать как ERROR, журнал перестаёт помогать: настоящая ошибка тонет в сообщениях о нормальной работе.</p>
+<p>Идентификатор запроса передают через контекст. В простом варианте его добавляют в каждое сообщение вручную, в более удобном используют <code>LoggerAdapter</code> или фильтр.</p>
+<div class="codehilite" data-lang="text"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">uuid</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">"app.requests"</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">handle</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">user</span><span class="p">):</span>
+    <span class="n">request_id</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"X-Request-ID"</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">str</span><span class="p">(</span><span class="n">uuid</span><span class="o">.</span><span class="n">uuid4</span><span class="p">())</span>
+    <span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">LoggerAdapter</span><span class="p">(</span><span class="n">logger</span><span class="p">,</span> <span class="p">{</span><span class="s2">"request_id"</span><span class="p">:</span> <span class="n">request_id</span><span class="p">,</span> <span class="s2">"user"</span><span class="p">:</span> <span class="n">user</span><span class="o">.</span><span class="n">login</span><span class="p">})</span>
+    <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">"create request: subject_len=</span><span class="si">%s</span><span class="s2">"</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">subject</span><span class="p">))</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">save</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">user</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="s2">"create request failed"</span><span class="p">)</span>
+        <span class="k">raise</span>
+    <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">"request created: id=</span><span class="si">%s</span><span class="s2">"</span><span class="p">,</span> <span class="n">request</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+</code></pre></div>
+
+<p><code>log.exception</code> добавляет трассировку стека к сообщению. Это удобнее, чем <code>print</code>, потому что сохраняет уровень, время и контекст.</p>
+<p>Формат журнала лучше делать структурированным. Строка <code>2026-03-12 10:15:03 ERROR request_id=8f2c user=ivan action=create</code> читается человеком и разбирается машиной. JSON удобнее для сборщика логов, но хуже для чтения глазами. Выбор зависит от того, кто и как будет искать.</p>
+<h3>Чего в журнале быть не должно</h3>
+<p>Журнал это тоже данные, и к нему применимы правила безопасности. Пароли, токены, номера карт и персональные данные писать нельзя. Даже отладочный вывод не должен содержать полный запрос с секретом.</p>
+<p>Второе ограничение это объём. Подробный журнал на каждый запрос быстро растёт и замедляет систему. Помогают уровни, выборочная запись и ротация файлов. Ротация удаляет старые записи, но именно они иногда нужны для разбора. Поэтому срок хранения выбирают заранее.</p>
+<p>Третье ограничение это время. Серверы должны синхронизировать часы. Если время на двух узлах расходится на минуту, последовательность событий восстанавливается неверно. Для измерения длительности используют монотонные часы, а для меток времени настенные.</p>
+<h3>Наблюдаемость и журнал</h3>
+<p>Журнал отвечает на вопрос «что произошло в конкретном запросе». Метрики отвечают на вопрос «насколько это отличается от нормы». Трассировка отвечает на вопрос «где прошло время». Эти три инструмента не заменяют друг друга.</p>
+<p>Метрика без журнала показывает рост ошибок, но не называет запрос. Журнал без метрики хранит подробности, но не сообщает, что проблема началась. Трассировка без меток времени бесполезна для поиска узкого места.</p>
+<p>Для учебного проекта достаточно трёх метрик: число ответов с кодом 500, время ответа на главный запрос и размер очереди фоновых задач. Порог, после которого срабатывает предупреждение, выбирают по обычному поведению, а не по круглому числу.</p>
+<p>Оповещение должно быть редким. Если предупреждение приходит каждый час, его перестают читать. Лучше одно правило, которое действительно означает проблему, чем десять, которые шумят.</p>
+<h3>Трассировка и отладчик</h3>
+<p>Трассировка стека показывает цепочку вызовов. В Python её можно напечатать модулем <code>traceback</code>, а в исключении она уже приложена <a href="https://docs.python.org/3/library/traceback.html">Python traceback</a>.</p>
+<p>Читать трассировку нужно снизу вверх: последняя строка указывает на место исключения, предыдущие показывают, как туда попали. Первая ошибка обычно не там, где напечатан итог, а на один шаг выше.</p>
+<p>Отладчик позволяет остановить программу и посмотреть значения. В Python это <code>breakpoint()</code> или <code>python -m pdb</code>. Отладчик хорош для проверки гипотезы о конкретной переменной. Он плох для поиска причины вслепую: пошаговое выполнение большого пути занимает часы.</p>
+<p>Правило простое: <strong>сначала гипотеза, потом точка останова</strong>. Остановка без вопроса «что я хочу увидеть» превращается в прогулку по коду.</p></div>
+</div>
+
+<div class="gate-step" data-gate>
+<p class="gate-action"><button type="button" class="gate-btn" aria-expanded="false"><span class="gate-q" aria-hidden="true">?</span><span>Как сузить историю, если неизвестно, когда появился дефект?</span></button></p>
+<div class="gate-content" hidden><h2 id="гипотезы-и-бисекция"><span class="num">05</span>Гипотезы и бисекция</h2>
+<p><strong>Гипотеза</strong> это проверяемое предположение о причине. Она должна быть сформулирована так, чтобы проверка дала однозначный ответ.</p>
+<p>Плохая гипотеза: «что-то не так с базой». Хорошая: «запрос падает, когда тема содержит одинарную кавычку, потому что SQL собирается конкатенацией». Вторая гипотеза говорит, какие данные взять и что проверить.</p>
+<p>Проверка гипотезы меняет один фактор за раз. Если поменять браузер и данные одновременно, результат нельзя приписать ни одному из них. Это медленнее, но даёт знание, а не совпадение.</p>
+<p>Гипотезы упорядочивают по стоимости проверки и вероятности. Сначала проверяют дешёвые и вероятные: неверные данные, отсутствие прав, пустое поле. Потом дорогие: гонка потоков, редкая конфигурация, сбой внешней службы.</p>
+<p>Полезно записывать гипотезы в журнал расследования. Строка «проверил X, результат Y» через час экономит повторную работу. В командном разборе такая запись показывает, что уже исключено.</p>
+<h3>Как работает git bisect</h3>
+<p>Когда известно, что раньше работало, а теперь нет, причину ищут в истории. <code>git bisect</code> делит диапазон коммитов пополам и проверяет середину <a href="https://git-scm.com/docs/git-bisect">git bisect</a>.</p>
 <div class="codehilite" data-lang="text"><pre><span></span><code>git<span class="w"> </span>bisect<span class="w"> </span>start
 git<span class="w"> </span>bisect<span class="w"> </span>bad
 git<span class="w"> </span>bisect<span class="w"> </span>good<span class="w"> </span>v1.2
 </code></pre></div>
 
-<p>Для небольших проектов достаточно просмотреть последние коммиты, но при длинной истории bisect экономит время.</p>
-<h2 id="исправление"><span class="num">06</span>Исправление</h2>
-<p>Исправление включает:</p>
-<ol>
-<li>минимальную правку причины;</li>
-<li>тест, который падал до правки;</li>
-<li>проверку соседних сценариев;</li>
-<li>запись в changelog, если дефект был в выпуске.</li>
-</ol>
-<p>Если правка лечит симптом, дефект вернётся.</p>
-<h2 id="оформление-дефекта"><span class="num">07</span>Оформление дефекта</h2>
-<p>Дефект содержит:</p>
-<ul>
-<li>заголовок с условием;</li>
-<li>шаги воспроизведения;</li>
-<li>ожидаемый результат;</li>
-<li>фактический результат;</li>
-<li>окружение;</li>
-<li>важность.</li>
-</ul>
-<p>Пример:</p>
-<blockquote>
-<p>При теме с кавычкой заявка не сохраняется. Ожидается сохранение или понятная ошибка. Фактически ответ 500, данные потеряны.</p>
-</blockquote>
-<h2 id="где-отладка-ломается"><span class="num">08</span>Где отладка ломается</h2>
-<p><strong>Правка наугад.</strong> Меняют код, пока не заработает, причину не понимают.</p>
-<p><strong>Нет воспроизведения.</strong> Дефект закрывают как «не подтвердился».</p>
-<p><strong>Один журнал на всех.</strong> Нельзя найти события конкретного запроса.</p>
-<p><strong>Исправление без теста.</strong> Ошибка возвращается при следующем изменении.</p>
-<p><strong>Симптом вместо причины.</strong> Обходят ошибку, источник остаётся.</p>
-<p><strong>Долгий поиск без гипотез.</strong> Перебирают всё подряд.</p>
-<div class="callout pitfall"><span class="label">Успешный запуск после правки не доказывает, что причина устранена. Нужен тест, который воспроизводил дефект до изменения.</span></div>
+<p>Git переключает репозиторий на средний коммит. Проверяющий запускает сценарий и говорит <code>git bisect good</code> или <code>git bisect bad</code>. Диапазон сужается вдвое. Процесс продолжается, пока не останется один коммит.</p>
+<p>Число шагов растёт логарифмически. Для 16 коммитов достаточно 4 проверок, для 1000 около 10, для 10000 около 14. Линейный просмотр потребовал бы сотни или тысячи проверок.</p>
+<p>Проверку можно автоматизировать:</p>
+<div class="codehilite" data-lang="text"><pre><span></span><code>git<span class="w"> </span>bisect<span class="w"> </span>run<span class="w"> </span>pytest<span class="w"> </span>-q<span class="w"> </span>tests/test_close.py
+</code></pre></div>
 
-<h2 id="итоги"><span class="num">09</span>Итоги</h2>
-<ul>
-<li>Дефект начинают с воспроизведения и условий.</li>
-<li>Журналы и трассировка дают факты.</li>
-<li>Гипотеза проверяется однозначно.</li>
-<li>Bisect сужает историю до коммита.</li>
-<li>Исправление закрепляют тестом и оформляют дефект.</li>
-</ul></div>
+<p>Команда должна возвращать нулевой код при успехе и ненулевой при падении. Если тест нестабилен, автоматическая бисекция найдёт не тот коммит. Поэтому сначала добиваются устойчивого воспроизведения.</p>
+<figure class="figure" data-fig="bisect-halving" data-one="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"><iframe title="Figure 2: bisect-halving" scrolling="no"></iframe><figcaption>Нажмите «Сделать срез»: диапазон коммитов делится пополам, и находится коммит, после которого поведение изменилось. Счётчик показывает число проверок вместо перебора.</figcaption></figure>
+
+<p>У бисекции есть ограничения. Она требует, чтобы дефект воспроизводился на старых коммитах и чтобы сборка вообще запускалась. Если старые зависимости не устанавливаются, диапазон придётся сокращать вручную. Если дефект появился не в коммите, а в данных или конфигурации, бисекция по коду ничего не найдёт.</p>
+<p>Второе ограничение это «плохой» коммит, который на самом деле содержит несколько изменений. Бисекция укажет на него, но причину всё равно придётся искать внутри. Хорошая практика небольших коммитов делает этот шаг дешёвым.</p></div>
 </div>
 
 <div class="gate-step" data-gate>
-<p class="gate-action"><button type="button" class="gate-btn" aria-expanded="false"><span class="gate-q" aria-hidden="true">?</span><span>Почему исправление без теста часто возвращает дефект?</span></button></p>
-<div class="gate-content" hidden><div class="quiz" data-quiz data-quiz-guard><div class="quiz-who"><label class="quiz-who-label"><span>ФИО</span><input type="text" class="quiz-name" data-quiz-name maxlength="80" autocomplete="off" placeholder="Иванов Иван Иванович"></label><span class="quiz-attempts" data-quiz-attempts>две попытки на лекцию</span><span class="quiz-note" data-who-note hidden></span></div><div class="quiz-q" data-type="single" data-correct="1" data-q="1"><p class="quiz-p"><span class="quiz-no" aria-hidden="true">01</span>Что даёт идентификатор запроса?</p><div class="opts"><label class="opt"><input type="radio" name="q106_0" value="1" autocomplete="off"><span>Ускоряет базу</span></label><label class="opt"><input type="radio" name="q106_0" value="3" autocomplete="off"><span>Меняет версию</span></label><label class="opt"><input type="radio" name="q106_0" value="0" autocomplete="off" data-ok><span>Связывает события одного запроса</span></label><label class="opt"><input type="radio" name="q106_0" value="2" autocomplete="off"><span>Шифрует трафик</span></label></div><p class="quiz-why" hidden>Поиск в журнале.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="multi" data-correct="4" data-q="2" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">02</span>Что входит в хороший дефект?</p><div class="opts"><label class="opt"><input type="checkbox" name="q106_1" value="5" autocomplete="off"><span>Личное мнение</span></label><label class="opt"><input type="checkbox" name="q106_1" value="0" autocomplete="off" data-ok><span>Шаги воспроизведения</span></label><label class="opt"><input type="checkbox" name="q106_1" value="3" autocomplete="off" data-ok><span>Окружение</span></label><label class="opt"><input type="checkbox" name="q106_1" value="4" autocomplete="off"><span>Пароль пользователя</span></label><label class="opt"><input type="checkbox" name="q106_1" value="1" autocomplete="off" data-ok><span>Ожидаемый результат</span></label><label class="opt"><input type="checkbox" name="q106_1" value="2" autocomplete="off" data-ok><span>Фактический результат</span></label></div><p class="quiz-why" hidden>Остальное лишнее.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="short" data-q="3" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">03</span>Какая команда ищет коммит с дефектом?</p><input type="text" class="short-answer" data-answers="[&quot;git bisect&quot;, &quot;bisect&quot;]" placeholder="Введите ответ" autocomplete="off" spellcheck="false" aria-label="Какая команда ищет коммит с дефектом?"><p class="quiz-why" hidden>Деление истории.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="4" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">04</span>Что содержит оформленный дефект?</p><div class="opts"><label class="opt"><input type="radio" name="q106_3" value="1" autocomplete="off"><span>Только заголовок</span></label><label class="opt"><input type="radio" name="q106_3" value="0" autocomplete="off" data-ok><span>Шаги, ожидание, факт, окружение</span></label><label class="opt"><input type="radio" name="q106_3" value="3" autocomplete="off"><span>Только код</span></label><label class="opt"><input type="radio" name="q106_3" value="2" autocomplete="off"><span>Только имя автора</span></label></div><p class="quiz-why" hidden>Полное описание.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="5" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">05</span>Почему правка наугад опасна?</p><div class="opts"><label class="opt"><input type="radio" name="q106_4" value="1" autocomplete="off"><span>Код становится короче</span></label><label class="opt"><input type="radio" name="q106_4" value="3" autocomplete="off"><span>Ветка удлиняется</span></label><label class="opt"><input type="radio" name="q106_4" value="0" autocomplete="off" data-ok><span>Причина остаётся неизвестной</span></label><label class="opt"><input type="radio" name="q106_4" value="2" autocomplete="off"><span>Тесты ускоряются</span></label></div><p class="quiz-why" hidden>Нет понимания.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="multi" data-correct="4" data-q="6" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">06</span>Какие ошибки отладки типичны?</p><div class="opts"><label class="opt"><input type="checkbox" name="q106_5" value="0" autocomplete="off" data-ok><span>Правка наугад</span></label><label class="opt"><input type="checkbox" name="q106_5" value="2" autocomplete="off" data-ok><span>Исправление без теста</span></label><label class="opt"><input type="checkbox" name="q106_5" value="4" autocomplete="off"><span>Проверка гипотез</span></label><label class="opt"><input type="checkbox" name="q106_5" value="1" autocomplete="off" data-ok><span>Нет воспроизведения</span></label><label class="opt"><input type="checkbox" name="q106_5" value="3" autocomplete="off" data-ok><span>Симптом вместо причины</span></label><label class="opt"><input type="checkbox" name="q106_5" value="5" autocomplete="off"><span>Запись в changelog</span></label></div><p class="quiz-why" hidden>Остальное хорошо.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="7" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">07</span>Что должно входить в исправление?</p><div class="opts"><label class="opt"><input type="radio" name="q106_6" value="3" autocomplete="off"><span>Только отчёт</span></label><label class="opt"><input type="radio" name="q106_6" value="1" autocomplete="off"><span>Только правка</span></label><label class="opt"><input type="radio" name="q106_6" value="0" autocomplete="off" data-ok><span>Правка причины и тест</span></label><label class="opt"><input type="radio" name="q106_6" value="2" autocomplete="off"><span>Только тест</span></label></div><p class="quiz-why" hidden>Причина и проверка.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="short" data-q="8" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">08</span>Что должно упасть до исправления и пройти после?</p><input type="text" class="short-answer" data-answers="[&quot;тест&quot;, &quot;регрессионный тест&quot;]" placeholder="Введите ответ" autocomplete="off" spellcheck="false" aria-label="Что должно упасть до исправления и пройти после?"><p class="quiz-why" hidden>Закрепление.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="9" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">09</span>С чего начинают отладку?</p><div class="opts"><label class="opt"><input type="radio" name="q106_8" value="3" autocomplete="off"><span>С выпуска версии</span></label><label class="opt"><input type="radio" name="q106_8" value="1" autocomplete="off"><span>С переписывания кода</span></label><label class="opt"><input type="radio" name="q106_8" value="0" autocomplete="off" data-ok><span>С воспроизведения условий</span></label><label class="opt"><input type="radio" name="q106_8" value="2" autocomplete="off"><span>С удаления журналов</span></label></div><p class="quiz-why" hidden>Воспроизведение.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="10" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">10</span>Что такое гипотеза?</p><div class="opts"><label class="opt"><input type="radio" name="q106_9" value="3" autocomplete="off"><span>Тест-кейс</span></label><label class="opt"><input type="radio" name="q106_9" value="2" autocomplete="off"><span>Готовое исправление</span></label><label class="opt"><input type="radio" name="q106_9" value="1" autocomplete="off"><span>Любая догадка</span></label><label class="opt"><input type="radio" name="q106_9" value="0" autocomplete="off" data-ok><span>Проверяемое предположение о причине</span></label></div><p class="quiz-why" hidden>Проверяемое.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="multi" data-correct="4" data-q="11" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">11</span>Какие источники фактов используют?</p><div class="opts"><label class="opt"><input type="checkbox" name="q106_10" value="2" autocomplete="off" data-ok><span>Состояние базы</span></label><label class="opt"><input type="checkbox" name="q106_10" value="0" autocomplete="off" data-ok><span>Журнал приложения</span></label><label class="opt"><input type="checkbox" name="q106_10" value="4" autocomplete="off"><span>Цвет интерфейса</span></label><label class="opt"><input type="checkbox" name="q106_10" value="1" autocomplete="off" data-ok><span>Трассировка стека</span></label><label class="opt"><input type="checkbox" name="q106_10" value="5" autocomplete="off"><span>Название проекта</span></label><label class="opt"><input type="checkbox" name="q106_10" value="3" autocomplete="off" data-ok><span>Сетевой запрос</span></label></div><p class="quiz-why" hidden>Остальное не факты.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="12" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">12</span>Что такое дефект?</p><div class="opts"><label class="opt"><input type="radio" name="q106_11" value="3" autocomplete="off"><span>Отсутствие теста</span></label><label class="opt"><input type="radio" name="q106_11" value="0" autocomplete="off" data-ok><span>Расхождение ожидаемого и фактического поведения</span></label><label class="opt"><input type="radio" name="q106_11" value="1" autocomplete="off"><span>Любая ошибка в тексте</span></label><label class="opt"><input type="radio" name="q106_11" value="2" autocomplete="off"><span>Новая функция</span></label></div><p class="quiz-why" hidden>Поведение.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="short" data-q="13" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">13</span>Как называют проверяемое предположение о причине?</p><input type="text" class="short-answer" data-answers="[&quot;гипотеза&quot;, &quot;hypothesis&quot;]" placeholder="Введите ответ" autocomplete="off" spellcheck="false" aria-label="Как называют проверяемое предположение о причине?"><p class="quiz-why" hidden>Проверка.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="14" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">14</span>Что означает «не воспроизводится»?</p><div class="opts"><label class="opt"><input type="radio" name="q106_13" value="2" autocomplete="off"><span>Пользователь ошибся</span></label><label class="opt"><input type="radio" name="q106_13" value="3" autocomplete="off"><span>Тесты не нужны</span></label><label class="opt"><input type="radio" name="q106_13" value="0" autocomplete="off" data-ok><span>Не найдены условия возникновения</span></label><label class="opt"><input type="radio" name="q106_13" value="1" autocomplete="off"><span>Дефекта не существует</span></label></div><p class="quiz-why" hidden>Условия не найдены.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="15" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">15</span>Что делает git bisect?</p><div class="opts"><label class="opt"><input type="radio" name="q106_14" value="3" autocomplete="off"><span>Сливает изменения</span></label><label class="opt"><input type="radio" name="q106_14" value="0" autocomplete="off" data-ok><span>Находит коммит, после которого поведение изменилось</span></label><label class="opt"><input type="radio" name="q106_14" value="1" autocomplete="off"><span>Удаляет историю</span></label><label class="opt"><input type="radio" name="q106_14" value="2" autocomplete="off"><span>Создаёт ветку</span></label></div><p class="quiz-why" hidden>Поиск коммита.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><p class="quiz-note quiz-submit-note" data-quiz-note hidden></p><div class="quiz-result" data-quiz-result hidden aria-live="polite"><span class="label">Результат теста</span><h3>Тест завершён</h3><p class="modal-name-line">ФИО: <b data-student-name></b></p><p class="modal-result" data-modal-result></p><p class="modal-result" data-modal-wrong></p><dl class="modal-times"><div><dt>Время выполнения теста</dt><dd data-test-time>00:00</dd></div><div><dt>Время просмотра лекции</dt><dd data-view-time>00:00</dd></div></dl></div></div></div>
+<p class="gate-action"><button type="button" class="gate-btn" aria-expanded="false"><span class="gate-q" aria-hidden="true">?</span><span>Почему исправление начинают с причины, а не с симптома?</span></button></p>
+<div class="gate-content" hidden><h2 id="исправление-и-закрепление"><span class="num">06</span>Исправление и закрепление</h2>
+<p>Исправление начинается с причины, а не с симптома. Симптом это наблюдаемое поведение. Причина это условие, которое его порождает.</p>
+<p>Пример. Заявка не сохраняется при кавычке в теме. Симптом можно убрать, заменив кавычку на похожий символ при вводе. Причина останется: SQL по-прежнему собирается конкатенацией, и следующая специальная последовательность снова сломает запрос.</p>
+<p>Правильная правка использует параметризованный запрос. Она меняет причину, а не вид данных.</p>
+<p>Минимальная правка лучше большой. Чем меньше изменений, тем легче проверить, что исправлено именно то, что нужно. Большой рефакторинг вместе с исправлением смешивает два риска.</p>
+<h3>Симптом и причина</h3>
+<p>Разница между симптомом и причиной видна на трёх типичных примерах.</p>
+<p><strong>Повтор запроса.</strong> Внешняя служба иногда отвечает медленно, и запрос падает по таймауту. Простая правка добавляет три повторные попытки. Пользователь перестаёт видеть ошибку, но служба всё равно медленная, а при повторной отправке заявка может создаться дважды. Симптом скрыт, причина осталась, добавился новый дефект.</p>
+<p><strong>Задержка в тесте.</strong> Тест падает, потому что не успевает прочитать файл. Правка добавляет <code>sleep(2)</code>. Тест становится зелёным на быстрой машине и снова падает в сборке. Причина была в отсутствии ожидания события, а не в нехватке времени.</p>
+<p><strong>Широкий перехват.</strong> Программа падает на пустом значении. Правка добавляет <code>except Exception: pass</code>. Падений больше нет, но данные не сохраняются, а пользователь видит успех. Причина была в неверной обработке пустого значения, а установилась тишина.</p>
+<p>Во всех трёх случаях правка уменьшила наблюдаемый отказ и увеличила скрытый риск. Признак лечения симптома простой: после правки непонятно, почему проблема возникала. Если объяснение звучит как «теперь не падает», причина не найдена.</p>
+<p>Хорошая правка отвечает на вопрос «какое условие было неверным». Иногда ответ ведёт в требование, а не в код. Тогда исправлять нужно требование и тест, а не подгонять код под неверное описание.</p>
+<h3>Красный, зелёный, рефакторинг</h3>
+<p>Порядок действий прост:</p>
+<ol>
+<li>Воспроизвести дефект тестом.</li>
+<li>Убедиться, что тест падает.</li>
+<li>Исправить причину.</li>
+<li>Убедиться, что тест проходит.</li>
+<li>Прогнать соседние проверки.</li>
+<li>Записать изменение в changelog, если дефект был в выпуске.</li>
+</ol>
+<p>Шаг 2 нельзя пропускать. Тест, который не падал до правки, не доказывает, что правка что-то исправила. Он мог быть написан под уже исправленное поведение.</p>
+<p>Соседние проверки нужны потому, что правка может изменить другое правило. Параметризованный запрос исправляет кавычку, но может изменить поведение поиска по подстроке. Регрессионный набор покажет, не затронуто ли что-то ещё.</p>
+<h3>Что ещё входит в исправление</h3>
+<p>Исправление это не только строка кода. В него входят:</p>
+<ul>
+<li>тест, который воспроизводит дефект;</li>
+<li>объяснение причины в описании коммита;</li>
+<li>проверка данных, которые уже успели испортиться;</li>
+<li>запись в changelog для пользователей;</li>
+<li>наблюдение после выпуска, если дефект был в работе.</li>
+</ul>
+<p>Последний пункт часто забывают. Если дефект приводил к потере данных, исправление кода не возвращает потерянное. Нужен план восстановления или объяснение пользователям.</p>
+<h3>Что делать с испорченными данными</h3>
+<p>Код можно исправить за минуту, а данные остаются неверными. Заявка, созданная дважды, не исчезнет после правки. Отчёт, посчитанный по старой формуле, не пересчитается сам.</p>
+<p>Поэтому в исправление входит проверка данных. Сначала отвечают на вопросы: какие записи затронуты, как их отличить, можно ли восстановить значение. Затем пишут запрос или скрипт миграции, который исправляет только подтверждённые случаи.</p>
+<p>Массовая правка опасна. Скрипт, который меняет все записи подряд, может испортить те, что были верными. Лучше сузить условие и проверить выборку на копии.</p>
+<p>Если восстановить нельзя, пользователей предупреждают. Молчание хуже: человек узнает о потере позже и не сможет её объяснить.</p>
+<p><strong>Blast radius</strong>, радиус поражения, помогает выбрать осторожность. Ошибка в подписи кнопки затрагивает один экран. Ошибка в формате даты может затронуть отчёты, интеграции и бухгалтерию. Чем шире радиус, тем больше проверок и тем меньше допустимый риск.</p>
+<h2 id="оформление-дефекта"><span class="num">07</span>Оформление дефекта</h2>
+<p>Дефект оформляют так, чтобы его мог воспроизвести другой человек. Это не бюрократия, а способ передать знание без устного пересказа.</p>
+<p>Хороший дефект содержит:</p>
+<ul>
+<li>заголовок с условием и результатом;</li>
+<li>шаги воспроизведения;</li>
+<li>ожидаемый результат;</li>
+<li>фактический результат;</li>
+<li>окружение и версию;</li>
+<li>частоту воспроизведения;</li>
+<li>важность и приоритет;</li>
+<li>доказательства: журнал, скриншот, идентификатор запроса.</li>
+</ul>
+<p>Заголовок важнее остального. «Ошибка при сохранении» ничего не говорит. «Сохранение заявки с кавычкой в теме возвращает 500 и теряет данные» говорит почти всё.</p>
+<h3>Дефект в требовании</h3>
+<p>Не каждый дефект живёт в коде. Требование «сотрудник видит свои заявки» допускает разное чтение: только созданные им или все, где он исполнитель. Код может точно реализовать неверное понимание, и тест будет зелёным.</p>
+<p>Такой дефект обнаруживается не отладкой, а сверкой с заказчиком и сценарием. Признаки: поведение совпадает с описанием, но пользователь им не пользуется; разные люди понимают критерий по-разному; приёмка заканчивается спором о словах.</p>
+<p>Исправление начинается с уточнения критерия. Затем меняют тест, потому что старый закреплял неверное поведение. Только после этого правят код. Если начать с кода, через неделю вернётся тот же спор.</p>
+<h3>Важность и приоритет</h3>
+<p><strong>Важность</strong> (severity) описывает влияние на систему. <strong>Приоритет</strong> описывает порядок исправления. Они не совпадают.</p>
+<p>Опечатка в названии компании на главной странице имеет низкую важность для работы, но высокий приоритет из-за репутации. Падение редкой функции имеет высокую важность, но низкий приоритет, если функция почти не используется.</p>
+<table>
+<thead>
+<tr>
+<th>Важность</th>
+<th>Пример</th>
+<th>Приоритет</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>критичная</td>
+<td>потеря данных, доступ к чужим данным</td>
+<td>немедленно</td>
+</tr>
+<tr>
+<td>высокая</td>
+<td>основной сценарий не работает</td>
+<td>в текущем выпуске</td>
+</tr>
+<tr>
+<td>средняя</td>
+<td>работает обходной путь</td>
+<td>по плану</td>
+</tr>
+<tr>
+<td>низкая</td>
+<td>косметика</td>
+<td>когда будет время</td>
+</tr>
+</tbody>
+</table>
+<p>Матрица не отменяет обсуждения. Она делает спор предметным: обсуждают влияние и порядок, а не «мне кажется, это важно».</p>
+<p>Приоритет может измениться. Дефект, который встречается у одного пользователя, становится критичным, если этот пользователь принимает платежи. Поэтому в описании нужна частота и контекст.</p>
+<h3>Чего в дефекте быть не должно</h3>
+<p>В дефекте не должно быть пароля, токена и персональных данных. Для доказательства достаточно идентификатора запроса и обезличенной записи.</p>
+<p>В дефекте не должно быть оценки личности. «Разработчик не проверил» не помогает исправить. «Запрос не фильтрует по owner_id» помогает.</p>
+<p>В дефекте не должно быть нескольких проблем. Один дефект это одно расхождение. Если в описании три разные ошибки, их исправят частично и закроют всё.</p>
+<p>Разделение помогает и в обратную сторону. Два отчёта про «не сохраняется» могут описывать один дефект, если совпадают условие и причина. Дубликат закрывают ссылкой на основной отчёт, а не отдельной работой.</p>
+<h3>Один дефект или несколько</h3>
+<p>Признак одного дефекта: у отчётов общий минимальный пример. Если после сокращения остаётся одна и та же строка данных или одно и то же условие, причина, вероятно, общая.</p>
+<p>Признак разных дефектов: минимальные примеры не совпадают. Тогда общий заголовок «проблемы с сохранением» только мешает. Лучше два отчёта с точными условиями, чем один с тремя причинами.</p>
+<p>Разделение важно для проверки исправления. Один тест на один дефект даёт ясный ответ. Тест на три дефекта упадёт, и будет непонятно, что именно не исправлено.</p>
+<h3>Триаж</h3>
+<p><strong>Триаж</strong> это разбор поступивших дефектов. На триаже решают, что делать: исправлять, отложить, запросить информацию, закрыть как дубликат или как работу по проекту.</p>
+<p>«Не воспроизводится» на триаже не закрывает дефект, а переводит в состояние «нужна информация». В ответе перечисляют, что именно нужно: версия, браузер, роль, данные, время, идентификатор запроса. Без этого дефект вернётся.</p>
+<p>Закрывать как «работает по проекту» можно только со ссылкой на требование. Иначе спор о поведении повторяется каждый раз.</p>
+<h3>Жизненный цикл дефекта</h3>
+<p>У дефекта есть состояния. Они нужны, чтобы команда понимала, кто и что ждёт.</p>
+<table>
+<thead>
+<tr>
+<th>Состояние</th>
+<th>Что означает</th>
+<th>Кто действует</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>новый</td>
+<td>описание получено, проверки не было</td>
+<td>триаж</td>
+</tr>
+<tr>
+<td>подтверждён</td>
+<td>условия воспроизведены</td>
+<td>разработчик</td>
+</tr>
+<tr>
+<td>в работе</td>
+<td>есть исполнитель и срок</td>
+<td>разработчик</td>
+</tr>
+<tr>
+<td>исправлен</td>
+<td>правка внесена, тест добавлен</td>
+<td>проверяющий</td>
+</tr>
+<tr>
+<td>проверен</td>
+<td>исправление подтверждено на сборке</td>
+<td>проверяющий</td>
+</tr>
+<tr>
+<td>закрыт</td>
+<td>результат принят</td>
+<td>триаж</td>
+</tr>
+</tbody>
+</table>
+<p>«Исправлен» и «закрыт» это разные состояния. Между ними стоит проверка: тот, кто нашёл дефект, убеждается, что поведение изменилось, а соседние сценарии не сломались. Если пропустить этот шаг, дефект вернётся уже как новый отчёт.</p>
+<p>Отдельные состояния для отказа: «отклонён» с причиной, «дубликат» со ссылкой, «отложен» с условием возврата. Причина важнее ярлыка. Через месяц никто не вспомнит, почему отчёт закрыли.</p>
+<h2 id="реальные-случаи"><span class="num">08</span>Реальные случаи</h2>
+<p>Два инцидента показывают, как отладка зависит от фактов и как отсутствие проверки восстановления превращает мелкую ошибку в потерю данных.</p>
+<h3>GitLab, 2017</h3>
+<p>31 января 2017 года инженер GitLab.com готовил вторичную базу к нагрузочному тестированию. Он собирался удалить каталог данных на вторичном сервере, но команда выполнилась на первичном. За одну-две секунды было удалено около 300 гигабайт данных.</p>
+<p>Восстановление оказалось сложнее, чем предполагалось. Несколько механизмов резервного копирования и восстановления не сработали так, как ожидалось: резервная копия <code>pg_dump</code> оказалась непригодной, снапшоты LVM и дисков Azure не проверяли на восстановление, репликация была сломана, а процедура восстановления не была отработана. В итоге использовали снапшот, сделанный примерно за шесть часов до инцидента, и потеряли данные за этот период. По оценке компании, пострадали около 5000 проектов, 5000 комментариев и 700 новых учётных записей. Копирование данных заняло около 18 часов.</p>
+<p>Разбор опубликован самой компанией <a href="https://about.gitlab.com/blog/2017/02/10/postmortem-of-database-outage-of-january-31/">GitLab, 2017</a>. В нём перечислены факты, хронология, причины и меры. Отдельно подчёркнуто, что защита от <code>rm -rf</code> не является решением: ошибки всё равно случатся, нужно уметь быстро восстанавливаться.</p>
+<p>С точки зрения отладки интересна последовательность. Инженер знал, что делает, но не проверил, на каком хосте находится. Различие между машинами не было заметным в момент выполнения команды. Факт «я на вторичном сервере» остался предположением, а не проверкой.</p>
+<p>Урок: <strong>проверяйте среду до разрушительного действия и проверяйте восстановление до инцидента</strong>. Резервная копия, которую ни разу не восстанавливали, является надеждой, а не резервом.</p>
+<h3>Amazon S3, 2017</h3>
+<p>28 февраля 2017 года сотрудник AWS выполнял по плану команду, которая должна была убрать небольшое число серверов подсистемы выставления счетов S3. Один из параметров команды был введён неверно, и было удалено больше серверов, чем планировалось. Затронутые серверы поддерживали две другие подсистемы: индекс и размещение.</p>
+<p>Индексная подсистема хранит метаданные всех объектов региона. Пока её перезапускали, S3 не мог обслуживать запросы. Полное восстановление индексной подсистемы завершилось к 13:18 по тихоокеанскому времени, то есть примерно через четыре часа после начала событий. Размещение восстанавливалось дольше.</p>
+<p>Осложнение было в наблюдении: панель состояния AWS зависела от S3 и не могла обновляться, поэтому первые два часа компания сообщала о проблеме через Twitter. Официальный разбор опубликован AWS <a href="https://aws.amazon.com/message/41926/">AWS, 2017</a>.</p>
+<p>Урок: <strong>инструмент наблюдения не должен зависеть от того, за чем он наблюдает</strong>. Если панель состояния живёт в той же системе, при её отказе команда теряет канал связи с пользователями.</p>
+<table>
+<thead>
+<tr>
+<th>Случай</th>
+<th>Что подвело</th>
+<th>Что проверять</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>GitLab</td>
+<td>неверный хост и непроверенное восстановление</td>
+<td>среду до команды, восстановление до инцидента</td>
+</tr>
+<tr>
+<td>Amazon S3</td>
+<td>неверный параметр команды и связанность подсистем</td>
+<td>лимиты команды, независимость наблюдения</td>
+</tr>
+</tbody>
+</table>
+<p>Общее у двух случаев одно: причина была не в сложной логике, а в отсутствии проверки перед необратимым действием.</p></div>
+</div>
+
+<div class="gate-step" data-gate>
+<p class="gate-action"><button type="button" class="gate-btn" aria-expanded="false"><span class="gate-q" aria-hidden="true">?</span><span>Что из этих правил можно применить в учебном проекте уже сейчас?</span></button></p>
+<div class="gate-content" hidden><h2 id="отладка-в-учебном-проекте"><span class="num">09</span>Отладка в учебном проекте</h2>
+<p>Учебный проект не требует системы наблюдаемости на миллион событий. Ему достаточно нескольких привычек.</p>
+<p><strong>Воспроизводите в тесте, а не только руками.</strong> Ручной запуск подтверждает, что дефект есть. Тест подтверждает, что он больше не вернётся.</p>
+<p><strong>Записывайте окружение.</strong> Коммит, версия Python, браузер, роль, набор данных. Без этого через день воспроизведение начнётся с нуля.</p>
+<p><strong>Логируйте границы.</strong> Вход запроса, результат, длительность, идентификатор. Не нужно логировать каждую строку.</p>
+<p><strong>Проверяйте одну гипотезу за раз.</strong> Записывайте результат проверки. Список исключённых причин так же полезен, как найденная.</p>
+<p><strong>Не исправляйте больше одного дефекта в одной правке.</strong> Смешение изменений мешает понять, что именно помогло.</p>
+<p><strong>Добавляйте тест до исправления.</strong> Красный тест доказывает, что дефект существует. Зелёный после правки доказывает, что причина устранена.</p>
+<p><strong>Разбирайте инцидент без поиска виноватого.</strong> Вопрос «почему система позволила ошибке произойти» полезнее вопроса «кто ошибся». Google SRE описывает такую культуру разбора как условие честных отчётов <a href="https://sre.google/sre-book/postmortem-culture/">Google SRE, postmortem culture</a>.</p>
+<h3>Шаблон разбора</h3>
+<table>
+<thead>
+<tr>
+<th>Пункт</th>
+<th>Что записать</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>что произошло</td>
+<td>наблюдаемое поведение и время</td>
+</tr>
+<tr>
+<td>влияние</td>
+<td>кто и что потерял</td>
+</tr>
+<tr>
+<td>хронология</td>
+<td>события по минутам</td>
+</tr>
+<tr>
+<td>причина</td>
+<td>условие, а не человек</td>
+</tr>
+<tr>
+<td>как обнаружили</td>
+<td>журнал, метрика, сообщение</td>
+</tr>
+<tr>
+<td>что помогло</td>
+<td>восстановление и его время</td>
+</tr>
+<tr>
+<td>что изменить</td>
+<td>проверка, тест, наблюдение</td>
+</tr>
+<tr>
+<td>что осталось</td>
+<td>известные пробелы</td>
+</tr>
+</tbody>
+</table>
+<p>Шаблон занимает полстраницы. Он полезнее длинного отчёта, который никто не читает.</p>
+<h3>Метрики отладки</h3>
+<p>Полезны три показателя. <strong>Время до обнаружения</strong> показывает, как быстро команда узнаёт о сбое. <strong>Время до восстановления</strong> показывает готовность к инциденту. <strong>Доля повторных дефектов</strong> показывает, лечат ли причину или симптом.</p>
+<p>DORA связывает скорость восстановления и долю неудачных изменений с практиками доставки <a href="https://dora.dev/guides/dora-metrics-four-keys/">DORA, four keys</a>. Для учебного проекта достаточно наблюдать за собой: стало ли восстановление короче после введения журналов и тестов.</p>
+<h2 id="итоги"><span class="num">10</span>Итоги</h2>
+<ul>
+<li>Ошибка живёт в решении, дефект в артефакте, отказ в поведении.</li>
+<li>Отладка начинается с воспроизведения и заканчивается проверкой гипотезы.</li>
+<li>Большой пример сокращают, чтобы увидеть причину.</li>
+<li>Журнал без идентификатора запроса не связывает события.</li>
+<li>Гипотеза проверяется по одному фактору за раз.</li>
+<li>Bisect сокращает историю логарифмически, но требует устойчивого воспроизведения.</li>
+<li>Исправление закрепляют тестом, который падал до правки.</li>
+<li>Дефект описывают условиями и фактами, без оценки людей.</li>
+<li>Восстановление проверяют до инцидента, а не во время него.</li>
+</ul>
+<h2 id="источники"><span class="num">11</span>Источники</h2>
+<ol>
+<li>Zeller A. Why Programs Fail: A Guide to Systematic Debugging, 2nd edition. Elsevier, 2009. https://www.elsevier.com/books/why-programs-fail/zeller/978-0-12-374515-6</li>
+<li>Zeller A. Yesterday, my program worked. Today, it does not. Why? ESEC/FSE 1999. https://doi.org/10.1145/318774.318946</li>
+<li>Git. git-bisect documentation. https://git-scm.com/docs/git-bisect</li>
+<li>Python documentation. logging: Logging facility for Python. https://docs.python.org/3/library/logging.html</li>
+<li>Python documentation. traceback: Print or retrieve a stack traceback. https://docs.python.org/3/library/traceback.html</li>
+<li>Google SRE. Postmortem Culture: Learning from Failure. https://sre.google/sre-book/postmortem-culture/</li>
+<li>GitLab. Postmortem of database outage of January 31, 2017. https://about.gitlab.com/blog/2017/02/10/postmortem-of-database-outage-of-january-31/</li>
+<li>Amazon Web Services. Summary of the Amazon S3 Service Disruption in the Northern Virginia Region, 2017. https://aws.amazon.com/message/41926/</li>
+<li>Keep a Changelog 1.1.0. https://keepachangelog.com/en/1.1.0/</li>
+<li>DORA. The four keys to software delivery performance. https://dora.dev/guides/dora-metrics-four-keys/</li>
+</ol>
+<div class="quiz" data-quiz data-quiz-guard><div class="quiz-who"><label class="quiz-who-label"><span>ФИО</span><input type="text" class="quiz-name" data-quiz-name maxlength="80" autocomplete="off" placeholder="Иванов Иван Иванович"></label><span class="quiz-attempts" data-quiz-attempts>две попытки на лекцию</span><span class="quiz-note" data-who-note hidden></span></div><div class="quiz-q" data-type="single" data-correct="1" data-q="1"><p class="quiz-p"><span class="quiz-no" aria-hidden="true">01</span>Что означает «не воспроизводится»?</p><div class="opts"><label class="opt"><input type="radio" name="q170_0" value="2" autocomplete="off"><span>Пользователь всегда ошибается</span></label><label class="opt"><input type="radio" name="q170_0" value="3" autocomplete="off"><span>Проверка больше не нужна</span></label><label class="opt"><input type="radio" name="q170_0" value="0" autocomplete="off" data-ok><span>Не найдены условия возникновения</span></label><label class="opt"><input type="radio" name="q170_0" value="1" autocomplete="off"><span>Дефекта не существует</span></label></div><p class="quiz-why" hidden>Условия нужно запросить и зафиксировать.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="short" data-q="2" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">02</span>Какая команда ищет коммит с дефектом?</p><input type="text" class="short-answer" data-answers="[&quot;git bisect&quot;, &quot;bisect&quot;]" placeholder="Введите ответ" autocomplete="off" spellcheck="false" aria-label="Какая команда ищет коммит с дефектом?"><p class="quiz-why" hidden>История делится пополам.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="multi" data-correct="4" data-q="3" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">03</span>Какие ошибки отладки типичны?</p><div class="opts"><label class="opt"><input type="checkbox" name="q170_2" value="0" autocomplete="off" data-ok><span>Правка наугад</span></label><label class="opt"><input type="checkbox" name="q170_2" value="2" autocomplete="off" data-ok><span>Исправление без теста</span></label><label class="opt"><input type="checkbox" name="q170_2" value="4" autocomplete="off"><span>Проверка одной гипотезы</span></label><label class="opt"><input type="checkbox" name="q170_2" value="1" autocomplete="off" data-ok><span>Отсутствие воспроизведения</span></label><label class="opt"><input type="checkbox" name="q170_2" value="3" autocomplete="off" data-ok><span>Лечение симптома вместо причины</span></label><label class="opt"><input type="checkbox" name="q170_2" value="5" autocomplete="off"><span>Запись причины в коммит</span></label></div><p class="quiz-why" hidden>Остальное помогает сузить поиск.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="4" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">04</span>Почему правка наугад опасна?</p><div class="opts"><label class="opt"><input type="radio" name="q170_3" value="1" autocomplete="off"><span>Код становится короче</span></label><label class="opt"><input type="radio" name="q170_3" value="3" autocomplete="off"><span>Ветка становится длиннее</span></label><label class="opt"><input type="radio" name="q170_3" value="0" autocomplete="off" data-ok><span>Причина остаётся неизвестной</span></label><label class="opt"><input type="radio" name="q170_3" value="2" autocomplete="off"><span>Тесты начинают идти быстрее</span></label></div><p class="quiz-why" hidden>Совпадение не заменяет понимание.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="5" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">05</span>Что такое проверяемая гипотеза?</p><div class="opts"><label class="opt"><input type="radio" name="q170_4" value="3" autocomplete="off"><span>Тест-кейс без ожидания</span></label><label class="opt"><input type="radio" name="q170_4" value="1" autocomplete="off"><span>Любая догадка о коде</span></label><label class="opt"><input type="radio" name="q170_4" value="2" autocomplete="off"><span>Готовое исправление</span></label><label class="opt"><input type="radio" name="q170_4" value="0" autocomplete="off" data-ok><span>Предположение о причине, которое можно подтвердить или опровергнуть</span></label></div><p class="quiz-why" hidden>Проверка должна давать однозначный ответ.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="multi" data-correct="4" data-q="6" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">06</span>Что снижает риск необратимой ошибки?</p><div class="opts"><label class="opt"><input type="checkbox" name="q170_5" value="0" autocomplete="off" data-ok><span>Проверка среды перед командой</span></label><label class="opt"><input type="checkbox" name="q170_5" value="3" autocomplete="off" data-ok><span>Небольшие обратимые изменения</span></label><label class="opt"><input type="checkbox" name="q170_5" value="4" autocomplete="off"><span>Защита от одной команды</span></label><label class="opt"><input type="checkbox" name="q170_5" value="1" autocomplete="off" data-ok><span>Проверка восстановления до инцидента</span></label><label class="opt"><input type="checkbox" name="q170_5" value="5" autocomplete="off"><span>Отказ от журналов</span></label><label class="opt"><input type="checkbox" name="q170_5" value="2" autocomplete="off" data-ok><span>Независимый канал наблюдения</span></label></div><p class="quiz-why" hidden>Остальное не устраняет причину.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="7" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">07</span>С чего начинают отладку?</p><div class="opts"><label class="opt"><input type="radio" name="q170_6" value="3" autocomplete="off"><span>С выпуска версии</span></label><label class="opt"><input type="radio" name="q170_6" value="1" autocomplete="off"><span>С переписывания модуля</span></label><label class="opt"><input type="radio" name="q170_6" value="0" autocomplete="off" data-ok><span>С воспроизведения условий</span></label><label class="opt"><input type="radio" name="q170_6" value="2" autocomplete="off"><span>С удаления журналов</span></label></div><p class="quiz-why" hidden>Без воспроизведения причина остаётся догадкой.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="8" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">08</span>Что делает git bisect?</p><div class="opts"><label class="opt"><input type="radio" name="q170_7" value="3" autocomplete="off"><span>Сливает изменения в основную ветку</span></label><label class="opt"><input type="radio" name="q170_7" value="0" autocomplete="off" data-ok><span>Находит коммит, после которого поведение изменилось</span></label><label class="opt"><input type="radio" name="q170_7" value="1" autocomplete="off"><span>Удаляет старые коммиты</span></label><label class="opt"><input type="radio" name="q170_7" value="2" autocomplete="off"><span>Создаёт ветку для исправления</span></label></div><p class="quiz-why" hidden>Он делит диапазон истории пополам.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="short" data-q="9" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">09</span>Как называют приём сокращения входа с сохранением отказа?</p><input type="text" class="short-answer" data-answers="[&quot;дельта-отладка&quot;, &quot;delta debugging&quot;]" placeholder="Введите ответ" autocomplete="off" spellcheck="false" aria-label="Как называют приём сокращения входа с сохранением отказа?"><p class="quiz-why" hidden>Вход делят на части и убирают лишнее.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="10" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">10</span>Что такое дефект?</p><div class="opts"><label class="opt"><input type="radio" name="q170_9" value="3" autocomplete="off"><span>Отсутствие журнала</span></label><label class="opt"><input type="radio" name="q170_9" value="0" autocomplete="off" data-ok><span>Недостаток в артефакте, который может вызвать отказ</span></label><label class="opt"><input type="radio" name="q170_9" value="1" autocomplete="off"><span>Любая ошибка в тексте сообщения</span></label><label class="opt"><input type="radio" name="q170_9" value="2" autocomplete="off"><span>Новая функция без теста</span></label></div><p class="quiz-why" hidden>Ошибка человека оставляет дефект в коде или документе.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="11" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">11</span>Почему панель состояния AWS не помогла при сбое S3 в 2017 году?</p><div class="opts"><label class="opt"><input type="radio" name="q170_10" value="1" autocomplete="off"><span>Её отключили перед сбоем</span></label><label class="opt"><input type="radio" name="q170_10" value="3" autocomplete="off"><span>Её обновляли вручную раз в сутки</span></label><label class="opt"><input type="radio" name="q170_10" value="0" autocomplete="off" data-ok><span>Она зависела от самого S3</span></label><label class="opt"><input type="radio" name="q170_10" value="2" autocomplete="off"><span>Она показывала только ошибки базы</span></label></div><p class="quiz-why" hidden>Инструмент наблюдения не должен зависеть от наблюдаемой системы.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="short" data-q="12" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">12</span>Что должно упасть до исправления и пройти после?</p><input type="text" class="short-answer" data-answers="[&quot;тест&quot;, &quot;регрессионный тест&quot;]" placeholder="Введите ответ" autocomplete="off" spellcheck="false" aria-label="Что должно упасть до исправления и пройти после?"><p class="quiz-why" hidden>Иначе правка не доказана.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="13" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">13</span>Что даёт идентификатор запроса?</p><div class="opts"><label class="opt"><input type="radio" name="q170_12" value="1" autocomplete="off"><span>Ускоряет работу базы</span></label><label class="opt"><input type="radio" name="q170_12" value="3" autocomplete="off"><span>Меняет версию приложения</span></label><label class="opt"><input type="radio" name="q170_12" value="0" autocomplete="off" data-ok><span>Связывает события одного запроса</span></label><label class="opt"><input type="radio" name="q170_12" value="2" autocomplete="off"><span>Шифрует трафик</span></label></div><p class="quiz-why" hidden>Без него события разных пользователей смешиваются.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="multi" data-correct="4" data-q="14" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">14</span>Какие источники дают факты при отладке?</p><div class="opts"><label class="opt"><input type="checkbox" name="q170_13" value="2" autocomplete="off" data-ok><span>Состояние базы</span></label><label class="opt"><input type="checkbox" name="q170_13" value="1" autocomplete="off" data-ok><span>Трассировка стека</span></label><label class="opt"><input type="checkbox" name="q170_13" value="4" autocomplete="off"><span>Цвет интерфейса</span></label><label class="opt"><input type="checkbox" name="q170_13" value="0" autocomplete="off" data-ok><span>Журнал приложения</span></label><label class="opt"><input type="checkbox" name="q170_13" value="5" autocomplete="off"><span>Название проекта</span></label><label class="opt"><input type="checkbox" name="q170_13" value="3" autocomplete="off" data-ok><span>Сетевой запрос</span></label></div><p class="quiz-why" hidden>Остальное не описывает поведение системы.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="15" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">15</span>Что должно входить в исправление?</p><div class="opts"><label class="opt"><input type="radio" name="q170_14" value="3" autocomplete="off"><span>Только запись в changelog</span></label><label class="opt"><input type="radio" name="q170_14" value="1" autocomplete="off"><span>Только правка кода</span></label><label class="opt"><input type="radio" name="q170_14" value="0" autocomplete="off" data-ok><span>Правка причины и тест, который падал до неё</span></label><label class="opt"><input type="radio" name="q170_14" value="2" autocomplete="off"><span>Только отчёт о дефекте</span></label></div><p class="quiz-why" hidden>Без теста возврат дефекта не заметят.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><p class="quiz-note quiz-submit-note" data-quiz-note hidden></p><div class="quiz-result" data-quiz-result hidden aria-live="polite"><span class="label">Результат теста</span><h3>Тест завершён</h3><p class="modal-name-line">ФИО: <b data-student-name></b></p><p class="modal-result" data-modal-result></p><p class="modal-result" data-modal-wrong></p><dl class="modal-times"><div><dt>Время выполнения теста</dt><dd data-test-time>00:00</dd></div><div><dt>Время просмотра лекции</dt><dd data-view-time>00:00</dd></div></dl></div></div></div>
 </div></article><nav class="pager"><a class="" href="22-prakt-08.html"><span>← Предыдущее занятие</span>Практика 8. Тест-кейсы и автотесты</a><a class="next" style="text-align:right;margin-left:auto" href="24-prakt-09.html"><span>Следующее занятие →</span>Практика 9. Поиск дефекта по журналу</a></nav></main>
 <div class="modal" data-modal="warn" hidden>
   <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="warn-title">

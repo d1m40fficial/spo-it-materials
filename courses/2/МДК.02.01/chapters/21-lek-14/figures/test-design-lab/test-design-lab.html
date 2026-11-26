@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Классы, границы и комбинации</title>
+<style>
+  :root { --paper:#faf6f3; --card:#fffdfb; --ink:#1a1916; --muted:#6b6459; --rule:#e4d8cf; --accent:#0F8A63; --soft:#E1F5EE; --warn:#B04A3A; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .demo { background:var(--paper); border:1px solid var(--rule); border-radius:14px; padding:16px; }
+  .head { display:flex; justify-content:space-between; align-items:flex-end; gap:14px; padding-bottom:9px; border-bottom:1px solid var(--rule); }
+  .eyebrow { margin:0 0 4px; font:600 10px/1.2 Consolas,monospace; letter-spacing:.12em; text-transform:uppercase; color:var(--accent); }
+  h3 { margin:0; font-size:19px; line-height:1.2; }
+  .hint { font:11px/1.4 Consolas,monospace; color:var(--muted); white-space:nowrap; }
+  svg { display:block; width:100%; height:auto; margin-top:8px; }
+  .panel { display:none; }
+  .panel.on { display:block; }
+  .status { min-height:62px; margin-top:6px; padding:10px 12px; border-radius:9px; background:var(--soft); font-size:13px; line-height:1.45; }
+  .status b { color:var(--accent); }
+  .detail { margin-top:7px; font:12px/1.4 Consolas,monospace; color:var(--muted); min-height:18px; }
+  .controls { display:flex; gap:7px; flex-wrap:wrap; margin-top:10px; }
+  button { font:600 12px/1 "Segoe UI",system-ui,sans-serif; padding:8px 10px; border-radius:9px; border:1px solid var(--rule); background:var(--card); color:var(--ink); cursor:pointer; }
+  button:hover { border-color:var(--accent); color:var(--accent); }
+  button.on { background:var(--accent); border-color:var(--accent); color:#fff; }
+  .pick { cursor:pointer; }
+  .pick:hover rect { stroke:var(--accent); stroke-width:2.4; }
+  @media (max-width:560px) { .demo { padding:12px; } h3 { font-size:17px; } .hint { display:none; } }
+</style>
+</head>
+<body>
+<div class="demo">
+  <div class="head">
+    <div><p class="eyebrow">Тесты · дизайн</p><h3>Сколько случаев нужно</h3></div>
+    <div class="hint">выберите правило</div>
+  </div>
+
+  <svg viewBox="0 0 680 258" role="img" aria-labelledby="tdl-title tdl-desc">
+    <title id="tdl-title">Классы эквивалентности, границы и таблица решений</title>
+    <desc id="tdl-desc">Для длины темы показаны четыре проверки на границах 0, 1, 80 и 81. Для статуса и роли показаны комбинации условий.</desc>
+
+    <g class="panel on" data-rule="len" font-family="Consolas,monospace">
+      <text x="34" y="30" font-size="15" font-weight="700" fill="#1a1916">Тема заявки: длина от 1 до 80</text>
+      <text x="34" y="52" font-size="12" fill="#6b6459">класс это диапазон с одинаковым поведением, граница это край</text>
+
+      <rect x="70" y="86" width="540" height="42" rx="6" fill="#fff" stroke="#2d3142"/>
+      <rect x="76.7" y="86" width="526.3" height="42" fill="#E1F5EE"/>
+      <line x1="70" y1="80" x2="70" y2="134" stroke="#B04A3A" stroke-width="1.6"/>
+      <line x1="76.7" y1="80" x2="76.7" y2="134" stroke="#0F8A63" stroke-width="1.6"/>
+      <line x1="603" y1="80" x2="603" y2="134" stroke="#0F8A63" stroke-width="1.6"/>
+      <line x1="610" y1="80" x2="610" y2="134" stroke="#B04A3A" stroke-width="1.6"/>
+
+      <circle cx="70" cy="107" r="4" fill="#B04A3A"/>
+      <circle cx="76.7" cy="107" r="4" fill="#0F8A63"/>
+      <circle cx="603" cy="107" r="4" fill="#0F8A63"/>
+      <circle cx="610" cy="107" r="4" fill="#B04A3A"/>
+
+      <text x="64" y="72" font-size="14" fill="#B04A3A" text-anchor="end">0</text>
+      <text x="84" y="72" font-size="14" fill="#0F8A63">1</text>
+      <text x="595" y="72" font-size="14" fill="#0F8A63" text-anchor="end">80</text>
+      <text x="618" y="72" font-size="14" fill="#B04A3A">81</text>
+      <text x="340" y="115" font-size="13" fill="#0F8A63" text-anchor="middle">допустимо</text>
+      <text x="70" y="150" font-size="11" fill="#B04A3A" text-anchor="middle">отказ</text>
+      <text x="340" y="150" font-size="11" fill="#6b6459" text-anchor="middle">обычная строка</text>
+      <text x="610" y="150" font-size="11" fill="#B04A3A" text-anchor="middle">отказ</text>
+
+      <g class="pick" data-note="0 символов: пустая строка, отказ. Проверяет нижнюю границу.">
+        <rect x="34" y="168" width="146" height="42" rx="7" fill="#fffdfb" stroke="#2d3142"/>
+        <text x="107" y="185" font-size="13" fill="#B04A3A" text-anchor="middle">0</text>
+        <text x="107" y="201" font-size="11" fill="#1a1916" text-anchor="middle">пустая строка</text>
+      </g>
+      <g class="pick" data-note="1 символ: минимальная допустимая строка, принять.">
+        <rect x="190" y="168" width="146" height="42" rx="7" fill="#E1F5EE" stroke="#0F8A63"/>
+        <text x="263" y="185" font-size="13" fill="#0F8A63" text-anchor="middle">1</text>
+        <text x="263" y="201" font-size="11" fill="#1a1916" text-anchor="middle">минимум</text>
+      </g>
+      <g class="pick" data-note="80 символов: верхняя граница, принять.">
+        <rect x="346" y="168" width="146" height="42" rx="7" fill="#E1F5EE" stroke="#0F8A63"/>
+        <text x="419" y="185" font-size="13" fill="#0F8A63" text-anchor="middle">80</text>
+        <text x="419" y="201" font-size="11" fill="#1a1916" text-anchor="middle">максимум</text>
+      </g>
+      <g class="pick" data-note="81 символ: выход за предел, отказ. Здесь чаще всего ломается сравнение.">
+        <rect x="502" y="168" width="146" height="42" rx="7" fill="#fffdfb" stroke="#B04A3A"/>
+        <text x="575" y="185" font-size="13" fill="#B04A3A" text-anchor="middle">81</text>
+        <text x="575" y="201" font-size="11" fill="#1a1916" text-anchor="middle">за пределом</text>
+      </g>
+
+      <text x="340" y="236" font-size="12" fill="#0F8A63" text-anchor="middle">4 проверки вместо 81 значения</text>
+    </g>
+
+    <g class="panel" data-rule="status" font-family="Consolas,monospace">
+      <text x="34" y="30" font-size="15" font-weight="700" fill="#1a1916">Статус заявки: переходы, а не значения</text>
+      <text x="34" y="52" font-size="12" fill="#6b6459">проверяют не только состояние, но и попытку запрещённого перехода</text>
+
+      <g class="pick" data-note="Открыта: можно взять в работу или сразу закрыть.">
+        <rect x="34" y="80" width="168" height="56" rx="8" fill="#fffdfb" stroke="#2d3142"/>
+        <text x="118" y="113" font-size="15" fill="#1a1916" text-anchor="middle">открыта</text>
+      </g>
+      <g class="pick" data-note="В работе: можно закрыть. Возврат в открытую запрещён.">
+        <rect x="256" y="80" width="168" height="56" rx="8" fill="#E1F5EE" stroke="#0F8A63"/>
+        <text x="340" y="113" font-size="15" fill="#0F8A63" text-anchor="middle">в работе</text>
+      </g>
+      <g class="pick" data-note="Закрыта: можно переоткрыть, но нельзя вернуть в работу напрямую.">
+        <rect x="478" y="80" width="168" height="56" rx="8" fill="#fffdfb" stroke="#2d3142"/>
+        <text x="562" y="113" font-size="15" fill="#1a1916" text-anchor="middle">закрыта</text>
+      </g>
+
+      <g stroke="#5b5560" stroke-width="1.8" fill="none" marker-end="url(#arw-tdl)">
+        <path d="M202 100h46"/>
+        <path d="M424 100h46"/>
+      </g>
+      <g stroke="#0F8A63" stroke-width="1.8" fill="none" marker-end="url(#arw-tdl-g)">
+        <path d="M562 140v34H118v-30"/>
+      </g>
+      <path d="M478 120H424" stroke="#B04A3A" stroke-width="1.8" fill="none" stroke-dasharray="5 4" marker-end="url(#arw-tdl-r)"/>
+      <text x="451" y="160" font-size="11" fill="#B04A3A" text-anchor="middle">нельзя</text>
+      <text x="340" y="184" font-size="11" fill="#B04A3A" text-anchor="middle">из закрытой в работу напрямую</text>
+
+      <text x="340" y="214" font-size="12" fill="#0F8A63" text-anchor="middle">3 состояния, 4 разрешённых перехода, 1 запрещённый</text>
+    </g>
+
+    <g class="panel" data-rule="role" font-family="Consolas,monospace">
+      <text x="34" y="30" font-size="15" font-weight="700" fill="#1a1916">Роль и владелец: таблица решений</text>
+      <text x="34" y="52" font-size="12" fill="#6b6459">результат зависит от сочетания двух условий, а не от одного</text>
+
+      <text x="196" y="82" font-size="12" fill="#6b6459" text-anchor="middle">своя заявка</text>
+      <text x="442" y="82" font-size="12" fill="#6b6459" text-anchor="middle">чужая заявка</text>
+
+      <text x="120" y="112" font-size="13" fill="#1a1916" text-anchor="middle">сотрудник</text>
+      <text x="120" y="170" font-size="13" fill="#1a1916" text-anchor="middle">менеджер</text>
+
+      <g class="pick" data-note="Сотрудник и своя заявка: закрыть можно.">
+        <rect x="172" y="88" width="150" height="42" rx="7" fill="#E1F5EE" stroke="#0F8A63"/>
+        <text x="247" y="114" font-size="13" fill="#0F8A63" text-anchor="middle">закрыть</text>
+      </g>
+      <g class="pick" data-note="Сотрудник и чужая заявка: отказ 403, статус не меняется.">
+        <rect x="418" y="88" width="150" height="42" rx="7" fill="#fffdfb" stroke="#B04A3A"/>
+        <text x="493" y="114" font-size="13" fill="#B04A3A" text-anchor="middle">403</text>
+      </g>
+      <g class="pick" data-note="Менеджер и своя заявка: закрыть можно.">
+        <rect x="172" y="146" width="150" height="42" rx="7" fill="#E1F5EE" stroke="#0F8A63"/>
+        <text x="247" y="172" font-size="13" fill="#0F8A63" text-anchor="middle">закрыть</text>
+      </g>
+      <g class="pick" data-note="Менеджер и чужая заявка: закрыть можно. Это правило нельзя проверить тестом на сотруднике.">
+        <rect x="418" y="146" width="150" height="42" rx="7" fill="#E1F5EE" stroke="#0F8A63"/>
+        <text x="493" y="172" font-size="13" fill="#0F8A63" text-anchor="middle">закрыть</text>
+      </g>
+
+      <text x="340" y="216" font-size="12" fill="#0F8A63" text-anchor="middle">4 комбинации: 3 успеха и 1 отказ</text>
+    </g>
+
+    <defs>
+      <marker id="arw-tdl" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#5b5560"/></marker>
+      <marker id="arw-tdl-g" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#0F8A63"/></marker>
+      <marker id="arw-tdl-r" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#B04A3A"/></marker>
+    </defs>
+  </svg>
+
+  <div class="status" id="tdl-status"></div>
+  <div class="detail" id="tdl-detail">Нажмите на карточку, чтобы увидеть пояснение.</div>
+  <div class="controls">
+    <button data-rule="len" class="on">Длина темы</button>
+    <button data-rule="status">Статус</button>
+    <button data-rule="role">Роль и владелец</button>
+  </div>
+</div>
+<script>
+(function () {
+  var data = {
+    len: '<b>Классы и границы.</b> Четыре класса: пусто, обычная строка, предел и выход за предел. Проверяют 0, 1, 80 и 81. Отдельно проверяют строку из пробелов: она не пустая, но и не осмысленная.',
+    status: '<b>Переходы состояний.</b> Состояний три, а проверять нужно и разрешённые переходы, и запрещённые. Скрытая кнопка не является правилом: запрос на запрещённый переход должен получить отказ.',
+    role: '<b>Таблица решений.</b> Условий два, поэтому комбинаций четыре. Строка «менеджер и чужая заявка» не проверяется тестом на сотруднике, а строка «сотрудник и чужая» не проверяется тестом на владельце.'
+  };
+  var panels = document.querySelectorAll('.panel');
+  var buttons = document.querySelectorAll('button[data-rule]');
+  var status = document.getElementById('tdl-status');
+  var detail = document.getElementById('tdl-detail');
+
+  function show(rule) {
+    panels.forEach(function (p) { p.classList.toggle('on', p.dataset.rule === rule); });
+    buttons.forEach(function (b) { b.classList.toggle('on', b.dataset.rule === rule); });
+    status.innerHTML = data[rule];
+    detail.textContent = 'Нажмите на карточку, чтобы увидеть пояснение.';
+  }
+
+  buttons.forEach(function (b) { b.addEventListener('click', function () { show(b.dataset.rule); }); });
+  document.querySelectorAll('.pick').forEach(function (el) {
+    el.addEventListener('click', function () {
+      detail.textContent = el.dataset.note || '';
+    });
+  });
+  show('len');
+})();
+</script>
+</body>
+</html>

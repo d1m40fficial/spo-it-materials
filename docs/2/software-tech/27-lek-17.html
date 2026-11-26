@@ -888,114 +888,494 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <canvas class="shader-bg" width="820" height="300" aria-hidden="true" style="background:linear-gradient(135deg,#08090D,#1D9E75 58%,#08090D)"></canvas>
 <div class="badges"><span class="pill dark">Занятие 31</span><span class="pill">Технология разработки ПО</span></div>
 <div class="hero-panel"><h1>Сборка, версии и релиз</h1><p class="dek">Релиз это воспроизводимая сборка с версией и списком изменений. Разберём semver, changelog и артефакты.</p></div>
-<div class="glyph" aria-hidden="true">Л17</div></header><section class="outcomes"><b>После этого занятия вы сможете</b><ul><li>Собирать артефакт по инструкции</li><li>Выбирать номер версии по semver</li><li>Вести changelog</li><li>Проверять установку на чистой среде</li></ul></section><nav class="toc"><b>Содержание занятия</b><ol><li><a href="#у-меня-собирается">«У меня собирается»</a></li><li><a href="#воспроизводимая-сборка">Воспроизводимая сборка</a></li><li><a href="#конвейер">Конвейер</a></li><li><a href="#semver">Semver</a></li><li><a href="#changelog">Changelog</a></li><li><a href="#артефакт">Артефакт</a></li><li><a href="#проверка-установки">Проверка установки</a></li><li><a href="#где-релиз-ломается">Где релиз ломается</a></li><li><a href="#итоги">Итоги</a></li></ol></nav><article class="prose"><h2 id="у-меня-собирается"><span class="num">01</span>«У меня собирается»</h2>
+<div class="glyph" aria-hidden="true">Л17</div></header><section class="outcomes"><b>После этого занятия вы сможете</b><ul><li>Собирать артефакт по инструкции из чистого репозитория</li><li>Выбирать номер версии по semver и объяснять обещание совместимости</li><li>Вести changelog для пользователя, а не пересказ коммитов</li><li>Проверять артефакт, его контрольную сумму и происхождение</li><li>Проверять установку на чистой среде и хранить предыдущий релиз</li></ul></section><nav class="toc"><b>Содержание занятия</b><ol><li><a href="#у-меня-собирается">«У меня собирается»</a></li><li><a href="#релиз-это-не-папка-с-файлами">Релиз это не папка с файлами</a></li><li><a href="#воспроизводимая-сборка">Воспроизводимая сборка</a></li><li><a href="#semver-три-числа-и-обязательства">Semver: три числа и обязательства</a></li><li><a href="#changelog-текст-для-человека">Changelog: текст для человека</a></li><li><a href="#артефакт-и-происхождение">Артефакт и происхождение</a></li><li><a href="#три-релиза-которые-объясняют-правила">Три релиза, которые объясняют правила</a></li><li><a href="#конвейер-релиза-в-учебном-проекте">Конвейер релиза в учебном проекте</a></li><li><a href="#проверка-установки-на-чистой-среде">Проверка установки на чистой среде</a></li><li><a href="#чек-лист-релиза">Чек-лист релиза</a></li><li><a href="#итоги">Итоги</a></li><li><a href="#источники">Источники</a></li></ol></nav><article class="prose"><h2 id="у-меня-собирается"><span class="num">01</span>«У меня собирается»</h2>
 <p>Разработчик передаёт проект архивом. На другом компьютере не хватает библиотеки, версия Python другая, а файл базы лежит в личной папке. Сборка существует только на машине автора.</p>
 <p><strong>Релиз</strong> это версия продукта, которую можно передать и установить по инструкции. Он включает артефакт, номер версии и список изменений.</p>
 <p>Главная мысль занятия: <strong>релиз должен собираться повторяемо</strong>. Если результат зависит от настроек автора, это не релиз.</p>
-<h2 id="воспроизводимая-сборка"><span class="num">02</span>Воспроизводимая сборка</h2>
-<p>Сборка воспроизводима, когда:</p>
+<p>Слово «собирается» опасно своей простотой. Оно скрывает вопрос: где именно собирается, из каких файлов, с какими версиями инструментов и что попадает в результат. На ноутбуке автора ответ обычно такой: из рабочей папки, с глобально установленными библиотеками, с несохранёнными правками и с файлом настроек, о котором знает только автор. На сервере или на компьютере преподавателя эти условия не выполняются.</p>
+<p>Разрыв обнаруживается в самый неудобный момент. Перед защитой проекта выясняется, что установка занимает сорок минут, половина шагов описана в переписке, а собранный архив содержит пароль от базы. Код при этом работал. Не работал процесс выпуска.</p>
+<p>Дальше разберём, из чего состоит релиз, почему номер версии является обещанием, зачем нужен changelog и как проверять артефакт до того, как его получит пользователь.</p>
+<h2 id="релиз-это-не-папка-с-файлами"><span class="num">02</span>Релиз это не папка с файлами</h2>
+<p>Полезно развести четыре близких понятия.</p>
+<table>
+<thead>
+<tr>
+<th>Понятие</th>
+<th>Что это</th>
+<th>Проверка</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>сборка</td>
+<td>процесс получения результата из исходников</td>
+<td>команда завершилась без ошибок</td>
+</tr>
+<tr>
+<td>артефакт</td>
+<td>файл или набор файлов, готовый к установке</td>
+<td>контрольная сумма совпадает</td>
+</tr>
+<tr>
+<td>релиз</td>
+<td>артефакт плюс версия, changelog и инструкция</td>
+<td>установка прошла на чистой среде</td>
+</tr>
+<tr>
+<td>развёртывание</td>
+<td>перенос релиза в рабочую среду</td>
+<td>система отвечает пользователям</td>
+</tr>
+</tbody>
+</table>
+<p>Сборка может пройти успешно, а релиза не быть. Например, если артефакт собран, но не имеет номера версии и никто не проверил установку. Развёртывание тоже не равно релизу: один и тот же артефакт можно поставить на тестовый стенд, на компьютер колледжа и на рабочий сервер.</p>
+<p>У релиза есть адресат. Пользователь получает не репозиторий и не инструкцию для автора, а готовый продукт с понятным номером и описанием изменений. Поэтому релиз отвечает на четыре вопроса:</p>
+<ul>
+<li>что именно установлено;</li>
+<li>какие изменения вошли в эту версию;</li>
+<li>как проверить, что установка прошла правильно;</li>
+<li>как вернуться к предыдущей версии.</li>
+</ul>
+<p>Стандарт ISO/IEC/IEEE 12207:2026 относит выпуск и передачу к процессам жизненного цикла, у которых есть вход, результат и проверка <a href="https://www.iso.org/standard/90219.html">ISO/IEC/IEEE 12207:2026</a>. Это подтверждает простую мысль: релиз является инженерной работой, а не побочным действием разработки.</p>
+<p>Если ответа нет хотя бы на один вопрос, передача превращается в пересылку файлов.</p>
+<p>Есть ещё один слой, который часто пропускают: <strong>идентичность артефакта</strong>. Два файла с одинаковым именем могут содержать разное содержимое. Если через месяц пользователь сообщает об ошибке, команда должна точно знать, какой файл у него стоит. Номер версии помогает, но только вместе с контрольной суммой и записью о том, из какого коммита собран артефакт.</p>
+<p>В учебном проекте достаточно простого правила: каждый переданный файл имеет версию, контрольную сумму и ссылку на инструкцию. Этого мало для крупной системы, но уже достаточно, чтобы не спорить, «та ли это сборка».</p>
+<h2 id="воспроизводимая-сборка"><span class="num">03</span>Воспроизводимая сборка</h2>
+<p>Сборка воспроизводима, когда из одного и того же исходного состояния получается один и тот же результат. Практически это означает четыре условия:</p>
 <ul>
 <li>зависимости зафиксированы;</li>
 <li>команда сборки записана;</li>
 <li>артефакт получается из чистого репозитория;</li>
-<li>результат не зависит от локальных файлов.</li>
+<li>результат не зависит от локальных файлов и настроек.</li>
 </ul>
-<p>Для Python фиксируют версии в <code>requirements.txt</code>, для .NET используют файл проекта и <code>dotnet publish</code>.</p>
-<h2 id="конвейер"><span class="num">03</span>Конвейер</h2>
+<p>Слово «фиксированы» не означает «навсегда заморожены». Оно означает, что версия зависимости известна и записана. Разница видна в двух строках:</p>
+<div class="codehilite" data-lang="text"><pre><span></span><code>requests&gt;=2.0
+requests==2.31.0
+</code></pre></div>
+
+<p>Первая строка разрешает установить любую версию начиная с 2.0. Сегодня это может быть 2.31, через год 2.40, а вместе с ней придёт изменение поведения. Вторая строка фиксирует конкретную версию. Для библиотеки, которую используют другие, диапазон иногда полезен. Для сборки релиза нужна точность.</p>
+<p>В Python версии обычно фиксируют в <code>requirements.txt</code> или в lock-файле. В .NET используют файл проекта и <code>dotnet publish</code>. В JavaScript применяют lock-файл пакетного менеджера. Названия разные, смысл один: сборка не должна заново выбирать версии зависимостей.</p>
+<p>Команда сборки тоже является частью релиза. Если она живёт в голове автора, её нельзя повторить. Хорошая команда короткая и проверяемая:</p>
+<div class="codehilite" data-lang="text"><pre><span></span><code>python -m venv .venv
+pip install -r requirements.txt
+pytest
+python -m build
+</code></pre></div>
+
+<p>Для .NET аналог выглядит так:</p>
+<div class="codehilite" data-lang="text"><pre><span></span><code>dotnet restore
+dotnet test
+dotnet publish -c Release -o publish
+</code></pre></div>
+
+<p>Это не требование к конкретному инструменту. Это требование к форме: шаги записаны, выполняются по порядку и не требуют ручных действий, которых нет в тексте.</p>
+<h3>Откуда берётся невоспроизводимость</h3>
+<p>Результат сборки меняется по нескольким причинам.</p>
+<p><strong>Время.</strong> В артефакт попадает дата сборки или номер сборки, и два запуска дают разные файлы. Это не всегда ошибка, но такие поля нужно отделять от содержательного результата.</p>
+<p><strong>Путь.</strong> Абсолютный путь к папке проекта может попасть в скомпилированный файл или в журнал. На другом компьютере путь другой.</p>
+<p><strong>Порядок файлов.</strong> Обход каталога может возвращать файлы в разном порядке. Если порядок влияет на упаковку, результат меняется.</p>
+<p><strong>Сеть.</strong> Сборка скачивает зависимость с сервера, и сервер отдаёт другую версию или недоступен.</p>
+<p><strong>Локальный кеш.</strong> На машине автора лежит старая библиотека, и сборка незаметно использует её вместо объявленной.</p>
+<p><strong>Несохранённые файлы.</strong> В рабочей папке есть файл, которого нет в репозитории. Сборка из репозитория его не найдёт.</p>
+<p><strong>Секреты и настройки.</strong> Пароль или адрес сервера подставляются из локального файла, поэтому результат зависит от машины.</p>
+<p>Проверка проста: взять чистый клон репозитория на другой машине или в контейнере, выполнить записанные команды и сравнить результат. Если сборка требует файла с рабочего стола, она не воспроизводима.</p>
+<h3>Герметичная сборка</h3>
+<p>В книге Google о надёжности сайтов описано понятие <strong>герметичной сборки</strong>: сборка не зависит от того, что установлено на машине сборщика, и использует известные версии инструментов и библиотек <a href="https://sre.google/sre-book/release-engineering/">Google SRE, Release Engineering</a>. Это более строгий вариант воспроизводимости, но идея доступна и в учебном проекте.</p>
+<p>Практический минимум:</p>
+<ul>
+<li>сборка запускается из чистого каталога;</li>
+<li>зависимости ставятся по зафиксированному списку;</li>
+<li>версия языка и сборщика записана в README;</li>
+<li>в артефакт не попадают файлы, которых нет в репозитории;</li>
+<li>результат сборки имеет контрольную сумму.</li>
+</ul>
+<p>Google в той же главе подчёркивает: релизный процесс должен быть повторяемым, а не «уникальным снегом». Уникальная сборка не проверяется повторно и не восстанавливается через месяц.</p>
+<h3>Компромисс точности и свежести</h3>
+<p>Фиксация версий создаёт работу. Обновление библиотеки требует проверки, а иногда и правок кода. Чем точнее зафиксированы зависимости, тем стабильнее сборка и тем чаще команда должна сознательно обновляться.</p>
+<p>Обратная крайность тоже плоха. Проект с зависимостями «примерно такими» однажды перестаёт собираться, потому что внешняя библиотека выпустила несовместимую версию. Ошибка возникает не в момент обновления, а в момент следующей установки.</p>
+<p>Разумная стратегия для учебного проекта: точные версии в релизе, отдельная задача на обновление зависимостей, проверка обновления тестами. Обновление становится событием с датой и результатом, а не побочным эффектом установки.</p>
 <figure class="figure" data-fig="release-pipeline" data-one="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"><iframe title="Figure 1: release-pipeline" scrolling="no"></iframe><figcaption>Конвейер релиза: коммит, тесты, сборка, версия, changelog и установка. Внизу правила semver.</figcaption></figure>
 
-<p>Этапы:</p>
-<ol>
-<li>проверить коммит;</li>
-<li>прогнать тесты;</li>
-<li>собрать артефакт;</li>
-<li>присвоить версию;</li>
-<li>заполнить changelog;</li>
-<li>установить на чистую среду.</li>
-</ol>
-<p>Автоматизация не обязательна на первом шаге. Важна повторяемость команд.</p>
-<h2 id="semver"><span class="num">04</span>Semver</h2>
-<p><strong>Semver</strong> задаёт три числа: <code>MAJOR.MINOR.PATCH</code>.</p>
+<p>Конвейер на схеме выглядит линейным, но внутри каждого шага есть проверка. Коммит проверяют на состав изменений, тесты на прохождение, сборку на соответствие версии, changelog на понятность, установку на чистую среду. Если шаг не даёт проверяемого результата, он превращается в формальность.</p>
+<p>Автоматизация не обязательна на первом шаге. Важна повторяемость команд. Ручной конвейер, записанный в README и выполненный дважды разными людьми, полезнее автоматического, который никто не понимает.</p>
+<div class="gate-step" data-gate>
+<p class="gate-action"><button type="button" class="gate-btn" aria-expanded="false"><span class="gate-q" aria-hidden="true">?</span><span>Почему номер версии это обещание совместимости, а не украшение?</span></button></p>
+<div class="gate-content" hidden><h2 id="semver-три-числа-и-обязательства"><span class="num">04</span>Semver: три числа и обязательства</h2>
+<p><strong>Semantic Versioning</strong>, или semver, задаёт формат <code>MAJOR.MINOR.PATCH</code> и правила изменения каждого числа <a href="https://semver.org/">semver.org</a>. Спецификация говорит не о красоте номера, а о том, что пользователь может предположить по номеру.</p>
 <table>
 <thead>
 <tr>
 <th>Часть</th>
 <th>Когда меняется</th>
+<th>Что обещает</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td>MAJOR</td>
-<td>несовместимое изменение</td>
+<td>несовместимое изменение публичного интерфейса</td>
+<td>обновление может потребовать правок</td>
 </tr>
 <tr>
 <td>MINOR</td>
 <td>новая возможность без поломки</td>
+<td>старый код продолжает работать</td>
 </tr>
 <tr>
 <td>PATCH</td>
-<td>исправление</td>
+<td>исправление без изменения интерфейса</td>
+<td>поведение исправлено, совместимость сохранена</td>
 </tr>
 </tbody>
 </table>
-<p>Пример: <code>1.4.2</code> значит четвёртая minor-версия, второе исправление.</p>
-<p>Номер версии сообщает пользователю, чего ждать. Молча сломать совместимость и оставить <code>1.4.3</code> нельзя.</p>
-<div class="gate-step" data-gate>
-<p class="gate-action"><button type="button" class="gate-btn" aria-expanded="false"><span class="gate-q" aria-hidden="true">?</span><span>Почему несовместимое изменение требует новой major-версии, даже если код изменился на пару строк?</span></button></p>
-<div class="gate-content" hidden><h2 id="changelog"><span class="num">05</span>Changelog</h2>
-<p>Changelog пишут по категориям:</p>
-<ul>
-<li>добавлено;</li>
-<li>изменено;</li>
-<li>исправлено;</li>
-<li>удалено;</li>
-<li>безопасность.</li>
-</ul>
-<p>Каждая запись отвечает на вопрос пользователя: что изменится для меня.</p>
-<p>Плохо: «Рефакторинг модуля».
-Хорошо: «Заявку можно закрыть с комментарием».</p>
-<h2 id="артефакт"><span class="num">06</span>Артефакт</h2>
-<p><strong>Артефакт</strong> это файл, который передают для установки: архив, пакет, исполняемый файл, образ.</p>
-<p>Артефакт содержит:</p>
-<ul>
-<li>собранный код;</li>
-<li>файлы конфигурации без секретов;</li>
-<li>инструкцию;</li>
-<li>номер версии.</li>
-</ul>
-<p>В артефакт не попадают личные данные, журналы и временные файлы.</p>
-<h2 id="проверка-установки"><span class="num">07</span>Проверка установки</h2>
-<p>Установку проверяют на чистой среде:</p>
-<ol>
-<li>взять артефакт;</li>
-<li>выполнить инструкцию;</li>
-<li>запустить продукт;</li>
-<li>пройти главный сценарий;</li>
-<li>убедиться, что версия отображается.</li>
-</ol>
-<p>Если для установки нужны файлы с рабочего стола автора, релиз не готов.</p>
-<h2 id="где-релиз-ломается"><span class="num">08</span>Где релиз ломается</h2>
-<p><strong>Сборка на машине автора.</strong> Зависимости не зафиксированы.</p>
-<p><strong>Версия на глаз.</strong> Номер не отражает изменения.</p>
-<p><strong>Changelog из коммитов.</strong> Пользователь не понимает записей.</p>
-<p><strong>Секреты в артефакте.</strong> Пароль базы попадает в архив.</p>
-<p><strong>Нет проверки установки.</strong> Ошибка находится у пользователя.</p>
-<p><strong>Артефакт без инструкции.</strong> Непонятно, что делать дальше.</p>
-<div class="callout pitfall"><span class="label">Релиз без проверки на чистой среде проверяет только машину разработчика, а не продукт.</span></div>
+<p>Пример: <code>1.4.2</code> означает: первая major-версия, четвёртая minor-версия, второе исправление. После несовместимого изменения номер становится <code>2.0.0</code>, а не <code>1.5.0</code>. После новой возможности без поломки <code>1.5.0</code>. После исправления <code>1.4.3</code>.</p>
+<p>Спецификация требует объявить публичный интерфейс. Для библиотеки это набор функций и форматов, на которые могут опираться другие. Для приложения публичный интерфейс может быть API, формат файла, схема базы или даже набор экранных сценариев, если на них опираются пользователи.</p>
+<h3>Правила, которые чаще всего нарушают</h3>
+<p><strong>Изменение уже выпущенной версии.</strong> Semver прямо говорит: содержимое выпущенной версии менять нельзя, любое изменение выпускается под новым номером. Если артефакт <code>1.4.2</code> пересобрали и заменили, пользователи с той же версией получили разное поведение. Сравнение версий перестаёт работать.</p>
+<p><strong>Несовместимое изменение в patch.</strong> Разработчик переименовал поле в ответе API и выпустил <code>1.4.3</code>, потому что «изменилась одна строка». Формально номер говорит «ничего не сломалось», фактически сломался клиент. Пользователь не может защититься, кроме как вручную проверять каждый выпуск.</p>
+<p><strong>Новая возможность в patch.</strong> Тоже нарушение, хотя менее опасное. Номер перестаёт сообщать, что в версии появилось что-то новое.</p>
+<p><strong>Отсутствие объявленного интерфейса.</strong> Если публичный интерфейс не определён, команда спорит, считается ли изменение ломающим. Спор решается мнением, а не документом.</p>
+<p><strong>Major-версия без причины.</strong> Номер <code>2.0.0</code> после косметической правки обесценивает сигнал. Пользователи перестают верить, что major означает несовместимость.</p>
+<h3>Ноль как особая зона</h3>
+<p>Версия <code>0.y.z</code> означает начальную разработку. Публичный интерфейс не считается стабильным, и изменения могут быть любыми. Это полезная зона для учебного проекта: продукт ещё не передан, интерфейс меняется, обещать совместимость рано.</p>
+<p>Версия <code>1.0.0</code> означает, что интерфейс объявлен и дальше действуют правила совместимости. Для учебного продукта <code>1.0.0</code> удобно ставить к защите проекта: с этого момента изменения должны сопровождаться версией и changelog.</p>
+<h3>Pre-release и метаданные</h3>
+<p>К номеру можно добавить предварительную метку: <code>1.4.0-beta.1</code>. Такая версия имеет меньший приоритет, чем <code>1.4.0</code>, и означает нестабильность. Метаданные сборки добавляют через плюс: <code>1.4.0+20261126</code>. Они не влияют на сравнение версий.</p>
+<p>Эти поля полезны, но требуют дисциплины. Если <code>beta</code> стоит на версии, которую уже используют как рабочую, метка теряет смысл.</p>
+<h3>Где semver не работает</h3>
+<p>Semver опирается на существование публичного интерфейса и на возможность его сравнивать. В приложении, которое не предоставляет API, граница размыта. В проекте, где версия означает дату (<code>2026.11</code>), semver не подходит. В библиотеке, которая ещё не имеет пользователей, строгие правила могут замедлять работу.</p>
+<p>Это не отменяет главного: номер версии должен что-то сообщать. Если команда выбрала календарную версию, она обязана объяснить, что означает смена месяца. Если выбрала semver, она обязана соблюдать правила.</p>
+<p>Есть и организационная цена. Каждый несовместимый выпуск требует миграции у пользователей. Поэтому крупные библиотеки долго живут на одной major-версии, а новую готовят с руководством по переходу. Semver не запрещает ломать совместимость. Он требует делать это явно.</p>
+<figure class="figure" data-fig="version-decider" data-one="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"><iframe title="Figure 2: version-decider" scrolling="no"></iframe><figcaption>Нажимайте тип изменения: схема показывает, как меняется версия <code>1.4.2</code> и в какую категорию changelog попадает запись.</figcaption></figure>
 
-<h2 id="итоги"><span class="num">09</span>Итоги</h2>
+<p>Интерактивная схема полезна как тренажёр: одно и то же изменение можно описать по-разному, и номер версии показывает, какое обещание дано пользователю.</p>
+<h3>Проверка совместимости</h3>
+<p>Номер версии не заменяет проверку. Даже аккуратная команда может ошибиться. Поэтому перед major-выпуском полезно:</p>
 <ul>
-<li>Релиз собирается повторяемо из чистого репозитория.</li>
-<li>Semver связывает номер версии с типом изменения.</li>
-<li>Changelog пишут для пользователя, а не из коммитов.</li>
-<li>Артефакт содержит всё нужное и не содержит секретов.</li>
-<li>Установку проверяют на чистой среде.</li>
-</ul></div>
+<li>зафиксировать публичный интерфейс в документе;</li>
+<li>прогнать сценарии старого клиента против новой версии;</li>
+<li>проверить миграцию данных;</li>
+<li>описать удаление и замену функций;</li>
+<li>дать пользователю хотя бы одну minor-версию с предупреждением об устаревании.</li>
+</ul>
+<p>Semver рекомендует объявлять устаревание в minor-версии, а удалять в major. Это даёт пользователю время. Если функцию удаляют сразу, без промежуточного выпуска, формально номер может быть верным, а процесс миграции всё равно сломан.</p>
+<h2 id="changelog-текст-для-человека"><span class="num">05</span>Changelog: текст для человека</h2>
+<p><strong>Changelog</strong> это упорядоченный список заметных изменений по версиям. Соглашение Keep a Changelog задаёт простые принципы: changelog пишут для людей, в нём есть запись для каждой версии, изменения сгруппированы по типам, последняя версия идёт первой, дата указана, а формат версии объяснён <a href="https://keepachangelog.com/en/1.1.0/">Keep a Changelog</a>.</p>
+<p>Стандартные категории:</p>
+<ul>
+<li><strong>Added</strong>: новая возможность;</li>
+<li><strong>Changed</strong>: изменение существующего поведения;</li>
+<li><strong>Deprecated</strong>: функция скоро будет удалена;</li>
+<li><strong>Removed</strong>: функция удалена;</li>
+<li><strong>Fixed</strong>: исправление;</li>
+<li><strong>Security</strong>: закрыта уязвимость.</li>
+</ul>
+<p>Категории нужны не для красоты. Они отвечают на разные вопросы пользователя. «Добавлено» говорит, что можно делать нового. «Изменено» предупреждает, что привычный сценарий может работать иначе. «Удалено» требует проверить зависимости. «Безопасность» требует обновиться быстрее обычного.</p>
+<h3>Changelog не равен журналу коммитов</h3>
+<p>Соблазн автоматизации понятен: взять <code>git log</code> и превратить в список. Проблема в том, что коммит описывает шаг работы автора, а changelog описывает заметное изменение для пользователя. В журнале будут «поправил отступ», «переименовал переменную», «слил ветку». Пользователь не поймёт, что ему делать.</p>
+<p>Keep a Changelog прямо называет журнал коммитов плохой заменой: в нём много шума, а цель записи другая. Хорошая запись отвечает на вопрос «что изменится для меня».</p>
+<table>
+<thead>
+<tr>
+<th>Плохо</th>
+<th>Почему</th>
+<th>Лучше</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Рефакторинг модуля</td>
+<td>пользователь не видит результата</td>
+<td>Заявку можно закрыть с комментарием</td>
+</tr>
+<tr>
+<td>Обновил библиотеку</td>
+<td>непонятно, что это даёт</td>
+<td>Исправлено падение при пустом списке</td>
+</tr>
+<tr>
+<td>Правки по ревью</td>
+<td>нет смысла для читателя</td>
+<td>Добавлена проверка прав при экспорте</td>
+</tr>
+<tr>
+<td>Удалил старый код</td>
+<td>не сказано, что перестало работать</td>
+<td>Удалён экспорт в формате CSV</td>
+</tr>
+</tbody>
+</table>
+<p>Автоматизация полезна как черновик. Инструмент собирает изменения, автор редактирует формулировки и убирает внутренние детали. Полностью автоматический changelog без редактора почти всегда превращается в шум.</p>
+<h3>Раздел Unreleased</h3>
+<p>Соглашение рекомендует держать вверху раздел <code>Unreleased</code>, где накапливаются будущие изменения. Перед выпуском записи переносят в раздел с номером и датой. Это уменьшает работу в день релиза и не даёт забыть важное изменение.</p>
+<p>Дата пишется в формате <code>2026-11-26</code>. Такой формат не путает день и месяц и соответствует ISO 8601. Для учебного проекта это мелочь, которая экономит споры.</p>
+<h3>Отозванные версии</h3>
+<p>Если версия выпущена с серьёзной ошибкой, её помечают как отозванную. Keep a Changelog предлагает метку <code>[YANKED]</code>. Она нужна, чтобы пользователь, который ищет информацию о версии, увидел предупреждение, а не пустоту.</p>
+<p>Отзыв версии не означает, что её можно переписать. Артефакт остаётся в истории, но получает явную пометку и, если возможно, блокировку установки. Следующая исправленная версия выходит с новым номером.</p>
+<h3>Changelog как инструмент поддержки</h3>
+<p>Changelog экономит время поддержки. Вместо вопроса «что изменилось в новой версии» пользователь читает список. Вместо спора «почему перестало работать» команда смотрит, в какой версии появилось изменение.</p>
+<p>Для этого записи должны быть полными. Если в changelog указана только половина изменений, пользователь перестаёт ему доверять. Неполный changelog опаснее отсутствующего: он создаёт ложное чувство, что других изменений нет.</p>
+<h2 id="артефакт-и-происхождение"><span class="num">06</span>Артефакт и происхождение</h2>
+<p><strong>Артефакт</strong> это файл, который передают для установки: архив, пакет, исполняемый файл, образ контейнера. Артефакт содержит собранный код, файлы конфигурации без секретов, инструкцию и номер версии.</p>
+<p>В артефакт не попадают:</p>
+<ul>
+<li>пароли, ключи и токены;</li>
+<li>личные данные пользователей;</li>
+<li>журналы разработки и временные файлы;</li>
+<li>локальные кеши и виртуальные окружения;</li>
+<li>файлы, которых нет в репозитории.</li>
+</ul>
+<p>Последний пункт важнее, чем кажется. Если артефакт собран из рабочей папки, в него может попасть старая база, тестовый файл или заметка автора. Проверка состава артефакта должна быть отдельным шагом.</p>
+<h3>Контрольная сумма</h3>
+<p><strong>Контрольная сумма</strong> это короткий отпечаток файла. Если файл изменился хотя бы на байт, отпечаток меняется. Пользователь скачивает артефакт, вычисляет сумму и сравнивает с опубликованной.</p>
+<p>Это защита от случайной подмены и от частичной загрузки. Она не защищает от злоумышленника, который поменял и файл, и опубликованную сумму. Для более сильной гарантии нужна подпись и происхождение.</p>
+<h3>Происхождение и SBOM</h3>
+<p><strong>Происхождение</strong> (provenance) описывает, где и как собран артефакт: из какого репозитория, коммита, сборочной системы и шагов. Спецификация SLSA описывает уровни гарантий и рекомендует передавать provenance вместе с артефактом <a href="https://slsa.dev/">SLSA</a>. GitHub Actions умеет создавать подписанные attestations для сборок, а также прикладывать список зависимостей <a href="https://docs.github.com/en/actions/concepts/workflows-and-actions/workflow-artifacts">GitHub Actions, artifacts</a>.</p>
+<p><strong>SBOM</strong> (software bill of materials) это перечень компонентов и версий, из которых состоит продукт. Он нужен, когда нужно быстро ответить на вопрос: «есть ли у нас уязвимая библиотека». Без SBOM ответ ищут вручную по всем проектам.</p>
+<p>Для учебного проекта достаточно трёх вещей: файл <code>requirements.txt</code> с точными версиями, контрольная сумма артефакта и запись в README о том, из какого коммита собрана версия. Это ещё не SLSA, но уже проверяемая цепочка.</p>
+<h3>Воспроизводимость как защита от подмены</h3>
+<p>Проект Reproducible Builds описывает практику, при которой независимый сборщик может повторить сборку и получить тот же результат <a href="https://reproducible-builds.org/">Reproducible Builds</a>. Если результат совпадает, появляется уверенность, что в артефакт не добавлено ничего лишнего.</p>
+<p>Это особенно важно для открытого кода, который распространяют архивами. Пользователь доверяет не только репозиторию, но и файлу, который скачал. Если архив собирается не из того же исходника, который виден в репозитории, доверие не подкреплено доказательством.</p>
+<figure class="figure" data-fig="artifact-anatomy" data-one="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"><iframe title="Figure 3: artifact-anatomy" scrolling="no"></iframe><figcaption>Что входит в артефакт и что в него попадать не должно. Слева состав релиза, справа типичные лишние файлы, которые превращают передачу в утечку или сюрприз.</figcaption></figure>
+
+<p>Схема подчёркивает простую мысль: артефакт это не «всё, что лежало в папке», а выбранный и проверенный набор.</p>
+<h3>Подпись и ключи</h3>
+<p>Подпись артефакта подтверждает, что его выпустил владелец ключа. Она полезна, но добавляет задачу: ключ нужно хранить, защищать и менять при компрометации. В учебном проекте подпись можно заменить контрольной суммой и записью о сборке. В продукте с внешними пользователями одной контрольной суммы недостаточно.</p>
+<p>Не стоит начинать с самой сложной схемы. Сначала команда должна научиться собирать из чистого репозитория и проверять установку. Подпись без воспроизводимой сборки подтверждает только то, что файл подписан, а не то, что он собран из проверенного кода.</p></div>
 </div>
 
 <div class="gate-step" data-gate>
-<p class="gate-action"><button type="button" class="gate-btn" aria-expanded="false"><span class="gate-q" aria-hidden="true">?</span><span>Почему «рефакторинг модуля» плохая запись в changelog?</span></button></p>
-<div class="gate-content" hidden><div class="quiz" data-quiz data-quiz-guard><div class="quiz-who"><label class="quiz-who-label"><span>ФИО</span><input type="text" class="quiz-name" data-quiz-name maxlength="80" autocomplete="off" placeholder="Иванов Иван Иванович"></label><span class="quiz-attempts" data-quiz-attempts>две попытки на лекцию</span><span class="quiz-note" data-who-note hidden></span></div><div class="quiz-q" data-type="single" data-correct="1" data-q="1"><p class="quiz-p"><span class="quiz-no" aria-hidden="true">01</span>Что содержит changelog?</p><div class="opts"><label class="opt"><input type="radio" name="q106_0" value="2" autocomplete="off"><span>Исходный код</span></label><label class="opt"><input type="radio" name="q106_0" value="1" autocomplete="off"><span>Все коммиты</span></label><label class="opt"><input type="radio" name="q106_0" value="0" autocomplete="off" data-ok><span>Изменения, важные пользователю</span></label><label class="opt"><input type="radio" name="q106_0" value="3" autocomplete="off"><span>Пароли</span></label></div><p class="quiz-why" hidden>История для читателя.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="2" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">02</span>Когда меняется PATCH?</p><div class="opts"><label class="opt"><input type="radio" name="q106_1" value="3" autocomplete="off"><span>При смене лицензии</span></label><label class="opt"><input type="radio" name="q106_1" value="0" autocomplete="off" data-ok><span>При исправлении</span></label><label class="opt"><input type="radio" name="q106_1" value="2" autocomplete="off"><span>При несовместимом изменении</span></label><label class="opt"><input type="radio" name="q106_1" value="1" autocomplete="off"><span>При новой возможности</span></label></div><p class="quiz-why" hidden>Исправление.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="short" data-q="3" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">03</span>Как называют файл, который передают для установки?</p><input type="text" class="short-answer" data-answers="[&quot;артефакт&quot;, &quot;artifact&quot;]" placeholder="Введите ответ" autocomplete="off" spellcheck="false" aria-label="Как называют файл, который передают для установки?"><p class="quiz-why" hidden>Готовый продукт.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="multi" data-correct="4" data-q="4" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">04</span>Что проверяют при установке?</p><div class="opts"><label class="opt"><input type="checkbox" name="q106_3" value="2" autocomplete="off" data-ok><span>Отображение версии</span></label><label class="opt"><input type="checkbox" name="q106_3" value="5" autocomplete="off"><span>Имя автора</span></label><label class="opt"><input type="checkbox" name="q106_3" value="1" autocomplete="off" data-ok><span>Главный сценарий</span></label><label class="opt"><input type="checkbox" name="q106_3" value="4" autocomplete="off"><span>Цвет иконки</span></label><label class="opt"><input type="checkbox" name="q106_3" value="3" autocomplete="off" data-ok><span>Отсутствие секретов</span></label><label class="opt"><input type="checkbox" name="q106_3" value="0" autocomplete="off" data-ok><span>Запуск продукта</span></label></div><p class="quiz-why" hidden>Остальное не проверки.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="5" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">05</span>Где проверяют установку?</p><div class="opts"><label class="opt"><input type="radio" name="q106_4" value="3" autocomplete="off"><span>В редакторе</span></label><label class="opt"><input type="radio" name="q106_4" value="1" autocomplete="off"><span>На машине автора</span></label><label class="opt"><input type="radio" name="q106_4" value="0" autocomplete="off" data-ok><span>На чистой среде</span></label><label class="opt"><input type="radio" name="q106_4" value="2" autocomplete="off"><span>В личной папке</span></label></div><p class="quiz-why" hidden>Чистая среда.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="6" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">06</span>Когда меняется MAJOR?</p><div class="opts"><label class="opt"><input type="radio" name="q106_5" value="2" autocomplete="off"><span>При новой возможности</span></label><label class="opt"><input type="radio" name="q106_5" value="3" autocomplete="off"><span>При смене автора</span></label><label class="opt"><input type="radio" name="q106_5" value="1" autocomplete="off"><span>При исправлении</span></label><label class="opt"><input type="radio" name="q106_5" value="0" autocomplete="off" data-ok><span>При несовместимом изменении</span></label></div><p class="quiz-why" hidden>Совместимость.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="short" data-q="7" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">07</span>Что перечисляет изменения версии?</p><input type="text" class="short-answer" data-answers="[&quot;changelog&quot;, &quot;журнал изменений&quot;]" placeholder="Введите ответ" autocomplete="off" spellcheck="false" aria-label="Что перечисляет изменения версии?"><p class="quiz-why" hidden>История для пользователя.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="multi" data-correct="4" data-q="8" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">08</span>Какие ошибки релиза типичны?</p><div class="opts"><label class="opt"><input type="checkbox" name="q106_7" value="1" autocomplete="off" data-ok><span>Версия на глаз</span></label><label class="opt"><input type="checkbox" name="q106_7" value="0" autocomplete="off" data-ok><span>Сборка на машине автора</span></label><label class="opt"><input type="checkbox" name="q106_7" value="4" autocomplete="off"><span>Фиксированные зависимости</span></label><label class="opt"><input type="checkbox" name="q106_7" value="5" autocomplete="off"><span>Проверка на чистой среде</span></label><label class="opt"><input type="checkbox" name="q106_7" value="2" autocomplete="off" data-ok><span>Секреты в артефакте</span></label><label class="opt"><input type="checkbox" name="q106_7" value="3" autocomplete="off" data-ok><span>Нет проверки установки</span></label></div><p class="quiz-why" hidden>Остальное хорошо.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="9" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">09</span>Что такое релиз?</p><div class="opts"><label class="opt"><input type="radio" name="q106_8" value="3" autocomplete="off"><span>Ветка Git</span></label><label class="opt"><input type="radio" name="q106_8" value="1" autocomplete="off"><span>Любой коммит</span></label><label class="opt"><input type="radio" name="q106_8" value="0" autocomplete="off" data-ok><span>Передаваемая версия продукта с артефактом и изменениями</span></label><label class="opt"><input type="radio" name="q106_8" value="2" autocomplete="off"><span>Папка на рабочем столе</span></label></div><p class="quiz-why" hidden>Готовая версия.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="10" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">10</span>Что значит воспроизводимая сборка?</p><div class="opts"><label class="opt"><input type="radio" name="q106_9" value="3" autocomplete="off"><span>Всегда занимает минуту</span></label><label class="opt"><input type="radio" name="q106_9" value="0" autocomplete="off" data-ok><span>Получается по инструкции из чистого репозитория</span></label><label class="opt"><input type="radio" name="q106_9" value="1" autocomplete="off"><span>Собирается только автором</span></label><label class="opt"><input type="radio" name="q106_9" value="2" autocomplete="off"><span>Не требует зависимостей</span></label></div><p class="quiz-why" hidden>Повторяемость.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="multi" data-correct="4" data-q="11" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">11</span>Какие категории есть в changelog?</p><div class="opts"><label class="opt"><input type="checkbox" name="q106_10" value="3" autocomplete="off" data-ok><span>Удалено</span></label><label class="opt"><input type="checkbox" name="q106_10" value="1" autocomplete="off" data-ok><span>Изменено</span></label><label class="opt"><input type="checkbox" name="q106_10" value="5" autocomplete="off"><span>Сотрудники</span></label><label class="opt"><input type="checkbox" name="q106_10" value="4" autocomplete="off"><span>Пароли</span></label><label class="opt"><input type="checkbox" name="q106_10" value="2" autocomplete="off" data-ok><span>Исправлено</span></label><label class="opt"><input type="checkbox" name="q106_10" value="0" autocomplete="off" data-ok><span>Добавлено</span></label></div><p class="quiz-why" hidden>Остальное лишнее.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="12" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">12</span>Что входит в артефакт?</p><div class="opts"><label class="opt"><input type="radio" name="q106_11" value="1" autocomplete="off"><span>Личные файлы автора</span></label><label class="opt"><input type="radio" name="q106_11" value="2" autocomplete="off"><span>Журналы разработки</span></label><label class="opt"><input type="radio" name="q106_11" value="0" autocomplete="off" data-ok><span>Собранный код и инструкция</span></label><label class="opt"><input type="radio" name="q106_11" value="3" autocomplete="off"><span>Пароли</span></label></div><p class="quiz-why" hidden>Готовый продукт.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="13" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">13</span>Что задаёт semver?</p><div class="opts"><label class="opt"><input type="radio" name="q106_12" value="3" autocomplete="off"><span>Пароль базы</span></label><label class="opt"><input type="radio" name="q106_12" value="0" autocomplete="off" data-ok><span>Три числа версии и правила их изменения</span></label><label class="opt"><input type="radio" name="q106_12" value="1" autocomplete="off"><span>Имя проекта</span></label><label class="opt"><input type="radio" name="q106_12" value="2" autocomplete="off"><span>Список файлов</span></label></div><p class="quiz-why" hidden>Версии.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="short" data-q="14" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">14</span>Какая часть версии отвечает за совместимость?</p><input type="text" class="short-answer" data-answers="[&quot;MAJOR&quot;, &quot;major&quot;]" placeholder="Введите ответ" autocomplete="off" spellcheck="false" aria-label="Какая часть версии отвечает за совместимость?"><p class="quiz-why" hidden>Несовместимое изменение.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="15" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">15</span>Почему «рефакторинг модуля» плохая запись?</p><div class="opts"><label class="opt"><input type="radio" name="q106_14" value="1" autocomplete="off"><span>Слишком длинная</span></label><label class="opt"><input type="radio" name="q106_14" value="3" autocomplete="off"><span>Содержит термин</span></label><label class="opt"><input type="radio" name="q106_14" value="2" autocomplete="off"><span>Написана по-русски</span></label><label class="opt"><input type="radio" name="q106_14" value="0" autocomplete="off" data-ok><span>Не говорит, что изменится для пользователя</span></label></div><p class="quiz-why" hidden>Нет пользы читателю.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><p class="quiz-note quiz-submit-note" data-quiz-note hidden></p><div class="quiz-result" data-quiz-result hidden aria-live="polite"><span class="label">Результат теста</span><h3>Тест завершён</h3><p class="modal-name-line">ФИО: <b data-student-name></b></p><p class="modal-result" data-modal-result></p><p class="modal-result" data-modal-wrong></p><dl class="modal-times"><div><dt>Время выполнения теста</dt><dd data-test-time>00:00</dd></div><div><dt>Время просмотра лекции</dt><dd data-view-time>00:00</dd></div></dl></div></div></div>
+<p class="gate-action"><button type="button" class="gate-btn" aria-expanded="false"><span class="gate-q" aria-hidden="true">?</span><span>Что общего у атаки на XZ и у обычной ошибки сборки?</span></button></p>
+<div class="gate-content" hidden><h2 id="три-релиза-которые-объясняют-правила"><span class="num">07</span>Три релиза, которые объясняют правила</h2>
+<p>Правила про версии и артефакты звучат абстрактно, пока не видно, что происходит при их нарушении. Ниже три случая с официальными отчётами и документами.</p>
+<h3>XZ Utils, 2024</h3>
+<p>В марте 2024 года исследователь Андрес Фройнд обнаружил бэкдор в библиотеке сжатия xz, точнее в liblzma. Атака была направлена на серверы SSH в Linux. Фройнд заметил необычную задержку при входе по SSH и начал разбираться. Оказалось, что вредоносный код присутствовал не только в репозитории, но и в распространяемых архивах версий 5.6.0 и 5.6.1 <a href="https://www.openwall.com/lists/oss-security/2024/03/29/4">Freund, oss-security, 2024</a>.</p>
+<p>Ключевая деталь для темы релиза: часть кода находилась только в tar-архивах. Файл <code>m4/build-to-host.m4</code> в архиве отличался от версии в git и запускал обфусцированный скрипт при сборке. То есть артефакт не соответствовал исходному коду, который видели проверяющие.</p>
+<p>Атака имела условия срабатывания: архитектура x86-64, Linux, glibc, сборка в пакете Debian или RPM. Вредоносный код пытался влиять на проверку подписи в SSH. К счастью, затронутые версии ещё не успели широко попасть в стабильные дистрибутивы. Red Hat присвоил уязвимости номер CVE-2024-3094.</p>
+<p>Процессные причины:</p>
+<ul>
+<li>архив релиза собирался не из того же дерева, которое проверяли в репозитории;</li>
+<li>сборочные скрипты в архиве не были частью обычного обзора;</li>
+<li>доверие к сопровождающему заменило проверку происхождения;</li>
+<li>у пользователей не было простого способа сравнить архив с исходником.</li>
+</ul>
+<p>Урок: <strong>артефакт это отдельный объект доверия</strong>. Проверять только репозиторий недостаточно. Нужно знать, из какого исходника собран архив, и уметь это доказать. Воспроизводимая сборка и provenance перестают быть академической темой, когда цена подмены измеряется доступом к серверам.</p>
+<h3>Windows 10, версия 1809, 2018</h3>
+<p>В октябре 2018 года Microsoft начала распространять обновление Windows 10 October 2018 Update, версия 1809. Через несколько дней появились сообщения о пропаже файлов. Microsoft приостановила распространение, убрала образы со всех каналов и начала расследование <a href="https://blogs.windows.com/windowsexperience/2018/10/09/updated-version-of-windows-10-october-2018-update-released-to-windows-insiders/">Microsoft, 2018</a>.</p>
+<p>Причина оказалась связана с перенаправлением известных папок (Known Folder Redirection). Если пользователь перенёс папки «Документы», «Изображения» или «Рабочий стол» в другое место, но старые файлы остались в исходной папке, обновление могло удалить исходную папку вместе с содержимым. В обновлении был код, который убирал пустые дубликаты папок. Сочетание этого кода с другой последовательностью сборки обновления привело к удалению старых папок.</p>
+<p>Microsoft оценила долю пострадавших установок как одну сотую процента. Но компания признала: любая потеря данных серьезна. Обновление было остановлено, исправлено и позже выпущено снова.</p>
+<p>Процессные причины:</p>
+<ul>
+<li>проверка не покрыла редкую, но допустимую конфигурацию пользователя;</li>
+<li>изменение, удаляющее папки, не было защищено достаточной проверкой;</li>
+<li>обновление сначала стало доступно вручную, что ограничило масштаб, но не отменило риск;</li>
+<li>откат клиентской системы сложен, поэтому цена ошибки выше, чем у серверного релиза.</li>
+</ul>
+<p>Урок: <strong>релиз проверяют на пути миграции, а не только на чистой установке</strong>. Чистая система без старых папок проходит проверку. Пользовательская система с историей и нестандартными настройками ломается. Поэтапное распространение уменьшает масштаб, но не заменяет проверку данных.</p>
+<h3>npm и left-pad, 2016</h3>
+<p>22 марта 2016 года автор пакета <code>left-pad</code> удалил из реестра npm свой пакет и ещё 272 пакета. <code>left-pad</code> был маленькой функцией выравнивания строки, но от него зависели тысячи проектов, в том числе через цепочки зависимостей. Сборки начали падать сотнями в минуту. npm восстановил версию <code>0.0.3</code> из резервной копии, и сбой длился около 2,5 часов <a href="https://blog.npmjs.org/post/141577284765/kik-left-pad-and-npm">npm, 2016</a>.</p>
+<p>Формально это не ошибка сборки. Это событие в экосистеме зависимостей. Но для релиза вывод тот же: если артефакт зависит от внешнего пакета, который может исчезнуть, воспроизводимость не гарантирована.</p>
+<p>Процессные причины:</p>
+<ul>
+<li>версия пакета не была иммутабельной: её можно было удалить;</li>
+<li>проекты полагались на диапазон версий и не фиксировали зависимость;</li>
+<li>у многих не было локального кеша или зеркала;</li>
+<li>цепочка зависимостей была длиннее, чем думали авторы.</li>
+</ul>
+<p>Урок: <strong>версия это контракт не только с пользователем, но и с экосистемой</strong>. Если выпущенная версия может исчезнуть или измениться, на неё нельзя опираться. Фиксация зависимостей, lock-файлы, локальное зеркало и проверка цепочки поставок уменьшают риск.</p>
+<table>
+<thead>
+<tr>
+<th>Случай</th>
+<th>Что сломалось</th>
+<th>Какой артефакт помог бы</th>
+<th>Вывод</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>XZ Utils</td>
+<td>архив не соответствовал исходнику</td>
+<td>воспроизводимая сборка, provenance</td>
+<td>проверяй происхождение</td>
+</tr>
+<tr>
+<td>Windows 1809</td>
+<td>обновление удалило данные</td>
+<td>проверка миграции, поэтапный выпуск</td>
+<td>проверяй путь пользователя</td>
+</tr>
+<tr>
+<td>npm left-pad</td>
+<td>зависимость исчезла из реестра</td>
+<td>lock-файл, зеркало, фиксация</td>
+<td>фиксируй и храни зависимости</td>
+</tr>
+</tbody>
+</table>
+<p>Общее у трёх случаев одно: релиз рассматривали как техническую операцию, а не как обязательство перед пользователем. В одном случае обязательством была целостность артефакта, в другом сохранность данных, в третьем доступность зависимости. Формально разные сбои, процессный вывод общий.</p></div>
+</div>
+
+<div class="gate-step" data-gate>
+<p class="gate-action"><button type="button" class="gate-btn" aria-expanded="false"><span class="gate-q" aria-hidden="true">?</span><span>Как перенести эти уроки на релиз учебного проекта?</span></button></p>
+<div class="gate-content" hidden><h2 id="конвейер-релиза-в-учебном-проекте"><span class="num">08</span>Конвейер релиза в учебном проекте</h2>
+<p>Учебный проект не требует промышленной инфраструктуры. Ему нужен конвейер, который можно повторить и объяснить.</p>
+<table>
+<thead>
+<tr>
+<th>Шаг</th>
+<th>Действие</th>
+<th>Результат</th>
+<th>Проверка</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>зафиксировать изменения</td>
+<td>коммит и тег</td>
+<td>история совпадает с релизом</td>
+</tr>
+<tr>
+<td>2</td>
+<td>прогнать тесты</td>
+<td>отчёт о тестах</td>
+<td>все обязательные тесты зелёные</td>
+</tr>
+<tr>
+<td>3</td>
+<td>собрать артефакт</td>
+<td>архив или пакет</td>
+<td>сборка из чистого клона</td>
+</tr>
+<tr>
+<td>4</td>
+<td>присвоить версию</td>
+<td>номер по semver</td>
+<td>номер соответствует изменениям</td>
+</tr>
+<tr>
+<td>5</td>
+<td>заполнить changelog</td>
+<td>раздел версии</td>
+<td>записи понятны пользователю</td>
+</tr>
+<tr>
+<td>6</td>
+<td>проверить состав</td>
+<td>список файлов</td>
+<td>нет секретов и лишних файлов</td>
+</tr>
+<tr>
+<td>7</td>
+<td>вычислить сумму</td>
+<td>файл с хешем</td>
+<td>сумма воспроизводится</td>
+</tr>
+<tr>
+<td>8</td>
+<td>установить на чистую среду</td>
+<td>работающий продукт</td>
+<td>главный сценарий проходит</td>
+</tr>
+<tr>
+<td>9</td>
+<td>сохранить предыдущий релиз</td>
+<td>архив прошлой версии</td>
+<td>откат возможен</td>
+</tr>
+</tbody>
+</table>
+<p>Девять шагов не означают девять инструментов. В небольшом проекте часть шагов выполняется вручную, но каждый имеет результат.</p>
+<h3>Автоматизация по частям</h3>
+<p>Автоматизировать всё сразу не нужно. Порядок полезности обычно такой:</p>
+<ol>
+<li>тесты, потому что они дают быструю обратную связь;</li>
+<li>сборка, потому что она должна быть повторяемой;</li>
+<li>проверка состава артефакта, потому что она предотвращает утечки;</li>
+<li>публикация и установка, потому что они чаще всего делаются вручную.</li>
+</ol>
+<p>Если команда автоматизирует публикацию раньше тестов, она ускоряет выпуск ошибок. Если автоматизирует сборку, но не проверяет состав, она быстрее получает архив с паролем.</p>
+<p>В GitHub Actions шаги описываются в workflow, а результат сборки можно сохранить как artifact. Для релиза полезны environments с правилами защиты: обязательное одобрение, ограничение ветки, история развёртываний <a href="https://docs.github.com/en/actions/deployment/about-deployments/deploying-with-github-actions">GitHub Actions, deployments</a>. Это не обязательный инструмент, а пример того, как процесс выражается в конфигурации.</p>
+<h3>Тег и версия</h3>
+<p>Тег в Git и номер версии должны совпадать. Если тег <code>v1.4.2</code> указывает на коммит, из которого собран артефакт <code>1.4.2</code>, связь проверяема. Если тег поставили после сборки на другой коммит, связь потеряна.</p>
+<p>Правило простое: сначала определяется коммит, затем сборка, затем тег, затем артефакт. Не наоборот. Иначе возникает ситуация, когда артефакт существует, а исходник, из которого он получен, неизвестен.</p>
+<h3>Хранение релизов</h3>
+<p>Предыдущий релиз нужно хранить. Не только исходники, но и артефакт, changelog и инструкцию. Если новая версия ломает работу, пользователь должен получить старую без пересборки.</p>
+<p>Хранение релизов отвечает на вопрос «что было установлено вчера». В учебном проекте достаточно папки <code>releases</code> с архивами и файлами контрольных сумм. В продукте используют репозиторий пакетов или хранилище артефактов.</p>
+<h2 id="проверка-установки-на-чистой-среде"><span class="num">09</span>Проверка установки на чистой среде</h2>
+<p>Установку проверяют на среде, где нет следов разработки. Это может быть новая виртуальная машина, контейнер, другой компьютер или новый пользователь системы.</p>
+<p>Порядок:</p>
+<ol>
+<li>взять артефакт из хранилища;</li>
+<li>сверить контрольную сумму;</li>
+<li>выполнить инструкцию без подсказок автора;</li>
+<li>запустить продукт;</li>
+<li>пройти главный сценарий;</li>
+<li>проверить, что версия отображается;</li>
+<li>проверить журналы на ошибки;</li>
+<li>попробовать удалить или обновить продукт.</li>
+</ol>
+<p>Если для установки нужны файлы с рабочего стола автора, релиз не готов. Если инструкция требует команды, которой нет в тексте, релиз не готов. Если после установки версия не отображается, пользователь не сможет сообщить, что у него стоит.</p>
+<h3>Что проверять в главном сценарии</h3>
+<p>Главный сценарий это путь, ради которого продукт существует. Для системы заявок: войти, создать заявку, увидеть её в списке, закрыть. Для учебного проекта достаточно одного сквозного сценария, который проходит от начала до конца.</p>
+<p>Проверка установки не заменяет полный прогон тестов. Она отвечает на другой вопрос: работает ли собранный артефакт в среде, похожей на пользовательскую. Тесты могут проходить в репозитории и падать после упаковки, потому что в артефакт не попал файл конфигурации.</p>
+<h3>Чистая среда и данные</h3>
+<p>Чистая среда не означает пустая база. Наоборот, полезно проверить два случая: установка с пустой базой и установка с копией данных предыдущей версии. Второй случай показывает, переживёт ли обновление существующие записи.</p>
+<p>Если продукт обновляется поверх старой версии, проверяют миграцию. Если продукт ставится с нуля, проверяют начальные данные и создание администратора. Это разные сценарии, и оба должны быть в инструкции.</p>
+<h3>Откат релиза</h3>
+<p>Для релиза откат означает возврат предыдущего артефакта и, если нужно, предыдущей схемы данных. Он должен быть подготовлен до выпуска.</p>
+<p>Минимальные условия:</p>
+<ul>
+<li>предыдущий артефакт сохранён;</li>
+<li>предыдущая версия схемы известна;</li>
+<li>есть резервная копия данных;</li>
+<li>инструкция отката проверена;</li>
+<li>ответственный знает, когда откат применяется.</li>
+</ul>
+<p>Откат не всегда возможен. Если новая версия уже изменила данные в несовместимом формате, простой возврат файла не поможет. Поэтому совместимость схемы и обратимость миграции обсуждают до релиза, а не во время сбоя.</p>
+<h2 id="чек-лист-релиза"><span class="num">10</span>Чек-лист релиза</h2>
+<p>Перед передачей версии ответьте на вопросы.</p>
+<ol>
+<li>Сборка выполнена из чистого клона репозитория?</li>
+<li>Все зависимости зафиксированы?</li>
+<li>Команда сборки записана в README?</li>
+<li>Тесты проходят, отчёт сохранён?</li>
+<li>Номер версии соответствует изменениям?</li>
+<li>Changelog описывает изменения для пользователя?</li>
+<li>В артефакте нет секретов и личных данных?</li>
+<li>Контрольная сумма вычислена и опубликована?</li>
+<li>Установка проверена на чистой среде?</li>
+<li>Главный сценарий пройден?</li>
+<li>Версия видна в продукте?</li>
+<li>Предыдущий релиз сохранён и откат описан?</li>
+</ol>
+<p>Чек-лист не гарантирует отсутствие ошибок. Он не даёт забыть шаг, который потом дорого исправлять.</p>
+<h2 id="итоги"><span class="num">11</span>Итоги</h2>
+<ul>
+<li>Релиз это артефакт, версия, changelog и проверенная установка, а не папка с файлами.</li>
+<li>Воспроизводимая сборка получается из чистого репозитория по записанной команде.</li>
+<li>Semver связывает номер версии с типом изменения и обещанием совместимости.</li>
+<li>Changelog пишут для пользователя, а не пересказывают коммиты.</li>
+<li>Артефакт содержит нужное и не содержит секретов, журналов и личных данных.</li>
+<li>Происхождение и контрольная сумма позволяют проверить, откуда взялся файл.</li>
+<li>Реальные сбои показывают цену подмены артефакта, непроверенной миграции и исчезнувшей зависимости.</li>
+<li>Установку проверяют на чистой среде, а предыдущий релиз хранят для отката.</li>
+</ul>
+<h2 id="источники"><span class="num">12</span>Источники</h2>
+<ol>
+<li>Semantic Versioning 2.0.0. https://semver.org/</li>
+<li>Keep a Changelog 1.1.0. https://keepachangelog.com/en/1.1.0/</li>
+<li>ISO/IEC/IEEE 12207:2026. Systems and software engineering. Software life cycle processes. https://www.iso.org/standard/90219.html</li>
+<li>Google SRE. Release Engineering. https://sre.google/sre-book/release-engineering/</li>
+<li>Reproducible Builds. https://reproducible-builds.org/</li>
+<li>SLSA specification 1.2. https://slsa.dev/spec/v1.2/</li>
+<li>GitHub Actions. Workflow artifacts. https://docs.github.com/en/actions/concepts/workflows-and-actions/workflow-artifacts</li>
+<li>Freund A. backdoor in upstream xz/liblzma leading to ssh server compromise. oss-security, 2024. https://www.openwall.com/lists/oss-security/2024/03/29/4</li>
+<li>Microsoft. Updated version of Windows 10 October 2018 Update released to Windows Insiders, 2018. https://blogs.windows.com/windowsexperience/2018/10/09/updated-version-of-windows-10-october-2018-update-released-to-windows-insiders/</li>
+<li>npm. kik, left-pad, and npm, 2016. https://blog.npmjs.org/post/141577284765/kik-left-pad-and-npm</li>
+</ol>
+<div class="quiz" data-quiz data-quiz-guard><div class="quiz-who"><label class="quiz-who-label"><span>ФИО</span><input type="text" class="quiz-name" data-quiz-name maxlength="80" autocomplete="off" placeholder="Иванов Иван Иванович"></label><span class="quiz-attempts" data-quiz-attempts>две попытки на лекцию</span><span class="quiz-note" data-who-note hidden></span></div><div class="quiz-q" data-type="single" data-correct="1" data-q="1"><p class="quiz-p"><span class="quiz-no" aria-hidden="true">01</span>Что описывает provenance артефакта?</p><div class="opts"><label class="opt"><input type="radio" name="q237_0" value="1" autocomplete="off"><span>Сколько стоит лицензия</span></label><label class="opt"><input type="radio" name="q237_0" value="3" autocomplete="off"><span>Какие тесты не запускались</span></label><label class="opt"><input type="radio" name="q237_0" value="0" autocomplete="off" data-ok><span>Где и как он был собран</span></label><label class="opt"><input type="radio" name="q237_0" value="2" autocomplete="off"><span>Кто пользовался продуктом</span></label></div><p class="quiz-why" hidden>Происхождение связывает файл с исходником.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="short" data-q="2" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">02</span>Как называют список заметных изменений по версиям?</p><input type="text" class="short-answer" data-answers="[&quot;changelog&quot;, &quot;журнал изменений&quot;]" placeholder="Введите ответ" autocomplete="off" spellcheck="false" aria-label="Как называют список заметных изменений по версиям?"><p class="quiz-why" hidden>История для пользователя.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="3" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">03</span>Чему учит случай left-pad?</p><div class="opts"><label class="opt"><input type="radio" name="q237_2" value="1" autocomplete="off"><span>Маленькие пакеты не нужны</span></label><label class="opt"><input type="radio" name="q237_2" value="0" autocomplete="off" data-ok><span>Выпущенная версия зависимости должна быть неизменной и доступной</span></label><label class="opt"><input type="radio" name="q237_2" value="2" autocomplete="off"><span>Реестр пакетов всегда надёжен</span></label><label class="opt"><input type="radio" name="q237_2" value="3" autocomplete="off"><span>Lock-файлы замедляют сборку</span></label></div><p class="quiz-why" hidden>Исчезновение зависимости ломает сборки.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="multi" data-correct="4" data-q="4" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">04</span>Какие категории changelog стандартны?</p><div class="opts"><label class="opt"><input type="checkbox" name="q237_3" value="1" autocomplete="off" data-ok><span>Changed</span></label><label class="opt"><input type="checkbox" name="q237_3" value="3" autocomplete="off" data-ok><span>Security</span></label><label class="opt"><input type="checkbox" name="q237_3" value="4" autocomplete="off"><span>Employees</span></label><label class="opt"><input type="checkbox" name="q237_3" value="5" autocomplete="off"><span>Passwords</span></label><label class="opt"><input type="checkbox" name="q237_3" value="0" autocomplete="off" data-ok><span>Added</span></label><label class="opt"><input type="checkbox" name="q237_3" value="2" autocomplete="off" data-ok><span>Fixed</span></label></div><p class="quiz-why" hidden>Остальное не изменения продукта.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="5" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">05</span>Что обязательно входит в артефакт?</p><div class="opts"><label class="opt"><input type="radio" name="q237_4" value="1" autocomplete="off"><span>Пароли и ключи</span></label><label class="opt"><input type="radio" name="q237_4" value="0" autocomplete="off" data-ok><span>Собранный код, конфигурация без секретов и инструкция</span></label><label class="opt"><input type="radio" name="q237_4" value="3" autocomplete="off"><span>Журналы разработки</span></label><label class="opt"><input type="radio" name="q237_4" value="2" autocomplete="off"><span>Личные файлы автора</span></label></div><p class="quiz-why" hidden>Артефакт должен быть безопасным и понятным.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="6" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">06</span>Для кого пишут changelog?</p><div class="opts"><label class="opt"><input type="radio" name="q237_5" value="1" autocomplete="off"><span>Для компилятора</span></label><label class="opt"><input type="radio" name="q237_5" value="2" autocomplete="off"><span>Для базы данных</span></label><label class="opt"><input type="radio" name="q237_5" value="0" autocomplete="off" data-ok><span>Для пользователей и сопровождения</span></label><label class="opt"><input type="radio" name="q237_5" value="3" autocomplete="off"><span>Для отдела кадров</span></label></div><p class="quiz-why" hidden>Запись объясняет заметное изменение.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="short" data-q="7" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">07</span>Как называют формат версии из трёх чисел?</p><input type="text" class="short-answer" data-answers="[&quot;semver&quot;, &quot;semantic versioning&quot;, &quot;семантическое версионирование&quot;]" placeholder="Введите ответ" autocomplete="off" spellcheck="false" aria-label="Как называют формат версии из трёх чисел?"><p class="quiz-why" hidden>MAJOR.MINOR.PATCH.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="8" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">08</span>Что делает сборку воспроизводимой?</p><div class="opts"><label class="opt"><input type="radio" name="q237_7" value="3" autocomplete="off"><span>Отсутствие тестов и инструкции</span></label><label class="opt"><input type="radio" name="q237_7" value="1" autocomplete="off"><span>Сборка на машине автора с локальным кешем</span></label><label class="opt"><input type="radio" name="q237_7" value="2" autocomplete="off"><span>Ручное копирование файлов из рабочей папки</span></label><label class="opt"><input type="radio" name="q237_7" value="0" autocomplete="off" data-ok><span>Чистый репозиторий, фиксированные зависимости и записанная команда</span></label></div><p class="quiz-why" hidden>Повторяемость важнее удобства автора.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="multi" data-correct="4" data-q="9" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">09</span>Какие практики поддерживают воспроизводимость?</p><div class="opts"><label class="opt"><input type="checkbox" name="q237_8" value="3" autocomplete="off" data-ok><span>Проверка контрольной суммы</span></label><label class="opt"><input type="checkbox" name="q237_8" value="5" autocomplete="off"><span>Правка артефакта после сборки</span></label><label class="opt"><input type="checkbox" name="q237_8" value="1" autocomplete="off" data-ok><span>Сборка из чистого клона</span></label><label class="opt"><input type="checkbox" name="q237_8" value="0" autocomplete="off" data-ok><span>Фиксация версий зависимостей</span></label><label class="opt"><input type="checkbox" name="q237_8" value="4" autocomplete="off"><span>Использование локального кеша без объявления</span></label><label class="opt"><input type="checkbox" name="q237_8" value="2" autocomplete="off" data-ok><span>Запись версии инструментов</span></label></div><p class="quiz-why" hidden>Остальное делает результат зависимым от машины.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="10" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">10</span>Когда по semver меняется MAJOR?</p><div class="opts"><label class="opt"><input type="radio" name="q237_9" value="3" autocomplete="off"><span>При смене даты выпуска</span></label><label class="opt"><input type="radio" name="q237_9" value="1" autocomplete="off"><span>При любом исправлении</span></label><label class="opt"><input type="radio" name="q237_9" value="2" autocomplete="off"><span>При добавлении возможности без поломки</span></label><label class="opt"><input type="radio" name="q237_9" value="0" autocomplete="off" data-ok><span>При несовместимом изменении публичного интерфейса</span></label></div><p class="quiz-why" hidden>Major сообщает о возможной поломке.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="11" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">11</span>Почему обновление Windows 1809 удаляло файлы?</p><div class="opts"><label class="opt"><input type="radio" name="q237_10" value="3" autocomplete="off"><span>Обновление не проверяло лицензию</span></label><label class="opt"><input type="radio" name="q237_10" value="0" autocomplete="off" data-ok><span>Сочетание перенаправления папок и кода очистки дубликатов</span></label><label class="opt"><input type="radio" name="q237_10" value="2" autocomplete="off"><span>В системе не было антивируса</span></label><label class="opt"><input type="radio" name="q237_10" value="1" autocomplete="off"><span>Пользователи удалили файлы сами</span></label></div><p class="quiz-why" hidden>Редкая конфигурация не была покрыта проверкой.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="multi" data-correct="4" data-q="12" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">12</span>Что не должно попадать в артефакт?</p><div class="opts"><label class="opt"><input type="checkbox" name="q237_11" value="2" autocomplete="off" data-ok><span>Журналы разработки</span></label><label class="opt"><input type="checkbox" name="q237_11" value="4" autocomplete="off"><span>Инструкция по установке</span></label><label class="opt"><input type="checkbox" name="q237_11" value="3" autocomplete="off" data-ok><span>Временные файлы</span></label><label class="opt"><input type="checkbox" name="q237_11" value="0" autocomplete="off" data-ok><span>Пароли и токены</span></label><label class="opt"><input type="checkbox" name="q237_11" value="5" autocomplete="off"><span>Номер версии</span></label><label class="opt"><input type="checkbox" name="q237_11" value="1" autocomplete="off" data-ok><span>Личные данные</span></label></div><p class="quiz-why" hidden>Остальное нужно релизу.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="short" data-q="13" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">13</span>Что вычисляют для проверки целостности файла?</p><input type="text" class="short-answer" data-answers="[&quot;контрольная сумма&quot;, &quot;хеш&quot;, &quot;checksum&quot;]" placeholder="Введите ответ" autocomplete="off" spellcheck="false" aria-label="Что вычисляют для проверки целостности файла?"><p class="quiz-why" hidden>Отпечаток файла.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="14" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">14</span>Что показал случай XZ Utils?</p><div class="opts"><label class="opt"><input type="radio" name="q237_13" value="1" autocomplete="off"><span>Язык Python перестал поддерживаться</span></label><label class="opt"><input type="radio" name="q237_13" value="2" autocomplete="off"><span>Все дистрибутивы обновились автоматически</span></label><label class="opt"><input type="radio" name="q237_13" value="3" autocomplete="off"><span>Бэкдор был только в документации</span></label><label class="opt"><input type="radio" name="q237_13" value="0" autocomplete="off" data-ok><span>Архив релиза мог отличаться от проверенного исходника</span></label></div><p class="quiz-why" hidden>Проверять нужно происхождение артефакта.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="15" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">15</span>Что semver говорит о содержимом выпущенной версии?</p><div class="opts"><label class="opt"><input type="radio" name="q237_14" value="2" autocomplete="off"><span>Его можно дополнить новой функцией</span></label><label class="opt"><input type="radio" name="q237_14" value="3" autocomplete="off"><span>Его можно удалить из реестра</span></label><label class="opt"><input type="radio" name="q237_14" value="1" autocomplete="off"><span>Его можно пересобрать и заменить</span></label><label class="opt"><input type="radio" name="q237_14" value="0" autocomplete="off" data-ok><span>Его нельзя менять, изменения выходят под новым номером</span></label></div><p class="quiz-why" hidden>Иначе номер перестаёт быть обещанием.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><p class="quiz-note quiz-submit-note" data-quiz-note hidden></p><div class="quiz-result" data-quiz-result hidden aria-live="polite"><span class="label">Результат теста</span><h3>Тест завершён</h3><p class="modal-name-line">ФИО: <b data-student-name></b></p><p class="modal-result" data-modal-result></p><p class="modal-result" data-modal-wrong></p><dl class="modal-times"><div><dt>Время выполнения теста</dt><dd data-test-time>00:00</dd></div><div><dt>Время просмотра лекции</dt><dd data-view-time>00:00</dd></div></dl></div></div></div>
 </div></article><nav class="pager"><a class="" href="26-prakt-10.html"><span>← Предыдущее занятие</span>Практика 10. Комплект документации</a><a class="next" style="text-align:right;margin-left:auto" href="28-prakt-11.html"><span>Следующее занятие →</span>Практика 11. Выпуск версии</a></nav></main>
 <div class="modal" data-modal="warn" hidden>
   <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="warn-title">

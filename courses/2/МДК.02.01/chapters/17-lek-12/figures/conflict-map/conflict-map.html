@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Разбор конфликта</title>
+<style>
+  :root { --paper:#faf6f3; --ink:#2d3142; --muted:#5b5560; --accent:#0F8A63; --soft:#E1F5EE; --rule:rgba(45,49,66,.12); }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .frame { background:var(--paper); border:1px solid var(--rule); border-radius:12px; padding:18px 18px 14px; }
+  .eyebrow { margin:0 0 8px; font:600 9px/1.2 Consolas,monospace; letter-spacing:.16em; text-transform:uppercase; color:var(--muted); }
+  .note { margin:10px 2px 0; font:11px/1.5 Consolas,monospace; color:var(--muted); }
+  svg { display:block; width:100%; height:auto; }
+</style>
+</head>
+<body>
+<div class="frame">
+  <p class="eyebrow">Git · конфликт</p>
+  <svg viewBox="0 0 680 286" role="img" aria-labelledby="cm-title cm-desc">
+    <title id="cm-title">Маркеры конфликта и порядок решения</title>
+    <desc id="cm-desc">Маркеры показывают два варианта строки. Решение принимают по смыслу, затем проверяют тестами.</desc>
+
+    <rect x="16" y="26" width="300" height="150" rx="8" fill="#fff" stroke="#2d3142"/>
+    <text x="30" y="46" font-family="Consolas,monospace" font-size="7" fill="#5b5560">ФРАГМЕНТ ФАЙЛА</text>
+    <g font-family="Consolas,monospace" font-size="8.5" fill="#2d3142">
+      <text x="30" y="68" fill="#0F8A63">&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD</text>
+      <text x="30" y="86">status = "new"</text>
+      <text x="30" y="104" fill="#0F8A63">=======</text>
+      <text x="30" y="122">status = "open"</text>
+      <text x="30" y="140" fill="#0F8A63">&gt;&gt;&gt;&gt;&gt;&gt;&gt; feature/statuses</text>
+    </g>
+    <text x="30" y="164" font-family="Consolas,monospace" font-size="7" fill="#5b5560">два варианта одной строки</text>
+
+    <g font-family="Consolas,monospace" font-size="7.5" fill="#2d3142">
+      <rect x="340" y="26" width="324" height="40" rx="7" fill="#E1F5EE" stroke="#0F8A63"/>
+      <text x="354" y="43" fill="#0F8A63">ВОПРОС 1</text>
+      <text x="354" y="58">оба изменения нужны?</text>
+
+      <rect x="340" y="74" width="324" height="40" rx="7" fill="#fff" stroke="#2d3142"/>
+      <text x="354" y="91" fill="#5b5560">ВОПРОС 2</text>
+      <text x="354" y="106">одно отменяет другое по требованию?</text>
+
+      <rect x="340" y="122" width="324" height="40" rx="7" fill="#fff" stroke="#2d3142"/>
+      <text x="354" y="139" fill="#5b5560">ВОПРОС 3</text>
+      <text x="354" y="154">смысл не ясен из кода и истории?</text>
+    </g>
+
+    <g stroke="#5b5560" stroke-width="1.3" fill="none" marker-end="url(#arw-cm)">
+      <path d="M316 46h14"/>
+      <path d="M316 94h14"/>
+      <path d="M316 142h14"/>
+    </g>
+
+    <g font-family="Consolas,monospace" font-size="7.5" text-anchor="middle">
+      <rect x="28" y="192" width="180" height="34" rx="6" fill="#fff" stroke="#0F8A63"/>
+      <text x="118" y="213" fill="#0F8A63">соединить оба варианта</text>
+
+      <rect x="224" y="192" width="180" height="34" rx="6" fill="#fff" stroke="#2d3142"/>
+      <text x="314" y="213">выбрать по требованию</text>
+
+      <rect x="420" y="192" width="232" height="34" rx="6" fill="#fff" stroke="#2d3142"/>
+      <text x="536" y="213">спросить автора и открыть историю</text>
+    </g>
+
+    <text x="340" y="250" text-anchor="middle" font-family="Consolas,monospace" font-size="7.5" fill="#5b5560">после выбора: убрать маркеры, запустить тесты, завершить слияние коммитом</text>
+    <text x="340" y="272" text-anchor="middle" font-family="Consolas,monospace" font-size="8" fill="#0F8A63">МАРКЕРЫ ЗАДАЮТ ВОПРОС, А НЕ ВЫБИРАЮТ СТОРОНУ</text>
+
+    <defs>
+      <marker id="arw-cm" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#5b5560"/></marker>
+    </defs>
+  </svg>
+  <p class="note">Удалить чужую строку проще всего, но это не решение конфликта. Решение объясняет, почему остался именно этот вариант.</p>
+</div>
+</body>
+</html>

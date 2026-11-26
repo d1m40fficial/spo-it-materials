@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Лимит WIP и время прохождения</title>
+<style>
+  :root { --paper:#faf6f3; --card:#fffdfb; --ink:#1a1916; --muted:#6b6459; --rule:#e4d8cf; --accent:#0F8A63; --soft:#E1F5EE; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .demo { background:var(--paper); border:1px solid var(--rule); border-radius:14px; padding:18px; }
+  .head { display:flex; justify-content:space-between; align-items:flex-end; gap:16px; padding-bottom:10px; border-bottom:1px solid var(--rule); }
+  .eyebrow { margin:0 0 4px; font:600 10px/1.2 Consolas,monospace; letter-spacing:.12em; text-transform:uppercase; color:var(--accent); }
+  h3 { margin:0; font-size:20px; line-height:1.2; }
+  .hint { font:11px/1.4 Consolas,monospace; color:var(--muted); white-space:nowrap; }
+  svg { display:block; width:100%; height:auto; margin-top:8px; }
+  .card { transition:opacity .2s; }
+  .status { min-height:72px; margin-top:8px; padding:10px 12px; border-radius:9px; background:var(--soft); font-size:12.5px; line-height:1.45; }
+  .status b { color:var(--accent); }
+  .controls { display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin-top:10px; }
+  .slider { display:flex; gap:8px; align-items:center; font:600 11.5px/1.2 "Segoe UI",system-ui,sans-serif; }
+  input[type="range"] { width:150px; accent-color:var(--accent); }
+  button { font:600 11.5px/1.1 "Segoe UI",system-ui,sans-serif; padding:8px 10px; border-radius:9px; border:1px solid var(--rule); background:var(--card); color:var(--ink); cursor:pointer; }
+  button:hover { border-color:var(--accent); color:var(--accent); }
+  button.on { background:var(--accent); border-color:var(--accent); color:#fff; }
+  @media (max-width:560px) { .demo { padding:12px; } .head { align-items:flex-start; flex-direction:column; gap:4px; } .hint { white-space:normal; } }
+</style>
+</head>
+<body>
+<div class="demo">
+  <div class="head">
+    <div><p class="eyebrow">Kanban · поток</p><h3>WIP, поток и время прохождения</h3></div>
+    <div class="hint">двигайте ползунок</div>
+  </div>
+  <svg viewBox="0 0 680 300" role="img" aria-label="Доска Kanban и график времени прохождения в зависимости от лимита WIP">
+    <text x="30" y="24" font-family="Consolas,monospace" font-size="7.4" letter-spacing=".1em" fill="#5b5560">ДОСКА</text>
+    <text x="95" y="44" text-anchor="middle" font-family="Consolas,monospace" font-size="7.2" fill="#0F8A63">В РАБОТЕ</text>
+    <text x="285" y="44" text-anchor="middle" font-family="Consolas,monospace" font-size="7.2" fill="#5b5560">ГОТОВО ЗА НЕДЕЛЮ</text>
+    <rect x="35" y="54" width="150" height="156" rx="8" fill="#fff" stroke="#2d3142"/>
+    <rect x="215" y="54" width="140" height="156" rx="8" fill="#fff" stroke="#cfc6bb" stroke-dasharray="4 3"/>
+
+    <g id="wipCards" font-family="Consolas,monospace" font-size="6.4" text-anchor="middle">
+      <g class="card" data-i="0"><rect x="45" y="64" width="130" height="13" rx="3" fill="#E1F5EE" stroke="#0F8A63"/><text x="110" y="73.5" fill="#0F8A63">задача 1</text></g>
+      <g class="card" data-i="1"><rect x="45" y="82" width="130" height="13" rx="3" fill="#E1F5EE" stroke="#0F8A63"/><text x="110" y="91.5" fill="#0F8A63">задача 2</text></g>
+      <g class="card" data-i="2"><rect x="45" y="100" width="130" height="13" rx="3" fill="#E1F5EE" stroke="#0F8A63"/><text x="110" y="109.5" fill="#0F8A63">задача 3</text></g>
+      <g class="card" data-i="3"><rect x="45" y="118" width="130" height="13" rx="3" fill="#E1F5EE" stroke="#0F8A63"/><text x="110" y="127.5" fill="#0F8A63">задача 4</text></g>
+      <g class="card" data-i="4"><rect x="45" y="136" width="130" height="13" rx="3" fill="#E1F5EE" stroke="#0F8A63"/><text x="110" y="145.5" fill="#0F8A63">задача 5</text></g>
+      <g class="card" data-i="5"><rect x="45" y="154" width="130" height="13" rx="3" fill="#E1F5EE" stroke="#0F8A63"/><text x="110" y="163.5" fill="#0F8A63">задача 6</text></g>
+      <g class="card" data-i="6"><rect x="45" y="172" width="130" height="13" rx="3" fill="#E1F5EE" stroke="#0F8A63"/><text x="110" y="181.5" fill="#0F8A63">задача 7</text></g>
+      <g class="card" data-i="7"><rect x="45" y="190" width="130" height="13" rx="3" fill="#E1F5EE" stroke="#0F8A63"/><text x="110" y="199.5" fill="#0F8A63">задача 8</text></g>
+    </g>
+    <text x="285" y="90" text-anchor="middle" font-family="Consolas,monospace" font-size="22" fill="#0F8A63" id="doneCount">4</text>
+    <text x="285" y="112" text-anchor="middle" font-family="Consolas,monospace" font-size="7" fill="#5b5560">задачи в неделю</text>
+    <text x="285" y="140" text-anchor="middle" font-family="Consolas,monospace" font-size="7" fill="#5b5560">это throughput</text>
+    <text x="285" y="176" text-anchor="middle" font-family="Consolas,monospace" font-size="6.6" fill="#6b6459">число карточек</text>
+    <text x="285" y="188" text-anchor="middle" font-family="Consolas,monospace" font-size="6.6" fill="#6b6459">на доске меняется</text>
+
+    <text x="390" y="26" font-family="Consolas,monospace" font-size="7.4" letter-spacing=".1em" fill="#5b5560">МОДЕЛЬ ЛИТТЛА</text>
+    <text x="390" y="48" font-family="Consolas,monospace" font-size="9" fill="#0F8A63">W = L / λ</text>
+    <text x="390" y="64" font-family="Consolas,monospace" font-size="6.8" fill="#5b5560">средний WIP = поток × время</text>
+
+    <rect x="390" y="78" width="260" height="160" rx="8" fill="#fff" stroke="#cfc6bb"/>
+    <g stroke="#b9ac9f" stroke-width="1" fill="none">
+      <path d="M414 218h228"/>
+      <path d="M414 218V92"/>
+    </g>
+    <g font-family="Consolas,monospace" font-size="6.4" fill="#6b6459" text-anchor="end">
+      <text x="410" y="221">0</text>
+      <text x="410" y="178">5</text>
+      <text x="410" y="135">10</text>
+      <text x="410" y="92">15</text>
+    </g>
+    <text x="402" y="86" font-family="Consolas,monospace" font-size="6.2" fill="#6b6459">дней</text>
+    <polyline id="chartLine" fill="none" stroke="#0F8A63" stroke-width="1.8" points=""/>
+    <circle id="marker" r="4" fill="#E1F5EE" stroke="#0F8A63" stroke-width="1.6"/>
+    <text id="markerLabel" font-family="Consolas,monospace" font-size="6.8" fill="#0F8A63" text-anchor="middle"></text>
+    <g font-family="Consolas,monospace" font-size="6.2" fill="#6b6459" text-anchor="middle">
+      <text x="414" y="232">1</text><text x="447" y="232">2</text><text x="480" y="232">3</text><text x="513" y="232">4</text>
+      <text x="546" y="232">5</text><text x="579" y="232">6</text><text x="612" y="232">7</text><text x="645" y="232">8</text>
+    </g>
+    <text x="528" y="248" text-anchor="middle" font-family="Consolas,monospace" font-size="6.4" fill="#6b6459">лимит WIP</text>
+
+    <text x="340" y="288" text-anchor="middle" font-family="Consolas,monospace" font-size="7" fill="#0F8A63">МОДЕЛЬ ПОКАЗЫВАЕТ ЗАВИСИМОСТЬ, А НЕ ГАРАНТИЮ ДЛЯ КАЖДОЙ ЗАДАЧИ</text>
+  </svg>
+  <div class="status" id="status"></div>
+  <div class="controls">
+    <div class="slider"><label for="wip">Лимит WIP: <span id="wipVal">4</span></label><input id="wip" type="range" min="1" max="8" step="1" value="4"></div>
+    <button data-t="2">Поток 2 в неделю</button>
+    <button data-t="4" class="on">Поток 4 в неделю</button>
+    <button data-t="6">Поток 6 в неделю</button>
+  </div>
+</div>
+<script>
+(function () {
+  var wip = 4, throughput = 4;
+  var slider = document.getElementById('wip');
+  var wipVal = document.getElementById('wipVal');
+  var doneCount = document.getElementById('doneCount');
+  var cards = document.querySelectorAll('#wipCards .card');
+  var line = document.getElementById('chartLine');
+  var marker = document.getElementById('marker');
+  var label = document.getElementById('markerLabel');
+  var status = document.getElementById('status');
+  var buttons = document.querySelectorAll('button[data-t]');
+
+  function xFor(w) { return 414 + ((w - 1) / 7) * 228; }
+  function yFor(days) { return 218 - (Math.min(days, 15) / 15) * 126; }
+
+  function update() {
+    wipVal.textContent = wip;
+    doneCount.textContent = throughput;
+    cards.forEach(function (c, i) { c.style.opacity = i < wip ? '1' : '0.12'; });
+
+    var pts = [];
+    for (var w = 1; w <= 8; w++) {
+      pts.push(xFor(w) + ',' + yFor((w / throughput) * 5));
+    }
+    line.setAttribute('points', pts.join(' '));
+
+    var days = (wip / throughput) * 5;
+    var mx = xFor(wip), my = yFor(days);
+    marker.setAttribute('cx', mx);
+    marker.setAttribute('cy', my);
+    label.setAttribute('x', mx);
+    label.setAttribute('y', Math.max(88, my - 8));
+    label.textContent = days.toFixed(1).replace('.', ',') + ' дн.';
+
+    var text = '<b>WIP ' + wip + ', поток ' + throughput + ' задачи в неделю.</b> ';
+    text += 'Среднее время прохождения по модели: ' + days.toFixed(1).replace('.', ',') + ' рабочих дней. ';
+    if (wip > throughput) {
+      text += 'Очередь больше недельного потока, поэтому задача ждёт дольше. Лимит помогает увидеть, где копится работа.';
+    } else {
+      text += 'Очередь не превышает недельный поток, поэтому ожидание короткое. Это не значит, что люди работают быстрее: меняется объём незавершённого.';
+    }
+    text += ' Допущение: поток постоянен, значения средние.';
+    status.innerHTML = text;
+  }
+
+  slider.addEventListener('input', function () { wip = Number(slider.value); update(); });
+  buttons.forEach(function (b) {
+    b.addEventListener('click', function () {
+      throughput = Number(b.dataset.t);
+      buttons.forEach(function (x) { x.classList.toggle('on', x === b); });
+      update();
+    });
+  });
+  update();
+})();
+</script>
+</body>
+</html>

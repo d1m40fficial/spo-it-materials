@@ -1,0 +1,160 @@
+﻿<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Что видит ревьюер</title>
+<style>
+  :root { --paper:#faf6f3; --card:#fffdfb; --ink:#1a1916; --muted:#6b6459; --rule:#e4d8cf; --accent:#0F8A63; --soft:#E1F5EE; --warn:#B45309; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .demo { background:var(--paper); border:1px solid var(--rule); border-radius:14px; padding:18px; }
+  .head { display:flex; justify-content:space-between; align-items:flex-end; gap:16px; padding-bottom:10px; border-bottom:1px solid var(--rule); }
+  .eyebrow { margin:0 0 4px; font:600 10px/1.2 Consolas,monospace; letter-spacing:.12em; text-transform:uppercase; color:var(--accent); }
+  h3 { margin:0; font-size:20px; line-height:1.2; }
+  .counter { font:11px/1.4 Consolas,monospace; color:var(--muted); white-space:nowrap; }
+  svg { display:block; width:100%; height:auto; margin-top:6px; }
+  .code { font-family:Consolas,monospace; font-size:8.5px; fill:#2d3142; }
+  .add { fill:#0F8A63; }
+  .del { fill:#9A3412; }
+  .cap { font-family:Consolas,monospace; font-size:7.5px; fill:#6b6459; }
+  .hot { fill:none; stroke:#B45309; stroke-width:1.8; rx:3; }
+  .status { min-height:70px; margin-top:8px; padding:10px 12px; border-radius:9px; background:var(--soft); font-size:12.5px; line-height:1.45; }
+  .status b { color:var(--accent); }
+  .controls { display:flex; gap:6px; flex-wrap:wrap; margin-top:10px; }
+  button { font:600 11px/1 "Segoe UI",system-ui,sans-serif; padding:8px 9px; border-radius:9px; border:1px solid var(--rule); background:var(--card); color:var(--ink); cursor:pointer; }
+  button:hover { border-color:var(--accent); color:var(--accent); }
+  button.on { background:var(--accent); border-color:var(--accent); color:#fff; }
+  @media (max-width:560px) { .demo { padding:12px; } }
+</style>
+</head>
+<body>
+<div class="demo">
+  <div class="head">
+    <div><p class="eyebrow">Ревью · чек-лист</p><h3>Одно изменение, шесть взглядов</h3></div>
+    <div class="counter">выберите пункт</div>
+  </div>
+  <svg viewBox="0 0 680 330" role="img" aria-label="Diff пул-реквеста и подсказки чек-листа">
+    <rect x="16" y="16" width="396" height="238" rx="9" fill="#fff" stroke="#2d3142"/>
+    <text class="cap" x="28" y="34">ПУЛ-РЕКВЕСТ: СПИСОК ЗАЯВОК</text>
+    <text class="code" x="28" y="56">Описание: добавить список заявок</text>
+    <text class="code" x="28" y="74">Файл: api/requests.py</text>
+
+    <text class="code" x="28" y="98">def list_requests(employee_id):</text>
+    <text class="code del" x="28" y="116">-    return []</text>
+    <text class="code add" x="28" y="134">+    return db.all("requests")</text>
+
+    <text class="code add" x="28" y="160">+def test_list_empty():</text>
+    <text class="code add" x="28" y="178">+    assert list_requests(1) == []</text>
+
+    <text class="code add" x="28" y="204">+    log.info("request=%s", request)</text>
+    <text class="code" x="28" y="228">README и описание API не менялись</text>
+
+    <g id="h-task" class="hot" hidden>
+      <rect x="22" y="42" width="360" height="100"/>
+    </g>
+    <g id="h-rights" class="hot" hidden>
+      <rect x="22" y="120" width="300" height="24"/>
+    </g>
+    <g id="h-tests" class="hot" hidden>
+      <rect x="22" y="148" width="300" height="40"/>
+    </g>
+    <g id="h-names" class="hot" hidden>
+      <rect x="22" y="84" width="300" height="24"/>
+    </g>
+    <g id="h-data" class="hot" hidden>
+      <rect x="22" y="192" width="300" height="24"/>
+    </g>
+    <g id="h-docs" class="hot" hidden>
+      <rect x="22" y="214" width="360" height="24"/>
+    </g>
+
+    <rect x="428" y="16" width="236" height="238" rx="9" fill="#E1F5EE" stroke="#0F8A63"/>
+    <text class="cap" x="442" y="36" fill="#0F8A63">ЧТО ПРОВЕРИТЬ</text>
+    <text class="code" x="442" y="60" id="l1">задача и diff</text>
+    <text class="code" x="442" y="84" id="l2">права доступа</text>
+    <text class="code" x="442" y="108" id="l3">тесты сценария</text>
+    <text class="code" x="442" y="132" id="l4">имена и границы</text>
+    <text class="code" x="442" y="156" id="l5">данные в журнале</text>
+    <text class="code" x="442" y="180" id="l6">документация</text>
+    <text class="cap" x="442" y="214">без пометки приоритета</text>
+    <text class="cap" x="442" y="230">автор не знает, что важно</text>
+
+    <text x="340" y="286" text-anchor="middle" font-family="Consolas,monospace" font-size="8" fill="#0F8A63" id="cap">ОДИН DIFF, РАЗНЫЕ ВОПРОСЫ</text>
+    <text x="340" y="306" text-anchor="middle" font-family="Consolas,monospace" font-size="7.5" fill="#2d3142" id="cap2">чек-лист нужен, чтобы вопросы не зависели от настроения ревьюера</text>
+  </svg>
+  <div class="status" id="status"></div>
+  <div class="controls">
+    <button data-k="task" class="on">Задача</button>
+    <button data-k="rights">Права</button>
+    <button data-k="tests">Тесты</button>
+    <button data-k="names">Имена</button>
+    <button data-k="data">Данные</button>
+    <button data-k="docs">Документация</button>
+  </div>
+</div>
+<script>
+(function () {
+  var data = {
+    task: {
+      h: "h-task",
+      cap: "ОПИСАНИЕ ОБЕЩАЕТ СПИСОК ЗАЯВОК, КОД ВОЗВРАЩАЕТ ВСЕ",
+      cap2: "первый вопрос ревью: совпадает ли diff с задачей",
+      text: "<b>Задача.</b> В описании сказано «список заявок», а функция возвращает все строки таблицы. Даже если права проверяются выше, поведение не соответствует обещанию. Это расхождение задачи и diff, его видно до чтения деталей."
+    },
+    rights: {
+      h: "h-rights",
+      cap: "ЗАПРОС БЕЗ ФИЛЬТРА ПО СОТРУДНИКУ",
+      cap2: "границы и права проверяют раньше стиля",
+      text: "<b>Права.</b> Параметр employee_id принимается, но не используется в запросе. Сотрудник увидит чужие заявки. Это блокер: без исправления сливать нельзя, даже если тесты зелёные."
+    },
+    tests: {
+      h: "h-tests",
+      cap: "ТЕСТ ПРОВЕРЯЕТ ТОЛЬКО ПУСТОЙ СПИСОК",
+      cap2: "тест на счастливый путь не доказывает фильтрацию",
+      text: "<b>Тесты.</b> Единственный тест проверяет пустой результат. Сценарий с двумя сотрудниками и непустым списком не покрыт, поэтому дефект прав не будет найден автоматически."
+    },
+    names: {
+      h: "h-names",
+      cap: "ИМЯ НЕ ГОВОРИТ, ЧТО СПИСОК ОБЩИЙ",
+      cap2: "имя обещает больше, чем делает функция",
+      text: "<b>Имена.</b> list_requests звучит как список заявок сотрудника, но фильтра нет. Либо имя должно стать list_all_requests, либо поведение должно соответствовать имени. Ложное имя усыпляет следующего читателя."
+    },
+    data: {
+      h: "h-data",
+      cap: "В ЖУРНАЛ ПОПАДАЕТ ВЕСЬ ОБЪЕКТ ЗАЯВКИ",
+      cap2: "данные в журнале это тоже граница безопасности",
+      text: "<b>Данные.</b> Строка журнала печатает весь объект заявки. Туда могут попасть контактные данные и служебные поля. Для разбора достаточно идентификатора, остальное создаёт риск утечки."
+    },
+    docs: {
+      h: "h-docs",
+      cap: "НОВОЕ ПОВЕДЕНИЕ НЕ ОПИСАНО",
+      cap2: "документация это часть изменения, а не отдельная задача",
+      text: "<b>Документация.</b> Новый параметр и правило фильтрации не описаны. Через месяц поддержка будет выяснять поведение по коду. Обновление README или описания API входит в это же изменение."
+    }
+  };
+  var groups = ["h-task", "h-rights", "h-tests", "h-names", "h-data", "h-docs"];
+  var status = document.getElementById('status');
+  var cap = document.getElementById('cap'), cap2 = document.getElementById('cap2');
+  var buttons = document.querySelectorAll('button[data-k]');
+
+  function apply(key) {
+    var d = data[key];
+    groups.forEach(function (id) {
+      var el = document.getElementById(id);
+      if (id === d.h) el.removeAttribute('hidden');
+      else el.setAttribute('hidden', '');
+    });
+    cap.textContent = d.cap;
+    cap2.textContent = d.cap2;
+    status.innerHTML = d.text;
+    buttons.forEach(function (b) { b.classList.toggle('on', b.dataset.k === key); });
+  }
+  buttons.forEach(function (b) { b.addEventListener('click', function () { apply(b.dataset.k); }); });
+  apply('task');
+})();
+</script>
+</body>
+</html>
+
+

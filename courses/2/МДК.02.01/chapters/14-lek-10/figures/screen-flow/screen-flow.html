@@ -1,0 +1,102 @@
+﻿<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Состояния экрана</title>
+<style>
+  :root { --paper:#faf6f3; --card:#fffdfb; --ink:#2d3142; --muted:#5b5560; --accent:#0F8A63; --soft:#E1F5EE; --rule:#e4d8cf; --bad:#b23a2b; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .demo { background:var(--paper); border:1px solid var(--rule); border-radius:14px; padding:18px; }
+  .head { display:flex; justify-content:space-between; align-items:flex-end; gap:16px; padding-bottom:10px; border-bottom:1px solid var(--rule); }
+  .eyebrow { margin:0 0 4px; font:600 10px/1.2 Consolas,monospace; letter-spacing:.12em; text-transform:uppercase; color:var(--accent); }
+  h3 { margin:0; font-size:19px; line-height:1.2; }
+  .hint { font:11px/1.4 Consolas,monospace; color:var(--muted); white-space:nowrap; }
+  svg { display:block; width:100%; height:auto; margin-top:6px; }
+  .status { min-height:52px; margin-top:6px; padding:10px 12px; border-radius:9px; background:var(--soft); font-size:12.5px; line-height:1.45; }
+  .status b { color:var(--accent); }
+  .controls { display:flex; gap:7px; flex-wrap:wrap; margin-top:10px; }
+  button { font:600 11.5px/1 "Segoe UI",system-ui,sans-serif; padding:8px 10px; border-radius:9px; border:1px solid var(--rule); background:var(--card); color:var(--ink); cursor:pointer; }
+  button:hover { border-color:var(--accent); color:var(--accent); }
+  button.on { background:var(--accent); border-color:var(--accent); color:#fff; }
+  @media (max-width:560px) { .demo { padding:12px; } .hint { display:none; } }
+</style>
+</head>
+<body>
+<div class="demo">
+  <div class="head">
+    <div><p class="eyebrow">Интерфейс · состояния</p><h3>Один экран, пять состояний</h3></div>
+    <div class="hint">выберите состояние</div>
+  </div>
+  <svg viewBox="0 0 680 300" role="img" aria-label="Макет экрана заявок в разных состояниях">
+    <rect x="24" y="24" width="370" height="180" rx="9" fill="#fff" stroke="#2d3142"/>
+    <line x1="24" y1="50" x2="394" y2="50" stroke="#e4d8cf"/>
+    <circle cx="38" cy="37" r="3" fill="#e4d8cf"/>
+    <circle cx="49" cy="37" r="3" fill="#e4d8cf"/>
+    <circle cx="60" cy="37" r="3" fill="#e4d8cf"/>
+    <text x="38" y="70" font-family="Consolas,monospace" font-size="9" fill="#2d3142">Заявки</text>
+
+    <text id="s-line1" x="38" y="104" font-family="Consolas,monospace" font-size="8" fill="#2d3142">Лампа в 214, новая</text>
+    <text id="s-line2" x="38" y="124" font-family="Consolas,monospace" font-size="8" fill="#5b5560">Замок в 310, в работе</text>
+
+    <g id="s-btn-group">
+      <rect id="s-btn" x="38" y="148" width="132" height="26" rx="5" fill="#E1F5EE" stroke="#0F8A63"/>
+      <text id="s-btn-label" x="104" y="165" text-anchor="middle" font-family="Consolas,monospace" font-size="7.5" fill="#0F8A63">Создать заявку</text>
+    </g>
+
+    <text id="s-state" x="38" y="194" font-family="Consolas,monospace" font-size="7.5" fill="#0F8A63">ДАННЫЕ</text>
+
+    <rect x="418" y="24" width="238" height="180" rx="9" fill="#fffdfb" stroke="#e4d8cf"/>
+    <text x="432" y="46" font-family="Consolas,monospace" font-size="7" fill="#5b5560">ЧТО ДЕЛАЕТ ПОЛЬЗОВАТЕЛЬ</text>
+    <text id="s-do" x="432" y="70" font-family="Consolas,monospace" font-size="7.2" fill="#2d3142">выбирает заявку</text>
+    <text id="s-do2" x="432" y="88" font-family="Consolas,monospace" font-size="7.2" fill="#2d3142">и открывает карточку</text>
+    <text x="432" y="116" font-family="Consolas,monospace" font-size="7" fill="#5b5560">ЧТО НЕЛЬЗЯ ЗАБЫТЬ</text>
+    <text id="s-rule" x="432" y="140" font-family="Consolas,monospace" font-size="7.2" fill="#0F8A63">фильтры и прокрутка</text>
+    <text id="s-rule2" x="432" y="158" font-family="Consolas,monospace" font-size="7.2" fill="#0F8A63">сохраняют контекст</text>
+
+    <text x="340" y="236" text-anchor="middle" font-family="Consolas,monospace" font-size="8" fill="#0F8A63">СОСТОЯНИЕ ЭТО ЧАСТЬ ЭКРАНА, А НЕ ОШИБКА РАЗРАБОТЧИКА</text>
+  </svg>
+  <div class="status" id="status"></div>
+  <div class="controls">
+    <button data-k="loading" class="on">Загрузка</button>
+    <button data-k="empty">Пусто</button>
+    <button data-k="data">Данные</button>
+    <button data-k="error">Ошибка</button>
+    <button data-k="denied">Нет прав</button>
+  </div>
+</div>
+<script>
+(function () {
+  var data = {
+    loading: { l1:'Загружаем список', l2:'подождите', btn:'', state:'ЗАГРУЗКА', do1:'ждёт результата', do2:'и не нажимает повторно', r1:'индикатор и блокировка', r2:'без мигания экрана', text:'<b>Загрузка.</b> Показывайте, что запрос выполняется, и блокируйте повторное действие. Иначе пользователь решит, что интерфейс завис.' },
+    empty: { l1:'Пока нет заявок', l2:'создайте первую', btn:'Создать заявку', state:'ПУСТО', do1:'создаёт первую запись', do2:'или читает объяснение', r1:'объяснить причину', r2:'и дать первый шаг', text:'<b>Пусто.</b> Пустой список объясняет, почему данных нет, и предлагает первое действие. Это не тот же экран, что ошибка загрузки.' },
+    data: { l1:'Лампа в 214, новая', l2:'Замок в 310, в работе', btn:'Создать заявку', state:'ДАННЫЕ', do1:'выбирает заявку', do2:'и открывает карточку', r1:'фильтры и прокрутка', r2:'сохраняют контекст', text:'<b>Данные.</b> Рабочее состояние показывает список, фильтры и понятные статусы. Цвет не должен быть единственным признаком.' },
+    error: { l1:'Не удалось загрузить', l2:'сервер не ответил', btn:'Повторить', state:'ОШИБКА', do1:'повторяет запрос', do2:'или уходит в другой раздел', r1:'назвать причину', r2:'и дать выход', text:'<b>Ошибка.</b> Сообщение называет причину и способ повторить. Код ошибки полезен поддержке, но не заменяет объяснение.' },
+    denied: { l1:'Нет доступа к заявкам', l2:'обратитесь к руководителю', btn:'', state:'НЕТ ПРАВ', do1:'понимает границу прав', do2:'и знает, к кому идти', r1:'не показывать пустоту', r2:'вместо объяснения', text:'<b>Нет прав.</b> Пользователь должен понимать, что дело не в сбое, а в доступе, и к кому обратиться.' }
+  };
+  var buttons = document.querySelectorAll('button[data-k]');
+  var status = document.getElementById('status');
+  var l1 = document.getElementById('s-line1'), l2 = document.getElementById('s-line2');
+  var btnGroup = document.getElementById('s-btn-group'), btnLabel = document.getElementById('s-btn-label');
+  var state = document.getElementById('s-state');
+  var do1 = document.getElementById('s-do'), do2 = document.getElementById('s-do2');
+  var r1 = document.getElementById('s-rule'), r2 = document.getElementById('s-rule2');
+
+  function apply(k) {
+    var s = data[k];
+    l1.textContent = s.l1; l2.textContent = s.l2;
+    state.textContent = s.state;
+    do1.textContent = s.do1; do2.textContent = s.do2;
+    r1.textContent = s.r1; r2.textContent = s.r2;
+    if (s.btn) { btnGroup.style.display = ''; btnLabel.textContent = s.btn; }
+    else { btnGroup.style.display = 'none'; }
+    buttons.forEach(function (b) { b.classList.toggle('on', b.dataset.k === k); });
+    status.innerHTML = s.text;
+  }
+  buttons.forEach(function (b) { b.addEventListener('click', function () { apply(b.dataset.k); }); });
+  apply('data');
+})();
+</script>
+</body>
+</html>

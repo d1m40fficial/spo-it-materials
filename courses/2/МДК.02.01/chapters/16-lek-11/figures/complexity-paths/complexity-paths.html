@@ -1,0 +1,137 @@
+﻿<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Пути в функции</title>
+<style>
+  :root { --paper:#faf6f3; --card:#fffdfb; --ink:#1a1916; --muted:#6b6459; --rule:#e4d8cf; --accent:#0F8A63; --soft:#E1F5EE; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .demo { background:var(--paper); border:1px solid var(--rule); border-radius:14px; padding:18px; }
+  .head { display:flex; justify-content:space-between; align-items:flex-end; gap:16px; padding-bottom:10px; border-bottom:1px solid var(--rule); }
+  .eyebrow { margin:0 0 4px; font:600 10px/1.2 Consolas,monospace; letter-spacing:.12em; text-transform:uppercase; color:var(--accent); }
+  h3 { margin:0; font-size:20px; line-height:1.2; }
+  .counter { font:11px/1.4 Consolas,monospace; color:var(--muted); white-space:nowrap; }
+  svg { display:block; width:100%; height:auto; margin-top:6px; }
+  .code { font-family:Consolas,monospace; font-size:9px; fill:#2d3142; }
+  .num { font-family:Consolas,monospace; font-size:26px; font-weight:700; fill:var(--accent); }
+  .cap { font-family:Consolas,monospace; font-size:8px; fill:var(--muted); }
+  .status { min-height:64px; margin-top:8px; padding:10px 12px; border-radius:9px; background:var(--soft); font-size:12.5px; line-height:1.45; }
+  .status b { color:var(--accent); }
+  .controls { display:flex; gap:7px; flex-wrap:wrap; margin-top:10px; }
+  button { font:600 11.5px/1 "Segoe UI",system-ui,sans-serif; padding:8px 10px; border-radius:9px; border:1px solid var(--rule); background:var(--card); color:var(--ink); cursor:pointer; }
+  button:hover { border-color:var(--accent); color:var(--accent); }
+  button.on { background:var(--accent); border-color:var(--accent); color:#fff; }
+  @media (max-width:560px) { .demo { padding:12px; } }
+</style>
+</head>
+<body>
+<div class="demo">
+  <div class="head">
+    <div><p class="eyebrow">Код · сложность</p><h3>Одна логика, разные пути</h3></div>
+    <div class="counter">условный пример</div>
+  </div>
+  <svg viewBox="0 0 680 300" role="img" aria-label="Три варианта функции и их сложность">
+    <rect x="16" y="16" width="330" height="196" rx="9" fill="#fff" stroke="#2d3142"/>
+
+    <g id="v-nested">
+      <text class="code" x="30" y="42">if total &gt;= 1000:</text>
+      <text class="code" x="30" y="58">    if not blocked:</text>
+      <text class="code" x="30" y="74">        if has_valid_coupon(order):</text>
+      <text class="code" x="30" y="90">            return percent</text>
+      <text class="code" x="30" y="106">        if vip:</text>
+      <text class="code" x="30" y="122">            return 10</text>
+      <text class="code" x="30" y="138">return 5</text>
+    </g>
+
+    <g id="v-guard" hidden>
+      <text class="code" x="30" y="42">if total &lt; 1000: return 0</text>
+      <text class="code" x="30" y="58">if blocked: return 0</text>
+      <text class="code" x="30" y="74">if has_valid_coupon(order):</text>
+      <text class="code" x="30" y="90">    return percent</text>
+      <text class="code" x="30" y="106">if vip: return 10</text>
+      <text class="code" x="30" y="122">return 5</text>
+    </g>
+
+    <g id="v-table" hidden>
+      <text class="code" x="30" y="42">rules = [</text>
+      <text class="code" x="30" y="58">  (no_order, 0),</text>
+      <text class="code" x="30" y="74">  (blocked, 0),</text>
+      <text class="code" x="30" y="90">  (has_coupon, percent),</text>
+      <text class="code" x="30" y="106">  (is_vip, 10),</text>
+      <text class="code" x="30" y="122">]</text>
+      <text class="code" x="30" y="138">return first_match(rules)</text>
+    </g>
+
+    <g>
+      <text class="cap" x="380" y="42">НЕЗАВИСИМЫХ ПУТЕЙ</text>
+      <text class="num" id="m-paths" x="380" y="72">5</text>
+      <text class="cap" x="500" y="42">МАКС. ВЛОЖЕННОСТЬ</text>
+      <text class="num" id="m-depth" x="500" y="72">4</text>
+      <text class="cap" x="380" y="112">МИНИМУМ ТЕСТОВ</text>
+      <text class="num" id="m-tests" x="380" y="142">5</text>
+      <text class="cap" x="500" y="112">ФУНКЦИЙ В МОДУЛЕ</text>
+      <text class="num" id="m-fn" x="500" y="142">1</text>
+    </g>
+
+    <rect x="16" y="228" width="648" height="52" rx="8" fill="#E1F5EE" stroke="#0F8A63"/>
+    <text x="340" y="250" text-anchor="middle" font-family="Consolas,monospace" font-size="9" fill="#0F8A63" id="cap">СЛОЖНОСТЬ СЧИТАЮТ ПО ВЕТВЛЕНИЯМ, А НЕ ПО СТРОКАМ</text>
+    <text x="340" y="268" text-anchor="middle" font-family="Consolas,monospace" font-size="8" fill="#2d3142" id="cap2">разделение снижает сложность каждой функции, но не общий объём работы</text>
+  </svg>
+  <div class="status" id="status"></div>
+  <div class="controls">
+    <button data-k="nested" class="on">Вложенные условия</button>
+    <button data-k="guard">Ранний выход</button>
+    <button data-k="table">Таблица правил</button>
+  </div>
+</div>
+<script>
+(function () {
+  var data = {
+    nested: {
+      paths: "5", depth: "4", tests: "5", fn: "1",
+      cap: "ВЛОЖЕННЫЕ УСЛОВИЯ: ПУТЕЙ СТОЛЬКО ЖЕ, ЧИТАТЬ ТРУДНЕЕ",
+      cap2: "каждое условие добавляет путь; вложенность добавляет нагрузку на читателя",
+      text: "<b>Вложенные условия.</b> Логика верная, но решение принимается на четырёх уровнях. Пять путей требуют минимум пяти тестов на ветви, а читатель держит в голове все уровни сразу."
+    },
+    guard: {
+      paths: "5", depth: "1", tests: "5", fn: "1",
+      cap: "РАННИЙ ВЫХОД: ТЕ ЖЕ ПУТИ, НО ПЛОСКАЯ ЗАПИСЬ",
+      cap2: "сложность не изменилась; изменилась цена чтения и проверки",
+      text: "<b>Ранний выход.</b> Проверки идут одна за другой и отсекают случаи. Число путей осталось прежним, поэтому тестов всё ещё пять, но вложенность упала с четырёх до одного уровня."
+    },
+    table: {
+      paths: "3", depth: "2", tests: "3", fn: "3",
+      cap: "ТАБЛИЦА ПРАВИЛ: РЕШЕНИЕ ВЫНЕСЕНО ИЗ ВЕТВЛЕНИЙ",
+      cap2: "каждая функция проще, но появляются новые функции и общий контракт",
+      text: "<b>Таблица правил.</b> Решения описаны данными, а не цепочкой if. У каждой функции путей меньше, зато функций стало три: сложность перераспределилась, а не исчезла."
+    }
+  };
+  var groups = { nested: document.getElementById('v-nested'), guard: document.getElementById('v-guard'), table: document.getElementById('v-table') };
+  var status = document.getElementById('status');
+  var cap = document.getElementById('cap'), cap2 = document.getElementById('cap2');
+  var buttons = document.querySelectorAll('button[data-k]');
+
+  function apply(key) {
+    Object.keys(groups).forEach(function (k) {
+      if (k === key) groups[k].removeAttribute('hidden');
+      else groups[k].setAttribute('hidden', '');
+    });
+    var d = data[key];
+    document.getElementById('m-paths').textContent = d.paths;
+    document.getElementById('m-depth').textContent = d.depth;
+    document.getElementById('m-tests').textContent = d.tests;
+    document.getElementById('m-fn').textContent = d.fn;
+    cap.textContent = d.cap;
+    cap2.textContent = d.cap2;
+    status.innerHTML = d.text;
+    buttons.forEach(function (b) { b.classList.toggle('on', b.dataset.k === key); });
+  }
+  buttons.forEach(function (b) { b.addEventListener('click', function () { apply(b.dataset.k); }); });
+  apply('nested');
+})();
+</script>
+</body>
+</html>
+

@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Как меняется версия</title>
+<style>
+  :root { --paper:#faf6f3; --card:#fffdfb; --ink:#1a1916; --muted:#6b6459; --rule:#e4d8cf; --accent:#0F8A63; --soft:#E1F5EE; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .demo { background:var(--paper); border:1px solid var(--rule); border-radius:14px; padding:18px; }
+  .head { display:flex; justify-content:space-between; align-items:flex-end; gap:16px; padding-bottom:10px; border-bottom:1px solid var(--rule); }
+  .eyebrow { margin:0 0 4px; font:600 10px/1.2 Consolas,monospace; letter-spacing:.12em; text-transform:uppercase; color:var(--accent); }
+  h3 { margin:0; font-size:19px; line-height:1.2; }
+  .hint { font:11px/1.4 Consolas,monospace; color:var(--muted); white-space:nowrap; }
+  svg { display:block; width:100%; height:auto; margin-top:8px; }
+  .status { min-height:56px; margin-top:8px; padding:10px 12px; border-radius:9px; background:var(--soft); font-size:12.5px; line-height:1.45; }
+  .status b { color:var(--accent); }
+  .controls { display:flex; gap:7px; flex-wrap:wrap; margin-top:10px; }
+  button { font:600 11.5px/1 "Segoe UI",system-ui,sans-serif; padding:8px 10px; border-radius:9px; border:1px solid var(--rule); background:var(--card); color:var(--ink); cursor:pointer; }
+  button:hover { border-color:var(--accent); color:var(--accent); }
+  button.on { background:var(--accent); border-color:var(--accent); color:#fff; }
+  @media (max-width:560px) { .demo { padding:12px; } .head { align-items:flex-start; flex-direction:column; gap:4px; } .hint { white-space:normal; } }
+</style>
+</head>
+<body>
+<div class="demo">
+  <div class="head">
+    <div><p class="eyebrow">Релиз · версия</p><h3>Одно изменение, один номер</h3></div>
+    <div class="hint">текущая версия 1.4.2</div>
+  </div>
+  <svg viewBox="0 0 680 236" role="img" aria-labelledby="vd-title vd-desc">
+    <title id="vd-title">Выбор типа изменения и номер версии</title>
+    <desc id="vd-desc">Тип изменения определяет, какая часть версии увеличивается и в какую категорию changelog попадает запись.</desc>
+
+    <rect x="16" y="22" width="196" height="118" rx="9" fill="#fff" stroke="#2d3142" stroke-width="1.3"/>
+    <text x="114" y="46" text-anchor="middle" font-family="Consolas,monospace" font-size="8" fill="#5b5560">ВЫБРАННОЕ ИЗМЕНЕНИЕ</text>
+    <text x="114" y="76" text-anchor="middle" font-family="Consolas,monospace" font-size="11" fill="#2d3142" id="vd-kind">несовместимое</text>
+    <text x="114" y="98" text-anchor="middle" font-family="Consolas,monospace" font-size="7.5" fill="#5b5560">публичный интерфейс</text>
+    <text x="114" y="114" text-anchor="middle" font-family="Consolas,monospace" font-size="7.5" fill="#5b5560">меняется несовместимо</text>
+
+    <path d="M220 81h44" stroke="#0F8A63" stroke-width="2" fill="none" marker-end="url(#vd-arrow)"/>
+    <text x="242" y="68" text-anchor="middle" font-family="Consolas,monospace" font-size="7" fill="#0F8A63">правило</text>
+
+    <rect x="276" y="22" width="176" height="118" rx="9" fill="#E1F5EE" stroke="#0F8A63" stroke-width="2"/>
+    <text x="364" y="46" text-anchor="middle" font-family="Consolas,monospace" font-size="8" fill="#0F8A63">НОВАЯ ВЕРСИЯ</text>
+    <text x="364" y="82" text-anchor="middle" font-family="Consolas,monospace" font-size="22" fill="#0F8A63" id="vd-version">2.0.0</text>
+    <text x="364" y="106" text-anchor="middle" font-family="Consolas,monospace" font-size="7.5" fill="#2d3142" id="vd-part">увеличивается MAJOR</text>
+    <text x="364" y="122" text-anchor="middle" font-family="Consolas,monospace" font-size="7.5" fill="#5b5560">minor и patch сбрасываются</text>
+
+    <path d="M460 81h30" stroke="#0F8A63" stroke-width="2" fill="none" marker-end="url(#vd-arrow)"/>
+
+    <rect x="498" y="22" width="166" height="118" rx="9" fill="#fff" stroke="#b9ac9f"/>
+    <text x="581" y="46" text-anchor="middle" font-family="Consolas,monospace" font-size="8" fill="#5b5560">CHANGELOG</text>
+    <text x="581" y="76" text-anchor="middle" font-family="Consolas,monospace" font-size="12" fill="#2d3142" id="vd-cat">Removed</text>
+    <text x="581" y="98" text-anchor="middle" font-family="Consolas,monospace" font-size="7.5" fill="#5b5560" id="vd-note">удалённая функция</text>
+    <text x="581" y="116" text-anchor="middle" font-family="Consolas,monospace" font-size="7.5" fill="#5b5560">или Changed</text>
+
+    <text x="340" y="176" text-anchor="middle" font-family="Consolas,monospace" font-size="7.6" fill="#2d3142">Версия сообщает пользователю, каких правок ждать при обновлении.</text>
+    <text x="340" y="196" text-anchor="middle" font-family="Consolas,monospace" font-size="7.6" fill="#0F8A63">Одно и то же изменение нельзя выпускать под старым номером.</text>
+    <text x="340" y="220" text-anchor="middle" font-family="Consolas,monospace" font-size="7" fill="#5b5560">Нажимайте кнопки под схемой, чтобы сравнить три типа изменений.</text>
+
+    <defs>
+      <marker id="vd-arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#0F8A63"/></marker>
+    </defs>
+  </svg>
+  <div class="status" id="vd-status"><b>Несовместимое изменение.</b> Пользователю придётся править код или данные. Номер 2.0.0 предупреждает об этом заранее.</div>
+  <div class="controls">
+    <button data-k="major" class="on">Несовместимое изменение</button>
+    <button data-k="minor">Новая возможность</button>
+    <button data-k="patch">Исправление</button>
+  </div>
+</div>
+<script>
+(function () {
+  var data = {
+    major: {
+      kind: 'несовместимое',
+      version: '2.0.0',
+      part: 'увеличивается MAJOR',
+      cat: 'Removed',
+      note: 'удалённая функция',
+      status: '<b>Несовместимое изменение.</b> Пользователю придётся править код или данные. Номер 2.0.0 предупреждает об этом заранее.'
+    },
+    minor: {
+      kind: 'новая возможность',
+      version: '1.5.0',
+      part: 'увеличивается MINOR',
+      cat: 'Added',
+      note: 'новая возможность',
+      status: '<b>Новая возможность без поломки.</b> Старый код продолжает работать, patch сбрасывается в ноль, номер 1.5.0 показывает совместимое расширение.'
+    },
+    patch: {
+      kind: 'исправление',
+      version: '1.4.3',
+      part: 'увеличивается PATCH',
+      cat: 'Fixed',
+      note: 'исправление ошибки',
+      status: '<b>Совместимое исправление.</b> Интерфейс не меняется, номер 1.4.3 говорит, что обновление безопасно для существующих пользователей.'
+    }
+  };
+  var buttons = document.querySelectorAll('button[data-k]');
+  var kind = document.getElementById('vd-kind');
+  var version = document.getElementById('vd-version');
+  var part = document.getElementById('vd-part');
+  var cat = document.getElementById('vd-cat');
+  var note = document.getElementById('vd-note');
+  var status = document.getElementById('vd-status');
+
+  function apply(key) {
+    var d = data[key];
+    buttons.forEach(function (b) { b.classList.toggle('on', b.dataset.k === key); });
+    kind.textContent = d.kind;
+    version.textContent = d.version;
+    part.textContent = d.part;
+    cat.textContent = d.cat;
+    note.textContent = d.note;
+    status.innerHTML = d.status;
+  }
+  buttons.forEach(function (b) { b.addEventListener('click', function () { apply(b.dataset.k); }); });
+  apply('major');
+})();
+</script>
+</body>
+</html>

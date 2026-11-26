@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Правило зависимостей</title>
+<style>
+  :root { --paper:#faf6f3; --ink:#2d3142; --muted:#5b5560; --accent:#0F8A63; --soft:#E1F5EE; --rule:rgba(45,49,66,.12); --warn:#a3543f; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .frame { background:var(--paper); border:1px solid var(--rule); border-radius:12px; padding:18px 18px 14px; }
+  .eyebrow { margin:0 0 8px; font:600 9px/1.2 Consolas,monospace; letter-spacing:.16em; text-transform:uppercase; color:var(--muted); }
+  .note { margin:10px 2px 0; font:11px/1.5 Consolas,monospace; color:var(--muted); }
+  svg { display:block; width:100%; height:auto; }
+</style>
+</head>
+<body>
+<div class="frame">
+  <p class="eyebrow">Архитектура · зависимости</p>
+  <svg viewBox="0 0 680 274" role="img" aria-labelledby="dr-title dr-desc">
+    <title id="dr-title">Разрешённые и запрещённые зависимости</title>
+    <desc id="dr-desc">Слои зависят сверху вниз. Прямой обход снизу вверх запрещён. Предметная область объявляет интерфейс, инфраструктура его реализует.</desc>
+
+    <g font-family="Consolas,monospace" text-anchor="middle">
+      <rect x="24" y="24" width="248" height="34" rx="6" fill="#E1F5EE" stroke="#0F8A63" stroke-width="1.5"/>
+      <text x="148" y="45" font-size="8.4" fill="#0F8A63">представление</text>
+
+      <rect x="24" y="72" width="248" height="34" rx="6" fill="#fff" stroke="#2d3142"/>
+      <text x="148" y="93" font-size="8.4">приложение</text>
+
+      <rect x="24" y="120" width="248" height="34" rx="6" fill="#fff" stroke="#2d3142"/>
+      <text x="148" y="141" font-size="8.4">предметная область</text>
+
+      <rect x="24" y="168" width="248" height="34" rx="6" fill="#fff" stroke="#2d3142"/>
+      <text x="148" y="189" font-size="8.4">инфраструктура</text>
+    </g>
+
+    <g stroke="#0F8A63" stroke-width="1.6" fill="none" marker-end="url(#arw-dr)">
+      <path d="M104 58v14"/>
+      <path d="M104 106v14"/>
+      <path d="M104 154v14"/>
+    </g>
+
+    <g stroke="#a3543f" stroke-width="1.4" fill="none" stroke-dasharray="5 3">
+      <path d="M272 41h22v144h-22"/>
+    </g>
+    <g stroke="#a3543f" stroke-width="1.6">
+      <path d="M288 108l8 8"/><path d="M296 108l-8 8"/>
+    </g>
+    <text x="302" y="112" font-family="Consolas,monospace" font-size="6.8" fill="#a3543f">нельзя</text>
+
+    <g stroke="#5b5560" stroke-width="1" stroke-dasharray="3 3">
+      <line x1="330" y1="20" x2="330" y2="206"/>
+    </g>
+
+    <g font-family="Consolas,monospace" text-anchor="middle">
+      <rect x="352" y="30" width="292" height="58" rx="7" fill="#fff" stroke="#2d3142"/>
+      <text x="498" y="49" font-size="8">предметная область</text>
+      <text x="498" y="64" font-size="6.8" fill="#5b5560">интерфейс Заявки</text>
+      <text x="498" y="77" font-size="6.8" fill="#5b5560">список(), сохранить()</text>
+
+      <rect x="352" y="136" width="292" height="58" rx="7" fill="#fff" stroke="#0F8A63" stroke-width="1.5"/>
+      <text x="498" y="155" font-size="8">инфраструктура</text>
+      <text x="498" y="170" font-size="6.8" fill="#5b5560">репозиторий SQLite</text>
+      <text x="498" y="183" font-size="6.8" fill="#5b5560">реализует интерфейс</text>
+    </g>
+
+    <g stroke="#0F8A63" stroke-width="1.5" fill="none" marker-end="url(#arw-dr)">
+      <path d="M498 136V96"/>
+    </g>
+    <text x="508" y="118" font-family="Consolas,monospace" font-size="6.8" fill="#0F8A63" text-anchor="start">реализует</text>
+    <text x="498" y="226" text-anchor="middle" font-family="Consolas,monospace" font-size="6.8" fill="#5b5560">вызов идёт вниз, знание о базе остаётся внизу</text>
+
+    <text x="340" y="258" text-anchor="middle" font-family="Consolas,monospace" font-size="7.6" fill="#0F8A63">ЗАВИСИМОСТЬ ИДЁТ ОТ УСТОЙЧИВОГО К ИЗМЕНЯЕМОМУ</text>
+
+    <defs>
+      <marker id="arw-dr" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#0F8A63"/></marker>
+    </defs>
+  </svg>
+  <p class="note">Прямой обход слоёв экономит одну строку и создаёт правило, которое работает только в одном канале.</p>
+</div>
+</body>
+</html>

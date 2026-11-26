@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>События спринта</title>
+<style>
+  :root { --paper:#faf6f3; --card:#fffdfb; --ink:#1a1916; --muted:#6b6459; --rule:#e4d8cf; --accent:#0F8A63; --soft:#E1F5EE; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .demo { background:var(--paper); border:1px solid var(--rule); border-radius:14px; padding:18px; }
+  .head { display:flex; justify-content:space-between; align-items:flex-end; gap:16px; padding-bottom:10px; border-bottom:1px solid var(--rule); }
+  .eyebrow { margin:0 0 4px; font:600 10px/1.2 Consolas,monospace; letter-spacing:.12em; text-transform:uppercase; color:var(--accent); }
+  h3 { margin:0; font-size:20px; line-height:1.2; }
+  .hint { font:11px/1.4 Consolas,monospace; color:var(--muted); white-space:nowrap; }
+  svg { display:block; width:100%; height:auto; margin-top:8px; }
+  .ev { cursor:pointer; }
+  .ev rect { fill:#fff; stroke:#2d3142; stroke-width:1.2; transition:fill .2s, stroke .2s; }
+  .ev:hover rect { stroke:var(--accent); }
+  .ev.on rect { fill:var(--soft); stroke:var(--accent); stroke-width:1.8; }
+  .ev text { font-family:Consolas,monospace; text-anchor:middle; fill:#2d3142; }
+  .ev .t { font-size:8.2px; }
+  .ev .s { font-size:6.6px; fill:#6b6459; }
+  .status { min-height:86px; margin-top:8px; padding:10px 12px; border-radius:9px; background:var(--soft); font-size:12.5px; line-height:1.45; }
+  .status b { color:var(--accent); }
+  .controls { display:flex; gap:7px; flex-wrap:wrap; margin-top:10px; }
+  button { font:600 11.5px/1.1 "Segoe UI",system-ui,sans-serif; padding:8px 10px; border-radius:9px; border:1px solid var(--rule); background:var(--card); color:var(--ink); cursor:pointer; }
+  button:hover { border-color:var(--accent); color:var(--accent); }
+  button.on { background:var(--accent); border-color:var(--accent); color:#fff; }
+  @media (max-width:560px) { .demo { padding:12px; } .head { align-items:flex-start; flex-direction:column; gap:4px; } .hint { white-space:normal; } }
+</style>
+</head>
+<body>
+<div class="demo">
+  <div class="head">
+    <div><p class="eyebrow">Scrum · события</p><h3>Спринт и его события</h3></div>
+    <div class="hint">нажмите на событие</div>
+  </div>
+  <svg viewBox="0 0 680 286" role="img" aria-label="Схема спринта и четырёх событий Scrum">
+    <rect x="30" y="26" width="620" height="52" rx="10" fill="#E1F5EE" stroke="#0F8A63" stroke-width="1.5"/>
+    <text x="46" y="46" font-family="Consolas,monospace" font-size="8" fill="#0F8A63">СПРИНТ</text>
+    <text x="46" y="62" font-family="Consolas,monospace" font-size="6.8" fill="#5b5560">контейнер: один месяц или меньше</text>
+    <text x="634" y="46" text-anchor="end" font-family="Consolas,monospace" font-size="6.8" fill="#5b5560">цель спринта защищает фокус</text>
+
+    <g class="ev" data-k="planning">
+      <rect x="38" y="104" width="136" height="56" rx="8"/>
+      <text x="106" y="124" class="t">планирование</text>
+      <text x="106" y="139" class="s">до 8 часов</text>
+      <text x="106" y="152" class="s">цель и бэклог спринта</text>
+    </g>
+    <g class="ev" data-k="daily">
+      <rect x="198" y="104" width="136" height="56" rx="8"/>
+      <text x="266" y="124" class="t">ежедневная</text>
+      <text x="266" y="139" class="s">15 минут</text>
+      <text x="266" y="152" class="s">план на следующий день</text>
+    </g>
+    <g class="ev" data-k="review">
+      <rect x="358" y="104" width="136" height="56" rx="8"/>
+      <text x="426" y="124" class="t">обзор</text>
+      <text x="426" y="139" class="s">до 4 часов</text>
+      <text x="426" y="152" class="s">инкремент и обратная связь</text>
+    </g>
+    <g class="ev" data-k="retro">
+      <rect x="518" y="104" width="132" height="56" rx="8"/>
+      <text x="584" y="124" class="t">ретроспектива</text>
+      <text x="584" y="139" class="s">до 3 часов</text>
+      <text x="584" y="152" class="s">улучшение процесса</text>
+    </g>
+
+    <g stroke="#5b5560" stroke-width="1.3" fill="none" marker-end="url(#arw-se)">
+      <path d="M174 132h18"/>
+      <path d="M334 132h18"/>
+      <path d="M494 132h18"/>
+    </g>
+    <path d="M266 166c0 22 18 26 30 12" stroke="#0F8A63" stroke-width="1.2" fill="none" stroke-dasharray="3 3" marker-end="url(#arw-se2)"/>
+    <text x="300" y="194" font-family="Consolas,monospace" font-size="6.6" fill="#0F8A63">ежедневно до конца спринта</text>
+
+    <rect x="38" y="214" width="612" height="52" rx="8" fill="#fff" stroke="#cfc6bb"/>
+    <text x="52" y="232" font-family="Consolas,monospace" font-size="6.8" letter-spacing=".08em" fill="#5b5560">ЧТО ПРОВЕРЯЕТСЯ</text>
+    <text x="52" y="250" font-family="Consolas,monospace" font-size="7.4" fill="#2d3142">обзор: продукт и следующие решения · ретроспектива: процесс и эффективность команды</text>
+    <text x="340" y="280" text-anchor="middle" font-family="Consolas,monospace" font-size="7.2" fill="#0F8A63">СОБЫТИЕ НУЖНО ДЛЯ РЕШЕНИЯ, А НЕ ДЛЯ ОТЧЁТА</text>
+
+    <defs>
+      <marker id="arw-se" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#5b5560"/></marker>
+      <marker id="arw-se2" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#0F8A63"/></marker>
+    </defs>
+  </svg>
+  <div class="status" id="status"></div>
+  <div class="controls">
+    <button data-k="planning">Планирование</button>
+    <button data-k="daily">Ежедневная</button>
+    <button data-k="review">Обзор</button>
+    <button data-k="retro">Ретроспектива</button>
+  </div>
+</div>
+<script>
+(function () {
+  var texts = {
+    planning: '<b>Планирование.</b> Зачем нужен спринт, что можно сделать и как. Участники: вся Scrum Team. Выход: цель спринта и бэклог спринта. Сбой: выбирают задачи без цели, поэтому при изменении объёма теряется смысл цикла.',
+    daily: '<b>Ежедневная встреча.</b> Проверить прогресс к цели и адаптировать план. Участники: разработчики; владелец продукта и скрам-мастер участвуют, если работают по бэклогу. Выход: действующий план на день. Сбой: отчёт перед руководителем вместо синхронизации.',
+    review: '<b>Обзор.</b> Показать инкремент и вместе со стейкхолдерами решить, что дальше. Участники: Scrum Team и приглашённые заинтересованные стороны. Выход: обратная связь и возможные изменения бэклога. Сбой: презентация слайдов вместо работающего продукта.',
+    retro: '<b>Ретроспектива.</b> Улучшить качество и эффективность команды. Участники: Scrum Team. Выход: одно или несколько улучшений, которые попадут в следующий спринт. Сбой: разбор виноватых вместо изменения процесса.'
+  };
+  var items = document.querySelectorAll('.ev');
+  var buttons = document.querySelectorAll('button[data-k]');
+  var status = document.getElementById('status');
+  function apply(key) {
+    items.forEach(function (i) { i.classList.toggle('on', i.dataset.k === key); });
+    buttons.forEach(function (b) { b.classList.toggle('on', b.dataset.k === key); });
+    status.innerHTML = texts[key];
+  }
+  items.forEach(function (i) { i.addEventListener('click', function () { apply(i.dataset.k); }); });
+  buttons.forEach(function (b) { b.addEventListener('click', function () { apply(b.dataset.k); }); });
+  apply('planning');
+})();
+</script>
+</body>
+</html>
