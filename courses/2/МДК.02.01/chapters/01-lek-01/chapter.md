@@ -567,6 +567,14 @@ Git, трекер задач, CI и чат ускоряют работу, но �
 9. NASA LLIS. Mars Climate Orbiter Mishap Investigation Board, lesson 641, 1999. https://llis.nasa.gov/lesson/641
 10. DORA. Software delivery performance metrics. https://dora.dev/guides/dora-metrics
 
+## Видеоразбор
+
+Главная идея занятия за минуту: почему рабочая программа не равна продукту, зачем каждой фазе артефакт и как дорожает ошибка, найденная поздно.
+
+::video https://vkvideo.ru/video_ext.php?oid=-243783037&id=456239017&hd=1 | 1. Процесс разработки ПО
+
+## Тест
+
 ::quiz
 Q: Как в книге о разработке в Google определяется программная инженерия?
 + Программирование, интегрированное во времени

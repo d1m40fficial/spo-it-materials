@@ -179,6 +179,11 @@ written chapter by chapter unless the user asks for a batch.
    multiple-choice (several `+`) and 1-3 short-answer (`=`), each with an explanation
    `!`. Do not list the question breakdown in the lecture text; it is not needed by the
    student. The quiz belongs inside the final gate. Practices do not get a test.
+   A lecture may close with a `::video <url> | N. Название занятия` right before
+   `## Тест`: use a VK embed URL (`https://vkvideo.ru/video_ext.php?oid=...&id=...&hash=...`)
+   so the site renders a responsive iframe with no visible caption. A local `.mp4` or
+   `.html` player is accepted for previews. Keep the script and graphics in
+   `<course>/media/<name>/` so the video can be rebuilt.
 6. **Build and check.** `python tools/ks/scripts/build_chapter.py <chapter.md>`, then
    `python tools/build_site.py`. Use `tools/ks/scripts/check_pages.py <dist-dir>` where
    Playwright/Chromium is available, including `--mobile` and `--dark`. The checker opens

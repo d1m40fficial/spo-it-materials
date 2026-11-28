@@ -186,6 +186,12 @@ def copy_course(year: str, course_dir: Path) -> dict:
     slug = c["slug"]
     src = course_dir / "dist"
     dst = SITE / year / slug
+    media = course_dir / "media"
+    if media.is_dir():
+        for f in media.iterdir():
+            if f.is_file() and f.suffix.lower() in (".mp4", ".webm", ".jpg", ".jpeg", ".png", ".webp", ".vtt", ".html"):
+                (src / "media").mkdir(parents=True, exist_ok=True)
+                shutil.copy2(f, src / "media" / f.name)
     if dst.exists():
         shutil.rmtree(dst)
     shutil.copytree(src, dst, ignore=shutil.ignore_patterns("shots*"))

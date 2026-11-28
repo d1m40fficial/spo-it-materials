@@ -99,6 +99,33 @@ def figure_dir(fid: str, base: Path) -> Path:
     return local
 
 
+def video_html(name: str, title: str, base: Path, n: int) -> str:
+    """An explainer video: a VK iframe for an http(s) URL, or a local MP4 for previews.
+
+    The visible caption is intentionally omitted; the second directive argument is only
+    the accessible title (and the VK upload title, e.g. "1. Процесс разработки ПО").
+    """
+    label = title or "Видео занятия"
+    if re.match(r"^https?://", name, re.I) or name.lower().endswith((".html", ".htm")):
+        src = name if re.match(r"^https?://", name, re.I) else f"media/{Path(name).name}"
+        return (f'<figure class="video-figure">'
+                f'<div class="video-frame"><iframe src="{esc(src)}" title="{esc(label)}" '
+                f'loading="lazy" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" '
+                f'allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div></figure>')
+    safe = Path(name).name
+    course_root = base.parents[1] if len(base.parents) > 1 else base
+    media = course_root / "media"
+    poster = media / f"{Path(safe).stem}.jpg"
+    if not (media / safe).is_file():
+        print(f"WARNING: video not found: {media / safe}")
+    poster_attr = f' poster="media/{esc(poster.name)}"' if poster.is_file() else ""
+    return (f'<figure class="video-figure">'
+            f'<div class="video-frame"><video controls preload="metadata" playsinline '
+            f'aria-label="{esc(label)}"{poster_attr}>'
+            f'<source src="media/{esc(safe)}" type="video/mp4">'
+            f'<a href="media/{esc(safe)}">Скачать видео</a></video></div></figure>')
+
+
 def figure_html(fid: str, caption: str, n: int, base: Path, figures: list) -> str:
     fdir = figure_dir(fid, base)
     dark, light = find_figure(fdir)
@@ -717,6 +744,7 @@ def render_quiz(block: list, n: int, kind: str = "chapter", guard: bool = False)
 def preprocess(body: str, base: Path, figures: list, page_kind: str = "chapter", guard: bool = False):
     """Turn callouts, figures, gates and quizzes into HTML blocks before Markdown runs."""
     out, lines, i, n_fig = [], body.split("\n"), 0, len(figures)
+    n_vid = 0
     has_quiz = False
     has_gate = False
     in_fence = False
@@ -786,6 +814,14 @@ def preprocess(body: str, base: Path, figures: list, page_kind: str = "chapter",
             n_fig += 1
             out.append("")
             out.append(figure_html(fm.group(1), (fm.group(2) or "").strip(), n_fig, base, figures))
+            out.append("")
+            i += 1
+            continue
+        vm = re.match(r"^::video\s+([^\s|]+)\s*(?:\|\s*(.*))?$", line.strip())
+        if vm:
+            n_vid += 1
+            out.append("")
+            out.append(video_html(vm.group(1), (vm.group(2) or "").strip(), base, n_vid))
             out.append("")
             i += 1
             continue

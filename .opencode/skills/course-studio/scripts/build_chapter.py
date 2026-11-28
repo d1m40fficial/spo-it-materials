@@ -31,7 +31,7 @@ import yaml
 from pygments.formatters import HtmlFormatter
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from _pages import accent_vars, esc, find_course_json, load_course, page, rail, FALLBACK, ASSETS  # noqa: E402
+from _pages import accent_vars, esc, find_course_json, is_cards, load_course, page, rail, FALLBACK, ASSETS  # noqa: E402
 from availability import is_open, load_availability  # noqa: E402
 
 SHADER_JS = (ASSETS / "shader.js").read_text(encoding="utf-8")
@@ -97,6 +97,33 @@ def figure_dir(fid: str, base: Path) -> Path:
             if d.is_dir():
                 return d
     return local
+
+
+def video_html(name: str, title: str, base: Path, n: int) -> str:
+    """An explainer video: a VK iframe for an http(s) URL, or a local MP4 for previews.
+
+    The visible caption is intentionally omitted; the second directive argument is only
+    the accessible title (and the VK upload title, e.g. "1. Процесс разработки ПО").
+    """
+    label = title or "Видео занятия"
+    if re.match(r"^https?://", name, re.I) or name.lower().endswith((".html", ".htm")):
+        src = name if re.match(r"^https?://", name, re.I) else f"media/{Path(name).name}"
+        return (f'<figure class="video-figure">'
+                f'<div class="video-frame"><iframe src="{esc(src)}" title="{esc(label)}" '
+                f'loading="lazy" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" '
+                f'allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div></figure>')
+    safe = Path(name).name
+    course_root = base.parents[1] if len(base.parents) > 1 else base
+    media = course_root / "media"
+    poster = media / f"{Path(safe).stem}.jpg"
+    if not (media / safe).is_file():
+        print(f"WARNING: video not found: {media / safe}")
+    poster_attr = f' poster="media/{esc(poster.name)}"' if poster.is_file() else ""
+    return (f'<figure class="video-figure">'
+            f'<div class="video-frame"><video controls preload="metadata" playsinline '
+            f'aria-label="{esc(label)}"{poster_attr}>'
+            f'<source src="media/{esc(safe)}" type="video/mp4">'
+            f'<a href="media/{esc(safe)}">Скачать видео</a></video></div></figure>')
 
 
 def figure_html(fid: str, caption: str, n: int, base: Path, figures: list) -> str:
@@ -211,33 +238,12 @@ READ_SCRIPT = r"""
     var max=document.documentElement.scrollHeight-window.innerHeight;
     return max>0?Math.min(100,Math.max(0,window.scrollY/max*100)):100;
   }
-  function gatePct(){
-    var steps=[].slice.call(document.querySelectorAll('.gate-step'));
-    if(!steps.length) return null;
-    var n=steps.length;
-    var open=steps.filter(function(step){ return step.classList.contains('open'); });
-    var article=document.querySelector('article.prose')||document.querySelector('.prose');
-    var view=window.scrollY+window.innerHeight;
-    if(!open.length){
-      if(!article) return 0;
-      var articleTop=article.getBoundingClientRect().top+window.scrollY;
-      var firstTop=steps[0].getBoundingClientRect().top+window.scrollY;
-      var span=Math.max(1, firstTop-articleTop);
-      var done=Math.min(1,Math.max(0,(view-articleTop)/span));
-      return done/(n+1)*100;
-    }
-    var last=open[open.length-1];
-    var box=last.getBoundingClientRect();
-    var top=box.top+window.scrollY;
-    var height=last.offsetHeight||box.height||1;
-    var seen=Math.min(1,Math.max(0,(view-top)/height));
-    return Math.min(100,Math.max(0,(1+(open.length-1)+seen)/(n+1)*100));
-  }
+  var maxPct=0;
   function update(){
-    var pct=gatePct();
-    if(pct===null) pct=scrollPct();
-    fill.style.width=pct.toFixed(2)+'%';
-    bar.setAttribute('aria-valuenow', String(Math.round(pct)));
+    var pct=scrollPct();
+    if(pct>maxPct) maxPct=pct;
+    fill.style.width=maxPct.toFixed(2)+'%';
+    bar.setAttribute('aria-valuenow', String(Math.round(maxPct)));
   }
   function onScroll(){ if(ticking) return; ticking=true;
     requestAnimationFrame(function(){update();ticking=false;}); }
@@ -252,6 +258,20 @@ PDF_SCRIPT = r"""
 (function(){
   document.querySelectorAll('[data-pdf]').forEach(function(button){
     button.addEventListener('click',function(){ window.print(); });
+  });
+})();
+"""
+
+CHECKLIST_SCRIPT = r"""
+(function(){
+  document.querySelectorAll('.work-checklist input[type="checkbox"]').forEach(function(cb){
+    cb.addEventListener('change', function(){
+      if(!cb.checked) return;
+      var row = cb.closest('tr');
+      row.querySelectorAll('input[type="checkbox"]').forEach(function(other){
+        if(other !== cb) other.checked = false;
+      });
+    });
   });
 })();
 """
@@ -359,32 +379,131 @@ QUIZ_SCRIPT = r"""
     q.querySelectorAll('input').forEach(function(i){ i.disabled = true; });
   }
 
+  function resetQuiz(quiz){
+    quiz.querySelectorAll('input').forEach(function(i){
+      if(i.type === 'checkbox' || i.type === 'radio') i.checked = false;
+      else i.value = '';
+      i.disabled = false;
+    });
+    quiz.querySelectorAll('.opt').forEach(function(o){ o.classList.remove('picked', 'correct'); });
+    quiz.querySelectorAll('.quiz-q').forEach(function(q){
+      q.classList.remove('ok', 'bad', 'missing');
+      delete q.dataset.answered;
+    });
+    quiz.querySelectorAll('.quiz-why').forEach(function(w){ w.hidden = true; });
+    quiz.querySelectorAll('[data-note]').forEach(function(n){ n.hidden = true; n.textContent = ''; });
+    quiz.querySelectorAll('[data-answer]').forEach(function(b){ b.hidden = false; b.disabled = false; });
+    var note = quiz.querySelector('[data-quiz-note]');
+    if(note){ note.hidden = true; note.textContent = ''; }
+    var card = quiz.querySelector('[data-quiz-result]');
+    if(card) card.hidden = true;
+    document.documentElement.classList.add('quiz-pending');
+  }
+
+  function shuffleQuestions(quiz){
+    var list = [].slice.call(quiz.querySelectorAll('.quiz-q'));
+    var anchor = quiz.querySelector('[data-quiz-note]') || null;
+    for(var i = list.length - 1; i > 0; i--){
+      var j = Math.floor(Math.random() * (i + 1));
+      var tmp = list[i]; list[i] = list[j]; list[j] = tmp;
+    }
+    list.forEach(function(q, idx){
+      var no = q.querySelector('.quiz-no');
+      if(no) no.textContent = String(idx + 1).padStart(2, '0');
+      if(anchor) quiz.insertBefore(q, anchor); else quiz.appendChild(q);
+    });
+  }
+
+  addEventListener('pageshow', function(e){ if(e.persisted) location.reload(); });
+
+  function quizStoreKey(){ return 'mdk-quiz:' + location.pathname; }
+  function readAttempts(name){
+    try { var raw = localStorage.getItem(quizStoreKey() + ':' + encodeURIComponent(name)); return raw ? JSON.parse(raw) : null; }
+    catch(e){ return null; }
+  }
+  function writeAttempts(name, data){
+    try { localStorage.setItem(quizStoreKey() + ':' + encodeURIComponent(name), JSON.stringify(data)); } catch(e){}
+  }
+  function shuffleOptions(quiz){
+    quiz.querySelectorAll('.quiz-q .opts').forEach(function(box){
+      var list = [].slice.call(box.children);
+      for(var i = list.length - 1; i > 0; i--){
+        var j = Math.floor(Math.random() * (i + 1));
+        var tmp = list[i]; list[i] = list[j]; list[j] = tmp;
+      }
+      list.forEach(function(o){ box.appendChild(o); });
+    });
+  }
+
   document.querySelectorAll('[data-quiz]').forEach(function(quiz){
+    resetQuiz(quiz);
+    shuffleQuestions(quiz);
+    shuffleOptions(quiz);
     var qs = [].slice.call(quiz.querySelectorAll('.quiz-q'));
     if(!qs.length) return;
-    document.documentElement.classList.add('quiz-pending');
-    var current = 0, right = 0, firstAt = null, lastAt = null;
+    var last = qs.length - 1;
+    var nameInput = quiz.querySelector('[data-quiz-name]');
+    var whoNote = quiz.querySelector('[data-who-note]');
+    var attemptsLabel = quiz.querySelector('[data-quiz-attempts]');
+    var right = 0, submitted = false, blocked = false, firstAt = null, lastAt = null;
     function mark(){ var now = performance.now(); if(firstAt === null) firstAt = now; lastAt = now; }
-    function showQuestion(i){
-      current = i;
-      qs[i].hidden = false;
-      if(window.__readProgress) window.__readProgress();
+    qs.forEach(function(q, i){
+      var b = q.querySelector('[data-answer]');
+      if(b) b.textContent = i === last ? 'Завершить тест' : 'Ответить';
+      q.hidden = i > 0;
+    });
+
+    function updateAttempts(){
+      if(!nameInput) return false;
+      var name = norm(nameInput.value);
+      if(!name){
+        blocked = false;
+        if(attemptsLabel){ attemptsLabel.textContent = 'две попытки на лекцию'; attemptsLabel.classList.remove('limit'); }
+        return false;
+      }
+      var data = readAttempts(name);
+      var count = data && data.count ? data.count : 0;
+      blocked = count >= 2;
+      if(attemptsLabel){
+        attemptsLabel.textContent = 'Попыток: ' + count + ' из 2' + (data && data.best != null ? ' · лучший ' + data.best + ' из ' + qs.length : '');
+        attemptsLabel.classList.toggle('limit', blocked);
+      }
+      if(whoNote){
+        whoNote.hidden = !blocked;
+        whoNote.textContent = blocked ? 'Для этого ФИО попытки закончились: 2 из 2.' : '';
+      }
+      qs.forEach(function(q){
+        var b = q.querySelector('[data-answer]');
+        if(b && !submitted) b.disabled = blocked;
+      });
+      return blocked;
     }
-    function finish(){
-      var card = quiz.querySelector('[data-quiz-result]');
-      if(!card) return;
-      var total = qs.length, pct = total ? Math.round(right / total * 100) : 0;
-      var testMs = (firstAt !== null && lastAt !== null) ? Math.max(0, lastAt - firstAt) : 0;
-      card.querySelector('[data-modal-result]').textContent = 'Правильных ответов: ' + right + ' из ' + total + ' (' + pct + '%)';
-      card.querySelector('[data-test-time]').textContent = fmt(testMs);
-      card.querySelector('[data-view-time]').textContent = fmt(viewingMs());
-      card.hidden = false;
-      document.documentElement.classList.remove('quiz-pending');
-      if(window.__readProgress) window.__readProgress();
-      window.dispatchEvent(new Event('resize'));
+    if(nameInput){
+      nameInput.addEventListener('input', updateAttempts);
+      nameInput.addEventListener('change', updateAttempts);
     }
+
+    qs.forEach(function(q, idx){
+      q.addEventListener('input', function(e){ if(e.target.matches('input')){ mark(); q.classList.remove('missing'); } });
+      q.addEventListener('change', function(e){ if(e.target.matches('input')){ mark(); paintPicked(q); q.classList.remove('missing'); } });
+      var short = q.querySelector('.short-answer');
+      if(short) short.addEventListener('keydown', function(e){ if(e.key === 'Enter'){ e.preventDefault(); mark(); } });
+      var answerBtn = q.querySelector('[data-answer]');
+      if(answerBtn) answerBtn.addEventListener('click', function(){ answer(q, idx); });
+    });
+
     function answer(q, idx){
-      if(q.dataset.answered === '1') return;
+      if(submitted) return;
+      if(nameInput && !norm(nameInput.value)){
+        if(whoNote){ whoNote.hidden = false; whoNote.textContent = 'Укажите ФИО перед началом теста.'; }
+        nameInput.focus();
+        return;
+      }
+      if(whoNote) whoNote.hidden = true;
+      if(updateAttempts()){
+        if(whoNote){ whoNote.hidden = false; whoNote.textContent = 'Для этого ФИО попытки закончились: 2 из 2.'; }
+        return;
+      }
       var note = q.querySelector('[data-note]');
       if(!hasAnswer(q)){
         if(note){ note.hidden = false; note.textContent = q.dataset.type === 'short' ? 'Введите ответ.' : 'Выберите вариант.'; }
@@ -392,26 +511,69 @@ QUIZ_SCRIPT = r"""
       }
       if(note) note.hidden = true;
       mark();
-      var ok = questionCorrect(q);
-      q.dataset.answered = '1';
-      q.classList.add(ok ? 'ok' : 'bad');
-      paintChoices(q);
-      var why = q.querySelector('.quiz-why'); if(why) why.hidden = false;
-      lock(q);
-      var answerBtn = q.querySelector('[data-answer]'); if(answerBtn) answerBtn.hidden = true;
-      if(ok) right++;
-      if(idx === qs.length - 1){ finish(); }
-      else { showQuestion(idx + 1); }
+      var btn = q.querySelector('[data-answer]');
+      if(btn){ btn.disabled = true; btn.hidden = true; }
+      if(idx === last){ finish(); }
+      else { qs[idx + 1].hidden = false; if(window.__readProgress) window.__readProgress(); }
     }
-    qs.forEach(function(q, idx){
-      q.addEventListener('input', function(e){ if(e.target.matches('input')) mark(); });
-      q.addEventListener('change', function(e){ if(e.target.matches('input')){ mark(); paintPicked(q); } });
-      var answerBtn = q.querySelector('[data-answer]');
-      if(answerBtn) answerBtn.addEventListener('click', function(){ answer(q, idx); });
-      var short = q.querySelector('.short-answer');
-      if(short) short.addEventListener('keydown', function(e){ if(e.key === 'Enter'){ e.preventDefault(); answer(q, idx); } });
+
+    function finish(){
+      if(submitted) return;
+      var note = quiz.querySelector('[data-quiz-note]');
+      var missing = qs.filter(function(q){ return !hasAnswer(q); });
+      if(missing.length){
+        qs.forEach(function(q){ q.classList.toggle('missing', !hasAnswer(q)); });
+        if(note){ note.hidden = false; note.textContent = 'Без ответа осталось вопросов: ' + missing.length + '. Ответьте на все и завершите тест снова.'; }
+        missing[0].scrollIntoView({block:'center', behavior:'smooth'});
+        return;
+      }
+      submitted = true;
+      if(note) note.hidden = true;
+      mark();
+      var wrong = [];
+      qs.forEach(function(q, i){
+        q.classList.remove('missing');
+        var ok = questionCorrect(q);
+        q.classList.add(ok ? 'ok' : 'bad');
+        paintPicked(q);
+        lock(q);
+        var btn = q.querySelector('[data-answer]'); if(btn) btn.hidden = true;
+        if(ok) right++; else wrong.push(i + 1);
+      });
+      var name = nameInput ? nameInput.value.trim() : '';
+      var nameKey = norm(name);
+      if(nameKey){
+        var data = readAttempts(nameKey) || {count: 0, best: 0};
+        data.count = (data.count || 0) + 1;
+        data.best = Math.max(data.best || 0, right);
+        writeAttempts(nameKey, data);
+      }
+      updateAttempts();
+      var card = quiz.querySelector('[data-quiz-result]');
+      if(!card) return;
+      var total = qs.length, pct = total ? Math.round(right / total * 100) : 0;
+      var testMs = (firstAt !== null && lastAt !== null) ? Math.max(0, lastAt - firstAt) : 0;
+      card.querySelector('[data-student-name]').textContent = name || 'не указано';
+      card.querySelector('[data-modal-result]').textContent = 'Правильных ответов: ' + right + ' из ' + total + ' (' + pct + '%)';
+      card.querySelector('[data-modal-wrong]').textContent = wrong.length
+        ? 'Вопросы с ошибками: ' + wrong.join(', ') + '. Повторите эти разделы лекции.'
+        : 'Ошибок нет.';
+      card.querySelector('[data-test-time]').textContent = fmt(testMs);
+      card.querySelector('[data-view-time]').textContent = fmt(viewingMs());
+      card.hidden = false;
+      document.documentElement.classList.remove('quiz-pending');
+      if(window.__readProgress) window.__readProgress();
+      window.dispatchEvent(new Event('resize'));
+    }
+  });
+
+  document.querySelectorAll('[data-quiz-guard]').forEach(function(quiz){
+    ['copy', 'cut', 'contextmenu', 'dragstart', 'selectstart'].forEach(function(type){
+      quiz.addEventListener(type, function(e){
+        if(e.target && e.target.closest && e.target.closest('input, textarea')) return;
+        e.preventDefault();
+      });
     });
-    showQuestion(0);
   });
 })();
 """
@@ -486,7 +648,7 @@ def shuffled_questions(questions: list) -> list:
     return order
 
 
-def render_quiz(block: list, n: int, kind: str = "chapter") -> tuple:
+def render_quiz(block: list, n: int, kind: str = "chapter", guard: bool = False) -> tuple:
     """Parse Q: / + / - / = lines into an interactive, self-scoring test.
 
     A question with one `+` is single-choice, several `+` lines make it
@@ -538,7 +700,7 @@ def render_quiz(block: list, n: int, kind: str = "chapter") -> tuple:
             input_type = "checkbox" if is_multi else "radio"
             order = shuffled_options(q["opts"], q["correct"], q["q"])
             opts = "".join(
-                f'<label class="opt"><input type="{input_type}" name="q{n}_{qi}" value="{oi}"'
+                f'<label class="opt"><input type="{input_type}" name="q{n}_{qi}" value="{oi}" autocomplete="off"'
                 f'{" data-ok" if oi in q["correct"] else ""}><span>{md(q["opts"][oi])[3:-4]}</span></label>'
                 for oi in order)
             qtype = "multi" if is_multi else "single"
@@ -557,24 +719,32 @@ def render_quiz(block: list, n: int, kind: str = "chapter") -> tuple:
             print(f"WARNING: lecture quiz has {len(questions)} questions, expected 15")
         if not all(counts.values()):
             print("WARNING: lecture quiz must contain single-choice, multiple-choice and short-answer questions")
+    submit_box = ('<p class="quiz-note quiz-submit-note" data-quiz-note hidden></p>')
+    who = ('<div class="quiz-who">'
+           '<label class="quiz-who-label"><span>ФИО</span>'
+           '<input type="text" class="quiz-name" data-quiz-name maxlength="80" autocomplete="off" '
+           'placeholder="Иванов Иван Иванович"></label>'
+           '<span class="quiz-attempts" data-quiz-attempts>две попытки на лекцию</span>'
+           '<span class="quiz-note" data-who-note hidden></span></div>')
     result = ('<div class="quiz-result" data-quiz-result hidden aria-live="polite">'
               '<span class="label">Результат теста</span><h3>Тест завершён</h3>'
-              '<label class="modal-name" data-student-label><span>ФИО студента</span>'
-              '<input type="text" data-student-name maxlength="80" autocomplete="name" '
-              'placeholder="Иванов Иван Иванович"></label>'
+              '<p class="modal-name-line">ФИО: <b data-student-name></b></p>'
               '<p class="modal-result" data-modal-result></p>'
+              '<p class="modal-result" data-modal-wrong></p>'
               '<dl class="modal-times">'
               '<div><dt>Время выполнения теста</dt><dd data-test-time>00:00</dd></div>'
               '<div><dt>Время просмотра лекции</dt><dd data-view-time>00:00</dd></div>'
               '</dl></div>')
-    html_block = (f'\n<div class="quiz" data-quiz>'
-                  f'{"".join(items)}{result}</div>\n')
+    guard_attr = " data-quiz-guard" if guard else ""
+    html_block = (f'\n<div class="quiz" data-quiz{guard_attr}>'
+                  f'{who}{"".join(items)}{submit_box}{result}</div>\n')
     return html_block, True
 
 
-def preprocess(body: str, base: Path, figures: list, page_kind: str = "chapter"):
+def preprocess(body: str, base: Path, figures: list, page_kind: str = "chapter", guard: bool = False):
     """Turn callouts, figures, gates and quizzes into HTML blocks before Markdown runs."""
     out, lines, i, n_fig = [], body.split("\n"), 0, len(figures)
+    n_vid = 0
     has_quiz = False
     has_gate = False
     in_fence = False
@@ -602,7 +772,7 @@ def preprocess(body: str, base: Path, figures: list, page_kind: str = "chapter")
                 i += 1
             if not closed:
                 print("WARNING: ::gate was not closed with ::/gate; closing it at the end")
-            inner_pre, inner_quiz, inner_gate = preprocess("\n".join(block), base, figures, page_kind)
+            inner_pre, inner_quiz, inner_gate = preprocess("\n".join(block), base, figures, page_kind, guard)
             if inner_gate:
                 print("WARNING: nested gates are not supported; flatten the lecture gates")
             inner_html = md(inner_pre)
@@ -633,7 +803,7 @@ def preprocess(body: str, base: Path, figures: list, page_kind: str = "chapter")
                         block.append(""); i += 1; continue
                     break
                 block.append(lines[i]); i += 1
-            qhtml, found = render_quiz(block, i, page_kind)
+            qhtml, found = render_quiz(block, i, page_kind, guard)
             has_quiz = has_quiz or found
             out.append("")
             out.append(qhtml)
@@ -644,6 +814,14 @@ def preprocess(body: str, base: Path, figures: list, page_kind: str = "chapter")
             n_fig += 1
             out.append("")
             out.append(figure_html(fm.group(1), (fm.group(2) or "").strip(), n_fig, base, figures))
+            out.append("")
+            i += 1
+            continue
+        vm = re.match(r"^::video\s+([^\s|]+)\s*(?:\|\s*(.*))?$", line.strip())
+        if vm:
+            n_vid += 1
+            out.append("")
+            out.append(video_html(vm.group(1), (vm.group(2) or "").strip(), base, n_vid))
             out.append("")
             i += 1
             continue
@@ -668,6 +846,48 @@ def preprocess(body: str, base: Path, figures: list, page_kind: str = "chapter")
         out.append(line)
         i += 1
     return "\n".join(out), has_quiz, has_gate
+
+
+def insert_work_checklist(html_body: str) -> str:
+    """Add a practical work checklist before the assessment criteria."""
+    if "work-checklist" in html_body:
+        return html_body
+    marker = "<h2>Критерии оценки</h2>"
+    if marker not in html_body:
+        return html_body
+    items = []
+    match = re.search(r"<h2[^>]*>\s*Что сдать\s*</h2>\s*(<ol[^>]*>.*?</ol>|<ul[^>]*>.*?</ul>)", html_body, re.S)
+    if match:
+        items = re.findall(r"<li>(.*?)</li>", match.group(1), re.S)
+    if not items:
+        # Some practices describe the deliverable in a paragraph instead of a list.
+        section = re.search(r"<h2[^>]*>\s*Что сдать\s*</h2>(.*?)(?=<h2)", html_body, re.S)
+        if section:
+            for para in re.findall(r"<p>(.*?)</p>", section.group(1), re.S):
+                text = re.sub(r"<[^>]+>", "", para).strip()
+                for sentence in re.split(r"(?<=[.!?])\s+(?=[А-ЯЁA-Z])", text):
+                    sentence = sentence.strip()
+                    if len(sentence.split()) >= 3:
+                        items.append(sentence)
+    if not items:
+        items = ["Комплект файлов подготовлен", "Проверки выполнены", "Отчёт оформлен"]
+    rows = []
+    for i, item in enumerate(items, 1):
+        label = re.sub(r"[;.,]\s*$", "", item.strip())
+        if label and not label.startswith("<") and label[0].islower():
+            label = label[0].upper() + label[1:]
+        rows.append(
+            f'<tr><td>{label}</td>'
+            f'<td><input type="checkbox" class="check-done" aria-label="Пункт {i} сделан"></td>'
+            f'<td><input type="checkbox" class="check-left" aria-label="Пункт {i} остался"></td></tr>'
+        )
+    block = (
+        "<h2>Чек-лист выполнения работы</h2>\n"
+        "<p>Отметьте, что уже сделано, а что осталось. Незакрытые пункты показывают, что ещё нужно выполнить.</p>\n"
+        '<table class="work-checklist"><thead><tr><th>Что сдать</th><th>Сделано</th><th>Осталось</th></tr></thead>'
+        f'<tbody>{"".join(rows)}</tbody></table>\n'
+    )
+    return html_body.replace(marker, block + marker, 1)
 
 
 def number_headings(html_body: str):
@@ -779,14 +999,18 @@ def main():
 
     figures = []
     kind = fm.get("kind", "chapter")  # chapter | notes | cheatsheet
-    pre, has_quiz, has_gate = preprocess(body, base, figures, kind)
-    html_body, toc = number_headings(md(pre))
+    pre, has_quiz, has_gate = preprocess(body, base, figures, kind, bool(fm.get("quiz_guard", True)))
+    raw_html = insert_work_checklist(md(pre))
+    html_body, toc = number_headings(raw_html)
     html_body = label_code_blocks(pre, html_body)
 
     ch = fm.get("chapter")
-    label = lesson_label(cj, base.name)
+    cards = is_cards(course)
+    label = None if cards else lesson_label(cj, base.name)
     pills = []
-    if label:
+    if cards:
+        pills.append(f'<span class="pill dark">{esc(ch or "Раздел")}</span>')
+    elif label:
         word = "Занятие" if "-" not in label else "Занятия"
         pills.append(f'<span class="pill dark">{word} {label}</span>')
     elif ch is not None:
@@ -811,11 +1035,13 @@ def main():
 
     outcomes = ""
     if fm.get("outcomes"):
-        outcomes = '<section class="outcomes"><b>После этого занятия вы сможете</b><ul>' + "".join(
+        outcomes_title = "Что вы разберёте в этом разделе" if cards else "После этого занятия вы сможете"
+        outcomes = f'<section class="outcomes"><b>{outcomes_title}</b><ul>' + "".join(
             f"<li>{md(str(o))[3:-4]}</li>" for o in fm["outcomes"]) + "</ul></section>"
     toc_html = ""
     if len(toc) >= 4:
-        toc_html = '<nav class="toc"><b>Содержание занятия</b><ol>' + "".join(
+        toc_title = "Содержание раздела" if cards else "Содержание занятия"
+        toc_html = f'<nav class="toc"><b>{toc_title}</b><ol>' + "".join(
             f'<li><a href="#{h}">{esc(t)}</a></li>' for h, t in toc) + "</ol></nav>"
 
     pager = ""
@@ -845,8 +1071,10 @@ def main():
                     return f'<a class="{cls}" href="{s}.html"><span>{lab}</span>{esc(c["title"])}</a>'
                 return f'<span class="pager-off {cls}" aria-disabled="true"><span>{lab}</span>Пока недоступно</span>'
 
-            pager = (f'<nav class="pager">{pager_item(prev_, slugs[k-1] if prev_ else "", "← Предыдущее занятие")}'
-                     f'{pager_item(next_, slugs[k+1] if next_ else "", "Следующее занятие →", "next")}</nav>')
+            prev_label = "← Предыдущий раздел" if cards else "← Предыдущее занятие"
+            next_label = "Следующий раздел →" if cards else "Следующее занятие →"
+            pager = (f'<nav class="pager">{pager_item(prev_, slugs[k-1] if prev_ else "", prev_label)}'
+                     f'{pager_item(next_, slugs[k+1] if next_ else "", next_label, "next")}</nav>')
             pager = pager.replace('class="next"', 'class="next" style="text-align:right;margin-left:auto"')
 
     dark_fmt = HtmlFormatter(style="github-dark")
@@ -857,7 +1085,7 @@ def main():
                 + "\n.codehilite,.codehilite pre{background:var(--code-bg)!important}")
 
     fig_script = FIG_SCRIPT.replace("__FIX__", json.dumps(IFRAME_FIX).replace("</", "<\\/"))
-    script = (SHADER_JS + (GATE_SCRIPT if has_gate else "") + READ_SCRIPT + REVEAL_SCRIPT + PDF_SCRIPT
+    script = (SHADER_JS + (GATE_SCRIPT if has_gate else "") + READ_SCRIPT + REVEAL_SCRIPT + PDF_SCRIPT + CHECKLIST_SCRIPT
               + (fig_script if any(f["status"] == "built" for f in figures) else "")
               + (QUIZ_SCRIPT if has_quiz else ""))
     modals = QUIZ_MODALS_HTML if has_quiz else ""
