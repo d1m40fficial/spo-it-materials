@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Сессия или токен</title>
+<style>
+  :root { --paper:#F8F4FA; --card:#FFFDFF; --ink:#241C2B; --muted:#6C6076; --rule:#DCCDE3; --accent:#8E5BC8; --soft:#EBE0EC; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .frame { background:var(--paper); border:1px solid var(--rule); border-radius:12px; padding:16px; }
+  .eyebrow { margin:0 0 8px; font:600 10px/1.2 Consolas,monospace; letter-spacing:.14em; text-transform:uppercase; color:var(--accent); }
+  svg { display:block; width:100%; height:auto; }
+  .box { fill:var(--card); stroke:#C9B6D4; stroke-width:1.4; }
+  .box.on { fill:var(--soft); stroke:var(--accent); stroke-width:2; }
+  .lbl { font-family:"Segoe UI",system-ui,sans-serif; }
+  .mono { font-family:Consolas,monospace; }
+  .path { stroke:var(--accent); stroke-width:2; fill:none; }
+  .path.off { stroke:#CFC2D6; stroke-width:1.2; stroke-dasharray:4 4; }
+  .status { min-height:96px; margin-top:8px; padding:10px 12px; border-radius:9px; background:var(--soft); font-size:12.8px; line-height:1.5; }
+  .status b { color:var(--accent); }
+  .status ul { margin:6px 0 0; padding-left:18px; }
+  .controls { display:flex; gap:7px; flex-wrap:wrap; margin-top:10px; }
+  button { font:600 11.5px/1.1 "Segoe UI",system-ui,sans-serif; padding:8px 11px; border-radius:8px; border:1px solid var(--rule); background:var(--card); color:var(--ink); cursor:pointer; }
+  button:hover { border-color:var(--accent); color:var(--accent); }
+  button.on { background:var(--accent); border-color:var(--accent); color:#fff; }
+  .note { margin:9px 2px 0; font:11.5px/1.5 "Segoe UI",system-ui,sans-serif; color:var(--muted); }
+  @media (max-width:560px) { .frame { padding:12px; } .status { font-size:12px; } }
+</style>
+</head>
+<body>
+<div class="frame">
+  <p class="eyebrow">Пропуск · где живёт состояние</p>
+  <svg viewBox="0 0 680 318" role="img" aria-labelledby="st-title st-desc">
+    <title id="st-title">Серверная сессия и подписанный токен</title>
+    <desc id="st-desc">Слева клиент, в центре сервер, справа хранилище сессий или ключ подписи. Переключите режим, чтобы увидеть путь проверки и последствия кражи пропуска.</desc>
+
+    <rect x="12" y="42" width="168" height="120" rx="10" class="box"/>
+    <text x="26" y="66" font-size="13" font-weight="700" class="lbl">Клиент</text>
+    <text x="26" y="86" font-size="10.5" fill="#6C6076" class="lbl" id="client-1">cookie с идентификатором</text>
+    <text x="26" y="102" font-size="10.5" fill="#6C6076" class="lbl" id="client-2">HttpOnly, Secure</text>
+    <text x="26" y="118" font-size="10.5" fill="#6C6076" class="lbl" id="client-3">SameSite=Lax</text>
+    <text x="26" y="140" font-size="9.5" fill="#8E5BC8" class="mono" id="client-4">sklad_session=8f3c1a7d</text>
+
+    <rect x="254" y="42" width="168" height="120" rx="10" class="box"/>
+    <text x="268" y="66" font-size="13" font-weight="700" class="lbl">Сервер</text>
+    <text x="268" y="88" font-size="10.5" fill="#6C6076" class="lbl" id="server-1">находит запись</text>
+    <text x="268" y="104" font-size="10.5" fill="#6C6076" class="lbl" id="server-2">получает роли</text>
+    <text x="268" y="120" font-size="10.5" fill="#6C6076" class="lbl" id="server-3">решает по правам</text>
+    <text x="268" y="146" font-size="9.5" fill="#8E5BC8" class="mono" id="server-4">проверка на каждом запросе</text>
+
+    <rect x="496" y="30" width="172" height="62" rx="9" class="box" id="store-box"/>
+    <text x="510" y="52" font-size="11.5" font-weight="700" class="lbl">Хранилище сессий</text>
+    <text x="510" y="70" font-size="10" fill="#6C6076" class="lbl">запись: роли, срок</text>
+    <text x="510" y="84" font-size="10" fill="#6C6076" class="lbl">удаление = выход</text>
+
+    <rect x="496" y="112" width="172" height="62" rx="9" class="box" id="key-box"/>
+    <text x="510" y="134" font-size="11.5" font-weight="700" class="lbl">Ключ подписи</text>
+    <text x="510" y="152" font-size="10" fill="#6C6076" class="lbl">только на сервере</text>
+    <text x="510" y="166" font-size="10" fill="#6C6076" class="lbl">алгоритм из списка</text>
+
+    <path d="M180 96 H250" class="path" id="p1"/>
+    <text x="188" y="86" font-size="9" fill="#8E5BC8" class="mono" id="p1-label">пропуск</text>
+    <path d="M422 96 H492" class="path" id="p2"/>
+    <text x="430" y="86" font-size="9" fill="#8E5BC8" class="mono" id="p2-label">чтение</text>
+
+    <text x="12" y="196" font-family="Consolas,monospace" font-size="9.5" fill="#6C6076">ОДИН ЗАПРОС</text>
+    <path d="M54 214 H626" stroke="#DCCDE3" stroke-width="1.5"/>
+    <circle cx="54" cy="214" r="4" fill="#8E5BC8"/>
+    <circle cx="626" cy="214" r="4" fill="#8E5BC8"/>
+    <text x="54" y="236" font-size="9.5" fill="#6C6076" class="mono">вход</text>
+    <text x="300" y="236" font-size="9.5" fill="#6C6076" class="mono">каждый следующий запрос</text>
+    <text x="626" y="236" text-anchor="end" font-size="9.5" fill="#6C6076" class="mono">действие</text>
+
+    <text x="12" y="268" font-size="11" fill="#6C6076" class="lbl">Отзыв:</text>
+    <text x="80" y="268" font-size="11" fill="#241C2B" class="lbl" id="revoke">удалить запись, доступ прекращается сразу</text>
+    <text x="12" y="290" font-size="11" fill="#6C6076" class="lbl">Кража:</text>
+    <text x="80" y="290" font-size="11" fill="#241C2B" class="lbl" id="theft">чужой идентификатор работает до удаления записи</text>
+    <text x="12" y="310" font-family="Consolas,monospace" font-size="8.6" fill="#8E5BC8">СЕРВЕРНОЕ СОСТОЯНИЕ ЛЕГКО ОТОЗВАТЬ, НО ЕГО НУЖНО ХРАНИТЬ И ДЕЛИТЬ МЕЖДУ УЗЛАМИ</text>
+  </svg>
+  <div class="status" id="st-status"></div>
+  <div class="controls">
+    <button data-m="session" class="on">Серверная сессия</button>
+    <button data-m="token">Подписанный токен</button>
+  </div>
+  <p class="note">Переключите режим. Схема показывает, где лежит состояние и что меняется при выходе, краже и добавлении второго сервера.</p>
+</div>
+<script>
+(function () {
+  var status = document.getElementById('st-status');
+  var els = {
+    session: {
+      c1:'cookie с идентификатором', c2:'HttpOnly, Secure', c3:'SameSite=Lax',
+      c4:'sklad_session=8f3c1a7d', s1:'находит запись', s2:'получает роли',
+      s3:'решает по правам', s4:'чтение хранилища', p1:'пропуск', p2:'чтение',
+      revoke:'удалить запись, доступ прекращается сразу',
+      theft:'чужой идентификатор работает до удаления записи',
+      html:'<b>Серверная сессия.</b> Клиент держит только случайный идентификатор, а роли лежат в хранилище. Выход удаляет запись и сразу закрывает доступ. Цена: хранилище нужно делить между серверами, иначе вход теряется при переходе на другой узел.'
+    },
+    token: {
+      c1:'токен с утверждениями', c2:'подпись и срок', c3:'хранится в памяти',
+      c4:'eyJhbGciOiJIUzI1NiJ9...', s1:'проверяет подпись', s2:'читает утверждения',
+      s3:'сверяет срок и аудиторию', s4:'без обращения к хранилищу', p1:'токен', p2:'ключ',
+      revoke:'удалить токен нельзя, работает до истечения срока',
+      theft:'украденный токен действует, пока не истёк срок',
+      html:'<b>Подписанный токен.</b> Утверждения лежат внутри токена, подпись подтверждает целостность. Проверка не требует общего хранилища, поэтому несколько сервисов работают проще. Цена: отзыв запаздывает, а содержимое токена читает любой, кто его получил.'
+    }
+  };
+
+  function show(mode) {
+    var d = els[mode];
+    document.getElementById('client-1').textContent = d.c1;
+    document.getElementById('client-2').textContent = d.c2;
+    document.getElementById('client-3').textContent = d.c3;
+    document.getElementById('client-4').textContent = d.c4;
+    document.getElementById('server-1').textContent = d.s1;
+    document.getElementById('server-2').textContent = d.s2;
+    document.getElementById('server-3').textContent = d.s3;
+    document.getElementById('server-4').textContent = d.s4;
+    document.getElementById('p1-label').textContent = d.p1;
+    document.getElementById('p2-label').textContent = d.p2;
+    document.getElementById('revoke').textContent = d.revoke;
+    document.getElementById('theft').textContent = d.theft;
+    document.getElementById('st-status').innerHTML = d.html;
+    var isSession = mode === 'session';
+    document.getElementById('store-box').classList.toggle('on', isSession);
+    document.getElementById('key-box').classList.toggle('on', !isSession);
+    document.getElementById('p2').classList.toggle('off', !isSession);
+    document.querySelectorAll('button[data-m]').forEach(function (b) { b.classList.toggle('on', b.dataset.m === mode); });
+  }
+
+  document.querySelectorAll('button[data-m]').forEach(function (b) {
+    b.addEventListener('click', function () { show(b.dataset.m); });
+  });
+  show('session');
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Модель движения товара</title>
+<style>
+  :root { --paper:#FBF7FC; --card:#FFFFFF; --ink:#2A2233; --muted:#6B6076; --rule:#DCCDE4; --accent:#8E5BC8; --soft:#EBE0EC; --good:#3F7A5A; --bad:#A34A5E; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .frame { background:var(--paper); border:1px solid var(--rule); border-radius:12px; padding:14px; }
+  .eyebrow { margin:0 0 6px; font:600 10px/1.2 Consolas,monospace; letter-spacing:.13em; text-transform:uppercase; color:var(--accent); }
+  svg { display:block; width:100%; height:auto; }
+  text { font-family:"Segoe UI",system-ui,sans-serif; }
+  .tabs { display:flex; gap:6px; flex-wrap:wrap; margin:9px 0 7px; }
+  button { font:600 11px/1.1 "Segoe UI",system-ui,sans-serif; padding:6px 8px; border-radius:8px; border:1px solid var(--rule); background:var(--card); color:var(--ink); cursor:pointer; }
+  button:hover { border-color:var(--accent); color:var(--accent); }
+  button.on { background:var(--accent); border-color:var(--accent); color:#fff; }
+  .panel { padding:9px 11px; border:1px solid var(--rule); border-radius:9px; background:var(--card); font-size:12px; line-height:1.5; }
+  .panel b { color:var(--accent); }
+  .grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:8px; }
+  .grid .panel { min-height:92px; }
+  .panel h4 { margin:0 0 5px; font:600 10px/1.2 Consolas,monospace; letter-spacing:.04em; text-transform:uppercase; color:var(--muted); }
+  code { font-family:Consolas,monospace; font-size:11px; }
+  .note { margin:8px 2px 0; font:11px/1.5 "Segoe UI",system-ui,sans-serif; color:var(--muted); }
+  .cls rect { fill:#FFFFFF; stroke:#DCCDE4; stroke-width:1.2; transition:fill .15s, stroke .15s; }
+  .cls.on rect { fill:#EBE0EC; stroke:#8E5BC8; stroke-width:2; }
+  @media (max-width:560px) { .frame { padding:10px; } .grid { grid-template-columns:1fr; } }
+</style>
+</head>
+<body>
+<div class="frame">
+  <p class="eyebrow">ООП · иерархия движений</p>
+  <svg viewBox="0 0 680 246" role="img" aria-labelledby="mv-title mv-desc">
+    <title id="mv-title">Базовый класс Movement и четыре подкласса</title>
+    <desc id="mv-desc">Приёмка, отгрузка, списание и возврат наследуют общие поля и метод apply. Выберите тип, чтобы увидеть поля, влияние на остаток и строку журнала.</desc>
+
+    <g class="cls" data-k="receipt"><rect x="20" y="34" width="150" height="58" rx="8"/><text x="34" y="56" font-size="12" font-weight="700" fill="#2A2233">Receipt</text><text x="34" y="74" font-size="10" fill="#6B6076">приёмка: +quantity</text></g>
+    <g class="cls" data-k="shipment"><rect x="185" y="34" width="150" height="58" rx="8"/><text x="199" y="56" font-size="12" font-weight="700" fill="#2A2233">Shipment</text><text x="199" y="74" font-size="10" fill="#6B6076">отгрузка: -quantity</text></g>
+    <g class="cls" data-k="writeoff"><rect x="350" y="34" width="150" height="58" rx="8"/><text x="364" y="56" font-size="12" font-weight="700" fill="#2A2233">WriteOff</text><text x="364" y="74" font-size="10" fill="#6B6076">списание: причина</text></g>
+    <g class="cls" data-k="return"><rect x="515" y="34" width="150" height="58" rx="8"/><text x="529" y="56" font-size="12" font-weight="700" fill="#2A2233">ReturnToSupplier</text><text x="529" y="74" font-size="10" fill="#6B6076">возврат: -quantity</text></g>
+
+    <g class="cls" data-k="base"><rect x="240" y="138" width="200" height="66" rx="9" fill="#FFFFFF" stroke="#8E5BC8" stroke-width="1.8"/><text x="254" y="160" font-size="12" font-weight="700" fill="#2A2233">Movement</text><text x="254" y="178" font-size="10" fill="#6B6076">number, sku, quantity</text><text x="254" y="194" font-size="10" fill="#8E5BC8">apply, describe</text></g>
+
+    <line x1="95" y1="92" x2="290" y2="134" stroke="#8E5BC8" stroke-width="1.2"/>
+    <line x1="260" y1="92" x2="320" y2="134" stroke="#8E5BC8" stroke-width="1.2"/>
+    <line x1="425" y1="92" x2="380" y2="134" stroke="#8E5BC8" stroke-width="1.2"/>
+    <line x1="590" y1="92" x2="400" y2="134" stroke="#8E5BC8" stroke-width="1.2"/>
+
+    <text x="20" y="232" font-family="Consolas,monospace" font-size="9.5" fill="#6B6076">ПОДКЛАСС ДОБАВЛЯЕТ ТОЛЬКО ОТЛИЧИЕ. ОБЩИЕ ПОЛЯ И ПРОВЕРКА ЖИВУТ В РОДИТЕЛЕ.</text>
+  </svg>
+
+  <div class="tabs" id="tabs">
+    <button data-k="receipt" class="on">Приёмка</button>
+    <button data-k="shipment">Отгрузка</button>
+    <button data-k="writeoff">Списание</button>
+    <button data-k="return">Возврат поставщику</button>
+  </div>
+
+  <div class="panel" id="about" aria-live="polite"></div>
+  <div class="grid">
+    <div class="panel"><h4>Проведение</h4><div id="effect"></div></div>
+    <div class="panel"><h4>Строка журнала</h4><div id="journal"></div></div>
+  </div>
+  <p class="note">Остаток до проводки равен 12. Каждый документ показан отдельно, поэтому результаты не складываются. Смотрите, какие поля приходят из родителя, а какие добавляет подкласс.</p>
+</div>
+<script>
+(function () {
+  var data = {
+    receipt: {
+      title: "Receipt: приёмка",
+      about: "Наследует номер, позицию и количество. Переопределяет apply и прибавляет количество. Своих полей нет.",
+      effect: "12 + 30 = <b>42</b><br><code>stock.add(sku, +quantity)</code>",
+      journal: "<code>ПР-201: SKU-1042, 30</code><br>описание берётся у Movement"
+    },
+    shipment: {
+      title: "Shipment: отгрузка",
+      about: "Тот же набор полей, что у приёмки. Отличие только в знаке: apply вычитает количество.",
+      effect: "12 - 8 = <b>4</b><br><code>stock.add(sku, -quantity)</code>",
+      journal: "<code>ОТ-118: SKU-1042, 8</code><br>описание берётся у Movement"
+    },
+    writeoff: {
+      title: "WriteOff: списание",
+      about: "Добавляет поле reason. Конструктор вызывает super, поэтому проверка количества не дублируется.",
+      effect: "12 - 4 = <b>8</b><br><code>stock.add(sku, -quantity)</code>",
+      journal: "<code>СП-07: SKU-1042, 4, причина: бой упаковки</code><br>describe вызывает super().describe()"
+    },
+    return: {
+      title: "ReturnToSupplier: возврат",
+      about: "Новый подкласс, добавленный без правки цикла проведения. Наследует общие поля и переопределяет apply.",
+      effect: "12 - 5 = <b>7</b><br><code>stock.add(sku, -quantity)</code>",
+      journal: "<code>ВП-33: SKU-1042, 5</code><br>цикл не знает про новый тип"
+    }
+  };
+  var cur = "receipt";
+  var cards = document.querySelectorAll(".cls");
+  var buttons = document.querySelectorAll("#tabs button");
+  var about = document.getElementById("about");
+  var effect = document.getElementById("effect");
+  var journal = document.getElementById("journal");
+
+  function apply(k) {
+    cur = k;
+    var d = data[k];
+    about.innerHTML = "<b>" + d.title + ".</b> " + d.about;
+    effect.innerHTML = d.effect;
+    journal.innerHTML = d.journal;
+    cards.forEach(function (c) { c.classList.toggle("on", c.dataset.k === k || c.dataset.k === "base"); });
+    buttons.forEach(function (b) { b.classList.toggle("on", b.dataset.k === k); });
+  }
+  cards.forEach(function (c) { if (c.dataset.k !== "base") c.addEventListener("click", function () { apply(c.dataset.k); }); });
+  buttons.forEach(function (b) { b.addEventListener("click", function () { apply(b.dataset.k); }); });
+  apply("receipt");
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Какие блоки try выполняются</title>
+<style>
+  :root { --paper:#F7F0FA; --card:#FFFFFF; --ink:#2B2333; --muted:#6E6179; --rule:#DCCBE6; --accent:#8E5BC8; --soft:#EBE0EC; --deep:#5B2E86; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .frame { background:var(--paper); border:1px solid var(--rule); border-radius:12px; padding:16px; }
+  .eyebrow { margin:0 0 6px; font:600 10.5px/1.2 Consolas,monospace; letter-spacing:.12em; text-transform:uppercase; color:var(--accent); }
+  svg { display:block; width:100%; height:auto; }
+  .blk rect { fill:#FFFFFF; stroke:#C9B6D6; stroke-width:1.3; transition:fill .15s, stroke .15s, opacity .15s; }
+  .blk.on rect { fill:#EBE0EC; stroke:#8E5BC8; stroke-width:2.2; }
+  .blk.skip rect { stroke-dasharray:4 3; opacity:.55; }
+  .blk.skip text { opacity:.5; }
+  .status { min-height:64px; margin-top:8px; padding:10px 12px; border-radius:9px; background:var(--soft); font-size:13px; line-height:1.45; }
+  .status b { color:var(--deep); }
+  .controls { display:flex; gap:6px; flex-wrap:wrap; margin-top:10px; }
+  button { font:600 11.5px/1.1 "Segoe UI",system-ui,sans-serif; padding:8px 10px; border-radius:8px; border:1px solid var(--rule); background:var(--card); color:var(--ink); cursor:pointer; }
+  button:hover { border-color:var(--accent); color:var(--accent); }
+  button.on { background:var(--accent); border-color:var(--accent); color:#fff; }
+  .note { margin:9px 2px 0; font:11.5px/1.5 "Segoe UI",system-ui,sans-serif; color:var(--muted); }
+  @media (max-width:560px) { .frame { padding:12px; } .status { font-size:12.5px; } }
+</style>
+</head>
+<body>
+<div class="frame">
+  <p class="eyebrow">Исключения · try, except, else, finally</p>
+  <svg viewBox="0 0 680 330" role="img" aria-labelledby="ef-title ef-desc">
+    <title id="ef-title">Четыре блока try и три сценария</title>
+    <desc id="ef-desc">Код с try, except ValueError, else и finally. При ValueError выполняется except, при KeyError ошибка уходит выше, без ошибки выполняется else. Finally выполняется всегда.</desc>
+
+    <rect x="16" y="24" width="300" height="238" rx="9" fill="#FFFFFF" stroke="#DCCBE6"/>
+    <text x="30" y="46" font-family="Consolas,monospace" font-size="10.5" fill="#6E6179">ФРАГМЕНТ</text>
+    <g font-family="Consolas,monospace" font-size="12" fill="#2B2333">
+      <text x="30" y="72">try:</text>
+      <text x="46" y="92">qty = parse(raw)</text>
+      <text x="30" y="114">except ValueError as err:</text>
+      <text x="46" y="134">log("bad qty")</text>
+      <text x="30" y="156">else:</text>
+      <text x="46" y="176">save(qty)</text>
+      <text x="30" y="198">finally:</text>
+      <text x="46" y="218">close()</text>
+    </g>
+
+    <g class="blk" data-k="try">
+      <rect x="336" y="24" width="328" height="54" rx="7"/>
+      <text x="350" y="45" font-size="13" font-weight="700" fill="#2B2333">try</text>
+      <text x="350" y="63" font-size="11.5" fill="#6E6179">идёт до первого исключения или до конца</text>
+    </g>
+    <g class="blk" data-k="except">
+      <rect x="336" y="90" width="328" height="54" rx="7"/>
+      <text x="350" y="111" font-size="13" font-weight="700" fill="#2B2333">except ValueError</text>
+      <text x="350" y="129" font-size="11.5" fill="#6E6179">срабатывает только при совпадении типа</text>
+    </g>
+    <g class="blk" data-k="else">
+      <rect x="336" y="156" width="328" height="54" rx="7"/>
+      <text x="350" y="177" font-size="13" font-weight="700" fill="#2B2333">else</text>
+      <text x="350" y="195" font-size="11.5" fill="#6E6179">только если исключения не было</text>
+    </g>
+    <g class="blk" data-k="finally">
+      <rect x="336" y="222" width="328" height="54" rx="7"/>
+      <text x="350" y="243" font-size="13" font-weight="700" fill="#2B2333">finally</text>
+      <text x="350" y="261" font-size="11.5" fill="#6E6179">выполняется при любом исходе</text>
+    </g>
+
+    <g font-family="Segoe UI,system-ui,sans-serif" font-size="11" fill="#6E6179">
+      <text x="16" y="286">ValueError ловится, KeyError нет: тип обработчика решает, куда пойдёт управление.</text>
+      <text x="16" y="306">finally закрывает ресурс даже тогда, когда ошибка уходит выше.</text>
+    </g>
+  </svg>
+  <div class="status" id="ef-status"></div>
+  <div class="controls" id="ef-buttons">
+    <button data-k="value" class="on">ошибка ValueError</button>
+    <button data-k="key">ошибка KeyError</button>
+    <button data-k="none">ошибок нет</button>
+  </div>
+  <p class="note">Нажмите сценарий. Подсвеченные блоки выполняются, пунктирные пропускаются.</p>
+</div>
+<script>
+(function () {
+  var data = {
+    value: {
+      on: ['try', 'except', 'finally'],
+      skip: ['else'],
+      text: '<b>ValueError перехвачен.</b> try остановился на parse(raw), выполнился except, затем finally. Блок else пропущен, потому что исключение было. Программа продолжает работу.'
+    },
+    key: {
+      on: ['try', 'finally'],
+      skip: ['except', 'else'],
+      text: '<b>KeyError не совпал с ValueError.</b> except пропущен, else тоже, ошибка уходит выше по стеку. finally всё равно выполнился и закрыл ресурс. Если выше обработчика нет, программа завершится.'
+    },
+    none: {
+      on: ['try', 'else', 'finally'],
+      skip: ['except'],
+      text: '<b>Ошибки нет.</b> try дошёл до конца, затем выполнился else с успешным продолжением, затем finally. Блок except не выполнялся.'
+    }
+  };
+  var blocks = document.querySelectorAll('.blk');
+  var buttons = document.querySelectorAll('#ef-buttons button');
+  var status = document.getElementById('ef-status');
+
+  function apply(key) {
+    var d = data[key];
+    blocks.forEach(function (b) {
+      var k = b.dataset.k;
+      b.classList.toggle('on', d.on.indexOf(k) >= 0);
+      b.classList.toggle('skip', d.skip.indexOf(k) >= 0);
+    });
+    buttons.forEach(function (b) { b.classList.toggle('on', b.dataset.k === key); });
+    status.innerHTML = d.text;
+  }
+  buttons.forEach(function (b) { b.addEventListener('click', function () { apply(b.dataset.k); }); });
+  apply('value');
+})();
+</script>
+</body>
+</html>

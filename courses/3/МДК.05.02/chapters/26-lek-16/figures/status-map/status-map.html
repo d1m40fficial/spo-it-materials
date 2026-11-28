@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Карта кодов состояния</title>
+<style>
+  :root { --paper:#FAF7F6; --card:#FFFDFC; --ink:#2A2430; --muted:#6B6272; --rule:#E6D9EC; --accent:#8E5BC8; --soft:#EBE0EC; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .frame { background:var(--paper); border:1px solid var(--rule); border-radius:12px; padding:16px; }
+  .eyebrow { margin:0 0 6px; font:600 10px/1.2 Consolas,monospace; letter-spacing:.14em; text-transform:uppercase; color:var(--accent); }
+  svg { display:block; width:100%; height:auto; }
+  .chip rect { fill:#FFFDFC; stroke:#D8C7E2; stroke-width:1.2; transition:fill .15s, stroke .15s; cursor:pointer; }
+  .chip text { font-family:Consolas,monospace; font-size:13px; font-weight:700; fill:#2A2430; text-anchor:middle; pointer-events:none; }
+  .chip.on rect { fill:var(--accent); stroke:var(--accent); }
+  .chip.on text { fill:#FFFFFF; }
+  .status { min-height:58px; margin-top:8px; padding:10px 12px; border-radius:9px; background:var(--soft); font-size:13px; line-height:1.45; }
+  .status b { color:var(--accent); }
+  .controls { display:flex; gap:6px; flex-wrap:wrap; margin-top:10px; }
+  button { font:600 11.5px/1.15 "Segoe UI",system-ui,sans-serif; padding:7px 9px; border-radius:8px; border:1px solid var(--rule); background:var(--card); color:var(--ink); cursor:pointer; }
+  button:hover { border-color:var(--accent); color:var(--accent); }
+  button.on { background:var(--accent); border-color:var(--accent); color:#fff; }
+  .note { margin:9px 2px 0; font:11.5px/1.5 "Segoe UI",system-ui,sans-serif; color:var(--muted); }
+  @media (max-width:560px) { .frame { padding:12px; } .status { font-size:12.5px; } }
+</style>
+</head>
+<body>
+<div class="frame">
+  <p class="eyebrow">HTTP · коды состояния</p>
+  <svg viewBox="0 0 680 250" role="img" aria-labelledby="sm-title sm-desc">
+    <title id="sm-title">Карта кодов состояния по группам</title>
+    <desc id="sm-desc">Коды сгруппированы по первой цифре. Сценарий из списка ниже подсвечивает один код.</desc>
+
+    <g font-family="Consolas,monospace" font-size="11" fill="#6B6272">
+      <text x="16" y="75">2xx</text>
+      <text x="16" y="121">3xx</text>
+      <text x="16" y="167">4xx</text>
+      <text x="16" y="213">5xx</text>
+    </g>
+
+    <g class="chip" data-code="200"><rect x="70" y="52" width="58" height="32" rx="6"/><text x="99" y="73">200</text></g>
+    <g class="chip" data-code="201"><rect x="133" y="52" width="58" height="32" rx="6"/><text x="162" y="73">201</text></g>
+    <g class="chip" data-code="204"><rect x="196" y="52" width="58" height="32" rx="6"/><text x="225" y="73">204</text></g>
+
+    <g class="chip" data-code="301"><rect x="70" y="98" width="58" height="32" rx="6"/><text x="99" y="119">301</text></g>
+    <g class="chip" data-code="304"><rect x="133" y="98" width="58" height="32" rx="6"/><text x="162" y="119">304</text></g>
+
+    <g class="chip" data-code="400"><rect x="70" y="144" width="58" height="32" rx="6"/><text x="99" y="165">400</text></g>
+    <g class="chip" data-code="401"><rect x="133" y="144" width="58" height="32" rx="6"/><text x="162" y="165">401</text></g>
+    <g class="chip" data-code="403"><rect x="196" y="144" width="58" height="32" rx="6"/><text x="225" y="165">403</text></g>
+    <g class="chip" data-code="404"><rect x="259" y="144" width="58" height="32" rx="6"/><text x="288" y="165">404</text></g>
+    <g class="chip" data-code="405"><rect x="322" y="144" width="58" height="32" rx="6"/><text x="351" y="165">405</text></g>
+    <g class="chip" data-code="409"><rect x="385" y="144" width="58" height="32" rx="6"/><text x="414" y="165">409</text></g>
+    <g class="chip" data-code="415"><rect x="448" y="144" width="58" height="32" rx="6"/><text x="477" y="165">415</text></g>
+    <g class="chip" data-code="422"><rect x="511" y="144" width="58" height="32" rx="6"/><text x="540" y="165">422</text></g>
+    <g class="chip" data-code="429"><rect x="574" y="144" width="58" height="32" rx="6"/><text x="603" y="165">429</text></g>
+
+    <g class="chip" data-code="500"><rect x="70" y="190" width="58" height="32" rx="6"/><text x="99" y="211">500</text></g>
+    <g class="chip" data-code="502"><rect x="133" y="190" width="58" height="32" rx="6"/><text x="162" y="211">502</text></g>
+    <g class="chip" data-code="503"><rect x="196" y="190" width="58" height="32" rx="6"/><text x="225" y="211">503</text></g>
+
+    <text x="70" y="32" font-family="Segoe UI,system-ui,sans-serif" font-size="11" fill="#2A2430">группа отвечает на вопрос «чем закончилась обработка»</text>
+    <text x="16" y="240" font-family="Consolas,monospace" font-size="9.5" fill="#6B6272">ОДИН СЦЕНАРИЙ, ОДИН КОД: НЕ СМЕШИВАЙТЕ 400, 422 И 409</text>
+  </svg>
+  <div class="status" id="sm-status"></div>
+  <div class="controls" id="sm-buttons">
+    <button data-k="created" class="on">товар создан</button>
+    <button data-k="cached">страница не изменилась</button>
+    <button data-k="notfound">товар не найден</button>
+    <button data-k="invalid">цена отрицательная</button>
+    <button data-k="noauth">нет токена</button>
+    <button data-k="forbidden">роль не позволяет</button>
+    <button data-k="conflict">повторный sku</button>
+    <button data-k="limit">слишком много запросов</button>
+    <button data-k="server">сервер упал</button>
+  </div>
+  <p class="note">Нажмите сценарий. Подсветка показывает код, который описывает именно эту причину, а не просто «ошибка».</p>
+</div>
+<script>
+(function () {
+  var data = {
+    created: { code: "201", text: "<b>201 Created.</b> Ресурс создан, адрес новой карточки передан в заголовке Location." },
+    cached: { code: "304", text: "<b>304 Not Modified.</b> Представление не изменилось, тело не передаётся, клиент берёт копию из кеша." },
+    notfound: { code: "404", text: "<b>404 Not Found.</b> Адрес понят, но записи с таким идентификатором нет." },
+    invalid: { code: "422", text: "<b>422 Unprocessable Content.</b> JSON разобран, поля на месте, но значение не проходит правило." },
+    noauth: { code: "401", text: "<b>401 Unauthorized.</b> Клиент не подтвердил вход, нужен токен или повторная аутентификация." },
+    forbidden: { code: "403", text: "<b>403 Forbidden.</b> Клиент известен, но прав на операцию нет. Повторный вход не поможет." },
+    conflict: { code: "409", text: "<b>409 Conflict.</b> Запрос конфликтует с текущим состоянием, например sku уже занят." },
+    limit: { code: "429", text: "<b>429 Too Many Requests.</b> Клиент превысил лимит, заголовок Retry-After подсказывает паузу." },
+    server: { code: "500", text: "<b>500 Internal Server Error.</b> Ошибка в обработчике. Клиенту нужен идентификатор запроса, подробности остаются в журнале." }
+  };
+  var chips = document.querySelectorAll(".chip");
+  var buttons = document.querySelectorAll("#sm-buttons button");
+  var status = document.getElementById("sm-status");
+
+  function apply(key) {
+    var item = data[key];
+    chips.forEach(function (c) { c.classList.toggle("on", c.dataset.code === item.code); });
+    buttons.forEach(function (b) { b.classList.toggle("on", b.dataset.k === key); });
+    status.innerHTML = item.text;
+  }
+  chips.forEach(function (c) { c.addEventListener("click", function () {
+    for (var k in data) { if (data[k].code === c.dataset.code) { apply(k); return; } }
+  }); });
+  buttons.forEach(function (b) { b.addEventListener("click", function () { apply(b.dataset.k); }); });
+  apply("created");
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ответ на неверное поле</title>
+<style>
+  :root { --paper:#F8F4FA; --card:#FFFDFF; --ink:#241C2B; --muted:#6C6076; --rule:#DCCDE3; --accent:#8E5BC8; --soft:#EBE0EC; --warn:#A34A5C; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .frame { background:var(--paper); border:1px solid var(--rule); border-radius:12px; padding:16px; }
+  .eyebrow { margin:0 0 8px; font:600 10px/1.2 Consolas,monospace; letter-spacing:.14em; text-transform:uppercase; color:var(--accent); }
+  svg { display:block; width:100%; height:auto; }
+  .panel { fill:var(--card); stroke:#C9B6D4; stroke-width:1.3; }
+  .mono { font-family:Consolas,monospace; }
+  .status { min-height:70px; margin-top:8px; padding:10px 12px; border-radius:9px; background:var(--soft); font-size:12.8px; line-height:1.5; }
+  .status b { color:var(--accent); }
+  .controls { display:flex; gap:6px; flex-wrap:wrap; margin-top:10px; }
+  button { font:600 11.5px/1.1 "Segoe UI",system-ui,sans-serif; padding:8px 9px; border-radius:8px; border:1px solid var(--rule); background:var(--card); color:var(--ink); cursor:pointer; }
+  button:hover { border-color:var(--accent); color:var(--accent); }
+  button.on { background:var(--accent); border-color:var(--accent); color:#fff; }
+  .note { margin:9px 2px 0; font:11.5px/1.5 "Segoe UI",system-ui,sans-serif; color:var(--muted); }
+  @media (max-width:560px) { .frame { padding:12px; } .status { font-size:12px; } }
+</style>
+</head>
+<body>
+<div class="frame">
+  <p class="eyebrow">Ошибка · что уходит клиенту</p>
+  <svg viewBox="0 0 680 306" role="img" aria-labelledby="er-title er-desc">
+    <title id="er-title">Ответ API на неверное поле</title>
+    <desc id="er-desc">Выберите дефект в данных приёмки. Схема покажет уровень проверки, код ответа и тело JSON.</desc>
+
+    <text x="12" y="20" font-family="Consolas,monospace" font-size="9.5" fill="#6C6076">ЧТО ПРИШЛО</text>
+    <rect x="12" y="28" width="656" height="42" rx="8" class="panel"/>
+    <text x="26" y="54" font-size="12" class="mono" fill="#241C2B" id="input-text"></text>
+
+    <rect x="12" y="86" width="320" height="40" rx="8" class="panel"/>
+    <text x="26" y="102" font-size="9.5" fill="#6C6076" font-family="Consolas,monospace">УРОВЕНЬ</text>
+    <text x="26" y="119" font-size="11.5" font-weight="700" id="layer">Схема входа</text>
+
+    <rect x="348" y="86" width="320" height="40" rx="8" class="panel"/>
+    <text x="362" y="102" font-size="9.5" fill="#6C6076" font-family="Consolas,monospace">КОД ОТВЕТА</text>
+    <text x="362" y="119" font-size="11.5" font-weight="700" id="code" fill="#A34A5C">400</text>
+
+    <text x="12" y="146" font-family="Consolas,monospace" font-size="9.5" fill="#6C6076">ТЕЛО ОТВЕТА</text>
+    <rect x="12" y="154" width="656" height="106" rx="8" class="panel"/>
+    <text x="26" y="174" font-size="9.6" class="mono" fill="#241C2B" id="j1"></text>
+    <text x="26" y="191" font-size="9.6" class="mono" fill="#241C2B" id="j2"></text>
+    <text x="26" y="208" font-size="9.6" class="mono" fill="#241C2B" id="j3"></text>
+    <text x="26" y="225" font-size="9.6" class="mono" fill="#241C2B" id="j4"></text>
+    <text x="26" y="242" font-size="9.6" class="mono" fill="#241C2B" id="j5"></text>
+
+    <text x="12" y="288" font-family="Consolas,monospace" font-size="8.8" fill="#8E5BC8">ТЕКСТ SQL, ИМЯ ТАБЛИЦЫ И СТЕК ВЫЗОВОВ ОСТАЮТСЯ В ЖУРНАЛЕ</text>
+  </svg>
+  <div class="status" id="er-status"></div>
+  <div class="controls" id="er-buttons"></div>
+  <p class="note">Выберите дефект. Обратите внимание: одинаковый код 400 может ссылаться на разные уровни, а повтор пары артикул и площадка даёт 409.</p>
+</div>
+<script>
+(function () {
+  var data = {
+    qty: {
+      label:'Количество 0',
+      text:'{"sku":"SKU-1001","qty":0,"price":4720,"site":"Москва"}',
+      layer:'Схема входа', code:'400', color:'#A34A5C',
+      j:['{','  "error": "validation_failed",','  "fields": [{"field": "qty", "code": "range",','    "message": "Количество от 1 до 10000"}]','}'],
+      html:'<b>Схема входа.</b> Ноль это целое число, но диапазон начинается с единицы. Клиент получает имя поля и границы, поэтому исправляет одно значение, а не перечитывает всю форму.'
+    },
+    price: {
+      label:'Цена -1',
+      text:'{"sku":"SKU-1001","qty":5,"price":-1,"site":"Москва"}',
+      layer:'Схема входа', code:'400', color:'#A34A5C',
+      j:['{','  "error": "validation_failed",','  "fields": [{"field": "price", "code": "range",','    "message": "Цена больше 0 и не выше 1 000 000"}]','}'],
+      html:'<b>Схема входа.</b> Отрицательная цена уменьшает итог приёмки. Проверка диапазона ловит её до сохранения, а не в отчёте через неделю.'
+    },
+    site: {
+      label:'Площадка Смоленск',
+      text:'{"sku":"SKU-1001","qty":5,"price":4720,"site":"Смоленск"}',
+      layer:'Схема входа', code:'400', color:'#A34A5C',
+      j:['{','  "error": "validation_failed",','  "fields": [{"field": "site", "code": "choice",','    "message": "Площадка: Москва, Тверь, Тула или Калуга"}]','}'],
+      html:'<b>Схема входа.</b> Площадка не входит в список допустимых значений. Белый список не пускает «Смоленск», даже если строка написана без ошибки.'
+    },
+    sku: {
+      label:'Артикул SKU-10',
+      text:'{"sku":"SKU-10","qty":5,"price":4720,"site":"Москва"}',
+      layer:'Схема входа', code:'400', color:'#A34A5C',
+      j:['{','  "error": "validation_failed",','  "fields": [{"field": "sku", "code": "format",','    "message": "Артикул вида SKU-1001"}]','}'],
+      html:'<b>Схема входа.</b> Шаблон требует четыре цифры после дефиса. Сообщение показывает ожидаемый вид, а не просто сообщает, что формат неверен.'
+    },
+    missing: {
+      label:'Нет артикула',
+      text:'{"qty":5,"price":4720,"site":"Тула"}',
+      layer:'Схема входа', code:'400', color:'#A34A5C',
+      j:['{','  "error": "validation_failed",','  "fields": [{"field": "sku", "code": "required",','    "message": "Укажите артикул"}]','}'],
+      html:'<b>Схема входа.</b> Поле отсутствует, а не заполнено неверно. Код required отличается от format, поэтому клиент понимает, что значение нужно добавить, а не исправить.'
+    },
+    duplicate: {
+      label:'Повтор пары',
+      text:'{"sku":"SKU-1001","qty":5,"price":4720,"site":"Москва"}',
+      layer:'Ограничение базы', code:'409', color:'#8E5BC8',
+      j:['{','  "error": "conflict",','  "message": "Позиция уже есть в приёмке",','  "fields": [{"field": "sku", "code": "conflict"}]','}'],
+      html:'<b>Ограничение базы.</b> Схема пропустила значения, но пара артикул и площадка уже существует. Приложение переводит ошибку уникальности в 409 и понятный текст, а не показывает сообщение SQLite.'
+    }
+  };
+  var key = 'qty';
+  var status = document.getElementById('er-status');
+  var buttons = document.getElementById('er-buttons');
+
+  function paint() {
+    var d = data[key];
+    document.getElementById('input-text').textContent = d.text;
+    document.getElementById('layer').textContent = d.layer;
+    var codeEl = document.getElementById('code');
+    codeEl.textContent = d.code;
+    codeEl.setAttribute('fill', d.color);
+    for (var i = 1; i <= 5; i++) document.getElementById('j' + i).textContent = d.j[i - 1] || '';
+    status.innerHTML = d.html;
+    buttons.querySelectorAll('button').forEach(function (b) { b.classList.toggle('on', b.dataset.k === key); });
+  }
+
+  Object.keys(data).forEach(function (k) {
+    var b = document.createElement('button');
+    b.textContent = data[k].label;
+    b.dataset.k = k;
+    b.addEventListener('click', function () { key = k; paint(); });
+    buttons.appendChild(b);
+  });
+  paint();
+})();
+</script>
+</body>
+</html>

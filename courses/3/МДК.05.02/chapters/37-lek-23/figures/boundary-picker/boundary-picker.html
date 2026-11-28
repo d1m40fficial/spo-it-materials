@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Границы свободного остатка</title>
+<style>
+  :root { --paper:#FBF7FC; --card:#FFFFFF; --ink:#2B2433; --muted:#6E6278; --rule:#E0D2E6; --accent:#8E5BC8; --soft:#EBE0EC; --bad:#B04A5A; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .frame { background:var(--paper); border:1px solid var(--rule); border-radius:12px; padding:16px; }
+  .eyebrow { margin:0 0 6px; font:600 10px/1.2 Consolas,monospace; letter-spacing:.14em; text-transform:uppercase; color:var(--accent); }
+  svg { display:block; width:100%; height:auto; }
+  .status { min-height:76px; margin-top:2px; padding:10px 12px; border-radius:9px; background:var(--soft); font-size:12.5px; line-height:1.45; }
+  .status b { color:#6B3E9E; }
+  .controls { display:flex; gap:6px; flex-wrap:wrap; margin-top:10px; }
+  button { font:600 12px/1 Consolas,monospace; padding:9px 12px; border-radius:8px; border:1px solid var(--rule); background:var(--card); color:var(--ink); cursor:pointer; }
+  button:hover { border-color:var(--accent); color:#6B3E9E; }
+  button.on { background:var(--accent); border-color:var(--accent); color:#fff; }
+  .note { margin:9px 2px 0; font:11.5px/1.5 "Segoe UI",system-ui,sans-serif; color:var(--muted); }
+  @media (max-width:560px) { .frame { padding:12px; } .status { font-size:12px; } }
+</style>
+</head>
+<body>
+<div class="frame">
+  <p class="eyebrow">Тесты · границы</p>
+  <svg viewBox="0 0 680 286" role="img" aria-labelledby="bp-title bp-desc">
+    <title id="bp-title">Свободный остаток при разных значениях резерва</title>
+    <desc id="bp-desc">Остаток равен 40. Полоса показывает, какая часть занята резервом, а какая свободна. Кнопки выбирают резерв 0, 1, 39, 40, 41 или недопустимое значение -1.</desc>
+
+    <text x="16" y="24" font-size="16" font-weight="700" fill="#2B2433">Свободный остаток: max(40 - резерв, 0)</text>
+    <text x="16" y="43" font-size="11" fill="#6E6278">выберите значение резерва кнопкой под схемой</text>
+
+    <text x="16" y="76" font-family="Consolas,monospace" font-size="11" fill="#6E6278">ФИЗИЧЕСКИЙ ОСТАТОК</text>
+    <rect x="16" y="84" width="648" height="34" rx="6" fill="#FFFFFF" stroke="#C9AFD6"/>
+    <rect id="bp-reserved" x="432" y="84" width="232" height="34" rx="0" fill="#DCC6E6"/>
+    <rect x="16" y="84" width="648" height="34" rx="6" fill="none" stroke="#C9AFD6"/>
+    <text id="bp-free-label" x="30" y="106" font-size="12" font-weight="700" fill="#5E338F">свободно 40</text>
+    <text id="bp-res-label" x="650" y="106" text-anchor="end" font-size="11" fill="#5B4468">резерв 0</text>
+
+    <line x1="16" y1="132" x2="664" y2="132" stroke="#E0D2E6"/>
+
+    <g font-family="Consolas,monospace">
+      <text x="16" y="158" font-size="11" fill="#6E6278">РЕЗЕРВ</text>
+      <text id="bp-value" x="104" y="160" font-size="22" font-weight="700" fill="#8E5BC8">0</text>
+      <text x="220" y="158" font-size="11" fill="#6E6278">СВОБОДНО</text>
+      <text id="bp-free" x="330" y="160" font-size="22" font-weight="700" fill="#5E338F">40</text>
+      <text x="430" y="158" font-size="11" fill="#6E6278">КЛАСС ЗНАЧЕНИЯ</text>
+      <text id="bp-class" x="430" y="178" font-size="12" fill="#2B2433">нижняя граница</text>
+    </g>
+
+    <rect id="bp-badge" x="16" y="198" width="648" height="46" rx="8" fill="#FFFFFF" stroke="#D9C8E0"/>
+    <text id="bp-badge-text" x="30" y="218" font-size="11.5" font-weight="700" fill="#5E338F">Что ловит эта проверка</text>
+    <text id="bp-catch" x="30" y="235" font-size="11.5" fill="#2B2433">Пока ничего: такая проверка проходит и на правильной, и на неправильной версии.</text>
+
+    <text x="16" y="272" font-family="Consolas,monospace" font-size="9.5" fill="#6E6278">СЕРЕДИНА ДИАПАЗОНА НЕ ПОКАЗЫВАЕТ ПЕРЕХОД. ПРОВЕРЯЙТЕ КРАЯ.</text>
+  </svg>
+  <div class="status" id="bp-status"></div>
+  <div class="controls" id="bp-buttons">
+    <button data-r="-1">-1</button>
+    <button data-r="0" class="on">0</button>
+    <button data-r="1">1</button>
+    <button data-r="39">39</button>
+    <button data-r="40">40</button>
+    <button data-r="41">41</button>
+  </div>
+  <p class="note">Кнопка 41 показывает превышение на единицу: правильная функция возвращает 0, а не отрицательное число. Кнопка 40 проверяет равенство, на котором ломается условие сравнения.</p>
+</div>
+<script>
+(function () {
+  var data = {
+    '-1': {
+      free: 'ошибка', cls: 'недопустимый вход',
+      catch: 'Функция обязана выбросить ValueError. Если она вернёт 40, отрицательный резерв пройдёт молча.',
+      status: '<b>Недопустимый вход.</b> Резерв не может быть отрицательным. Проверка фиксирует не число, а контракт: такой вход отклоняют исключением, а не приводят к нулю.'
+    },
+    '0': {
+      free: '40', cls: 'нижняя граница',
+      catch: 'Пока ничего: такая проверка проходит и на правильной, и на неправильной версии.',
+      status: '<b>Резерв отсутствует.</b> Свободно 40. Этот случай проверяют первым, потому что он удобный, но именно он скрывает дефект вычитания: при нуле резерва и правильная, и многие неправильные версии дают 40.'
+    },
+    '1': {
+      free: '39', cls: 'минимальный ненулевой резерв',
+      catch: 'Проверяет, что вычитание вообще работает при ненулевом резерве.',
+      status: '<b>Минимальный ненулевой резерв.</b> Свободно 39. Если в коде перепутаны знаки или резерв не вычитается, тест упадёт на самом простом ненулевом значении.'
+    },
+    '39': {
+      free: '1', cls: 'почти весь товар занят',
+      catch: 'Проверяет верхнюю границу допустимого резерва и отсутствие округления.',
+      status: '<b>Почти весь товар занят.</b> Свободна одна единица. Случай полезен, когда в расчёте появляется деление или округление: единица не должна превращаться в ноль раньше времени.'
+    },
+    '40': {
+      free: '0', cls: 'равенство остатку',
+      catch: 'Ловит условие > вместо >= и забытый max: свободного не остаётся ровно ноль.',
+      status: '<b>Резерв равен остатку.</b> Свободно 0. Это главная граница: при сравнении строгого и нестрогого неравенства здесь появляется лишняя единица или отказ на допустимой операции.'
+    },
+    '41': {
+      free: '0', cls: 'превышение на единицу',
+      catch: 'Ловит отсутствие max: без защиты функция вернёт -1, и склад увидит отрицательный остаток.',
+      status: '<b>Резерв больше остатка на единицу.</b> Правильный ответ 0, а не минус один. Именно здесь проявляется забытая защита, которая в обычный день не видна.'
+    }
+  };
+  var buttons = document.querySelectorAll('#bp-buttons button');
+  var status = document.getElementById('bp-status');
+  var reserved = document.getElementById('bp-reserved');
+  var resLabel = document.getElementById('bp-res-label');
+  var freeLabel = document.getElementById('bp-free-label');
+  var value = document.getElementById('bp-value');
+  var free = document.getElementById('bp-free');
+  var cls = document.getElementById('bp-class');
+  var catchText = document.getElementById('bp-catch');
+  var badge = document.getElementById('bp-badge-text');
+  var badgeBox = document.getElementById('bp-badge');
+
+  function apply(raw) {
+    var r = Number(raw);
+    var shown = Math.max(0, Math.min(40, r));
+    var width = (shown / 40) * 648;
+    reserved.setAttribute('width', String(width));
+    reserved.setAttribute('x', String(16 + 648 - width));
+    resLabel.setAttribute('x', '650');
+    resLabel.setAttribute('text-anchor', 'end');
+    resLabel.textContent = r === -1 ? 'недопустимо' : 'резерв ' + r;
+    freeLabel.textContent = r === -1 ? 'значение вне правила' : 'свободно ' + Math.max(40 - r, 0);
+    value.textContent = String(r);
+    free.textContent = data[raw].free;
+    cls.textContent = data[raw].cls;
+    catchText.textContent = data[raw].catch;
+    status.innerHTML = data[raw].status;
+    var bad = r === -1;
+    value.setAttribute('fill', bad ? '#B04A5A' : '#8E5BC8');
+    reserved.setAttribute('fill', bad ? '#EBC9D0' : '#DCC6E6');
+    badgeBox.setAttribute('stroke', bad ? '#D9A6B2' : '#D9C8E0');
+    badge.setAttribute('fill', bad ? '#B04A5A' : '#5E338F');
+    buttons.forEach(function (b) { b.classList.toggle('on', b.dataset.r === raw); });
+  }
+  buttons.forEach(function (b) { b.addEventListener('click', function () { apply(b.dataset.r); }); });
+  apply('0');
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Восстановление типов после разбора</title>
+<style>
+  :root { --paper:#F7F0FA; --card:#FFFFFF; --ink:#2B2333; --muted:#6E6179; --rule:#DCCBE6; --accent:#8E5BC8; --soft:#EBE0EC; --deep:#5B2E86; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .frame { background:var(--paper); border:1px solid var(--rule); border-radius:12px; padding:16px; }
+  .eyebrow { margin:0 0 6px; font:600 10.5px/1.2 Consolas,monospace; letter-spacing:.12em; text-transform:uppercase; color:var(--accent); }
+  svg { display:block; width:100%; height:auto; }
+  .row { cursor:pointer; }
+  .row rect { fill:#FFFFFF; stroke:#DCCBE6; stroke-width:1; transition:fill .15s, stroke .15s; }
+  .row.on rect { fill:#EBE0EC; stroke:#8E5BC8; stroke-width:1.8; }
+  .status { min-height:64px; margin-top:8px; padding:10px 12px; border-radius:9px; background:var(--soft); font-size:13px; line-height:1.45; }
+  .status b { color:var(--deep); }
+  .controls { display:flex; gap:6px; flex-wrap:wrap; margin-top:10px; }
+  button { font:600 11.5px/1.1 "Segoe UI",system-ui,sans-serif; padding:8px 9px; border-radius:8px; border:1px solid var(--rule); background:var(--card); color:var(--ink); cursor:pointer; }
+  button:hover { border-color:var(--accent); color:var(--accent); }
+  button.on { background:var(--accent); border-color:var(--accent); color:#fff; }
+  .note { margin:9px 2px 0; font:11.5px/1.5 "Segoe UI",system-ui,sans-serif; color:var(--muted); }
+  @media (max-width:560px) { .frame { padding:12px; } .status { font-size:12.5px; } }
+</style>
+</head>
+<body>
+<div class="frame">
+  <p class="eyebrow">Обмен · типы после разбора</p>
+  <svg viewBox="0 0 680 266" role="img" aria-labelledby="tr-title tr-desc">
+    <title id="tr-title">Шесть полей и правила восстановления типов</title>
+    <desc id="tr-desc">Количество, цена, дата, артикул, логический признак и пустая ячейка. Для каждого поля показано значение в JSON, сырое значение в CSV и правило преобразования. Строки можно выбирать.</desc>
+
+    <g font-family="Segoe UI,system-ui,sans-serif">
+      <rect x="16" y="18" width="648" height="30" rx="5" fill="#EBE0EC" stroke="#8E5BC8"/>
+      <text x="26" y="38" font-size="11" font-weight="700" fill="#2B2333">Поле</text>
+      <text x="170" y="38" font-size="11" font-weight="700" fill="#2B2333">JSON</text>
+      <text x="330" y="38" font-size="11" font-weight="700" fill="#2B2333">CSV</text>
+      <text x="500" y="38" font-size="11" font-weight="700" fill="#2B2333">Правило</text>
+
+      <g class="row on" data-k="qty">
+        <rect x="16" y="50" width="648" height="30" rx="0"/>
+        <text x="26" y="70" font-size="11.5" font-weight="600" fill="#2B2333">Количество</text>
+        <text x="170" y="70" font-family="Consolas,monospace" font-size="10.5" fill="#4E4358">48 (int)</text>
+        <text x="330" y="70" font-family="Consolas,monospace" font-size="10.5" fill="#4E4358">"48" (str)</text>
+        <text x="500" y="70" font-size="11" fill="#5B2E86">int()</text>
+      </g>
+      <g class="row" data-k="price">
+        <rect x="16" y="80" width="648" height="30"/>
+        <text x="26" y="100" font-size="11.5" font-weight="600" fill="#2B2333">Цена</text>
+        <text x="170" y="100" font-family="Consolas,monospace" font-size="10.5" fill="#4E4358">312.5 (number)</text>
+        <text x="330" y="100" font-family="Consolas,monospace" font-size="10.5" fill="#4E4358">"312,50" (str)</text>
+        <text x="500" y="100" font-size="11" fill="#5B2E86">Decimal</text>
+      </g>
+      <g class="row" data-k="date">
+        <rect x="16" y="110" width="648" height="30"/>
+        <text x="26" y="130" font-size="11.5" font-weight="600" fill="#2B2333">Дата</text>
+        <text x="170" y="130" font-family="Consolas,monospace" font-size="10.5" fill="#4E4358">"2026-10-05" (str)</text>
+        <text x="330" y="130" font-family="Consolas,monospace" font-size="10.5" fill="#4E4358">"05.10.2026" (str)</text>
+        <text x="500" y="130" font-size="11" fill="#5B2E86">strptime</text>
+      </g>
+      <g class="row" data-k="sku">
+        <rect x="16" y="140" width="648" height="30"/>
+        <text x="26" y="160" font-size="11.5" font-weight="600" fill="#2B2333">Артикул</text>
+        <text x="170" y="160" font-family="Consolas,monospace" font-size="10.5" fill="#4E4358">"SKU-1042" (str)</text>
+        <text x="330" y="160" font-family="Consolas,monospace" font-size="10.5" fill="#4E4358">"007" (str)</text>
+        <text x="500" y="160" font-size="11" fill="#5B2E86">оставить строкой</text>
+      </g>
+      <g class="row" data-k="flag">
+        <rect x="16" y="170" width="648" height="30"/>
+        <text x="26" y="190" font-size="11.5" font-weight="600" fill="#2B2333">Признак</text>
+        <text x="170" y="190" font-family="Consolas,monospace" font-size="10.5" fill="#4E4358">false (bool)</text>
+        <text x="330" y="190" font-family="Consolas,monospace" font-size="10.5" fill="#4E4358">"нет" (str)</text>
+        <text x="500" y="190" font-size="11" fill="#5B2E86">таблица значений</text>
+      </g>
+      <g class="row" data-k="empty">
+        <rect x="16" y="200" width="648" height="30"/>
+        <text x="26" y="220" font-size="11.5" font-weight="600" fill="#2B2333">Пустая ячейка</text>
+        <text x="170" y="220" font-family="Consolas,monospace" font-size="10.5" fill="#4E4358">null</text>
+        <text x="330" y="220" font-family="Consolas,monospace" font-size="10.5" fill="#4E4358">""</text>
+        <text x="500" y="220" font-size="11" fill="#5B2E86">правило поля</text>
+      </g>
+
+      <text x="16" y="252" font-family="Consolas,monospace" font-size="9.5" fill="#6E6179">CSV НЕ ЗНАЕТ ТИПОВ: ИХ ВОССТАНАВЛИВАЕТ ПРОГРАММА ПО ДОГОВОРУ</text>
+    </g>
+  </svg>
+  <div class="status" id="tr-status"></div>
+  <div class="controls" id="tr-buttons">
+    <button data-k="qty" class="on">Количество</button>
+    <button data-k="price">Цена</button>
+    <button data-k="date">Дата</button>
+    <button data-k="sku">Артикул</button>
+    <button data-k="flag">Признак</button>
+    <button data-k="empty">Пустая</button>
+  </div>
+  <p class="note">Нажмите строку таблицы или кнопку. Сравните, что приходит из JSON, что лежит в CSV и какое правило снимает неоднозначность.</p>
+</div>
+<script>
+(function () {
+  var data = {
+    qty: '<b>Количество.</b> В JSON это int, в CSV строка. int("48") даёт 48. Без преобразования "48" + "12" даёт "4812", а "48" > "100" возвращает True: строки сравниваются посимвольно.',
+    price: '<b>Цена.</b> float("312,50") падает из-за запятой. После замены на точку Decimal сохраняет два знака, а float теряет масштаб и накапливает погрешность. В базу пишут Decimal или целые копейки.',
+    date: '<b>Дата.</b> Обе строки выглядят допустимыми, но 05.10.2026 и 10.05.2026 читаются по-разному. Формат %d.%m.%Y фиксируют в договоре и проверяют диапазон, иначе день и месяц меняются местами.',
+    sku: '<b>Артикул.</b> int("007") вернёт 7, и товар перестанет находиться. Идентификатор всегда остаётся строкой, даже если состоит только из цифр.',
+    flag: '<b>Признак.</b> bool("нет") возвращает True, потому что непустая строка истинна. Нужна явная таблица: да и 1 и true означают истину, нет и 0 и false означают ложь.',
+    empty: '<b>Пустая ячейка.</b> В JSON null отличается от нуля и пустой строки. В CSV пусто может означать и ноль, и отсутствие данных. Правило задают для каждого столбца отдельно.'
+  };
+  var rows = document.querySelectorAll('.row');
+  var buttons = document.querySelectorAll('#tr-buttons button');
+  var status = document.getElementById('tr-status');
+
+  function apply(key) {
+    rows.forEach(function (r) { r.classList.toggle('on', r.dataset.k === key); });
+    buttons.forEach(function (b) { b.classList.toggle('on', b.dataset.k === key); });
+    status.innerHTML = data[key];
+  }
+  rows.forEach(function (r) { r.addEventListener('click', function () { apply(r.dataset.k); }); });
+  buttons.forEach(function (b) { b.addEventListener('click', function () { apply(b.dataset.k); }); });
+  apply('qty');
+})();
+</script>
+</body>
+</html>

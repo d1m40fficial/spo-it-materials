@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Карта отката после неудачной выкладки</title>
+<style>
+  :root { --paper:#FAF7F6; --card:#FFFDFC; --ink:#2A2430; --muted:#6B6272; --rule:#E6D9EC; --accent:#8E5BC8; --soft:#EBE0EC; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .frame { background:var(--paper); border:1px solid var(--rule); border-radius:12px; padding:16px; }
+  .eyebrow { margin:0 0 6px; font:600 10px/1.2 Consolas,monospace; letter-spacing:.14em; text-transform:uppercase; color:var(--accent); }
+  svg { display:block; width:100%; height:auto; }
+  .q { fill:var(--card); stroke:var(--accent); stroke-width:1.4; }
+  .act { fill:#F4EBF8; stroke:var(--rule); stroke-width:1.2; }
+  .sym { fill:#EBE0EC; stroke:var(--rule); stroke-width:1.2; }
+  .t { font-size:10.5px; font-weight:600; fill:var(--ink); }
+  .a { font-size:9.5px; fill:#5F3A85; }
+  .m { font-size:9px; fill:var(--muted); }
+  .ar { stroke:var(--accent); stroke-width:1.5; fill:none; }
+  .no { font-size:9px; font-weight:700; fill:#8C2F2F; }
+  @media (max-width:560px) { .frame { padding:12px; } }
+</style>
+</head>
+<body>
+<div class="frame">
+  <p class="eyebrow">Порядок действий при сбое</p>
+  <svg viewBox="0 0 680 348" role="img" aria-labelledby="rm-title rm-desc">
+    <title id="rm-title">Карта отката после неудачной выкладки</title>
+    <desc id="rm-desc">Симптом вверху. Три вопроса по порядку: отвечает ли приложение, совпадает ли число записей, верны ли настройки. Для каждого ответа нет указано своё действие. Если все ответы да, разбирают код и данные.</desc>
+
+    <rect class="sym" x="16" y="8" width="430" height="34" rx="7"/>
+    <text class="t" x="30" y="29">Симптом: 502, ответы 500, пустые данные после выкладки</text>
+
+    <rect class="q" x="16" y="58" width="300" height="44" rx="8"/>
+    <text class="t" x="30" y="77">Health check отвечает 200?</text>
+    <text class="m" x="30" y="93">и число позиций в ответе равно 4800</text>
+
+    <path class="ar" d="M316 80 H356"/>
+    <path class="ar" d="M350 74 l8 6 -8 6"/>
+    <text class="no" x="322" y="70">нет</text>
+    <rect class="act" x="364" y="58" width="300" height="44" rx="8"/>
+    <text class="t" x="378" y="77">Вернуть прежний артефакт</text>
+    <text class="a" x="378" y="93">затем health check и журнал</text>
+
+    <path class="ar" d="M166 102 V126"/>
+    <path class="ar" d="M160 120 l6 8 6 -8"/>
+    <text class="m" x="176" y="120">да</text>
+
+    <rect class="q" x="16" y="128" width="300" height="44" rx="8"/>
+    <text class="t" x="30" y="147">Число записей совпадает?</text>
+    <text class="m" x="30" y="163">накладные, позиции, справочники</text>
+
+    <path class="ar" d="M316 150 H356"/>
+    <path class="ar" d="M350 144 l8 6 -8 6"/>
+    <text class="no" x="322" y="140">нет</text>
+    <rect class="act" x="364" y="128" width="300" height="44" rx="8"/>
+    <text class="t" x="378" y="147">Восстановить копию базы</text>
+    <text class="a" x="378" y="163">сверить суммы и число записей</text>
+
+    <path class="ar" d="M166 172 V196"/>
+    <path class="ar" d="M160 190 l6 8 6 -8"/>
+    <text class="m" x="176" y="190">да</text>
+
+    <rect class="q" x="16" y="198" width="300" height="44" rx="8"/>
+    <text class="t" x="30" y="217">Профиль и источники верные?</text>
+    <text class="m" x="30" y="233">prod, путь к базе, нет отладки</text>
+
+    <path class="ar" d="M316 220 H356"/>
+    <path class="ar" d="M350 214 l8 6 -8 6"/>
+    <text class="no" x="322" y="210">нет</text>
+    <rect class="act" x="364" y="198" width="300" height="44" rx="8"/>
+    <text class="t" x="378" y="217">Вернуть настройки площадки</text>
+    <text class="a" x="378" y="233">и перезапустить службу</text>
+
+    <path class="ar" d="M166 242 V266"/>
+    <path class="ar" d="M160 260 l6 8 6 -8"/>
+    <text class="m" x="176" y="260">да</text>
+
+    <rect class="sym" x="16" y="268" width="648" height="40" rx="8"/>
+    <text class="t" x="30" y="288">Разбирать код и данные на тестовой копии, не трогая работающий сервис</text>
+    <text class="m" x="30" y="302">сначала сохранить журналы и слепок базы</text>
+
+    <text class="m" x="16" y="330">Порядок от дешёвого к дорогому: артефакт, затем копия базы, затем настройки, затем данные.</text>
+    <text class="m" x="16" y="344">Пока идёт разбор, склад работает на прежней версии.</text>
+  </svg>
+</div>
+</body>
+</html>

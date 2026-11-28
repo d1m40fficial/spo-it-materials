@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Устройство файла базы SQLite</title>
+<style>
+  :root { color-scheme:light; --paper:#EBE0EC; --card:#FFFDFC; --ink:#2A2430; --muted:#6B6272; --rule:#CDBBD6; --accent:#8E5BC8; --soft:#F3EAF4; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .frame { background:var(--paper); border:1px solid var(--rule); border-radius:12px; padding:16px; }
+  .eyebrow { margin:0 0 6px; font:600 10px/1.2 Consolas,monospace; letter-spacing:.14em; text-transform:uppercase; color:var(--accent); }
+  svg { display:block; width:100%; height:auto; }
+  .note { margin:9px 2px 0; font:11.5px/1.5 "Segoe UI",system-ui,sans-serif; color:var(--muted); }
+  @media (max-width:560px) { .frame { padding:12px; } .note { font-size:11px; } }
+</style>
+</head>
+<body>
+<div class="frame">
+  <p class="eyebrow">SQLite · файл базы</p>
+  <svg viewBox="0 0 680 410" role="img" aria-labelledby="fm-title fm-desc">
+    <title id="fm-title">Страницы файла базы SQLite</title>
+    <desc id="fm-desc">Основной файл базы состоит из страниц: заголовок и sqlite_master, деревья таблиц, индексы, свободные страницы. Рядом могут лежать файлы журнала WAL и разделяемой памяти.</desc>
+
+    <text x="16" y="18" font-family="Consolas,monospace" font-size="10" fill="#6B6272">ОДИН ФАЙЛ, МНОГО СТРАНИЦ</text>
+    <rect x="16" y="26" width="404" height="232" rx="10" fill="#FFFDFC" stroke="#CDBBD6"/>
+    <text x="30" y="47" font-family="Segoe UI,system-ui,sans-serif" font-size="13" font-weight="700" fill="#2A2430">sklad.db</text>
+    <text x="30" y="64" font-family="Segoe UI,system-ui,sans-serif" font-size="10.5" fill="#6B6272">страница по умолчанию 4096 байт, заголовок занимает 100 байт</text>
+
+    <g font-family="Segoe UI,system-ui,sans-serif">
+      <rect x="30" y="74" width="376" height="30" rx="5" fill="#F3EAF4" stroke="#CDBBD6"/>
+      <text x="40" y="93" font-size="11" font-weight="600" fill="#2A2430">стр. 1</text>
+      <text x="86" y="93" font-size="10.5" fill="#2A2430">заголовок файла и корень sqlite_master</text>
+
+      <rect x="30" y="110" width="376" height="30" rx="5" fill="#FFFDFC" stroke="#CDBBD6"/>
+      <text x="40" y="129" font-size="11" font-weight="600" fill="#2A2430">стр. 2</text>
+      <text x="86" y="129" font-size="10.5" fill="#2A2430">B-дерево таблицы products, листья и узлы</text>
+
+      <rect x="30" y="146" width="376" height="30" rx="5" fill="#FFFDFC" stroke="#CDBBD6"/>
+      <text x="40" y="165" font-size="11" font-weight="600" fill="#2A2430">стр. 3</text>
+      <text x="86" y="165" font-size="10.5" fill="#2A2430">B-дерево индекса idx_products_category</text>
+
+      <rect x="30" y="182" width="376" height="30" rx="5" fill="#FFFDFC" stroke="#CDBBD6" stroke-dasharray="4 3"/>
+      <text x="40" y="201" font-size="11" font-weight="600" fill="#2A2430">стр. 4</text>
+      <text x="86" y="201" font-size="10.5" fill="#2A2430">свободная страница после DELETE, место не отдано ОС</text>
+
+      <rect x="30" y="218" width="376" height="30" rx="5" fill="#FFFDFC" stroke="#CDBBD6"/>
+      <text x="40" y="237" font-size="11" font-weight="600" fill="#2A2430">стр. 5</text>
+      <text x="86" y="237" font-size="10.5" fill="#2A2430">страница переполнения для длинной записи</text>
+    </g>
+
+    <g font-family="Segoe UI,system-ui,sans-serif">
+      <rect x="436" y="26" width="228" height="232" rx="10" fill="#FFFDFC" stroke="#CDBBD6"/>
+      <text x="450" y="47" font-size="12" font-weight="700" fill="#2A2430">Что где хранится</text>
+
+      <rect x="450" y="58" width="10" height="10" rx="2" fill="#8E5BC8"/>
+      <text x="468" y="67" font-size="10.5" fill="#2A2430">схема и служебные данные</text>
+
+      <rect x="450" y="82" width="10" height="10" rx="2" fill="#C9AEDB"/>
+      <text x="468" y="91" font-size="10.5" fill="#2A2430">строки таблиц и ключи</text>
+
+      <rect x="450" y="106" width="10" height="10" rx="2" fill="#E4D5EC"/>
+      <text x="468" y="115" font-size="10.5" fill="#2A2430">индексы, отдельные деревья</text>
+
+      <rect x="450" y="130" width="10" height="10" rx="2" fill="#FFFDFC" stroke="#8E5BC8" stroke-dasharray="3 2"/>
+      <text x="468" y="139" font-size="10.5" fill="#2A2430">свободные страницы</text>
+
+      <text x="450" y="168" font-size="10.5" fill="#6B6272">Размер = page_size × page_count.</text>
+      <text x="450" y="184" font-size="10.5" fill="#6B6272">Свободное место возвращает</text>
+      <text x="450" y="199" font-size="10.5" fill="#6B6272">VACUUM или VACUUM INTO.</text>
+      <text x="450" y="223" font-size="10.5" font-weight="600" fill="#8E5BC8">Схема это тоже данные.</text>
+      <text x="450" y="239" font-size="10.5" fill="#6B6272">Её читают запросом.</text>
+    </g>
+
+    <text x="16" y="282" font-family="Consolas,monospace" font-size="10" fill="#6B6272">ФАЙЛЫ РЯДОМ С БАЗОЙ В РЕЖИМЕ WAL</text>
+
+    <g font-family="Segoe UI,system-ui,sans-serif">
+      <rect x="16" y="292" width="196" height="54" rx="8" fill="#FFFDFC" stroke="#8E5BC8" stroke-width="1.6"/>
+      <text x="28" y="312" font-size="12" font-weight="700" fill="#2A2430">sklad.db</text>
+      <text x="28" y="329" font-size="10" fill="#6B6272">основной файл, страницы</text>
+
+      <rect x="228" y="292" width="212" height="54" rx="8" fill="#FFFDFC" stroke="#CDBBD6"/>
+      <text x="240" y="312" font-size="12" font-weight="700" fill="#2A2430">sklad.db-wal</text>
+      <text x="240" y="329" font-size="10" fill="#6B6272">кадры, ещё не перенесённые в базу</text>
+
+      <rect x="456" y="292" width="208" height="54" rx="8" fill="#FFFDFC" stroke="#CDBBD6"/>
+      <text x="468" y="312" font-size="12" font-weight="700" fill="#2A2430">sklad.db-shm</text>
+      <text x="468" y="329" font-size="10" fill="#6B6272">индекс кадров, разделяемая память</text>
+
+      <path d="M224 319 L228 319" stroke="#8E5BC8" stroke-width="1.6"/>
+      <path d="M440 319 L456 319" stroke="#8E5BC8" stroke-width="1.6"/>
+      <text x="16" y="370" font-size="10.5" fill="#2A2430">Копия только sklad.db при активном WAL не содержит последних фиксаций.</text>
+      <text x="16" y="387" font-size="10.5" fill="#6B6272">Для копии используют backup API, VACUUM INTO или checkpoint перед копированием.</text>
+    </g>
+  </svg>
+  <p class="note">Слева страницы одного файла, справа назначение структур, внизу файлы журнала. Сравните, какие страницы растут при вставке, а какие появляются только на время записи.</p>
+</div>
+</body>
+</html>

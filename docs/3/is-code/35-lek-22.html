@@ -894,13 +894,15 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <canvas class="shader-bg" width="820" height="300" aria-hidden="true" style="background:linear-gradient(135deg,#08090D,#8E5BC8 58%,#08090D)"></canvas>
 <div class="badges"><span class="pill dark">Занятие 39</span><span class="pill">Разработка кода информационных систем</span></div>
 <div class="hero-panel"><h1>Логирование</h1><p class="dek">Запись в журнале связывает время, пользователя, действие и идентификатор запроса, поэтому по ней можно восстановить ход сбоя, а не гадать о причине.</p></div>
-<div class="glyph" aria-hidden="true">Л22</div></header><section class="outcomes"><b>После этого занятия вы сможете</b><ul><li>Выбирать уровень сообщения под событие</li><li>Писать в журнал время, событие и идентификатор</li><li>Читать журнал и восстанавливать ход запроса</li></ul></section><nav class="toc"><b>Содержание занятия</b><ol><li><a href="#отгрузка-о-которой-известно-одно-слово">Отгрузка, о которой известно одно слово</a></li><li><a href="#журнал-это-след-решений-а-не-вывод-отладки">Журнал это след решений, а не вывод отладки</a></li><li><a href="#уровни-сообщений">Уровни сообщений</a></li><li><a href="#формат-записи">Формат записи</a></li><li><a href="#идентификатор-запроса">Идентификатор запроса</a></li><li><a href="#чтение-журнала">Чтение журнала</a></li><li><a href="#что-не-попадает-в-журнал">Что не попадает в журнал</a></li><li><a href="#сколько-журнал-живёт">Сколько журнал живёт</a></li><li><a href="#типичные-ошибки">Типичные ошибки</a></li><li><a href="#итоги">Итоги</a></li></ol></nav><article class="prose"><h2 id="отгрузка-о-которой-известно-одно-слово"><span class="num">01</span>Отгрузка, о которой известно одно слово</h2>
+<div class="glyph" aria-hidden="true">Л22</div></header><section class="outcomes"><b>После этого занятия вы сможете</b><ul><li>Выбирать уровень сообщения под событие</li><li>Писать в журнал время, событие и идентификатор</li><li>Читать журнал и восстанавливать ход запроса</li><li>Отличать журнал приложения от аудита и метрик</li><li>Проверять запись на секреты, персональные данные и подделку</li></ul></section><nav class="toc"><b>Содержание занятия</b><ol><li><a href="#отгрузка-о-которой-известно-одно-слово">Отгрузка, о которой известно одно слово</a></li><li><a href="#журнал-это-след-решений-а-не-вывод-отладки">Журнал это след решений, а не вывод отладки</a></li><li><a href="#уровни-не-важность-текста-а-цена-события">Уровни: не важность текста, а цена события</a></li><li><a href="#формат-записи-от-строки-к-событию">Формат записи: от строки к событию</a></li><li><a href="#время-длительность-и-порядок">Время, длительность и порядок</a></li><li><a href="#идентификатор-запроса-и-контекст">Идентификатор запроса и контекст</a></li><li><a href="#секреты-персональные-данные-и-подделка-записи">Секреты, персональные данные и подделка записи</a></li><li><a href="#объём-ротация-и-стоимость">Объём, ротация и стоимость</a></li><li><a href="#три-аварии-в-которых-журнал-оказался-не-тем-чем-казался">Три аварии, в которых журнал оказался не тем, чем казался</a></li><li><a href="#как-читать-журнал">Как читать журнал</a></li><li><a href="#чек-лист-перед-запуском">Чек-лист перед запуском</a></li><li><a href="#типичные-ошибки">Типичные ошибки</a></li><li><a href="#итоги">Итоги</a></li><li><a href="#источники">Источники</a></li></ol></nav><article class="prose"><h2 id="отгрузка-о-которой-известно-одно-слово"><span class="num">01</span>Отгрузка, о которой известно одно слово</h2>
 <p>В 03:40 кладовщик из Калуги нажимает «Отгрузить» и получает сообщение об ошибке. Через десять минут звонит менеджер: машина стоит, накладная не закрыта. Инженер открывает журнал приложения и видит одну строку:</p>
 <div class="codehilite" data-lang="text"><pre><span></span><code>ERROR: failed
 </code></pre></div>
 
 <p>В ней нет времени, имени пользователя, номера накладной и идентификатора запроса. Непонятно, это та самая отгрузка или ошибка недельной давности. Инженер начинает искать причину наугад: проверяет базу, свободное место, сеть до Калуги. На это уходит два часа, а причина оказывается в заблокированной записи товара, которую приложение не смогло прочитать.</p>
+<p>Через сутки выясняется ещё одна подробность. Строка <code>failed</code> встречается в журнале 412 раз за неделю. Она появляется при таймауте, при отказе прав, при нарушении ограничения базы и при сетевой ошибке. Все четыре ситуации выглядят одинаково, поэтому поиск превращается в перебор. Инженер не может отличить редкий сбой от привычного фона, а поддержка не может ответить менеджеру, когда проблема повторится.</p>
 <p><strong>Журнал это последовательность записей о том, что приложение пыталось сделать и чем это закончилось.</strong> Он нужен не для того, чтобы любоваться выводом, а чтобы после сбоя восстановить ход событий: кто пришёл, что запросил, к какому объекту обратился, сколько ждал и что получил в ответ.</p>
+<p>Хороший журнал отвечает на вопросы через месяц, на другой машине и без разработчика, который писал код. Именно это отличает его от отладочной печати, которая помогает здесь и сейчас, а после перезапуска терминала исчезает.</p>
 <h2 id="журнал-это-след-решений-а-не-вывод-отладки"><span class="num">02</span>Журнал это след решений, а не вывод отладки</h2>
 <p>Разница между журналом и отладочным выводом видна на вопросе, который задают к записи. Отладочный <code>print("тут")</code> отвечает на вопрос «дошла ли программа до этой строки». Запись журнала отвечает на вопрос «что произошло с этим запросом и этим пользователем». Первое нужно разработчику на своей машине, второе нужно инженеру через месяц после сбоя.</p>
 <p>Хорошая запись отвечает на пять вопросов: когда, кто, что делал, с каким объектом, чем закончилось. Если хотя бы один ответ отсутствует, запись приходится дополнять догадками. В строке <code>ERROR: failed</code> нет ни одного ответа, поэтому она бесполезна, хотя формально это журнал.</p>
@@ -947,7 +949,10 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 </tbody>
 </table>
 <p>Поле <code>request_id</code> связывает записи одного запроса. Без него шесть строк от одного действия выглядят как шесть независимых событий, и восстановить порядок можно только по времени, а при расхождении часов это ненадёжно.</p>
-<h2 id="уровни-сообщений"><span class="num">03</span>Уровни сообщений</h2>
+<p>Есть ещё одно различие, которое редко проговаривают. Журнал приложения описывает работу программы, а журнал аудита описывает действия людей с данными. Аудит нужен для доказательства факта доступа и хранится по правилам, которые задаёт служба безопасности. Приложение может писать оба потока, но смешивать их в одном файле не стоит: у них разные сроки хранения, разные права на чтение и разные требования к неизменности.</p>
+<figure class="figure" data-fig="log-anatomy" data-one="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"><iframe title="Figure 1: log-anatomy" scrolling="no"></iframe><figcaption>Слева поля записи, справа вопрос, на который каждое отвечает. Сравните строку <code>ERROR: failed</code> внизу с полной записью сверху: разница не в длине, а в числе ответов, которые получает инженер через месяц.</figcaption></figure>
+
+<h2 id="уровни-не-важность-текста-а-цена-события"><span class="num">03</span>Уровни: не важность текста, а цена события</h2>
 <p>Уровень показывает, насколько событие важно и кто должен на него реагировать. Уровни нужны не для красоты: по ним настраивают фильтр, и в рабочей среде обычно оставляют INFO и выше, а DEBUG включают только на время разбора.</p>
 <table>
 <thead>
@@ -994,9 +999,61 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <p>Граница между WARNING и ERROR проходит по результату операции. Если запрос к базе не удался, но приложение повторило его и получило данные, это WARNING: пользователь получил результат. Если после повтора операция всё равно не выполнена, это ERROR. Один и тот же сбой может дать обе записи, и это нормально, если у них разные <code>result</code>.</p>
 <p>Ошибка валидации не является ERROR. Кладовщик ввёл количество 0, сервер вернул 400 и список полей. Это ожидаемое событие, о котором достаточно записи INFO или WARNING с кодом <code>validation_failed</code>. Если каждую опечатку писать как ERROR, журнал ошибок перестанет быть списком проблем, которые действительно нужно разбирать.</p>
 <p>Уровень назначают по последствиям, а не по типу исключения. <code>PermissionError</code> при выгрузке отчёта это ERROR для менеджера, который ждёт файл, и WARNING, если приложение само запросило доступ и получило отказ в рамках проверки. Контекст важнее имени класса ошибки.</p>
+<p>Полезно помнить, что имена уровней в разных библиотеках совпадают не полностью. В Python есть пять основных уровней и числовые значения: DEBUG 10, INFO 20, WARNING 30, ERROR 40, CRITICAL 50. В .NET к ним добавляется Trace ниже Debug и None для полного отключения. OpenTelemetry использует TRACE, DEBUG, INFO, WARN, ERROR, FATAL. Смысл один, но при переходе между библиотеками настройки переносят по смыслу, а не по числу.</p>
+<table>
+<thead>
+<tr>
+<th>Событие</th>
+<th>Python</th>
+<th>.NET</th>
+<th>OpenTelemetry</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>подробная трассировка</td>
+<td>DEBUG</td>
+<td>Trace</td>
+<td>TRACE</td>
+</tr>
+<tr>
+<td>отладочные значения</td>
+<td>DEBUG</td>
+<td>Debug</td>
+<td>DEBUG</td>
+</tr>
+<tr>
+<td>штатное событие</td>
+<td>INFO</td>
+<td>Information</td>
+<td>INFO</td>
+</tr>
+<tr>
+<td>отклонение с продолжением</td>
+<td>WARNING</td>
+<td>Warning</td>
+<td>WARN</td>
+</tr>
+<tr>
+<td>операция не выполнена</td>
+<td>ERROR</td>
+<td>Error</td>
+<td>ERROR</td>
+</tr>
+<tr>
+<td>отказ сервиса</td>
+<td>CRITICAL</td>
+<td>Critical</td>
+<td>FATAL</td>
+</tr>
+</tbody>
+</table>
+<p>Фильтр по уровню это не то же самое, что фильтр по важности для бизнеса. Запись INFO о том, что пользователь вошёл, может быть критичной для аудита, а запись DEBUG с суммой заказа может содержать персональные данные. Уровень отвечает на вопрос «кого будить», а не на вопрос «что хранить». Эти решения принимают отдельно.</p>
+<figure class="figure" data-fig="log-level-filter" data-one="H4sIAAAAAAACCtVabW/b1hX+nl9xS2OwvFmySL2alozFtrwF6NIhbTEMw1BQIiUTpkiNpJR4RYA2Qedu7Zq1G7ahA9q1GLB92ADHtWLFjhygv4D6Rzvn3EuRlGxJ6GwgC+BI9/W8Pfecc89V5bWdN7bf+vlPa2zPb1ubtyr4wSzNblUltythh6Hp8NE2fI019jTXM/yq1PWb6bIUdtta26hKPdO433FcX2INx/YNG6bdN3V/r6obPbNhpKmxykzb9E3NSnsNzTKqMm7im75lbAb/CAbB+ejj0aPReyx4GVyw0ePRe8FFcBwMR5+w4Bk1h8FRcB4cVdb4olsVzz/AT8ZU13F89i5Lpztax3DVpd2t3dLu9gZ0NDRXhzb9w7Zp76tLypaSz+Ww2e76BowXa0WlVMYOt2sZ6lItu6PUitjWGg2QR10q1wpb2zTDc5rQrm3VsjWg8BDIfx9I150Hac/8tWm31Lrj6oabhh4+jHpdhQn6Acxra27LtNXsBqtrjf2W63RtXfVdzfY6mguUNkCFluOqPc1NEbcrG6wJSk03tbZpHajSm0bLMdjbd6RV78DzjXa6a656sDztGa7Z5BQzTRfsglxFNPiGpB/YkvOoyp0HzHMsU2d8GKUfj6ZdTTe7niorHZCko+k6SicXO0KujHFg1F3nfkwqlmU0jByrxWyWydnOgzU5o7BtxwZCmrfadmwHZG0YG8wyfB/IYAt3zsh5o73BfOOBnyaNNB23rXY7wHFD84ykZrhdVjgnXq8FTOim17G0A7VuOY39DUagU+Vs9nsbbM8wW3u+qnV9R/Du+Zrf9ZB1006L4UIZeeeypH2noyYFB1EY10VSP+vUNalphEloOwCGAWrMFHCmZdpGSFHO5AtJhurAEpdzqbiVq63XxDAeLNexvJicTcuA7VpaR+U6h2b6vgtN/C8hB7LO96l3fd+xYZPIQjKytSazucgKFQFaYuvTaihHXVfialJJeDpXLoN8o+t60NVxTPAnbpx3dc/pGS6dOKJ+KSgu0SBfnSHhp/gYL1xg02YzPGW24xsR+EElDNDBsgL+oWIzhfmqjdMjlySAneHHi04D+E6Q3sHD4h+wjFzwojkZp9mEeWIQTlKZj/2wbeimxlJt7QF3wmqhCFhYgbljHzHGN0H7YexoxLHLxx7eqqwJr1tZE+EBHRt86GaPNeCAe1WJdpbQMVc6YZ/wFdJm8OfImbNvTyNP3wdf/3FlrUPr8ERjVNlyHlQlcivlLMspisTgEEDEMdstiWmuqaUtrW5YlqHXD6qS1UxTbGDwRTe8BvEAu/FOU49mAB9fBhdE+Zt4sHnCggELToG5l8Fg9H4wWGXBGUx8hJNHHwV9Ck/wdxScwLJHLDhOhKdxcCK6yENIlvMTfAVyvhh9zGDvi+Dp6CPYeRA8hyaDLY6A8hCovAAm4kxhR4YFnwMNpH0W8ngSHI0+QSZgHMYG8HmEcZQ2eT6hWjUhF6P5z4RAXBHBEcP/YHiIsoHoR8DY6HD0KQTmQ5h+xqU/Q0aBwjF89nEerAAlEeUzDN7vYyDHiQy2hgbMG+JM+P4ENUaiPoWxQ9RGMr73M5U11NXmLWE7CAcMQCAXJQYmVvJShEveS8375FCrUimbhR7TsqqSCPOg9H+i/eKW+3TacjAMXwdxdfTBmkB981JG8rkkI/KYLE8mgOyEoGhl6OiD2UDr3PqHaFJ25+7uGwS8Y+j6MOivsp3a1ts/gjbo8xxMfBgaeog2OqZdXoAuBWaeEstHIbtJfguFwlhzFFs1u7HnuHAkbV2K5xZVaTpIJ2XMTsv4ZfBF8Hf4++O0rsLztuca3p5jATHgpljMXxc3ygzT83RN2kTNJtXSShIJPfOljln4D1ol/Bj6MKZrPjienkUqCefALNdoxCFSKEs8CwGx8/B9TzCaAz5d1MWYXZ6fSsyDGL8Psi3VijvrtS1p7ZLNFa5A1KPYvKREe8tlvnc+2jtbu72rJLYKoVHM0lal0oQt2qauW8Z3AMdV5gjhQrCOIyV5smTBT3niaGUK02f6FM8CnStwZOhW4GTTcXhBnoYcn/B42AAXBSfnjLuqc+6+r2SkWIgYufYjg74ocpV0gMduQrjZSdYqa625SFRmIXE9f4NIlNHQC0GRX5pmQVGWczeORUoKk67hSijKcn4BLB6PPgCbnpD/pihzjvEuGK7ymIPGPqVAfATG72Ob7Vua7vS8vcaeuf+OMheJxMf1Q/FDjM3wh3lFP5mT9K8ZgnIue5MYzBWvD4P59VcLg4XsAhjEHPUbyFEfA9QgQWMeXJytg3cgCBeyBW7aU0wY0W3Ohxt+vupwy82EW7F4k3BDjC0WfYu10k5xJtzKhZuG23q+mJV3pc2f3b53987d+QFYLhfnI47S+ud45RCXhZjzgyvLON3HrmN+gaKQLbpekuHPFgEjcnP9mesFkT8HVoY8ifguGMzPwqCSVW4Qg0q2vCgGSzs7tZkZoKLIN43B27ncFhh0s3bv3hv35iJQUZTFfB6/neLFqM8RyH3gMxF+6drJr3ZHwfFcqBHZ6/d7/JaGzu499H/8+t+HGyYkDXhYrht3uZu8eCj5/PXhrlB6xXBXKH+HWMvRh3eNM6wSoWfkdYT3saCRdIHz/R3x8P8AwsJMEJZu8s6hlBe+c5S2y9u7M0G4fuN3jtK2vJtTpM3te3feurN9+/X5OFxf5N7xlEwKWON53RCg9wGBETqo8AYIfblQwkf0rj/GIisviJ1zirGQ+F0BM/pyaaEtJ5f/d0a+CL4Kvg7+EPyNvv2bURPrVp+rQBD2sMNyVcPp2v4ClaUiCILrNlnw1+AvrBTJVVnzeiRVvCbOi+pSSEU0NytrMGdybvjWM57N3y68sJwtHnGSVShRWuFjV02EG1pIxLHD68fsJZhlj/PG2VPzkZudPREdR3QUormRNsbvBvjGkijWc197gtdoXn6OlbXBp1FR+hndMJ4zfFXmpe5+vD/DwPBDRm78GLY4FBslKjOi1EqZKtWP8CWA15FPKMmlFIPBCTsGMieU706U9fuL1Lo7+JRCYle8hmt2AEKpZtdu4GsPS62wd0EdPc2ll3aPVdm7clZly2Tt5VWmYAPNCN9z+F2YCpp5bJI5oFHARqjy5YcbYlOELG1KhqKdK/W4tokOcFkHmH82WS+feAjBcMJjCj5wxB4b+qTyrzE8klmofP0MnyuuqnCfcQYoQ7/gmZ0oeau8cv670ae0GjSN0Yy/MfRFVR+TvokXCQp+4YMGr8HzUj9wj5I+RWTQNlSnhw8I5E+QI/FmwdFDL0BxG4+eZJZXSXnKtPLQLkJ3X4TPIKgr2hLr/OSiJ1UFEiKUES6nfD5bqNgJKv4Px+f4aYG/AkUAHCSUv0rKGr9uwTKyx4DSgY9YdFvn715o7D5p+zcwBx/Gpm5Q4vnsAmQbAMmzYBBqJzetHYHUqxV0SLKhgfuJpysQ9F9J1kT9DZjm5OPZ2WBKnbwqN/o9HfcXo8f8FydxbGPfkBfqglMU6ilsdsLxdRI+gPEkahX4DLUe0w/HzAWZ4rfIIlgEHVaoj/y0PuioXq2NR/x1KqmHz7i1EOETvqtPHB8JFFxqviG9ieG2BI0hHY4og1VZ8obPxAZ9LHRGJqYD/Zi/JA7j76Pnky9soeyFadlDzzQpflRFoCQVXUPC2YN6QxiiRVDP/G0SdPMnUMcTHilCJvBRD1RFlkdZB9DmzozU2yeTfRMp55h8QsgLFnAH3MuLcu/E68JLbgfu5ghYV2Mqswy6GPthSKzRDetOo9s2bD/zq67hHrxpWJD0Ou5ty0ot4yv/8ko4XyQEs5csRZmDWBBtIN74Y+tbhl+zDPy6dXBHTy2Pk5RoEaVGc9bQnGjJ+PFvzrLxPFwKa8cRUMMqZsoyeoa1IsIU7tszPbNuGbBrdoM6UYOZpuPWtMZeLH664SK+DLqq7G63XTfclJvBhMQz/AzkJCtsczzAiW2IZW6GMpHXTc/P+E6rZRmpZafZhJj6mmOPZ5lNloLmmK8fVJnMxx6KOcISl/BYx59j1C8jYwMVwVQ9yW21OsEu/mBEUBrrMoPhfZv/Ig/kpgziFzT9l3wmGWti1pu+a9qtlBBEbMmRkDFt23B//NZPXod5lDrEdot+YzNDRk3Xaz2gg2IasFdquWGZjX0QM5HyCKtfKjoXVAjL5ylZaDxcScH/kHuLJAo8Cf9hyhr/eeN/AbcpQcDvKAAA"><iframe title="Figure 2: log-level-filter" scrolling="no"></iframe><figcaption>Нажмите кнопку уровня под схемой. В таблице останутся только записи, которые попадут в журнал при таком пороге, пересчитается их число и появится пояснение. Обратите внимание: при пороге INFO исчезает DEBUG, но остаётся WARNING, а при пороге ERROR пропадает причина ошибки.</figcaption></figure>
+
 <div class="gate-step" data-gate>
-<p class="gate-action"><button type="button" class="gate-btn" aria-expanded="false"><span class="gate-q" aria-hidden="true">?</span><span>Как связать шесть строк одного запроса в одну историю?</span></button></p>
-<div class="gate-content" hidden><h2 id="формат-записи"><span class="num">04</span>Формат записи</h2>
+<p class="gate-action"><button type="button" class="gate-btn" aria-expanded="false"><span class="gate-q" aria-hidden="true">?</span><span>Как связать шесть строк одного запроса в одну историю и не потерять её в очереди?</span></button></p>
+<div class="gate-content" hidden><h2 id="формат-записи-от-строки-к-событию"><span class="num">04</span>Формат записи: от строки к событию</h2>
 <p>Запись состоит из постоянных полей и сообщения. Постоянные поля пишут в одном порядке, чтобы журнал читался глазами и разбирался программой. Самый распространённый формат в учебных и рабочих системах это пары <code>ключ=значение</code>, разделённые пробелом.</p>
 <div class="codehilite" data-lang="text"><pre><span></span><code>2026-10-12 09:16:41 WARN request_id=8f23 user=kladovshchik_2 action=stock_list site=Тула rows=0 reason=timeout
 2026-10-12 09:17:10 ERROR request_id=8f23 user=kladovshchik_2 action=stock_list error=TimeoutError
@@ -1041,10 +1098,37 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 </tbody>
 </table>
 <p>Выбор формата не так важен, как постоянство. Если половина записей в JSON, а половина в свободном тексте, автоматический разбор невозможен. Договоритесь о формате один раз и проверьте его на нескольких событиях.</p>
+<p>Структурированная запись начинается с отказа от склейки сообщения заранее. В Python принято передавать параметры отдельно, чтобы библиотека подставила их по шаблону:</p>
+<div class="codehilite" data-lang="text"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
+
+<span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">"sklad.shipment"</span><span class="p">)</span>
+
+<span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+    <span class="s2">"shipment_created request_id=</span><span class="si">%s</span><span class="s2"> user=</span><span class="si">%s</span><span class="s2"> supply_id=</span><span class="si">%s</span><span class="s2"> lines=</span><span class="si">%d</span><span class="s2"> duration_ms=</span><span class="si">%d</span><span class="s2">"</span><span class="p">,</span>
+    <span class="n">request_id</span><span class="p">,</span> <span class="n">user</span><span class="p">,</span> <span class="n">supply_id</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">lines</span><span class="p">),</span> <span class="n">elapsed_ms</span><span class="p">,</span>
+<span class="p">)</span>
+</code></pre></div>
+
+<p>В .NET та же идея выражается шаблоном сообщения. Фигурные скобки задают имена полей, которые провайдер журналирования сохраняет отдельно от текста:</p>
+<div class="codehilite" data-lang="text"><pre><span></span><code><span class="k">public</span><span class="w"> </span><span class="k">sealed</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nf">ShipmentService</span><span class="p">(</span><span class="n">ILogger</span><span class="o">&lt;</span><span class="n">ShipmentService</span><span class="o">&gt;</span><span class="w"> </span><span class="n">log</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">Create</span><span class="p">(</span><span class="kt">string</span><span class="w"> </span><span class="n">requestId</span><span class="p">,</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="n">user</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">supplyId</span><span class="p">)</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="n">log</span><span class="p">.</span><span class="n">LogInformation</span><span class="p">(</span>
+<span class="w">            </span><span class="s">"shipment_created request_id={RequestId} user={User} supply_id={SupplyId}"</span><span class="p">,</span>
+<span class="w">            </span><span class="n">requestId</span><span class="p">,</span><span class="w"> </span><span class="n">user</span><span class="p">,</span><span class="w"> </span><span class="n">supplyId</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>Разница между <code>$"supply_id={supplyId}"</code> и шаблоном <code>"supply_id={SupplyId}"</code> не косметическая. В первом случае строка уже склеена, и провайдер видит только текст. Во втором он получает имя поля и значение, поэтому может записать JSON, отфильтровать по <code>SupplyId</code> и построить график. Это и называют структурированным журналированием.</p>
+<h2 id="время-длительность-и-порядок"><span class="num">05</span>Время, длительность и порядок</h2>
 <p>Время пишут в формате ISO 8601 с часовым поясом: <code>2026-10-12T09:16:41+03:00</code>. Локальное время без пояса опасно при сборе с нескольких площадок и при переходе на летнее время. Даже если все четыре склада находятся в одной зоне, запись с поясом однозначна, а без пояса требует догадки.</p>
 <p>Часы на серверах синхронизируют. Если часы приложения в Москве отстают на две минуты, а часы базы в Туле спешат, порядок записей одного запроса нарушится: ответ окажется раньше запроса. Служба точного времени и единый часовой пояс в настройках снимают эту проблему. В учебном стенде достаточно одного сервера, но правило стоит запомнить для рабочей системы с четырьмя площадками.</p>
-<p>Длительность операции пишут числом в миллисекундах. <code>duration_ms=1840</code> сразу показывает, что запрос шёл почти две секунды, а <code>duration_ms=12</code> что он быстрый. Без этого поля невозможно отличить медленную базу от сетевого таймаута, не открывая другие журналы.</p>
-<h2 id="идентификатор-запроса"><span class="num">05</span>Идентификатор запроса</h2>
+<p>Порядок внутри одного запроса лучше не выводить из времени. Две записи могут получить одинаковую метку с точностью до миллисекунды, а перестановка при сортировке сделает историю неверной. Надёжнее добавить порядковый номер события или писать идентификатор шага: <code>step=2</code>, <code>attempt=1</code>. Тогда последовательность сохраняется даже при расхождении часов.</p>
+<p>Длительность операции пишут числом в миллисекундах. <code>duration_ms=1840</code> сразу показывает, что запрос шёл почти две секунды, а <code>duration_ms=12</code> что он быстрый. Без этого поля невозможно отличить медленную базу от сетевого таймаута, не открывая другие журналы. Измерять длительность лучше по монотонным часам, которые не зависят от перевода времени: в Python это <code>time.perf_counter</code>, в .NET <code>Stopwatch</code>.</p>
+<p>Для распределённой системы одного <code>duration_ms</code> мало. Нужно понимать, где именно прошло время: в приложении, в базе или в очереди. Поэтому в запись добавляют <code>db_ms</code>, <code>queue_ms</code>, <code>http_ms</code>. Сумма частей не всегда равна общему времени, и расхождение само по себе является полезным наблюдением.</p>
+<h2 id="идентификатор-запроса-и-контекст"><span class="num">06</span>Идентификатор запроса и контекст</h2>
 <p>Идентификатор запроса выдаётся на входе и передаётся во все записи, которые относятся к этому запросу. Его можно взять из заголовка <code>X-Request-ID</code>, если клиент его прислал, или сгенерировать на сервере. В ответ клиенту возвращают тот же идентификатор, чтобы пользователь мог назвать его в обращении в поддержку.</p>
 <p>Ниже пример на Flask: идентификатор создаётся до обработчика, попадает в журнал и возвращается в заголовке ответа.</p>
 <div class="codehilite" data-lang="text"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
@@ -1054,8 +1138,6 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <span class="kn">from</span><span class="w"> </span><span class="nn">flask</span><span class="w"> </span><span class="kn">import</span> <span class="n">Flask</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">jsonify</span><span class="p">,</span> <span class="n">request</span>
 
 <span class="n">app</span> <span class="o">=</span> <span class="n">Flask</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
-<span class="n">app</span><span class="o">.</span><span class="n">json</span><span class="o">.</span><span class="n">sort_keys</span> <span class="o">=</span> <span class="kc">False</span>
-
 <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">"sklad.api"</span><span class="p">)</span>
 <span class="n">logger</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">)</span>
 <span class="n">logger</span><span class="o">.</span><span class="n">propagate</span> <span class="o">=</span> <span class="kc">False</span>
@@ -1069,7 +1151,7 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <span class="nd">@app</span><span class="o">.</span><span class="n">before_request</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">assign_request_id</span><span class="p">():</span>
     <span class="n">g</span><span class="o">.</span><span class="n">request_id</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"X-Request-ID"</span><span class="p">)</span> <span class="ow">or</span> <span class="n">uuid</span><span class="o">.</span><span class="n">uuid4</span><span class="p">()</span><span class="o">.</span><span class="n">hex</span><span class="p">[:</span><span class="mi">8</span><span class="p">]</span>
-    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">"request_id=</span><span class="si">%s</span><span class="s2"> action=request_start method=</span><span class="si">%s</span><span class="s2"> path=</span><span class="si">%s</span><span class="s2">"</span><span class="p">,</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">"request_start request_id=</span><span class="si">%s</span><span class="s2"> method=</span><span class="si">%s</span><span class="s2"> path=</span><span class="si">%s</span><span class="s2">"</span><span class="p">,</span>
                 <span class="n">g</span><span class="o">.</span><span class="n">request_id</span><span class="p">,</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span><span class="p">,</span> <span class="n">request</span><span class="o">.</span><span class="n">path</span><span class="p">)</span>
 
 
@@ -1081,7 +1163,7 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 
 <span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"/api/stock"</span><span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">stock</span><span class="p">():</span>
-    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">"request_id=</span><span class="si">%s</span><span class="s2"> action=stock_list rows=</span><span class="si">%s</span><span class="s2">"</span><span class="p">,</span> <span class="n">g</span><span class="o">.</span><span class="n">request_id</span><span class="p">,</span> <span class="mi">4800</span><span class="p">)</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">"stock_list request_id=</span><span class="si">%s</span><span class="s2"> rows=</span><span class="si">%s</span><span class="s2">"</span><span class="p">,</span> <span class="n">g</span><span class="o">.</span><span class="n">request_id</span><span class="p">,</span> <span class="mi">4800</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">jsonify</span><span class="p">({</span><span class="s2">"rows"</span><span class="p">:</span> <span class="mi">4800</span><span class="p">}),</span> <span class="mi">200</span>
 
 
@@ -1089,21 +1171,194 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"/api/stock"</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="s2">"X-Request-ID"</span><span class="p">:</span> <span class="s2">"8f23"</span><span class="p">})</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">"HTTP"</span><span class="p">,</span> <span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">"X-Request-ID:"</span><span class="p">,</span> <span class="n">response</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"X-Request-ID"</span><span class="p">))</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">get_json</span><span class="p">())</span>
 </code></pre></div>
 
 <p>Запуск показывает, что один идентификатор связал начало запроса, работу обработчика и заголовок ответа:</p>
-<div class="codehilite" data-lang="text"><pre><span></span><code>2026-10-31 11:26:18 INFO request_id=8f23 action=request_start method=GET path=/api/stock
-2026-10-31 11:26:18 INFO request_id=8f23 action=stock_list rows=4800
+<div class="codehilite" data-lang="text"><pre><span></span><code>2026-10-31 11:26:18 INFO request_start request_id=8f23 method=GET path=/api/stock
+2026-10-31 11:26:18 INFO stock_list request_id=8f23 rows=4800
 HTTP 200
 X-Request-ID: 8f23
-{'rows': 4800}
 </code></pre></div>
 
-<p>В рабочем сервисе идентификатор передают и дальше: в вызовы базы, в очередь, в фоновую задачу. Если фоновая задача обрабатывает заявку через минуту после запроса, она сохраняет тот же <code>request_id</code>, и цепочка не рвётся. Для этого идентификатор передают явным параметром, а не надеются, что он сам появится в новом потоке.</p>
+<p>В рабочем сервисе идентификатор передают и дальше: в вызовы базы, в очередь, в фоновую задачу. Если фоновая задача обрабатывает заявку через минуту после запроса, она сохраняет тот же <code>request_id</code>, и цепочка не рвётся. Для этого идентификатор передают явным параметром или кладут в контекст выполнения, а не надеются, что он сам появится в новом потоке.</p>
+<p>В C# ту же роль играет область журналирования: <code>ILogger</code> с <code>BeginScope</code> добавляет идентификатор ко всем записям внутри блока, а провайдер выводит его в составе сообщения.</p>
+<div class="codehilite" data-lang="text"><pre><span></span><code><span class="k">using</span><span class="w"> </span><span class="p">(</span><span class="n">log</span><span class="p">.</span><span class="n">BeginScope</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="n">Dictionary</span><span class="o">&lt;</span><span class="kt">string</span><span class="p">,</span><span class="w"> </span><span class="kt">object</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">[</span><span class="s">"request_id"</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">requestId</span><span class="w"> </span><span class="p">}))</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="n">log</span><span class="p">.</span><span class="n">LogInformation</span><span class="p">(</span><span class="s">"stock_list rows={Rows}"</span><span class="p">,</span><span class="w"> </span><span class="n">rows</span><span class="p">);</span>
+<span class="w">    </span><span class="n">ReserveStock</span><span class="p">(</span><span class="n">supplyId</span><span class="p">,</span><span class="w"> </span><span class="n">requestId</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>Смысл не меняется: один запрос, один идентификатор, все записи с ним. В распределённой системе к нему добавляют <code>trace_id</code> и <code>span_id</code> из W3C Trace Context. Журнал, метрики и трассировка тогда ссылаются друг на друга, и переход от медленного графика к конкретной записи занимает секунды.</p>
 <p>Заголовок от клиента принимают с осторожностью. Слишком длинное значение или перевод строки внутри него ломают формат журнала и позволяют подделать запись. Перед использованием проверяют длину и набор символов: например, разрешают от 8 до 32 символов латиницы и цифр, а всё остальное заменяют сгенерированным значением. Тогда внешний клиент не сможет вставить в журнал чужую строку.</p>
-<p>В C# ту же роль играет область журналирования: <code>ILogger</code> с <code>BeginScope</code> добавляет идентификатор ко всем записям внутри блока, а провайдер выводит его в составе сообщения. Смысл не меняется: один запрос, один идентификатор, все записи с ним.</p>
-<h2 id="чтение-журнала"><span class="num">06</span>Чтение журнала</h2>
+<p>Отдельная проблема это очередь. Если приложение пишет журнал синхронно на диск, медленный диск останавливает обработку запроса. Если пишет в очередь, очередь может переполниться, и записи начнут теряться. Обычно выбирают компромисс: в очередь кладут всё, а при переполнении сохраняют WARNING и ERROR, отбрасывая DEBUG. Потерю части DEBUG фиксируют отдельным счётчиком, чтобы она не осталась незамеченной.</p></div>
+</div>
+
+<div class="gate-step" data-gate>
+<p class="gate-action"><button type="button" class="gate-btn" aria-expanded="false"><span class="gate-q" aria-hidden="true">?</span><span>Что писать в журнал, а что оставить в тайне?</span></button></p>
+<div class="gate-content" hidden><h2 id="секреты-персональные-данные-и-подделка-записи"><span class="num">07</span>Секреты, персональные данные и подделка записи</h2>
+<p>Журнал читают люди с разными правами, и он хранится дольше, чем живёт запрос. Поэтому в него не попадают секреты и лишние персональные данные. Пароль, токен, ключ API и строка подключения с паролем не должны появляться ни в одной записи, даже на уровне DEBUG.</p>
+<table>
+<thead>
+<tr>
+<th>Нельзя писать</th>
+<th>Почему</th>
+<th>Что писать вместо</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Пароль</td>
+<td>даёт прямой доступ к учётной записи</td>
+<td><code>user=kladovshchik_2</code>, <code>result=denied</code></td>
+</tr>
+<tr>
+<td>Токен целиком</td>
+<td>позволяет выдать себя за пользователя</td>
+<td><code>token_id=...</code>, <code>result=expired</code></td>
+</tr>
+<tr>
+<td>Номер карты</td>
+<td>персональные данные</td>
+<td>последние четыре цифры</td>
+</tr>
+<tr>
+<td>Полное имя и адрес</td>
+<td>избыточные персональные данные</td>
+<td>идентификатор пользователя</td>
+</tr>
+<tr>
+<td>Текст SQL с параметрами</td>
+<td>раскрывает схему и данные</td>
+<td>имя запроса, <code>duration_ms</code></td>
+</tr>
+<tr>
+<td>Стек вызовов клиенту</td>
+<td>раскрывает устройство сервиса</td>
+<td>короткий код ошибки</td>
+</tr>
+</tbody>
+</table>
+<p>Правило простое: в журнал пишут идентификаторы, а не содержимое. Идентификатор пользователя позволяет найти запись в справочнике, но сам по себе не раскрывает пароль. Номер накладной позволяет найти документ, но не показывает суммы и контрагентов.</p>
+<p>Отдельно решают, что делать с адресом электронной почты и телефоном. Иногда без них невозможно разобрать обращение, но хранить их в общем журнале на всех уровнях не нужно. Если поле действительно важно, его маскируют: <code>user=kladovshchik_2</code>, <code>phone=***-***-12-34</code>.</p>
+<p>Ошибки с секретами возникают из привычки писать в журнал весь объект запроса. <code>logger.info("request=%s", data)</code> выглядит удобно, пока в <code>data</code> не окажется пароль или токен. Пишите поля явно: <code>logger.info("login user=%s result=%s", login_name, result)</code>. Тогда лишнее не попадёт в запись случайно.</p>
+<p>Маскирование должно происходить до записи, а не при чтении. Если пароль попал в файл, он останется в копиях, архивах и резервных копиях. Удаление строки из текущего файла не убирает её из старого сегмента. Поэтому фильтр ставят на входе в обработчик и проверяют тестом: подставить объект с полем <code>password</code> и убедиться, что в выводе его нет.</p>
+<p>Вторая угроза это подделка записи через пользовательские данные. Если имя файла или значение поля содержит перевод строки, злоумышленник может добавить в журнал строку, которой не было. Такой приём называют log injection. Лечение простое: экранировать управляющие символы, ограничивать длину пользовательских полей и не собирать запись конкатенацией.</p>
+<div class="codehilite" data-lang="text"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">clean</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">limit</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">120</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="n">value</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">"</span><span class="se">\r</span><span class="s2">"</span><span class="p">,</span> <span class="s2">"</span><span class="se">\\</span><span class="s2">r"</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="p">,</span> <span class="s2">"</span><span class="se">\\</span><span class="s2">n"</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">value</span><span class="p">[:</span><span class="n">limit</span><span class="p">]</span>
+</code></pre></div>
+
+<p>OWASP рекомендует записывать события аутентификации, отказы в доступе и ошибки проверки ввода, но не секреты и не полные персональные данные <a href="https://cheatsheetseries.owasp.org/cheatsheets/Logging_Cheat_Sheet.html">OWASP Logging Cheat Sheet</a>. Там же сказано, что журналы нужно защищать от изменения и хранить столько, сколько требует политика. Эти правила полезно прочитать целиком: они короткие и хорошо переводятся в чек-лист.</p>
+<p>Третья угроза это чтение журнала не тем человеком. Каталог с журналами не должен быть доступен всем пользователям сервера. Права на запись есть у приложения, права на чтение у дежурной смены, а на удаление у отдельной процедуры ротации. Если журнал лежит рядом с исходным кодом и открыт веб-серверу, он становится способом утечки.</p>
+<h2 id="объём-ротация-и-стоимость"><span class="num">08</span>Объём, ротация и стоимость</h2>
+<p>Журнал растёт с каждой операцией. В «Склад+» 120 сотрудников, в среднем 35 действий за рабочий день, это около 4200 записей. При средней длине 250 байт получается примерно 1 МБ в рабочий день и 23 МБ в месяц. За год без ротации накопится около 277 МБ, а поиск по одному файлу станет медленным.</p>
+<p>Числа кажутся небольшими, пока не добавить DEBUG и JSON. Подробная запись параметров запроса весит 400-600 байт, а при включённом DEBUG число строк вырастает в пять раз. Тот же поток превращается в 5 МБ в день и 150 МБ в месяц. На четырёх площадках это уже 600 МБ, а с трассировкой и вовсе несколько гигабайт.</p>
+<p>Ротация делит журнал на файлы по размеру или по дате. Настройка <code>RotatingFileHandler</code> с пределом 10 МБ и пятью копиями держит на диске около 50 МБ и создаёт новый файл, когда старый заполнен. Старые копии удаляются по кругу, поэтому место не растёт бесконечно.</p>
+<div class="codehilite" data-lang="text"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">logging.handlers</span><span class="w"> </span><span class="kn">import</span> <span class="n">RotatingFileHandler</span>
+
+<span class="n">handler</span> <span class="o">=</span> <span class="n">RotatingFileHandler</span><span class="p">(</span>
+    <span class="s2">"logs/app.log"</span><span class="p">,</span> <span class="n">maxBytes</span><span class="o">=</span><span class="mi">10</span> <span class="o">*</span> <span class="mi">1024</span> <span class="o">*</span> <span class="mi">1024</span><span class="p">,</span> <span class="n">backupCount</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span>
+<span class="p">)</span>
+</code></pre></div>
+
+<table>
+<thead>
+<tr>
+<th>Параметр</th>
+<th>Значение для учебного стенда</th>
+<th>Что означает</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Размер файла</td>
+<td>10 МБ</td>
+<td>после заполнения создаётся новый</td>
+</tr>
+<tr>
+<td>Число копий</td>
+<td>5</td>
+<td>хранятся последние пять файлов</td>
+</tr>
+<tr>
+<td>Срок хранения</td>
+<td>90 дней</td>
+<td>требование службы безопасности</td>
+</tr>
+<tr>
+<td>Уровень в работе</td>
+<td>INFO</td>
+<td>DEBUG включают на время разбора</td>
+</tr>
+<tr>
+<td>Место</td>
+<td>отдельный каталог вне репозитория</td>
+<td>журнал не коммитят</td>
+</tr>
+</tbody>
+</table>
+<p>Срок хранения задают не по размеру диска, а по требованиям: сколько времени нужно, чтобы разобрать инцидент и доказать факт доступа. Девяносто дней это типичный учебный ориентир, в реальной системе срок может быть больше. Если журнал нужен дольше, его отправляют в центральное хранилище, а на сервере оставляют только последние дни.</p>
+<p>Отдельно настраивают журнал ошибок. Удобно держать два потока: общий с уровнем INFO и отдельный с уровнем ERROR, чтобы дежурный не искал ошибки среди тысяч штатных записей. Оба потока пишут в разные файлы, но используют один формат и один идентификатор запроса.</p>
+<p>Стоимость журнала складывается не только из диска. Централизованное хранилище берёт деньги за приём, индексацию и запросы. Высокая кардинальность поля, например <code>user_id</code> или <code>request_id</code> в качестве метки, делает индекс огромным. Поэтому идентификаторы ищут полнотекстовым поиском, а графики строят по ограниченному набору полей: <code>action</code>, <code>site</code>, <code>result</code>.</p>
+<p>Сэмплирование снижает объём, но требует осторожности. Можно сохранять все ERROR и WARNING и каждый десятый INFO. Тогда редкая ошибка не потеряется, а фон станет меньше. Нельзя сэмплировать аудит и события безопасности: пропущенная запись о входе может оказаться единственным доказательством.</p>
+<p>Журнал не заменяет метрики. Метрика это число, посчитанное по событиям: сколько запросов в секунду, какая доля завершилась ошибкой, сколько длится девяносто пятый процентиль. Метрики дешевы в хранении и хорошо показывают тренд, но не объясняют причину отдельного отказа. Журнал объясняет причину, но по нему дорого строить график за год. Поэтому в рабочей системе смотрят на график, а затем открывают записи того периода, где график изменился.</p>
+<p>Трассировка добавляет третий взгляд. Она показывает путь одного запроса через несколько сервисов и время каждого шага. Журнал и трассировка связаны через <code>trace_id</code>: по нему можно перейти от медленного участка к записям с подробностями. Если в проекте уже есть трассировка, дублировать её шаги в журнале не нужно, достаточно ссылки.</p>
+<p>Аудит отличается от журнала приложения не форматом, а обязательствами. Запись аудита должна быть неизменяемой, доступной только уполномоченным людям и храниться столько, сколько требует политика. Журнал приложения можно сэмплировать и чистить, аудит нельзя. Если смешать их в одном файле, ротация однажды удалит доказательство доступа, а служба безопасности узнает об этом после проверки.</p>
+<figure class="figure" data-fig="log-pipeline" data-one="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"><iframe title="Figure 3: log-pipeline" scrolling="no"></iframe><figcaption>Путь записи от вызова в коде до центрального хранилища. На каждом шаге справа указано, что может потеряться: структура, уровень, секрет, буфер, срок хранения или сеть. Используйте схему как порядок проверки при настройке нового сервиса.</figcaption></figure></div>
+</div>
+
+<div class="gate-step" data-gate>
+<p class="gate-action"><button type="button" class="gate-btn" aria-expanded="false"><span class="gate-q" aria-hidden="true">?</span><span>Что общего у трёх аварий, после которых пришлось менять не код, а наблюдение?</span></button></p>
+<div class="gate-content" hidden><h2 id="три-аварии-в-которых-журнал-оказался-не-тем-чем-казался"><span class="num">09</span>Три аварии, в которых журнал оказался не тем, чем казался</h2>
+<p>Разборы ниже следуют правилу послеаварийного анализа без обвинений: ищут условие, которое позволило ошибке пройти, а не виноватого <a href="https://sre.google/sre-book/postmortem-culture/">Postmortem Culture</a>.</p>
+<h3>GitLab, 2017: журнал был, а сигнала не было</h3>
+<p>31 января 2017 года инженер GitLab настраивал репликацию PostgreSQL и по ошибке удалил каталог данных на основном сервере вместо вторичного. Удаление остановили через секунду или две, но около 300 ГБ уже было потеряно. Сервис GitLab.com не работал примерно 18 часов, а восстановление шло из снимка шестичасовой давности. По оценке компании, пропали данные примерно 5000 проектов, 5000 комментариев и 700 учётных записей, созданных между 17:20 и 23:30 UTC <a href="https://about.gitlab.com/blog/postmortem-of-database-outage-of-january-31/">GitLab, 2017</a>.</p>
+<p>Самое важное в этом разборе не команда удаления. Резервное копирование через <code>pg_dump</code> не работало: версия утилиты не совпадала с версией сервера, и процесс завершался ошибкой. Уведомления об ошибке отправлялись по электронной почте, но почтовый сервер отвергал их из-за настроек DMARC. Другого канала не было. В результате сбой резервного копирования не видел никто, пока не понадобилось восстановление.</p>
+<p>Урок для журналирования прямой. Запись об ошибке, которую никто не получает, не является сигналом. Нужен отдельный канал доставки, проверка, что он работает, и мониторинг самого процесса резервного копирования. GitLab после разбора добавил панель состояния резервных копий и назначил владельца процедуры. Журнал стал частью контура наблюдения, а не файлом, который пишется сам по себе.</p>
+<h3>Knight Capital, 2012: развёртывание без следа версий</h3>
+<p>1 августа 2012 года брокерская фирма Knight Capital включила новую версию торговой системы. Обновление должны были установить на восемь серверов, но на одном из них остался старый код. Этот код содержал функцию <code>Power Peg</code>, которая раньше использовалась для тестовых сценариев и не должна была работать с реальными заявками. После открытия рынка система начала отправлять заявки, которых никто не заказывал. За 45 минут фирма потеряла более 460 млн долларов, а Комиссия по ценным бумагам США позже установила, что у фирмы не было надлежащего контроля за развёртыванием и обработкой заявок <a href="https://www.sec.gov/litigation/admin/2013/34-70694.pdf">SEC, 2013</a>.</p>
+<p>В этой истории нет одной строки журнала, которая спасла бы фирму. Но есть вопрос, на который журнал обязан отвечать: какая версия кода работает на каждой машине и когда она туда попала. Если развёртывание не оставляет следа, расхождение версий обнаруживается только по последствиям. Запись <code>deploy version=2.7 host=app-07 result=ok</code> кажется скучной, пока не выясняется, что на <code>app-08</code> такой записи нет.</p>
+<p>Урок для темы: журнал нужен не только приложению, но и процессу доставки. Версия, время, хеш коммита и список машин должны попадать в отдельный поток, который не смешивается с бизнес-событиями. Тогда вопрос «что именно работало в момент сбоя» имеет ответ.</p>
+<h3>TSB, 2018: миллионы клиентов и месяц разбора</h3>
+<p>22 апреля 2018 года британский банк TSB перевёл клиентов на новую банковскую платформу. Миграция прошла не полностью: часть клиентов не могла войти в приложение, операции не проходили, а разбор последствий растянулся на месяцы. В 2022 году Управление финансового надзора Великобритании оштрафовало банк на 29,1 млн фунтов за недостаточное управление операционной устойчивостью, а Банк Англии добавил отдельный штраф <a href="https://www.fca.org.uk/publication/final-notices/tsb-bank-plc-2022.pdf">FCA, 2022</a>.</p>
+<p>Для журналирования здесь важны два обстоятельства. Первое: при массовом сбое поток записей резко вырастает, и хранилище должно выдержать не средний, а пиковый объём. Второе: поддержке нужно быстро отвечать на вопрос «что произошло с конкретным клиентом», а для этого записи должны быть связаны с идентификатором клиента и операции, а не только с номером сервера.</p>
+<p>Урок для темы: журнал проектируют под худший день, а не под обычный. Проверка нагрузки на журнал входит в проверку готовности к запуску. Если при десятикратном росте записей приложение начинает тормозить или терять записи, журнал становится участником аварии, а не инструментом её разбора.</p>
+<table>
+<thead>
+<tr>
+<th>Случай</th>
+<th>Что отказало</th>
+<th>Роль журнала</th>
+<th>Вывод</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>GitLab, 2017</td>
+<td>резервное копирование и доставка уведомлений</td>
+<td>ошибки писались, но сигнал не доходил</td>
+<td>журнал без получателя не работает</td>
+</tr>
+<tr>
+<td>Knight Capital, 2012</td>
+<td>контроль версий при развёртывании</td>
+<td>не было следа, какая версия где работает</td>
+<td>журнал доставки так же важен, как журнал приложения</td>
+</tr>
+<tr>
+<td>TSB, 2018</td>
+<td>устойчивость при массовой миграции</td>
+<td>объём и связь с клиентом</td>
+<td>журнал проверяют на пиковой нагрузке</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+
+<div class="gate-step" data-gate>
+<p class="gate-action"><button type="button" class="gate-btn" aria-expanded="false"><span class="gate-q" aria-hidden="true">?</span><span>Как проверить журнал до аварии, а не после?</span></button></p>
+<div class="gate-content" hidden><h2 id="как-читать-журнал"><span class="num">10</span>Как читать журнал</h2>
 <p>Читать журнал значит восстанавливать историю по идентификатору. Ниже фрагмент утреннего журнала «Склад+». В нём перемешаны события разных пользователей, поэтому сначала выбирают нужный <code>request_id</code>.</p>
 <div class="codehilite" data-lang="text"><pre><span></span><code>2026-10-12 09:14:22 INFO request_id=8f21 user=kladovshchik_1 action=login result=ok
 2026-10-12 09:15:03 INFO request_id=8f22 user=kladovshchik_1 action=stock_list site=Москва rows=4800
@@ -1165,104 +1420,62 @@ X-Request-ID: 8f23
 </tbody>
 </table>
 <p>Порядок записей внутри одного идентификатора тоже важен. Сначала WARNING о таймауте, потом ERROR о том, что повтор не помог. Если бы приложение писало только итоговую ошибку, причина осталась бы неизвестной. Если бы писало только таймаут, было бы непонятно, чем закончилось дело.</p>
-<p>По журналу можно ответить и на вопрос, которого не было в запросе. Например, <code>rows=0</code> при <code>reason=timeout</code> показывает, что пустой список остатков не означает пустой склад: данные не пришли. Без этого поля поддержка могла бы сообщить менеджеру неверную причину.</p></div>
-</div>
-
-<div class="gate-step" data-gate>
-<p class="gate-action"><button type="button" class="gate-btn" aria-expanded="false"><span class="gate-q" aria-hidden="true">?</span><span>Что писать в журнал, а что оставить в тайне?</span></button></p>
-<div class="gate-content" hidden><h2 id="что-не-попадает-в-журнал"><span class="num">07</span>Что не попадает в журнал</h2>
-<p>Журнал читают люди с разными правами, и он хранится дольше, чем живёт запрос. Поэтому в него не попадают секреты и лишние персональные данные. Пароль, токен, ключ API и строка подключения с паролем не должны появляться ни в одной записи, даже на уровне DEBUG.</p>
+<p>По журналу можно ответить и на вопрос, которого не было в запросе. Например, <code>rows=0</code> при <code>reason=timeout</code> показывает, что пустой список остатков не означает пустой склад: данные не пришли. Без этого поля поддержка могла бы сообщить менеджеру неверную причину.</p>
+<p>При разборе полезно идти от общего к частному. Сначала выбрать временное окно и площадку, затем найти аномалию по частоте или длительности, затем взять один <code>request_id</code> и прочитать его целиком. Обратный порядок, когда сразу открывают первую ошибку, часто уводит в сторону: первая ошибка может быть следствием, а не причиной.</p>
+<h2 id="чек-лист-перед-запуском"><span class="num">11</span>Чек-лист перед запуском</h2>
 <table>
 <thead>
 <tr>
-<th>Нельзя писать</th>
-<th>Почему</th>
-<th>Что писать вместо</th>
+<th>Пункт</th>
+<th>Что проверить</th>
+<th>Признак готовности</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>Пароль</td>
-<td>даёт прямой доступ к учётной записи</td>
-<td><code>user=kladovshchik_2</code>, <code>result=denied</code></td>
+<td>Поля</td>
+<td>время, уровень, <code>request_id</code>, действие, результат</td>
+<td>запись отвечает на пять вопросов</td>
 </tr>
 <tr>
-<td>Токен целиком</td>
-<td>позволяет выдать себя за пользователя</td>
-<td><code>token_id=...</code>, <code>result=expired</code></td>
+<td>Уровни</td>
+<td>INFO в работе, DEBUG по требованию</td>
+<td>фильтр меняется без правки кода</td>
 </tr>
 <tr>
-<td>Номер карты</td>
-<td>персональные данные</td>
-<td>последние четыре цифры</td>
+<td>Секреты</td>
+<td>пароли, токены, карты</td>
+<td>тест с объектом-ловушкой не находит секрет</td>
 </tr>
 <tr>
-<td>Полное имя и адрес</td>
-<td>избыточные персональные данные</td>
-<td>идентификатор пользователя</td>
+<td>Подделка</td>
+<td>перевод строки в пользовательском поле</td>
+<td>строка остаётся одной записью</td>
 </tr>
 <tr>
-<td>Текст SQL с параметрами</td>
-<td>раскрывает схему и данные</td>
-<td>имя запроса, <code>duration_ms</code></td>
+<td>Ротация</td>
+<td>размер, число копий, срок</td>
+<td>диск не растёт бесконечно</td>
 </tr>
 <tr>
-<td>Стек вызовов клиенту</td>
-<td>раскрывает устройство сервиса</td>
-<td>короткий код ошибки</td>
+<td>Доставка</td>
+<td>ошибки журнала видны дежурному</td>
+<td>тестовая ошибка доходит до получателя</td>
+</tr>
+<tr>
+<td>Нагрузка</td>
+<td>пиковый поток записей</td>
+<td>приложение не теряет ERROR</td>
+</tr>
+<tr>
+<td>Хранение</td>
+<td>срок и права</td>
+<td>журнал недоступен лишним людям</td>
 </tr>
 </tbody>
 </table>
-<p>Правило простое: в журнал пишут идентификаторы, а не содержимое. Идентификатор пользователя позволяет найти запись в справочнике, но сам по себе не раскрывает пароль. Номер накладной позволяет найти документ, но не показывает суммы и контрагентов.</p>
-<p>Отдельно решают, что делать с адресом электронной почты и телефоном. Иногда без них невозможно разобрать обращение, но хранить их в общем журнале на всех уровнях не нужно. Если поле действительно важно, его маскируют: <code>user=kladovshchik_2</code>, <code>phone=***-***-12-34</code>.</p>
-<p>Ошибки с секретами возникают из привычки писать в журнал весь объект запроса. <code>logger.info("request=%s", data)</code> выглядит удобно, пока в <code>data</code> не окажется пароль или токен. Пишите поля явно: <code>logger.info("action=login user=%s result=%s", login_name, result)</code>. Тогда лишнее не попадёт в запись случайно.</p></div>
-</div>
-
-<div class="gate-step" data-gate>
-<p class="gate-action"><button type="button" class="gate-btn" aria-expanded="false"><span class="gate-q" aria-hidden="true">?</span><span>Почему журнал растёт и как его хранить через год?</span></button></p>
-<div class="gate-content" hidden><h2 id="сколько-журнал-живёт"><span class="num">08</span>Сколько журнал живёт</h2>
-<p>Журнал растёт с каждой операцией. В «Склад+» 120 сотрудников, в среднем 35 действий за рабочий день, это около 4200 записей. При средней длине 250 байт получается примерно 1 МБ в рабочий день и 23 МБ в месяц. За год без ротации накопится около 277 МБ, а поиск по одному файлу станет медленным.</p>
-<p>Ротация делит журнал на файлы по размеру или по дате. Настройка <code>RotatingFileHandler</code> с пределом 10 МБ и пятью копиями держит на диске около 50 МБ и создаёт новый файл, когда старый заполнен. Старые копии удаляются по кругу, поэтому место не растёт бесконечно.</p>
-<table>
-<thead>
-<tr>
-<th>Параметр</th>
-<th>Значение для учебного стенда</th>
-<th>Что означает</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Размер файла</td>
-<td>10 МБ</td>
-<td>после заполнения создаётся новый</td>
-</tr>
-<tr>
-<td>Число копий</td>
-<td>5</td>
-<td>хранятся последние пять файлов</td>
-</tr>
-<tr>
-<td>Срок хранения</td>
-<td>90 дней</td>
-<td>требование службы безопасности</td>
-</tr>
-<tr>
-<td>Уровень в работе</td>
-<td>INFO</td>
-<td>DEBUG включают на время разбора</td>
-</tr>
-<tr>
-<td>Место</td>
-<td>отдельный каталог вне репозитория</td>
-<td>журнал не коммитят</td>
-</tr>
-</tbody>
-</table>
-<p>Срок хранения задают не по размеру диска, а по требованиям: сколько времени нужно, чтобы разобрать инцидент и доказать факт доступа. Девяносто дней это типичный учебный ориентир, в реальной системе срок может быть больше. Если журнал нужен дольше, его отправляют в центральное хранилище, а на сервере оставляют только последние дни.</p>
-<p>Журнал не хранят в репозитории и не пересылают в чат целиком. Файл журнала может содержать идентификаторы пользователей и служебные адреса. В репозиторий попадает только конфигурация журналирования, а сам каталог добавляют в <code>.gitignore</code>.</p>
-<p>Отдельно настраивают журнал ошибок. Удобно держать два потока: общий с уровнем INFO и отдельный с уровнем ERROR, чтобы дежурный не искал ошибки среди тысяч штатных записей. Оба потока пишут в разные файлы, но используют один формат и один идентификатор запроса.</p>
-<h2 id="типичные-ошибки"><span class="num">09</span>Типичные ошибки</h2>
+<p>Этот список проверяют до запуска, а не во время первого разбора. Каждый пункт можно проверить на учебном стенде: отправить запрос с паролем в поле, вставить перевод строки в имя пользователя, временно заполнить диск, отключить почтовый сервер. Дешевле найти проблему на стенде, чем объяснять её заказчику.</p>
+<h2 id="типичные-ошибки"><span class="num">12</span>Типичные ошибки</h2>
 <p><strong>Вывод через <code>print</code>.</strong> <code>print</code> не знает уровней, не пишет время и не умеет отправлять записи в файл. В консоли разработчика он выглядит нормально, в рабочей среде теряется среди вывода сервера. Для журнала используют <code>logging</code> или его аналог в другом языке.</p>
 <p><strong>Запись без контекста.</strong> <code>ERROR: failed</code> не отвечает ни на один вопрос. Запись <code>ERROR request_id=8f23 user=kladovshchik_2 action=shipment_create supply_id=505 error=LockedError</code> позволяет найти документ и причину за минуту.</p>
 <p><strong>Секрет в сообщении.</strong> <code>logger.info("login=%s password=%s", login, password)</code> навсегда оставляет пароль в файле, копиях и резервных архивах. Даже удаление строки из текущего файла не убирает её из старых копий.</p>
@@ -1271,15 +1484,30 @@ X-Request-ID: 8f23
 <p><strong>Нет идентификатора.</strong> Шесть строк одного запроса выглядят как шесть событий. Связать их можно только по времени, а при параллельных запросах это не работает.</p>
 <p><strong>Журнал без ротации.</strong> Файл растёт, пока не закончится место на диске. Сервер падает не из-за бизнес-ошибки, а из-за собственного журнала. Предел размера и число копий задают до запуска в работу.</p>
 <p><strong>Журнал в репозитории.</strong> Файл с идентификаторами пользователей попадает в Git и остаётся в истории даже после удаления. Каталог журналов добавляют в <code>.gitignore</code>, а конфигурацию хранят отдельно.</p>
-<h2 id="итоги"><span class="num">10</span>Итоги</h2>
+<p><strong>Склейка вместо шаблона.</strong> <code>logger.info("user=" + name)</code> теряет структуру и позволяет подставить перевод строки. Передавайте значения параметрами, а имена полей держите в шаблоне.</p>
+<h2 id="итоги"><span class="num">13</span>Итоги</h2>
 <ul>
 <li>Журнал восстанавливает ход запроса: когда, кто, что делал, с каким объектом и чем закончилось.</li>
 <li>Уровень выбирают по последствиям: INFO для штатных событий, WARNING для отклонений, ERROR для неудачных операций.</li>
 <li><code>request_id</code> связывает записи одного запроса и возвращается клиенту в заголовке.</li>
 <li>В журнал пишут идентификаторы, а не пароли, токены и лишние персональные данные.</li>
 <li>Ротация и срок хранения защищают диск от переполнения, а журнал от бесконечного роста.</li>
+<li>Журнал без доставки, проверки и владельца не является сигналом, что показывают разборы GitLab, Knight Capital и TSB.</li>
 </ul>
-<div class="quiz" data-quiz data-quiz-guard><div class="quiz-who"><label class="quiz-who-label"><span>ФИО</span><input type="text" class="quiz-name" data-quiz-name maxlength="80" autocomplete="off" placeholder="Иванов Иван Иванович"></label><span class="quiz-attempts" data-quiz-attempts>две попытки на лекцию</span><span class="quiz-note" data-who-note hidden></span></div><div class="quiz-q" data-type="single" data-correct="1" data-q="1"><p class="quiz-p"><span class="quiz-no" aria-hidden="true">01</span>Что делать с журналом, который растёт каждый день?</p><div class="opts"><label class="opt"><input type="radio" name="q151_0" value="2" autocomplete="off"><span>Писать только ошибки валидации</span></label><label class="opt"><input type="radio" name="q151_0" value="0" autocomplete="off" data-ok><span>Настроить ротацию по размеру или дате</span></label><label class="opt"><input type="radio" name="q151_0" value="1" autocomplete="off"><span>Удалять файл перед каждым запросом</span></label><label class="opt"><input type="radio" name="q151_0" value="3" autocomplete="off"><span>Хранить журнал в репозитории</span></label></div><p class="quiz-why" hidden>Ротация ограничивает размер и сохраняет последние записи.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="multi" data-correct="3" data-q="2" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">02</span>Какие данные допустимо писать в журнал?</p><div class="opts"><label class="opt"><input type="checkbox" name="q151_1" value="3" autocomplete="off"><span>Пароль в открытом виде</span></label><label class="opt"><input type="checkbox" name="q151_1" value="0" autocomplete="off" data-ok><span>Идентификатор пользователя</span></label><label class="opt"><input type="checkbox" name="q151_1" value="1" autocomplete="off" data-ok><span>Номер накладной</span></label><label class="opt"><input type="checkbox" name="q151_1" value="4" autocomplete="off"><span>Полный токен доступа</span></label><label class="opt"><input type="checkbox" name="q151_1" value="2" autocomplete="off" data-ok><span>Код ошибки</span></label></div><p class="quiz-why" hidden>Идентификаторы позволяют найти объект, не раскрывая секрет.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="3" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">03</span>Зачем нужен журнал приложения?</p><div class="opts"><label class="opt"><input type="radio" name="q151_2" value="1" autocomplete="off"><span>Чтобы заменить резервное копирование базы</span></label><label class="opt"><input type="radio" name="q151_2" value="3" autocomplete="off"><span>Чтобы хранить пароли пользователей</span></label><label class="opt"><input type="radio" name="q151_2" value="2" autocomplete="off"><span>Чтобы ускорить выполнение SQL-запросов</span></label><label class="opt"><input type="radio" name="q151_2" value="0" autocomplete="off" data-ok><span>Чтобы восстановить ход запроса и причину сбоя</span></label></div><p class="quiz-why" hidden>Журнал фиксирует события и результаты, по нему разбирают инцидент.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="short" data-q="4" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">04</span>Как называют деление журнала на файлы по размеру или дате?</p><input type="text" class="short-answer" data-answers="[&quot;ротация&quot;, &quot;ротация журнала&quot;]" placeholder="Введите ответ" autocomplete="off" spellcheck="false" aria-label="Как называют деление журнала на файлы по размеру или дате?"><p class="quiz-why" hidden>Ротация создаёт новые файлы и удаляет старые по заданному правилу.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="5" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">05</span>Почему пароль нельзя писать в журнал?</p><div class="opts"><label class="opt"><input type="radio" name="q151_4" value="1" autocomplete="off"><span>Он увеличивает размер строки</span></label><label class="opt"><input type="radio" name="q151_4" value="2" autocomplete="off"><span>Он мешает ротации файла</span></label><label class="opt"><input type="radio" name="q151_4" value="0" autocomplete="off" data-ok><span>Он остаётся в файлах и копиях и даёт доступ к учётной записи</span></label><label class="opt"><input type="radio" name="q151_4" value="3" autocomplete="off"><span>Он меняет уровень сообщения</span></label></div><p class="quiz-why" hidden>Секрет в журнале переживает запрос и попадает в резервные копии.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="multi" data-correct="2" data-q="6" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">06</span>Какие события относятся к уровню ERROR?</p><div class="opts"><label class="opt"><input type="checkbox" name="q151_5" value="0" autocomplete="off" data-ok><span>Отгрузка не закрыта после повторной попытки</span></label><label class="opt"><input type="checkbox" name="q151_5" value="2" autocomplete="off"><span>Пользователь ввёл количество 0 и получил 400</span></label><label class="opt"><input type="checkbox" name="q151_5" value="3" autocomplete="off"><span>Вход выполнен успешно</span></label><label class="opt"><input type="checkbox" name="q151_5" value="1" autocomplete="off" data-ok><span>Отчёт не выгружен из-за отсутствия прав</span></label></div><p class="quiz-why" hidden>ERROR означает, что операция не выполнена после всех попыток.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="7" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">07</span>Что означает поле <code>duration_ms=1840</code>?</p><div class="opts"><label class="opt"><input type="radio" name="q151_6" value="2" autocomplete="off"><span>В запросе 1840 строк</span></label><label class="opt"><input type="radio" name="q151_6" value="3" autocomplete="off"><span>Пользователь ждал 1840 минут</span></label><label class="opt"><input type="radio" name="q151_6" value="0" autocomplete="off" data-ok><span>Операция заняла около 1,8 секунды</span></label><label class="opt"><input type="radio" name="q151_6" value="1" autocomplete="off"><span>Операция началась в 18:40</span></label></div><p class="quiz-why" hidden>Длительность пишут в миллисекундах, чтобы видеть медленные операции.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="8" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">08</span>Что означает уровень WARNING?</p><div class="opts"><label class="opt"><input type="radio" name="q151_7" value="1" autocomplete="off"><span>Полная остановка сервиса</span></label><label class="opt"><input type="radio" name="q151_7" value="0" autocomplete="off" data-ok><span>Отклонение, при котором работа продолжается</span></label><label class="opt"><input type="radio" name="q151_7" value="3" autocomplete="off"><span>Штатное завершение операции</span></label><label class="opt"><input type="radio" name="q151_7" value="2" autocomplete="off"><span>Подробность только для разработчика</span></label></div><p class="quiz-why" hidden>WARNING сообщает о проблеме, которую удалось обойти или повторить.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="multi" data-correct="3" data-q="9" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">09</span>Какие поля помогают найти причину медленного запроса?</p><div class="opts"><label class="opt"><input type="checkbox" name="q151_8" value="0" autocomplete="off" data-ok><span><code>duration_ms</code></span></label><label class="opt"><input type="checkbox" name="q151_8" value="2" autocomplete="off" data-ok><span><code>request_id</code></span></label><label class="opt"><input type="checkbox" name="q151_8" value="4" autocomplete="off"><span><code>token</code></span></label><label class="opt"><input type="checkbox" name="q151_8" value="1" autocomplete="off" data-ok><span><code>action</code></span></label><label class="opt"><input type="checkbox" name="q151_8" value="3" autocomplete="off"><span><code>password</code></span></label></div><p class="quiz-why" hidden>Длительность, действие и идентификатор запроса показывают, где искать узкое место.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="10" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">10</span>Почему ошибку не стоит записывать дважды?</p><div class="opts"><label class="opt"><input type="radio" name="q151_9" value="3" autocomplete="off"><span>Уровень ERROR становится необязательным</span></label><label class="opt"><input type="radio" name="q151_9" value="0" autocomplete="off" data-ok><span>Пользователь получает один отказ, а дежурный ищет две причины</span></label><label class="opt"><input type="radio" name="q151_9" value="1" autocomplete="off"><span>Вторая запись всегда теряется</span></label><label class="opt"><input type="radio" name="q151_9" value="2" autocomplete="off"><span>Журнал перестаёт быть текстовым</span></label></div><p class="quiz-why" hidden>Дублирование запутывает разбор и раздувает журнал.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="11" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">11</span>Что связывает записи одного запроса?</p><div class="opts"><label class="opt"><input type="radio" name="q151_10" value="2" autocomplete="off"><span>Номер версии приложения</span></label><label class="opt"><input type="radio" name="q151_10" value="1" autocomplete="off"><span>Имя пользователя</span></label><label class="opt"><input type="radio" name="q151_10" value="3" autocomplete="off"><span>Уровень сообщения</span></label><label class="opt"><input type="radio" name="q151_10" value="0" autocomplete="off" data-ok><span><code>request_id</code></span></label></div><p class="quiz-why" hidden>Один идентификатор запроса позволяет собрать все его записи в одну историю.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="short" data-q="12" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">12</span>В каком заголовке клиент получает идентификатор запроса?</p><input type="text" class="short-answer" data-answers="[&quot;X-Request-ID&quot;, &quot;X-Request-Id&quot;]" placeholder="Введите ответ" autocomplete="off" spellcheck="false" aria-label="В каком заголовке клиент получает идентификатор запроса?"><p class="quiz-why" hidden>Сервер возвращает тот же идентификатор, чтобы его можно было назвать в поддержке.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="13" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">13</span>Что означает код <code>reason=timeout</code> в записи WARNING?</p><div class="opts"><label class="opt"><input type="radio" name="q151_12" value="1" autocomplete="off"><span>Пользователь не прошёл проверку пароля</span></label><label class="opt"><input type="radio" name="q151_12" value="2" autocomplete="off"><span>Запись удалена из базы</span></label><label class="opt"><input type="radio" name="q151_12" value="3" autocomplete="off"><span>Токен истёк по расписанию</span></label><label class="opt"><input type="radio" name="q151_12" value="0" autocomplete="off" data-ok><span>Операция не уложилась в отведённое время</span></label></div><p class="quiz-why" hidden><code>timeout</code> указывает на превышение времени ожидания.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="multi" data-correct="3" data-q="14" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">14</span>Что должно быть в записи журнала?</p><div class="opts"><label class="opt"><input type="checkbox" name="q151_13" value="2" autocomplete="off" data-ok><span>Результат операции</span></label><label class="opt"><input type="checkbox" name="q151_13" value="3" autocomplete="off"><span>Пароль пользователя</span></label><label class="opt"><input type="checkbox" name="q151_13" value="1" autocomplete="off" data-ok><span>Пользователь и действие</span></label><label class="opt"><input type="checkbox" name="q151_13" value="4" autocomplete="off"><span>Полный текст токена</span></label><label class="opt"><input type="checkbox" name="q151_13" value="0" autocomplete="off" data-ok><span>Время события</span></label></div><p class="quiz-why" hidden>Запись описывает событие и результат, но не раскрывает секреты.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="15" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">15</span>Какой уровень подходит для штатного успешного входа?</p><div class="opts"><label class="opt"><input type="radio" name="q151_14" value="3" autocomplete="off"><span>DEBUG</span></label><label class="opt"><input type="radio" name="q151_14" value="1" autocomplete="off"><span>ERROR</span></label><label class="opt"><input type="radio" name="q151_14" value="2" autocomplete="off"><span>CRITICAL</span></label><label class="opt"><input type="radio" name="q151_14" value="0" autocomplete="off" data-ok><span>INFO</span></label></div><p class="quiz-why" hidden>Успешный вход это нормальное событие, для него достаточно INFO.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><p class="quiz-note quiz-submit-note" data-quiz-note hidden></p><div class="quiz-result" data-quiz-result hidden aria-live="polite"><span class="label">Результат теста</span><h3>Тест завершён</h3><p class="modal-name-line">ФИО: <b data-student-name></b></p><p class="modal-result" data-modal-result></p><p class="modal-result" data-modal-wrong></p><dl class="modal-times"><div><dt>Время выполнения теста</dt><dd data-test-time>00:00</dd></div><div><dt>Время просмотра лекции</dt><dd data-view-time>00:00</dd></div></dl></div></div></div>
+<h2 id="источники"><span class="num">14</span>Источники</h2>
+<ol>
+<li>Python Software Foundation. logging. https://docs.python.org/3/library/logging.html</li>
+<li>Python Software Foundation. Logging HOWTO. https://docs.python.org/3/howto/logging.html</li>
+<li>Microsoft. Logging in .NET. https://learn.microsoft.com/en-us/dotnet/core/extensions/logging/overview</li>
+<li>OpenTelemetry. Logs. https://opentelemetry.io/docs/concepts/signals/logs/</li>
+<li>Google. Site Reliability Engineering: Monitoring Distributed Systems. https://sre.google/sre-book/monitoring-distributed-systems/</li>
+<li>OWASP. Logging Cheat Sheet. https://cheatsheetseries.owasp.org/cheatsheets/Logging_Cheat_Sheet.html</li>
+<li>U.S. Securities and Exchange Commission. Order in the Matter of Knight Capital Americas LLC, 2013. https://www.sec.gov/litigation/admin/2013/34-70694.pdf</li>
+<li>GitLab. Postmortem of database outage of January 31, 2017. https://about.gitlab.com/blog/postmortem-of-database-outage-of-january-31/</li>
+<li>Financial Conduct Authority. Final Notice: TSB Bank plc, 2022. https://www.fca.org.uk/publication/final-notices/tsb-bank-plc-2022.pdf</li>
+<li>Google. Site Reliability Engineering: Postmortem Culture. https://sre.google/sre-book/postmortem-culture/</li>
+</ol>
+<div class="quiz" data-quiz data-quiz-guard><div class="quiz-who"><label class="quiz-who-label"><span>ФИО</span><input type="text" class="quiz-name" data-quiz-name maxlength="80" autocomplete="off" placeholder="Иванов Иван Иванович"></label><span class="quiz-attempts" data-quiz-attempts>две попытки на лекцию</span><span class="quiz-note" data-who-note hidden></span></div><div class="quiz-q" data-type="single" data-correct="1" data-q="1"><p class="quiz-p"><span class="quiz-no" aria-hidden="true">01</span>Зачем нужен журнал приложения?</p><div class="opts"><label class="opt"><input type="radio" name="q191_0" value="1" autocomplete="off"><span>Чтобы заменить резервное копирование базы</span></label><label class="opt"><input type="radio" name="q191_0" value="3" autocomplete="off"><span>Чтобы хранить пароли пользователей</span></label><label class="opt"><input type="radio" name="q191_0" value="2" autocomplete="off"><span>Чтобы ускорить выполнение SQL-запросов</span></label><label class="opt"><input type="radio" name="q191_0" value="0" autocomplete="off" data-ok><span>Чтобы восстановить ход запроса и причину сбоя</span></label></div><p class="quiz-why" hidden>Журнал фиксирует события и результаты, по нему разбирают инцидент.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="multi" data-correct="3" data-q="2" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">02</span>Какие данные допустимо писать в журнал?</p><div class="opts"><label class="opt"><input type="checkbox" name="q191_1" value="3" autocomplete="off"><span>Пароль в открытом виде</span></label><label class="opt"><input type="checkbox" name="q191_1" value="0" autocomplete="off" data-ok><span>Идентификатор пользователя</span></label><label class="opt"><input type="checkbox" name="q191_1" value="1" autocomplete="off" data-ok><span>Номер накладной</span></label><label class="opt"><input type="checkbox" name="q191_1" value="4" autocomplete="off"><span>Полный токен доступа</span></label><label class="opt"><input type="checkbox" name="q191_1" value="2" autocomplete="off" data-ok><span>Код ошибки</span></label></div><p class="quiz-why" hidden>Идентификаторы позволяют найти объект, не раскрывая секрет.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="short" data-q="3" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">03</span>В каком заголовке клиент получает идентификатор запроса?</p><input type="text" class="short-answer" data-answers="[&quot;X-Request-ID&quot;, &quot;X-Request-Id&quot;]" placeholder="Введите ответ" autocomplete="off" spellcheck="false" aria-label="В каком заголовке клиент получает идентификатор запроса?"><p class="quiz-why" hidden>Сервер возвращает тот же идентификатор, чтобы его можно было назвать в поддержке.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="4" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">04</span>Почему ошибку не стоит записывать дважды?</p><div class="opts"><label class="opt"><input type="radio" name="q191_3" value="3" autocomplete="off"><span>Уровень ERROR становится необязательным</span></label><label class="opt"><input type="radio" name="q191_3" value="0" autocomplete="off" data-ok><span>Пользователь получает один отказ, а дежурный ищет две причины</span></label><label class="opt"><input type="radio" name="q191_3" value="1" autocomplete="off"><span>Вторая запись всегда теряется</span></label><label class="opt"><input type="radio" name="q191_3" value="2" autocomplete="off"><span>Журнал перестаёт быть текстовым</span></label></div><p class="quiz-why" hidden>Дублирование запутывает разбор и раздувает журнал.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="5" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">05</span>Почему журнал GitLab не помог предотвратить потерю данных?</p><div class="opts"><label class="opt"><input type="radio" name="q191_4" value="3" autocomplete="off"><span>Уровень INFO был запрещён настройками</span></label><label class="opt"><input type="radio" name="q191_4" value="2" autocomplete="off"><span>Записи хранились в базе данных вместо файла</span></label><label class="opt"><input type="radio" name="q191_4" value="0" autocomplete="off" data-ok><span>Ошибки резервного копирования отправлялись почтой, которую отвергал сервер</span></label><label class="opt"><input type="radio" name="q191_4" value="1" autocomplete="off"><span>Журнал был отключён на всех серверах</span></label></div><p class="quiz-why" hidden>Сигнал об ошибке существовал, но не доходил до людей.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="multi" data-correct="2" data-q="6" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">06</span>Какие события относятся к уровню ERROR?</p><div class="opts"><label class="opt"><input type="checkbox" name="q191_5" value="0" autocomplete="off" data-ok><span>Отгрузка не закрыта после повторной попытки</span></label><label class="opt"><input type="checkbox" name="q191_5" value="2" autocomplete="off"><span>Пользователь ввёл количество 0 и получил 400</span></label><label class="opt"><input type="checkbox" name="q191_5" value="3" autocomplete="off"><span>Вход выполнен успешно</span></label><label class="opt"><input type="checkbox" name="q191_5" value="1" autocomplete="off" data-ok><span>Отчёт не выгружен из-за отсутствия прав</span></label></div><p class="quiz-why" hidden>ERROR означает, что операция не выполнена после всех попыток.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="7" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">07</span>Какой уровень подходит для штатного успешного входа?</p><div class="opts"><label class="opt"><input type="radio" name="q191_6" value="3" autocomplete="off"><span>DEBUG</span></label><label class="opt"><input type="radio" name="q191_6" value="1" autocomplete="off"><span>ERROR</span></label><label class="opt"><input type="radio" name="q191_6" value="2" autocomplete="off"><span>CRITICAL</span></label><label class="opt"><input type="radio" name="q191_6" value="0" autocomplete="off" data-ok><span>INFO</span></label></div><p class="quiz-why" hidden>Успешный вход это нормальное событие, для него достаточно INFO.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="8" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">08</span>Что означает поле <code>duration_ms=1840</code>?</p><div class="opts"><label class="opt"><input type="radio" name="q191_7" value="2" autocomplete="off"><span>В запросе 1840 строк</span></label><label class="opt"><input type="radio" name="q191_7" value="3" autocomplete="off"><span>Пользователь ждал 1840 минут</span></label><label class="opt"><input type="radio" name="q191_7" value="0" autocomplete="off" data-ok><span>Операция заняла около 1,8 секунды</span></label><label class="opt"><input type="radio" name="q191_7" value="1" autocomplete="off"><span>Операция началась в 18:40</span></label></div><p class="quiz-why" hidden>Длительность пишут в миллисекундах, чтобы видеть медленные операции.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="short" data-q="9" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">09</span>Как называют подделку записи через перевод строки в пользовательском поле?</p><input type="text" class="short-answer" data-answers="[&quot;log injection&quot;, &quot;инъекция в журнал&quot;]" placeholder="Введите ответ" autocomplete="off" spellcheck="false" aria-label="Как называют подделку записи через перевод строки в пользовательском поле?"><p class="quiz-why" hidden>Управляющие символы экранируют, а длину поля ограничивают.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="10" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">10</span>Что делать с журналом, который растёт каждый день?</p><div class="opts"><label class="opt"><input type="radio" name="q191_9" value="2" autocomplete="off"><span>Писать только ошибки валидации</span></label><label class="opt"><input type="radio" name="q191_9" value="0" autocomplete="off" data-ok><span>Настроить ротацию по размеру или дате</span></label><label class="opt"><input type="radio" name="q191_9" value="1" autocomplete="off"><span>Удалять файл перед каждым запросом</span></label><label class="opt"><input type="radio" name="q191_9" value="3" autocomplete="off"><span>Хранить журнал в репозитории</span></label></div><p class="quiz-why" hidden>Ротация ограничивает размер и сохраняет последние записи.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="11" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">11</span>Почему пароль нельзя писать в журнал?</p><div class="opts"><label class="opt"><input type="radio" name="q191_10" value="1" autocomplete="off"><span>Он увеличивает размер строки</span></label><label class="opt"><input type="radio" name="q191_10" value="2" autocomplete="off"><span>Он мешает ротации файла</span></label><label class="opt"><input type="radio" name="q191_10" value="0" autocomplete="off" data-ok><span>Он остаётся в файлах и копиях и даёт доступ к учётной записи</span></label><label class="opt"><input type="radio" name="q191_10" value="3" autocomplete="off"><span>Он меняет уровень сообщения</span></label></div><p class="quiz-why" hidden>Секрет в журнале переживает запрос и попадает в резервные копии.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="short" data-q="12" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">12</span>Как называют деление журнала на файлы по размеру или дате?</p><input type="text" class="short-answer" data-answers="[&quot;ротация&quot;, &quot;ротация журнала&quot;]" placeholder="Введите ответ" autocomplete="off" spellcheck="false" aria-label="Как называют деление журнала на файлы по размеру или дате?"><p class="quiz-why" hidden>Ротация создаёт новые файлы и удаляет старые по заданному правилу.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="13" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">13</span>Что означает уровень WARNING?</p><div class="opts"><label class="opt"><input type="radio" name="q191_12" value="1" autocomplete="off"><span>Полная остановка сервиса</span></label><label class="opt"><input type="radio" name="q191_12" value="0" autocomplete="off" data-ok><span>Отклонение, при котором работа продолжается</span></label><label class="opt"><input type="radio" name="q191_12" value="3" autocomplete="off"><span>Штатное завершение операции</span></label><label class="opt"><input type="radio" name="q191_12" value="2" autocomplete="off"><span>Подробность только для разработчика</span></label></div><p class="quiz-why" hidden>WARNING сообщает о проблеме, которую удалось обойти или повторить.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="multi" data-correct="3" data-q="14" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">14</span>Что должно быть в записи журнала?</p><div class="opts"><label class="opt"><input type="checkbox" name="q191_13" value="2" autocomplete="off" data-ok><span>Результат операции</span></label><label class="opt"><input type="checkbox" name="q191_13" value="3" autocomplete="off"><span>Пароль пользователя</span></label><label class="opt"><input type="checkbox" name="q191_13" value="1" autocomplete="off" data-ok><span>Пользователь и действие</span></label><label class="opt"><input type="checkbox" name="q191_13" value="4" autocomplete="off"><span>Полный текст токена</span></label><label class="opt"><input type="checkbox" name="q191_13" value="0" autocomplete="off" data-ok><span>Время события</span></label></div><p class="quiz-why" hidden>Запись описывает событие и результат, но не раскрывает секреты.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="15" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">15</span>Что связывает записи одного запроса?</p><div class="opts"><label class="opt"><input type="radio" name="q191_14" value="2" autocomplete="off"><span>Номер версии приложения</span></label><label class="opt"><input type="radio" name="q191_14" value="1" autocomplete="off"><span>Имя пользователя</span></label><label class="opt"><input type="radio" name="q191_14" value="3" autocomplete="off"><span>Уровень сообщения</span></label><label class="opt"><input type="radio" name="q191_14" value="0" autocomplete="off" data-ok><span><code>request_id</code></span></label></div><p class="quiz-why" hidden>Один идентификатор запроса позволяет собрать все его записи в одну историю.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><p class="quiz-note quiz-submit-note" data-quiz-note hidden></p><div class="quiz-result" data-quiz-result hidden aria-live="polite"><span class="label">Результат теста</span><h3>Тест завершён</h3><p class="modal-name-line">ФИО: <b data-student-name></b></p><p class="modal-result" data-modal-result></p><p class="modal-result" data-modal-wrong></p><dl class="modal-times"><div><dt>Время выполнения теста</dt><dd data-test-time>00:00</dd></div><div><dt>Время просмотра лекции</dt><dd data-view-time>00:00</dd></div></dl></div></div></div>
 </div></article><nav class="pager"><a class="" href="34-prakt-13.html"><span>← Предыдущее занятие</span>Практика 13. Вход в систему и проверка полей</a><a class="next" style="text-align:right;margin-left:auto" href="36-prakt-14.html"><span>Следующее занятие →</span>Практика 14. Аудит доступа и защита секретов</a></nav></main>
 <div class="modal" data-modal="warn" hidden>
   <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="warn-title">
@@ -1585,6 +1813,29 @@ X-Request-ID: 8f23
       });
     });
   });
+})();
+
+(function(){
+  var FIX = "<style>html{color-scheme:__T__!important}html,body{background:transparent!important;margin:0!important}.iso-page{margin:6px auto 4px!important}<\/style><script>window.__errs=[];addEventListener('error',function(e){__errs.push(String(e.message))});<\/script>";
+  function size(f){ try{ var d=f.contentDocument; if(!d||!d.body) return;
+    f.style.height = Math.max(d.documentElement.scrollHeight, d.body.scrollHeight) + 'px'; }catch(e){} }
+  function load(fig){
+    var t='light'; if(fig.dataset.loaded===t) return; fig.dataset.loaded=t;
+    var f=fig.querySelector('iframe'), one=fig.getAttribute('data-one');
+    var b=atob(one || fig.getAttribute('data-light')), bytes=Uint8Array.from(b, function(c){return c.charCodeAt(0)});
+    f.style.colorScheme = 'light';
+    new Response(new Blob([bytes]).stream().pipeThrough(new DecompressionStream('gzip'))).text().then(function(html){
+      if (one) html = html.split('data-theme="dark"').join('data-theme="light"');
+      html = html.replace('</head>', FIX.split('__T__').join('light') + '</head>');
+      f.srcdoc = html;
+    });
+    f.onload=function(){ size(f); setTimeout(function(){size(f)},300); setTimeout(function(){size(f)},1200);
+      try{ new ResizeObserver(function(){size(f)}).observe(f.contentDocument.body); }catch(e){} };
+  }
+  var figs=[].slice.call(document.querySelectorAll('figure.figure'));
+  var io = 'IntersectionObserver' in window ? new IntersectionObserver(function(es){ es.forEach(function(e){ if(e.isIntersecting){ load(e.target); io.unobserve(e.target);} }); }, {rootMargin:'600px'}) : null;
+  figs.forEach(function(f){ io ? io.observe(f) : load(f); });
+  addEventListener('resize', function(){ figs.forEach(function(f){ var i=f.querySelector('iframe'); if(f.dataset.loaded) size(i); }); });
 })();
 
 (function(){

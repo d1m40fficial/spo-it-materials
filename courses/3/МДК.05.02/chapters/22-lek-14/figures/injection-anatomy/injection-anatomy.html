@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Склейка строки и параметр запроса</title>
+<style>
+  :root { color-scheme:light; --paper:#EBE0EC; --card:#FFFDFC; --ink:#2A2430; --muted:#6B6272; --rule:#CDBBD6; --accent:#8E5BC8; --soft:#F3EAF4; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .frame { background:var(--paper); border:1px solid var(--rule); border-radius:12px; padding:16px; }
+  .eyebrow { margin:0 0 6px; font:600 10px/1.2 Consolas,monospace; letter-spacing:.14em; text-transform:uppercase; color:var(--accent); }
+  svg { display:block; width:100%; height:auto; }
+  .status { min-height:64px; margin-top:8px; padding:10px 12px; border-radius:9px; background:var(--soft); font-size:12.5px; line-height:1.45; }
+  .status b { color:var(--accent); }
+  .controls { display:flex; gap:6px; flex-wrap:wrap; margin-top:10px; }
+  button { font:600 11.5px/1.1 "Segoe UI",system-ui,sans-serif; padding:8px 10px; border-radius:8px; border:1px solid var(--rule); background:var(--card); color:var(--ink); cursor:pointer; }
+  button:hover { border-color:var(--accent); color:var(--accent); }
+  button.on { background:var(--accent); border-color:var(--accent); color:#fff; }
+  .note { margin:9px 2px 0; font:11.5px/1.5 "Segoe UI",system-ui,sans-serif; color:var(--muted); }
+  @media (max-width:560px) { .frame { padding:12px; } .status { font-size:12px; } }
+</style>
+</head>
+<body>
+<div class="frame">
+  <p class="eyebrow">SQL из кода · инъекция</p>
+  <svg viewBox="0 0 680 372" role="img" aria-labelledby="ia-title ia-desc">
+    <title id="ia-title">Одна строка поиска в двух режимах</title>
+    <desc id="ia-desc">Ввод с апострофом и комментарием. При склейке он меняет запрос и возвращает все строки, при параметре остаётся значением и возвращает ноль строк.</desc>
+
+    <g font-family="Segoe UI,system-ui,sans-serif">
+      <rect x="16" y="20" width="648" height="46" rx="8" fill="#FFFDFC" stroke="#CDBBD6"/>
+      <text x="30" y="40" font-size="10" fill="#6B6272" font-family="Consolas,monospace">ПОЛЕ ПОИСКА</text>
+      <text x="30" y="58" font-size="13" fill="#2A2430" font-family="Consolas,monospace">' OR 1=1 --</text>
+      <text x="520" y="58" font-size="10" fill="#6B6272">ввод пользователя</text>
+
+      <path d="M340 66 L340 88" stroke="#8E5BC8" stroke-width="1.6"/>
+      <path d="M334 82 L340 88 L346 82" fill="none" stroke="#8E5BC8" stroke-width="1.6"/>
+
+      <rect x="16" y="94" width="648" height="104" rx="8" fill="#FFFDFC" stroke="#CDBBD6"/>
+      <text x="30" y="114" font-size="10" fill="#6B6272" font-family="Consolas,monospace" id="ia-cap">ЧТО ПОЛУЧАЕТ БАЗА: СКЛЕЙКА</text>
+      <text x="30" y="138" font-size="11.5" fill="#2A2430" font-family="Consolas,monospace" id="q1">SELECT id, title FROM products</text>
+      <text x="30" y="158" font-size="11.5" fill="#2A2430" font-family="Consolas,monospace" id="q2">WHERE title LIKE '%' OR 1=1 --%'</text>
+      <text x="30" y="178" font-size="11.5" fill="#2A2430" font-family="Consolas,monospace" id="q3"> </text>
+      <text x="30" y="192" font-size="10" fill="#8E5BC8" id="q-note">апостроф закрыл литерал, два дефиса начали комментарий</text>
+
+      <rect x="16" y="214" width="648" height="98" rx="8" fill="#F3EAF4" stroke="#CDBBD6"/>
+      <text x="30" y="234" font-size="10" fill="#6B6272" font-family="Consolas,monospace">РЕЗУЛЬТАТ</text>
+      <g id="rows"></g>
+      <text x="30" y="290" font-size="11" fill="#2A2430" id="ia-count">8 строк из 8</text>
+      <text x="560" y="290" font-size="10" fill="#6B6272">учебная база</text>
+    </g>
+  </svg>
+  <div class="status" id="ia-status"></div>
+  <div class="controls" id="ia-buttons">
+    <button data-mode="concat" class="on">Склейка строки</button>
+    <button data-mode="param">Параметр запроса</button>
+  </div>
+  <p class="note">Переключите режим. Сравните две вещи: изменился ли текст команды и сколько строк вернула база.</p>
+</div>
+<script>
+(function () {
+  var modes = {
+    concat: {
+      cap: "ЧТО ПОЛУЧАЕТ БАЗА: СКЛЕЙКА",
+      q1: "SELECT id, title FROM products",
+      q2: "WHERE title LIKE '%' OR 1=1 --%'",
+      q3: " ",
+      note: "апостроф закрыл литерал, два дефиса начали комментарий",
+      count: "8 строк из 8, условие 1=1 истинно для каждой",
+      filled: 8,
+      status: "<b>Склейка.</b> Значение попало в текст команды до разбора. Апостроф закрыл строковый литерал, комментарий отбросил хвост шаблона, и условие превратилось в <code>1=1</code>."
+    },
+    param: {
+      cap: "ЧТО ПОЛУЧАЕТ БАЗА: ПАРАМЕТР",
+      q1: "SELECT id, title FROM products",
+      q2: "WHERE title LIKE ?",
+      q3: "значение: %' OR 1=1 --%",
+      note: "значение пришло после разбора и осталось текстом",
+      count: "0 строк из 8, такой подстроки в названиях нет",
+      filled: 0,
+      status: "<b>Параметр.</b> База разобрала шаблон с меткой, затем получила значение. Апостроф и дефисы остались внутри значения и не смогли изменить синтаксис."
+    }
+  };
+  var mode = "concat";
+  var buttons = document.querySelectorAll("#ia-buttons button");
+  var status = document.getElementById("ia-status");
+  var rows = document.getElementById("rows");
+
+  function drawRows(n) {
+    rows.innerHTML = "";
+    for (var i = 0; i < 8; i++) {
+      var x = 30 + i * 34, y = 250;
+      var r = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+      r.setAttribute("x", x); r.setAttribute("y", y);
+      r.setAttribute("width", 24); r.setAttribute("height", 18); r.setAttribute("rx", 4);
+      r.setAttribute("fill", i < n ? "#8E5BC8" : "#FFFDFC");
+      r.setAttribute("stroke", "#CDBBD6");
+      rows.appendChild(r);
+    }
+  }
+
+  function render() {
+    var m = modes[mode];
+    document.getElementById("ia-cap").textContent = m.cap;
+    document.getElementById("q1").textContent = m.q1;
+    document.getElementById("q2").textContent = m.q2;
+    document.getElementById("q3").textContent = m.q3;
+    document.getElementById("q-note").textContent = m.note;
+    document.getElementById("ia-count").textContent = m.count;
+    status.innerHTML = m.status;
+    buttons.forEach(function (b) { b.classList.toggle("on", b.dataset.mode === mode); });
+    drawRows(m.filled);
+  }
+  buttons.forEach(function (b) { b.addEventListener("click", function () { mode = b.dataset.mode; render(); }); });
+  render();
+})();
+</script>
+</body>
+</html>

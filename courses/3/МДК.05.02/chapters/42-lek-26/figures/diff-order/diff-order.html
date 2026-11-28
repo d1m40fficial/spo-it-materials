@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Порядок чтения diff</title>
+<style>
+  :root { --paper:#EBE0EC; --card:#FFFDFF; --ink:#2A2430; --muted:#6B5F72; --rule:#D6C4DB; --accent:#8E5BC8; --soft:#F3EAF6; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .frame { background:var(--paper); border:1px solid var(--rule); border-radius:12px; padding:16px; }
+  .eyebrow { margin:0 0 6px; font:600 10px/1.2 Consolas,monospace; letter-spacing:.14em; text-transform:uppercase; color:var(--accent); }
+  svg { display:block; width:100%; height:auto; }
+  .note { margin:9px 2px 0; font:11.5px/1.5 "Segoe UI",system-ui,sans-serif; color:var(--muted); }
+  @media (max-width:560px) { .frame { padding:12px; } }
+</style>
+</head>
+<body>
+<div class="frame">
+  <p class="eyebrow">Code review · порядок чтения</p>
+  <svg viewBox="0 0 680 356" role="img" aria-labelledby="do-title do-desc">
+    <title id="do-title">Четыре шага чтения изменения</title>
+    <desc id="do-desc">Сначала файлы, затем описание и коммиты, затем файл целиком, затем строки. На каждом шаге свой вопрос и типичная находка.</desc>
+
+    <line x1="42" y1="44" x2="42" y2="322" stroke="#D6C4DB" stroke-width="2"/>
+    <g font-family="Segoe UI,system-ui,sans-serif">
+      <g>
+        <circle cx="42" cy="58" r="14" fill="#8E5BC8" stroke="#8E5BC8"/>
+        <text x="42" y="63" text-anchor="middle" font-size="11" font-weight="700" fill="#FFF">01</text>
+        <rect x="70" y="32" width="590" height="54" rx="8" fill="#FFFDFF" stroke="#C9AFD2"/>
+        <text x="84" y="52" font-size="13" font-weight="700" fill="#2A2430">Файлы: что вообще затронуто</text>
+        <text x="84" y="70" font-size="10.5" fill="#6B5F72">Нет ли миграции, настроек, секретов, сгенерированного кода и лишних файлов?</text>
+        <text x="512" y="70" font-size="10" fill="#8E5BC8">находка: .env в diff</text>
+      </g>
+
+      <g>
+        <circle cx="42" cy="132" r="14" fill="#8E5BC8" stroke="#8E5BC8"/>
+        <text x="42" y="137" text-anchor="middle" font-size="11" font-weight="700" fill="#FFF">02</text>
+        <rect x="70" y="106" width="590" height="54" rx="8" fill="#FFFDFF" stroke="#C9AFD2"/>
+        <text x="84" y="126" font-size="13" font-weight="700" fill="#2A2430">Описание и коммиты: зачем изменение</text>
+        <text x="84" y="144" font-size="10.5" fill="#6B5F72">Совпадает ли с задачей? Не смешаны ли функция, рефакторинг и обновление зависимостей?</text>
+        <text x="500" y="144" font-size="10" fill="#8E5BC8">находка: не та задача</text>
+      </g>
+
+      <g>
+        <circle cx="42" cy="206" r="14" fill="#8E5BC8" stroke="#8E5BC8"/>
+        <text x="42" y="211" text-anchor="middle" font-size="11" font-weight="700" fill="#FFF">03</text>
+        <rect x="70" y="180" width="590" height="54" rx="8" fill="#FFFDFF" stroke="#C9AFD2"/>
+        <text x="84" y="200" font-size="13" font-weight="700" fill="#2A2430">Файл целиком: контекст функции</text>
+        <text x="84" y="218" font-size="10.5" fill="#6B5F72">Видно ли рядом reserved, проверку прав, обработку ошибки и место вызова?</text>
+        <text x="512" y="218" font-size="10" fill="#8E5BC8">находка: потерян резерв</text>
+      </g>
+
+      <g>
+        <circle cx="42" cy="280" r="14" fill="#8E5BC8" stroke="#8E5BC8"/>
+        <text x="42" y="285" text-anchor="middle" font-size="11" font-weight="700" fill="#FFF">04</text>
+        <rect x="70" y="254" width="590" height="54" rx="8" fill="#FFFDFF" stroke="#C9AFD2"/>
+        <text x="84" y="274" font-size="13" font-weight="700" fill="#2A2430">Строки: границы и ошибки</text>
+        <text x="84" y="292" font-size="10.5" fill="#6B5F72">Пустой ввод, ноль, отрицательное число, повторный вызов, округление, сбой базы.</text>
+        <text x="512" y="292" font-size="10" fill="#8E5BC8">находка: деление на ноль</text>
+      </g>
+    </g>
+
+    <text x="16" y="338" font-family="Consolas,monospace" font-size="9.5" fill="#6B5F72">ЧИТАЙТЕ СВЕРХУ ВНИЗ: ПОЛОВИНА ПРОБЛЕМ ВИДНА ДО ПЕРВОЙ СТРОКИ DIFF</text>
+  </svg>
+  <p class="note">Шаги 1 и 2 занимают минуты, но экономят основное время. Если список файлов или описание вызывают вопрос, дальше можно не идти.</p>
+</div>
+</body>
+</html>

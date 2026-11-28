@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Дерево учебного проекта</title>
+<style>
+  :root { --paper:#FBF8FC; --card:#FFFFFF; --ink:#2A2430; --muted:#6B6175; --rule:#E0D3E6; --accent:#8E5BC8; --soft:#EBE0EC; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .frame { background:var(--paper); border:1px solid var(--rule); border-radius:12px; padding:14px; }
+  .eyebrow { margin:0 0 6px; font:600 10px/1.2 Consolas,monospace; letter-spacing:.14em; text-transform:uppercase; color:var(--accent); }
+  svg { display:block; width:100%; height:auto; }
+  .row rect { fill:transparent; stroke:none; transition:fill .12s; cursor:pointer; }
+  .row.on rect { fill:#EBE0EC; }
+  .row.on .nm { fill:#6B2FA0; font-weight:700; }
+  .status { min-height:66px; margin-top:8px; padding:10px 12px; border-radius:9px; background:var(--soft); font-size:13px; line-height:1.45; }
+  .status b { color:var(--accent); }
+  .note { margin:9px 2px 0; font:11.5px/1.5 "Segoe UI",system-ui,sans-serif; color:var(--muted); }
+  @media (max-width:560px) { .frame { padding:10px; } .status { font-size:12.5px; } }
+</style>
+</head>
+<body>
+<div class="frame">
+  <p class="eyebrow">Структура · дерево проекта</p>
+  <svg viewBox="0 0 680 424" role="img" aria-labelledby="pt-title pt-desc">
+    <title id="pt-title">Дерево каталогов учебного проекта</title>
+    <desc id="pt-desc">Корень проекта, исходный код в src/sklad, тесты, документация, данные, миграции и файлы сборки. Нажмите строку, чтобы увидеть назначение.</desc>
+
+    <g font-family="Consolas,monospace">
+      <text x="14" y="22" font-size="9.5" fill="#6B6175">ПУТЬ</text>
+      <text x="330" y="22" font-family="Segoe UI,system-ui,sans-serif" font-size="9.5" fill="#6B6175">НАЗНАЧЕНИЕ</text>
+
+      <g class="row" data-k="root">
+        <rect x="10" y="28" width="660" height="24" rx="5"/>
+        <text class="nm" x="22" y="45" font-size="11.5" fill="#2A2430">sklad-plus/</text>
+        <text x="330" y="45" font-family="Segoe UI,system-ui,sans-serif" font-size="10.5" fill="#6B6175">корень репозитория</text>
+      </g>
+      <g class="row" data-k="src">
+        <rect x="10" y="52" width="660" height="24" rx="5"/>
+        <text class="nm" x="44" y="69" font-size="11.5" fill="#2A2430">src/</text>
+        <text x="330" y="69" font-family="Segoe UI,system-ui,sans-serif" font-size="10.5" fill="#6B6175">исходный корень, только код</text>
+      </g>
+      <g class="row" data-k="pkg">
+        <rect x="10" y="76" width="660" height="24" rx="5"/>
+        <text class="nm" x="66" y="93" font-size="11.5" fill="#2A2430">sklad/</text>
+        <text x="330" y="93" font-family="Segoe UI,system-ui,sans-serif" font-size="10.5" fill="#6B6175">пакет приложения</text>
+      </g>
+      <g class="row" data-k="ui">
+        <rect x="10" y="100" width="660" height="24" rx="5"/>
+        <text class="nm" x="88" y="117" font-size="11.5" fill="#2A2430">ui/</text>
+        <text x="330" y="117" font-family="Segoe UI,system-ui,sans-serif" font-size="10.5" fill="#6B6175">экраны, меню, формат ответа</text>
+      </g>
+      <g class="row" data-k="service">
+        <rect x="10" y="124" width="660" height="24" rx="5"/>
+        <text class="nm" x="88" y="141" font-size="11.5" fill="#2A2430">service/</text>
+        <text x="330" y="141" font-family="Segoe UI,system-ui,sans-serif" font-size="10.5" fill="#6B6175">правила склада и проверки</text>
+      </g>
+      <g class="row" data-k="repo">
+        <rect x="10" y="148" width="660" height="24" rx="5"/>
+        <text class="nm" x="88" y="165" font-size="11.5" fill="#2A2430">repo/</text>
+        <text x="330" y="165" font-family="Segoe UI,system-ui,sans-serif" font-size="10.5" fill="#6B6175">запросы и преобразование строк</text>
+      </g>
+      <g class="row" data-k="config">
+        <rect x="10" y="172" width="660" height="24" rx="5"/>
+        <text class="nm" x="88" y="189" font-size="11.5" fill="#2A2430">config.py</text>
+        <text x="330" y="189" font-family="Segoe UI,system-ui,sans-serif" font-size="10.5" fill="#6B6175">чтение настроек, без секретов в коде</text>
+      </g>
+      <g class="row" data-k="main">
+        <rect x="10" y="196" width="660" height="24" rx="5"/>
+        <text class="nm" x="88" y="213" font-size="11.5" fill="#2A2430">__main__.py</text>
+        <text x="330" y="213" font-family="Segoe UI,system-ui,sans-serif" font-size="10.5" fill="#6B6175">точка входа и сборка объектов</text>
+      </g>
+      <g class="row" data-k="tests">
+        <rect x="10" y="220" width="660" height="24" rx="5"/>
+        <text class="nm" x="44" y="237" font-size="11.5" fill="#2A2430">tests/</text>
+        <text x="330" y="237" font-family="Segoe UI,system-ui,sans-serif" font-size="10.5" fill="#6B6175">зеркальные проверки модулей</text>
+      </g>
+      <g class="row" data-k="docs">
+        <rect x="10" y="244" width="660" height="24" rx="5"/>
+        <text class="nm" x="44" y="261" font-size="11.5" fill="#2A2430">docs/</text>
+        <text x="330" y="261" font-family="Segoe UI,system-ui,sans-serif" font-size="10.5" fill="#6B6175">требования, схема, инструкция запуска</text>
+      </g>
+      <g class="row" data-k="data">
+        <rect x="10" y="268" width="660" height="24" rx="5"/>
+        <text class="nm" x="44" y="285" font-size="11.5" fill="#2A2430">data/</text>
+        <text x="330" y="285" font-family="Segoe UI,system-ui,sans-serif" font-size="10.5" fill="#6B6175">небольшая учебная база</text>
+      </g>
+      <g class="row" data-k="migrations">
+        <rect x="10" y="292" width="660" height="24" rx="5"/>
+        <text class="nm" x="44" y="309" font-size="11.5" fill="#2A2430">migrations/</text>
+        <text x="330" y="309" font-family="Segoe UI,system-ui,sans-serif" font-size="10.5" fill="#6B6175">скрипты изменения схемы</text>
+      </g>
+      <g class="row" data-k="pyproject">
+        <rect x="10" y="316" width="660" height="24" rx="5"/>
+        <text class="nm" x="44" y="333" font-size="11.5" fill="#2A2430">pyproject.toml</text>
+        <text x="330" y="333" font-family="Segoe UI,system-ui,sans-serif" font-size="10.5" fill="#6B6175">имя, версия, зависимости, команды</text>
+      </g>
+      <g class="row" data-k="readme">
+        <rect x="10" y="340" width="660" height="24" rx="5"/>
+        <text class="nm" x="44" y="357" font-size="11.5" fill="#2A2430">README.md</text>
+        <text x="330" y="357" font-family="Segoe UI,system-ui,sans-serif" font-size="10.5" fill="#6B6175">первые пять минут нового человека</text>
+      </g>
+      <g class="row" data-k="gitignore">
+        <rect x="10" y="364" width="660" height="24" rx="5"/>
+        <text class="nm" x="44" y="381" font-size="11.5" fill="#2A2430">.gitignore</text>
+        <text x="330" y="381" font-family="Segoe UI,system-ui,sans-serif" font-size="10.5" fill="#6B6175">что не хранить в репозитории</text>
+      </g>
+
+      <text x="14" y="410" font-family="Consolas,monospace" font-size="9.5" fill="#6B6175">ФАЙЛ ИЩУТ ПО ВОПРОСУ, А НЕ ПО ПАМЯТИ АВТОРА</text>
+    </g>
+  </svg>
+  <div class="status" id="pt-status"></div>
+  <p class="note">Нажмите любую строку дерева. В карточке появится назначение каталога и того, чего в нём быть не должно.</p>
+</div>
+<script>
+(function () {
+  var data = {
+    root: '<b>Корень репозитория.</b> Здесь только файлы уровня проекта: описание пакета, README, правила игнорирования, каталоги. Файлы кода, тестов и настроек конкретной машины в корне не лежат.',
+    src: '<b>src/.</b> Исходный корень. Внутри один пакет приложения, а не набор файлов. Тесты, база и пароли сюда не попадают: пакет должен устанавливаться без них.',
+    pkg: '<b>sklad/.</b> Пакет с публичным именем. Имя используется в импортах и в команде запуска, поэтому меняется редко. Внутри каталоги по слоям или предметным областям.',
+    ui: '<b>ui/.</b> Экраны, меню, команды и формат ответа. Слой знает, что показать, но не знает SQL и правил расчёта. Запрос к базе здесь означает нарушение границы.',
+    service: '<b>service/.</b> Правила склада: доступный остаток, право на приёмку, порядок операции. Слой возвращает данные, а не готовый текст, и не печатает в консоль.',
+    repo: '<b>repo/.</b> Запросы и преобразование строк в объекты. Слой знает таблицы и параметры, но не решает, можно ли отгрузить товар. Сообщения для пользователя здесь неуместны.',
+    config: '<b>config.py.</b> Читает настройки из окружения и отдаёт их остальному коду. Пароли в файле не хранятся, значения по умолчанию допустимы только безопасные.',
+    main: '<b>__main__.py.</b> Точка входа: прочитать настройки, создать соединение, собрать объекты, запустить цикл команд. Правил и SQL здесь быть не должно.',
+    tests: '<b>tests/.</b> Автоматические проверки, повторяющие структуру модулей. Общие фикстуры лежат в conftest.py. Боевая база и большие выгрузки сюда не попадают.',
+    docs: '<b>docs/.</b> Требования, схема данных, инструкция запуска и записи решений. Личные черновики и переписка остаются в задаче, а не в документации.',
+    data: '<b>data/.</b> Небольшой учебный набор для демонстрации и ручной проверки. Полная рабочая база склада здесь не хранится.',
+    migrations: '<b>migrations/.</b> Скрипты изменения схемы с номерами по порядку. Ручные правки таблиц не заменяют миграцию, иначе схему невозможно повторить.',
+    pyproject: '<b>pyproject.toml.</b> Имя пакета, версия, зависимости и команды сборки. Секреты и пароли здесь не хранятся, для них есть окружение.',
+    readme: '<b>README.md.</b> Что делает система, какие версии нужны, как создать окружение, запустить приложение и тесты. Не история проекта на десять страниц.',
+    gitignore: '<b>.gitignore.</b> Список того, что не попадает в историю: окружение, файлы с секретами, журналы, временные файлы. Не список всех файлов проекта.'
+  };
+  var rows = document.querySelectorAll('.row');
+  var status = document.getElementById('pt-status');
+  rows.forEach(function (r) {
+    r.addEventListener('click', function () {
+      rows.forEach(function (x) { x.classList.toggle('on', x === r); });
+      status.innerHTML = data[r.dataset.k];
+    });
+  });
+  rows[0].classList.add('on');
+  status.innerHTML = data.root;
+})();
+</script>
+</body>
+</html>

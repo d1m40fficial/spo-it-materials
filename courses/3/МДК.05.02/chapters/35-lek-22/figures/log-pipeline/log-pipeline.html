@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Путь записи журнала</title>
+<style>
+  :root { --paper:#FBF7FC; --card:#FFFFFF; --ink:#2B2433; --muted:#6E6278; --rule:#E0D2E6; --accent:#8E5BC8; --soft:#EBE0EC; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .frame { background:var(--paper); border:1px solid var(--rule); border-radius:12px; padding:16px; }
+  .eyebrow { margin:0 0 6px; font:600 10px/1.2 Consolas,monospace; letter-spacing:.14em; text-transform:uppercase; color:var(--accent); }
+  svg { display:block; width:100%; height:auto; }
+  .note { margin:10px 2px 0; font:12px/1.5 "Segoe UI",system-ui,sans-serif; color:var(--muted); }
+</style>
+</head>
+<body>
+<div class="frame">
+  <p class="eyebrow">Журнал · путь записи</p>
+  <svg viewBox="0 0 680 372" role="img" aria-labelledby="lp-title lp-desc">
+    <title id="lp-title">Путь записи от вызова в коде до центрального хранилища</title>
+    <desc id="lp-desc">Шесть шагов: вызов регистратора, фильтр уровня, форматтер, очередь, файл с ротацией, агент сбора и хранилище. Справа у каждого шага указано, что может потеряться.</desc>
+
+    <text x="16" y="24" font-size="16" font-weight="700" fill="#2B2433">Где теряется запись</text>
+    <text x="16" y="43" font-size="11" fill="#6E6278">каждый шаг решает свою задачу и создаёт свой способ потерять событие</text>
+
+    <g font-family="Segoe UI,system-ui,sans-serif">
+      <g>
+        <rect x="16" y="58" width="196" height="36" rx="7" fill="#FFFFFF" stroke="#D9C8E0"/>
+        <text x="28" y="74" font-family="Consolas,monospace" font-size="11" font-weight="700" fill="#6B3E9E">logger.info(...)</text>
+        <text x="28" y="88" font-size="10" fill="#6E6278">вызов в коде приложения</text>
+        <text x="232" y="74" font-size="11.5" fill="#2B2433">Запись создана, поля переданы параметрами</text>
+        <text x="232" y="89" font-size="10" fill="#6E6278">потеря: склейка строки уничтожила структуру</text>
+      </g>
+      <g>
+        <rect x="16" y="110" width="196" height="36" rx="7" fill="#FFFFFF" stroke="#D9C8E0"/>
+        <text x="28" y="126" font-family="Consolas,monospace" font-size="11" font-weight="700" fill="#6B3E9E">фильтр уровня</text>
+        <text x="28" y="140" font-size="10" fill="#6E6278">ниже порога отбрасывается</text>
+        <text x="232" y="126" font-size="11.5" fill="#2B2433">DEBUG исчезает при рабочем пороге INFO</text>
+        <text x="232" y="141" font-size="10" fill="#6E6278">потеря: подробности нужны именно при разборе</text>
+      </g>
+      <g>
+        <rect x="16" y="162" width="196" height="36" rx="7" fill="#FFFFFF" stroke="#D9C8E0"/>
+        <text x="28" y="178" font-family="Consolas,monospace" font-size="11" font-weight="700" fill="#6B3E9E">форматтер</text>
+        <text x="28" y="192" font-size="10" fill="#6E6278">строка или JSON</text>
+        <text x="232" y="178" font-size="11.5" fill="#2B2433">Поля записаны в постоянном порядке</text>
+        <text x="232" y="193" font-size="10" fill="#6E6278">потеря: секрет попал в текст сообщения</text>
+      </g>
+      <g>
+        <rect x="16" y="214" width="196" height="36" rx="7" fill="#FFFFFF" stroke="#D9C8E0"/>
+        <text x="28" y="230" font-family="Consolas,monospace" font-size="11" font-weight="700" fill="#6B3E9E">очередь</text>
+        <text x="28" y="244" font-size="10" fill="#6E6278">буфер между кодом и диском</text>
+        <text x="232" y="230" font-size="11.5" fill="#2B2433">Запрос не ждёт медленный диск</text>
+        <text x="232" y="245" font-size="10" fill="#6E6278">потеря: переполнение и сброс части записей</text>
+      </g>
+      <g>
+        <rect x="16" y="266" width="196" height="36" rx="7" fill="#FFFFFF" stroke="#D9C8E0"/>
+        <text x="28" y="282" font-family="Consolas,monospace" font-size="11" font-weight="700" fill="#6B3E9E">файл и ротация</text>
+        <text x="28" y="296" font-size="10" fill="#6E6278">предел размера и копии</text>
+        <text x="232" y="282" font-size="11.5" fill="#2B2433">Диск не растёт бесконечно</text>
+        <text x="232" y="297" font-size="10" fill="#6E6278">потеря: старые копии удалены по сроку</text>
+      </g>
+      <g>
+        <rect x="16" y="318" width="196" height="36" rx="7" fill="#EBE0EC" stroke="#C9AFD6"/>
+        <text x="28" y="334" font-family="Consolas,monospace" font-size="11" font-weight="700" fill="#6B3E9E">агент и хранилище</text>
+        <text x="28" y="348" font-size="10" fill="#6E6278">сбор с нескольких машин</text>
+        <text x="232" y="334" font-size="11.5" fill="#2B2433">Поиск по всем площадкам в одном месте</text>
+        <text x="232" y="349" font-size="10" fill="#6E6278">потеря: обрыв сети, неверные часы, лишние права</text>
+      </g>
+    </g>
+
+    <g stroke="#B99BCB" stroke-width="1.4" fill="none">
+      <path d="M114 94v16"/><path d="M114 146v16"/><path d="M114 198v16"/><path d="M114 250v16"/><path d="M114 302v16"/>
+    </g>
+    <g fill="#8E5BC8">
+      <circle cx="114" cy="102" r="2.2"/><circle cx="114" cy="154" r="2.2"/><circle cx="114" cy="206" r="2.2"/><circle cx="114" cy="258" r="2.2"/><circle cx="114" cy="310" r="2.2"/>
+    </g>
+  </svg>
+  <p class="note">Настройка журнала это не одна строка basicConfig, а цепочка решений. Проверять нужно каждый шаг, иначе запись теряется молча.</p>
+</div>
+</body>
+</html>

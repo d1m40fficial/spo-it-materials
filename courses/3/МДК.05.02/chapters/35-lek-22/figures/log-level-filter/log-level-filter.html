@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Фильтр по уровню журнала</title>
+<style>
+  :root { --paper:#FBF7FC; --card:#FFFFFF; --ink:#2B2433; --muted:#6E6278; --rule:#E0D2E6; --accent:#8E5BC8; --soft:#EBE0EC; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .frame { background:var(--paper); border:1px solid var(--rule); border-radius:12px; padding:16px; }
+  .eyebrow { margin:0 0 6px; font:600 10px/1.2 Consolas,monospace; letter-spacing:.14em; text-transform:uppercase; color:var(--accent); }
+  svg { display:block; width:100%; height:auto; }
+  .status { min-height:58px; margin-top:2px; padding:10px 12px; border-radius:9px; background:var(--soft); font-size:12.5px; line-height:1.45; }
+  .status b { color:#6B3E9E; }
+  .controls { display:flex; gap:6px; flex-wrap:wrap; margin-top:10px; }
+  button { font:600 11.5px/1 "Segoe UI",system-ui,sans-serif; padding:8px 9px; border-radius:8px; border:1px solid var(--rule); background:var(--card); color:var(--ink); cursor:pointer; }
+  button:hover { border-color:var(--accent); color:#6B3E9E; }
+  button.on { background:var(--accent); border-color:var(--accent); color:#fff; }
+  .note { margin:9px 2px 0; font:11.5px/1.5 "Segoe UI",system-ui,sans-serif; color:var(--muted); }
+  .row { transition:opacity .15s; }
+  .row.off { opacity:.18; }
+  @media (max-width:560px) { .frame { padding:12px; } .status { font-size:12px; } }
+</style>
+</head>
+<body>
+<div class="frame">
+  <p class="eyebrow">Журнал · уровень</p>
+  <svg viewBox="0 0 680 322" role="img" aria-labelledby="lf-title lf-desc">
+    <title id="lf-title">Порог уровня и записи, которые попадут в журнал</title>
+    <desc id="lf-desc">Семь событий с разными уровнями. Кнопки задают минимальный уровень: записи ниже порога гаснут, а счётчик показывает, сколько строк останется в рабочем журнале.</desc>
+
+    <text x="16" y="24" font-size="16" font-weight="700" fill="#2B2433">Что попадёт в журнал при пороге</text>
+    <text x="16" y="43" font-size="11" fill="#6E6278">в рабочей среде обычно INFO и выше, DEBUG включают на время разбора</text>
+
+    <text x="555" y="24" text-anchor="end" font-family="Consolas,monospace" font-size="10" fill="#6E6278">ПОРОГ</text>
+    <text id="lf-threshold" x="664" y="24" text-anchor="end" font-family="Consolas,monospace" font-size="12" font-weight="700" fill="#8E5BC8">INFO</text>
+
+    <g font-family="Segoe UI,system-ui,sans-serif">
+      <g class="row" data-lvl="10">
+        <rect x="16" y="58" width="648" height="30" rx="6" fill="#FFFFFF" stroke="#E6D9EB"/>
+        <rect x="24" y="64" width="72" height="18" rx="4" fill="#F0EAF2"/>
+        <text x="60" y="77" text-anchor="middle" font-family="Consolas,monospace" font-size="10" font-weight="700" fill="#6E6278">DEBUG</text>
+        <text x="110" y="78" font-size="11.5" fill="#2B2433">значения параметров запроса к складу</text>
+        <text x="650" y="78" text-anchor="end" font-family="Consolas,monospace" font-size="10" fill="#6E6278">только разработчику</text>
+      </g>
+      <g class="row" data-lvl="20">
+        <rect x="16" y="94" width="648" height="30" rx="6" fill="#FFFFFF" stroke="#E6D9EB"/>
+        <rect x="24" y="100" width="72" height="18" rx="4" fill="#EBE0EC"/>
+        <text x="60" y="113" text-anchor="middle" font-family="Consolas,monospace" font-size="10" font-weight="700" fill="#6B3E9E">INFO</text>
+        <text x="110" y="114" font-size="11.5" fill="#2B2433">вход выполнен, пользователь kladovshchik_2</text>
+        <text x="650" y="114" text-anchor="end" font-family="Consolas,monospace" font-size="10" fill="#6E6278">штатное событие</text>
+      </g>
+      <g class="row" data-lvl="20">
+        <rect x="16" y="130" width="648" height="30" rx="6" fill="#FFFFFF" stroke="#E6D9EB"/>
+        <rect x="24" y="136" width="72" height="18" rx="4" fill="#EBE0EC"/>
+        <text x="60" y="149" text-anchor="middle" font-family="Consolas,monospace" font-size="10" font-weight="700" fill="#6B3E9E">INFO</text>
+        <text x="110" y="150" font-size="11.5" fill="#2B2433">отгрузка supply_id=505 создана</text>
+        <text x="650" y="150" text-anchor="end" font-family="Consolas,monospace" font-size="10" fill="#6E6278">штатное событие</text>
+      </g>
+      <g class="row" data-lvl="30">
+        <rect x="16" y="166" width="648" height="30" rx="6" fill="#FFFFFF" stroke="#E6D9EB"/>
+        <rect x="24" y="172" width="72" height="18" rx="4" fill="#F6E7D6"/>
+        <text x="60" y="185" text-anchor="middle" font-family="Consolas,monospace" font-size="10" font-weight="700" fill="#94601F">WARNING</text>
+        <text x="110" y="186" font-size="11.5" fill="#2B2433">таймаут, выполняется повторная попытка</text>
+        <text x="650" y="186" text-anchor="end" font-family="Consolas,monospace" font-size="10" fill="#6E6278">отклонение</text>
+      </g>
+      <g class="row" data-lvl="40">
+        <rect x="16" y="202" width="648" height="30" rx="6" fill="#FFFFFF" stroke="#E6D9EB"/>
+        <rect x="24" y="208" width="72" height="18" rx="4" fill="#F7DDE2"/>
+        <text x="60" y="221" text-anchor="middle" font-family="Consolas,monospace" font-size="10" font-weight="700" fill="#A33B50">ERROR</text>
+        <text x="110" y="222" font-size="11.5" fill="#2B2433">отчёт не выгружен, нет прав</text>
+        <text x="650" y="222" text-anchor="end" font-family="Consolas,monospace" font-size="10" fill="#6E6278">разобрать сегодня</text>
+      </g>
+      <g class="row" data-lvl="40">
+        <rect x="16" y="238" width="648" height="30" rx="6" fill="#FFFFFF" stroke="#E6D9EB"/>
+        <rect x="24" y="244" width="72" height="18" rx="4" fill="#F7DDE2"/>
+        <text x="60" y="257" text-anchor="middle" font-family="Consolas,monospace" font-size="10" font-weight="700" fill="#A33B50">ERROR</text>
+        <text x="110" y="258" font-size="11.5" fill="#2B2433">отгрузка не закрыта после повтора</text>
+        <text x="650" y="258" text-anchor="end" font-family="Consolas,monospace" font-size="10" fill="#6E6278">разобрать сегодня</text>
+      </g>
+      <g class="row" data-lvl="50">
+        <rect x="16" y="274" width="648" height="30" rx="6" fill="#FFFFFF" stroke="#E6D9EB"/>
+        <rect x="24" y="280" width="72" height="18" rx="4" fill="#E7C8CF"/>
+        <text x="60" y="293" text-anchor="middle" font-family="Consolas,monospace" font-size="10" font-weight="700" fill="#7C1F32">CRITICAL</text>
+        <text x="110" y="294" font-size="11.5" fill="#2B2433">база данных недоступна</text>
+        <text x="650" y="294" text-anchor="end" font-family="Consolas,monospace" font-size="10" fill="#6E6278">немедленно</text>
+      </g>
+    </g>
+
+    <text x="16" y="318" font-family="Consolas,monospace" font-size="10" fill="#6E6278">ОСТАЛОСЬ СТРОК: <tspan id="lf-count" font-weight="700" fill="#8E5BC8">6</tspan> ИЗ 7</text>
+  </svg>
+  <div class="status" id="lf-status"></div>
+  <div class="controls" id="lf-buttons">
+    <button data-lvl="10">DEBUG</button>
+    <button data-lvl="20" class="on">INFO</button>
+    <button data-lvl="30">WARNING</button>
+    <button data-lvl="40">ERROR</button>
+    <button data-lvl="50">CRITICAL</button>
+  </div>
+  <p class="note">Порог не делает запись важной или неважной. Он отвечает только на вопрос, кто должен увидеть событие в рабочем журнале.</p>
+</div>
+<script>
+(function () {
+  var names = {10: 'DEBUG', 20: 'INFO', 30: 'WARNING', 40: 'ERROR', 50: 'CRITICAL'};
+  var texts = {
+    10: '<b>Порог DEBUG.</b> В журнал попадут все семь записей. Такой режим включают на короткое время: объём вырастает в несколько раз, а среди подробностей теряются важные события.',
+    20: '<b>Порог INFO.</b> Останутся шесть записей: исчезнут значения параметров. Это обычный рабочий режим, в котором видны штатные операции, отклонения и ошибки.',
+    30: '<b>Порог WARNING.</b> Останутся четыре записи. Штатные входы и отгрузки исчезнут, поэтому по журналу нельзя будет доказать, что операция вообще была.',
+    40: '<b>Порог ERROR.</b> Останутся три записи. Видно только неудачные операции, но причина скрыта: таймаут перед ошибкой уже не попал в журнал.',
+    50: '<b>Порог CRITICAL.</b> Останется одна запись об отказе базы. Для дежурного это сигнал тревоги, но восстановить ход запроса по такому журналу нельзя.'
+  };
+  var rows = document.querySelectorAll('.row');
+  var buttons = document.querySelectorAll('#lf-buttons button');
+  var status = document.getElementById('lf-status');
+  var count = document.getElementById('lf-count');
+  var threshold = document.getElementById('lf-threshold');
+
+  function apply(level) {
+    var visible = 0;
+    rows.forEach(function (r) {
+      var on = Number(r.dataset.lvl) >= Number(level);
+      r.classList.toggle('off', !on);
+      if (on) visible += 1;
+    });
+    buttons.forEach(function (b) { b.classList.toggle('on', Number(b.dataset.lvl) === Number(level)); });
+    threshold.textContent = names[level];
+    count.textContent = String(visible);
+    status.innerHTML = texts[level];
+  }
+  buttons.forEach(function (b) { b.addEventListener('click', function () { apply(Number(b.dataset.lvl)); }); });
+  apply(20);
+})();
+</script>
+</body>
+</html>

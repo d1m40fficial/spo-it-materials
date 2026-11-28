@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Путь отладки</title>
+<style>
+  :root { --paper:#FBF7FC; --card:#FFFFFF; --ink:#2B2433; --muted:#6E6278; --rule:#E0D2E6; --accent:#8E5BC8; --soft:#EBE0EC; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .frame { background:var(--paper); border:1px solid var(--rule); border-radius:12px; padding:16px; }
+  .eyebrow { margin:0 0 6px; font:600 10px/1.2 Consolas,monospace; letter-spacing:.14em; text-transform:uppercase; color:var(--accent); }
+  svg { display:block; width:100%; height:auto; }
+  .note { margin:10px 2px 0; font:12px/1.5 "Segoe UI",system-ui,sans-serif; color:var(--muted); }
+</style>
+</head>
+<body>
+<div class="frame">
+  <p class="eyebrow">Отладка · порядок</p>
+  <svg viewBox="0 0 680 304" role="img" aria-labelledby="dp-title dp-desc">
+    <title id="dp-title">Порядок отладки и возврат к наблюдению</title>
+    <desc id="dp-desc">Пять шагов: воспроизвести, наблюдать, сформулировать гипотезу, проверить, исправить. Затем закрепить тестом. Если гипотеза не подтвердилась, возврат к наблюдению.</desc>
+
+    <text x="16" y="24" font-size="16" font-weight="700" fill="#2B2433">Правка стоит предпоследней</text>
+    <text x="16" y="43" font-size="11" fill="#6E6278">сначала факты, потом изменение, потом закрепление результата</text>
+
+    <g font-family="Segoe UI,system-ui,sans-serif" font-size="10.5">
+      <g>
+        <rect x="16" y="60" width="120" height="64" rx="8" fill="#FFFFFF" stroke="#C9AFD6"/>
+        <text x="28" y="82" font-family="Consolas,monospace" font-size="9" fill="#8E5BC8">01</text>
+        <text x="28" y="98" font-size="11.5" font-weight="700" fill="#2B2433">воспроизвести</text>
+        <text x="28" y="114" fill="#6E6278">вход и команда</text>
+      </g>
+      <g>
+        <rect x="148" y="60" width="120" height="64" rx="8" fill="#EBE0EC" stroke="#8E5BC8"/>
+        <text x="160" y="82" font-family="Consolas,monospace" font-size="9" fill="#8E5BC8">02</text>
+        <text x="160" y="98" font-size="11.5" font-weight="700" fill="#2B2433">наблюдать</text>
+        <text x="160" y="114" fill="#6E6278">значения и стек</text>
+      </g>
+      <g>
+        <rect x="280" y="60" width="120" height="64" rx="8" fill="#FFFFFF" stroke="#C9AFD6"/>
+        <text x="292" y="82" font-family="Consolas,monospace" font-size="9" fill="#8E5BC8">03</text>
+        <text x="292" y="98" font-size="11.5" font-weight="700" fill="#2B2433">гипотеза</text>
+        <text x="292" y="114" fill="#6E6278">что проверить</text>
+      </g>
+      <g>
+        <rect x="412" y="60" width="120" height="64" rx="8" fill="#FFFFFF" stroke="#C9AFD6"/>
+        <text x="424" y="82" font-family="Consolas,monospace" font-size="9" fill="#8E5BC8">04</text>
+        <text x="424" y="98" font-size="11.5" font-weight="700" fill="#2B2433">проверить</text>
+        <text x="424" y="114" fill="#6E6278">одним наблюдением</text>
+      </g>
+      <g>
+        <rect x="544" y="60" width="120" height="64" rx="8" fill="#FFFFFF" stroke="#C9AFD6"/>
+        <text x="556" y="82" font-family="Consolas,monospace" font-size="9" fill="#8E5BC8">05</text>
+        <text x="556" y="98" font-size="11.5" font-weight="700" fill="#2B2433">исправить</text>
+        <text x="556" y="114" fill="#6E6278">изменить причину</text>
+      </g>
+    </g>
+
+    <g stroke="#8E5BC8" stroke-width="1.5" fill="none">
+      <path d="M136 92h12"/><path d="M268 92h12"/><path d="M400 92h12"/><path d="M532 92h12"/>
+    </g>
+    <g fill="#8E5BC8">
+      <path d="M148 92l-6 -3v6z"/><path d="M280 92l-6 -3v6z"/><path d="M412 92l-6 -3v6z"/><path d="M544 92l-6 -3v6z"/>
+    </g>
+
+    <path d="M472 124v34H208v-34" stroke="#B08BC4" stroke-width="1.4" stroke-dasharray="5 4" fill="none"/>
+    <path d="M208 124l-3 6h6z" fill="#B08BC4"/>
+    <text x="340" y="152" text-anchor="middle" font-family="Consolas,monospace" font-size="9" fill="#7A4AA8">ГИПОТЕЗА НЕ ПОДТВЕРДИЛАСЬ: ВЕРНУТЬСЯ К ФАКТАМ</text>
+
+    <path d="M604 124v36" stroke="#8E5BC8" stroke-width="1.5" fill="none"/>
+    <path d="M604 168l-3 -8h6z" fill="#8E5BC8"/>
+    <rect x="544" y="176" width="120" height="50" rx="8" fill="#EBE0EC" stroke="#8E5BC8"/>
+    <text x="556" y="196" font-family="Consolas,monospace" font-size="9" fill="#8E5BC8">06</text>
+    <text x="556" y="211" font-size="11" font-weight="700" fill="#2B2433">закрепить</text>
+    <text x="556" y="224" font-size="10" fill="#6E6278">тест падал до правки</text>
+
+    <rect x="16" y="176" width="500" height="50" rx="8" fill="#FFFFFF" stroke="#E0D2E6"/>
+    <text x="28" y="196" font-size="11" font-weight="700" fill="#2B2433">Что считается наблюдением</text>
+    <text x="28" y="212" font-size="10.5" fill="#6E6278">значение переменной, кадр стека, запись журнала, ответ API, версия сборки</text>
+
+    <text x="16" y="252" font-family="Consolas,monospace" font-size="9.5" fill="#6E6278">НАБЛЮДЕНИЕ ОТВЕЧАЕТ НА ВОПРОС, А НЕ ПОДТВЕРЖДАЕТ ДОГАДКУ</text>
+    <text x="16" y="270" font-size="11" fill="#2B2433">Гипотеза «что-то не так с данными» не проверяется. Гипотеза «цикл начинается с единицы»</text>
+    <text x="16" y="286" font-size="11" fill="#2B2433">проверяется одним взглядом на переменную «i», и это делает её полезной.</text>
+  </svg>
+  <p class="note">Возврат к наблюдению не является неудачей. Он означает, что одна версия отброшена и пространство поиска сузилось.</p>
+</div>
+</body>
+</html>

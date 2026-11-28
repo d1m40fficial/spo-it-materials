@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Дерево исключений Python</title>
+<style>
+  :root { --paper:#F7F0FA; --card:#FFFFFF; --ink:#2B2333; --muted:#6E6179; --rule:#DCCBE6; --accent:#8E5BC8; --soft:#EBE0EC; --deep:#5B2E86; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .frame { background:var(--paper); border:1px solid var(--rule); border-radius:12px; padding:16px; }
+  .eyebrow { margin:0 0 6px; font:600 10.5px/1.2 Consolas,monospace; letter-spacing:.12em; text-transform:uppercase; color:var(--accent); }
+  svg { display:block; width:100%; height:auto; }
+  .note { margin:10px 2px 0; font:12px/1.5 "Segoe UI",system-ui,sans-serif; color:var(--muted); }
+</style>
+</head>
+<body>
+<div class="frame">
+  <p class="eyebrow">Исключения · иерархия Python</p>
+  <svg viewBox="0 0 680 470" role="img" aria-labelledby="et-title et-desc">
+    <title id="et-title">Дерево исключений Python</title>
+    <desc id="et-desc">BaseException делится на Exception, KeyboardInterrupt, SystemExit и GeneratorExit. Внутри Exception находятся ValueError, TypeError, LookupError и OSError с их наследниками.</desc>
+
+    <g font-family="Segoe UI,system-ui,sans-serif">
+      <rect x="40" y="22" width="220" height="28" rx="6" fill="#EBE0EC" stroke="#8E5BC8" stroke-width="1.6"/>
+      <text x="52" y="41" font-size="13" font-weight="700" fill="#2B2333">BaseException</text>
+
+      <rect x="76" y="62" width="200" height="26" rx="5" fill="#FFFFFF" stroke="#C9B6D6"/>
+      <text x="88" y="80" font-size="12.5" font-weight="600" fill="#2B2333">Exception</text>
+
+      <rect x="120" y="100" width="180" height="26" rx="5" fill="#FFFFFF" stroke="#C9B6D6"/>
+      <text x="132" y="118" font-size="12.5" fill="#2B2333">ValueError</text>
+      <rect x="120" y="130" width="180" height="26" rx="5" fill="#FFFFFF" stroke="#C9B6D6"/>
+      <text x="132" y="148" font-size="12.5" fill="#2B2333">TypeError</text>
+      <rect x="120" y="160" width="180" height="26" rx="5" fill="#FFFFFF" stroke="#C9B6D6"/>
+      <text x="132" y="178" font-size="12.5" fill="#2B2333">LookupError</text>
+      <rect x="164" y="198" width="176" height="26" rx="5" fill="#FFFFFF" stroke="#C9B6D6"/>
+      <text x="176" y="216" font-size="12.5" fill="#2B2333">KeyError</text>
+      <rect x="164" y="228" width="176" height="26" rx="5" fill="#FFFFFF" stroke="#C9B6D6"/>
+      <text x="176" y="246" font-size="12.5" fill="#2B2333">IndexError</text>
+
+      <rect x="120" y="258" width="180" height="26" rx="5" fill="#FFFFFF" stroke="#C9B6D6"/>
+      <text x="132" y="276" font-size="12.5" fill="#2B2333">OSError</text>
+      <rect x="164" y="296" width="196" height="26" rx="5" fill="#FFFFFF" stroke="#C9B6D6"/>
+      <text x="176" y="314" font-size="12.5" fill="#2B2333">FileNotFoundError</text>
+      <rect x="164" y="326" width="196" height="26" rx="5" fill="#FFFFFF" stroke="#C9B6D6"/>
+      <text x="176" y="344" font-size="12.5" fill="#2B2333">PermissionError</text>
+
+      <rect x="76" y="364" width="200" height="26" rx="5" fill="#F1E8F5" stroke="#C9B6D6" stroke-dasharray="4 3"/>
+      <text x="88" y="382" font-size="12.5" fill="#5B2E86">KeyboardInterrupt</text>
+      <rect x="76" y="394" width="200" height="26" rx="5" fill="#F1E8F5" stroke="#C9B6D6" stroke-dasharray="4 3"/>
+      <text x="88" y="412" font-size="12.5" fill="#5B2E86">SystemExit</text>
+      <rect x="76" y="424" width="200" height="26" rx="5" fill="#F1E8F5" stroke="#C9B6D6" stroke-dasharray="4 3"/>
+      <text x="88" y="442" font-size="12.5" fill="#5B2E86">GeneratorExit</text>
+
+      <path d="M64 50 V74 H76 M64 50 V376 H76 M64 50 V406 H76 M64 50 V436 H76" fill="none" stroke="#C9B6D6" stroke-width="1.4"/>
+      <path d="M100 88 V112 H120 M100 88 V142 H120 M100 88 V172 H120 M100 88 V270 H120" fill="none" stroke="#C9B6D6" stroke-width="1.4"/>
+      <path d="M144 186 V210 H164 M144 186 V238 H164" fill="none" stroke="#C9B6D6" stroke-width="1.4"/>
+      <path d="M144 284 V308 H164 M144 284 V338 H164" fill="none" stroke="#C9B6D6" stroke-width="1.4"/>
+
+      <text x="404" y="41" font-size="11.5" fill="#6E6179">ловят целиком только в самом верху</text>
+      <text x="404" y="80" font-size="11.5" fill="#6E6179">база прикладных ошибок</text>
+      <text x="404" y="118" font-size="11.5" fill="#6E6179">значение не подходит по смыслу или типу</text>
+      <text x="404" y="178" font-size="11.5" fill="#6E6179">ошибка поиска в коллекции</text>
+      <text x="404" y="216" font-size="11.5" fill="#6E6179">нет ключа в словаре</text>
+      <text x="404" y="246" font-size="11.5" fill="#6E6179">индекс вышел за границы</text>
+      <text x="404" y="276" font-size="11.5" fill="#6E6179">ввод-вывод, файлы, сеть, права</text>
+      <text x="404" y="314" font-size="11.5" fill="#6E6179">файл не найден</text>
+      <text x="404" y="344" font-size="11.5" fill="#6E6179">нет доступа к файлу или папке</text>
+      <text x="404" y="382" font-size="11.5" fill="#5B2E86">Ctrl+C, не глотать широким except</text>
+      <text x="404" y="412" font-size="11.5" fill="#5B2E86">штатное завершение процесса</text>
+      <text x="404" y="442" font-size="11.5" fill="#5B2E86">остановка генератора</text>
+
+      <text x="40" y="462" font-family="Consolas,monospace" font-size="9.5" fill="#6E6179">СНАЧАЛА КОНКРЕТНЫЙ ТИП, ПОТОМ ОБЩИЙ ПРЕДОК</text>
+    </g>
+  </svg>
+  <p class="note">ValueError из начала лекции находится в ветке Exception. KeyboardInterrupt и SystemExit намеренно вынесены за её пределы.</p>
+</div>
+</body>
+</html>

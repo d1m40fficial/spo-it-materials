@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Круг жизни документа</title>
+<style>
+  :root { --paper:#FAF7F6; --card:#FFFDFC; --ink:#2A2430; --muted:#6B6272; --rule:#E6D9EC; --accent:#8E5BC8; --soft:#EBE0EC; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .frame { background:var(--paper); border:1px solid var(--rule); border-radius:12px; padding:16px; }
+  .eyebrow { margin:0 0 6px; font:600 10px/1.2 Consolas,monospace; letter-spacing:.14em; text-transform:uppercase; color:var(--accent); }
+  svg { display:block; width:100%; height:auto; }
+  .n { fill:var(--card); stroke:var(--rule); stroke-width:1.3; }
+  .hot { fill:#F4EBF8; stroke:var(--accent); stroke-width:1.6; }
+  .t { font-size:10.5px; font-weight:700; fill:var(--ink); }
+  .s { font-size:9px; fill:var(--muted); }
+  .ar { stroke:var(--accent); stroke-width:1.5; fill:none; }
+  .lbl { font-size:9px; fill:#5F3A85; font-weight:600; }
+  .cap { font-size:9.5px; fill:var(--muted); }
+  @media (max-width:560px) { .frame { padding:12px; } }
+</style>
+</head>
+<body>
+<div class="frame">
+  <p class="eyebrow">Документ меняется вместе с кодом</p>
+  <svg viewBox="0 0 680 288" role="img" aria-labelledby="dl-title dl-desc">
+    <title id="dl-title">Круг жизни документа</title>
+    <desc id="dl-desc">Пять шагов: изменение кода, правка документа, ревью, проверка примеров, выпуск. Стрелка возврата идёт от выпуска через обращение поддержки к изменению кода.</desc>
+
+    <rect class="n" x="16" y="34" width="118" height="60" rx="8"/>
+    <text class="t" x="28" y="56">Изменение</text>
+    <text class="t" x="28" y="72">кода</text>
+    <text class="s" x="28" y="87">поведение меняется</text>
+
+    <rect class="hot" x="152" y="34" width="118" height="60" rx="8"/>
+    <text class="t" x="164" y="56">Правка</text>
+    <text class="t" x="164" y="72">документа</text>
+    <text class="s" x="164" y="87">в том же изменении</text>
+
+    <rect class="n" x="288" y="34" width="118" height="60" rx="8"/>
+    <text class="t" x="300" y="56">Ревью</text>
+    <text class="t" x="300" y="72">изменения</text>
+    <text class="s" x="300" y="87">рецензент видит связь</text>
+
+    <rect class="n" x="424" y="34" width="118" height="60" rx="8"/>
+    <text class="t" x="436" y="56">Проверка</text>
+    <text class="t" x="436" y="72">примеров</text>
+    <text class="s" x="436" y="87">запросы и ссылки</text>
+
+    <rect class="n" x="560" y="34" width="104" height="60" rx="8"/>
+    <text class="t" x="572" y="56">Выпуск</text>
+    <text class="t" x="572" y="72">версии</text>
+    <text class="s" x="572" y="87">журнал и тег</text>
+
+    <path class="ar" d="M134 64 H148 M270 64 H284 M406 64 H420 M542 64 H556"/>
+    <path class="ar" d="M144 59 l6 5 -6 5 M280 59 l6 5 -6 5 M416 59 l6 5 -6 5 M552 59 l6 5 -6 5"/>
+
+    <path class="ar" d="M612 94 V168 H75 V186"/>
+    <path class="ar" d="M70 180 l5 8 5 -8"/>
+    <text class="lbl" x="292" y="140">обращение пользователя</text>
+    <text class="s" x="292" y="156">вопрос поддержки показывает пробел в тексте</text>
+
+    <rect class="hot" x="16" y="188" width="648" height="42" rx="8"/>
+    <text class="t" x="30" y="206">Правка документа начинается с обращения, а не с желания переписать всё</text>
+    <text class="s" x="30" y="221">вопрос поддержки, устаревший пример и неверный код ошибки становятся задачей</text>
+
+    <text class="cap" x="16" y="254">Документация и код меняются одним изменением, иначе расхождение замечают только пользователи.</text>
+    <text class="cap" x="16" y="270">Долг документа закрывают небольшими правками при каждом выпуске, а не генеральной переписью раз в год.</text>
+  </svg>
+</div>
+</body>
+</html>

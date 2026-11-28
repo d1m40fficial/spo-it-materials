@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Этапы жизненного цикла и артефакты</title>
+<style>
+  :root { --paper:#FBF8FC; --card:#FFFFFF; --ink:#2A2430; --muted:#6B6175; --rule:#E0D3E6; --accent:#8E5BC8; --soft:#EBE0EC; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .frame { background:var(--paper); border:1px solid var(--rule); border-radius:12px; padding:14px; }
+  .eyebrow { margin:0 0 6px; font:600 10px/1.2 Consolas,monospace; letter-spacing:.14em; text-transform:uppercase; color:var(--accent); }
+  svg { display:block; width:100%; height:auto; }
+  .note { margin:10px 2px 0; font:12px/1.5 "Segoe UI",system-ui,sans-serif; color:var(--muted); }
+  @media (max-width:560px) { .frame { padding:10px; } }
+</style>
+</head>
+<body>
+<div class="frame">
+  <p class="eyebrow">Разработка кода · жизненный цикл</p>
+  <svg viewBox="0 0 680 470" role="img" aria-labelledby="lc-title lc-desc">
+    <title id="lc-title">Шесть этапов жизненного цикла и артефакт каждого</title>
+    <desc id="lc-desc">Обследование, проектирование, разработка, внедрение, эксплуатация и вывод из эксплуатации. Справа артефакт, который этап передаёт дальше. Внизу стрелка возврата дефекта к месту возникновения.</desc>
+
+    <g font-family="Segoe UI,system-ui,sans-serif">
+      <text x="14" y="20" font-family="Consolas,monospace" font-size="9.5" fill="#6B6175">ЭТАП</text>
+      <text x="310" y="20" font-family="Consolas,monospace" font-size="9.5" fill="#6B6175">ЧТО ПЕРЕДАЁТ ДАЛЬШЕ</text>
+
+      <g>
+        <circle cx="30" cy="54" r="13" fill="#EBE0EC" stroke="#8E5BC8" stroke-width="1.5"/>
+        <text x="30" y="58" text-anchor="middle" font-size="10" font-weight="700" fill="#8E5BC8">01</text>
+        <rect x="54" y="34" width="232" height="40" rx="7" fill="#FFFFFF" stroke="#D9C9E2"/>
+        <text x="66" y="51" font-size="13" font-weight="600" fill="#2A2430">Обследование</text>
+        <text x="66" y="66" font-size="10.5" fill="#6B6175">как склад работает сейчас</text>
+        <text x="302" y="52" font-size="11" fill="#2A2430">отчёт, карта процессов,</text>
+        <text x="302" y="67" font-size="11" fill="#2A2430">перечень проблем</text>
+      </g>
+
+      <g>
+        <circle cx="30" cy="110" r="13" fill="#EBE0EC" stroke="#8E5BC8" stroke-width="1.5"/>
+        <text x="30" y="114" text-anchor="middle" font-size="10" font-weight="700" fill="#8E5BC8">02</text>
+        <rect x="54" y="90" width="232" height="40" rx="7" fill="#FFFFFF" stroke="#D9C9E2"/>
+        <text x="66" y="107" font-size="13" font-weight="600" fill="#2A2430">Проектирование</text>
+        <text x="66" y="122" font-size="10.5" fill="#6B6175">модель данных и границы слоёв</text>
+        <text x="302" y="108" font-size="11" fill="#2A2430">схема базы,</text>
+        <text x="302" y="123" font-size="11" fill="#2A2430">схема слоёв</text>
+      </g>
+
+      <g>
+        <rect x="14" y="146" width="652" height="52" rx="9" fill="#EBE0EC" stroke="#8E5BC8" stroke-width="1.8"/>
+        <circle cx="30" cy="172" r="13" fill="#8E5BC8"/>
+        <text x="30" y="176" text-anchor="middle" font-size="10" font-weight="700" fill="#FFFFFF">03</text>
+        <text x="66" y="169" font-size="13" font-weight="700" fill="#2A2430">Разработка</text>
+        <text x="66" y="186" font-size="10.5" fill="#5A4A66">код, тесты и сборка</text>
+        <text x="302" y="169" font-size="11" font-weight="600" fill="#8E5BC8">код, тесты,</text>
+        <text x="302" y="186" font-size="11" font-weight="600" fill="#8E5BC8">собранная версия</text>
+      </g>
+
+      <g>
+        <circle cx="30" cy="228" r="13" fill="#EBE0EC" stroke="#8E5BC8" stroke-width="1.5"/>
+        <text x="30" y="232" text-anchor="middle" font-size="10" font-weight="700" fill="#8E5BC8">04</text>
+        <rect x="54" y="208" width="232" height="40" rx="7" fill="#FFFFFF" stroke="#D9C9E2"/>
+        <text x="66" y="225" font-size="13" font-weight="600" fill="#2A2430">Внедрение</text>
+        <text x="66" y="240" font-size="10.5" fill="#6B6175">данные, обучение, запуск</text>
+        <text x="302" y="226" font-size="11" fill="#2A2430">обученные пользователи,</text>
+        <text x="302" y="241" font-size="11" fill="#2A2430">перенесённые данные</text>
+      </g>
+
+      <g>
+        <circle cx="30" cy="284" r="13" fill="#EBE0EC" stroke="#8E5BC8" stroke-width="1.5"/>
+        <text x="30" y="288" text-anchor="middle" font-size="10" font-weight="700" fill="#8E5BC8">05</text>
+        <rect x="54" y="264" width="232" height="40" rx="7" fill="#FFFFFF" stroke="#D9C9E2"/>
+        <text x="66" y="281" font-size="13" font-weight="600" fill="#2A2430">Эксплуатация</text>
+        <text x="66" y="296" font-size="10.5" fill="#6B6175">работа, поддержка, изменения</text>
+        <text x="302" y="282" font-size="11" fill="#2A2430">исправления,</text>
+        <text x="302" y="297" font-size="11" fill="#2A2430">новые версии</text>
+      </g>
+
+      <g>
+        <circle cx="30" cy="340" r="13" fill="#EBE0EC" stroke="#8E5BC8" stroke-width="1.5"/>
+        <text x="30" y="344" text-anchor="middle" font-size="10" font-weight="700" fill="#8E5BC8">06</text>
+        <rect x="54" y="320" width="232" height="40" rx="7" fill="#FFFFFF" stroke="#D9C9E2"/>
+        <text x="66" y="337" font-size="13" font-weight="600" fill="#2A2430">Вывод из эксплуатации</text>
+        <text x="66" y="352" font-size="10.5" fill="#6B6175">закрытие и перенос данных</text>
+        <text x="302" y="338" font-size="11" fill="#2A2430">архив, акт закрытия,</text>
+        <text x="302" y="353" font-size="11" fill="#2A2430">переданные данные</text>
+      </g>
+
+      <line x1="30" y1="368" x2="30" y2="392" stroke="#BFA5D0" stroke-width="2" stroke-dasharray="5 4"/>
+      <path d="M30 392 C30 420 240 424 300 404" fill="none" stroke="#8E5BC8" stroke-width="2" stroke-dasharray="6 4"/>
+      <path d="M292 408 L302 403 L300 413" fill="none" stroke="#8E5BC8" stroke-width="2"/>
+      <text x="318" y="404" font-size="11" fill="#8E5BC8">дефект возвращается туда, где он возник,</text>
+      <text x="318" y="420" font-size="11" fill="#8E5BC8">а не туда, где его заметили</text>
+
+      <text x="14" y="452" font-family="Consolas,monospace" font-size="9.5" fill="#6B6175">КОД ЗАНИМАЕТ ОДИН ЭТАП, А ЭКСПЛУАТАЦИЯ ДЛИТСЯ ГОДАМИ</text>
+    </g>
+  </svg>
+  <p class="note">Слева этап, справа его результат для следующего шага. Пунктир показывает, что сопровождение возвращает изменения в требования, проект и код.</p>
+</div>
+</body>
+</html>

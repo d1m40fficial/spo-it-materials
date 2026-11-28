@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Схема ветвления учебного проекта</title>
+<style>
+  :root { --paper:#EBE0EC; --card:#FFFDFF; --ink:#2A2430; --muted:#6B5F72; --rule:#D6C4DB; --accent:#8E5BC8; --soft:#F3EAF6; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .frame { background:var(--paper); border:1px solid var(--rule); border-radius:12px; padding:16px; }
+  .eyebrow { margin:0 0 6px; font:600 10px/1.2 Consolas,monospace; letter-spacing:.14em; text-transform:uppercase; color:var(--accent); }
+  svg { display:block; width:100%; height:auto; }
+  .scene { display:none; }
+  .scene.on { display:block; }
+  .status { min-height:66px; margin-top:8px; padding:10px 12px; border-radius:9px; background:var(--soft); font-size:13px; line-height:1.45; }
+  .status b { color:var(--accent); }
+  .controls { display:flex; gap:6px; flex-wrap:wrap; margin-top:10px; }
+  button { font:600 11.5px/1.1 "Segoe UI",system-ui,sans-serif; padding:8px 10px; border-radius:8px; border:1px solid var(--rule); background:var(--card); color:var(--ink); cursor:pointer; }
+  button:hover { border-color:var(--accent); color:var(--accent); }
+  button.on { background:var(--accent); border-color:var(--accent); color:#fff; }
+  .note { margin:9px 2px 0; font:11.5px/1.5 "Segoe UI",system-ui,sans-serif; color:var(--muted); }
+  @media (max-width:560px) { .frame { padding:12px; } .status { font-size:12.5px; } }
+</style>
+</head>
+<body>
+<div class="frame">
+  <p class="eyebrow">Git · схема веток</p>
+  <svg viewBox="0 0 680 300" role="img" aria-labelledby="bf-title bf-desc">
+    <title id="bf-title">Ветки учебного проекта для задачи, исправления и релиза</title>
+    <desc id="bf-desc">Три сценария: обычная задача в feature, срочное исправление в fix от тега, подготовка версии в release. Переключите сценарий кнопкой.</desc>
+
+    <g class="scene on" data-scene="feature">
+      <text x="16" y="20" font-family="Consolas,monospace" font-size="10" fill="#6B5F72">ЗАДАЧА: ВЕТКА ЖИВЁТ ДО СЛИЯНИЯ</text>
+      <line x1="40" y1="210" x2="640" y2="210" stroke="#D6C4DB" stroke-width="2" stroke-dasharray="5 4"/>
+      <line x1="40" y1="100" x2="640" y2="100" stroke="#D6C4DB" stroke-width="2" stroke-dasharray="5 4"/>
+      <text x="16" y="222" font-family="Consolas,monospace" font-size="10" fill="#8E5BC8">MAIN</text>
+      <text x="16" y="112" font-family="Consolas,monospace" font-size="10" fill="#8E5BC8">FEATURE</text>
+
+      <path d="M70 210 L572 210" stroke="#B79AC2" stroke-width="2.5" fill="none"/>
+      <path d="M198 210 C238 210 238 100 296 100" stroke="#B79AC2" stroke-width="2.5" fill="none"/>
+      <path d="M312 100 L444 100" stroke="#B79AC2" stroke-width="2.5" fill="none"/>
+      <path d="M444 100 C510 100 510 210 552 210" stroke="#B79AC2" stroke-width="2.5" fill="none"/>
+
+      <g font-family="Consolas,monospace" font-size="11" font-weight="700">
+        <circle cx="70" cy="210" r="15" fill="#FFFDFF" stroke="#B79AC2" stroke-width="2"/><text x="70" y="214" text-anchor="middle" fill="#2A2430">M1</text>
+        <circle cx="198" cy="210" r="15" fill="#FFFDFF" stroke="#B79AC2" stroke-width="2"/><text x="198" y="214" text-anchor="middle" fill="#2A2430">M2</text>
+        <circle cx="304" cy="100" r="15" fill="#FFFDFF" stroke="#8E5BC8" stroke-width="2.4"/><text x="304" y="104" text-anchor="middle" fill="#8E5BC8">F1</text>
+        <circle cx="452" cy="100" r="15" fill="#FFFDFF" stroke="#8E5BC8" stroke-width="2.4"/><text x="452" y="104" text-anchor="middle" fill="#8E5BC8">F2</text>
+        <circle cx="560" cy="210" r="17" fill="#8E5BC8" stroke="#8E5BC8" stroke-width="2"/><text x="560" y="214" text-anchor="middle" fill="#FFFFFF">M3</text>
+      </g>
+
+      <g font-family="Segoe UI,system-ui,sans-serif" font-size="10.5" fill="#2A2430">
+        <text x="48" y="245">рабочая версия</text>
+        <text x="160" y="245">свежая main</text>
+        <text x="250" y="70">создание ветки</text>
+        <text x="404" y="70">коммиты задачи</text>
+        <text x="508" y="245">слияние после проверки</text>
+      </g>
+      <text x="16" y="280" font-family="Segoe UI,system-ui,sans-serif" font-size="11" fill="#6B5F72">Защита main: прямая отправка запрещена, нужен запрос на слияние и зелёные проверки.</text>
+    </g>
+
+    <g class="scene" data-scene="fix">
+      <text x="16" y="20" font-family="Consolas,monospace" font-size="10" fill="#6B5F72">ИСПРАВЛЕНИЕ: ВЕТКА ОТ ПОСЛЕДНЕГО ТЕГА</text>
+      <line x1="40" y1="210" x2="640" y2="210" stroke="#D6C4DB" stroke-width="2" stroke-dasharray="5 4"/>
+      <line x1="40" y1="100" x2="640" y2="100" stroke="#D6C4DB" stroke-width="2" stroke-dasharray="5 4"/>
+      <text x="16" y="222" font-family="Consolas,monospace" font-size="10" fill="#8E5BC8">MAIN</text>
+      <text x="16" y="112" font-family="Consolas,monospace" font-size="10" fill="#8E5BC8">FIX</text>
+
+      <path d="M70 210 L572 210" stroke="#B79AC2" stroke-width="2.5" fill="none"/>
+      <path d="M198 210 C238 210 238 100 296 100" stroke="#B79AC2" stroke-width="2.5" fill="none"/>
+      <path d="M312 100 L420 100" stroke="#B79AC2" stroke-width="2.5" fill="none"/>
+      <path d="M420 100 C490 100 490 210 544 210" stroke="#B79AC2" stroke-width="2.5" fill="none"/>
+
+      <g font-family="Consolas,monospace" font-size="11" font-weight="700">
+        <circle cx="70" cy="210" r="15" fill="#FFFDFF" stroke="#B79AC2" stroke-width="2"/><text x="70" y="214" text-anchor="middle" fill="#2A2430">M1</text>
+        <circle cx="198" cy="210" r="15" fill="#FFFDFF" stroke="#B79AC2" stroke-width="2"/><text x="198" y="214" text-anchor="middle" fill="#2A2430">M2</text>
+        <circle cx="304" cy="100" r="15" fill="#FFFDFF" stroke="#8E5BC8" stroke-width="2.4"/><text x="304" y="104" text-anchor="middle" fill="#8E5BC8">X1</text>
+        <circle cx="552" cy="210" r="17" fill="#8E5BC8" stroke="#8E5BC8" stroke-width="2"/><text x="552" y="214" text-anchor="middle" fill="#FFFFFF">M3</text>
+      </g>
+
+      <rect x="176" y="230" width="46" height="20" rx="6" fill="#FFFDFF" stroke="#8E5BC8"/>
+      <text x="199" y="244" text-anchor="middle" font-family="Consolas,monospace" font-size="10" fill="#8E5BC8">v1.0</text>
+      <g font-family="Segoe UI,system-ui,sans-serif" font-size="10.5" fill="#2A2430">
+        <text x="252" y="70">ветка от тега</text>
+        <text x="392" y="70">минимальная правка</text>
+        <text x="500" y="245">возврат в main</text>
+      </g>
+      <text x="16" y="280" font-family="Segoe UI,system-ui,sans-serif" font-size="11" fill="#6B5F72">Исправление не ждёт конца задачи: ветка создаётся от выпущенной версии и сливается первой.</text>
+    </g>
+
+    <g class="scene" data-scene="release">
+      <text x="16" y="20" font-family="Consolas,monospace" font-size="10" fill="#6B5F72">РЕЛИЗ: ВЕРСИЮ ГОТОВЯТ ОТДЕЛЬНО</text>
+      <line x1="40" y1="220" x2="640" y2="220" stroke="#D6C4DB" stroke-width="2" stroke-dasharray="5 4"/>
+      <line x1="40" y1="120" x2="640" y2="120" stroke="#D6C4DB" stroke-width="2" stroke-dasharray="5 4"/>
+      <text x="16" y="232" font-family="Consolas,monospace" font-size="10" fill="#8E5BC8">MAIN</text>
+      <text x="16" y="132" font-family="Consolas,monospace" font-size="10" fill="#8E5BC8">RELEASE</text>
+
+      <path d="M70 220 L576 220" stroke="#B79AC2" stroke-width="2.5" fill="none"/>
+      <path d="M198 220 C238 220 238 120 300 120" stroke="#B79AC2" stroke-width="2.5" fill="none"/>
+      <path d="M316 120 L420 120" stroke="#B79AC2" stroke-width="2.5" fill="none"/>
+      <path d="M436 120 L500 120" stroke="#B79AC2" stroke-width="2.5" fill="none"/>
+      <path d="M500 120 C540 120 540 220 576 220" stroke="#B79AC2" stroke-width="2.5" fill="none"/>
+
+      <g font-family="Consolas,monospace" font-size="11" font-weight="700">
+        <circle cx="70" cy="220" r="15" fill="#FFFDFF" stroke="#B79AC2" stroke-width="2"/><text x="70" y="224" text-anchor="middle" fill="#2A2430">M1</text>
+        <circle cx="198" cy="220" r="15" fill="#FFFDFF" stroke="#B79AC2" stroke-width="2"/><text x="198" y="224" text-anchor="middle" fill="#2A2430">M2</text>
+        <circle cx="308" cy="120" r="15" fill="#FFFDFF" stroke="#8E5BC8" stroke-width="2.4"/><text x="308" y="124" text-anchor="middle" fill="#8E5BC8">R1</text>
+        <circle cx="428" cy="120" r="15" fill="#FFFDFF" stroke="#8E5BC8" stroke-width="2.4"/><text x="428" y="124" text-anchor="middle" fill="#8E5BC8">R2</text>
+        <circle cx="584" cy="220" r="17" fill="#8E5BC8" stroke="#8E5BC8" stroke-width="2"/><text x="584" y="224" text-anchor="middle" fill="#FFFFFF">M3</text>
+      </g>
+
+      <rect x="392" y="86" width="52" height="20" rx="6" fill="#FFFDFF" stroke="#8E5BC8"/>
+      <text x="418" y="100" text-anchor="middle" font-family="Consolas,monospace" font-size="10" fill="#8E5BC8">v1.1</text>
+      <g font-family="Segoe UI,system-ui,sans-serif" font-size="10.5" fill="#2A2430">
+        <text x="250" y="92">стабилизация</text>
+        <text x="378" y="180">только исправления</text>
+        <text x="520" y="255">тег уже на release</text>
+      </g>
+      <text x="16" y="280" font-family="Segoe UI,system-ui,sans-serif" font-size="11" fill="#6B5F72">В релизную ветку не добавляют новые функции: иначе тег перестаёт быть проверенной версией.</text>
+    </g>
+  </svg>
+  <div class="status" id="bf-status"></div>
+  <div class="controls" id="bf-buttons">
+    <button data-scene="feature" class="on">Обычная задача</button>
+    <button data-scene="fix">Исправление</button>
+    <button data-scene="release">Релиз</button>
+  </div>
+  <p class="note">Переключите сценарий. Сравните, от какого коммита создаётся ветка и куда она возвращается.</p>
+</div>
+<script>
+(function () {
+  var data = {
+    feature: '<b>Обычная задача.</b> Ветка feature/discount создаётся от свежей main, получает два коммита и возвращается через запрос на слияние. Главная ветка защищена: прямая отправка запрещена, проверки обязательны. После слияния рабочую ветку удаляют.',
+    fix: '<b>Исправление.</b> Ветка fix создаётся от тега выпущенной версии, а не от конца текущей разработки. В ней только минимальная правка. Так исправление не тащит за собой незаконченные функции и попадает в выпуск раньше остальных.',
+    release: '<b>Релиз.</b> Ветка release отделяется, когда набор функций согласован. В неё попадают только исправления и правки документации. Тег ставят на проверенный коммит, а затем release сливают обратно в main, чтобы исправления не потерялись.'
+  };
+  var scenes = document.querySelectorAll('.scene');
+  var buttons = document.querySelectorAll('#bf-buttons button');
+  var status = document.getElementById('bf-status');
+
+  function apply(key) {
+    scenes.forEach(function (s) { s.classList.toggle('on', s.dataset.scene === key); });
+    buttons.forEach(function (b) { b.classList.toggle('on', b.dataset.scene === key); });
+    status.innerHTML = data[key];
+  }
+  buttons.forEach(function (b) { b.addEventListener('click', function () { apply(b.dataset.scene); }); });
+  apply('feature');
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Устройство инструкции запуска</title>
+<style>
+  :root { --paper:#FAF7F6; --card:#FFFDFC; --ink:#2A2430; --muted:#6B6272; --rule:#E6D9EC; --accent:#8E5BC8; --soft:#EBE0EC; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .frame { background:var(--paper); border:1px solid var(--rule); border-radius:12px; padding:16px; }
+  .eyebrow { margin:0 0 6px; font:600 10px/1.2 Consolas,monospace; letter-spacing:.14em; text-transform:uppercase; color:var(--accent); }
+  svg { display:block; width:100%; height:auto; }
+  .row { fill:var(--card); stroke:var(--rule); stroke-width:1.2; }
+  .num { fill:var(--soft); stroke:var(--accent); stroke-width:1.1; }
+  .n { font-size:9.5px; font-weight:700; fill:#5F3A85; }
+  .t { font-size:11px; font-weight:700; fill:var(--ink); }
+  .e { font-size:9.5px; fill:var(--muted); }
+  .c { font-family:Consolas,monospace; font-size:9px; fill:#5F3A85; }
+  .ln { stroke:#D9CBE0; stroke-width:1.4; }
+  .cap { font-size:9.5px; fill:var(--muted); }
+  @media (max-width:560px) { .frame { padding:12px; } }
+</style>
+</head>
+<body>
+<div class="frame">
+  <p class="eyebrow">Из чего состоит выполнимая инструкция</p>
+  <svg viewBox="0 0 680 336" role="img" aria-labelledby="ia-title ia-desc">
+    <title id="ia-title">Шесть частей инструкции</title>
+    <desc id="ia-desc">Предусловия, шаг, ожидаемый результат, ошибки, проверка и откат. Справа пример для запуска учебного приложения: команда, строка запуска, health check и возврат версии.</desc>
+
+    <line class="ln" x1="38" y1="46" x2="38" y2="292"/>
+
+    <circle class="num" cx="38" cy="48" r="12"/><text class="n" x="38" y="52" text-anchor="middle">01</text>
+    <rect class="row" x="62" y="30" width="602" height="38" rx="7"/>
+    <text class="t" x="76" y="46">Предусловия</text>
+    <text class="e" x="76" y="60">Python 3.11, свободный порт, права на каталог</text>
+
+    <circle class="num" cx="38" cy="92" r="12"/><text class="n" x="38" y="96" text-anchor="middle">02</text>
+    <rect class="row" x="62" y="74" width="602" height="38" rx="7"/>
+    <text class="t" x="76" y="90">Шаг</text>
+    <text class="c" x="76" y="104">python -m sklad_plus.api</text>
+
+    <circle class="num" cx="38" cy="136" r="12"/><text class="n" x="38" y="140" text-anchor="middle">03</text>
+    <rect class="row" x="62" y="118" width="602" height="38" rx="7"/>
+    <text class="t" x="76" y="134">Ожидаемый результат</text>
+    <text class="c" x="76" y="148">Running on http://127.0.0.1:8000</text>
+
+    <circle class="num" cx="38" cy="180" r="12"/><text class="n" x="38" y="184" text-anchor="middle">04</text>
+    <rect class="row" x="62" y="162" width="602" height="38" rx="7"/>
+    <text class="t" x="76" y="178">Ошибки</text>
+    <text class="e" x="76" y="192">порт занят: изменить SKLAD_API_PORT и перезапустить службу</text>
+
+    <circle class="num" cx="38" cy="224" r="12"/><text class="n" x="38" y="228" text-anchor="middle">05</text>
+    <rect class="row" x="62" y="206" width="602" height="38" rx="7"/>
+    <text class="t" x="76" y="222">Проверка</text>
+    <text class="e" x="76" y="236">GET /api/health: код 200 и positions 4800</text>
+
+    <circle class="num" cx="38" cy="268" r="12"/><text class="n" x="38" y="272" text-anchor="middle">06</text>
+    <rect class="row" x="62" y="250" width="602" height="38" rx="7"/>
+    <text class="t" x="76" y="266">Откат</text>
+    <text class="e" x="76" y="280">остановить службу и вернуть прежний артефакт</text>
+
+    <text class="cap" x="16" y="316">Проверка отвечает, что задача решена. Откат нужен для шагов, которые меняют данные или доступ.</text>
+    <text class="cap" x="16" y="330">Шаг без ожидаемого результата заставляет читателя гадать, получилось ли.</text>
+  </svg>
+</div>
+</body>
+</html>

@@ -894,14 +894,17 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <canvas class="shader-bg" width="820" height="300" aria-hidden="true" style="background:linear-gradient(135deg,#08090D,#8E5BC8 58%,#08090D)"></canvas>
 <div class="badges"><span class="pill dark">Занятие 46</span><span class="pill">Разработка кода информационных систем</span></div>
 <div class="hero-panel"><h1>Git и ветки</h1><p class="dek">Ветка отделяет задачу от общей работы, а слияние и перебазирование сводят изменения так, чтобы чужая правка не пропала.</p></div>
-<div class="glyph" aria-hidden="true">Л25</div></header><section class="outcomes"><b>После этого занятия вы сможете</b><ul><li>Создавать ветку под задачу и переключаться между ветками</li><li>Сливать ветку и разрешать конфликт</li><li>Объяснять разницу между слиянием и перебазированием</li></ul></section><nav class="toc"><b>Содержание занятия</b><ol><li><a href="#ветка-которая-потеряла-скидку">Ветка, которая потеряла скидку</a></li><li><a href="#коммит-ветка-и-указатель">Коммит, ветка и указатель</a></li><li><a href="#ветка-под-задачу">Ветка под задачу</a></li><li><a href="#слияние-fast-forward-и-merge-commit">Слияние: fast-forward и merge commit</a></li><li><a href="#конфликт-и-его-разрешение">Конфликт и его разрешение</a></li><li><a href="#перебазирование">Перебазирование</a></li><li><a href="#схема-ветвления-учебного-проекта">Схема ветвления учебного проекта</a></li><li><a href="#типичные-ошибки">Типичные ошибки</a></li><li><a href="#итоги">Итоги</a></li></ol></nav><article class="prose"><h2 id="ветка-которая-потеряла-скидку"><span class="num">01</span>Ветка, которая потеряла скидку</h2>
+<div class="glyph" aria-hidden="true">Л25</div></header><section class="outcomes"><b>После этого занятия вы сможете</b><ul><li>Создавать ветку под задачу и переключаться между ветками</li><li>Сливать ветку и разрешать конфликт</li><li>Объяснять разницу между слиянием и перебазированием</li><li>Читать граф истории и находить общий предок двух веток</li><li>Выбирать между слиянием и перебазированием по состоянию ветки</li><li>Проверять ветку перед отправкой в общий репозиторий</li></ul></section><nav class="toc"><b>Содержание занятия</b><ol><li><a href="#ветка-которая-потеряла-скидку">Ветка, которая потеряла скидку</a></li><li><a href="#коммит-дерево-и-указатель">Коммит, дерево и указатель</a></li><li><a href="#слияние-три-версии-и-один-коммит">Слияние: три версии и один коммит</a></li><li><a href="#перебазирование-и-цена-линейной-истории">Перебазирование и цена линейной истории</a></li><li><a href="#удалённый-репозиторий-и-общая-ветка">Удалённый репозиторий и общая ветка</a></li><li><a href="#когда-история-спасает-а-когда-нет">Когда история спасает, а когда нет</a></li><li><a href="#проверка-перед-слиянием-и-типичные-ошибки">Проверка перед слиянием и типичные ошибки</a></li><li><a href="#итоги">Итоги</a></li><li><a href="#источники">Источники</a></li></ol></nav><article class="prose"><h2 id="ветка-которая-потеряла-скидку"><span class="num">01</span>Ветка, которая потеряла скидку</h2>
 <p>В четверг два разработчика получили задачи по одному файлу <code>pricing.py</code>. Первый поднял скидку с 5 до 10 процентов, второй изменил ту же строку до 7. Оба отправили изменения в общий репозиторий. Первый слил свою ветку без замечаний, второй получил конфликт и решил его быстро: оставил свою строку, удалил чужую и нажал «завершить слияние».</p>
 <p>Через день отдел продаж обнаружил, что скидка снова 7 процентов. Задача первого разработчика была закрыта, тесты проходили, история выглядела нормально. Пропала не строка кода, а результат работы человека. Восстановили его только по переписке и старой ветке.</p>
 <p><strong>Ветка это отдельная линия работы, которая позволяет менять код, не затрагивая общую версию.</strong> Слияние возвращает изменения в общую линию. Конфликт это место, где Git не может решить за людей, какую правку оставить. Если разрешать конфликт удалением чужой строки, Git не ошибётся: он сделает ровно то, что попросили, и потеряет работу.</p>
 <p>Ветки нужны не для красоты истории. Они дают возможность проверить изменение до того, как оно попадёт к остальным, и вернуться к рабочей версии, если проверка не прошла. В проекте <code>sklad-plus</code> над кодом работают несколько человек, и без веток каждая незаконченная правка сразу оказывалась бы в общей версии.</p>
 <p>Потерянная работа обходится дороже конфликта. Конфликт занимает минуты и заканчивается понятным решением. Потерянный коммит обнаруживают через день, когда по нему уже отчитались перед заказчиком. Восстанавливать приходится по журналам, переписке и резервным копиям, а иногда и переписывать заново. Поэтому правила работы с ветками защищают не удобство разработчика, а результат команды.</p>
-<h2 id="коммит-ветка-и-указатель"><span class="num">02</span>Коммит, ветка и указатель</h2>
-<p>Чтобы уверенно работать с ветками, нужно представить три вещи: коммит, ветку и указатель <code>HEAD</code>. Коммит это снимок состояния проекта с автором, датой и сообщением. Он ссылается на предыдущий коммит, поэтому история образует цепочку. Ветка это подвижный указатель на один из коммитов. <code>HEAD</code> показывает, на какой ветке или коммите вы находитесь сейчас.</p>
+<p>У этой истории есть менее заметный слой. Второй разработчик не был злоумышленником. Он видел конфликт, видел две версии строки и принял решение «моя версия новее». В его картине мира скидка 7 процентов была последней согласованной. В картине мира первого разработчика последней была 10. Git не хранит картину мира: он хранит коммиты и их родителей. Поэтому вопрос «кто прав» решается не в момент конфликта, а в требованиях, в задаче и в разговоре. Инструмент лишь показывает, что два изменения встретились в одном месте.</p>
+<p>Дальше разберём, как устроена история внутри, почему слияние иногда обходится без нового коммита, чем перебазирование отличается от слияния по последствиям и какие правила не дают общей ветке потерять чужую работу.</p>
+<h2 id="коммит-дерево-и-указатель"><span class="num">02</span>Коммит, дерево и указатель</h2>
+<p>Чтобы уверенно работать с ветками, нужно представить четыре вещи: объект, коммит, ссылку и индекс. <strong>Объект</strong> это единица хранения внутри репозитория. Файл хранится как объект типа blob, каталог как объект типа tree, а коммит как объект, который ссылается на корневое дерево и на родителей. У каждого объекта есть имя, вычисленное из его содержимого. Поэтому одинаковое содержимое в двух местах репозитория хранится один раз, а любое изменение даёт новое имя.</p>
+<p><strong>Коммит</strong> это снимок всего проекта, а не только изменённых файлов. Внутри коммита лежат ссылка на дерево, имя автора, дата, сообщение и ссылки на родителей. Первый коммит родителей не имеет, обычный коммит имеет одного, коммит слияния двух и более. Цепочка родителей и образует историю, которую рисует <code>git log --graph</code>.</p>
 <table>
 <thead>
 <tr>
@@ -912,18 +915,23 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 </thead>
 <tbody>
 <tr>
+<td>Объект</td>
+<td>blob, tree, commit или tag внутри репозитория</td>
+<td>создаются новые объекты</td>
+</tr>
+<tr>
 <td>Коммит</td>
-<td>снимок файлов и ссылка на родителя</td>
-<td>создаётся новый снимок</td>
+<td>снимок дерева и ссылка на родителя</td>
+<td>появляется новый коммит</td>
 </tr>
 <tr>
 <td>Ветка</td>
-<td>указатель на коммит</td>
-<td>указатель сдвигается на новый коммит</td>
+<td>подвижная ссылка на коммит</td>
+<td>ссылка сдвигается на новый коммит</td>
 </tr>
 <tr>
 <td><code>HEAD</code></td>
-<td>текущая позиция</td>
+<td>ссылка на текущую ветку или коммит</td>
 <td>остаётся на той же ветке</td>
 </tr>
 <tr>
@@ -938,68 +946,58 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 </tr>
 </tbody>
 </table>
-<p>Когда вы делаете коммит в ветке <code>main</code>, указатель <code>main</code> сдвигается на новый коммит. Когда переключаетесь на другую ветку, Git меняет файлы в рабочем каталоге так, чтобы они соответствовали её последнему коммиту. Незакоммиченные изменения при переключении могут переноситься или мешать, поэтому перед сменой ветки рабочее состояние проверяют командой <code>git status</code>.</p>
+<p>Имя объекта вычисляется хеш-функцией. Долгое время в Git использовался SHA-1, который даёт 40 шестнадцатеричных символов. В 2017 году исследователи показали практическую коллизию SHA-1 на двух разных PDF-файлах, после чего Git добавил защиту от подмены объектов и поддержку SHA-256 в новых репозиториях. Для повседневной работы важно другое: имя коммита зависит от содержимого, родителей, автора, даты и сообщения. Изменили сообщение, получили другое имя. Именно поэтому перебазирование, которое меняет родителя, всегда меняет имена коммитов.</p>
+<p><strong>Ветка</strong> это не копия проекта. Это файл в служебном каталоге <code>.git</code>, в котором записан хеш одного коммита, то есть примерно 41 байт. Когда вы делаете коммит в ветке <code>main</code>, Git создаёт новый коммит и переписывает файл ветки так, чтобы он указывал на новинку. Создание ветки поэтому почти ничего не стоит: это запись одного имени. Переключение ветки меняет файлы рабочего каталога под выбранный снимок, но второй проект на диске не появляется.</p>
+<p><code>HEAD</code> это отдельная ссылка, которая показывает, где вы находитесь. Обычно она указывает на ветку, а ветка на коммит. Если открыть <code>.git/HEAD</code>, можно увидеть строку вида <code>ref: refs/heads/main</code>. Когда <code>HEAD</code> указывает прямо на коммит, состояние называют отсоединённым. В нём удобно смотреть старую версию, но новые коммиты не принадлежат ветке и после переключения могут остаться без имени. Спасает журнал ссылок <code>git reflog</code>, который хранит перемещения <code>HEAD</code> и веток.</p>
+<p><strong>Индекс</strong> это третий слой между рабочим каталогом и историей. Он хранит не файлы, а снимок того, что войдёт в следующий коммит. Поэтому <code>git add</code> важен отдельно от <code>git commit</code>: можно изменить десять файлов, добавить в индекс два и закоммитить только их. При конфликте индекс временно хранит три версии файла: общую, свою и чужую. Эти версии называют стадиями, и по ним Git понимает, что именно не сходится.</p>
 <div class="codehilite" data-lang="text"><pre><span></span><code>git status
 git log --oneline --graph --all
+git reflog
 </code></pre></div>
 
-<p><code>git status</code> показывает, на какой ветке вы находитесь, какие файлы изменены и что подготовлено к коммиту. <code>git log</code> показывает историю. Флаг <code>--graph</code> рисует ветвление, <code>--oneline</code> сокращает запись, <code>--all</code> добавляет все ветки, а не только текущую.</p>
+<p><code>git status</code> показывает ветку, изменения и конфликты. <code>git log</code> показывает историю, флаг <code>--graph</code> рисует ветвление, <code>--oneline</code> сокращает запись, <code>--all</code> добавляет все ветки. <code>git reflog</code> показывает, куда перемещались указатели, и часто это единственный способ найти коммит, потерянный после неудачного перебазирования.</p>
+<figure class="figure" data-fig="git-graph" data-one="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"><iframe title="Figure 1: git-graph" scrolling="no"></iframe><figcaption>Граф из пяти коммитов: общий предок, две ветки, коммит слияния и подписи ссылок. Нажмите на коммит, чтобы увидеть его родителей и объяснение. Сравните положение <code>main</code>, <code>feature/discount</code> и <code>HEAD</code>.</figcaption></figure>
+
 <p>История в Git не является одной прямой линией. Каждый коммит знает своего родителя, а ветки это ярлыки на разные концы цепочки. Слияние создаёт коммит с двумя родителями, поэтому граф разветвляется и сходится. Понимание графа избавляет от страха перед конфликтами: конфликт это не поломка, а развилка, которую нужно свести вручную.</p>
-<p><code>HEAD</code> может указывать не только на ветку, но и на отдельный коммит. Такое состояние называют отсоединённым указателем. В нём можно смотреть старую версию, но новые коммиты не будут принадлежать ветке, и после переключения их легко потерять. Если Git сообщает, что вы не на ветке, вернитесь на нужную командой <code>git switch main</code> или создайте ветку из текущего коммита командой <code>git switch -c имя</code>.</p>
-<h2 id="ветка-под-задачу"><span class="num">03</span>Ветка под задачу</h2>
-<p>Ветку создают под одну задачу: новую функцию, исправление дефекта, обновление документации. Имя ветки должно отвечать на вопрос «что здесь делают». В учебном проекте удобны префиксы <code>feature/</code>, <code>fix/</code> и <code>docs/</code>.</p>
-<div class="codehilite" data-lang="text"><pre><span></span><code>git switch main
-git pull
-git switch -c feature/discount
-</code></pre></div>
-
-<p>Первая команда переключает на главную ветку, вторая забирает свежие изменения из общего репозитория, третья создаёт новую ветку и сразу переключается на неё. Флаг <code>-c</code> означает create. Старая форма той же команды выглядит как <code>git checkout -b feature/discount</code>; в новых версиях Git предпочитают <code>switch</code> для веток и <code>restore</code> для файлов, потому что <code>checkout</code> делал слишком много разных вещей.</p>
+<p>Отсоединённый указатель полезен и опасен одновременно. Полезен, потому что позволяет проверить старую версию, не трогая ветки. Опасен, потому что человек может сделать несколько коммитов, переключиться на <code>main</code> и решить, что работа пропала. На самом деле коммиты живы, пока на них ссылается <code>HEAD</code>, ветка, тег или журнал ссылок. <code>git switch -c experiment</code> из отсоединённого состояния даёт этим коммитам имя и снимает риск.</p>
+<p>Отдельно стоит запомнить, что тег это тоже ссылка, но обычно неподвижная. Лёгкий тег просто указывает на коммит, аннотированный хранит автора, дату и сообщение. Тегом отмечают релиз, потому что номер версии должен указывать на конкретный снимок, а не на «примерно ту неделю».</p>
+<p>Сообщение коммита это часть интерфейса истории. Через месяц по нему ищут причину изменения, а не пересказ файлов. В командах часто принимают соглашение <strong>Conventional Commits</strong>: тип изменения (<code>feat</code>, <code>fix</code>, <code>docs</code>, <code>refactor</code>, <code>test</code>), необязательная область и краткое описание в повелительном наклонении. Например, <code>fix(stock): учитывать резерв при проверке остатка</code> говорит и что изменилось, и где. Соглашение описано на отдельном сайте <a href="https://www.conventionalcommits.org/en/v1.0.0/">Conventional Commits 1.0.0</a>. Оно не заменяет содержательное сообщение, но делает историю предсказуемой и позволяет автоматически собирать список изменений релиза.</p>
+<div class="gate-step" data-gate>
+<p class="gate-action"><button type="button" class="gate-btn" aria-expanded="false"><span class="gate-q" aria-hidden="true">?</span><span>Что именно сравнивает Git, когда обе ветки изменили один файл?</span></button></p>
+<div class="gate-content" hidden><h2 id="слияние-три-версии-и-один-коммит"><span class="num">03</span>Слияние: три версии и один коммит</h2>
+<p>Слияние вливает изменения одной ветки в другую. Git не сравнивает два файла целиком и не выбирает «более новый». Он находит <strong>общий предок</strong> двух веток, то есть последний коммит, который был в обеих историях. Этот предок называется базой слияния. Затем Git сравнивает с ним каждую сторону и применяет изменения, которые не пересекаются.</p>
+<p>Такое сравнение называют трёхсторонним: база, ваша версия, их версия. Если в базе строка была <code>DISCOUNT = 5</code>, у вас стала <code>DISCOUNT = 10</code>, а у коллеги <code>DISCOUNT = 7</code>, обе стороны изменили одно место по-разному. Git не знает, какое значение правильное, и оставляет конфликт. Если же вы изменили скидку, а коллега добавил функцию в другой конец файла, изменения не пересекаются и Git применяет оба.</p>
 <table>
 <thead>
 <tr>
-<th>Команда</th>
-<th>Что делает</th>
+<th>Ситуация</th>
+<th>Что сделает <code>git merge</code></th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><code>git branch</code></td>
-<td>показывает локальные ветки</td>
+<td>целевая ветка не менялась после отделения</td>
+<td>fast-forward, новый коммит не нужен</td>
 </tr>
 <tr>
-<td><code>git branch -a</code></td>
-<td>показывает локальные и удалённые ветки</td>
+<td>обе ветки менялись, файлы не пересекаются</td>
+<td>коммит слияния без конфликта</td>
 </tr>
 <tr>
-<td><code>git switch имя</code></td>
-<td>переключает на существующую ветку</td>
+<td>обе ветки изменили одну строку</td>
+<td>конфликт, нужна ручная правка</td>
 </tr>
 <tr>
-<td><code>git switch -c имя</code></td>
-<td>создаёт ветку и переключается на неё</td>
+<td>одна ветка переименовала файл, другая изменила его</td>
+<td>Git попробует связать переименование, иначе конфликт</td>
 </tr>
 <tr>
-<td><code>git branch -d имя</code></td>
-<td>удаляет слитую ветку</td>
-</tr>
-<tr>
-<td><code>git branch -m новое</code></td>
-<td>переименовывает текущую ветку</td>
+<td>целевая ветка уже содержит рабочую</td>
+<td>сообщение «Already up to date»</td>
 </tr>
 </tbody>
 </table>
-<p>После создания ветки делают серию коммитов. Один коммит должен содержать одно законченное изменение, а сообщение должно объяснять причину, а не пересказывать файлы. «Поднять скидку до 10 процентов» лучше, чем «изменён pricing.py»: через месяц по сообщению будет понятно, зачем менялась строка.</p>
-<p>Дробление на маленькие коммиты помогает не только читать историю. Если изменение сломало тесты, можно отменить один коммит, а не всю ветку. Если задачу придётся отложить, готовые куски уже сохранены и не потеряются при переключении. Один большой коммит «сделал всё» невозможно ни проверить, ни аккуратно откатить.</p>
-<div class="codehilite" data-lang="text"><pre><span></span><code>git add pricing.py
-git commit -m "Поднять скидку до 10 процентов"
-</code></pre></div>
-
-<p><code>git add</code> помещает изменение в индекс, то есть в набор того, что войдёт в следующий коммит. <code>git commit</code> создаёт снимок. Если нужно добавить все изменённые файлы, используют <code>git add .</code>, но в общем проекте лучше перечислять файлы явно: так в коммит не попадут случайные настройки и временные файлы.</p>
-<p>Ветка должна решать одну задачу. Если в ней смешаны новая функция, исправление старого дефекта и переименование файлов, рецензенту трудно понять, что проверять, а при откате придётся выбирать нужные коммиты вручную. Несколько маленьких веток сливаются проще, чем одна большая. Пока задача не закончена, ветку периодически обновляют от главной, чтобы конфликты решались по частям, а не все сразу в конце.</p>
-<div class="gate-step" data-gate>
-<p class="gate-action"><button type="button" class="gate-btn" aria-expanded="false"><span class="gate-q" aria-hidden="true">?</span><span>Что произойдёт при слиянии, если обе ветки изменили одну строку?</span></button></p>
-<div class="gate-content" hidden><h2 id="слияние-fast-forward-и-merge-commit"><span class="num">04</span>Слияние: fast-forward и merge commit</h2>
-<p>Слияние вливает изменения одной ветки в другую. Результат зависит от того, разошлась ли история. Если целевая ветка не получала новых коммитов с момента создания рабочей ветки, Git может просто передвинуть указатель вперёд. Это называют fast-forward, то есть перемоткой.</p>
+<p>Если целевая ветка не получала новых коммитов с момента создания рабочей, Git может просто передвинуть указатель вперёд. Это называют <strong>fast-forward</strong>, то есть перемоткой. Нового коммита не появляется, история остаётся линейной, а факт слияния в ней не виден.</p>
 <div class="codehilite" data-lang="text"><pre><span></span><code>git switch main
 git merge feature/report
 </code></pre></div>
@@ -1011,8 +1009,7 @@ Fast-forward
  create mode 100644 report.py
 </code></pre></div>
 
-<p>Нового коммита не появилось: указатель <code>main</code> перешёл на последний коммит ветки <code>feature/report</code>. История осталась линейной, а факт слияния в ней не виден. Для небольшой задачи это удобно, для крупной изменение лучше сохранить отдельным коммитом слияния.</p>
-<p>Если обе ветки получили свои коммиты, fast-forward невозможен. Git создаёт коммит слияния с двумя родителями и объединяет изменения. Такой коммит показывает, где именно работа отделилась и вернулась в общую линию.</p>
+<p>Коммит слияния нужен, когда обе ветки разошлись. У него два родителя, и он фиксирует точку, где работа отделилась и вернулась. Именно в этом коммите разрешается конфликт, если он был.</p>
 <div class="codehilite" data-lang="text"><pre><span></span><code>git log --graph --oneline --all
 </code></pre></div>
 
@@ -1024,43 +1021,18 @@ Fast-forward
 * 2867907 Добавить расчёт стоимости со скидкой
 </code></pre></div>
 
-<p>Читать граф нужно сверху вниз: верхний коммит самый новый, ниже его родители. Символы <code>|\</code> и <code>|/</code> показывают, где ветка отделилась и где соединилась. Коммит <code>5773655</code> имеет двух родителей: <code>0fa9a5f</code> из рабочей ветки и <code>6eeb16b</code> из <code>main</code>. Именно в нём разрешён конфликт. Хэши в вашем репозитории будут другими: они зависят от содержимого, автора и времени коммита.</p>
+<p>Читать граф нужно сверху вниз: верхний коммит самый новый, ниже его родители. Символы <code>|\</code> и <code>|/</code> показывают, где ветка отделилась и где соединилась. Коммит <code>5773655</code> имеет двух родителей: <code>0fa9a5f</code> из рабочей ветки и <code>6eeb16b</code> из <code>main</code>. Хэши в вашем репозитории будут другими: они зависят от содержимого, автора и времени коммита.</p>
 <p>Иногда команда хочет сохранить коммит слияния даже при возможности fast-forward. Тогда используют <code>git merge --no-ff имя</code>. Это делает историю чуть длиннее, но оставляет видимую границу задачи. Обратный выбор, <code>--ff-only</code>, запрещает создавать коммит слияния и завершается ошибкой, если перемотка невозможна. Это полезная защита от неожиданной развилки.</p>
-<p>Слияние не проверяет код и не запускает тесты. Оно только соединяет истории. Если в ветке был дефект, после слияния он окажется в главной ветке. Поэтому перед слиянием прогоняют тесты на рабочей ветке, а после слияния повторяют их на главной: объединение двух правильных изменений иногда даёт неправильный результат.</p>
-<table>
-<thead>
-<tr>
-<th>Ситуация</th>
-<th>Что сделает <code>git merge</code></th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>целевая ветка не менялась</td>
-<td>fast-forward, новый коммит не нужен</td>
-</tr>
-<tr>
-<td>обе ветки менялись, файлы не пересекаются</td>
-<td>коммит слияния без конфликта</td>
-</tr>
-<tr>
-<td>обе ветки менялись, одна строка</td>
-<td>конфликт, нужна ручная правка</td>
-</tr>
-<tr>
-<td>целевая ветка уже содержит рабочую</td>
-<td>сообщение «Already up to date»</td>
-</tr>
-</tbody>
-</table>
+<p>Есть и третий вариант, <code>git merge --squash</code>. Он собирает все изменения ветки в один набор и кладёт его в индекс, но коммит слияния не создаёт и связь с веткой не сохраняет. Так делают, когда хотят один аккуратный коммит вместо десяти черновых. Цена в том, что Git больше не знает, что ветка уже влита: повторное слияние может снова принести те же изменения. Поэтому squash применяют осознанно, а не как замену обычному слиянию.</p>
+<p>Слияние не проверяет код и не запускает тесты. Оно только соединяет истории. Если в ветке был дефект, после слияния он окажется в главной ветке. Поэтому перед слиянием прогоняют тесты на рабочей ветке, а после слияния повторяют их на главной: объединение двух правильных изменений иногда даёт неправильный результат. Классический пример: одна ветка переименовала функцию, другая добавила её вызов. По отдельности обе ветки работают, вместе получается ошибка.</p>
 <p>Перед слиянием полезно посмотреть, что именно придёт из ветки:</p>
 <div class="codehilite" data-lang="text"><pre><span></span><code>git log main..feature/discount --oneline
 git diff main...feature/discount --stat
 </code></pre></div>
 
-<p>Первая команда показывает коммиты, которых нет в <code>main</code>. Вторая показывает файлы и число изменённых строк относительно общего предка. Это дешевле, чем сливать вслепую и разбираться потом.</p>
-<h2 id="конфликт-и-его-разрешение"><span class="num">05</span>Конфликт и его разрешение</h2>
-<p>Конфликт возникает, когда обе ветки изменили одну и ту же строку или удалили файл, который другая ветка правила. Git не знает, какое изменение правильное, и останавливает слияние. В рабочем каталоге появляются маркеры.</p>
+<p>Первая команда показывает коммиты, которых нет в <code>main</code>. Вторая показывает файлы и число изменённых строк относительно общего предка. Три точки здесь означают сравнение с базой слияния, а не с текущим концом <code>main</code>. Это дешевле, чем сливать вслепую и разбираться потом.</p>
+<h3>Конфликт и его разрешение</h3>
+<p>Конфликт возникает, когда обе ветки изменили одну и ту же строку, удалили файл, который другая ветка правила, или по-разному переименовали один путь. Git останавливает слияние и оставляет в файле маркеры.</p>
 <div class="codehilite" data-lang="text"><pre><span></span><code>git merge feature/discount
 </code></pre></div>
 
@@ -1075,8 +1047,7 @@ Automatic merge failed; fix conflicts and then commit the result.
 <div class="codehilite" data-lang="text"><pre><span></span><code>UU pricing.py
 </code></pre></div>
 
-<p>Две буквы <code>U</code> означают, что файл изменён обеими сторонами и конфликт ещё не разрешён. Другие сочетания, например <code>AA</code> или <code>DU</code>, говорят о добавлении или удалении с двух сторон. В любом случае <code>git status</code> подсказывает, что делать дальше.</p>
-<p>Внутри файла Git оставляет обе версии:</p>
+<p>Две буквы <code>U</code> означают, что файл изменён обеими сторонами и конфликт ещё не разрешён. Другие сочетания, например <code>AA</code> или <code>DU</code>, говорят о добавлении или удалении с двух сторон. Внутри файла Git оставляет обе версии:</p>
 <div class="codehilite" data-lang="text"><pre><span></span><code>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD
 DISCOUNT = 7
 =======
@@ -1137,13 +1108,14 @@ git commit -m "Свести скидку к согласованному зна�
 </table>
 <p>Конфликт может быть не только в одной строке. Если один разработчик переименовал файл, а другой изменил его содержимое, Git может предложить новое имя и спросить, что делать. Если один удалил функцию, а другой её вызывал, конфликт проявится как ошибка сборки уже после слияния. Поэтому после разрешения конфликта запускают тесты, а не только смотрят на исчезнувшие маркеры.</p>
 <p>В спорной ситуации помогает разговор с автором второй ветки. Git показывает, кто и когда изменил строку, но не объясняет причину. Сообщение коммита и обсуждение задачи дают контекст: одно изменение могло быть временным обходом, а другое окончательным решением. Если договориться не удаётся, решение фиксируют в сообщении коммита слияния, чтобы через месяц было понятно, почему оставили именно эту версию.</p>
+<p>Для повторяющихся конфликтов есть механизм <code>git rerere</code>, название которого расшифровывается как reuse recorded resolution. Git запоминает, как вы разрешили конфликт, и при следующей встрече тех же сторон предлагает готовое решение. Это полезно при длинной ветке, которую регулярно обновляют от главной: один и тот же конфликт не приходится разрешать заново. Но запоминание не отменяет проверку: автоматически применённое решение тоже нужно прочитать.</p>
 <div class="callout pitfall"><span class="label">«Моя версия правильная»</span><p>Кнопка «оставить моё» или «оставить чужое» разрешает конфликт механически. Если вторая сторона добавила проверку или исправление, оно исчезнет. Перед выбором нужно прочитать обе версии и понять, зачем каждая появилась.</p></div></div>
 </div>
 
 <div class="gate-step" data-gate>
-<p class="gate-action"><button type="button" class="gate-btn" aria-expanded="false"><span class="gate-q" aria-hidden="true">?</span><span>Чем перебазирование отличается от слияния для истории?</span></button></p>
-<div class="gate-content" hidden><h2 id="перебазирование"><span class="num">06</span>Перебазирование</h2>
-<p>Перебазирование берёт коммиты рабочей ветки и заново применяет их поверх другой ветки. История становится линейной, как будто работу начали позже. Хэши коммитов меняются, потому что у них появляется другой родитель.</p>
+<p class="gate-action"><button type="button" class="gate-btn" aria-expanded="false"><span class="gate-q" aria-hidden="true">?</span><span>Почему перебазирование меняет хэши коммитов и когда это допустимо?</span></button></p>
+<div class="gate-content" hidden><h2 id="перебазирование-и-цена-линейной-истории"><span class="num">04</span>Перебазирование и цена линейной истории</h2>
+<p>Перебазирование берёт коммиты рабочей ветки и заново применяет их поверх другой ветки. История становится линейной, как будто работу начали позже. Хэши коммитов меняются, потому что у них появляется другой родитель, а имя коммита зависит от родителя.</p>
 <div class="codehilite" data-lang="text"><pre><span></span><code>git switch feature/report
 git rebase main
 </code></pre></div>
@@ -1163,6 +1135,12 @@ git rebase main
 </code></pre></div>
 
 <p>Коммит <code>4ac50e2</code> стоит прямо над <code>cbc67fe</code>, без боковой ветки. Читать такую историю проще: изменения идут друг за другом. Но у перебазирования есть цена: если ветку уже отправили в общий репозиторий и коллеги на неё опираются, их история разойдётся с новой. Поэтому перебазируют только личные ветки, которые ещё не стали общими.</p>
+<p>Внутри перебазирование работает не как слияние. Git не создаёт один общий коммит, а по очереди применяет каждый коммит ветки к новой базе. Если конфликт возникает на втором коммите, его разрешают, добавляют файл в индекс и выполняют <code>git rebase --continue</code>. Потом Git применяет третий коммит, и конфликт может повториться. Отсюда практическое следствие: при перебазировании конфликты решаются несколько раз, при слиянии один раз.</p>
+<div class="codehilite" data-lang="text"><pre><span></span><code>git add pricing.py
+git rebase --continue
+</code></pre></div>
+
+<p>Если стало сложно, перебазирование отменяют командой <code>git rebase --abort</code>. Прерывать и продолжать можно несколько раз, пока все коммиты не перенесутся. Если конфликт уже разрешён, но вы не хотите продолжать, <code>git rebase --skip</code> пропускает текущий коммит. Пропуск это опасная операция: вместе с коммитом исчезнет и его изменение, поэтому применять её стоит только к явно лишнему коммиту.</p>
 <table>
 <thead>
 <tr>
@@ -1197,18 +1175,62 @@ git rebase main
 <td>видно, где была задача</td>
 <td>выглядит как последовательная работа</td>
 </tr>
+<tr>
+<td>Восстановление</td>
+<td>проще, история не переписана</td>
+<td>нужен <code>reflog</code>, если что-то пошло не так</td>
+</tr>
 </tbody>
 </table>
-<p>Конфликты при перебазировании решают так же, как при слиянии: правят файл, добавляют его в индекс и продолжают командой <code>git rebase --continue</code>. Если стало сложно, перебазирование отменяют командой <code>git rebase --abort</code>. Прерывать и продолжать можно несколько раз, пока все коммиты не перенесутся.</p>
-<div class="codehilite" data-lang="text"><pre><span></span><code>git add pricing.py
-git rebase --continue
-</code></pre></div>
+<figure class="figure" data-fig="merge-rebase" data-one="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"><iframe title="Figure 2: merge-rebase" scrolling="no"></iframe><figcaption>Два варианта одной и той же работы: слияние с коммитом-развилкой и перебазирование в линию. Переключите режим кнопкой и посмотрите, что происходит с хэшами, общими ветками и конфликтами.</figcaption></figure>
 
 <p>Есть правило, которое стоит запомнить: <strong>перебазируют то, что ещё не отправили другим, сливают то, что уже общее.</strong> Если ветка существует только на вашей машине, перебазирование безопасно. Если её уже скачали коллеги, перебазирование перепишет историю и создаст им лишнюю работу.</p>
 <p>В повседневной работе перебазирование часто применяют при получении чужих изменений: <code>git pull --rebase</code> переносит ваши локальные коммиты поверх свежей главной ветки. Это избавляет от лишнего коммита слияния в личной работе. Но если в локальной ветке уже есть общие коммиты, лучше использовать обычный <code>git pull</code> с слиянием, чтобы не менять историю, которую видят другие.</p>
-<h2 id="схема-ветвления-учебного-проекта"><span class="num">07</span>Схема ветвления учебного проекта</h2>
-<p>Для <code>sklad-plus</code> достаточно трёх уровней: главная ветка, рабочие ветки задач и короткие ветки исправлений. Главная ветка всегда должна собираться и проходить тесты. Рабочая ветка живёт до слияния задачи. Ветка исправления создаётся от главной и возвращается в неё после проверки.</p>
-<p>Главную ветку защищают настройками репозитория: запрещают прямую отправку и требуют пройти проверку. Тогда даже опытный разработчик не сможет случайно отправить незаконченную правку. Защита не заменяет дисциплину, но делает ошибку заметной до того, как она попадёт к остальным.</p>
+<p>Интерактивное перебазирование <code>git rebase -i</code> позволяет привести черновую ветку в порядок до отправки. В открывшемся списке коммитов можно оставить коммит как есть, переименовать сообщение, объединить несколько коммитов в один или удалить лишний. Это удобно, когда в ветке остались коммиты «поправил опечатку» и «ещё раз поправил». Но переписывать можно только личную ветку: после отправки коллегам такой список превращается в изменение общей истории.</p>
+<p>Флаг <code>--onto</code> переносит не всю ветку, а выбранный диапазон коммитов на другую базу. Он нужен, когда ветку случайно создали от чужой рабочей ветки, а не от <code>main</code>. Вместо ручного копирования коммитов достаточно указать, что переносить и куда. Синтаксис легко перепутать, поэтому перед выполнением смотрят <code>git log --oneline --graph</code> и проверяют диапазон.</p>
+<p>У перебазирования есть ещё один компромисс. Линейная история выглядит аккуратно, но скрывает, что задача разрабатывалась параллельно с другими. Коммит слияния, наоборот, показывает реальную развилку и точку интеграции. Для небольшой команды и коротких веток разница невелика. Для большой истории с релизными ветками коммиты слияния помогают восстановить, когда именно изменение попало в основную линию.</p>
+<p>Поэтому спор «merge или rebase» не имеет одного правильного ответа. Правило, которое работает в учебном проекте, звучит так: личную ветку можно перебазировать до отправки, общую ветку сливают. Внутри команды это правило фиксируют в документе, чтобы каждый новый участник не выяснял его в первом конфликте.</p></div>
+</div>
+
+<div class="gate-step" data-gate>
+<p class="gate-action"><button type="button" class="gate-btn" aria-expanded="false"><span class="gate-q" aria-hidden="true">?</span><span>Что происходит, когда двое отправили изменения в одну ветку?</span></button></p>
+<div class="gate-content" hidden><h2 id="удалённый-репозиторий-и-общая-ветка"><span class="num">05</span>Удалённый репозиторий и общая ветка</h2>
+<p>Удалённый репозиторий хранит общую копию истории. Локальная ветка и её удалённая копия это два указателя, которые синхронизируют командами <code>git push</code> и <code>git pull</code>. <code>push</code> отправляет ваши коммиты на сервер, <code>pull</code> забирает чужие и сливает их с вашими. Если сервер отклонил отправку, значит, на нём появились новые коммиты: сначала забирают их, затем повторяют отправку.</p>
+<table>
+<thead>
+<tr>
+<th>Команда</th>
+<th>Направление</th>
+<th>Что делает</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>git push</code></td>
+<td>от вас на сервер</td>
+<td>отправляет коммиты ветки</td>
+</tr>
+<tr>
+<td><code>git pull</code></td>
+<td>с сервера к вам</td>
+<td>забирает и сливает изменения</td>
+</tr>
+<tr>
+<td><code>git fetch</code></td>
+<td>с сервера к вам</td>
+<td>забирает, но не сливает</td>
+</tr>
+<tr>
+<td><code>git push -u origin ветка</code></td>
+<td>от вас на сервер</td>
+<td>связывает ветки при первой отправке</td>
+</tr>
+</tbody>
+</table>
+<p><code>git fetch</code> полезен, когда нужно посмотреть чужие изменения до слияния. Он обновляет удалённые ветки, но не трогает рабочий каталог. После него можно сравнить свою ветку с серверной и решить, сливать сразу или сначала разобраться. <code>git pull</code> делает то же самое и сразу добавляет слияние или перебазирование, поэтому в незнакомой ситуации безопаснее начать с <code>fetch</code>.</p>
+<p>Важно понимать, что <code>origin/main</code> это не ветка на сервере в момент просмотра, а локальная запись о том, где сервер был в последний раз. Пока вы не выполнили <code>fetch</code>, эта запись устаревает. Отсюда странные ситуации: «на сервере уже исправили, а у меня старое». Исправили, но локальная копия знаний о сервере ещё не обновилась.</p>
+<p>Запрос на слияние это не формальность. В нём видно, какие файлы изменились, кто автор и какие проверки прошли. Рецензент читает diff и оставляет замечания до слияния, а не после. Если в проекте нет отдельного рецензента, роль проверяющего берёт второй разработчик или преподаватель, но проверка всё равно должна быть.</p>
+<p>Главную ветку защищают настройками репозитория: запрещают прямую отправку и требуют пройти проверку. Тогда даже опытный разработчик не сможет случайно отправить незаконченную правку. Защита не заменяет дисциплину, но делает ошибку заметной до того, как она попадёт к остальным. Дополнительно можно потребовать рецензию от владельца участка кода и запретить слияние, пока не закрыты блокирующие замечания.</p>
 <table>
 <thead>
 <tr>
@@ -1243,8 +1265,15 @@ git rebase --continue
 <td>до слияния</td>
 <td>автор</td>
 </tr>
+<tr>
+<td><code>release/...</code></td>
+<td>подготовка версии</td>
+<td>до выпуска</td>
+<td>ответственный за релиз</td>
+</tr>
 </tbody>
 </table>
+<p>Для <code>sklad-plus</code> достаточно трёх уровней: главная ветка, рабочие ветки задач и короткие ветки исправлений. Главная ветка всегда должна собираться и проходить тесты. Рабочая ветка живёт до слияния задачи. Ветка исправления создаётся от главной и возвращается в неё после проверки. Релизная ветка нужна, только если версию готовят отдельно и в неё больше не попадают новые функции.</p>
 <p>Рабочий цикл выглядит так. Сначала забирают свежую главную ветку, затем создают рабочую, делают коммиты, отправляют ветку в общий репозиторий, открывают запрос на слияние, проходят проверку и только потом сливают. После слияния рабочую ветку удаляют, чтобы не плодить устаревшие указатели.</p>
 <div class="codehilite" data-lang="text"><pre><span></span><code>git switch main
 git pull
@@ -1253,41 +1282,9 @@ git push -u origin feature/stock-report
 </code></pre></div>
 
 <p>Флаг <code>-u</code> связывает локальную ветку с удалённой, чтобы следующие <code>git push</code> и <code>git pull</code> работали без указания имени. После этого в интерфейсе репозитория можно открыть запрос на слияние и попросить рецензию.</p>
-<p>Удалённый репозиторий хранит общую копию истории. Локальная ветка и её удалённая копия это два указателя, которые синхронизируют командами <code>git push</code> и <code>git pull</code>. <code>push</code> отправляет ваши коммиты на сервер, <code>pull</code> забирает чужие и сливает их с вашими. Если сервер отклонил отправку, значит, на нём появились новые коммиты: сначала забирают их, затем повторяют отправку.</p>
-<table>
-<thead>
-<tr>
-<th>Команда</th>
-<th>Направление</th>
-<th>Что делает</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>git push</code></td>
-<td>от вас на сервер</td>
-<td>отправляет коммиты ветки</td>
-</tr>
-<tr>
-<td><code>git pull</code></td>
-<td>с сервера к вам</td>
-<td>забирает и сливает изменения</td>
-</tr>
-<tr>
-<td><code>git fetch</code></td>
-<td>с сервера к вам</td>
-<td>забирает, но не сливает</td>
-</tr>
-<tr>
-<td><code>git push -u origin ветка</code></td>
-<td>от вас на сервер</td>
-<td>связывает ветки при первой отправке</td>
-</tr>
-</tbody>
-</table>
-<p><code>git fetch</code> полезен, когда нужно посмотреть чужие изменения до слияния. Он обновляет удалённые ветки, но не трогает рабочий каталог. После него можно сравнить свою ветку с серверной и решить, сливать сразу или сначала разобраться.</p>
+<figure class="figure" data-fig="branch-flow" data-one="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"><iframe title="Figure 3: branch-flow" scrolling="no"></iframe><figcaption>Схема ветвления учебного проекта: главная ветка, задача, исправление и релиз. Переключите сценарий, чтобы увидеть, от какой ветки создаётся следующая и где стоит защита.</figcaption></figure>
+
 <p>Перед отправкой полезно проверить, что в коммит не попали лишние файлы. <code>git status</code> показывает неотслеживаемые файлы, <code>git diff --cached</code> показывает то, что уже подготовлено. Если в списке оказались база, журнал или файл с паролем, их убирают из индекса и добавляют шаблон в <code>.gitignore</code>.</p>
-<p>Запрос на слияние это не формальность. В нём видно, какие файлы изменились, кто автор и какие проверки прошли. Рецензент читает diff и оставляет замечания до слияния, а не после. Если в проекте нет отдельного рецензента, роль проверяющего берёт второй разработчик или преподаватель, но проверка всё равно должна быть.</p>
 <table>
 <thead>
 <tr>
@@ -1317,12 +1314,89 @@ git push -u origin feature/stock-report
 <td>просмотр <code>git diff --cached</code></td>
 </tr>
 </tbody>
+</table>
+<p>История и удалённый репозиторий решают разные задачи. История позволяет понять, кто и зачем менял код. Удалённый репозиторий позволяет обмениваться работой. Ни то, ни другое не является резервной копией по умолчанию: сервер может потерять данные, а локальная копия может быть уничтожена вместе с ноутбуком. Поэтому в проекте нужны и история, и регулярные копии, и проверка восстановления.</p>
+<h2 id="когда-история-спасает-а-когда-нет"><span class="num">06</span>Когда история спасает, а когда нет</h2>
+<p>Три случая показывают, что ветки и удалённый репозиторий это инструменты с ограничениями. В каждом случае проблема была не в команде <code>merge</code>, а в процессе вокруг неё.</p>
+<h3>BitKeeper и появление Git</h3>
+<p>До 2005 года ядро Linux разрабатывалось с использованием проприетарной системы BitKeeper, которую её создатель разрешал использовать сообществу бесплатно. В 2005 году сотрудничество прекратилось, и бесплатная лицензия была отозвана. Сообщество осталось без инструмента, который выдерживал бы десятки тысяч файлов и постоянные слияния.</p>
+<p>Линус Торвальдс начал писать замену в апреле 2005 года. Уже через несколько дней прототип мог хранить историю, а вскоре Git стал использоваться для слияния изменений самого ядра. История этого перехода описана в книге Pro Git <a href="https://git-scm.com/book/en/v2/Getting-Started-A-Short-History-of-Git">Pro Git, история Git</a>. Урок для темы: инструмент и принятый в команде процесс связаны. Когда инструмент исчезает, исчезает и возможность сливать работу привычным способом. Распределённая модель, в которой у каждого есть полная история, снижает зависимость от одного сервера, но не отменяет договорённостей о ветках.</p>
+<h3>GitLab.com, 31 января 2017 года</h3>
+<p>В этот день инженер GitLab.com работал с репликой базы и по ошибке удалил каталог данных на основном сервере вместо вторичного. Было удалено около 300 ГБ данных. Восстановление заняло около 18 часов, а данные, созданные примерно за шесть часов, спасти не удалось. По оценке компании, пострадали около 5000 проектов, 5000 комментариев и 700 новых учётных записей.</p>
+<p>Самое важное в отчёте: несколько механизмов резервного копирования не сработали одновременно. Ежедневный дамп базы не создавался из-за несовпадения версий <code>pg_dump</code> и сервера, а сообщения об ошибке не доходили. Снимки диска не были включены для серверов базы. Реплика использовалась для отказоустойчивости, а не для восстановления. Оставался снимок шестичасовой давности. При этом Git-репозитории не пострадали, потому что хранились отдельно от базы <a href="https://about.gitlab.com/blog/postmortem-of-database-outage-of-january-31/">GitLab, 2017</a>.</p>
+<p>Урок для темы: удалённый репозиторий не становится резервной копией от того, что он удалённый. Если восстановление ни разу не проверяли, нельзя утверждать, что оно работает. Для учебного проекта это означает простое правило: перед сдачей работы убедитесь, что репозиторий существует не только на вашей машине, а архив сданной версии лежит отдельно.</p>
+<h3>CVE-2024-32002: клонирование как выполнение чужого кода</h3>
+<p>В 2024 году в Git нашли уязвимость, которая позволяла выполнить код при клонировании специально подготовленного репозитория с подмодулями. На файловых системах, где имена не различают регистр, например в Windows и macOS, подмодуль мог подменить путь и записать hook в служебный каталог. При рекурсивном клонировании hook выполнялся до того, как пользователь открывал проект.</p>
+<p>Уязвимость затронула версии до 2.45.1, 2.44.1, 2.43.4, 2.42.2, 2.41.1, 2.40.2 и 2.39.4. Исправление описано в базе уязвимостей <a href="https://nvd.nist.gov/vuln/detail/CVE-2024-32002">NVD, CVE-2024-32002</a>. Урок для темы: <code>git clone --recursive</code> по ссылке из письма или задачи это не безобидное чтение. Подмодули, hooks и настройки репозитория относятся к недоверенному вводу. Перед клонированием незнакомого проекта стоит понять, откуда он, а рекурсивные подмодули включать осознанно.</p>
+<table>
+<thead>
+<tr>
+<th>Случай</th>
+<th>Что сломалось</th>
+<th>Вывод</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>BitKeeper, 2005</td>
+<td>исчез инструмент, а вместе с ним привычный процесс</td>
+<td>история и процесс должны опираться на несколько механизмов</td>
+</tr>
+<tr>
+<td>GitLab, 2017</td>
+<td>резервные копии не проверяли, реплика не заменяла восстановление</td>
+<td>удалённый репозиторий не равен резервной копии</td>
+</tr>
+<tr>
+<td>Git, 2024</td>
+<td>рекурсивное клонирование выполнило код из подмодуля</td>
+<td>репозиторий и его настройки это недоверенный ввод</td>
+</tr>
+</tbody>
 </table></div>
 </div>
 
 <div class="gate-step" data-gate>
-<p class="gate-action"><button type="button" class="gate-btn" aria-expanded="false"><span class="gate-q" aria-hidden="true">?</span><span>Какие правила защищают общую ветку от потери работы?</span></button></p>
-<div class="gate-content" hidden><h2 id="типичные-ошибки"><span class="num">08</span>Типичные ошибки</h2>
+<p class="gate-action"><button type="button" class="gate-btn" aria-expanded="false"><span class="gate-q" aria-hidden="true">?</span><span>Какие проверки стоит сделать до слияния и что делать после него?</span></button></p>
+<div class="gate-content" hidden><h2 id="проверка-перед-слиянием-и-типичные-ошибки"><span class="num">07</span>Проверка перед слиянием и типичные ошибки</h2>
+<p>Слияние это точка, где работа одного человека становится работой всех. Поэтому проверка перед слиянием важнее скорости. Минимальный набор такой: ветка собрана, тесты проходят, diff прочитан, в нём нет секретов и случайных файлов, описание объясняет изменение.</p>
+<table>
+<thead>
+<tr>
+<th>Что проверить</th>
+<th>Зачем</th>
+<th>Как</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ветка создана от свежей главной</td>
+<td>меньше конфликтов</td>
+<td><code>git log --oneline main..HEAD</code></td>
+</tr>
+<tr>
+<td>тесты проходят</td>
+<td>изменение не ломает поведение</td>
+<td>запуск набора тестов</td>
+</tr>
+<tr>
+<td>diff прочитан целиком</td>
+<td>автор видит свои случайные правки</td>
+<td><code>git diff main...HEAD</code></td>
+</tr>
+<tr>
+<td>нет секретов и мусора</td>
+<td>данные не утекают в историю</td>
+<td><code>git diff --cached</code>, <code>.gitignore</code></td>
+</tr>
+<tr>
+<td>описание понятно</td>
+<td>рецензент знает, что проверять</td>
+<td>заголовок и описание запроса</td>
+</tr>
+</tbody>
+</table>
+<p>После слияния работу не заканчивают. Нужно удалить рабочую ветку, обновить локальную главную, прогнать тесты на объединённом коде и убедиться, что CI собрал именно тот коммит, который попал в <code>main</code>. Если после слияния обнаружен дефект, исправление делают отдельной веткой от свежей главной, а не правкой поверх старой.</p>
 <p><strong>Коммиты прямо в главную ветку.</strong> Несколько человек пишут в <code>main</code>, и незаконченная правка ломает сборку у всех. Симптом: тесты падают, хотя никто не завершал задачу. Лечение: работать в отдельной ветке и сливать только проверенное.</p>
 <p><strong>Слияние без проверки.</strong> Ветку сливают, не запустив тесты и не прочитав diff. Конфликт разрешён, маркеры удалены, но поведение сломано. Симптом: после слияния отчёт пустой. Лечение: прогон тестов до и после слияния.</p>
 <p><strong>Разрешение конфликта удалением чужой строки.</strong> Самая дорогая ошибка в примере с начала лекции. Симптом: задача закрыта, а изменение исчезло. Лечение: читать обе версии и фиксировать решение в сообщении коммита.</p>
@@ -1332,9 +1406,10 @@ git push -u origin feature/stock-report
 <p><strong>Забытый <code>.gitignore</code>.</strong> В репозиторий попадают база, журнал, виртуальное окружение и файл с паролем. Симптом: репозиторий растёт, а секрет виден в истории. Лечение: настроить игнор до первого коммита, а секрет при попадании заменить и удалить из истории.</p>
 <p><strong>Переключение с незакоммиченными изменениями.</strong> Файлы переносятся в другую ветку или мешают переключению. Симптом: правка оказалась не там, где планировалась. Лечение: перед сменой ветки проверять <code>git status</code> и либо коммитить, либо временно откладывать изменения через <code>git stash</code>.</p>
 <p><strong>Слияние ветки в саму себя.</strong> Автор путает ветки и выполняет <code>git merge</code> на той же ветке, где стоит. Симптом: сообщение «Already up to date», а изменения не появились в главной. Лечение: перед слиянием проверить <code>git branch --show-current</code> и явно указать целевую ветку.</p>
+<p><strong>Потеря коммита после перебазирования.</strong> Автор отменяет перебазирование, не сохранив ветку, и не знает, где искать старые коммиты. Симптом: «всё пропало». Лечение: <code>git reflog</code> показывает перемещения указателя, по нему можно вернуться и создать ветку заново.</p>
 <div class="callout key"><span class="label">Ветка это не копия проекта</span><p>Ветка это указатель на коммит. Переключение меняет файлы в рабочем каталоге, но не создаёт второй проект. Поэтому ветки дешёвые, а коммиты общие для всего репозитория.</p></div>
 
-<h2 id="итоги"><span class="num">09</span>Итоги</h2>
+<h2 id="итоги"><span class="num">08</span>Итоги</h2>
 <ul>
 <li>Коммит это снимок проекта, ветка это указатель на коммит, <code>HEAD</code> показывает текущую позицию.</li>
 <li>Ветку создают под одну задачу и дают ей имя, по которому понятно назначение.</li>
@@ -1342,8 +1417,22 @@ git push -u origin feature/stock-report
 <li>Конфликт разрешают вручную: прочитать обе версии, выбрать поведение, добавить файл и завершить слияние.</li>
 <li>Перебазирование делает историю линейной, меняет хэши и подходит только для личных веток.</li>
 <li>Главная ветка всегда собирается и проходит тесты, а рабочая ветка живёт до слияния задачи.</li>
+<li>Удалённый репозиторий и резервная копия это разные вещи, а клонирование незнакомого проекта требует осторожности.</li>
 </ul>
-<div class="quiz" data-quiz data-quiz-guard><div class="quiz-who"><label class="quiz-who-label"><span>ФИО</span><input type="text" class="quiz-name" data-quiz-name maxlength="80" autocomplete="off" placeholder="Иванов Иван Иванович"></label><span class="quiz-attempts" data-quiz-attempts>две попытки на лекцию</span><span class="quiz-note" data-who-note hidden></span></div><div class="quiz-q" data-type="single" data-correct="1" data-q="1"><p class="quiz-p"><span class="quiz-no" aria-hidden="true">01</span>Когда при слиянии возникает конфликт?</p><div class="opts"><label class="opt"><input type="radio" name="q134_0" value="1" autocomplete="off"><span>Когда в ветке больше одного коммита</span></label><label class="opt"><input type="radio" name="q134_0" value="3" autocomplete="off"><span>Когда в проекте есть файл <code>.gitignore</code></span></label><label class="opt"><input type="radio" name="q134_0" value="0" autocomplete="off" data-ok><span>Когда обе ветки изменили одну и ту же строку или файл</span></label><label class="opt"><input type="radio" name="q134_0" value="2" autocomplete="off"><span>Когда ветка отправлена в удалённый репозиторий</span></label></div><p class="quiz-why" hidden>Git не может выбрать между двумя изменениями одного места.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="multi" data-correct="3" data-q="2" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">02</span>Какие команды создают новую ветку?</p><div class="opts"><label class="opt"><input type="checkbox" name="q134_1" value="0" autocomplete="off" data-ok><span><code>git branch feature/report</code></span></label><label class="opt"><input type="checkbox" name="q134_1" value="3" autocomplete="off"><span><code>git merge feature/report</code></span></label><label class="opt"><input type="checkbox" name="q134_1" value="2" autocomplete="off" data-ok><span><code>git checkout -b feature/report</code></span></label><label class="opt"><input type="checkbox" name="q134_1" value="4" autocomplete="off"><span><code>git push feature/report</code></span></label><label class="opt"><input type="checkbox" name="q134_1" value="1" autocomplete="off" data-ok><span><code>git switch -c feature/report</code></span></label></div><p class="quiz-why" hidden>Все три команды создают ветку, но переключаются на неё не все.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="short" data-q="3" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">03</span>Какая команда показывает состояние рабочего каталога и индекс?</p><input type="text" class="short-answer" data-answers="[&quot;git status&quot;, &quot;status&quot;]" placeholder="Введите ответ" autocomplete="off" spellcheck="false" aria-label="Какая команда показывает состояние рабочего каталога и индекс?"><p class="quiz-why" hidden><code>git status</code> показывает ветку, изменения и конфликты.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="4" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">04</span>Что такое fast-forward при слиянии?</p><div class="opts"><label class="opt"><input type="radio" name="q134_3" value="3" autocomplete="off"><span>Разрешение конфликта выбором первой версии</span></label><label class="opt"><input type="radio" name="q134_3" value="2" autocomplete="off"><span>Удаление всех коммитов рабочей ветки</span></label><label class="opt"><input type="radio" name="q134_3" value="1" autocomplete="off"><span>Принудительная отправка ветки в удалённый репозиторий</span></label><label class="opt"><input type="radio" name="q134_3" value="0" autocomplete="off" data-ok><span>Перемещение указателя целевой ветки без создания коммита слияния</span></label></div><p class="quiz-why" hidden>Перемотка возможна, когда целевая ветка не получала новых коммитов.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="5" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">05</span>Почему нельзя перебазировать общую ветку?</p><div class="opts"><label class="opt"><input type="radio" name="q134_4" value="3" autocomplete="off"><span>После него нельзя сделать слияние</span></label><label class="opt"><input type="radio" name="q134_4" value="0" autocomplete="off" data-ok><span>Перебазирование меняет хэши, и история у коллег расходится</span></label><label class="opt"><input type="radio" name="q134_4" value="2" autocomplete="off"><span>Перебазирование запрещено в Git</span></label><label class="opt"><input type="radio" name="q134_4" value="1" autocomplete="off"><span>Перебазирование удаляет все файлы проекта</span></label></div><p class="quiz-why" hidden>Общую ветку безопаснее сливать, а не переписывать.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="short" data-q="6" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">06</span>Как называется перенос коммитов ветки на новую базу?</p><input type="text" class="short-answer" data-answers="[&quot;rebase&quot;, &quot;перебазирование&quot;]" placeholder="Введите ответ" autocomplete="off" spellcheck="false" aria-label="Как называется перенос коммитов ветки на новую базу?"><p class="quiz-why" hidden>Перебазирование применяет коммиты заново поверх другой ветки.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="7" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">07</span>Как отменить начатое слияние?</p><div class="opts"><label class="opt"><input type="radio" name="q134_6" value="2" autocomplete="off"><span><code>git push --abort</code></span></label><label class="opt"><input type="radio" name="q134_6" value="3" autocomplete="off"><span><code>git switch --abort</code></span></label><label class="opt"><input type="radio" name="q134_6" value="0" autocomplete="off" data-ok><span><code>git merge --abort</code></span></label><label class="opt"><input type="radio" name="q134_6" value="1" autocomplete="off"><span><code>git commit --abort</code></span></label></div><p class="quiz-why" hidden>Команда возвращает состояние до начала слияния.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="8" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">08</span>Что означает <code>UU</code> в выводе <code>git status --short</code>?</p><div class="opts"><label class="opt"><input type="radio" name="q134_7" value="1" autocomplete="off"><span>Файл удалён из репозитория</span></label><label class="opt"><input type="radio" name="q134_7" value="0" autocomplete="off" data-ok><span>Файл изменён обеими сторонами, конфликт ещё не разрешён</span></label><label class="opt"><input type="radio" name="q134_7" value="3" autocomplete="off"><span>Файл не отслеживается</span></label><label class="opt"><input type="radio" name="q134_7" value="2" autocomplete="off"><span>Файл добавлен в индекс и готов к коммиту</span></label></div><p class="quiz-why" hidden>Две буквы <code>U</code> показывают конфликт с двух сторон.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="multi" data-correct="3" data-q="9" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">09</span>Какие правила защищают общую ветку?</p><div class="opts"><label class="opt"><input type="checkbox" name="q134_8" value="0" autocomplete="off" data-ok><span>Работать в отдельной ветке под задачу</span></label><label class="opt"><input type="checkbox" name="q134_8" value="1" autocomplete="off" data-ok><span>Запускать тесты перед слиянием</span></label><label class="opt"><input type="checkbox" name="q134_8" value="4" autocomplete="off"><span>Разрешать конфликт удалением чужой строки</span></label><label class="opt"><input type="checkbox" name="q134_8" value="3" autocomplete="off"><span>Коммитить напрямую в <code>main</code> без проверки</span></label><label class="opt"><input type="checkbox" name="q134_8" value="2" autocomplete="off" data-ok><span>Читать обе стороны конфликта</span></label></div><p class="quiz-why" hidden>Ветка, тесты и внимательное разрешение конфликта сохраняют чужую работу.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="10" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">10</span>Что такое ветка в Git?</p><div class="opts"><label class="opt"><input type="radio" name="q134_9" value="3" autocomplete="off"><span>Список изменённых строк</span></label><label class="opt"><input type="radio" name="q134_9" value="2" autocomplete="off"><span>Файл с настройками репозитория</span></label><label class="opt"><input type="radio" name="q134_9" value="1" autocomplete="off"><span>Полная копия проекта на диске</span></label><label class="opt"><input type="radio" name="q134_9" value="0" autocomplete="off" data-ok><span>Указатель на коммит, который двигается при новых коммитах</span></label></div><p class="quiz-why" hidden>Ветка это ярлык на коммит, а не отдельная копия файлов.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="11" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">11</span>Что делает <code>git add</code> после разрешения конфликта?</p><div class="opts"><label class="opt"><input type="radio" name="q134_10" value="2" autocomplete="off"><span>Отменяет слияние</span></label><label class="opt"><input type="radio" name="q134_10" value="0" autocomplete="off" data-ok><span>Отмечает конфликт как разрешённый и готовит файл к коммиту</span></label><label class="opt"><input type="radio" name="q134_10" value="3" autocomplete="off"><span>Отправляет файл в удалённый репозиторий</span></label><label class="opt"><input type="radio" name="q134_10" value="1" autocomplete="off"><span>Удаляет конфликтующие строки автоматически</span></label></div><p class="quiz-why" hidden>Индекс сообщает Git, что файл готов к завершению слияния.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="multi" data-correct="4" data-q="12" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">12</span>Что показывает <code>git log --graph --oneline --all</code>?</p><div class="opts"><label class="opt"><input type="checkbox" name="q134_11" value="0" autocomplete="off" data-ok><span>Граф истории всех веток с короткими хэшами</span></label><label class="opt"><input type="checkbox" name="q134_11" value="1" autocomplete="off" data-ok><span>Список файлов рабочего каталога</span></label><label class="opt"><input type="checkbox" name="q134_11" value="2" autocomplete="off" data-ok><span>Содержимое индекса</span></label><label class="opt"><input type="checkbox" name="q134_11" value="3" autocomplete="off" data-ok><span>Настройки удалённого репозитория</span></label></div><p class="quiz-why" hidden>Флаги включают граф, краткий формат и все ветки.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="13" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">13</span>Что делает команда <code>git switch -c feature/discount</code>?</p><div class="opts"><label class="opt"><input type="radio" name="q134_12" value="1" autocomplete="off"><span>Удаляет ветку <code>feature/discount</code></span></label><label class="opt"><input type="radio" name="q134_12" value="2" autocomplete="off"><span>Сливает ветку в <code>main</code></span></label><label class="opt"><input type="radio" name="q134_12" value="3" autocomplete="off"><span>Отправляет ветку в удалённый репозиторий</span></label><label class="opt"><input type="radio" name="q134_12" value="0" autocomplete="off" data-ok><span>Создаёт ветку <code>feature/discount</code> и переключается на неё</span></label></div><p class="quiz-why" hidden>Флаг <code>-c</code> означает создание новой ветки.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="short" data-q="14" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">14</span>Как называется слияние, при котором указатель просто перемещается вперёд?</p><input type="text" class="short-answer" data-answers="[&quot;fast-forward&quot;, &quot;перемотка&quot;]" placeholder="Введите ответ" autocomplete="off" spellcheck="false" aria-label="Как называется слияние, при котором указатель просто перемещается вперёд?"><p class="quiz-why" hidden>При перемотке новый коммит слияния не создаётся.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="15" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">15</span>Чем слияние отличается от перебазирования?</p><div class="opts"><label class="opt"><input type="radio" name="q134_14" value="2" autocomplete="off"><span>Перебазирование работает только с удалёнными ветками</span></label><label class="opt"><input type="radio" name="q134_14" value="1" autocomplete="off"><span>Слияние меняет хэши, перебазирование их сохраняет</span></label><label class="opt"><input type="radio" name="q134_14" value="3" autocomplete="off"><span>Между ними нет разницы</span></label><label class="opt"><input type="radio" name="q134_14" value="0" autocomplete="off" data-ok><span>Слияние сохраняет ветвление, перебазирование переносит коммиты на новую базу</span></label></div><p class="quiz-why" hidden>Перебазирование делает историю линейной и меняет хэши коммитов.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><p class="quiz-note quiz-submit-note" data-quiz-note hidden></p><div class="quiz-result" data-quiz-result hidden aria-live="polite"><span class="label">Результат теста</span><h3>Тест завершён</h3><p class="modal-name-line">ФИО: <b data-student-name></b></p><p class="modal-result" data-modal-result></p><p class="modal-result" data-modal-wrong></p><dl class="modal-times"><div><dt>Время выполнения теста</dt><dd data-test-time>00:00</dd></div><div><dt>Время просмотра лекции</dt><dd data-view-time>00:00</dd></div></dl></div></div></div>
+<h2 id="источники"><span class="num">09</span>Источники</h2>
+<ol>
+<li>Chacon S., Straub B. Pro Git. https://git-scm.com/book/en/v2</li>
+<li>Pro Git. Git Branching. https://git-scm.com/book/en/v2/Git-Branching-Branches-in-a-Nutshell</li>
+<li>Pro Git. A Short History of Git. https://git-scm.com/book/en/v2/Getting-Started-A-Short-History-of-Git</li>
+<li>Git documentation. git-merge. https://git-scm.com/docs/git-merge</li>
+<li>Git documentation. git-rebase. https://git-scm.com/docs/git-rebase</li>
+<li>Git documentation. git-reflog. https://git-scm.com/docs/git-reflog</li>
+<li>GitHub Docs. GitHub Flow. https://docs.github.com/en/get-started/using-github/github-flow</li>
+<li>GitLab. Postmortem of database outage of January 31, 2017. https://about.gitlab.com/blog/postmortem-of-database-outage-of-january-31/</li>
+<li>NIST. CVE-2024-32002. https://nvd.nist.gov/vuln/detail/CVE-2024-32002</li>
+<li>Conventional Commits 1.0.0. https://www.conventionalcommits.org/en/v1.0.0/</li>
+</ol>
+<div class="quiz" data-quiz data-quiz-guard><div class="quiz-who"><label class="quiz-who-label"><span>ФИО</span><input type="text" class="quiz-name" data-quiz-name maxlength="80" autocomplete="off" placeholder="Иванов Иван Иванович"></label><span class="quiz-attempts" data-quiz-attempts>две попытки на лекцию</span><span class="quiz-note" data-who-note hidden></span></div><div class="quiz-q" data-type="single" data-correct="1" data-q="1"><p class="quiz-p"><span class="quiz-no" aria-hidden="true">01</span>Почему перебазирование меняет хэши коммитов?</p><div class="opts"><label class="opt"><input type="radio" name="q163_0" value="2" autocomplete="off"><span>Потому что меняется имя удалённого репозитория</span></label><label class="opt"><input type="radio" name="q163_0" value="1" autocomplete="off"><span>Потому что Git удаляет сообщения коммитов</span></label><label class="opt"><input type="radio" name="q163_0" value="0" autocomplete="off" data-ok><span>Потому что у коммитов появляется другой родитель</span></label><label class="opt"><input type="radio" name="q163_0" value="3" autocomplete="off"><span>Потому что перебазирование создаёт новый тег</span></label></div><p class="quiz-why" hidden>Имя коммита зависит от содержимого и родителя, поэтому перенос на новую базу даёт новые имена.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="short" data-q="2" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">02</span>Какая команда показывает состояние рабочего каталога и индекс?</p><input type="text" class="short-answer" data-answers="[&quot;git status&quot;, &quot;status&quot;]" placeholder="Введите ответ" autocomplete="off" spellcheck="false" aria-label="Какая команда показывает состояние рабочего каталога и индекс?"><p class="quiz-why" hidden><code>git status</code> показывает ветку, изменения и конфликты.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="multi" data-correct="3" data-q="3" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">03</span>Что проверяют перед отправкой ветки в общий репозиторий?</p><div class="opts"><label class="opt"><input type="checkbox" name="q163_2" value="2" autocomplete="off" data-ok><span>Что описание объясняет цель изменения</span></label><label class="opt"><input type="checkbox" name="q163_2" value="4" autocomplete="off"><span>Что история переписана после отправки</span></label><label class="opt"><input type="checkbox" name="q163_2" value="1" autocomplete="off" data-ok><span>Что тесты проходят на рабочей ветке</span></label><label class="opt"><input type="checkbox" name="q163_2" value="3" autocomplete="off"><span>Что в ветке как можно больше коммитов</span></label><label class="opt"><input type="checkbox" name="q163_2" value="0" autocomplete="off" data-ok><span>Что в diff нет секретов и случайных файлов</span></label></div><p class="quiz-why" hidden>Перед отправкой проверяют состав изменения, тесты и понятность описания.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="4" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">04</span>Что делает <code>git fetch</code>?</p><div class="opts"><label class="opt"><input type="radio" name="q163_3" value="3" autocomplete="off"><span>Удаляет удалённые ветки</span></label><label class="opt"><input type="radio" name="q163_3" value="1" autocomplete="off"><span>Сливает удалённую ветку в текущую</span></label><label class="opt"><input type="radio" name="q163_3" value="2" autocomplete="off"><span>Отправляет локальные коммиты на сервер</span></label><label class="opt"><input type="radio" name="q163_3" value="0" autocomplete="off" data-ok><span>Забирает изменения с сервера, но не сливает их с рабочей веткой</span></label></div><p class="quiz-why" hidden>Fetch обновляет сведения о сервере, а слияние выполняют отдельно.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="5" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">05</span>Чем опасно рекурсивное клонирование незнакомого репозитория?</p><div class="opts"><label class="opt"><input type="radio" name="q163_4" value="2" autocomplete="off"><span>Git запрещает клонировать репозитории с подмодулями</span></label><label class="opt"><input type="radio" name="q163_4" value="3" autocomplete="off"><span>После клонирования нельзя сделать коммит</span></label><label class="opt"><input type="radio" name="q163_4" value="1" autocomplete="off"><span>Клонирование всегда удаляет локальные ветки</span></label><label class="opt"><input type="radio" name="q163_4" value="0" autocomplete="off" data-ok><span>Подмодуль может выполнить код через hook при клонировании</span></label></div><p class="quiz-why" hidden>Уязвимость CVE-2024-32002 показала, что подмодули и hooks относятся к недоверенному вводу.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="short" data-q="6" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">06</span>Как называется перенос коммитов ветки на новую базу?</p><input type="text" class="short-answer" data-answers="[&quot;rebase&quot;, &quot;перебазирование&quot;]" placeholder="Введите ответ" autocomplete="off" spellcheck="false" aria-label="Как называется перенос коммитов ветки на новую базу?"><p class="quiz-why" hidden>Перебазирование применяет коммиты заново поверх другой ветки.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="7" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">07</span>Что такое fast-forward при слиянии?</p><div class="opts"><label class="opt"><input type="radio" name="q163_6" value="3" autocomplete="off"><span>Разрешение конфликта выбором первой версии</span></label><label class="opt"><input type="radio" name="q163_6" value="2" autocomplete="off"><span>Удаление всех коммитов рабочей ветки</span></label><label class="opt"><input type="radio" name="q163_6" value="1" autocomplete="off"><span>Принудительная отправка ветки в удалённый репозиторий</span></label><label class="opt"><input type="radio" name="q163_6" value="0" autocomplete="off" data-ok><span>Перемещение указателя целевой ветки без создания коммита слияния</span></label></div><p class="quiz-why" hidden>Перемотка возможна, когда целевая ветка не получала новых коммитов.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="multi" data-correct="3" data-q="8" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">08</span>Какие команды создают новую ветку?</p><div class="opts"><label class="opt"><input type="checkbox" name="q163_7" value="0" autocomplete="off" data-ok><span><code>git branch feature/report</code></span></label><label class="opt"><input type="checkbox" name="q163_7" value="3" autocomplete="off"><span><code>git merge feature/report</code></span></label><label class="opt"><input type="checkbox" name="q163_7" value="2" autocomplete="off" data-ok><span><code>git checkout -b feature/report</code></span></label><label class="opt"><input type="checkbox" name="q163_7" value="4" autocomplete="off"><span><code>git push feature/report</code></span></label><label class="opt"><input type="checkbox" name="q163_7" value="1" autocomplete="off" data-ok><span><code>git switch -c feature/report</code></span></label></div><p class="quiz-why" hidden>Все три команды создают ветку, но переключаются на неё не все.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="9" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">09</span>Что такое ветка в Git?</p><div class="opts"><label class="opt"><input type="radio" name="q163_8" value="3" autocomplete="off"><span>Список изменённых строк</span></label><label class="opt"><input type="radio" name="q163_8" value="2" autocomplete="off"><span>Файл с настройками репозитория</span></label><label class="opt"><input type="radio" name="q163_8" value="1" autocomplete="off"><span>Полная копия проекта на диске</span></label><label class="opt"><input type="radio" name="q163_8" value="0" autocomplete="off" data-ok><span>Указатель на коммит, который двигается при новых коммитах</span></label></div><p class="quiz-why" hidden>Ветка это ярлык на коммит, а не отдельная копия файлов.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="10" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">10</span>Что произошло в GitLab.com в 2017 году?</p><div class="opts"><label class="opt"><input type="radio" name="q163_9" value="1" autocomplete="off"><span>Все Git-репозитории были удалены вместе с базой</span></label><label class="opt"><input type="radio" name="q163_9" value="3" autocomplete="off"><span>Ветки перестали сливаться из-за ошибки в Git</span></label><label class="opt"><input type="radio" name="q163_9" value="0" autocomplete="off" data-ok><span>Основной сервер базы потерял данные, а резервные копии не сработали</span></label><label class="opt"><input type="radio" name="q163_9" value="2" autocomplete="off"><span>Компания потеряла лицензию на Git</span></label></div><p class="quiz-why" hidden>Git-репозитории хранились отдельно, но данные базы восстановить полностью не удалось.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="multi" data-correct="3" data-q="11" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">11</span>Какие правила защищают общую ветку?</p><div class="opts"><label class="opt"><input type="checkbox" name="q163_10" value="0" autocomplete="off" data-ok><span>Работать в отдельной ветке под задачу</span></label><label class="opt"><input type="checkbox" name="q163_10" value="1" autocomplete="off" data-ok><span>Запускать тесты перед слиянием</span></label><label class="opt"><input type="checkbox" name="q163_10" value="4" autocomplete="off"><span>Разрешать конфликт удалением чужой строки</span></label><label class="opt"><input type="checkbox" name="q163_10" value="3" autocomplete="off"><span>Коммитить напрямую в <code>main</code> без проверки</span></label><label class="opt"><input type="checkbox" name="q163_10" value="2" autocomplete="off" data-ok><span>Читать обе стороны конфликта</span></label></div><p class="quiz-why" hidden>Ветка, тесты и внимательное разрешение конфликта сохраняют чужую работу.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="12" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">12</span>Что делает команда <code>git switch -c feature/discount</code>?</p><div class="opts"><label class="opt"><input type="radio" name="q163_11" value="1" autocomplete="off"><span>Удаляет ветку <code>feature/discount</code></span></label><label class="opt"><input type="radio" name="q163_11" value="2" autocomplete="off"><span>Сливает ветку в <code>main</code></span></label><label class="opt"><input type="radio" name="q163_11" value="3" autocomplete="off"><span>Отправляет ветку в удалённый репозиторий</span></label><label class="opt"><input type="radio" name="q163_11" value="0" autocomplete="off" data-ok><span>Создаёт ветку <code>feature/discount</code> и переключается на неё</span></label></div><p class="quiz-why" hidden>Флаг <code>-c</code> означает создание новой ветки.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="13" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">13</span>Когда при слиянии возникает конфликт?</p><div class="opts"><label class="opt"><input type="radio" name="q163_12" value="1" autocomplete="off"><span>Когда в ветке больше одного коммита</span></label><label class="opt"><input type="radio" name="q163_12" value="3" autocomplete="off"><span>Когда в проекте есть файл <code>.gitignore</code></span></label><label class="opt"><input type="radio" name="q163_12" value="0" autocomplete="off" data-ok><span>Когда обе ветки изменили одну и ту же строку или файл</span></label><label class="opt"><input type="radio" name="q163_12" value="2" autocomplete="off"><span>Когда ветка отправлена в удалённый репозиторий</span></label></div><p class="quiz-why" hidden>Git не может выбрать между двумя изменениями одного места.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="short" data-q="14" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">14</span>Как называется слияние, при котором указатель просто перемещается вперёд?</p><input type="text" class="short-answer" data-answers="[&quot;fast-forward&quot;, &quot;перемотка&quot;]" placeholder="Введите ответ" autocomplete="off" spellcheck="false" aria-label="Как называется слияние, при котором указатель просто перемещается вперёд?"><p class="quiz-why" hidden>При перемотке новый коммит слияния не создаётся.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="15" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">15</span>Что означает отклонённая отправка <code>git push</code>?</p><div class="opts"><label class="opt"><input type="radio" name="q163_14" value="3" autocomplete="off"><span>Пользователь не имеет прав на чтение</span></label><label class="opt"><input type="radio" name="q163_14" value="0" autocomplete="off" data-ok><span>На сервере появились коммиты, которых нет локально</span></label><label class="opt"><input type="radio" name="q163_14" value="1" autocomplete="off"><span>Локальная ветка удалена</span></label><label class="opt"><input type="radio" name="q163_14" value="2" autocomplete="off"><span>В репозитории закончилось место</span></label></div><p class="quiz-why" hidden>Сначала забирают чужие коммиты, затем повторяют отправку.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><p class="quiz-note quiz-submit-note" data-quiz-note hidden></p><div class="quiz-result" data-quiz-result hidden aria-live="polite"><span class="label">Результат теста</span><h3>Тест завершён</h3><p class="modal-name-line">ФИО: <b data-student-name></b></p><p class="modal-result" data-modal-result></p><p class="modal-result" data-modal-wrong></p><dl class="modal-times"><div><dt>Время выполнения теста</dt><dd data-test-time>00:00</dd></div><div><dt>Время просмотра лекции</dt><dd data-view-time>00:00</dd></div></dl></div></div></div>
 </div></article><nav class="pager"><a class="" href="39-prakt-15.html"><span>← Предыдущее занятие</span>Практика 15. Проверка модулей и поиск дефекта</a><a class="next" style="text-align:right;margin-left:auto" href="41-prakt-16.html"><span>Следующее занятие →</span>Практика 16. История изменений учебного проекта</a></nav></main>
 <div class="modal" data-modal="warn" hidden>
   <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="warn-title">
@@ -1649,6 +1738,29 @@ git push -u origin feature/stock-report
       });
     });
   });
+})();
+
+(function(){
+  var FIX = "<style>html{color-scheme:__T__!important}html,body{background:transparent!important;margin:0!important}.iso-page{margin:6px auto 4px!important}<\/style><script>window.__errs=[];addEventListener('error',function(e){__errs.push(String(e.message))});<\/script>";
+  function size(f){ try{ var d=f.contentDocument; if(!d||!d.body) return;
+    f.style.height = Math.max(d.documentElement.scrollHeight, d.body.scrollHeight) + 'px'; }catch(e){} }
+  function load(fig){
+    var t='light'; if(fig.dataset.loaded===t) return; fig.dataset.loaded=t;
+    var f=fig.querySelector('iframe'), one=fig.getAttribute('data-one');
+    var b=atob(one || fig.getAttribute('data-light')), bytes=Uint8Array.from(b, function(c){return c.charCodeAt(0)});
+    f.style.colorScheme = 'light';
+    new Response(new Blob([bytes]).stream().pipeThrough(new DecompressionStream('gzip'))).text().then(function(html){
+      if (one) html = html.split('data-theme="dark"').join('data-theme="light"');
+      html = html.replace('</head>', FIX.split('__T__').join('light') + '</head>');
+      f.srcdoc = html;
+    });
+    f.onload=function(){ size(f); setTimeout(function(){size(f)},300); setTimeout(function(){size(f)},1200);
+      try{ new ResizeObserver(function(){size(f)}).observe(f.contentDocument.body); }catch(e){} };
+  }
+  var figs=[].slice.call(document.querySelectorAll('figure.figure'));
+  var io = 'IntersectionObserver' in window ? new IntersectionObserver(function(es){ es.forEach(function(e){ if(e.isIntersecting){ load(e.target); io.unobserve(e.target);} }); }, {rootMargin:'600px'}) : null;
+  figs.forEach(function(f){ io ? io.observe(f) : load(f); });
+  addEventListener('resize', function(){ figs.forEach(function(f){ var i=f.querySelector('iframe'); if(f.dataset.loaded) size(i); }); });
 })();
 
 (function(){

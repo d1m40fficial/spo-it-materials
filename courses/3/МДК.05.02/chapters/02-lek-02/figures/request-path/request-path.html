@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Путь запроса через слои</title>
+<style>
+  :root { --paper:#FBF8FC; --card:#FFFFFF; --ink:#2A2430; --muted:#6B6175; --rule:#E0D3E6; --accent:#8E5BC8; --soft:#EBE0EC; --stop:#A85672; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .frame { background:var(--paper); border:1px solid var(--rule); border-radius:12px; padding:14px; }
+  .eyebrow { margin:0 0 6px; font:600 10px/1.2 Consolas,monospace; letter-spacing:.14em; text-transform:uppercase; color:var(--accent); }
+  svg { display:block; width:100%; height:auto; }
+  .note { margin:10px 2px 0; font:12px/1.5 "Segoe UI",system-ui,sans-serif; color:var(--muted); }
+  @media (max-width:560px) { .frame { padding:10px; } }
+</style>
+</head>
+<body>
+<div class="frame">
+  <p class="eyebrow">Архитектура · путь запроса</p>
+  <svg viewBox="0 0 680 300" role="img" aria-labelledby="rp-title rp-desc">
+    <title id="rp-title">Путь запроса от интерфейса до базы</title>
+    <desc id="rp-desc">Обработчик кнопки вызывает сервис, сервис вызывает репозиторий, репозиторий обращается к базе. Внизу пунктирная стрелка показывает запрещённый прямой запрос из интерфейса в базу.</desc>
+
+    <g font-family="Segoe UI,system-ui,sans-serif">
+      <rect x="14" y="34" width="140" height="76" rx="9" fill="#FFFFFF" stroke="#D3C1DE" stroke-width="1.4"/>
+      <text x="84" y="60" text-anchor="middle" font-size="13" font-weight="700" fill="#2A2430">Интерфейс</text>
+      <text x="84" y="78" text-anchor="middle" font-size="10" fill="#6B6175">кнопка «Отгрузить»</text>
+      <text x="84" y="93" text-anchor="middle" font-size="10" fill="#8E5BC8">форматирует ответ</text>
+
+      <line x1="154" y1="62" x2="192" y2="62" stroke="#8E5BC8" stroke-width="2"/>
+      <path d="M186 56 L195 62 L186 68" fill="none" stroke="#8E5BC8" stroke-width="2"/>
+      <text x="174" y="50" text-anchor="middle" font-size="9" fill="#6B6175">заказ</text>
+
+      <rect x="195" y="34" width="140" height="76" rx="9" fill="#EBE0EC" stroke="#8E5BC8" stroke-width="1.8"/>
+      <text x="265" y="60" text-anchor="middle" font-size="13" font-weight="700" fill="#2A2430">Логика</text>
+      <text x="265" y="78" text-anchor="middle" font-size="10" fill="#5A4A66">проверяет резерв</text>
+      <text x="265" y="93" text-anchor="middle" font-size="10" fill="#8E5BC8">открывает транзакцию</text>
+
+      <line x1="335" y1="62" x2="373" y2="62" stroke="#8E5BC8" stroke-width="2"/>
+      <path d="M367 56 L376 62 L367 68" fill="none" stroke="#8E5BC8" stroke-width="2"/>
+      <text x="355" y="50" text-anchor="middle" font-size="9" fill="#6B6175">площадка</text>
+
+      <rect x="376" y="34" width="140" height="76" rx="9" fill="#FFFFFF" stroke="#D3C1DE" stroke-width="1.4"/>
+      <text x="446" y="60" text-anchor="middle" font-size="13" font-weight="700" fill="#2A2430">Данные</text>
+      <text x="446" y="78" text-anchor="middle" font-size="10" fill="#6B6175">запрос с параметром</text>
+      <text x="446" y="93" text-anchor="middle" font-size="10" fill="#8E5BC8">возвращает числа</text>
+
+      <line x1="516" y1="62" x2="554" y2="62" stroke="#8E5BC8" stroke-width="2"/>
+      <path d="M548 56 L557 62 L548 68" fill="none" stroke="#8E5BC8" stroke-width="2"/>
+      <text x="536" y="50" text-anchor="middle" font-size="9" fill="#6B6175">SQL</text>
+
+      <ellipse cx="595" cy="52" rx="48" ry="10" fill="#FFFFFF" stroke="#D3C1DE"/>
+      <path d="M547 52 L547 92 A48 10 0 0 0 643 92 L643 52" fill="#FFFFFF" stroke="#D3C1DE"/>
+      <text x="595" y="78" text-anchor="middle" font-size="10" fill="#2A2430">База</text>
+
+      <text x="84" y="140" text-anchor="middle" font-size="10" fill="#6B6175">число и текст</text>
+      <line x1="84" y1="124" x2="84" y2="146" stroke="#B49AC6" stroke-width="1.4" stroke-dasharray="4 3"/>
+      <path d="M78 128 L84 119 L90 128" fill="none" stroke="#B49AC6" stroke-width="1.4"/>
+
+      <text x="265" y="140" text-anchor="middle" font-size="10" fill="#6B6175">доступный остаток</text>
+      <line x1="265" y1="124" x2="265" y2="146" stroke="#B49AC6" stroke-width="1.4" stroke-dasharray="4 3"/>
+      <path d="M259 128 L265 119 L271 128" fill="none" stroke="#B49AC6" stroke-width="1.4"/>
+
+      <text x="446" y="140" text-anchor="middle" font-size="10" fill="#6B6175">кортеж или объект</text>
+      <line x1="446" y1="124" x2="446" y2="146" stroke="#B49AC6" stroke-width="1.4" stroke-dasharray="4 3"/>
+      <path d="M440 128 L446 119 L452 128" fill="none" stroke="#B49AC6" stroke-width="1.4"/>
+
+      <path d="M84 160 C84 214 595 214 595 118" fill="none" stroke="#A85672" stroke-width="2" stroke-dasharray="7 5"/>
+      <path d="M589 126 L595 116 L601 126" fill="none" stroke="#A85672" stroke-width="2"/>
+      <text x="340" y="208" text-anchor="middle" font-size="10.5" fill="#A85672">прямой запрос из интерфейса в базу: граница нарушена</text>
+
+      <text x="14" y="246" font-size="11" fill="#2A2430">Через границу передают значения, а не курсоры.</text>
+      <text x="14" y="263" font-size="11" fill="#2A2430">Ошибку переводят на границе, а не показывают текст драйвера.</text>
+      <text x="14" y="280" font-size="11" fill="#2A2430">Транзакцию открывает сервис, потому что он знает сценарий.</text>
+    </g>
+  </svg>
+  <p class="note">Слева направо идёт вызов, обратно возвращаются данные. Пунктирная дуга внизу показывает нарушение, при котором обработчик кнопки сам обращается к базе.</p>
+</div>
+</body>
+</html>

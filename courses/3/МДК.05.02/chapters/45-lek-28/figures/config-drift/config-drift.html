@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Четыре причины расхождения настроек</title>
+<style>
+  :root { --paper:#FAF7F6; --card:#FFFDFC; --ink:#2A2430; --muted:#6B6272; --rule:#E6D9EC; --accent:#8E5BC8; --soft:#EBE0EC; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .frame { background:var(--paper); border:1px solid var(--rule); border-radius:12px; padding:16px; }
+  .eyebrow { margin:0 0 6px; font:600 10px/1.2 Consolas,monospace; letter-spacing:.14em; text-transform:uppercase; color:var(--accent); }
+  svg { display:block; width:100%; height:auto; }
+  .card { fill:var(--card); stroke:var(--rule); stroke-width:1.2; }
+  .bar { fill:var(--soft); stroke:var(--accent); stroke-width:1.4; }
+  .ct { font-size:12px; font-weight:700; fill:var(--ink); }
+  .cs { font-size:10px; fill:var(--muted); }
+  .cc { font-size:10px; fill:#5F3A85; font-weight:600; }
+  .h { font-size:10.5px; font-weight:700; fill:var(--accent); }
+  @media (max-width:560px) { .frame { padding:12px; } }
+</style>
+</head>
+<body>
+<div class="frame">
+  <p class="eyebrow">Почему среда расходится с ожиданием</p>
+  <svg viewBox="0 0 680 302" role="img" aria-labelledby="cd-title cd-desc">
+    <title id="cd-title">Четыре причины расхождения настроек</title>
+    <desc id="cd-desc">Четыре карточки: разные имена, разные источники, опасные умолчания и разное время применения. Для каждой причины указан симптом и проверка. Внизу перечислены проверки при старте.</desc>
+
+    <rect class="card" x="16" y="8" width="318" height="100" rx="9"/>
+    <text class="ct" x="30" y="32">1. Разные имена</text>
+    <text class="cs" x="30" y="53">В коде DB_PATH, на сервере</text>
+    <text class="cs" x="30" y="69">SKLAD_DB_PATH: читается умолчание</text>
+    <text class="cc" x="30" y="93">Проверка: сверка имён с .env.example</text>
+
+    <rect class="card" x="346" y="8" width="318" height="100" rx="9"/>
+    <text class="ct" x="360" y="32">2. Разные источники</text>
+    <text class="cs" x="360" y="53">Локально читается .env, служба</text>
+    <text class="cs" x="360" y="69">передаёт только часть переменных</text>
+    <text class="cc" x="360" y="93">Проверка: журнал найденных источников</text>
+
+    <rect class="card" x="16" y="120" width="318" height="100" rx="9"/>
+    <text class="ct" x="30" y="144">3. Опасные умолчания</text>
+    <text class="cs" x="30" y="165">Секрет dev-only работает молча</text>
+    <text class="cs" x="30" y="181">и включает отладку в prod</text>
+    <text class="cc" x="30" y="205">Проверка: запрет умолчаний в prod</text>
+
+    <rect class="card" x="346" y="120" width="318" height="100" rx="9"/>
+    <text class="ct" x="360" y="144">4. Разное время применения</text>
+    <text class="cs" x="360" y="165">Файл правят, процесс не перезапускают</text>
+    <text class="cs" x="360" y="181">и ищут причину в бизнес-логике</text>
+    <text class="cc" x="360" y="205">Проверка: время старта процесса</text>
+
+    <rect class="bar" x="16" y="236" width="648" height="48" rx="9"/>
+    <text class="h" x="30" y="256">Проверка при старте</text>
+    <text class="cs" x="30" y="274">Обязательные значения · диапазон · допустимые варианты · доступность пути · согласованность пар</text>
+
+    <text class="cs" x="16" y="294" font-size="9.5">Проверка при старте ловит ошибку окружения, но не заменяет тесты и наблюдение после запуска.</text>
+  </svg>
+</div>
+</body>
+</html>

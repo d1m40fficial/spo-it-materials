@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Барьеры проверки данных</title>
+<style>
+  :root { --paper:#FAF7F6; --card:#FFFDFC; --ink:#2A2430; --muted:#6B6272; --rule:#E6D9EC; --accent:#8E5BC8; --soft:#EBE0EC; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .frame { background:var(--paper); border:1px solid var(--rule); border-radius:12px; padding:16px; }
+  .eyebrow { margin:0 0 6px; font:600 10px/1.2 Consolas,monospace; letter-spacing:.14em; text-transform:uppercase; color:var(--accent); }
+  svg { display:block; width:100%; height:auto; }
+  .note { margin:10px 2px 0; font:12px/1.5 "Segoe UI",system-ui,sans-serif; color:var(--muted); }
+  @media (max-width:560px) { .frame { padding:12px; } .note { font-size:11.5px; } }
+</style>
+</head>
+<body>
+<div class="frame">
+  <p class="eyebrow">FastAPI · проверка данных</p>
+  <svg viewBox="0 0 680 360" role="img" aria-labelledby="vl-title vl-desc">
+    <title id="vl-title">Пять барьеров между телом запроса и ответом</title>
+    <desc id="vl-desc">Тело проходит разбор JSON, проверку схемы, правила обработчика, ограничения базы и модель ответа. Каждый барьер возвращает свой код ошибки.</desc>
+
+    <text x="16" y="24" font-family="Consolas,monospace" font-size="10" fill="#6B6272">БАРЬЕР</text>
+    <text x="476" y="24" font-family="Consolas,monospace" font-size="10" fill="#6B6272">ЧТО ЛОВИТ</text>
+    <line x1="16" y1="32" x2="664" y2="32" stroke="#E6D9EC"/>
+
+    <g font-family="Segoe UI,system-ui,sans-serif">
+      <rect x="16" y="42" width="440" height="42" rx="7" fill="#FFFDFC" stroke="#D8C7E2"/>
+      <text x="30" y="60" font-size="12" font-weight="700" fill="#2A2430">1 · разбор тела</text>
+      <text x="30" y="75" font-size="10" fill="#6B6272">байты превращаются в JSON, проверяется Content-Type</text>
+      <text x="476" y="67" font-size="10.5" fill="#8E5BC8">400, 415</text>
+
+      <rect x="16" y="90" width="440" height="42" rx="7" fill="#FFFDFC" stroke="#D8C7E2"/>
+      <text x="30" y="108" font-size="12" font-weight="700" fill="#2A2430">2 · схема Pydantic</text>
+      <text x="30" y="123" font-size="10" fill="#6B6272">типы, длина, диапазон, формат, лишние поля</text>
+      <text x="476" y="115" font-size="10.5" fill="#8E5BC8">422</text>
+
+      <rect x="16" y="138" width="440" height="42" rx="7" fill="#FFFDFC" stroke="#D8C7E2"/>
+      <text x="30" y="156" font-size="12" font-weight="700" fill="#2A2430">3 · правила обработчика</text>
+      <text x="30" y="171" font-size="10" fill="#6B6272">существует ли запись, хватает ли остатка, разрешена ли роль</text>
+      <text x="476" y="163" font-size="10.5" fill="#8E5BC8">403, 404, 409</text>
+
+      <rect x="16" y="186" width="440" height="42" rx="7" fill="#FFFDFC" stroke="#D8C7E2"/>
+      <text x="30" y="204" font-size="12" font-weight="700" fill="#2A2430">4 · ограничения базы</text>
+      <text x="30" y="219" font-size="10" fill="#6B6272">уникальный индекс, внешний ключ, NOT NULL</text>
+      <text x="476" y="211" font-size="10.5" fill="#8E5BC8">409 или 500</text>
+
+      <rect x="16" y="234" width="440" height="42" rx="7" fill="#EBE0EC" stroke="#8E5BC8" stroke-width="1.6"/>
+      <text x="30" y="252" font-size="12" font-weight="700" fill="#2A2430">5 · модель ответа</text>
+      <text x="30" y="267" font-size="10" fill="#2A2430">оставляет только объявленные поля, скрывает служебные</text>
+      <text x="476" y="259" font-size="10.5" fill="#8E5BC8">фильтр, не ошибка</text>
+    </g>
+
+    <line x1="36" y1="282" x2="36" y2="318" stroke="#8E5BC8" stroke-width="1.4" marker-end="url(#arw-v)"/>
+    <text x="48" y="304" font-family="Segoe UI,system-ui,sans-serif" font-size="11" fill="#6B6272">клиент получает ответ</text>
+    <text x="16" y="342" font-family="Consolas,monospace" font-size="9.5" fill="#6B6272">СХЕМА ПРОВЕРЯЕТ ФОРМУ, БАЗА ПРОВЕРЯЕТ СОСТОЯНИЕ</text>
+
+    <defs>
+      <marker id="arw-v" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#8E5BC8"/></marker>
+    </defs>
+  </svg>
+  <p class="note">Один и тот же дефект можно поймать на разных барьерах. Чем раньше он пойман, тем точнее сообщение и тем дешевле исправление.</p>
+</div>
+</body>
+</html>

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Путь миграции схемы</title>
+<style>
+  :root { color-scheme:light; --paper:#EBE0EC; --card:#FFFDFC; --ink:#2A2430; --muted:#6B6272; --rule:#CDBBD6; --accent:#8E5BC8; --soft:#F3EAF4; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .frame { background:var(--paper); border:1px solid var(--rule); border-radius:12px; padding:16px; }
+  .eyebrow { margin:0 0 6px; font:600 10px/1.2 Consolas,monospace; letter-spacing:.14em; text-transform:uppercase; color:var(--accent); }
+  svg { display:block; width:100%; height:auto; }
+  .note { margin:9px 2px 0; font:11.5px/1.5 "Segoe UI",system-ui,sans-serif; color:var(--muted); }
+  @media (max-width:560px) { .frame { padding:12px; } }
+</style>
+</head>
+<body>
+<div class="frame">
+  <p class="eyebrow">ORM · миграции</p>
+  <svg viewBox="0 0 680 364" role="img" aria-labelledby="mf-title mf-desc">
+    <title id="mf-title">Пять шагов миграции схемы</title>
+    <desc id="mf-desc">Модель, автоматическая миграция, проверка файла, прогон на копии, применение и проверка. Отмечены места, где теряются данные.</desc>
+
+    <g font-family="Segoe UI,system-ui,sans-serif">
+      <rect x="16" y="24" width="440" height="50" rx="8" fill="#FFFDFC" stroke="#CDBBD6"/>
+      <text x="30" y="44" font-size="12" font-weight="700" fill="#2A2430">1. Изменить модель</text>
+      <text x="30" y="62" font-size="10.5" fill="#6B6272">новая колонка default_cell в классе Product</text>
+
+      <path d="M236 74 L236 88" stroke="#8E5BC8" stroke-width="1.5"/>
+      <path d="M230 82 L236 88 L242 82" fill="none" stroke="#8E5BC8" stroke-width="1.5"/>
+
+      <rect x="16" y="92" width="440" height="50" rx="8" fill="#FFFDFC" stroke="#CDBBD6"/>
+      <text x="30" y="112" font-size="12" font-weight="700" fill="#2A2430">2. Сгенерировать миграцию</text>
+      <text x="30" y="130" font-size="10.5" fill="#6B6272" font-family="Consolas,monospace">alembic revision --autogenerate -m "add default cell"</text>
+
+      <path d="M236 142 L236 156" stroke="#8E5BC8" stroke-width="1.5"/>
+      <path d="M230 150 L236 156 L242 150" fill="none" stroke="#8E5BC8" stroke-width="1.5"/>
+
+      <rect x="16" y="160" width="440" height="72" rx="8" fill="#F3EAF4" stroke="#8E5BC8" stroke-width="1.6"/>
+      <text x="30" y="180" font-size="12" font-weight="700" fill="#2A2430">3. Прочитать файл миграции</text>
+      <text x="30" y="198" font-size="10.5" fill="#2A2430">Переименование распознано или это drop и add?</text>
+      <text x="30" y="214" font-size="10.5" fill="#2A2430">Новая колонка обязательна для старых строк?</text>
+
+      <text x="472" y="178" font-size="10" font-weight="700" fill="#A3445F">риск 1</text>
+      <text x="472" y="193" font-size="9.5" fill="#6B6272">rename =</text>
+      <text x="472" y="206" font-size="9.5" fill="#6B6272">drop + add</text>
+      <text x="472" y="222" font-size="9.5" fill="#6B6272">данные теряются</text>
+
+      <path d="M236 232 L236 246" stroke="#8E5BC8" stroke-width="1.5"/>
+      <path d="M230 240 L236 246 L242 240" fill="none" stroke="#8E5BC8" stroke-width="1.5"/>
+
+      <rect x="16" y="250" width="440" height="50" rx="8" fill="#FFFDFC" stroke="#CDBBD6"/>
+      <text x="30" y="270" font-size="12" font-weight="700" fill="#2A2430">4. Прогнать на копии</text>
+      <text x="30" y="288" font-size="10.5" fill="#6B6272">та же версия схемы и объём данных, что на работе</text>
+
+      <text x="472" y="266" font-size="10" font-weight="700" fill="#A3445F">риск 2</text>
+      <text x="472" y="281" font-size="9.5" fill="#6B6272">пустая база</text>
+      <text x="472" y="294" font-size="9.5" fill="#6B6272">не докажет</text>
+      <text x="472" y="307" font-size="9.5" fill="#6B6272">готовность</text>
+
+      <path d="M236 300 L236 314" stroke="#8E5BC8" stroke-width="1.5"/>
+      <path d="M230 308 L236 314 L242 308" fill="none" stroke="#8E5BC8" stroke-width="1.5"/>
+
+      <rect x="16" y="318" width="440" height="38" rx="8" fill="#8E5BC8"/>
+      <text x="30" y="336" font-size="12" font-weight="700" fill="#FFFFFF">5. Применить и проверить</text>
+      <text x="30" y="350" font-size="9.5" fill="#F3EAF4">схема, данные, откат, журнал</text>
+    </g>
+  </svg>
+  <p class="note">Автоматическая генерация угадывает не всё. Переименование, обязательная колонка и большой объём данных требуют ручной проверки до применения.</p>
+</div>
+</body>
+</html>

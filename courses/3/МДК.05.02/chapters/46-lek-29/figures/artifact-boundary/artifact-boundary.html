@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Граница артефакта и окружения</title>
+<style>
+  :root { --paper:#FAF7F6; --card:#FFFDFC; --ink:#2A2430; --muted:#6B6272; --rule:#E6D9EC; --accent:#8E5BC8; --soft:#EBE0EC; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .frame { background:var(--paper); border:1px solid var(--rule); border-radius:12px; padding:16px; }
+  .eyebrow { margin:0 0 6px; font:600 10px/1.2 Consolas,monospace; letter-spacing:.14em; text-transform:uppercase; color:var(--accent); }
+  svg { display:block; width:100%; height:auto; }
+  .box { fill:var(--card); stroke:var(--rule); stroke-width:1.3; }
+  .box-a { fill:#F4EBF8; stroke:var(--accent); stroke-width:1.6; }
+  .item { font-size:10.5px; fill:var(--ink); }
+  .sub { font-size:9.5px; fill:var(--muted); }
+  .ttl { font-size:12px; font-weight:700; fill:#5F3A85; }
+  .ar { stroke:var(--accent); stroke-width:1.8; fill:none; }
+  .tag { font-size:9.5px; fill:var(--accent); font-weight:700; }
+  @media (max-width:560px) { .frame { padding:12px; } }
+</style>
+</head>
+<body>
+<div class="frame">
+  <p class="eyebrow">Что заменяется, а что остаётся</p>
+  <svg viewBox="0 0 680 292" role="img" aria-labelledby="ab-title ab-desc">
+    <title id="ab-title">Граница артефакта и окружения</title>
+    <desc id="ab-desc">Слева артефакт: код, статика, метаданные и зависимости, он заменяется целиком. Справа окружение: база, настройки, секреты, журналы и копии, оно переживает замену версии.</desc>
+
+    <rect class="box-a" x="16" y="24" width="300" height="170" rx="10"/>
+    <text class="ttl" x="34" y="48">Артефакт</text>
+    <text class="sub" x="34" y="66">собирается один раз, имеет версию</text>
+    <text class="item" x="34" y="92">Код приложения</text>
+    <text class="item" x="34" y="114">Шаблоны и статические файлы</text>
+    <text class="item" x="34" y="136">Метаданные, версия и зависимости</text>
+    <text class="item" x="34" y="158">Скрипты миграции</text>
+    <text class="tag" x="34" y="182">Заменяется целиком при выпуске</text>
+
+    <path class="ar" d="M322 108 H358"/>
+    <path class="ar" d="M352 102 l8 6 -8 6"/>
+    <text class="sub" x="326" y="96">выпуск</text>
+
+    <rect class="box" x="364" y="24" width="300" height="170" rx="10"/>
+    <text class="ttl" x="382" y="48" fill="#5F3A85">Окружение</text>
+    <text class="sub" x="382" y="66">настраивается для площадки</text>
+    <text class="item" x="382" y="92">База данных и рабочие записи</text>
+    <text class="item" x="382" y="114">Файл настроек площадки</text>
+    <text class="item" x="382" y="136">Секреты и права доступа</text>
+    <text class="item" x="382" y="158">Журналы и резервные копии</text>
+    <text class="tag" x="382" y="182">Переживает замену версии</text>
+
+    <rect x="16" y="212" width="648" height="46" rx="9" fill="#EBE0EC" stroke="#D9CBE0"/>
+    <text x="30" y="232" font-size="10.5" font-weight="700" fill="#5F3A85">Три признака артефакта</text>
+    <text class="sub" x="30" y="249">номер версии · хеш коммита · контрольная сумма файла</text>
+
+    <text class="sub" x="16" y="282" font-size="9.5">Если база или секрет лежат внутри артефакта, следующая выкладка затрёт данные или разнесёт секрет по копиям.</text>
+  </svg>
+</div>
+</body>
+</html>

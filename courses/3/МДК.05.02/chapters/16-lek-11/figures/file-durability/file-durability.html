@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Что переживает сбой при записи файла</title>
+<style>
+  :root { --paper:#F7F0FA; --card:#FFFFFF; --ink:#2B2333; --muted:#6E6179; --rule:#DCCBE6; --accent:#8E5BC8; --soft:#EBE0EC; --deep:#5B2E86; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .frame { background:var(--paper); border:1px solid var(--rule); border-radius:12px; padding:16px; }
+  .eyebrow { margin:0 0 6px; font:600 10.5px/1.2 Consolas,monospace; letter-spacing:.12em; text-transform:uppercase; color:var(--accent); }
+  svg { display:block; width:100%; height:auto; }
+  .stage rect { fill:#FFFFFF; stroke:#C9B6D6; stroke-width:1.3; transition:fill .15s, stroke .15s, opacity .15s; }
+  .stage.on rect { fill:#EBE0EC; stroke:#8E5BC8; stroke-width:2.2; }
+  .stage.skip { opacity:.45; }
+  .logline { transition:opacity .15s; }
+  .chip { font-weight:600; }
+  .status { min-height:76px; margin-top:8px; padding:10px 12px; border-radius:9px; background:var(--soft); font-size:13px; line-height:1.45; }
+  .status b { color:var(--deep); }
+  .controls { display:flex; gap:6px; flex-wrap:wrap; margin-top:10px; }
+  button { font:600 11.5px/1.1 "Segoe UI",system-ui,sans-serif; padding:8px 9px; border-radius:8px; border:1px solid var(--rule); background:var(--card); color:var(--ink); cursor:pointer; }
+  button:hover { border-color:var(--accent); color:var(--accent); }
+  button.on { background:var(--accent); border-color:var(--accent); color:#fff; }
+  .note { margin:9px 2px 0; font:11.5px/1.5 "Segoe UI",system-ui,sans-serif; color:var(--muted); }
+  @media (max-width:560px) { .frame { padding:12px; } .status { font-size:12.5px; } }
+</style>
+</head>
+<body>
+<div class="frame">
+  <p class="eyebrow">Файлы · буфер, кеш и диск</p>
+  <svg viewBox="0 0 680 300" role="img" aria-labelledby="fd-title fd-desc">
+    <title id="fd-title">Четыре шага записи и три строки журнала</title>
+    <desc id="fd-desc">write помещает строки в буфер процесса, flush передаёт их кешу операционной системы, fsync записывает на диск, close закрывает файл. Ниже показано, где находятся три строки журнала после выбранного шага.</desc>
+
+    <defs>
+      <marker id="fd-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+        <path d="M2 1L8 5L2 9" fill="none" stroke="#8E5BC8" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+      </marker>
+    </defs>
+
+    <g font-family="Segoe UI,system-ui,sans-serif">
+      <g class="stage" data-k="write">
+        <rect x="16" y="30" width="146" height="78" rx="8"/>
+        <text x="28" y="51" font-size="10.5" fill="#6E6179">шаг 1</text>
+        <text x="28" y="72" font-family="Consolas,monospace" font-size="12" font-weight="700" fill="#2B2333">write()</text>
+        <text x="28" y="92" font-size="11.5" fill="#4E4358">буфер процесса</text>
+      </g>
+      <g class="stage" data-k="flush">
+        <rect x="180" y="30" width="146" height="78" rx="8"/>
+        <text x="192" y="51" font-size="10.5" fill="#6E6179">шаг 2</text>
+        <text x="192" y="72" font-family="Consolas,monospace" font-size="12" font-weight="700" fill="#2B2333">flush()</text>
+        <text x="192" y="92" font-size="11.5" fill="#4E4358">кеш операционной системы</text>
+      </g>
+      <g class="stage" data-k="fsync">
+        <rect x="344" y="30" width="146" height="78" rx="8"/>
+        <text x="356" y="51" font-size="10.5" fill="#6E6179">шаг 3</text>
+        <text x="356" y="72" font-family="Consolas,monospace" font-size="12" font-weight="700" fill="#2B2333">fsync()</text>
+        <text x="356" y="92" font-size="11.5" fill="#4E4358">данные на носителе</text>
+      </g>
+      <g class="stage" data-k="close">
+        <rect x="508" y="30" width="156" height="78" rx="8"/>
+        <text x="520" y="51" font-size="10.5" fill="#6E6179">шаг 4</text>
+        <text x="520" y="72" font-family="Consolas,monospace" font-size="12" font-weight="700" fill="#2B2333">close()</text>
+        <text x="520" y="92" font-size="11.5" fill="#4E4358">закрытие файла</text>
+      </g>
+
+      <path d="M162 69 H180" fill="none" stroke="#8E5BC8" stroke-width="1.6" marker-end="url(#fd-arrow)"/>
+      <path d="M326 69 H344" fill="none" stroke="#8E5BC8" stroke-width="1.6" marker-end="url(#fd-arrow)"/>
+      <path d="M490 69 H508" fill="none" stroke="#8E5BC8" stroke-width="1.6" marker-end="url(#fd-arrow)"/>
+
+      <rect x="16" y="128" width="648" height="130" rx="9" fill="#FFFFFF" stroke="#DCCBE6"/>
+      <text x="30" y="150" font-size="10.5" fill="#6E6179">ЖУРНАЛ ПОСЛЕ ПЕРЕЗАПУСКА</text>
+
+      <g class="logline" data-line="1">
+        <text x="30" y="176" font-family="Consolas,monospace" font-size="11.5" fill="#2B2333">07:40;SKU-1042;+12</text>
+        <text class="chip" x="410" y="176" font-size="11" fill="#5B2E86">в буфере</text>
+      </g>
+      <g class="logline" data-line="2">
+        <text x="30" y="200" font-family="Consolas,monospace" font-size="11.5" fill="#2B2333">07:42;SKU-2087;+4</text>
+        <text class="chip" x="410" y="200" font-size="11" fill="#5B2E86">в буфере</text>
+      </g>
+      <g class="logline" data-line="3">
+        <text x="30" y="224" font-family="Consolas,monospace" font-size="11.5" fill="#2B2333">07:45;SKU-1042;-3</text>
+        <text class="chip" x="410" y="224" font-size="11" fill="#5B2E86">в буфере</text>
+      </g>
+
+      <text x="30" y="246" font-size="10.5" fill="#6E6179">статус строки: буфер процесса, кеш ОС или диск</text>
+      <text x="16" y="284" font-family="Consolas,monospace" font-size="9.5" fill="#6E6179">CLOSE СБРАСЫВАЕТ БУФЕР, НО НЕ ЗАМЕНЯЕТ FSYNC</text>
+    </g>
+  </svg>
+  <div class="status" id="fd-status"></div>
+  <div class="controls" id="fd-buttons">
+    <button data-k="write" class="on">после write</button>
+    <button data-k="flush">после flush</button>
+    <button data-k="fsync">после fsync</button>
+    <button data-k="close">после close</button>
+  </div>
+  <p class="note">Нажмите шаг. Схема показывает, где находятся три строки и что произойдёт при падении процесса или выключении питания.</p>
+</div>
+<script>
+(function () {
+  var data = {
+    write: {
+      on: ['write'],
+      where: 'в буфере',
+      text: '<b>Строки в буфере процесса, на диске 0 из 3.</b> Падение процесса или выключение питания теряет все три строки. Вызов write без flush не означает запись.'
+    },
+    flush: {
+      on: ['write', 'flush'],
+      where: 'в кеше ОС',
+      text: '<b>Строки в кеше операционной системы, на диске 0 из 3.</b> Падение процесса их не теряет, потому что данные уже вне программы. Выключение питания может их потерять.'
+    },
+    fsync: {
+      on: ['write', 'flush', 'fsync'],
+      where: 'на диске',
+      text: '<b>Строки на диске, 3 из 3.</b> fsync дождался подтверждения устройства. Выключение питания эти строки не теряет, но каждый вызов ждёт диск.'
+    },
+    close: {
+      on: ['write', 'flush', 'fsync', 'close'],
+      where: 'на диске',
+      text: '<b>Файл закрыт, строки на диске.</b> close сбрасывает буфер программы, но сам по себе не гарантирует fsync. Если нужна гарантия при выключении питания, fsync вызывают явно.'
+    }
+  };
+  var stages = document.querySelectorAll('.stage');
+  var buttons = document.querySelectorAll('#fd-buttons button');
+  var lines = document.querySelectorAll('.logline');
+  var status = document.getElementById('fd-status');
+
+  function apply(key) {
+    var d = data[key];
+    stages.forEach(function (s) {
+      var k = s.dataset.k;
+      s.classList.toggle('on', d.on.indexOf(k) >= 0);
+      s.classList.toggle('skip', d.on.indexOf(k) < 0);
+    });
+    buttons.forEach(function (b) { b.classList.toggle('on', b.dataset.k === key); });
+    lines.forEach(function (l) {
+      var chip = l.querySelector('.chip');
+      chip.textContent = d.where;
+      chip.setAttribute('fill', d.where === 'на диске' ? '#5B2E86' : '#8A4F6E');
+    });
+    status.innerHTML = d.text;
+  }
+  buttons.forEach(function (b) { b.addEventListener('click', function () { apply(b.dataset.k); }); });
+  apply('write');
+})();
+</script>
+</body>
+</html>

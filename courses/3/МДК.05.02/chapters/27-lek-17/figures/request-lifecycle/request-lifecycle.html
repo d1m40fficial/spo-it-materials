@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Обработка запроса во Flask и FastAPI</title>
+<style>
+  :root { --paper:#FAF7F6; --card:#FFFDFC; --ink:#2A2430; --muted:#6B6272; --rule:#E6D9EC; --accent:#8E5BC8; --soft:#EBE0EC; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .frame { background:var(--paper); border:1px solid var(--rule); border-radius:12px; padding:16px; }
+  .eyebrow { margin:0 0 6px; font:600 10px/1.2 Consolas,monospace; letter-spacing:.14em; text-transform:uppercase; color:var(--accent); }
+  svg { display:block; width:100%; height:auto; }
+  .lane { transition:opacity .2s; cursor:pointer; }
+  .lane.off { opacity:.38; }
+  .lane rect { fill:#FFFDFC; stroke:#D8C7E2; stroke-width:1.3; }
+  .lane.on rect { stroke:var(--accent); stroke-width:1.8; }
+  .lane.on .check { fill:var(--soft); }
+  .status { min-height:74px; margin-top:8px; padding:10px 12px; border-radius:9px; background:var(--soft); font-size:13px; line-height:1.45; }
+  .status b { color:var(--accent); }
+  .controls { display:flex; gap:6px; flex-wrap:wrap; margin-top:10px; }
+  button { font:600 11.5px/1.15 "Segoe UI",system-ui,sans-serif; padding:8px 12px; border-radius:8px; border:1px solid var(--rule); background:var(--card); color:var(--ink); cursor:pointer; }
+  button:hover { border-color:var(--accent); color:var(--accent); }
+  button.on { background:var(--accent); border-color:var(--accent); color:#fff; }
+  .note { margin:9px 2px 0; font:11.5px/1.5 "Segoe UI",system-ui,sans-serif; color:var(--muted); }
+  @media (max-width:560px) { .frame { padding:12px; } .status { font-size:12.5px; } }
+</style>
+</head>
+<body>
+<div class="frame">
+  <p class="eyebrow">Фреймворки · путь запроса</p>
+  <svg viewBox="0 0 680 320" role="img" aria-labelledby="rl-title rl-desc">
+    <title id="rl-title">Путь запроса во Flask и FastAPI</title>
+    <desc id="rl-desc">Две линии показывают, где в каждом фреймворке выполняется проверка данных. Во Flask внутри обработчика, во FastAPI до его вызова.</desc>
+
+    <g class="lane" data-k="flask">
+      <text x="16" y="26" font-family="Consolas,monospace" font-size="10" fill="#6B6272">FLASK · WSGI</text>
+      <rect x="16" y="38" width="120" height="62" rx="7"/>
+      <text x="28" y="60" font-size="11" font-weight="700" fill="#2A2430">HTTP-запрос</text>
+      <text x="28" y="76" font-size="9.5" fill="#6B6272">метод, путь</text>
+      <text x="28" y="89" font-size="9.5" fill="#6B6272">тело, заголовки</text>
+
+      <rect x="146" y="38" width="120" height="62" rx="7"/>
+      <text x="158" y="60" font-size="11" font-weight="700" fill="#2A2430">Werkzeug</text>
+      <text x="158" y="76" font-size="9.5" fill="#6B6272">WSGI, один вызов</text>
+      <text x="158" y="89" font-size="9.5" fill="#6B6272">на запрос</text>
+
+      <rect x="276" y="38" width="120" height="62" rx="7"/>
+      <text x="288" y="60" font-size="11" font-weight="700" fill="#2A2430">маршрут</text>
+      <text x="288" y="76" font-size="9.5" fill="#6B6272">таблица адресов</text>
+      <text x="288" y="89" font-size="9.5" fill="#6B6272">и методов</text>
+
+      <rect class="check" x="406" y="38" width="120" height="62" rx="7"/>
+      <text x="418" y="60" font-size="11" font-weight="700" fill="#2A2430">обработчик</text>
+      <text x="418" y="76" font-size="9.5" fill="#2A2430">ручная проверка</text>
+      <text x="418" y="89" font-size="9.5" fill="#2A2430">полей</text>
+
+      <rect x="536" y="38" width="128" height="62" rx="7"/>
+      <text x="548" y="60" font-size="11" font-weight="700" fill="#2A2430">ответ</text>
+      <text x="548" y="76" font-size="9.5" fill="#6B6272">jsonify, код</text>
+      <text x="548" y="89" font-size="9.5" fill="#6B6272">по умолчанию 200</text>
+    </g>
+
+    <g class="lane off" data-k="fastapi">
+      <text x="16" y="146" font-family="Consolas,monospace" font-size="10" fill="#6B6272">FASTAPI · ASGI</text>
+      <rect x="16" y="158" width="120" height="62" rx="7"/>
+      <text x="28" y="180" font-size="11" font-weight="700" fill="#2A2430">HTTP-запрос</text>
+      <text x="28" y="196" font-size="9.5" fill="#6B6272">метод, путь</text>
+      <text x="28" y="209" font-size="9.5" fill="#6B6272">тело, заголовки</text>
+
+      <rect x="146" y="158" width="120" height="62" rx="7"/>
+      <text x="158" y="180" font-size="11" font-weight="700" fill="#2A2430">uvicorn</text>
+      <text x="158" y="196" font-size="9.5" fill="#6B6272">ASGI, цикл</text>
+      <text x="158" y="209" font-size="9.5" fill="#6B6272">событий</text>
+
+      <rect x="276" y="158" width="120" height="62" rx="7"/>
+      <text x="288" y="180" font-size="11" font-weight="700" fill="#2A2430">маршрут</text>
+      <text x="288" y="196" font-size="9.5" fill="#6B6272">и сигнатура</text>
+      <text x="288" y="209" font-size="9.5" fill="#6B6272">функции</text>
+
+      <rect class="check" x="406" y="158" width="120" height="62" rx="7"/>
+      <text x="418" y="180" font-size="11" font-weight="700" fill="#2A2430">Pydantic</text>
+      <text x="418" y="196" font-size="9.5" fill="#2A2430">проверка до</text>
+      <text x="418" y="209" font-size="9.5" fill="#2A2430">вызова, 422</text>
+
+      <rect x="536" y="158" width="128" height="62" rx="7"/>
+      <text x="548" y="180" font-size="11" font-weight="700" fill="#2A2430">ответ</text>
+      <text x="548" y="196" font-size="9.5" fill="#6B6272">response_model</text>
+      <text x="548" y="209" font-size="9.5" fill="#6B6272">фильтрует поля</text>
+    </g>
+
+    <text x="16" y="252" font-family="Consolas,monospace" font-size="9.5" fill="#6B6272">ПОДСВЕЧЕННАЯ РАМКА: МЕСТО, ГДЕ ДАННЫЕ СТАНОВЯТСЯ ОБЪЕКТОМ</text>
+    <text x="16" y="274" font-family="Segoe UI,system-ui,sans-serif" font-size="10.5" fill="#6B6272">Flask проверяет внутри функции, поэтому забытая проверка даёт 500 или плохие данные.</text>
+    <text x="16" y="292" font-family="Segoe UI,system-ui,sans-serif" font-size="10.5" fill="#6B6272">FastAPI проверяет до функции, поэтому обработчик получает уже готовый объект.</text>
+  </svg>
+  <div class="status" id="rl-status"></div>
+  <div class="controls">
+    <button data-k="flask" class="on">Flask</button>
+    <button data-k="fastapi">FastAPI</button>
+  </div>
+  <p class="note">Нажмите фреймворк, чтобы подсветить его линию. Обратите внимание, что проверка стоит в разных местах цепочки.</p>
+</div>
+<script>
+(function () {
+  var data = {
+    flask: "<b>Flask.</b> Запрос проходит через WSGI, маршрут выбирает функцию, и только внутри неё появляется разбор тела и проверка полей. Если проверку пропустить, ошибка всплывёт позже.",
+    fastapi: "<b>FastAPI.</b> Сигнатура функции объявляет модель, и фреймворк проверяет тело до вызова. Неверное значение останавливает запрос с кодом 422, а обработчик получает готовый объект."
+  };
+  var lanes = document.querySelectorAll(".lane");
+  var buttons = document.querySelectorAll("button[data-k]");
+  var status = document.getElementById("rl-status");
+
+  function apply(key) {
+    lanes.forEach(function (l) {
+      l.classList.toggle("on", l.dataset.k === key);
+      l.classList.toggle("off", l.dataset.k !== key);
+    });
+    buttons.forEach(function (b) { b.classList.toggle("on", b.dataset.k === key); });
+    status.innerHTML = data[key];
+  }
+  lanes.forEach(function (l) { l.addEventListener("click", function () { apply(l.dataset.k); }); });
+  buttons.forEach(function (b) { b.addEventListener("click", function () { apply(b.dataset.k); }); });
+  apply("flask");
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Поведение методов чтения результата</title>
+<style>
+  :root { color-scheme:light; --paper:#EBE0EC; --card:#FFFDFC; --ink:#2A2430; --muted:#6B6272; --rule:#CDBBD6; --accent:#8E5BC8; --soft:#F3EAF4; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .frame { background:var(--paper); border:1px solid var(--rule); border-radius:12px; padding:16px; }
+  .eyebrow { margin:0 0 6px; font:600 10px/1.2 Consolas,monospace; letter-spacing:.14em; text-transform:uppercase; color:var(--accent); }
+  svg { display:block; width:100%; height:auto; }
+  .note { margin:9px 2px 0; font:11.5px/1.5 "Segoe UI",system-ui,sans-serif; color:var(--muted); }
+  @media (max-width:560px) { .frame { padding:12px; } }
+</style>
+</head>
+<body>
+<div class="frame">
+  <p class="eyebrow">SQL из кода · результат выборки</p>
+  <svg viewBox="0 0 680 300" role="img" aria-labelledby="rs-title rs-desc">
+    <title id="rs-title">Четыре способа прочитать результат</title>
+    <desc id="rs-desc">Таблица поведения fetchone, fetchall, one и one_or_none при нуле, одной и двух строках.</desc>
+
+    <g font-family="Segoe UI,system-ui,sans-serif">
+      <rect x="16" y="20" width="648" height="34" rx="6" fill="#8E5BC8"/>
+      <text x="30" y="41" font-size="11" font-weight="700" fill="#FFFFFF">Метод</text>
+      <text x="220" y="41" font-size="11" font-weight="700" fill="#FFFFFF">0 строк</text>
+      <text x="370" y="41" font-size="11" font-weight="700" fill="#FFFFFF">1 строка</text>
+      <text x="520" y="41" font-size="11" font-weight="700" fill="#FFFFFF">2 строки</text>
+
+      <rect x="16" y="60" width="648" height="38" rx="5" fill="#FFFDFC" stroke="#CDBBD6"/>
+      <text x="30" y="84" font-size="11" font-family="Consolas,monospace" fill="#2A2430">fetchone()</text>
+      <text x="220" y="84" font-size="11" fill="#2A2430">None</text>
+      <text x="370" y="84" font-size="11" fill="#2A2430">строка</text>
+      <text x="520" y="84" font-size="11" fill="#2A2430">первая</text>
+
+      <rect x="16" y="102" width="648" height="38" rx="5" fill="#FFFDFC" stroke="#CDBBD6"/>
+      <text x="30" y="126" font-size="11" font-family="Consolas,monospace" fill="#2A2430">fetchall()</text>
+      <text x="220" y="126" font-size="11" fill="#2A2430">[]</text>
+      <text x="370" y="126" font-size="11" fill="#2A2430">[строка]</text>
+      <text x="520" y="126" font-size="11" fill="#2A2430">[две]</text>
+
+      <rect x="16" y="144" width="648" height="38" rx="5" fill="#FFFDFC" stroke="#CDBBD6"/>
+      <text x="30" y="168" font-size="11" font-family="Consolas,monospace" fill="#2A2430">one()</text>
+      <text x="220" y="168" font-size="11" fill="#A3445F">исключение</text>
+      <text x="370" y="168" font-size="11" fill="#2A2430">строка</text>
+      <text x="520" y="168" font-size="11" fill="#A3445F">исключение</text>
+
+      <rect x="16" y="186" width="648" height="38" rx="5" fill="#FFFDFC" stroke="#CDBBD6"/>
+      <text x="30" y="210" font-size="11" font-family="Consolas,monospace" fill="#2A2430">one_or_none()</text>
+      <text x="220" y="210" font-size="11" fill="#2A2430">None</text>
+      <text x="370" y="210" font-size="11" fill="#2A2430">строка</text>
+      <text x="520" y="210" font-size="11" fill="#A3445F">исключение</text>
+
+      <rect x="16" y="238" width="648" height="48" rx="8" fill="#F3EAF4" stroke="#CDBBD6"/>
+      <text x="30" y="258" font-size="10.5" fill="#2A2430">Пустой результат это штатная ситуация. Проверяйте None и пустой список до обращения к полям.</text>
+      <text x="30" y="275" font-size="10.5" fill="#6B6272">one() выбирают там, где отсутствие или дубль строки должны быть явной ошибкой.</text>
+    </g>
+  </svg>
+  <p class="note">Строки таблицы показывают, что вернёт метод. Используйте её как памятку при выборе между fetchone, fetchall и one_or_none.</p>
+</div>
+</body>
+</html>

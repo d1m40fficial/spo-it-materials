@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Пошаговое выполнение цикла</title>
+<style>
+  :root { --paper:#FBF7FC; --card:#FFFFFF; --ink:#2B2433; --muted:#6E6278; --rule:#E0D2E6; --accent:#8E5BC8; --soft:#EBE0EC; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .frame { background:var(--paper); border:1px solid var(--rule); border-radius:12px; padding:16px; }
+  .eyebrow { margin:0 0 6px; font:600 10px/1.2 Consolas,monospace; letter-spacing:.14em; text-transform:uppercase; color:var(--accent); }
+  svg { display:block; width:100%; height:auto; }
+  .status { min-height:66px; margin-top:2px; padding:10px 12px; border-radius:9px; background:var(--soft); font-size:12.5px; line-height:1.45; }
+  .status b { color:#6B3E9E; }
+  .controls { display:flex; gap:6px; flex-wrap:wrap; margin-top:10px; }
+  button { font:600 11.5px/1 "Segoe UI",system-ui,sans-serif; padding:8px 10px; border-radius:8px; border:1px solid var(--rule); background:var(--card); color:var(--ink); cursor:pointer; }
+  button:hover { border-color:var(--accent); color:#6B3E9E; }
+  button.on { background:var(--accent); border-color:var(--accent); color:#fff; }
+  .note { margin:9px 2px 0; font:11.5px/1.5 "Segoe UI",system-ui,sans-serif; color:var(--muted); }
+  @media (max-width:560px) { .frame { padding:12px; } .status { font-size:12px; } }
+</style>
+</head>
+<body>
+<div class="frame">
+  <p class="eyebrow">Отладка · шаг за шагом</p>
+  <svg viewBox="0 0 680 306" role="img" aria-labelledby="ds-title ds-desc">
+    <title id="ds-title">Пошаговое выполнение batch_free в отладчике</title>
+    <desc id="ds-desc">Код функции и панель переменных. Кнопки выполняют строку, входят в line_qty, доводят цикл до конца или сбрасывают состояние. Видно, что цикл начинается с индекса 1 и первая строка не попадает в сумму.</desc>
+
+    <text x="16" y="24" font-size="16" font-weight="700" fill="#2B2433">Что видно на каждом шаге</text>
+    <text x="16" y="43" font-size="11" fill="#6E6278">жёлтая строка ещё не выполнена, значения справа относятся к текущему моменту</text>
+
+    <rect x="16" y="54" width="400" height="120" rx="8" fill="#FFFFFF" stroke="#D9C8E0"/>
+    <rect id="ds-hl" x="24" y="73" width="384" height="20" rx="4" fill="#EBE0EC"/>
+    <g font-family="Consolas,monospace" font-size="10.5" fill="#2B2433">
+      <text x="34" y="88">def batch_free(rows):</text>
+      <text x="34" y="110">    total = 0</text>
+      <text x="34" y="132">    for i in range(1, len(rows)):</text>
+      <text x="34" y="154">        total += line_qty(rows[i])</text>
+      <text x="34" y="176">    return total</text>
+    </g>
+
+    <rect x="428" y="54" width="236" height="120" rx="8" fill="#FFFFFF" stroke="#D9C8E0"/>
+    <text x="442" y="74" font-family="Consolas,monospace" font-size="9.5" fill="#8E5BC8">ПЕРЕМЕННЫЕ</text>
+    <g font-family="Consolas,monospace" font-size="10.5">
+      <text x="442" y="94" fill="#6E6278">i</text>
+      <text id="ds-i" x="650" y="94" text-anchor="end" fill="#2B2433">не задан</text>
+      <text x="442" y="114" fill="#6E6278">total</text>
+      <text id="ds-total" x="650" y="114" text-anchor="end" fill="#2B2433">0</text>
+      <text x="442" y="134" fill="#6E6278">строк</text>
+      <text id="ds-len" x="650" y="134" text-anchor="end" fill="#2B2433">4</text>
+      <text x="442" y="154" fill="#6E6278">rows[0]</text>
+      <text id="ds-first" x="650" y="154" text-anchor="end" fill="#2B2433">qty=12</text>
+      <text x="442" y="168" fill="#6E6278">ожидается</text>
+      <text x="650" y="168" text-anchor="end" font-weight="700" fill="#8E5BC8">24</text>
+    </g>
+
+    <rect x="16" y="188" width="648" height="66" rx="8" fill="#FFFFFF" stroke="#D9C8E0"/>
+    <text id="ds-badge" x="30" y="208" font-family="Consolas,monospace" font-size="9.5" font-weight="700" fill="#8E5BC8">СТРОКА 2</text>
+    <text id="ds-line1" x="30" y="226" font-size="11.5" fill="#2B2433">Начало функции: total = 0.</text>
+    <text id="ds-line2" x="30" y="242" font-size="11.5" fill="#2B2433">Цикл ещё не начался.</text>
+
+    <text x="16" y="278" font-family="Consolas,monospace" font-size="9.5" fill="#6E6278">СРАВНИВАЙТЕ ОЖИДАЕМОЕ С ФАКТИЧЕСКИМ НА КАЖДОМ ШАГЕ, А НЕ ТОЛЬКО В КОНЦЕ</text>
+    <text x="16" y="296" font-size="10.5" fill="#6E6278">Кнопка «Войти» работает только на строке сложения: именно там вызывается line_qty.</text>
+  </svg>
+  <div class="status" id="ds-status"></div>
+  <div class="controls" id="ds-buttons">
+    <button data-act="next" class="on">Дальше</button>
+    <button data-act="step">Войти</button>
+    <button data-act="end">До конца</button>
+    <button data-act="reset">Сброс</button>
+  </div>
+  <p class="note">«Дальше» выполняет строку целиком, «Войти» показывает внутренности line_qty, «До конца» доводит цикл до возврата. Итог 12 вместо 24 виден без единой правки кода.</p>
+</div>
+<script>
+(function () {
+  var states = [
+    {line: 2, i: 'не задан', total: 0, a: 'Начало функции: total = 0.', b: 'Цикл ещё не начался.', note: '<b>Старт.</b> Программа стоит на первой строке тела функции. Значение total известно, список rows ещё не обработан.'},
+    {line: 3, i: '1', total: 0, a: 'Цикл начинается с i = 1.', b: 'Строка rows[0] не попадёт в сумму.', note: '<b>Вход в цикл.</b> range(1, 4) даёт индексы 1, 2, 3. Первый элемент списка имеет индекс 0 и остаётся в стороне: это первое сильное наблюдение.'},
+    {line: 4, i: '1', total: 0, a: 'Строка сложения ещё не выполнена.', b: 'Можно войти в line_qty и увидеть аргумент.', note: '<b>Перед сложением.</b> total пока 0, i равен 1. Нажмите «Войти», чтобы проверить, с какой строкой работает line_qty.'},
+    {line: 3, i: '1', total: 5, a: 'После сложения total = 5.', b: 'Следующая итерация назначит i = 2.', note: '<b>Первый вклад.</b> Сумма стала 5, но это вклад второй строки. Если ожидалось 24, уже видно расхождение в 12 единиц.'},
+    {line: 4, i: '2', total: 5, a: 'Вторая итерация, i = 2.', b: 'Первая строка по-прежнему пропущена.', note: '<b>Следующая итерация.</b> Индекс растёт, но начало диапазона не меняется. Именно повторение делает дефект устойчивым, а не случайным.'},
+    {line: 3, i: '2', total: 8, a: 'total = 8: строка SKU-1044 дала 3.', b: 'До конца цикла осталась одна итерация.', note: '<b>Третий вклад.</b> Сумма 8. Сравните с ожидаемым накоплением: после трёх строк должно быть 20, а не 8.'},
+    {line: 4, i: '3', total: 8, a: 'Последняя итерация, i = 3.', b: 'Следующая строка завершит цикл.', note: '<b>Последняя итерация.</b> Если гипотеза верна, после неё total станет 12 и цикл закончится.'},
+    {line: 3, i: '3', total: 12, a: 'total = 12: строка SKU-1045 дала 4.', b: 'Цикл больше не выполнится.', note: '<b>Цикл закончен.</b> Сумма 12. Не хватает ровно 12 единиц, то есть первой строки SKU-1042.'},
+    {line: 5, i: '3', total: 12, a: 'Возврат: функция вернёт 12.', b: 'Ожидалось 24. Причина: range начался с 1.', note: '<b>Итог.</b> Наблюдения сложились в одну картину: i начинается с 1, rows[0] существует, его вклад равен 12, итог 12. Причина доказана без правки кода.'}
+  ];
+  var rows = [
+    {sku: 'SKU-1043', qty: 7, reserved: 2, value: 5},
+    {sku: 'SKU-1044', qty: 3, reserved: 0, value: 3},
+    {sku: 'SKU-1045', qty: 5, reserved: 1, value: 4}
+  ];
+  var idx = 0, inside = false;
+  var hl = document.getElementById('ds-hl');
+  var iEl = document.getElementById('ds-i');
+  var totalEl = document.getElementById('ds-total');
+  var badge = document.getElementById('ds-badge');
+  var line1 = document.getElementById('ds-line1');
+  var line2 = document.getElementById('ds-line2');
+  var status = document.getElementById('ds-status');
+
+  function render() {
+    var s = states[idx];
+    var y = {2: 73, 3: 95, 4: 117, 5: 139}[s.line];
+    hl.setAttribute('y', String(y));
+    iEl.textContent = s.i;
+    totalEl.textContent = String(s.total);
+    badge.textContent = 'СТРОКА ' + s.line + (inside ? ' · ВНУТРИ line_qty' : '');
+    line1.textContent = s.a;
+    line2.textContent = s.b;
+    if (inside) {
+      var r = rows[idx === 2 ? 0 : idx === 4 ? 1 : 2];
+      status.innerHTML = '<b>Внутри line_qty.</b> row = {sku: ' + r.sku + ', qty: ' + r.qty + ', reserved: ' + r.reserved + '}. Функция вернёт ' + r.value + '. Нажмите «Дальше», чтобы вернуться в цикл.';
+    } else {
+      status.innerHTML = s.note;
+    }
+  }
+
+  function next() {
+    if (inside) { inside = false; idx = Math.min(idx + 1, states.length - 1); }
+    else { idx = Math.min(idx + 1, states.length - 1); }
+    render();
+  }
+
+  document.querySelectorAll('#ds-buttons button').forEach(function (b) {
+    b.addEventListener('click', function () {
+      var act = b.dataset.act;
+      if (act === 'next') next();
+      else if (act === 'step') {
+        if (idx === 2 || idx === 4 || idx === 6) { inside = true; render(); }
+        else { status.innerHTML = '<b>Здесь нечего открывать.</b> Вход в функцию возможен только на строке вызова line_qty, то есть на строке 4.'; }
+      } else if (act === 'end') { idx = states.length - 1; inside = false; render(); }
+      else { idx = 0; inside = false; render(); }
+    });
+  });
+  render();
+})();
+</script>
+</body>
+</html>

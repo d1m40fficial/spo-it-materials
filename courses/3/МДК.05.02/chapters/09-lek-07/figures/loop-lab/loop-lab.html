@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Лаборатория цикла</title>
+<style>
+  :root { --paper:#FBF7FC; --card:#FFFFFF; --ink:#2A2233; --muted:#6B6076; --rule:#DCCDE4; --accent:#8E5BC8; --soft:#EBE0EC; --good:#3F7A5A; --bad:#A34A5E; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .frame { background:var(--paper); border:1px solid var(--rule); border-radius:12px; padding:14px; }
+  .eyebrow { margin:0 0 6px; font:600 10px/1.2 Consolas,monospace; letter-spacing:.13em; text-transform:uppercase; color:var(--accent); }
+  svg { display:block; width:100%; height:auto; }
+  text { font-family:"Segoe UI",system-ui,sans-serif; }
+  .scenarios { display:flex; gap:6px; flex-wrap:wrap; margin:10px 0 8px; }
+  button { font:600 11.5px/1.1 "Segoe UI",system-ui,sans-serif; padding:7px 9px; border-radius:8px; border:1px solid var(--rule); background:var(--card); color:var(--ink); cursor:pointer; }
+  button:hover { border-color:var(--accent); color:var(--accent); }
+  button.on { background:var(--accent); border-color:var(--accent); color:#fff; }
+  button:disabled { opacity:.45; cursor:default; }
+  .status { min-height:54px; margin-top:6px; padding:9px 11px; border-radius:9px; background:var(--soft); font-size:12.5px; line-height:1.45; }
+  .status b { color:var(--accent); }
+  .status .ok { color:var(--good); font-weight:700; }
+  .status .err { color:var(--bad); font-weight:700; }
+  table { width:100%; border-collapse:collapse; margin-top:8px; font-size:11px; }
+  th, td { padding:5px 6px; border-bottom:1px solid var(--rule); text-align:left; }
+  th { font:600 10px/1.2 Consolas,monospace; letter-spacing:.04em; color:var(--muted); text-transform:uppercase; }
+  tr.now td { background:#F3EAF7; }
+  tr.done td { color:var(--muted); }
+  .actions { display:flex; gap:6px; flex-wrap:wrap; margin-top:8px; }
+  .note { margin:8px 2px 0; font:11px/1.5 "Segoe UI",system-ui,sans-serif; color:var(--muted); }
+  @media (max-width:560px) {
+    .frame { padding:10px; }
+    table { font-size:10.5px; table-layout:fixed; }
+    th, td { padding:4px; }
+    table th:nth-child(3), table td:nth-child(3),
+    table th:nth-child(4), table td:nth-child(4),
+    table th:nth-child(8), table td:nth-child(8) { display:none; }
+  }
+</style>
+</head>
+<body>
+<div class="frame">
+  <p class="eyebrow">Управляющие конструкции · цикл и накопитель</p>
+  <svg viewBox="0 0 680 106" role="img" aria-labelledby="ll-title ll-desc">
+    <title id="ll-title">Очередь строк и текущая итерация</title>
+    <desc id="ll-desc">Пять строк списка. Текущая строка подсвечена, обработанные отмечены. Кнопки меняют сценарий и переходят к следующей итерации.</desc>
+    <text x="14" y="18" font-size="10" font-family="Consolas,monospace" fill="#6B6076">ОЧЕРЕДЬ СТРОК</text>
+    <g id="chips"></g>
+  </svg>
+  <div class="scenarios" id="scenarios">
+    <button data-k="normal" class="on">Обычный набор</button>
+    <button data-k="threshold">Порог</button>
+    <button data-k="empty">Пустой список</button>
+    <button data-k="zero">Нулевая упаковка</button>
+  </div>
+  <div class="status" id="status" aria-live="polite"></div>
+  <div class="actions">
+    <button id="step">Следующий шаг</button>
+    <button id="reset">Сброс</button>
+  </div>
+  <table>
+    <thead>
+      <tr><th>Позиция</th><th>Остаток</th><th>Минимум</th><th>Упаковка</th><th>Решение</th><th>Заказ</th><th>Итог</th><th>Позиций</th></tr>
+    </thead>
+    <tbody id="rows"></tbody>
+  </table>
+  <p class="note">Нажимайте «Следующий шаг»: таблица заполняется по одной строке, а накопители меняются только после решения. Сценарий «Нулевая упаковка» показывает ошибку входа, которую цикл не должен скрывать.</p>
+</div>
+<script>
+(function () {
+  var data = {
+    normal: [
+      { sku: "SKU-1042", qty: 12, min: 40, pack: 10 },
+      { sku: "SKU-2087", qty: 96, min: 60, pack: 12 },
+      { sku: "SKU-3310", qty: 0, min: 25, pack: 5 },
+      { sku: "SKU-4155", qty: 7, min: 7, pack: 1 },
+      { sku: "SKU-5201", qty: 3, min: 30, pack: 6 }
+    ],
+    threshold: [
+      { sku: "SKU-4155", qty: 7, min: 7, pack: 1 },
+      { sku: "SKU-6100", qty: 6, min: 7, pack: 1 },
+      { sku: "SKU-1042", qty: 12, min: 40, pack: 10 }
+    ],
+    empty: [],
+    zero: [
+      { sku: "SKU-9001", qty: 3, min: 30, pack: 0 }
+    ]
+  };
+  var names = { normal: "обычный набор", threshold: "порог", empty: "пустой список", zero: "нулевая упаковка" };
+  var key = "normal";
+  var rows = data[key];
+  var idx = 0, total = 0, count = 0;
+  var failed = false;
+  var chips = document.getElementById("chips");
+  var tbody = document.getElementById("rows");
+  var status = document.getElementById("status");
+  var stepBtn = document.getElementById("step");
+  var buttons = document.querySelectorAll("#scenarios button");
+
+  function chip(i) {
+    var x = 14 + i * 130;
+    var fill = "#FFFFFF", stroke = "#DCCDE4", name = rows[i].sku;
+    if (i < idx) { fill = "#F0F7F2"; stroke = "#B9D6C4"; }
+    if (i === idx) { fill = "#EBE0EC"; stroke = "#8E5BC8"; }
+    return '<rect x="' + x + '" y="30" width="118" height="52" rx="8" fill="' + fill + '" stroke="' + stroke + '" stroke-width="' + (i === idx ? 2 : 1) + '"/>' +
+      '<text x="' + (x + 10) + '" y="52" font-size="11" font-weight="700" fill="#2A2233">' + name + '</text>' +
+      '<text x="' + (x + 10) + '" y="69" font-size="10" fill="#6B6076">' + rows[i].qty + ' / ' + rows[i].min + '</text>';
+  }
+
+  function drawChips() {
+    if (!rows.length) {
+      chips.innerHTML = '<rect x="14" y="30" width="280" height="52" rx="8" fill="#FFFFFF" stroke="#DCCDE4" stroke-dasharray="5 4"/>' +
+        '<text x="28" y="61" font-size="11" fill="#6B6076">строк нет: цикл не выполнится ни разу</text>';
+      return;
+    }
+    var out = "";
+    for (var i = 0; i < rows.length; i++) out += chip(i);
+    chips.innerHTML = out;
+  }
+
+  function addRowText(i, decision, order) {
+    var r = rows[i];
+    var tr = document.createElement("tr");
+    if (i === idx) tr.className = "now";
+    else if (i < idx) tr.className = "done";
+    tr.innerHTML = "<td>" + r.sku + "</td><td>" + r.qty + "</td><td>" + r.min + "</td><td>" + r.pack +
+      "</td><td>" + decision + "</td><td>" + order + "</td><td>" + total + "</td><td>" + count + "</td>";
+    tbody.appendChild(tr);
+  }
+
+  function resetTable() {
+    tbody.innerHTML = "";
+    for (var i = 0; i < rows.length; i++) {
+      var tr = document.createElement("tr");
+      if (i === 0) tr.className = "now";
+      tr.innerHTML = "<td>" + rows[i].sku + "</td><td>" + rows[i].qty + "</td><td>" + rows[i].min +
+        "</td><td>" + rows[i].pack + "</td><td>ожидает</td><td>0</td><td>0</td><td>0</td>";
+      tbody.appendChild(tr);
+    }
+    if (!rows.length) {
+      var e = document.createElement("tr");
+      e.innerHTML = "<td colspan=\"8\">Строк нет. Итог 0, счётчик 0.</td>";
+      tbody.appendChild(e);
+    }
+  }
+
+  function reset(k) {
+    key = k || key;
+    rows = data[key];
+    idx = 0; total = 0; count = 0; failed = false;
+    stepBtn.disabled = false;
+    for (var i = 0; i < buttons.length; i++) buttons[i].classList.toggle("on", buttons[i].dataset.k === key);
+    drawChips();
+    resetTable();
+    status.innerHTML = "<b>" + names[key] + ".</b> Строк в наборе: " + rows.length + ". Итог 0, позиций к заказу 0. Нажмите «Следующий шаг».";
+  }
+
+  function step() {
+    if (failed) return;
+    if (idx >= rows.length) {
+      status.innerHTML = "<span class=\"ok\">Цикл завершён.</span> Обработано строк: " + rows.length + ". Итог " + total + ", позиций к заказу " + count + ".";
+      stepBtn.disabled = true;
+      return;
+    }
+    var r = rows[idx];
+    if (r.pack <= 0) {
+      failed = true;
+      stepBtn.disabled = true;
+      status.innerHTML = "<span class=\"err\">Ошибка входа:</span> у позиции " + r.sku + " упаковка равна " + r.pack + ". Деление на ноль. Проверка должна стоять до цикла и сообщать, какая строка испорчена.";
+      return;
+    }
+    var decision, order;
+    if (r.qty >= r.min) {
+      decision = "пропуск";
+      order = 0;
+    } else {
+      var missing = r.min - r.qty;
+      var packs = Math.floor((missing + r.pack - 1) / r.pack);
+      order = packs * r.pack;
+      decision = "в заказ";
+      total += order;
+      count += 1;
+    }
+    var processed = idx;
+    idx += 1;
+    drawChips();
+    var tr = tbody.children[processed];
+    if (tr) {
+      tr.className = "done";
+      tr.innerHTML = "<td>" + r.sku + "</td><td>" + r.qty + "</td><td>" + r.min + "</td><td>" + r.pack +
+        "</td><td>" + decision + "</td><td>" + order + "</td><td>" + total + "</td><td>" + count + "</td>";
+    }
+    if (idx < tbody.children.length && tbody.children[idx]) tbody.children[idx].className = "now";
+    if (decision === "пропуск") {
+      status.innerHTML = "<b>" + r.sku + ":</b> остаток " + r.qty + " не ниже минимума " + r.min + ". Ветка <code>continue</code> пропускает расчёт, итог не меняется.";
+    } else {
+      status.innerHTML = "<b>" + r.sku + ":</b> дефицит " + (r.min - r.qty) + ", коробок " + Math.floor(((r.min - r.qty) + r.pack - 1) / r.pack) + ", заказ " + order + ". Итог стал " + total + ", счётчик " + count + ".";
+    }
+    if (idx >= rows.length) {
+      status.innerHTML += " <span class=\"ok\">Это была последняя строка.</span>";
+    }
+  }
+
+  stepBtn.addEventListener("click", step);
+  document.getElementById("reset").addEventListener("click", function () { reset(key); });
+  for (var i = 0; i < buttons.length; i++) {
+    buttons[i].addEventListener("click", function () { reset(this.dataset.k); });
+  }
+  reset("normal");
+})();
+</script>
+</body>
+</html>

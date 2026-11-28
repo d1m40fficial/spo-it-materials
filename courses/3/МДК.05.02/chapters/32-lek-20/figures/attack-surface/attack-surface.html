@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Поверхности атаки</title>
+<style>
+  :root { --paper:#F8F4FA; --card:#FFFDFF; --ink:#241C2B; --muted:#6C6076; --rule:#DCCDE3; --accent:#8E5BC8; --soft:#EBE0EC; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .frame { background:var(--paper); border:1px solid var(--rule); border-radius:12px; padding:16px; }
+  .eyebrow { margin:0 0 6px; font:600 10px/1.2 Consolas,monospace; letter-spacing:.14em; text-transform:uppercase; color:var(--accent); }
+  svg { display:block; width:100%; height:auto; }
+  .card rect { fill:var(--card); stroke:#C9B6D4; stroke-width:1.3; }
+  .card .head { fill:var(--soft); }
+  .foot { margin:9px 2px 0; font:11.5px/1.5 "Segoe UI",system-ui,sans-serif; color:var(--muted); }
+  @media (max-width:560px) { .frame { padding:12px; } }
+</style>
+</head>
+<body>
+<div class="frame">
+  <p class="eyebrow">Безопасность · где искать</p>
+  <svg viewBox="0 0 680 312" role="img" aria-labelledby="as-title as-desc">
+    <title id="as-title">Пять поверхностей атаки приложения с базой</title>
+    <desc id="as-desc">HTTP, база, конфигурация, зависимости и журнал. У каждой поверхности свой вход и свой первый контроль.</desc>
+
+    <g class="card">
+      <rect x="12" y="30" width="124" height="188" rx="9"/>
+      <rect x="12" y="30" width="124" height="28" rx="9" class="head"/>
+      <text x="24" y="49" font-size="10.5" font-weight="700" fill="#8E5BC8" font-family="Consolas,monospace">HTTP</text>
+      <text x="24" y="78" font-size="10" fill="#6C6076">вход:</text>
+      <text x="24" y="94" font-size="10">склейка SQL,</text>
+      <text x="24" y="108" font-size="10">лишние поля</text>
+      <text x="24" y="132" font-size="10" fill="#6C6076">контроль:</text>
+      <text x="24" y="148" font-size="10">параметры,</text>
+      <text x="24" y="162" font-size="10">модель входа</text>
+      <text x="24" y="186" font-size="9" fill="#8E5BC8" font-family="Consolas,monospace">A05, A01</text>
+    </g>
+
+    <g class="card">
+      <rect x="146" y="30" width="124" height="188" rx="9"/>
+      <rect x="146" y="30" width="124" height="28" rx="9" class="head"/>
+      <text x="158" y="49" font-size="10.5" font-weight="700" fill="#8E5BC8" font-family="Consolas,monospace">БАЗА</text>
+      <text x="158" y="78" font-size="10" fill="#6C6076">вход:</text>
+      <text x="158" y="94" font-size="10">права</text>
+      <text x="158" y="108" font-size="10">администратора</text>
+      <text x="158" y="132" font-size="10" fill="#6C6076">контроль:</text>
+      <text x="158" y="148" font-size="10">отдельная роль</text>
+      <text x="158" y="162" font-size="10">для приложения</text>
+      <text x="158" y="186" font-size="9" fill="#8E5BC8" font-family="Consolas,monospace">A01</text>
+    </g>
+
+    <g class="card">
+      <rect x="280" y="30" width="124" height="188" rx="9"/>
+      <rect x="280" y="30" width="124" height="28" rx="9" class="head"/>
+      <text x="292" y="49" font-size="10.5" font-weight="700" fill="#8E5BC8" font-family="Consolas,monospace">КОНФИГ</text>
+      <text x="292" y="78" font-size="10" fill="#6C6076">вход:</text>
+      <text x="292" y="94" font-size="10">пароль</text>
+      <text x="292" y="108" font-size="10">в репозитории</text>
+      <text x="292" y="132" font-size="10" fill="#6C6076">контроль:</text>
+      <text x="292" y="148" font-size="10">переменные</text>
+      <text x="292" y="162" font-size="10">и хранилище</text>
+      <text x="292" y="186" font-size="9" fill="#8E5BC8" font-family="Consolas,monospace">A02, A04</text>
+    </g>
+
+    <g class="card">
+      <rect x="414" y="30" width="124" height="188" rx="9"/>
+      <rect x="414" y="30" width="124" height="28" rx="9" class="head"/>
+      <text x="426" y="49" font-size="10.5" font-weight="700" fill="#8E5BC8" font-family="Consolas,monospace">ЗАВИСИМОСТИ</text>
+      <text x="426" y="78" font-size="10" fill="#6C6076">вход:</text>
+      <text x="426" y="94" font-size="10">старая версия</text>
+      <text x="426" y="108" font-size="10">пакета</text>
+      <text x="426" y="132" font-size="10" fill="#6C6076">контроль:</text>
+      <text x="426" y="148" font-size="10">фиксация,</text>
+      <text x="426" y="162" font-size="10">сканер, KEV</text>
+      <text x="426" y="186" font-size="9" fill="#8E5BC8" font-family="Consolas,monospace">A03</text>
+    </g>
+
+    <g class="card">
+      <rect x="548" y="30" width="120" height="188" rx="9"/>
+      <rect x="548" y="30" width="120" height="28" rx="9" class="head"/>
+      <text x="560" y="49" font-size="10.5" font-weight="700" fill="#8E5BC8" font-family="Consolas,monospace">ЖУРНАЛ</text>
+      <text x="560" y="78" font-size="10" fill="#6C6076">вход:</text>
+      <text x="560" y="94" font-size="10">подробная</text>
+      <text x="560" y="108" font-size="10">ошибка</text>
+      <text x="560" y="132" font-size="10" fill="#6C6076">контроль:</text>
+      <text x="560" y="148" font-size="10">общий ответ,</text>
+      <text x="560" y="162" font-size="10">события</text>
+      <text x="560" y="186" font-size="9" fill="#8E5BC8" font-family="Consolas,monospace">A09, A10</text>
+    </g>
+
+    <text x="12" y="248" font-size="11" fill="#241C2B">Каждая поверхность добавляет путь входа.</text>
+    <text x="12" y="268" font-size="11" fill="#241C2B">Новый маршрут, пакет или файл настроек расширяет её.</text>
+
+    <text x="12" y="296" font-family="Consolas,monospace" font-size="9" fill="#8E5BC8">СЛОИ РАБОТАЮТ ВМЕСТЕ: ОДИН ОТКАЗ НЕ ДОЛЖЕН ОТКРЫВАТЬ ВСЮ БАЗУ</text>
+  </svg>
+  <p class="foot">Слева поверхности, связанные с кодом, справа те, которые часто остаются без внимания. Номера внизу карточек соответствуют категориям OWASP Top 10:2025.</p>
+</div>
+</body>
+</html>

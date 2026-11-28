@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Анатомия записи журнала</title>
+<style>
+  :root { --paper:#FBF7FC; --card:#FFFFFF; --ink:#2B2433; --muted:#6E6278; --rule:#E0D2E6; --accent:#8E5BC8; --soft:#EBE0EC; --bad:#B04A5A; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .frame { background:var(--paper); border:1px solid var(--rule); border-radius:12px; padding:16px; }
+  .eyebrow { margin:0 0 6px; font:600 10px/1.2 Consolas,monospace; letter-spacing:.14em; text-transform:uppercase; color:var(--accent); }
+  svg { display:block; width:100%; height:auto; }
+  .note { margin:10px 2px 0; font:12px/1.5 "Segoe UI",system-ui,sans-serif; color:var(--muted); }
+</style>
+</head>
+<body>
+<div class="frame">
+  <p class="eyebrow">Журнал · одна запись</p>
+  <svg viewBox="0 0 680 404" role="img" aria-labelledby="la-title la-desc">
+    <title id="la-title">Поля записи журнала и вопросы, на которые они отвечают</title>
+    <desc id="la-desc">Полная запись об ошибке отгрузки разложена на пять частей: время, пользователь, действие с объектом, результат с длительностью и идентификатор запроса. Внизу показана бесполезная строка ERROR failed, которая не отвечает ни на один вопрос.</desc>
+
+    <text x="16" y="24" font-size="16" font-weight="700" fill="#2B2433">Одна запись, пять ответов</text>
+    <text x="16" y="43" font-size="11" fill="#6E6278">поля идут в постоянном порядке, поэтому запись читает и человек, и программа</text>
+
+    <rect x="16" y="56" width="648" height="58" rx="8" fill="#FFFFFF" stroke="#D9C8E0"/>
+    <text x="28" y="78" font-family="Consolas,monospace" font-size="10.5" fill="#8E5BC8">2026-10-12T09:16:41+03:00  ERROR  request_id=8f23</text>
+    <text x="28" y="98" font-family="Consolas,monospace" font-size="10.5" fill="#2B2433">user=kladovshchik_2 action=shipment_create supply_id=505</text>
+    <text x="28" y="112" font-family="Consolas,monospace" font-size="10.5" fill="#2B2433">error=LockedError duration_ms=1840</text>
+
+    <g font-family="Segoe UI,system-ui,sans-serif">
+      <g>
+        <rect x="16" y="132" width="172" height="30" rx="6" fill="#EBE0EC" stroke="#D9C8E0"/>
+        <text x="28" y="152" font-family="Consolas,monospace" font-size="11" font-weight="700" fill="#6B3E9E">time</text>
+        <text x="204" y="152" font-size="12" fill="#2B2433">Когда это было, с часовым поясом</text>
+      </g>
+      <g>
+        <rect x="16" y="170" width="172" height="30" rx="6" fill="#EBE0EC" stroke="#D9C8E0"/>
+        <text x="28" y="190" font-family="Consolas,monospace" font-size="11" font-weight="700" fill="#6B3E9E">user</text>
+        <text x="204" y="190" font-size="12" fill="#2B2433">Кто действовал, по идентификатору</text>
+      </g>
+      <g>
+        <rect x="16" y="208" width="172" height="30" rx="6" fill="#EBE0EC" stroke="#D9C8E0"/>
+        <text x="28" y="228" font-family="Consolas,monospace" font-size="11" font-weight="700" fill="#6B3E9E">action + supply_id</text>
+        <text x="204" y="228" font-size="12" fill="#2B2433">Что делал и с каким объектом</text>
+      </g>
+      <g>
+        <rect x="16" y="246" width="172" height="30" rx="6" fill="#EBE0EC" stroke="#D9C8E0"/>
+        <text x="28" y="266" font-family="Consolas,monospace" font-size="11" font-weight="700" fill="#6B3E9E">error + duration_ms</text>
+        <text x="204" y="266" font-size="12" fill="#2B2433">Чем закончилось и сколько ждало</text>
+      </g>
+      <g>
+        <rect x="16" y="284" width="172" height="30" rx="6" fill="#EBE0EC" stroke="#D9C8E0"/>
+        <text x="28" y="304" font-family="Consolas,monospace" font-size="11" font-weight="700" fill="#6B3E9E">request_id</text>
+        <text x="204" y="304" font-size="12" fill="#2B2433">В рамках какого запроса всё шло</text>
+      </g>
+    </g>
+
+    <rect x="16" y="332" width="648" height="44" rx="8" fill="#FDF1F3" stroke="#E4B9C1" stroke-dasharray="4 3"/>
+    <text x="28" y="350" font-family="Consolas,monospace" font-size="10.5" fill="#B04A5A">ERROR: failed</text>
+    <text x="28" y="366" font-size="11" fill="#8C5A63">так выглядит запись, у которой нет ни одного ответа: время, кто, объект и запрос неизвестны</text>
+
+    <text x="16" y="394" font-family="Consolas,monospace" font-size="9.5" fill="#6E6278">ПРАВИЛО: ЕСЛИ ПОЛЕ НЕ ОТВЕЧАЕТ НА ВОПРОС, ЕГО НЕ НУЖНО ПИСАТЬ</text>
+  </svg>
+  <p class="note">Сравните верхнюю запись с нижней строкой. Разница не в длине текста, а в том, сколько вопросов остаётся без ответа.</p>
+</div>
+</body>
+</html>

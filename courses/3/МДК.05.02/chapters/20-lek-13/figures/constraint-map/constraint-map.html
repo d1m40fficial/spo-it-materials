@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ограничения целостности SQLite</title>
+<style>
+  :root { color-scheme:light; --paper:#EBE0EC; --card:#FFFDFC; --ink:#2A2430; --muted:#6B6272; --rule:#CDBBD6; --accent:#8E5BC8; --soft:#F3EAF4; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .frame { background:var(--paper); border:1px solid var(--rule); border-radius:12px; padding:16px; }
+  .eyebrow { margin:0 0 6px; font:600 10px/1.2 Consolas,monospace; letter-spacing:.14em; text-transform:uppercase; color:var(--accent); }
+  svg { display:block; width:100%; height:auto; }
+  .rule rect { fill:#FFFDFC; stroke:#CDBBD6; stroke-width:1.3; transition:fill .15s, stroke .15s; cursor:pointer; }
+  .rule.on rect { fill:#F3EAF4; stroke:#8E5BC8; stroke-width:2.2; }
+  .status { min-height:86px; margin-top:8px; padding:10px 12px; border-radius:9px; background:var(--soft); font-size:12.5px; line-height:1.45; }
+  .status b { color:var(--accent); }
+  .status code { font-family:Consolas,monospace; font-size:11.5px; background:#FFFDFC; padding:1px 4px; border-radius:3px; }
+  .note { margin:9px 2px 0; font:11.5px/1.5 "Segoe UI",system-ui,sans-serif; color:var(--muted); }
+  @media (max-width:560px) { .frame { padding:12px; } .status { font-size:12px; } }
+</style>
+</head>
+<body>
+<div class="frame">
+  <p class="eyebrow">SQLite · ограничения схемы</p>
+  <svg viewBox="0 0 680 250" role="img" aria-labelledby="cm-title cm-desc">
+    <title id="cm-title">Пять ограничений схемы SQLite</title>
+    <desc id="cm-desc">PRIMARY KEY, UNIQUE, NOT NULL, CHECK и REFERENCES. Нажмите ограничение, чтобы увидеть пример нарушения и сообщение базы.</desc>
+
+    <g class="rule" data-k="pk">
+      <rect x="16" y="26" width="200" height="86" rx="9"/>
+      <text x="30" y="48" font-family="Segoe UI,system-ui,sans-serif" font-size="13" font-weight="700" fill="#2A2430">PRIMARY KEY</text>
+      <text x="30" y="68" font-family="Segoe UI,system-ui,sans-serif" font-size="10.5" fill="#6B6272">уникальный идентификатор</text>
+      <text x="30" y="86" font-family="Segoe UI,system-ui,sans-serif" font-size="10.5" fill="#2A2430">INTEGER PRIMARY KEY</text>
+      <text x="30" y="101" font-family="Segoe UI,system-ui,sans-serif" font-size="10.5" fill="#2A2430">становится rowid</text>
+    </g>
+
+    <g class="rule" data-k="unique">
+      <rect x="240" y="26" width="200" height="86" rx="9"/>
+      <text x="254" y="48" font-family="Segoe UI,system-ui,sans-serif" font-size="13" font-weight="700" fill="#2A2430">UNIQUE</text>
+      <text x="254" y="68" font-family="Segoe UI,system-ui,sans-serif" font-size="10.5" fill="#6B6272">запрещает повтор значения</text>
+      <text x="254" y="86" font-family="Segoe UI,system-ui,sans-serif" font-size="10.5" fill="#2A2430">создаёт автоматический</text>
+      <text x="254" y="101" font-family="Segoe UI,system-ui,sans-serif" font-size="10.5" fill="#2A2430">индекс</text>
+    </g>
+
+    <g class="rule" data-k="notnull">
+      <rect x="464" y="26" width="200" height="86" rx="9"/>
+      <text x="478" y="48" font-family="Segoe UI,system-ui,sans-serif" font-size="13" font-weight="700" fill="#2A2430">NOT NULL</text>
+      <text x="478" y="68" font-family="Segoe UI,system-ui,sans-serif" font-size="10.5" fill="#6B6272">требует значение</text>
+      <text x="478" y="86" font-family="Segoe UI,system-ui,sans-serif" font-size="10.5" fill="#2A2430">без него в столбце</text>
+      <text x="478" y="101" font-family="Segoe UI,system-ui,sans-serif" font-size="10.5" fill="#2A2430">может быть NULL</text>
+    </g>
+
+    <g class="rule" data-k="check">
+      <rect x="16" y="128" width="200" height="86" rx="9"/>
+      <text x="30" y="150" font-family="Segoe UI,system-ui,sans-serif" font-size="13" font-weight="700" fill="#2A2430">CHECK</text>
+      <text x="30" y="170" font-family="Segoe UI,system-ui,sans-serif" font-size="10.5" fill="#6B6272">условие на строку</text>
+      <text x="30" y="188" font-family="Segoe UI,system-ui,sans-serif" font-size="10.5" fill="#2A2430">NULL в условии</text>
+      <text x="30" y="203" font-family="Segoe UI,system-ui,sans-serif" font-size="10.5" fill="#2A2430">не нарушает правило</text>
+    </g>
+
+    <g class="rule" data-k="fk">
+      <rect x="240" y="128" width="200" height="86" rx="9"/>
+      <text x="254" y="150" font-family="Segoe UI,system-ui,sans-serif" font-size="13" font-weight="700" fill="#2A2430">REFERENCES</text>
+      <text x="254" y="170" font-family="Segoe UI,system-ui,sans-serif" font-size="10.5" fill="#6B6272">внешний ключ</text>
+      <text x="254" y="188" font-family="Segoe UI,system-ui,sans-serif" font-size="10.5" fill="#2A2430">проверка включается</text>
+      <text x="254" y="203" font-family="Segoe UI,system-ui,sans-serif" font-size="10.5" fill="#2A2430">на соединении</text>
+    </g>
+
+    <g>
+      <rect x="464" y="128" width="200" height="86" rx="9" fill="#F3EAF4" stroke="#CDBBD6" stroke-dasharray="4 3"/>
+      <text x="478" y="150" font-family="Segoe UI,system-ui,sans-serif" font-size="11" font-weight="700" fill="#2A2430">Правило проекта</text>
+      <text x="478" y="170" font-family="Segoe UI,system-ui,sans-serif" font-size="10.5" fill="#2A2430">Ограничение в базе</text>
+      <text x="478" y="186" font-family="Segoe UI,system-ui,sans-serif" font-size="10.5" fill="#2A2430">защищает от любой</text>
+      <text x="478" y="202" font-family="Segoe UI,system-ui,sans-serif" font-size="10.5" fill="#2A2430">программы, не только</text>
+    </g>
+
+    <text x="478" y="230" font-family="Segoe UI,system-ui,sans-serif" font-size="10.5" fill="#6B6272">от вашей.</text>
+  </svg>
+  <div class="status" id="cm-status"></div>
+  <p class="note">Нажмите карточку ограничения. Внизу появится оператор, пример нарушения и сообщение, которое вернёт база.</p>
+</div>
+<script>
+(function () {
+  var data = {
+    pk: '<b>PRIMARY KEY.</b> Задаёт уникальный идентификатор строки. В таблице остатков ключ составной: пара «площадка и товар». Пример нарушения: вставить второй остаток с теми же двумя ключами. Ответ базы: <code>UNIQUE constraint failed: stock.warehouse_id, stock.product_id</code>.',
+    unique: '<b>UNIQUE.</b> Запрещает повторение значения и создаёт индекс. Тонкость: несколько NULL считаются разными, поэтому столбец с UNIQUE может содержать много пустых значений. Пример нарушения: второй товар с артикулом SKU-1000. Ответ: <code>UNIQUE constraint failed: products.sku</code>.',
+    notnull: '<b>NOT NULL.</b> Требует, чтобы значение было задано. Без него в столбец можно записать NULL, и ошибка проявится позже, при чтении или расчёте. Пример нарушения: остаток без количества. Ответ: <code>NOT NULL constraint failed: stock.qty</code>.',
+    check: '<b>CHECK.</b> Проверяет условие на строку. Если выражение даёт NULL, ограничение не нарушено, поэтому CHECK работает в паре с NOT NULL. Пример нарушения: остаток минус единица. Ответ: <code>CHECK constraint failed: qty >= 0</code>.',
+    fk: '<b>REFERENCES.</b> Требует, чтобы родительская строка существовала. По умолчанию SQLite не проверяет ключ: нужен <code>PRAGMA foreign_keys = ON</code> для каждого соединения. Пример нарушения: остаток для товара 99999. Ответ: <code>FOREIGN KEY constraint failed</code>.'
+  };
+  var cards = document.querySelectorAll('.rule');
+  var status = document.getElementById('cm-status');
+  function apply(key) {
+    cards.forEach(function (c) { c.classList.toggle('on', c.dataset.k === key); });
+    status.innerHTML = data[key];
+  }
+  cards.forEach(function (c) { c.addEventListener('click', function () { apply(c.dataset.k); }); });
+  apply('pk');
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Границы проекта и вертикальный срез</title>
+<style>
+  :root { color-scheme:light; --bg:#EBE0EC; --paper:#FBF8FC; --ink:#2A2430; --muted:#6B5F75; --accent:#8E5BC8; --soft:#F1E7F5; --rule:#D9C9E2; --grey:#EFEDF1; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .frame { background:var(--bg); border:1px solid var(--rule); border-radius:12px; padding:16px 16px 12px; }
+  .eyebrow { margin:0 0 4px; font:600 9px/1.3 Consolas,monospace; letter-spacing:.16em; text-transform:uppercase; color:var(--accent); }
+  h3 { margin:0 0 6px; font-size:18px; line-height:1.2; }
+  svg { display:block; width:100%; height:auto; }
+  .note { margin:8px 2px 0; font:11px/1.5 Consolas,monospace; color:var(--muted); }
+  @media (max-width:560px) { .frame { padding:12px; } h3 { font-size:16px; } }
+</style>
+</head>
+<body>
+<div class="frame">
+  <p class="eyebrow">Итоговый проект · границы</p>
+  <h3>Один срез насквозь, а не половина каждого слоя</h3>
+  <svg viewBox="0 0 680 306" role="img" aria-labelledby="ss-t ss-d">
+    <title id="ss-t">Вертикальный срез проекта</title>
+    <desc id="ss-d">Пять слоёв системы и пять сценариев. Первый срез проходит через все слои для входа и выдачи, следующий срез добавляет возврат и отчёт, экспорт остаётся за границами проекта.</desc>
+    <g font-family="'Segoe UI',system-ui,sans-serif">
+      <text x="14" y="16" font-size="9" font-family="Consolas,monospace" letter-spacing="1.2" fill="#6B5F75">СЛОИ СИСТЕМЫ</text>
+      <text x="130" y="16" font-size="9" font-family="Consolas,monospace" letter-spacing="1.2" fill="#6B5F75">СЦЕНАРИИ</text>
+
+      <g font-size="10" fill="#6B5F75">
+        <text x="182" y="34" text-anchor="middle">вход</text>
+        <text x="288" y="34" text-anchor="middle">выдача</text>
+        <text x="394" y="34" text-anchor="middle">возврат</text>
+        <text x="500" y="34" text-anchor="middle">отчёт</text>
+        <text x="606" y="34" text-anchor="middle">экспорт</text>
+      </g>
+
+      <g font-size="10" fill="#2A2430">
+        <text x="20" y="74">интерфейс</text>
+        <text x="20" y="112">API</text>
+        <text x="20" y="150">логика</text>
+        <text x="20" y="188">данные</text>
+        <text x="20" y="226">база</text>
+      </g>
+
+      <g fill="#FBF8FC" stroke="#E4D6EC">
+        <rect x="130" y="50" width="476" height="34" rx="5"/>
+        <rect x="130" y="88" width="476" height="34" rx="5"/>
+        <rect x="130" y="126" width="476" height="34" rx="5"/>
+        <rect x="130" y="164" width="476" height="34" rx="5"/>
+        <rect x="130" y="202" width="476" height="34" rx="5"/>
+      </g>
+
+      <g stroke="#E4D6EC" stroke-width="1">
+        <line x1="234" y1="50" x2="234" y2="236"/>
+        <line x1="340" y1="50" x2="340" y2="236"/>
+        <line x1="446" y1="50" x2="446" y2="236"/>
+        <line x1="552" y1="50" x2="552" y2="236"/>
+      </g>
+
+      <rect x="124" y="42" width="218" height="200" rx="8" fill="#F1E7F5" stroke="#8E5BC8" stroke-width="1.6"/>
+      <rect x="336" y="42" width="216" height="200" rx="8" fill="#FBF8FC" stroke="#B99BD0" stroke-width="1.2" stroke-dasharray="5 4"/>
+      <rect x="548" y="42" width="112" height="200" rx="8" fill="#EFEDF1" stroke="#C9C2CC" stroke-width="1.2" stroke-dasharray="4 4"/>
+
+      <text x="233" y="64" text-anchor="middle" font-size="9" font-weight="600" fill="#6B3E9B">срез 1</text>
+      <text x="444" y="64" text-anchor="middle" font-size="9" fill="#8A6DA1">срез 2</text>
+      <text x="604" y="64" text-anchor="middle" font-size="9" fill="#8A868E">не входит</text>
+
+      <g font-size="9" fill="#4A3F55" text-anchor="middle">
+        <text x="182" y="71">форма входа</text>
+        <text x="288" y="71">список и карточка</text>
+        <text x="394" y="71">форма возврата</text>
+        <text x="500" y="71">таблица отчёта</text>
+        <text x="606" y="71">нет</text>
+
+        <text x="182" y="109">POST /login</text>
+        <text x="288" y="109">GET /issues</text>
+        <text x="394" y="109">PUT /issues</text>
+        <text x="500" y="109">GET /report</text>
+        <text x="606" y="109">нет</text>
+
+        <text x="182" y="147">хеш и роль</text>
+        <text x="288" y="147">правило выдачи</text>
+        <text x="394" y="147">срок и штраф</text>
+        <text x="500" y="147">сводка</text>
+        <text x="606" y="147">нет</text>
+
+        <text x="182" y="185">поиск по логину</text>
+        <text x="288" y="185">запрос с параметром</text>
+        <text x="394" y="185">обновление строки</text>
+        <text x="500" y="185">группировка</text>
+        <text x="606" y="185">нет</text>
+
+        <text x="182" y="223">users</text>
+        <text x="288" y="223">issues, tools</text>
+        <text x="394" y="223">issues, history</text>
+        <text x="500" y="223">представление</text>
+        <text x="606" y="223">нет</text>
+      </g>
+
+      <g>
+        <rect x="14" y="256" width="10" height="10" rx="2" fill="#F1E7F5" stroke="#8E5BC8"/>
+        <text x="30" y="265" font-size="9" fill="#2A2430">срез MVP: вход и выдача</text>
+        <rect x="196" y="256" width="10" height="10" rx="2" fill="#FBF8FC" stroke="#B99BD0" stroke-dasharray="3 2"/>
+        <text x="212" y="265" font-size="9" fill="#2A2430">следующий срез</text>
+        <rect x="332" y="256" width="10" height="10" rx="2" fill="#EFEDF1" stroke="#C9C2CC"/>
+        <text x="348" y="265" font-size="9" fill="#2A2430">за границами проекта</text>
+      </g>
+
+      <text x="14" y="290" font-size="10" fill="#6B5F75">Срез проходит все слои. Ширина добавляется только после того, как срез закрыт и проверен.</text>
+    </g>
+  </svg>
+  <p class="note">Срез 1 даёт работающий путь от формы до строки в базе. Срез 2 расширяет систему, но не отменяет уже собранное.</p>
+</div>
+</body>
+</html>

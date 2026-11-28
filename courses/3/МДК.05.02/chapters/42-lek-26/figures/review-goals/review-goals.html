@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Цели рецензирования кода</title>
+<style>
+  :root { --paper:#EBE0EC; --card:#FFFDFF; --ink:#2A2430; --muted:#6B5F72; --rule:#D6C4DB; --accent:#8E5BC8; --soft:#F3EAF6; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .frame { background:var(--paper); border:1px solid var(--rule); border-radius:12px; padding:16px; }
+  .eyebrow { margin:0 0 6px; font:600 10px/1.2 Consolas,monospace; letter-spacing:.14em; text-transform:uppercase; color:var(--accent); }
+  svg { display:block; width:100%; height:auto; }
+  .goal { cursor:pointer; }
+  .goal rect { fill:var(--card); stroke:#C9AFD2; stroke-width:1.4; transition:fill .15s, stroke .15s; }
+  .goal.on rect { fill:#F3EAF6; stroke:var(--accent); stroke-width:2.2; }
+  .goal text { font-family:"Segoe UI",system-ui,sans-serif; pointer-events:none; }
+  .status { min-height:70px; margin-top:8px; padding:10px 12px; border-radius:9px; background:var(--soft); font-size:13px; line-height:1.45; }
+  .status b { color:var(--accent); }
+  .controls { display:flex; gap:6px; flex-wrap:wrap; margin-top:10px; }
+  button { font:600 11.5px/1.1 "Segoe UI",system-ui,sans-serif; padding:8px 10px; border-radius:8px; border:1px solid var(--rule); background:var(--card); color:var(--ink); cursor:pointer; }
+  button:hover { border-color:var(--accent); color:var(--accent); }
+  button.on { background:var(--accent); border-color:var(--accent); color:#fff; }
+  .note { margin:9px 2px 0; font:11.5px/1.5 "Segoe UI",system-ui,sans-serif; color:var(--muted); }
+  @media (max-width:560px) { .frame { padding:12px; } .status { font-size:12.5px; } }
+</style>
+</head>
+<body>
+<div class="frame">
+  <p class="eyebrow">Code review · цели</p>
+  <svg viewBox="0 0 680 300" role="img" aria-labelledby="rg-title rg-desc">
+    <title id="rg-title">Пять целей рецензирования кода</title>
+    <desc id="rg-desc">Поиск дефектов, соответствие задаче, передача знания, единый стиль и снижение риска. Нажмите карточку, чтобы увидеть пример замечания.</desc>
+
+    <g class="goal" data-k="defect">
+      <rect x="16" y="28" width="208" height="94" rx="9"/>
+      <text x="30" y="50" font-size="12.5" font-weight="700" fill="#2A2430">Поиск дефекта</text>
+      <text x="30" y="69" font-size="10.5" fill="#6B5F72">ошибка не доходит</text>
+      <text x="30" y="84" font-size="10.5" fill="#6B5F72">до пользователя</text>
+      <text x="30" y="106" font-size="10" fill="#8E5BC8">diff и граничные входы</text>
+    </g>
+
+    <g class="goal" data-k="task">
+      <rect x="236" y="28" width="208" height="94" rx="9"/>
+      <text x="250" y="50" font-size="12.5" font-weight="700" fill="#2A2430">Соответствие задаче</text>
+      <text x="250" y="69" font-size="10.5" fill="#6B5F72">нет лишних функций</text>
+      <text x="250" y="84" font-size="10.5" fill="#6B5F72">и пропущенных требований</text>
+      <text x="250" y="106" font-size="10" fill="#8E5BC8">сверка с критериями</text>
+    </g>
+
+    <g class="goal" data-k="knowledge">
+      <rect x="456" y="28" width="208" height="94" rx="9"/>
+      <text x="470" y="50" font-size="12.5" font-weight="700" fill="#2A2430">Передача знания</text>
+      <text x="470" y="69" font-size="10.5" fill="#6B5F72">участок кода понимают</text>
+      <text x="470" y="84" font-size="10.5" fill="#6B5F72">несколько человек</text>
+      <text x="470" y="106" font-size="10" fill="#8E5BC8">вопросы и объяснения</text>
+    </g>
+
+    <g class="goal" data-k="style">
+      <rect x="16" y="138" width="208" height="94" rx="9"/>
+      <text x="30" y="160" font-size="12.5" font-weight="700" fill="#2A2430">Единый стиль</text>
+      <text x="30" y="179" font-size="10.5" fill="#6B5F72">код проще читать</text>
+      <text x="30" y="194" font-size="10.5" fill="#6B5F72">и сопровождать</text>
+      <text x="30" y="216" font-size="10" fill="#8E5BC8">линтер и договорённость</text>
+    </g>
+
+    <g class="goal" data-k="risk">
+      <rect x="236" y="138" width="428" height="94" rx="9"/>
+      <text x="250" y="160" font-size="12.5" font-weight="700" fill="#2A2430">Снижение риска</text>
+      <text x="250" y="179" font-size="10.5" fill="#6B5F72">критическое изменение читают двое, а не один</text>
+      <text x="250" y="194" font-size="10.5" fill="#6B5F72">цена ошибки видна до выпуска</text>
+      <text x="250" y="216" font-size="10" fill="#8E5BC8">второй рецензент и постепенный выпуск</text>
+    </g>
+
+    <text x="16" y="268" font-family="Consolas,monospace" font-size="9.5" fill="#6B5F72">РЕЦЕНЗИЯ НЕ ЗАМЕНЯЕТ ТЕСТЫ, ОНА СМОТРИТ ТУДА, ГДЕ ТЕСТОВ ЕЩЁ НЕТ</text>
+    <text x="16" y="286" font-family="Segoe UI,system-ui,sans-serif" font-size="10.5" fill="#6B5F72">Нажмите карточку или кнопку под схемой</text>
+  </svg>
+  <div class="status" id="rg-status"></div>
+  <div class="controls" id="rg-buttons">
+    <button data-k="defect" class="on">Поиск дефекта</button>
+    <button data-k="task">Соответствие задаче</button>
+    <button data-k="knowledge">Передача знания</button>
+    <button data-k="style">Единый стиль</button>
+    <button data-k="risk">Снижение риска</button>
+  </div>
+  <p class="note">Одна рецензия редко достигает всех целей сразу. Полезно заранее решить, какая цель главная для этого изменения.</p>
+</div>
+<script>
+(function () {
+  var data = {
+    defect: '<b>Поиск дефекта.</b> Пример: «src/stock.py:11, блокирующее: при 40, 30 и 25 вернётся 15 вместо ошибки, потому что проверка не учитывает резерв». Замечание указывает вход, на котором поведение расходится с ожиданием.',
+    task: '<b>Соответствие задаче.</b> Пример: «В задаче просили фильтр по категории, в diff фильтр по складу. Это другая задача или требование изменилось?» Рецензент сверяет поведение с критериями приёмки, а не только читает строки.',
+    knowledge: '<b>Передача знания.</b> Пример: «Объясните, почему резерв вычитается до проверки: хочу понять инвариант, чтобы не сломать его следующей правкой». После такого вопроса участок кода понимают двое.',
+    style: '<b>Единый стиль.</b> Пример: «В проекте принято snake_case, здесь camelCase. Это ловит линтер, но проверьте, что правило включено в CI». Стиль редко должен занимать время человека.',
+    risk: '<b>Снижение риска.</b> Пример: «Изменение затрагивает все запросы к API. Предлагаю сначала выпустить на одном узле и посмотреть задержку». Вопрос о радиусе поражения важнее оформления.'
+  };
+  var cards = document.querySelectorAll('.goal');
+  var buttons = document.querySelectorAll('#rg-buttons button');
+  var status = document.getElementById('rg-status');
+
+  function apply(key) {
+    cards.forEach(function (c) { c.classList.toggle('on', c.dataset.k === key); });
+    buttons.forEach(function (b) { b.classList.toggle('on', b.dataset.k === key); });
+    status.innerHTML = data[key];
+  }
+  cards.forEach(function (c) { c.addEventListener('click', function () { apply(c.dataset.k); }); });
+  buttons.forEach(function (b) { b.addEventListener('click', function () { apply(b.dataset.k); }); });
+  apply('defect');
+})();
+</script>
+</body>
+</html>

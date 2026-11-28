@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Граф зависимостей проекта</title>
+<style>
+  :root { --paper:#EBE0EC; --card:#FFFDFF; --ink:#2A2430; --muted:#6B5F72; --rule:#D6C4DB; --accent:#8E5BC8; --soft:#F3EAF6; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .frame { background:var(--paper); border:1px solid var(--rule); border-radius:12px; padding:16px; }
+  .eyebrow { margin:0 0 6px; font:600 10px/1.2 Consolas,monospace; letter-spacing:.14em; text-transform:uppercase; color:var(--accent); }
+  svg { display:block; width:100%; height:auto; }
+  .note { margin:9px 2px 0; font:11.5px/1.5 "Segoe UI",system-ui,sans-serif; color:var(--muted); }
+  @media (max-width:560px) { .frame { padding:12px; } }
+</style>
+</head>
+<body>
+<div class="frame">
+  <p class="eyebrow">Зависимости · граф</p>
+  <svg viewBox="0 0 680 330" role="img" aria-labelledby="dg-title dg-desc">
+    <title id="dg-title">Одна прямая зависимость и четыре транзитивные</title>
+    <desc id="dg-desc">Проект зависит от requests, requests зависит от urllib3, certifi, idna и charset-normalizer. Замок версий фиксирует все пять пакетов.</desc>
+
+    <text x="16" y="22" font-family="Consolas,monospace" font-size="10" fill="#6B5F72">ПРОЕКТ → ПРЯМАЯ ЗАВИСИМОСТЬ → ТРАНЗИТИВНЫЕ</text>
+
+    <rect x="16" y="120" width="150" height="78" rx="9" fill="#8E5BC8" stroke="#8E5BC8"/>
+    <text x="91" y="148" text-anchor="middle" font-family="Segoe UI,system-ui,sans-serif" font-size="13" font-weight="700" fill="#FFF">sklad-plus</text>
+    <text x="91" y="168" text-anchor="middle" font-family="Segoe UI,system-ui,sans-serif" font-size="10.5" fill="#F3EAF6">код проекта</text>
+    <text x="91" y="184" text-anchor="middle" font-family="Consolas,monospace" font-size="9.5" fill="#F3EAF6">requirements.txt</text>
+
+    <path d="M166 159 L206 159" stroke="#B79AC2" stroke-width="2.5" fill="none"/>
+    <path d="M206 159 L200 154 M206 159 L200 164" stroke="#B79AC2" stroke-width="2.5" fill="none"/>
+
+    <rect x="210" y="128" width="160" height="62" rx="9" fill="#FFFDFF" stroke="#8E5BC8" stroke-width="2"/>
+    <text x="290" y="152" text-anchor="middle" font-family="Consolas,monospace" font-size="12" font-weight="700" fill="#8E5BC8">requests</text>
+    <text x="290" y="170" text-anchor="middle" font-family="Consolas,monospace" font-size="10.5" fill="#2A2430">==2.32.3</text>
+    <text x="290" y="184" text-anchor="middle" font-family="Segoe UI,system-ui,sans-serif" font-size="9.5" fill="#6B5F72">прямая</text>
+
+    <path d="M370 155 C400 155 400 62 428 62" stroke="#B79AC2" stroke-width="2" fill="none"/>
+    <path d="M370 159 C400 159 400 112 428 112" stroke="#B79AC2" stroke-width="2" fill="none"/>
+    <path d="M370 163 C400 163 400 166 428 166" stroke="#B79AC2" stroke-width="2" fill="none"/>
+    <path d="M370 168 C400 168 400 218 428 218" stroke="#B79AC2" stroke-width="2" fill="none"/>
+
+    <g font-family="Consolas,monospace">
+      <rect x="430" y="42" width="226" height="40" rx="7" fill="#FFFDFF" stroke="#C9AFD2"/>
+      <text x="444" y="61" font-size="11" font-weight="700" fill="#2A2430">urllib3</text>
+      <text x="444" y="75" font-size="10" fill="#6B5F72">==2.8.0</text>
+      <text x="590" y="66" font-size="9.5" fill="#8E5BC8">транзитивная</text>
+
+      <rect x="430" y="92" width="226" height="40" rx="7" fill="#FFFDFF" stroke="#C9AFD2"/>
+      <text x="444" y="111" font-size="11" font-weight="700" fill="#2A2430">certifi</text>
+      <text x="444" y="125" font-size="10" fill="#6B5F72">==2026.10.23</text>
+      <text x="590" y="116" font-size="9.5" fill="#8E5BC8">транзитивная</text>
+
+      <rect x="430" y="146" width="226" height="40" rx="7" fill="#FFFDFF" stroke="#C9AFD2"/>
+      <text x="444" y="165" font-size="11" font-weight="700" fill="#2A2430">idna</text>
+      <text x="444" y="179" font-size="10" fill="#6B5F72">==3.20</text>
+      <text x="590" y="170" font-size="9.5" fill="#8E5BC8">транзитивная</text>
+
+      <rect x="430" y="198" width="226" height="40" rx="7" fill="#FFFDFF" stroke="#C9AFD2"/>
+      <text x="444" y="217" font-size="11" font-weight="700" fill="#2A2430">charset-normalizer</text>
+      <text x="444" y="231" font-size="10" fill="#6B5F72">==3.5.2</text>
+      <text x="590" y="222" font-size="9.5" fill="#8E5BC8">транзитивная</text>
+    </g>
+
+    <rect x="16" y="252" width="640" height="52" rx="8" fill="#F3EAF6" stroke="#C9AFD2"/>
+    <text x="32" y="273" font-family="Consolas,monospace" font-size="10" fill="#8E5BC8">REQUIREMENTS.LOCK: 5 ТОЧНЫХ ВЕРСИЙ</text>
+    <text x="32" y="291" font-family="Segoe UI,system-ui,sans-serif" font-size="10.5" fill="#2A2430">Одна строка в requirements.txt даёт пять строк в замке. Без замка выбор транзитивных версий повторяется при каждой установке.</text>
+
+    <text x="16" y="322" font-family="Consolas,monospace" font-size="9" fill="#6B5F72">СТАВИТЬ ИЗ ЗАМКА, А НЕ ПО ОДНОЙ ПРЯМОЙ СТРОКЕ</text>
+  </svg>
+  <p class="note">Граф не хранится в файле прямых зависимостей. Его фиксирует замок, а посмотреть фактический набор помогают pip freeze и dotnet list package --include-transitive.</p>
+</div>
+</body>
+</html>

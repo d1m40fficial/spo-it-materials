@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Глобальный Python и окружение проекта</title>
+<style>
+  :root { --paper:#EBE0EC; --card:#FBF7FC; --ink:#2A2233; --muted:#6B5F75; --rule:#D5C2DC; --accent:#8E5BC8; --soft:#E4D5EC; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .frame { background:var(--paper); border:1px solid var(--rule); border-radius:12px; padding:16px; }
+  .eyebrow { margin:0 0 6px; font:600 10px/1.2 Consolas,monospace; letter-spacing:.14em; text-transform:uppercase; color:var(--accent); }
+  svg { display:block; width:100%; height:auto; }
+  .case rect { fill:#FBF7FC; stroke:#D5C2DC; stroke-width:1.3; transition:fill .15s, stroke .15s; }
+  .case.on rect { fill:#EFE3F3; stroke:#8E5BC8; stroke-width:2.2; }
+  .status { min-height:66px; margin-top:8px; padding:10px 12px; border-radius:9px; background:var(--soft); font-size:13px; line-height:1.45; }
+  .status b { color:var(--accent); }
+  .controls { display:flex; gap:6px; flex-wrap:wrap; margin-top:10px; }
+  button { font:600 11.5px/1.1 "Segoe UI",system-ui,sans-serif; padding:8px 10px; border-radius:8px; border:1px solid var(--rule); background:var(--card); color:var(--ink); cursor:pointer; }
+  button:hover { border-color:var(--accent); color:var(--accent); }
+  button.on { background:var(--accent); border-color:var(--accent); color:#fff; }
+  .note { margin:9px 2px 0; font:11.5px/1.5 "Segoe UI",system-ui,sans-serif; color:var(--muted); }
+  @media (max-width:560px) { .frame { padding:12px; } .status { font-size:12.5px; } }
+</style>
+</head>
+<body>
+<div class="frame">
+  <p class="eyebrow">Python · окружение проекта</p>
+  <svg viewBox="0 0 680 388" role="img" aria-labelledby="vs-title vs-desc">
+    <title id="vs-title">Сравнение глобального Python и виртуального окружения</title>
+    <desc id="vs-desc">Две карточки: глобальный интерпретатор и окружение проекта. Показаны путь интерпретатора, sys.prefix, каталог site-packages и получатель пакетов pip. Нажмите карточку или кнопку, чтобы сравнить.</desc>
+
+    <text x="16" y="22" font-family="Consolas,monospace" font-size="10" fill="#6B5F75">ОДНА КОМАНДА PYTHON, ДВА РАЗНЫХ НАБОРА БИБЛИОТЕК</text>
+
+    <g class="case" data-k="global">
+      <rect x="16" y="34" width="314" height="228" rx="10"/>
+      <text x="30" y="58" font-size="13" font-weight="700" fill="#2A2233">Глобальный Python</text>
+      <text x="30" y="76" font-size="10.5" fill="#6B5F75">окружение системы, не проекта</text>
+      <line x1="30" y1="86" x2="316" y2="86" stroke="#D5C2DC"/>
+      <text x="30" y="106" font-family="Consolas,monospace" font-size="9.5" fill="#6B5F75">sys.executable</text>
+      <text x="30" y="122" font-size="10.5" fill="#2A2233">...\Python313\python.exe</text>
+      <text x="30" y="146" font-family="Consolas,monospace" font-size="9.5" fill="#6B5F75">sys.prefix</text>
+      <text x="30" y="162" font-size="10.5" fill="#2A2233">...\Python313</text>
+      <text x="30" y="186" font-family="Consolas,monospace" font-size="9.5" fill="#6B5F75">site-packages</text>
+      <text x="30" y="202" font-size="10.5" fill="#2A2233">...\Python313\Lib\site-packages</text>
+      <text x="30" y="226" font-family="Consolas,monospace" font-size="9.5" fill="#6B5F75">pip ставит пакеты</text>
+      <text x="30" y="242" font-size="10.5" fill="#2A2233">в общий каталог системы</text>
+    </g>
+
+    <g class="case" data-k="venv">
+      <rect x="350" y="34" width="314" height="228" rx="10"/>
+      <text x="364" y="58" font-size="13" font-weight="700" fill="#2A2233">Проект .venv</text>
+      <text x="364" y="76" font-size="10.5" fill="#6B5F75">окружение внутри папки проекта</text>
+      <line x1="364" y1="86" x2="650" y2="86" stroke="#D5C2DC"/>
+      <text x="364" y="106" font-family="Consolas,monospace" font-size="9.5" fill="#6B5F75">sys.executable</text>
+      <text x="364" y="122" font-size="10.5" fill="#2A2233">проект\.venv\Scripts\python.exe</text>
+      <text x="364" y="146" font-family="Consolas,monospace" font-size="9.5" fill="#6B5F75">sys.prefix</text>
+      <text x="364" y="162" font-size="10.5" fill="#2A2233">проект\.venv</text>
+      <text x="364" y="186" font-family="Consolas,monospace" font-size="9.5" fill="#6B5F75">site-packages</text>
+      <text x="364" y="202" font-size="10.5" fill="#2A2233">проект\.venv\Lib\site-packages</text>
+      <text x="364" y="226" font-family="Consolas,monospace" font-size="9.5" fill="#6B5F75">pip ставит пакеты</text>
+      <text x="364" y="242" font-size="10.5" fill="#2A2233">только в окружение проекта</text>
+    </g>
+
+    <g font-family="Segoe UI,system-ui,sans-serif">
+      <rect x="16" y="278" width="648" height="76" rx="8" fill="#FBF7FC" stroke="#D5C2DC"/>
+      <text x="30" y="298" font-size="11" font-weight="700" fill="#8E5BC8">ЧТО МЕНЯЕТ АКТИВАЦИЯ</text>
+      <text x="30" y="318" font-size="11" fill="#2A2233">Скрипт Activate.ps1 добавляет .venv\Scripts в начало PATH текущей оболочки.</text>
+      <text x="30" y="335" font-size="11" fill="#2A2233">Файлы проекта, настройки VS Code и соседние окна терминала остаются прежними.</text>
+    </g>
+
+    <text x="16" y="374" font-family="Consolas,monospace" font-size="9.5" fill="#6B5F75">ПРОВЕРКА: sys.prefix != sys.base_prefix ДАЁТ TRUE ТОЛЬКО ВНУТРИ ОКРУЖЕНИЯ</text>
+  </svg>
+  <div class="status" id="vs-status"></div>
+  <div class="controls" id="vs-buttons">
+    <button data-k="global" class="on">Глобальный Python</button>
+    <button data-k="venv">Проект .venv</button>
+  </div>
+  <p class="note">Нажмите карточку или кнопку. Сравните, куда смотрит интерпретатор и куда попадёт пакет после pip install.</p>
+</div>
+<script>
+(function () {
+  var data = {
+    global: '<b>Глобальный Python.</b> Библиотеки лежат в системном каталоге. Пакет, поставленный для одного проекта, видят все проекты, а обновление может сломать соседний. Для проверки: sys.prefix равен sys.base_prefix.',
+    venv: '<b>Проект .venv.</b> Интерпретатор и site-packages принадлежат папке проекта. Пакеты не видны глобальному Python, а глобальные не видны проекту. Для проверки: sys.prefix отличается от sys.base_prefix.'
+  };
+  var cards = document.querySelectorAll('.case');
+  var buttons = document.querySelectorAll('#vs-buttons button');
+  var status = document.getElementById('vs-status');
+
+  function apply(key) {
+    cards.forEach(function (c) { c.classList.toggle('on', c.dataset.k === key); });
+    buttons.forEach(function (b) { b.classList.toggle('on', b.dataset.k === key); });
+    status.innerHTML = data[key];
+  }
+  cards.forEach(function (c) { c.addEventListener('click', function () { apply(c.dataset.k); }); });
+  buttons.forEach(function (b) { b.addEventListener('click', function () { apply(b.dataset.k); }); });
+  apply('venv');
+})();
+</script>
+</body>
+</html>

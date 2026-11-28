@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Двоичная дробь, decimal и копейки</title>
+<style>
+  :root { --paper:#EBE0EC; --card:#FBF7FC; --ink:#2A2233; --muted:#6B5F75; --rule:#D5C2DC; --accent:#8E5BC8; --soft:#E4D5EC; --bad:#A8455A; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .frame { background:var(--paper); border:1px solid var(--rule); border-radius:12px; padding:16px; }
+  .eyebrow { margin:0 0 6px; font:600 10px/1.2 Consolas,monospace; letter-spacing:.14em; text-transform:uppercase; color:var(--accent); }
+  svg { display:block; width:100%; height:auto; }
+  .rep { display:none; }
+  .rep.on { display:block; }
+  .status { min-height:100px; margin-top:8px; padding:10px 12px; border-radius:9px; background:var(--soft); font-size:13px; line-height:1.45; }
+  .status b { color:var(--accent); }
+  .controls { display:flex; gap:6px; flex-wrap:wrap; margin-top:10px; }
+  button { font:600 11.5px/1.1 "Segoe UI",system-ui,sans-serif; padding:8px 10px; border-radius:8px; border:1px solid var(--rule); background:var(--card); color:var(--ink); cursor:pointer; }
+  button:hover { border-color:var(--accent); color:var(--accent); }
+  button.on { background:var(--accent); border-color:var(--accent); color:#fff; }
+  .note { margin:9px 2px 0; font:11.5px/1.5 "Segoe UI",system-ui,sans-serif; color:var(--muted); }
+  @media (max-width:560px) { .frame { padding:12px; } .status { font-size:12.5px; } }
+</style>
+</head>
+<body>
+<div class="frame">
+  <p class="eyebrow">Дроби · точность</p>
+  <svg viewBox="0 0 680 414" role="img" aria-labelledby="fb-title fb-desc">
+    <title id="fb-title">Как хранятся двоичные и десятичные дроби</title>
+    <desc id="fb-desc">Переключите double, decimal и копейки. Схема показывает разрядную сетку, результат сложения 0,1 и 0,2 и сравнение с 0,3.</desc>
+
+    <text x="16" y="22" font-family="Consolas,monospace" font-size="10" fill="#6B5F75">ОДНА ЗАПИСЬ, ТРИ СПОСОБА ХРАНЕНИЯ</text>
+
+    <g class="rep on" data-k="double">
+      <rect x="40" y="38" width="52" height="42" rx="5" fill="#FBF7FC" stroke="#8E5BC8"/>
+      <text x="66" y="55" text-anchor="middle" font-size="9" fill="#6B5F75">знак</text>
+      <text x="66" y="70" text-anchor="middle" font-family="Consolas,monospace" font-size="9" fill="#2A2233">1</text>
+
+      <rect x="92" y="38" width="200" height="42" rx="5" fill="#EFE3F3" stroke="#8E5BC8"/>
+      <text x="192" y="55" text-anchor="middle" font-size="9" fill="#6B5F75">экспонента</text>
+      <text x="192" y="70" text-anchor="middle" font-family="Consolas,monospace" font-size="9" fill="#2A2233">11 бит</text>
+
+      <rect x="292" y="38" width="348" height="42" rx="5" fill="#FBF7FC" stroke="#8E5BC8"/>
+      <text x="466" y="55" text-anchor="middle" font-size="9" fill="#6B5F75">дробная часть</text>
+      <text x="466" y="70" text-anchor="middle" font-family="Consolas,monospace" font-size="9" fill="#2A2233">52 бита + неявная единица = 53 бита точности</text>
+    </g>
+
+    <g class="rep" data-k="decimal">
+      <rect x="40" y="38" width="430" height="42" rx="5" fill="#EFE3F3" stroke="#8E5BC8"/>
+      <text x="255" y="55" text-anchor="middle" font-size="9" fill="#6B5F75">целое число</text>
+      <text x="255" y="70" text-anchor="middle" font-family="Consolas,monospace" font-size="9" fill="#2A2233">96 бит</text>
+
+      <rect x="470" y="38" width="170" height="42" rx="5" fill="#FBF7FC" stroke="#8E5BC8"/>
+      <text x="555" y="55" text-anchor="middle" font-size="9" fill="#6B5F75">масштаб</text>
+      <text x="555" y="70" text-anchor="middle" font-family="Consolas,monospace" font-size="9" fill="#2A2233">0..28 знаков</text>
+    </g>
+
+    <g class="rep" data-k="cents">
+      <rect x="40" y="38" width="600" height="42" rx="5" fill="#EFE3F3" stroke="#8E5BC8"/>
+      <text x="340" y="55" text-anchor="middle" font-size="9" fill="#6B5F75">целое число копеек</text>
+      <text x="340" y="70" text-anchor="middle" font-family="Consolas,monospace" font-size="9" fill="#2A2233">10 = 0,10 рубля · 20 = 0,20 рубля · масштаб задан правилом</text>
+    </g>
+
+    <g font-family="Segoe UI,system-ui,sans-serif">
+      <rect x="90" y="112" width="500" height="150" rx="10" fill="#FBF7FC" stroke="#D5C2DC"/>
+      <text x="340" y="138" text-anchor="middle" font-size="11" font-weight="700" fill="#8E5BC8">0,1 + 0,2</text>
+      <text id="fb-result" x="340" y="186" text-anchor="middle" font-family="Consolas,monospace" font-size="21" font-weight="700" fill="#2A2233">0.30000000000000004</text>
+      <text id="fb-compare" x="340" y="214" text-anchor="middle" font-family="Consolas,monospace" font-size="11" fill="#A8455A">0.1 + 0.2 == 0.3  →  False</text>
+      <text id="fb-note" x="340" y="240" text-anchor="middle" font-size="10" fill="#6B5F75">ближайшее двоичное приближение, обрезанное до 53 бит</text>
+    </g>
+
+    <g font-family="Segoe UI,system-ui,sans-serif">
+      <rect x="16" y="282" width="314" height="66" rx="8" fill="#FBF7FC" stroke="#D5C2DC"/>
+      <text x="30" y="302" font-size="10.5" font-weight="700" fill="#8E5BC8">ДЛЯ ЧЕГО DOUBLE</text>
+      <text x="30" y="320" font-size="10.5" fill="#2A2233">объёмы, расстояния, графики:</text>
+      <text x="30" y="336" font-size="10.5" fill="#2A2233">ошибка в 16-м знаке не влияет</text>
+
+      <rect x="350" y="282" width="314" height="66" rx="8" fill="#FBF7FC" stroke="#D5C2DC"/>
+      <text x="364" y="302" font-size="10.5" font-weight="700" fill="#8E5BC8">ДЛЯ ЧЕГО DECIMAL</text>
+      <text x="364" y="320" font-size="10.5" fill="#2A2233">деньги, тарифы, суммы:</text>
+      <text x="364" y="336" font-size="10.5" fill="#2A2233">копейка должна сходиться точно</text>
+    </g>
+
+    <text x="16" y="382" font-family="Consolas,monospace" font-size="9.5" fill="#6B5F75">СРАВНИВАТЬ ДРОБИ НА РАВЕНСТВО ОПАСНО: ИСПОЛЬЗУЙТЕ ДОПУСК ИЛИ DECIMAL</text>
+    <text x="16" y="400" font-family="Consolas,monospace" font-size="9.5" fill="#6B5F75">DECIMAL ТОЧЕН ДЛЯ ДЕСЯТИЧНЫХ ДОЛЕЙ, НО МЕДЛЕННЕЕ И ИМЕЕТ МЕНЬШИЙ ДИАПАЗОН</text>
+  </svg>
+  <div class="status" id="fb-status"></div>
+  <div class="controls" id="fb-buttons">
+    <button data-k="double" class="on">double</button>
+    <button data-k="decimal">decimal</button>
+    <button data-k="cents">копейки</button>
+  </div>
+  <p class="note">Переключайте представление. Одинаковая запись 0,1 + 0,2 даёт разные результаты, потому что числа хранятся по разным правилам.</p>
+</div>
+<script>
+(function () {
+  var data = {
+    double: { result: '0.30000000000000004', compare: '0.1 + 0.2 == 0.3  →  False', note: 'ближайшее двоичное приближение, обрезанное до 53 бит', text: '<b>double.</b> 0,1 не представляется двоичной дробью точно. Сумма двух приближений даёт 0,30000000000000004, а сравнение с 0,3 ложно.' },
+    decimal: { result: '0.3', compare: '0.1m + 0.2m == 0.3m  →  True', note: 'десятичный масштаб, 28-29 значащих цифр', text: '<b>decimal.</b> Число хранится как целое с десятичным масштабом, поэтому десятые складываются точно. Диапазон меньше, операции медленнее.' },
+    cents: { result: '30 копеек', compare: '10 + 20 = 30  →  True', note: 'сумма в целых копейках, масштаб задан правилом', text: '<b>Копейки.</b> Деньги хранят целым числом в минимальной единице. Арифметика точная, но запятую при выводе ставят отдельным правилом.' }
+  };
+  var groups = document.querySelectorAll('.rep');
+  var buttons = document.querySelectorAll('#fb-buttons button');
+  var status = document.getElementById('fb-status');
+  var elResult = document.getElementById('fb-result');
+  var elCompare = document.getElementById('fb-compare');
+  var elNote = document.getElementById('fb-note');
+
+  function apply(key) {
+    var d = data[key];
+    groups.forEach(function (g) { g.classList.toggle('on', g.dataset.k === key); });
+    buttons.forEach(function (b) { b.classList.toggle('on', b.dataset.k === key); });
+    elResult.textContent = d.result;
+    elCompare.textContent = d.compare;
+    elNote.textContent = d.note;
+    status.innerHTML = d.text;
+  }
+  buttons.forEach(function (b) { b.addEventListener('click', function () { apply(b.dataset.k); }); });
+  apply('double');
+})();
+</script>
+</body>
+</html>

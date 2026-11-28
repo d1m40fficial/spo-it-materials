@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Решение, проект и результат сборки</title>
+<style>
+  :root { --paper:#EBE0EC; --card:#FBF7FC; --ink:#2A2233; --muted:#6B5F75; --rule:#D5C2DC; --accent:#8E5BC8; --soft:#E4D5EC; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .frame { background:var(--paper); border:1px solid var(--rule); border-radius:12px; padding:16px; }
+  .eyebrow { margin:0 0 6px; font:600 10px/1.2 Consolas,monospace; letter-spacing:.14em; text-transform:uppercase; color:var(--accent); }
+  svg { display:block; width:100%; height:auto; }
+  .node { cursor:pointer; }
+  .node rect { fill:#FBF7FC; stroke:#D5C2DC; stroke-width:1.3; transition:fill .15s, stroke .15s; }
+  .node.on rect { fill:#EFE3F3; stroke:#8E5BC8; stroke-width:2.2; }
+  .status { min-height:112px; margin-top:8px; padding:10px 12px; border-radius:9px; background:var(--soft); font-size:13px; line-height:1.45; }
+  .status b { color:var(--accent); }
+  .controls { display:flex; gap:6px; flex-wrap:wrap; margin-top:10px; }
+  button { font:600 11.5px/1.1 "Segoe UI",system-ui,sans-serif; padding:8px 9px; border-radius:8px; border:1px solid var(--rule); background:var(--card); color:var(--ink); cursor:pointer; }
+  button:hover { border-color:var(--accent); color:var(--accent); }
+  button.on { background:var(--accent); border-color:var(--accent); color:#fff; }
+  .note { margin:9px 2px 0; font:11.5px/1.5 "Segoe UI",system-ui,sans-serif; color:var(--muted); }
+  @media (max-width:560px) { .frame { padding:12px; } .status { font-size:12.5px; } }
+</style>
+</head>
+<body>
+<div class="frame">
+  <p class="eyebrow">C# · структура решения</p>
+  <svg viewBox="0 0 680 336" role="img" aria-labelledby="pm-title pm-desc">
+    <title id="pm-title">Дерево решения учебного проекта</title>
+    <desc id="pm-desc">Решение содержит проект приложения и проект библиотеки. Внутри проектов лежат исходные файлы, каталог bin с результатом сборки и каталог obj с промежуточными файлами. Нажмите узел, чтобы увидеть его роль.</desc>
+
+    <g class="node" data-k="sln">
+      <rect x="230" y="22" width="220" height="44" rx="8"/>
+      <text x="244" y="42" font-size="12" font-weight="700" fill="#2A2233">sklad-plus.sln</text>
+      <text x="244" y="57" font-size="10" fill="#6B5F75">решение: список проектов</text>
+    </g>
+
+    <line x1="340" y1="66" x2="340" y2="84" stroke="#C9B2D4" stroke-width="1.4"/>
+    <line x1="185" y1="84" x2="495" y2="84" stroke="#C9B2D4" stroke-width="1.4"/>
+    <line x1="185" y1="84" x2="185" y2="102" stroke="#C9B2D4" stroke-width="1.4"/>
+    <line x1="495" y1="84" x2="495" y2="102" stroke="#C9B2D4" stroke-width="1.4"/>
+
+    <g class="node" data-k="app">
+      <rect x="60" y="102" width="250" height="54" rx="8"/>
+      <text x="74" y="122" font-size="12" font-weight="700" fill="#2A2233">SkladPlus.App</text>
+      <text x="74" y="138" font-size="10" fill="#6B5F75">консольное приложение, OutputType Exe</text>
+      <text x="74" y="151" font-size="9.5" fill="#6B5F75">net10.0 · точка входа</text>
+    </g>
+
+    <g class="node" data-k="lib">
+      <rect x="370" y="102" width="250" height="54" rx="8"/>
+      <text x="384" y="122" font-size="12" font-weight="700" fill="#2A2233">SkladPlus.Storage</text>
+      <text x="384" y="138" font-size="10" fill="#6B5F75">библиотека расчётов, OutputType Library</text>
+      <text x="384" y="151" font-size="9.5" fill="#6B5F75">не знает о приложении</text>
+    </g>
+
+    <line x1="185" y1="156" x2="185" y2="180" stroke="#C9B2D4" stroke-width="1.4"/>
+    <line x1="85" y1="180" x2="285" y2="180" stroke="#C9B2D4" stroke-width="1.4"/>
+    <line x1="85" y1="180" x2="85" y2="198" stroke="#C9B2D4" stroke-width="1.4"/>
+    <line x1="185" y1="180" x2="185" y2="198" stroke="#C9B2D4" stroke-width="1.4"/>
+    <line x1="285" y1="180" x2="285" y2="198" stroke="#C9B2D4" stroke-width="1.4"/>
+
+    <line x1="495" y1="156" x2="495" y2="180" stroke="#C9B2D4" stroke-width="1.4"/>
+    <line x1="395" y1="180" x2="595" y2="180" stroke="#C9B2D4" stroke-width="1.4"/>
+    <line x1="395" y1="180" x2="395" y2="198" stroke="#C9B2D4" stroke-width="1.4"/>
+    <line x1="495" y1="180" x2="495" y2="198" stroke="#C9B2D4" stroke-width="1.4"/>
+    <line x1="595" y1="180" x2="595" y2="198" stroke="#C9B2D4" stroke-width="1.4"/>
+
+    <g class="node" data-k="program">
+      <rect x="35" y="198" width="100" height="40" rx="7"/>
+      <text x="47" y="215" font-size="10.5" font-weight="700" fill="#2A2233">Program.cs</text>
+      <text x="47" y="229" font-size="9.5" fill="#6B5F75">точка входа</text>
+    </g>
+
+    <g class="node" data-k="bin">
+      <rect x="145" y="198" width="80" height="40" rx="7"/>
+      <text x="157" y="215" font-size="10.5" font-weight="700" fill="#2A2233">bin/</text>
+      <text x="157" y="229" font-size="9.5" fill="#6B5F75">.dll, .exe</text>
+    </g>
+
+    <g class="node" data-k="obj">
+      <rect x="235" y="198" width="80" height="40" rx="7"/>
+      <text x="247" y="215" font-size="10.5" font-weight="700" fill="#2A2233">obj/</text>
+      <text x="247" y="229" font-size="9.5" fill="#6B5F75">промежуточные</text>
+    </g>
+
+    <g class="node" data-k="storage">
+      <rect x="345" y="198" width="100" height="40" rx="7"/>
+      <text x="357" y="215" font-size="10.5" font-weight="700" fill="#2A2233">Storage.cs</text>
+      <text x="357" y="229" font-size="9.5" fill="#6B5F75">класс расчётов</text>
+    </g>
+
+    <g class="node" data-k="bin">
+      <rect x="455" y="198" width="80" height="40" rx="7"/>
+      <text x="467" y="215" font-size="10.5" font-weight="700" fill="#2A2233">bin/</text>
+      <text x="467" y="229" font-size="9.5" fill="#6B5F75">.dll</text>
+    </g>
+
+    <g class="node" data-k="obj">
+      <rect x="545" y="198" width="80" height="40" rx="7"/>
+      <text x="557" y="215" font-size="10.5" font-weight="700" fill="#2A2233">obj/</text>
+      <text x="557" y="229" font-size="9.5" fill="#6B5F75">промежуточные</text>
+    </g>
+
+    <g font-family="Segoe UI,system-ui,sans-serif">
+      <rect x="60" y="260" width="250" height="54" rx="7" fill="#FBF7FC" stroke="#D5C2DC" stroke-dasharray="4 3"/>
+      <text x="72" y="279" font-size="10.5" font-weight="700" fill="#8E5BC8">ССЫЛКА В ОДНУ СТОРОНУ</text>
+      <text x="72" y="296" font-size="10.5" fill="#2A2233">App → Storage разрешена, обратная запрещена</text>
+
+      <rect x="370" y="260" width="250" height="54" rx="7" fill="#FBF7FC" stroke="#D5C2DC" stroke-dasharray="4 3"/>
+      <text x="382" y="279" font-size="10.5" font-weight="700" fill="#8E5BC8">ЧТО НЕ ХРАНЯТ В GIT</text>
+      <text x="382" y="296" font-size="10.5" fill="#2A2233">bin и obj создаются заново при сборке</text>
+    </g>
+
+    <text x="16" y="330" font-family="Consolas,monospace" font-size="9.5" fill="#6B5F75">РЕШЕНИЕ НЕ КОМПИЛИРУЕТСЯ САМО: ОНО УКАЗЫВАЕТ, ЧТО СОБИРАТЬ</text>
+  </svg>
+  <div class="status" id="pm-status"></div>
+  <div class="controls" id="pm-buttons">
+    <button data-k="sln" class="on">Решение</button>
+    <button data-k="app">Приложение</button>
+    <button data-k="lib">Библиотека</button>
+    <button data-k="program">Program.cs</button>
+    <button data-k="bin">bin</button>
+    <button data-k="obj">obj</button>
+  </div>
+  <p class="note">Нажимайте узлы дерева или кнопки. Сравните, что описывает файл, что является результатом сборки и что можно удалить без потери кода.</p>
+</div>
+<script>
+(function () {
+  var data = {
+    sln: '<b>Решение.</b> Файл .sln хранит список проектов и порядок сборки. Сам по себе он не компилируется: это контейнер, который говорит инструменту, какие проекты собрать.',
+    app: '<b>Проект приложения.</b> Файл .csproj задаёт OutputType Exe, целевую платформу net10.0 и зависимости. Компилятор собирает проект в одну сборку, а приложение получает точку входа.',
+    lib: '<b>Проект библиотеки.</b> Расчёты вынесены отдельно, чтобы их использовали приложение, будущий API и тесты. Библиотека не ссылается на приложение: зависимость идёт в одну сторону.',
+    program: '<b>Program.cs.</b> Исходный файл с операторами верхнего уровня. Компилятор сам создаёт из них метод Main, поэтому отдельный класс писать не обязательно.',
+    bin: '<b>Каталог bin.</b> Результат сборки: .dll, файл запуска и копии зависимостей. Именно отсюда запускается готовая программа. Каталог создаётся автоматически.',
+    obj: '<b>Каталог obj.</b> Промежуточные файлы: сведения о восстановленных пакетах, сгенерированный код, кеш компилятора. Правка этих файлов бессмысленна, при следующей сборке они перезаписываются.'
+  };
+  var nodes = document.querySelectorAll('.node');
+  var buttons = document.querySelectorAll('#pm-buttons button');
+  var status = document.getElementById('pm-status');
+
+  function apply(key) {
+    nodes.forEach(function (n) { n.classList.toggle('on', n.dataset.k === key); });
+    buttons.forEach(function (b) { b.classList.toggle('on', b.dataset.k === key); });
+    status.innerHTML = data[key];
+  }
+  nodes.forEach(function (n) { n.addEventListener('click', function () { apply(n.dataset.k); }); });
+  buttons.forEach(function (b) { b.addEventListener('click', function () { apply(b.dataset.k); }); });
+  apply('sln');
+})();
+</script>
+</body>
+</html>

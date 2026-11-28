@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Динамическое связывание методов</title>
+<style>
+  :root { --paper:#FBF7FC; --card:#FFFFFF; --ink:#2A2233; --muted:#6B6076; --rule:#DCCDE4; --accent:#8E5BC8; --soft:#EBE0EC; --bad:#A34A5E; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .frame { background:var(--paper); border:1px solid var(--rule); border-radius:12px; padding:14px; }
+  .eyebrow { margin:0 0 6px; font:600 10px/1.2 Consolas,monospace; letter-spacing:.13em; text-transform:uppercase; color:var(--accent); }
+  svg { display:block; width:100%; height:auto; }
+  text { font-family:"Segoe UI",system-ui,sans-serif; }
+  .note { margin:9px 2px 0; font:11.5px/1.5 "Segoe UI",system-ui,sans-serif; color:var(--muted); }
+  @media (max-width:560px) { .frame { padding:10px; } .note { font-size:11px; } }
+</style>
+</head>
+<body>
+<div class="frame">
+  <p class="eyebrow">ООП · выбор метода во время выполнения</p>
+  <svg viewBox="0 0 680 368" role="img" aria-labelledby="dm-title dm-desc">
+    <title id="dm-title">Массив движений и таблица виртуальных методов</title>
+    <desc id="dm-desc">Массив хранит ссылки типа Movement. Цикл вызывает Apply у каждого элемента. Фактический класс выбирает свою реализацию, поэтому проверка типа в цикле не нужна.</desc>
+
+    <text x="16" y="20" font-size="10" font-family="Consolas,monospace" fill="#6B6076">МАССИВ ССЫЛОК</text>
+    <rect x="16" y="30" width="150" height="210" rx="9" fill="#FFFFFF" stroke="#DCCDE4"/>
+    <text x="30" y="52" font-size="11" font-weight="700" fill="#2A2233">Movement[]</text>
+    <text x="30" y="68" font-size="9.5" fill="#6B6076">тип элемента известен</text>
+    <text x="30" y="82" font-size="9.5" fill="#6B6076">только как Movement</text>
+
+    <rect x="30" y="96" width="122" height="28" rx="5" fill="#EBE0EC" stroke="#8E5BC8"/>
+    <text x="38" y="115" font-size="10" fill="#2A2233">Receipt</text>
+    <rect x="30" y="130" width="122" height="28" rx="5" fill="#EBE0EC" stroke="#8E5BC8"/>
+    <text x="38" y="149" font-size="10" fill="#2A2233">Shipment</text>
+    <rect x="30" y="164" width="122" height="28" rx="5" fill="#EBE0EC" stroke="#8E5BC8"/>
+    <text x="38" y="183" font-size="10" fill="#2A2233">WriteOff</text>
+    <rect x="30" y="198" width="122" height="28" rx="5" fill="#EBE0EC" stroke="#8E5BC8"/>
+    <text x="38" y="217" font-size="10" fill="#2A2233">ReturnToSupplier</text>
+
+    <rect x="204" y="86" width="170" height="104" rx="9" fill="#F3EAF7" stroke="#8E5BC8" stroke-width="1.6"/>
+    <text x="218" y="108" font-size="11" font-weight="700" fill="#2A2233">foreach (Movement m)</text>
+    <text x="218" y="128" font-size="10" fill="#2A2233">m.Apply(stock)</text>
+    <text x="218" y="146" font-size="9.5" fill="#6B6076">компилятор видит</text>
+    <text x="218" y="160" font-size="9.5" fill="#6B6076">Movement.Apply</text>
+    <text x="218" y="178" font-size="9.5" fill="#8E5BC8">фактический класс решает</text>
+
+    <line x1="152" y1="110" x2="200" y2="120" stroke="#8E5BC8" stroke-width="1.3"/>
+    <line x1="152" y1="144" x2="200" y2="138" stroke="#8E5BC8" stroke-width="1.3"/>
+    <line x1="152" y1="178" x2="200" y2="156" stroke="#8E5BC8" stroke-width="1.3"/>
+    <line x1="152" y1="212" x2="200" y2="174" stroke="#8E5BC8" stroke-width="1.3"/>
+
+    <text x="402" y="20" font-size="10" font-family="Consolas,monospace" fill="#6B6076">РЕАЛИЗАЦИИ</text>
+    <rect x="402" y="30" width="262" height="210" rx="9" fill="#FFFFFF" stroke="#DCCDE4"/>
+
+    <rect x="416" y="44" width="234" height="38" rx="6" fill="#FFFFFF" stroke="#8E5BC8"/>
+    <text x="428" y="60" font-size="10" font-weight="700" fill="#2A2233">Receipt.Apply</text>
+    <text x="428" y="74" font-size="9.5" fill="#6B6076">stock.add(sku, +quantity)</text>
+
+    <rect x="416" y="88" width="234" height="38" rx="6" fill="#FFFFFF" stroke="#8E5BC8"/>
+    <text x="428" y="104" font-size="10" font-weight="700" fill="#2A2233">Shipment.Apply</text>
+    <text x="428" y="118" font-size="9.5" fill="#6B6076">stock.add(sku, -quantity)</text>
+
+    <rect x="416" y="132" width="234" height="38" rx="6" fill="#FFFFFF" stroke="#8E5BC8"/>
+    <text x="428" y="148" font-size="10" font-weight="700" fill="#2A2233">WriteOff.Apply</text>
+    <text x="428" y="162" font-size="9.5" fill="#6B6076">stock.add(sku, -quantity) и причина</text>
+
+    <rect x="416" y="176" width="234" height="38" rx="6" fill="#FFFFFF" stroke="#8E5BC8"/>
+    <text x="428" y="192" font-size="10" font-weight="700" fill="#2A2233">ReturnToSupplier.Apply</text>
+    <text x="428" y="206" font-size="9.5" fill="#6B6076">stock.add(sku, -quantity)</text>
+
+    <path d="M374 120 C 390 120, 390 63, 412 63" fill="none" stroke="#8E5BC8" stroke-width="1.2" stroke-dasharray="4 3"/>
+    <path d="M374 134 C 392 134, 392 107, 412 107" fill="none" stroke="#8E5BC8" stroke-width="1.2" stroke-dasharray="4 3"/>
+    <path d="M374 152 C 394 152, 394 151, 412 151" fill="none" stroke="#8E5BC8" stroke-width="1.2" stroke-dasharray="4 3"/>
+    <path d="M374 172 C 394 172, 394 195, 412 195" fill="none" stroke="#8E5BC8" stroke-width="1.2" stroke-dasharray="4 3"/>
+
+    <rect x="16" y="262" width="648" height="44" rx="8" fill="#EBE0EC" stroke="#8E5BC8"/>
+    <text x="30" y="280" font-size="10.5" fill="#2A2233">Один цикл, один вызов, четыре разных поведения. Новый тип добавляет строку в массив, а не ветку в цикл.</text>
+    <text x="30" y="296" font-size="9.5" fill="#6B6076">Проверка <tspan font-family="Consolas,monospace">if (m is Shipment)</tspan> внутри цикла вернула бы знание типов туда, откуда его убрали.</text>
+
+    <text x="16" y="338" font-family="Consolas,monospace" font-size="9.5" fill="#6B6076">В PYTHON МЕТОД ИЩЕТСЯ В КЛАССЕ ОБЪЕКТА, В C# РАБОТАЕТ ТАБЛИЦА ВИРТУАЛЬНЫХ МЕТОДОВ.</text>
+  </svg>
+  <p class="note">Слева ссылки одного базового типа, в центре один вызов, справа разные реализации. Динамическое связывание выбирает реализацию по фактическому объекту.</p>
+</div>
+</body>
+</html>

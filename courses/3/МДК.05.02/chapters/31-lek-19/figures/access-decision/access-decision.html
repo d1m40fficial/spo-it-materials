@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Кто и что может</title>
+<style>
+  :root { --paper:#F8F4FA; --card:#FFFDFF; --ink:#241C2B; --muted:#6C6076; --rule:#DCCDE3; --accent:#8E5BC8; --soft:#EBE0EC; --ok:#2F7D5B; --no:#A34A5C; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .frame { background:var(--paper); border:1px solid var(--rule); border-radius:12px; padding:16px; }
+  .eyebrow { margin:0 0 6px; font:600 10px/1.2 Consolas,monospace; letter-spacing:.14em; text-transform:uppercase; color:var(--accent); }
+  svg { display:block; width:100%; height:auto; }
+  .user rect { fill:var(--card); stroke:#C9B6D4; stroke-width:1.3; cursor:pointer; transition:fill .15s, stroke .15s; }
+  .user text { pointer-events:none; }
+  .user.on rect { fill:var(--soft); stroke:var(--accent); stroke-width:2.2; }
+  .act rect { fill:var(--card); stroke:#C9B6D4; stroke-width:1.2; cursor:pointer; transition:fill .15s, stroke .15s; }
+  .act text { pointer-events:none; }
+  .act.on rect { fill:var(--soft); stroke:var(--accent); stroke-width:2; }
+  .status { min-height:86px; margin-top:8px; padding:10px 12px; border-radius:9px; background:var(--soft); font-size:13px; line-height:1.45; }
+  .status .code { display:inline-block; margin-right:8px; padding:2px 8px; border-radius:6px; font:700 12px/1.4 Consolas,monospace; color:#fff; background:var(--accent); }
+  .status .code.ok { background:var(--ok); }
+  .status .code.no { background:var(--no); }
+  .status b { color:var(--accent); }
+  .controls { display:flex; flex-direction:column; gap:6px; margin-top:10px; }
+  .row { display:flex; gap:6px; flex-wrap:wrap; align-items:center; }
+  .row span { font:600 9.5px/1 Consolas,monospace; letter-spacing:.08em; color:var(--muted); min-width:58px; text-transform:uppercase; }
+  button { font:600 11.5px/1.1 "Segoe UI",system-ui,sans-serif; padding:8px 9px; border-radius:8px; border:1px solid var(--rule); background:var(--card); color:var(--ink); cursor:pointer; }
+  button:hover { border-color:var(--accent); color:var(--accent); }
+  button.on { background:var(--accent); border-color:var(--accent); color:#fff; }
+  .note { margin:9px 2px 0; font:11.5px/1.5 "Segoe UI",system-ui,sans-serif; color:var(--muted); }
+  @media (max-width:560px) { .frame { padding:12px; } .status { font-size:12.5px; } }
+</style>
+</head>
+<body>
+<div class="frame">
+  <p class="eyebrow">Доступ · решение</p>
+  <svg viewBox="0 0 680 336" role="img" aria-labelledby="ad-title ad-desc">
+    <title id="ad-title">Проверка доступа для четырёх пользователей и четырёх действий</title>
+    <desc id="ad-desc">Слева пользователи, справа действия, в центре сервер. Нажмите пользователя и действие, чтобы увидеть код ответа и причину.</desc>
+
+    <text x="14" y="18" font-family="Consolas,monospace" font-size="9.5" fill="#6C6076">КТО ПРИШЁЛ</text>
+    <text x="666" y="18" text-anchor="end" font-family="Consolas,monospace" font-size="9.5" fill="#6C6076">ЧТО ПРОСИТ</text>
+
+    <g class="user" data-u="guest">
+      <rect x="14" y="30" width="176" height="52" rx="8"/>
+      <text x="26" y="50" font-size="12.5" font-weight="700">Гость</text>
+      <text x="26" y="68" font-size="10.5" fill="#6C6076">пропуска нет</text>
+    </g>
+    <g class="user" data-u="storekeeper">
+      <rect x="14" y="92" width="176" height="52" rx="8"/>
+      <text x="26" y="112" font-size="12.5" font-weight="700">Кладовщик</text>
+      <text x="26" y="130" font-size="10.5" fill="#6C6076">роль storekeeper, Тула</text>
+    </g>
+    <g class="user" data-u="manager">
+      <rect x="14" y="154" width="176" height="52" rx="8"/>
+      <text x="26" y="174" font-size="12.5" font-weight="700">Менеджер</text>
+      <text x="26" y="192" font-size="10.5" fill="#6C6076">роль manager, Москва</text>
+    </g>
+    <g class="user" data-u="admin">
+      <rect x="14" y="216" width="176" height="52" rx="8"/>
+      <text x="26" y="236" font-size="12.5" font-weight="700">Администратор</text>
+      <text x="26" y="254" font-size="10.5" fill="#6C6076">роль admin, без площадки</text>
+    </g>
+
+    <g class="act" data-a="read-all">
+      <rect x="430" y="30" width="236" height="52" rx="8"/>
+      <text x="442" y="50" font-size="12" font-weight="600">Открыть накладные</text>
+      <text x="442" y="68" font-size="10.5" fill="#6C6076">всех четырёх площадок</text>
+    </g>
+    <g class="act" data-a="edit-tula">
+      <rect x="430" y="92" width="236" height="52" rx="8"/>
+      <text x="442" y="112" font-size="12" font-weight="600">Изменить остаток</text>
+      <text x="442" y="130" font-size="10.5" fill="#6C6076">позиции в Туле</text>
+    </g>
+    <g class="act" data-a="edit-kaluga">
+      <rect x="430" y="154" width="236" height="52" rx="8"/>
+      <text x="442" y="174" font-size="12" font-weight="600">Изменить остаток</text>
+      <text x="442" y="192" font-size="10.5" fill="#6C6076">позиции в Калуге</text>
+    </g>
+    <g class="act" data-a="manage-users">
+      <rect x="430" y="216" width="236" height="52" rx="8"/>
+      <text x="442" y="236" font-size="12" font-weight="600">Управлять учётными</text>
+      <text x="442" y="254" font-size="10.5" fill="#6C6076">записями и ролями</text>
+    </g>
+
+    <rect x="228" y="92" width="170" height="114" rx="10" fill="#FFFDFF" stroke="#8E5BC8" stroke-width="1.6"/>
+    <text x="313" y="120" text-anchor="middle" font-size="12.5" font-weight="700" fill="#8E5BC8">Сервер</text>
+    <text x="313" y="140" text-anchor="middle" font-size="10" fill="#6C6076">1. проверяет пропуск</text>
+    <text x="313" y="156" text-anchor="middle" font-size="10" fill="#6C6076">2. сверяет роль</text>
+    <text x="313" y="172" text-anchor="middle" font-size="10" fill="#6C6076">3. читает запись</text>
+    <text x="313" y="188" text-anchor="middle" font-size="10" fill="#6C6076">4. решает</text>
+
+    <path d="M190 116 H224" stroke="#8E5BC8" stroke-width="1.5" marker-end="url(#ar)"/>
+    <path d="M402 116 H426" stroke="#8E5BC8" stroke-width="1.5" marker-end="url(#ar)"/>
+    <path d="M190 242 H228 V210" stroke="#C9B6D4" stroke-width="1.2" fill="none" stroke-dasharray="4 4"/>
+    <path d="M398 210 V242 H426" stroke="#C9B6D4" stroke-width="1.2" fill="none" stroke-dasharray="4 4"/>
+
+    <defs>
+      <marker id="ar" viewBox="0 0 8 8" refX="6" refY="4" markerWidth="6" markerHeight="6" orient="auto">
+        <path d="M0 0 L8 4 L0 8 z" fill="#8E5BC8"/>
+      </marker>
+    </defs>
+
+    <text x="14" y="292" font-family="Consolas,monospace" font-size="9" fill="#6C6076">ОДИН И ТОТ ЖЕ ЗАПРОС ДАЁТ 200, 403 ИЛИ 401 В ЗАВИСИМОСТИ ОТ ЛИЧНОСТИ</text>
+    <text x="14" y="310" font-family="Consolas,monospace" font-size="9" fill="#6C6076">И ОТ ТОГО, К КАКОЙ ЗАПИСИ ОН ОТНОСИТСЯ</text>
+  </svg>
+  <div class="status" id="ad-status"></div>
+  <div class="controls">
+    <div class="row" id="ad-users"><span>Кто</span></div>
+    <div class="row" id="ad-actions"><span>Просит</span></div>
+  </div>
+  <p class="note">Нажмите пользователя, затем действие. Сравните 401 у гостя, 403 у кладовщика на чужой площадке и 200 у менеджера на той же операции.</p>
+</div>
+<script>
+(function () {
+  var users = { guest:'Гость', storekeeper:'Кладовщик Тулы', manager:'Менеджер', admin:'Администратор' };
+  var acts = { 'read-all':'накладные всех площадок', 'edit-tula':'остаток в Туле', 'edit-kaluga':'остаток в Калуге', 'manage-users':'учётные записи' };
+  var matrix = {
+    guest:      { 'read-all':401, 'edit-tula':401, 'edit-kaluga':401, 'manage-users':401 },
+    storekeeper:{ 'read-all':403, 'edit-tula':200, 'edit-kaluga':403, 'manage-users':403 },
+    manager:    { 'read-all':200, 'edit-tula':200, 'edit-kaluga':200, 'manage-users':403 },
+    admin:      { 'read-all':403, 'edit-tula':403, 'edit-kaluga':403, 'manage-users':200 }
+  };
+  var why = {
+    'guest': 'Пропуск не передан или просрочен. Сервер не знает, кто перед ним, поэтому отвечает 401 и предлагает войти заново.',
+    'read-all|storekeeper': 'Роль storekeeper разрешает читать только свою площадку. Личность известна, права на все документы нет, поэтому 403.',
+    'read-all|manager': 'Роль manager видит все четыре площадки. Проверка роли проходит, проверка записи не ограничивает список.',
+    'read-all|admin': 'Администратор управляет учётными записями, но не работает с накладными. Роль не даёт этой операции, поэтому 403.',
+    'edit-tula|storekeeper': 'Площадка пользователя совпадает с площадкой записи. Роль и запись проходят проверку, изменение разрешено.',
+    'edit-tula|manager': 'Менеджер имеет право менять остатки на любой площадке. Проверка записи для него не ограничивает площадку.',
+    'edit-tula|admin': 'У администратора нет операции изменения остатков. Высокие права на учётные записи не означают прав на склад.',
+    'edit-kaluga|storekeeper': 'Роль верная, но площадка записи другая. Это классический случай, который ловится только проверкой владельца записи.',
+    'edit-kaluga|manager': 'Менеджер меняет остатки на всех площадках, поэтому запись в Калуге для него доступна.',
+    'edit-kaluga|admin': 'Администратор не получает доступ к складу автоматически. Каждая операция проверяется отдельно.',
+    'manage-users|storekeeper': 'Управление учётными записями не входит в права кладовщика. Личность известна, операция запрещена.',
+    'manage-users|manager': 'Менеджер не управляет учётными записями. Роль описывает работу с заказами и остатками, а не администрирование.',
+    'manage-users|admin': 'Только роль admin даёт право менять учётные записи. Действие при этом попадает в журнал аудита.'
+  };
+  var u = 'storekeeper', a = 'edit-kaluga';
+  var status = document.getElementById('ad-status');
+  var userRow = document.getElementById('ad-users');
+  var actRow = document.getElementById('ad-actions');
+
+  function paint() {
+    document.querySelectorAll('.user').forEach(function (el) { el.classList.toggle('on', el.dataset.u === u); });
+    document.querySelectorAll('.act').forEach(function (el) { el.classList.toggle('on', el.dataset.a === a); });
+    userRow.querySelectorAll('button').forEach(function (b) { b.classList.toggle('on', b.dataset.u === u); });
+    actRow.querySelectorAll('button').forEach(function (b) { b.classList.toggle('on', b.dataset.a === a); });
+    var code = matrix[u][a];
+    var cls = code === 200 ? 'ok' : 'no';
+    var text = why[u + '|' + a] || why[u];
+    status.innerHTML = '<span class="code ' + cls + '">' + code + '</span><b>' + users[u] + '</b> просит ' +
+      acts[a] + '. ' + text;
+  }
+
+  document.querySelectorAll('.user').forEach(function (el) {
+    el.addEventListener('click', function () { u = el.dataset.u; paint(); });
+  });
+  document.querySelectorAll('.act').forEach(function (el) {
+    el.addEventListener('click', function () { a = el.dataset.a; paint(); });
+  });
+
+  Object.keys(users).forEach(function (uk) {
+    var b = document.createElement('button');
+    b.textContent = uk === 'guest' ? 'Гость' : users[uk];
+    b.dataset.u = uk;
+    b.addEventListener('click', function () { u = uk; paint(); });
+    userRow.appendChild(b);
+  });
+  Object.keys(acts).forEach(function (ak) {
+    var b = document.createElement('button');
+    b.textContent = ak === 'read-all' ? 'Накладные всех' : ak === 'manage-users' ? 'Учётные записи' :
+      ak === 'edit-tula' ? 'Остаток Тулы' : 'Остаток Калуги';
+    b.dataset.a = ak;
+    b.addEventListener('click', function () { a = ak; paint(); });
+    actRow.appendChild(b);
+  });
+  paint();
+})();
+</script>
+</body>
+</html>

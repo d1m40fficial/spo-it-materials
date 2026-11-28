@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Этапы развёртывания и проверки</title>
+<style>
+  :root { --paper:#FAF7F6; --card:#FFFDFC; --ink:#2A2430; --muted:#6B6272; --rule:#E6D9EC; --accent:#8E5BC8; --soft:#EBE0EC; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .frame { background:var(--paper); border:1px solid var(--rule); border-radius:12px; padding:16px; }
+  .eyebrow { margin:0 0 6px; font:600 10px/1.2 Consolas,monospace; letter-spacing:.14em; text-transform:uppercase; color:var(--accent); }
+  svg { display:block; width:100%; height:auto; }
+  .step { cursor:pointer; }
+  .step rect.row { fill:var(--card); stroke:var(--rule); stroke-width:1.2; transition:fill .15s, stroke .15s; }
+  .step.on rect.row { fill:#F4EBF8; stroke:var(--accent); stroke-width:1.8; }
+  .step circle { fill:var(--soft); stroke:var(--rule); stroke-width:1.2; }
+  .step.on circle { fill:var(--accent); stroke:var(--accent); }
+  .step text.n { font-size:10px; font-weight:700; fill:#5F3A85; }
+  .step.on text.n { fill:#FFFFFF; }
+  .step text.t { font-size:12px; font-weight:600; fill:var(--ink); }
+  .step text.c { font-size:9.5px; fill:var(--muted); }
+  .ln { stroke:#D9CBE0; stroke-width:1.6; }
+  .status { min-height:66px; margin-top:8px; padding:9px 11px; border-radius:9px; background:var(--soft); font-size:12.5px; line-height:1.45; }
+  .status b { color:var(--accent); }
+  .note { margin:9px 2px 0; font:11.5px/1.5 "Segoe UI",system-ui,sans-serif; color:var(--muted); }
+  @media (max-width:560px) { .frame { padding:12px; } .status { font-size:12px; } }
+</style>
+</head>
+<body>
+<div class="frame">
+  <p class="eyebrow">Перенос по шагам</p>
+  <svg viewBox="0 0 680 380" role="img" aria-labelledby="dp-title dp-desc">
+    <title id="dp-title">Семь этапов переноса приложения</title>
+    <desc id="dp-desc">Вертикальный список этапов: фиксация кода, сборка, тест, миграция, запуск, проверка, наблюдение. У каждого этапа есть проверка. Нажмите этап, чтобы увидеть типичный сбой и действие при отказе.</desc>
+
+    <line class="ln" x1="42" y1="44" x2="42" y2="330"/>
+
+    <g class="step" data-k="0">
+      <circle cx="42" cy="46" r="13"/><text class="n" x="42" y="50" text-anchor="middle">01</text>
+      <rect class="row" x="68" y="28" width="596" height="36" rx="7"/>
+      <text class="t" x="82" y="44">Фиксация кода</text>
+      <text class="c" x="82" y="58">тег и хеш коммита</text>
+      <text class="c" x="330" y="51">версия одна для всех площадок</text>
+    </g>
+    <g class="step" data-k="1">
+      <circle cx="42" cy="90" r="13"/><text class="n" x="42" y="94" text-anchor="middle">02</text>
+      <rect class="row" x="68" y="72" width="596" height="36" rx="7"/>
+      <text class="t" x="82" y="88">Сборка</text>
+      <text class="c" x="82" y="102">артефакт создан и не пуст</text>
+      <text class="c" x="330" y="95">один раз, в конвейере</text>
+    </g>
+    <g class="step" data-k="2">
+      <circle cx="42" cy="134" r="13"/><text class="n" x="42" y="138" text-anchor="middle">03</text>
+      <rect class="row" x="68" y="116" width="596" height="36" rx="7"/>
+      <text class="t" x="82" y="132">Тест</text>
+      <text class="c" x="82" y="146">прогон зелёный до выкладки</text>
+      <text class="c" x="330" y="139">тестовая среда ближе к эксплуатации</text>
+    </g>
+    <g class="step" data-k="3">
+      <circle cx="42" cy="178" r="13"/><text class="n" x="42" y="182" text-anchor="middle">04</text>
+      <rect class="row" x="68" y="160" width="596" height="36" rx="7"/>
+      <text class="t" x="82" y="176">Миграция</text>
+      <text class="c" x="82" y="190">копия сделана, версия схемы совпала</text>
+      <text class="c" x="330" y="183">до запуска новой версии</text>
+    </g>
+    <g class="step" data-k="4">
+      <circle cx="42" cy="222" r="13"/><text class="n" x="42" y="226" text-anchor="middle">05</text>
+      <rect class="row" x="68" y="204" width="596" height="36" rx="7"/>
+      <text class="t" x="82" y="220">Запуск</text>
+      <text class="c" x="82" y="234">порт свободен, профиль prod</text>
+      <text class="c" x="330" y="227">служба от отдельного пользователя</text>
+    </g>
+    <g class="step" data-k="5">
+      <circle cx="42" cy="266" r="13"/><text class="n" x="42" y="270" text-anchor="middle">06</text>
+      <rect class="row" x="68" y="248" width="596" height="36" rx="7"/>
+      <text class="t" x="82" y="264">Проверка</text>
+      <text class="c" x="82" y="278">health 200, 4800 позиций, сценарий</text>
+      <text class="c" x="330" y="271">технические проверки и один сценарий</text>
+    </g>
+    <g class="step" data-k="6">
+      <circle cx="42" cy="310" r="13"/><text class="n" x="42" y="314" text-anchor="middle">07</text>
+      <rect class="row" x="68" y="292" width="596" height="36" rx="7"/>
+      <text class="t" x="82" y="308">Наблюдение</text>
+      <text class="c" x="82" y="322">ошибки ниже порога 15 минут</text>
+      <text class="c" x="330" y="315">сравнение с прошлой версией</text>
+    </g>
+
+    <text class="c" x="16" y="362">Миграция идёт между тестом и запуском: без неё версия упадёт на первом запросе.</text>
+  </svg>
+  <div class="status" id="dp-status"></div>
+  <p class="note">Нажмите этап на схеме. Проверка отвечает, что должно быть верно до перехода дальше; сбой показывает, как ошибка выглядит; откат говорит, что вернуть.</p>
+</div>
+<script>
+(function () {
+  var data = [
+    ['<b>Фиксация кода.</b> Проверка: тег и хеш коммита совпадают с тем, что записан в журнале выпуска. Сбой: на сервере оказалась чужая или более старая версия. Откат: выложить артефакт из хранилища заново и сверить хеш.'],
+    ['<b>Сборка.</b> Проверка: артефакт создан, его размер и контрольная сумма записаны. Сбой: сборка выполнена на сервере из исходников, зависимости разошлись. Откат: пересобрать в конвейере из зафиксированного коммита.'],
+    ['<b>Тест.</b> Проверка: прогон зелёный на версии, которая пойдёт в эксплуатацию. Сбой: проверяли другую сборку или пропустили тест ради срока. Откат: остановить выпуск до выяснения причины.'],
+    ['<b>Миграция.</b> Проверка: копия базы новее последней миграции, повторный запуск ничего не меняет. Сбой: поле добавлено не было, приложение падает на первом запросе. Откат: восстановить копию и проверить число записей.'],
+    ['<b>Запуск.</b> Проверка: порт свободен, профиль prod, служба работает от отдельного пользователя. Сбой: порт занят мониторингом или служба открыла пустую базу. Откат: освободить порт или вернуть прежний артефакт.'],
+    ['<b>Проверка.</b> Проверка: health check отдаёт 200 и 4800 позиций, журнал без трассировок, пользовательский сценарий проходит. Сбой: пустая база или ошибка прав роли. Откат: вернуть артефакт и настройки.'],
+    ['<b>Наблюдение.</b> Проверка: доля ошибок и время ответа не хуже базовых значений. Сбой: рост ответов 500 в первые минуты. Откат: остановить выкладку и вернуть предыдущую версию, не дожидаясь конца дня.']
+  ];
+  var steps = document.querySelectorAll('.step');
+  var status = document.getElementById('dp-status');
+  function apply(i) {
+    steps.forEach(function (s) { s.classList.toggle('on', s.dataset.k === String(i)); });
+    status.innerHTML = data[i];
+  }
+  steps.forEach(function (s) {
+    s.addEventListener('click', function () { apply(Number(s.dataset.k)); });
+  });
+  apply(3);
+})();
+</script>
+</body>
+</html>

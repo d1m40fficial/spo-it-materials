@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Порядок проверок в расчёте заказа</title>
+<style>
+  :root { --paper:#FBF7FC; --card:#FFFFFF; --ink:#2A2233; --muted:#6B6076; --rule:#DCCDE4; --accent:#8E5BC8; --soft:#EBE0EC; --good:#3F7A5A; --bad:#A34A5E; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .frame { background:var(--paper); border:1px solid var(--rule); border-radius:12px; padding:14px; }
+  .eyebrow { margin:0 0 6px; font:600 10px/1.2 Consolas,monospace; letter-spacing:.13em; text-transform:uppercase; color:var(--accent); }
+  svg { display:block; width:100%; height:auto; }
+  text { font-family:"Segoe UI",system-ui,sans-serif; }
+  .note { margin:9px 2px 0; font:11.5px/1.5 "Segoe UI",system-ui,sans-serif; color:var(--muted); }
+  @media (max-width:560px) { .frame { padding:10px; } .note { font-size:11px; } }
+</style>
+</head>
+<body>
+<div class="frame">
+  <p class="eyebrow">Управляющие конструкции · порядок проверок</p>
+  <svg viewBox="0 0 680 392" role="img" aria-labelledby="do-title do-desc">
+    <title id="do-title">Две цепочки проверок для одной и той же позиции</title>
+    <desc id="do-desc">Слева правильный порядок: активность, категория, дефицит. Справа проверка остатка стоит первой, поэтому архивная позиция с нулевым остатком попадает в заказ.</desc>
+
+    <rect x="14" y="10" width="316" height="330" rx="10" fill="#FFFFFF" stroke="#DCCDE4"/>
+    <rect x="350" y="10" width="316" height="330" rx="10" fill="#FFFFFF" stroke="#DCCDE4"/>
+
+    <text x="30" y="36" font-size="12" font-weight="700" fill="#3F7A5A">ПРАВИЛЬНО: СНАЧАЛА АКТИВНОСТЬ</text>
+    <text x="366" y="36" font-size="12" font-weight="700" fill="#A34A5E">ОШИБКА: СНАЧАЛА ОСТАТОК</text>
+
+    <g>
+      <rect x="30" y="52" width="284" height="46" rx="7" fill="#EBE0EC" stroke="#8E5BC8"/>
+      <text x="42" y="71" font-size="12" font-weight="700" fill="#2A2233">1. position["active"]?</text>
+      <text x="42" y="88" font-size="10.5" fill="#6B6076">нет: архив, дальше не идём</text>
+    </g>
+    <line x1="172" y1="98" x2="172" y2="118" stroke="#8E5BC8" stroke-width="1.4"/>
+    <polygon points="168,118 176,118 172,124" fill="#8E5BC8"/>
+    <text x="180" y="113" font-size="10" fill="#6B6076">да</text>
+
+    <g>
+      <rect x="30" y="126" width="284" height="46" rx="7" fill="#FFFFFF" stroke="#DCCDE4"/>
+      <text x="42" y="145" font-size="12" font-weight="700" fill="#2A2233">2. category == "Спецтехника"?</text>
+      <text x="42" y="162" font-size="10.5" fill="#6B6076">да: заказ вручную</text>
+    </g>
+    <line x1="172" y1="172" x2="172" y2="192" stroke="#8E5BC8" stroke-width="1.4"/>
+    <polygon points="168,192 176,192 172,198" fill="#8E5BC8"/>
+    <text x="180" y="187" font-size="10" fill="#6B6076">нет</text>
+
+    <g>
+      <rect x="30" y="200" width="284" height="46" rx="7" fill="#FFFFFF" stroke="#DCCDE4"/>
+      <text x="42" y="219" font-size="12" font-weight="700" fill="#2A2233">3. qty &lt; min_qty?</text>
+      <text x="42" y="236" font-size="10.5" fill="#6B6076">да: в заказ, нет: достаточно</text>
+    </g>
+
+    <rect x="30" y="264" width="284" height="56" rx="7" fill="#F0F7F2" stroke="#B9D6C4"/>
+    <text x="42" y="284" font-size="11" font-weight="700" fill="#3F7A5A">SKU-7700: остаток 0, минимум 25</text>
+    <text x="42" y="302" font-size="10.5" fill="#2A2233">Строка архивная, поэтому решение</text>
+    <text x="42" y="316" font-size="10.5" fill="#2A2233">принимается до проверки дефицита.</text>
+
+    <g>
+      <rect x="366" y="52" width="284" height="46" rx="7" fill="#EBE0EC" stroke="#8E5BC8"/>
+      <text x="378" y="71" font-size="12" font-weight="700" fill="#2A2233">1. qty &lt; min_qty?</text>
+      <text x="378" y="88" font-size="10.5" fill="#6B6076">0 &lt; 25: истина, идём в заказ</text>
+    </g>
+    <line x1="508" y1="98" x2="508" y2="118" stroke="#A34A5E" stroke-width="1.4"/>
+    <polygon points="504,118 512,118 508,124" fill="#A34A5E"/>
+    <text x="516" y="113" font-size="10" fill="#6B6076">да</text>
+
+    <g>
+      <rect x="366" y="126" width="284" height="46" rx="7" fill="#FBF2F4" stroke="#E3BCC6"/>
+      <text x="378" y="145" font-size="12" font-weight="700" fill="#A34A5E">2. decision = "в заказ"</text>
+      <text x="378" y="162" font-size="10.5" fill="#6B6076">проверка активности не достигнута</text>
+    </g>
+
+    <g>
+      <rect x="366" y="186" width="284" height="36" rx="7" fill="#FFFFFF" stroke="#DCCDE4" stroke-dasharray="4 3"/>
+      <text x="378" y="209" font-size="11" fill="#6B6076">3. active? уже не выполняется</text>
+    </g>
+
+    <rect x="366" y="264" width="284" height="56" rx="7" fill="#FBF2F4" stroke="#E3BCC6"/>
+    <text x="378" y="284" font-size="11" font-weight="700" fill="#A34A5E">Итог: архивная позиция в заказе</text>
+    <text x="378" y="302" font-size="10.5" fill="#2A2233">Склад закупает товар, снятый</text>
+    <text x="378" y="316" font-size="10.5" fill="#2A2233">с продажи, и замораживает деньги.</text>
+
+    <text x="30" y="360" font-family="Consolas,monospace" font-size="9.5" fill="#6B6076">ЦЕПОЧКА ELIF ВЫБИРАЕТ ОДНУ ВЕТКУ. ПОРЯДОК ВЕТОК И ЕСТЬ ПРИОРИТЕТ ПРАВИЛ.</text>
+  </svg>
+  <p class="note">Одна и та же позиция, две цепочки проверок. Разница только в порядке: слева решение защищено, справа архивная строка проходит по числу.</p>
+</div>
+</body>
+</html>

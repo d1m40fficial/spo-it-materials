@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Порядок ступеней конвейера</title>
+<style>
+  :root { --paper:#FAF7F6; --card:#FFFDFC; --ink:#2A2430; --muted:#6B6272; --rule:#E6D9EC; --accent:#8E5BC8; --soft:#EBE0EC; --bad:#B3261E; --badsoft:#FBEAE8; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .frame { background:var(--paper); border:1px solid var(--rule); border-radius:12px; padding:16px; }
+  .eyebrow { margin:0 0 6px; font:600 10px/1.2 Consolas,monospace; letter-spacing:.14em; text-transform:uppercase; color:var(--accent); }
+  svg { display:block; width:100%; height:auto; }
+  .step rect { fill:#FFFDFC; stroke:#D8C7E2; stroke-width:1.3; transition:fill .15s, stroke .15s; }
+  .step text { font-family:"Segoe UI",system-ui,sans-serif; }
+  .step.ok rect { fill:var(--soft); stroke:var(--accent); stroke-width:1.8; }
+  .step.bad rect { fill:var(--badsoft); stroke:var(--bad); stroke-width:1.8; }
+  .step.dim { opacity:.42; }
+  .status { min-height:84px; margin-top:8px; padding:10px 12px; border-radius:9px; background:var(--soft); font-size:13px; line-height:1.45; }
+  .status b { color:var(--accent); }
+  .status b.bad { color:var(--bad); }
+  .controls { display:flex; gap:6px; flex-wrap:wrap; margin-top:10px; }
+  button { font:600 11.5px/1.15 "Segoe UI",system-ui,sans-serif; padding:7px 9px; border-radius:8px; border:1px solid var(--rule); background:var(--card); color:var(--ink); cursor:pointer; }
+  button:hover { border-color:var(--accent); color:var(--accent); }
+  button.on { background:var(--accent); border-color:var(--accent); color:#fff; }
+  .note { margin:9px 2px 0; font:11.5px/1.5 "Segoe UI",system-ui,sans-serif; color:var(--muted); }
+  @media (max-width:560px) { .frame { padding:12px; } .status { font-size:12.5px; } }
+</style>
+</head>
+<body>
+<div class="frame">
+  <p class="eyebrow">ASP.NET Core · конвейер</p>
+  <svg viewBox="0 0 680 330" role="img" aria-labelledby="po-title po-desc">
+    <title id="po-title">Семь ступеней конвейера и последствия перестановки</title>
+    <desc id="po-desc">Список ступеней сверху вниз. Выбранный сценарий подсвечивает правильные ступени и показывает переставленные или отсутствующие.</desc>
+
+    <g class="step" data-s="1"><rect x="16" y="26" width="414" height="32" rx="6"/><text x="30" y="47" font-size="12" font-weight="600" fill="#2A2430">1 · обработчик исключений</text><text x="418" y="47" font-size="9.5" fill="#6B6272">ловит ошибки ниже</text></g>
+    <g class="step" data-s="2"><rect x="16" y="64" width="414" height="32" rx="6"/><text x="30" y="85" font-size="12" font-weight="600" fill="#2A2430">2 · перенаправление на HTTPS</text><text x="418" y="85" font-size="9.5" fill="#6B6272">307 на защищённый адрес</text></g>
+    <g class="step" data-s="3"><rect x="16" y="102" width="414" height="32" rx="6"/><text x="30" y="123" font-size="12" font-weight="600" fill="#2A2430">3 · статические файлы</text><text x="418" y="123" font-size="9.5" fill="#6B6272">файл без контроллера</text></g>
+    <g class="step" data-s="4"><rect x="16" y="140" width="414" height="32" rx="6"/><text x="30" y="161" font-size="12" font-weight="600" fill="#2A2430">4 · маршрутизация</text><text x="418" y="161" font-size="9.5" fill="#6B6272">выбирает конечную точку</text></g>
+    <g class="step" data-s="5"><rect x="16" y="178" width="414" height="32" rx="6"/><text x="30" y="199" font-size="12" font-weight="600" fill="#2A2430">5 · аутентификация</text><text x="418" y="199" font-size="9.5" fill="#6B6272">кто это</text></g>
+    <g class="step" data-s="6"><rect x="16" y="216" width="414" height="32" rx="6"/><text x="30" y="237" font-size="12" font-weight="600" fill="#2A2430">6 · авторизация</text><text x="418" y="237" font-size="9.5" fill="#6B6272">что разрешено</text></g>
+    <g class="step" data-s="7"><rect x="16" y="254" width="414" height="32" rx="6"/><text x="30" y="275" font-size="12" font-weight="600" fill="#2A2430">7 · конечная точка</text><text x="418" y="275" font-size="9.5" fill="#6B6272">действие контроллера</text></g>
+
+    <text x="448" y="26" font-family="Consolas,monospace" font-size="9.5" fill="#6B6272">ПРАВИЛО</text>
+    <text x="448" y="44" font-family="Segoe UI,system-ui,sans-serif" font-size="10" fill="#6B6272">исключения снаружи</text>
+    <text x="448" y="60" font-family="Segoe UI,system-ui,sans-serif" font-size="10" fill="#6B6272">маршрут до прав</text>
+    <text x="448" y="76" font-family="Segoe UI,system-ui,sans-serif" font-size="10" fill="#6B6272">вход до проверки</text>
+    <text x="448" y="92" font-family="Segoe UI,system-ui,sans-serif" font-size="10" fill="#6B6272">точка последней</text>
+
+    <text x="16" y="314" font-family="Consolas,monospace" font-size="9.5" fill="#6B6272">ПЕРЕСТАНОВКА НЕ МЕШАЕТ СБОРКЕ, НО МЕНЯЕТ ПОВЕДЕНИЕ</text>
+  </svg>
+  <div class="status" id="po-status"></div>
+  <div class="controls" id="po-buttons">
+    <button data-k="order" class="on">правильный порядок</button>
+    <button data-k="noexc">нет обработчика</button>
+    <button data-k="authfirst">права раньше входа</button>
+    <button data-k="routelate">маршрут после прав</button>
+    <button data-k="staticlate">статик после маршрута</button>
+  </div>
+  <p class="note">Нажмите сценарий. Красная рамка показывает ступень, которая перестаёт работать или стоит не на месте.</p>
+</div>
+<script>
+(function () {
+  var data = {
+    order: {
+      ok: [1,2,3,4,5,6,7], bad: [],
+      text: "<b>Правильный порядок.</b> Исключения ловятся снаружи, маршрут выбран до проверки прав, вход выполнен до авторизации, контроллер вызывается последним."
+    },
+    noexc: {
+      ok: [2,3,4,5,6,7], bad: [1],
+      text: "<b class='bad'>Нет обработчика исключений.</b> Ошибка из любого нижнего слоя уходит наружу. В рабочем контуре клиент получает пустой 500 без идентификатора запроса, а подробности теряются."
+    },
+    authfirst: {
+      ok: [1,2,3,4], bad: [5,6],
+      text: "<b class='bad'>Права раньше входа.</b> Авторизация не знает, кто клиент, потому что аутентификация ещё не выполнена. Ограничение либо пропускает всех, либо отказывает всем."
+    },
+    routelate: {
+      ok: [1,2,3,5], bad: [4,6],
+      text: "<b class='bad'>Маршрут после прав.</b> Атрибут Authorize привязан к конечной точке, а она ещё не выбрана. Проверка не знает, какой метод защищать."
+    },
+    staticlate: {
+      ok: [1,2,4,5,6], bad: [3,7],
+      text: "<b class='bad'>Статик после маршрута.</b> Запрос к картинке проходит дальше и ищет контроллер. Вместо файла клиент получает 404, а журнал заполняется лишними записями."
+    }
+  };
+  var steps = document.querySelectorAll(".step");
+  var buttons = document.querySelectorAll("#po-buttons button");
+  var status = document.getElementById("po-status");
+
+  function apply(key) {
+    var item = data[key];
+    steps.forEach(function (s) {
+      var n = Number(s.dataset.s);
+      s.classList.toggle("ok", item.ok.indexOf(n) >= 0 && item.bad.indexOf(n) < 0);
+      s.classList.toggle("bad", item.bad.indexOf(n) >= 0);
+      s.classList.toggle("dim", item.ok.indexOf(n) < 0 && item.bad.indexOf(n) < 0);
+    });
+    buttons.forEach(function (b) { b.classList.toggle("on", b.dataset.k === key); });
+    status.innerHTML = item.text;
+  }
+  buttons.forEach(function (b) { b.addEventListener("click", function () { apply(b.dataset.k); }); });
+  apply("order");
+})();
+</script>
+</body>
+</html>

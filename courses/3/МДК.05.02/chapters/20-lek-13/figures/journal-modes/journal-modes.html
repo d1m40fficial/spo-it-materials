@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Журнал SQLite: откат и WAL</title>
+<style>
+  :root { color-scheme:light; --paper:#EBE0EC; --card:#FFFDFC; --ink:#2A2430; --muted:#6B6272; --rule:#CDBBD6; --accent:#8E5BC8; --soft:#F3EAF4; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .frame { background:var(--paper); border:1px solid var(--rule); border-radius:12px; padding:16px; }
+  .eyebrow { margin:0 0 6px; font:600 10px/1.2 Consolas,monospace; letter-spacing:.14em; text-transform:uppercase; color:var(--accent); }
+  svg { display:block; width:100%; height:auto; }
+  .status { min-height:64px; margin-top:8px; padding:10px 12px; border-radius:9px; background:var(--soft); font-size:12.5px; line-height:1.45; }
+  .status b { color:var(--accent); }
+  .controls { display:flex; gap:6px; flex-wrap:wrap; margin-top:10px; }
+  button { font:600 11.5px/1.1 "Segoe UI",system-ui,sans-serif; padding:8px 10px; border-radius:8px; border:1px solid var(--rule); background:var(--card); color:var(--ink); cursor:pointer; }
+  button:hover { border-color:var(--accent); color:var(--accent); }
+  button.on { background:var(--accent); border-color:var(--accent); color:#fff; }
+  .note { margin:9px 2px 0; font:11.5px/1.5 "Segoe UI",system-ui,sans-serif; color:var(--muted); }
+  @media (max-width:560px) { .frame { padding:12px; } .status { font-size:12px; } }
+</style>
+</head>
+<body>
+<div class="frame">
+  <p class="eyebrow">SQLite · журнал и блокировки</p>
+  <svg viewBox="0 0 680 330" role="img" aria-labelledby="jm-title jm-desc">
+    <title id="jm-title">Режимы журнала SQLite: откат и WAL</title>
+    <desc id="jm-desc">Слева писатель, справа читатель, внизу файлы базы. Переключите режим журнала и шаг, чтобы увидеть, какие файлы появляются и кто кого блокирует.</desc>
+
+    <g font-family="Segoe UI,system-ui,sans-serif">
+      <rect x="16" y="26" width="300" height="126" rx="9" fill="#FFFDFC" stroke="#CDBBD6"/>
+      <text x="30" y="47" font-size="12" font-weight="700" fill="#2A2430">Писатель</text>
+      <text x="30" y="68" font-size="10.5" fill="#2A2430" id="w1">1. BEGIN</text>
+      <text x="30" y="88" font-size="10.5" fill="#2A2430" id="w2">2. старые страницы в journal</text>
+      <text x="30" y="108" font-size="10.5" fill="#2A2430" id="w3">3. COMMIT удаляет journal</text>
+      <text x="30" y="134" font-size="10" fill="#8E5BC8" id="w4">один писатель в каждый момент</text>
+
+      <rect x="364" y="26" width="300" height="126" rx="9" fill="#FFFDFC" stroke="#CDBBD6"/>
+      <text x="378" y="47" font-size="12" font-weight="700" fill="#2A2430">Читатель</text>
+      <text x="378" y="68" font-size="10.5" fill="#2A2430" id="r1">видит прежние данные</text>
+      <text x="378" y="88" font-size="10.5" fill="#2A2430" id="r2">на время COMMIT ждёт</text>
+      <text x="378" y="108" font-size="10.5" fill="#2A2430" id="r3">после фиксации читает новое</text>
+      <text x="378" y="134" font-size="10" fill="#8E5BC8" id="r4">читателей может быть много</text>
+
+      <text x="16" y="182" font-family="Consolas,monospace" font-size="10" fill="#6B6272">ФАЙЛЫ НА ДИСКЕ</text>
+
+      <rect x="16" y="192" width="200" height="54" rx="8" fill="#FFFDFC" stroke="#8E5BC8" stroke-width="1.6"/>
+      <text x="28" y="212" font-size="12" font-weight="700" fill="#2A2430" id="f1">sklad.db</text>
+      <text x="28" y="229" font-size="10" fill="#6B6272" id="f1s">основной файл базы</text>
+
+      <rect x="232" y="192" width="200" height="54" rx="8" fill="#FFFDFC" stroke="#CDBBD6"/>
+      <text x="244" y="212" font-size="12" font-weight="700" fill="#2A2430" id="f2">sklad.db-journal</text>
+      <text x="244" y="229" font-size="10" fill="#6B6272" id="f2s">прежние версии страниц</text>
+
+      <rect x="448" y="192" width="216" height="54" rx="8" fill="#FFFDFC" stroke="#CDBBD6"/>
+      <text x="460" y="212" font-size="12" font-weight="700" fill="#2A2430" id="f3">нет</text>
+      <text x="460" y="229" font-size="10" fill="#6B6272" id="f3s">отдельного файла нет</text>
+
+      <rect x="16" y="262" width="648" height="46" rx="8" fill="#F3EAF4" stroke="#CDBBD6"/>
+      <text x="28" y="282" font-size="10.5" fill="#2A2430" id="lock">Писатель блокирует других писателей. Читатель кратко ждёт COMMIT.</text>
+      <text x="28" y="299" font-size="10" fill="#6B6272" id="lock2">Фиксация в режиме откота это удаление журнала.</text>
+    </g>
+  </svg>
+  <div class="status" id="jm-status"></div>
+  <div class="controls" id="jm-modes">
+    <button data-mode="delete" class="on">Журнал откота</button>
+    <button data-mode="wal">WAL</button>
+  </div>
+  <div class="controls" id="jm-steps">
+    <button data-step="1" class="on">Шаг 1: запись</button>
+    <button data-step="2">Шаг 2: фиксация</button>
+    <button data-step="3">Шаг 3: чтение</button>
+  </div>
+  <p class="note">Нажмите режим и шаг. Сравните, какие файлы появляются, что видит читатель и когда возникает блокировка.</p>
+</div>
+<script>
+(function () {
+  var modes = {
+    delete: {
+      w1: "1. BEGIN, разделяемая блокировка",
+      w2: "2. старые страницы копируются в journal",
+      w3: "3. COMMIT удаляет journal",
+      w4: "один писатель в каждый момент",
+      r1: "видит прежние данные",
+      r2: "на время COMMIT ждёт",
+      r3: "после фиксации читает новое",
+      r4: "читателей может быть много",
+      f1: "sklad.db", f1s: "основной файл базы",
+      f2: "sklad.db-journal", f2s: "прежние версии страниц",
+      f3: "нет", f3s: "отдельного файла нет",
+      lock: "Писатель блокирует других писателей. Читатель кратко ждёт COMMIT.",
+      lock2: "Фиксация в режиме откота это удаление журнала.",
+      steps: {
+        1: "<b>Запись.</b> Перед изменением страницы база сохраняет её прежнюю версию в journal. Пока журнал существует, изменения не считаются подтверждёнными.",
+        2: "<b>Фиксация.</b> COMMIT удаляет journal. Если приложение упадёт до этого шага, при следующем открытии база вернёт страницы из журнала.",
+        3: "<b>Чтение.</b> Читатель видит только зафиксированные данные. На короткое время COMMIT он ждёт, потому что писатель берёт исключительную блокировку."
+      }
+    },
+    wal: {
+      w1: "1. BEGIN, писатель один",
+      w2: "2. кадры дописываются в -wal",
+      w3: "3. отметка фиксации в журнале",
+      w4: "один писатель в каждый момент",
+      r1: "читает снимок на момент начала",
+      r2: "не ждёт писателя",
+      r3: "видит версию до фиксации",
+      r4: "читателей может быть много",
+      f1: "sklad.db", f1s: "основной файл базы",
+      f2: "sklad.db-wal", f2s: "кадры до checkpoint",
+      f3: "sklad.db-shm", f3s: "индекс кадров в памяти",
+      lock: "Писатель один, читатели работают параллельно. Checkpoint переносит кадры в базу.",
+      lock2: "WAL требует локальной файловой системы и разделяемой памяти.",
+      steps: {
+        1: "<b>Запись.</b> Новые версии страниц дописываются кадрами в файл -wal. Основной файл не меняется до checkpoint.",
+        2: "<b>Фиксация.</b> В журнал ставится отметка фиксации. Читатель, начавший раньше, продолжает видеть прежний снимок.",
+        3: "<b>Чтение.</b> Читатель не блокирует писателя. Долгий читатель мешает checkpoint, и файл -wal растёт."
+      }
+    }
+  };
+  var mode = "delete", step = "1";
+  var ids = ["w1","w2","w3","w4","r1","r2","r3","r4","f1","f1s","f2","f2s","f3","f3s","lock","lock2"];
+  var status = document.getElementById("jm-status");
+  var modeButtons = document.querySelectorAll("#jm-modes button");
+  var stepButtons = document.querySelectorAll("#jm-steps button");
+
+  function render() {
+    var data = modes[mode];
+    ids.forEach(function (id) { document.getElementById(id).textContent = data[id]; });
+    modeButtons.forEach(function (b) { b.classList.toggle("on", b.dataset.mode === mode); });
+    stepButtons.forEach(function (b) { b.classList.toggle("on", b.dataset.step === step); });
+    status.innerHTML = data.steps[step];
+  }
+  modeButtons.forEach(function (b) { b.addEventListener("click", function () { mode = b.dataset.mode; render(); }); });
+  stepButtons.forEach(function (b) { b.addEventListener("click", function () { step = b.dataset.step; render(); }); });
+  render();
+})();
+</script>
+</body>
+</html>

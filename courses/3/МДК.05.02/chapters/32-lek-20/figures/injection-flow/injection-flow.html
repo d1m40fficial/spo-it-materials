@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Склейка и параметр</title>
+<style>
+  :root { --paper:#F8F4FA; --card:#FFFDFF; --ink:#241C2B; --muted:#6C6076; --rule:#DCCDE3; --accent:#8E5BC8; --soft:#EBE0EC; --ok:#2F7D5B; --no:#A34A5C; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .frame { background:var(--paper); border:1px solid var(--rule); border-radius:12px; padding:16px; }
+  .eyebrow { margin:0 0 8px; font:600 10px/1.2 Consolas,monospace; letter-spacing:.14em; text-transform:uppercase; color:var(--accent); }
+  svg { display:block; width:100%; height:auto; }
+  .panel { fill:var(--card); stroke:#C9B6D4; stroke-width:1.3; }
+  .panel.on { stroke:var(--accent); stroke-width:1.8; }
+  .mono { font-family:Consolas,monospace; }
+  .status { min-height:92px; margin-top:8px; padding:10px 12px; border-radius:9px; background:var(--soft); font-size:12.8px; line-height:1.5; }
+  .status b { color:var(--accent); }
+  .status .code { display:inline-block; margin-right:8px; padding:2px 8px; border-radius:6px; font:700 12px/1.4 Consolas,monospace; color:#fff; background:var(--no); }
+  .status .code.ok { background:var(--ok); }
+  .controls { display:flex; flex-direction:column; gap:6px; margin-top:10px; }
+  .row { display:flex; gap:6px; flex-wrap:wrap; align-items:center; }
+  .row span { font:600 9.5px/1 Consolas,monospace; letter-spacing:.08em; color:var(--muted); min-width:64px; text-transform:uppercase; }
+  button { font:600 11.5px/1.1 "Segoe UI",system-ui,sans-serif; padding:8px 9px; border-radius:8px; border:1px solid var(--rule); background:var(--card); color:var(--ink); cursor:pointer; }
+  button:hover { border-color:var(--accent); color:var(--accent); }
+  button.on { background:var(--accent); border-color:var(--accent); color:#fff; }
+  .note { margin:9px 2px 0; font:11.5px/1.5 "Segoe UI",system-ui,sans-serif; color:var(--muted); }
+  @media (max-width:560px) { .frame { padding:12px; } .status { font-size:12px; } }
+</style>
+</head>
+<body>
+<div class="frame">
+  <p class="eyebrow">Инъекция · два пути одного ввода</p>
+  <svg viewBox="0 0 680 306" role="img" aria-labelledby="if-title if-desc">
+    <title id="if-title">Склейка запроса и передача параметра</title>
+    <desc id="if-desc">Выберите полезную нагрузку и режим. Схема покажет итоговый запрос, число строк и объяснение.</desc>
+
+    <text x="12" y="20" font-family="Consolas,monospace" font-size="9.5" fill="#6C6076">ВВОД КЛИЕНТА</text>
+    <rect x="12" y="28" width="656" height="44" rx="8" class="panel on"/>
+    <text x="26" y="55" font-size="12" class="mono" fill="#241C2B" id="input-text"></text>
+
+    <text x="12" y="96" font-family="Consolas,monospace" font-size="9.5" fill="#6C6076">ЗАПРОС, КОТОРЫЙ УВИДИТ БАЗА</text>
+    <rect x="12" y="104" width="656" height="72" rx="8" class="panel"/>
+    <text x="26" y="126" font-size="9.6" class="mono" fill="#241C2B" id="q1"></text>
+    <text x="26" y="143" font-size="9.6" class="mono" fill="#241C2B" id="q2"></text>
+    <text x="26" y="160" font-size="9.6" class="mono" fill="#8E5BC8" id="q3"></text>
+
+    <text x="12" y="196" font-family="Consolas,monospace" font-size="9.5" fill="#6C6076">РЕЗУЛЬТАТ</text>
+    <rect x="12" y="204" width="656" height="64" rx="8" class="panel"/>
+    <text x="26" y="224" font-size="10.5" class="mono" fill="#241C2B" id="r1"></text>
+    <text x="26" y="241" font-size="10.5" class="mono" fill="#6C6076" id="r2"></text>
+    <text x="26" y="258" font-size="10.5" class="mono" fill="#6C6076" id="r3"></text>
+
+    <text x="12" y="290" font-family="Consolas,monospace" font-size="8.8" fill="#8E5BC8">ПРИ ПАРАМЕТРЕ КАВЫЧКА ОСТАЁТСЯ ЧАСТЬЮ ЗНАЧЕНИЯ, А НЕ ЧАСТЬЮ КОМАНДЫ</text>
+  </svg>
+  <div class="status" id="if-status"></div>
+  <div class="controls">
+    <div class="row" id="if-payloads"><span>Ввод</span></div>
+    <div class="row" id="if-modes"><span>Режим</span></div>
+  </div>
+  <p class="note">Выберите ввод и режим. В режиме параметра тот же текст возвращает пустой список, потому что база ищет товар с таким названием, а не выполняет команду.</p>
+</div>
+<script>
+(function () {
+  var payloads = {
+    or:  { label:"' OR 1=1 --", text:"' OR 1=1 --" },
+    union:{ label:"UNION SELECT", text:"' UNION SELECT id, login, role FROM users --" },
+    word:{ label:"Паллета", text:"Паллета" }
+  };
+  var modes = { concat:"Склейка", param:"Параметр" };
+  var state = { p:"or", m:"concat" };
+  var out = {
+    or: {
+      concat: {
+        q1:"SELECT id, item, site FROM stock",
+        q2:"WHERE item = '' OR 1=1 --'",
+        q3:"условие OR 1=1 истинно для каждой строки",
+        r1:"строк: 4 из 4",
+        r2:"Кабель UTP · Москва · 120",
+        r3:"Паллета · Калуга · 60",
+        code:"200", ok:false,
+        html:"<b>Склейка.</b> Кавычка закрыла строку, <span class=\"mono\">OR 1=1</span> сделало условие истинным, два дефиса убрали остаток запроса. Поиск вернул весь склад. Это не ошибка ввода, а изменение структуры команды."
+      },
+      param: {
+        q1:"SELECT id, item, site FROM stock",
+        q2:"WHERE item = ?",
+        q3:"значение передано отдельно: ' OR 1=1 --",
+        r1:"строк: 0",
+        r2:"совпадений с таким названием нет",
+        r3:"",
+        code:"200", ok:true,
+        html:"<b>Параметр.</b> База ищет товар с названием <span class=\"mono\">' OR 1=1 --</span> и ничего не находит. Значение осталось данными, потому что структура запроса была разобрана до подстановки."
+      }
+    },
+    union: {
+      concat: {
+        q1:"SELECT id, item, site FROM stock",
+        q2:"WHERE item = '' UNION SELECT id, login, role FROM users --'",
+        q3:"второй SELECT читает другую таблицу",
+        r1:"строк: 4 + 3",
+        r2:"1042 · irina · manager",
+        r3:"1043 · pavel · storekeeper",
+        code:"200", ok:false,
+        html:"<b>Склейка.</b> Через <span class=\"mono\">UNION</span> к результату присоединена таблица пользователей. Число колонок совпало, поэтому запрос выполнился. Такой приём требует знания структуры, но ошибки на странице помогают его получить."
+      },
+      param: {
+        q1:"SELECT id, item, site FROM stock",
+        q2:"WHERE item = ?",
+        q3:"значение передано отдельно целиком",
+        r1:"строк: 0",
+        r2:"строка с UNION не является командой",
+        r3:"",
+        code:"200", ok:true,
+        html:"<b>Параметр.</b> Вся строка с <span class=\"mono\">UNION</span> стала значением для сравнения. База не разбирает её как продолжение запроса, поэтому таблица пользователей остаётся закрытой."
+      }
+    },
+    word: {
+      concat: {
+        q1:"SELECT id, item, site FROM stock",
+        q2:"WHERE item = 'Паллета'",
+        q3:"обычное значение без метасимволов",
+        r1:"строк: 1",
+        r2:"Паллета · Калуга · 60",
+        r3:"",
+        code:"200", ok:true,
+        html:"<b>Склейка.</b> Обычный текст работает, поэтому ошибка незаметна на тестовых данных. Проблема появляется только при символе, который база считает частью команды."
+      },
+      param: {
+        q1:"SELECT id, item, site FROM stock",
+        q2:"WHERE item = ?",
+        q3:"значение передано отдельно: Паллета",
+        r1:"строк: 1",
+        r2:"Паллета · Калуга · 60",
+        r3:"результат совпадает со склейкой",
+        code:"200", ok:true,
+        html:"<b>Параметр.</b> Для нормального значения результат тот же. Разница видна не на успешном запросе, а на строке, которая пытается стать командой."
+      }
+    }
+  };
+
+  var status = document.getElementById('if-status');
+  var payloadRow = document.getElementById('if-payloads');
+  var modeRow = document.getElementById('if-modes');
+
+  function show() {
+    var d = out[state.p][state.m];
+    document.getElementById('input-text').textContent = payloads[state.p].text;
+    document.getElementById('q1').textContent = d.q1;
+    document.getElementById('q2').textContent = d.q2;
+    document.getElementById('q3').textContent = d.q3;
+    document.getElementById('r1').textContent = d.r1;
+    document.getElementById('r2').textContent = d.r2;
+    document.getElementById('r3').textContent = d.r3;
+    status.innerHTML = '<span class="code ' + (d.ok ? 'ok' : '') + '">' + d.code + '</span>' + d.html;
+    payloadRow.querySelectorAll('button').forEach(function (b) { b.classList.toggle('on', b.dataset.p === state.p); });
+    modeRow.querySelectorAll('button').forEach(function (b) { b.classList.toggle('on', b.dataset.m === state.m); });
+  }
+
+  Object.keys(payloads).forEach(function (k) {
+    var b = document.createElement('button');
+    b.textContent = payloads[k].label;
+    b.dataset.p = k;
+    b.addEventListener('click', function () { state.p = k; show(); });
+    payloadRow.appendChild(b);
+  });
+  Object.keys(modes).forEach(function (k) {
+    var b = document.createElement('button');
+    b.textContent = modes[k];
+    b.dataset.m = k;
+    b.addEventListener('click', function () { state.m = k; show(); });
+    modeRow.appendChild(b);
+  });
+  show();
+})();
+</script>
+</body>
+</html>

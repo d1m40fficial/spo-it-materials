@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Четыре уровня проверки прав</title>
+<style>
+  :root { --paper:#F8F4FA; --card:#FFFDFF; --ink:#241C2B; --muted:#6C6076; --rule:#DCCDE3; --accent:#8E5BC8; --soft:#EBE0EC; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .frame { background:var(--paper); border:1px solid var(--rule); border-radius:12px; padding:16px; }
+  .eyebrow { margin:0 0 6px; font:600 10px/1.2 Consolas,monospace; letter-spacing:.14em; text-transform:uppercase; color:var(--accent); }
+  svg { display:block; width:100%; height:auto; }
+  .lvl rect { fill:var(--card); stroke:#C9B6D4; stroke-width:1.3; }
+  .lvl .num { fill:var(--soft); }
+  .foot { margin:9px 2px 0; font:11.5px/1.5 "Segoe UI",system-ui,sans-serif; color:var(--muted); }
+  @media (max-width:560px) { .frame { padding:12px; } }
+</style>
+</head>
+<body>
+<div class="frame">
+  <p class="eyebrow">Доступ · четыре проверки</p>
+  <svg viewBox="0 0 680 286" role="img" aria-labelledby="al-title al-desc">
+    <title id="al-title">Маршрут, роль, запись и поле</title>
+    <desc id="al-desc">Четыре последовательные проверки на пути запроса. У каждой свой вопрос, свой инструмент и свой способ обхода.</desc>
+
+    <text x="12" y="20" font-family="Consolas,monospace" font-size="9.5" fill="#6C6076">ЗАПРОС</text>
+    <path d="M12 32 H668" stroke="#DCCDE3" stroke-width="1.5" marker-end="url(#a2)"/>
+    <defs>
+      <marker id="a2" viewBox="0 0 8 8" refX="6" refY="4" markerWidth="7" markerHeight="7" orient="auto">
+        <path d="M0 0 L8 4 L0 8 z" fill="#DCCDE3"/>
+      </marker>
+    </defs>
+
+    <g class="lvl">
+      <rect x="12" y="48" width="154" height="150" rx="9"/>
+      <rect x="12" y="48" width="154" height="26" rx="9" class="num"/>
+      <text x="26" y="66" font-size="10" font-weight="700" fill="#8E5BC8" font-family="Consolas,monospace">1 · МАРШРУТ</text>
+      <text x="26" y="96" font-size="11.5" font-weight="700">Нужен ли вход</text>
+      <text x="26" y="116" font-size="10" fill="#6C6076">атрибут [Authorize]</text>
+      <text x="26" y="132" font-size="10" fill="#6C6076">или общая политика</text>
+      <text x="26" y="158" font-size="10" font-weight="600" fill="#A34A5C">обход:</text>
+      <text x="26" y="174" font-size="10" fill="#241C2B">новый маршрут</text>
+      <text x="26" y="188" font-size="10" fill="#241C2B">без атрибута</text>
+    </g>
+
+    <g class="lvl">
+      <rect x="180" y="48" width="154" height="150" rx="9"/>
+      <rect x="180" y="48" width="154" height="26" rx="9" class="num"/>
+      <text x="194" y="66" font-size="10" font-weight="700" fill="#8E5BC8" font-family="Consolas,monospace">2 · РОЛЬ</text>
+      <text x="194" y="96" font-size="11.5" font-weight="700">Есть ли операция</text>
+      <text x="194" y="116" font-size="10" fill="#6C6076">политика и роли</text>
+      <text x="194" y="132" font-size="10" fill="#6C6076">storekeeper, manager</text>
+      <text x="194" y="158" font-size="10" font-weight="600" fill="#A34A5C">обход:</text>
+      <text x="194" y="174" font-size="10" fill="#241C2B">роль из тела</text>
+      <text x="194" y="188" font-size="10" fill="#241C2B">запроса</text>
+    </g>
+
+    <g class="lvl">
+      <rect x="348" y="48" width="154" height="150" rx="9"/>
+      <rect x="348" y="48" width="154" height="26" rx="9" class="num"/>
+      <text x="362" y="66" font-size="10" font-weight="700" fill="#8E5BC8" font-family="Consolas,monospace">3 · ЗАПИСЬ</text>
+      <text x="362" y="96" font-size="11.5" font-weight="700">Чья это запись</text>
+      <text x="362" y="116" font-size="10" fill="#6C6076">site пользователя</text>
+      <text x="362" y="132" font-size="10" fill="#6C6076">равен site записи</text>
+      <text x="362" y="158" font-size="10" font-weight="600" fill="#A34A5C">обход:</text>
+      <text x="362" y="174" font-size="10" fill="#241C2B">подмена номера</text>
+      <text x="362" y="188" font-size="10" fill="#241C2B">в адресе</text>
+    </g>
+
+    <g class="lvl">
+      <rect x="516" y="48" width="152" height="150" rx="9"/>
+      <rect x="516" y="48" width="152" height="26" rx="9" class="num"/>
+      <text x="530" y="66" font-size="10" font-weight="700" fill="#8E5BC8" font-family="Consolas,monospace">4 · ПОЛЕ</text>
+      <text x="530" y="96" font-size="11.5" font-weight="700">Что можно менять</text>
+      <text x="530" y="116" font-size="10" fill="#6C6076">модель входа</text>
+      <text x="530" y="132" font-size="10" fill="#6C6076">только поля операции</text>
+      <text x="530" y="158" font-size="10" font-weight="600" fill="#A34A5C">обход:</text>
+      <text x="530" y="174" font-size="10" fill="#241C2B">лишнее поле</text>
+      <text x="530" y="188" font-size="10" fill="#241C2B">role или site</text>
+    </g>
+
+    <text x="12" y="224" font-size="10.5" fill="#6C6076">Ответы идут по порядку:</text>
+    <text x="150" y="224" font-size="10.5" fill="#241C2B">401 нет личности → 403 нет операции → 403 чужая запись → 400 лишнее поле</text>
+
+    <text x="12" y="252" font-family="Consolas,monospace" font-size="9" fill="#8E5BC8">ПРОПУЩЕННЫЙ СЛОЙ НЕ КОМПЕНСИРУЕТСЯ СОСЕДНИМ: КАЖДЫЙ ОТВЕЧАЕТ ЗА СВОЙ ВОПРОС</text>
+    <text x="12" y="272" font-family="Consolas,monospace" font-size="9" fill="#6C6076">РОЛЬ РАЗРЕШАЕТ ОПЕРАЦИЮ, НО НЕ ПОДТВЕРЖДАЕТ ВЛАДЕЛЬЦА ЗАПИСИ</text>
+  </svg>
+  <p class="foot">Проверка записи стоит после чтения строки: до этого сервер не знает, к какой площадке она относится. Проверка полей стоит последней, потому что она ограничивает не доступ, а объём изменений.</p>
+</div>
+</body>
+</html>

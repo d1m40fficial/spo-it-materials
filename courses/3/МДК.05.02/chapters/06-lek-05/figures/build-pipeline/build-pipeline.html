@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Путь от исходного кода C# до работающей программы</title>
+<style>
+  :root { --paper:#EBE0EC; --card:#FBF7FC; --ink:#2A2233; --muted:#6B5F75; --rule:#D5C2DC; --accent:#8E5BC8; --soft:#E4D5EC; --deep:#4B2E63; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .frame { background:var(--paper); border:1px solid var(--rule); border-radius:12px; padding:16px; }
+  .eyebrow { margin:0 0 6px; font:600 10px/1.2 Consolas,monospace; letter-spacing:.14em; text-transform:uppercase; color:var(--accent); }
+  svg { display:block; width:100%; height:auto; }
+  .note { margin:10px 2px 0; font:12px/1.5 "Segoe UI",system-ui,sans-serif; color:var(--muted); }
+  @media (max-width:560px) { .frame { padding:12px; } }
+</style>
+</head>
+<body>
+<div class="frame">
+  <p class="eyebrow">C# · сборка и запуск</p>
+  <svg viewBox="0 0 680 426" role="img" aria-labelledby="bp-title bp-desc">
+    <title id="bp-title">Две стадии выполнения программы на C#</title>
+    <desc id="bp-desc">Сверху исходные файлы проходят проверку компилятора и превращаются в сборку с промежуточным кодом. Снизу среда загружает сборку, JIT переводит методы в машинные команды и программа работает.</desc>
+
+    <text x="16" y="22" font-family="Consolas,monospace" font-size="10" fill="#6B5F75">СТАДИЯ 1 · СБОРКА: ЗДЕСЬ ВИДНЫ ОШИБКИ ТИПОВ</text>
+
+    <g font-family="Segoe UI,system-ui,sans-serif">
+      <rect x="16" y="34" width="150" height="72" rx="8" fill="#FBF7FC" stroke="#D5C2DC"/>
+      <text x="28" y="56" font-size="11.5" font-weight="700" fill="#2A2233">Файлы проекта</text>
+      <text x="28" y="75" font-size="10.5" fill="#6B5F75">Program.cs</text>
+      <text x="28" y="91" font-size="10.5" fill="#6B5F75">Storage.cs, .csproj</text>
+
+      <path d="M172 70h28" stroke="#8E5BC8" stroke-width="1.6" fill="none" marker-end="url(#bp-arrow)"/>
+
+      <rect x="206" y="34" width="196" height="72" rx="8" fill="#EFE3F3" stroke="#8E5BC8" stroke-width="1.8"/>
+      <text x="220" y="56" font-size="11.5" font-weight="700" fill="#2A2233">Компилятор Roslyn</text>
+      <text x="220" y="75" font-size="10.5" fill="#2A2233">синтаксис, имена, типы</text>
+      <text x="220" y="91" font-size="10.5" fill="#5B3E76">ошибка останавливает сборку</text>
+
+      <path d="M408 70h28" stroke="#8E5BC8" stroke-width="1.6" fill="none" marker-end="url(#bp-arrow)"/>
+
+      <rect x="442" y="34" width="222" height="72" rx="8" fill="#FBF7FC" stroke="#D5C2DC"/>
+      <text x="456" y="56" font-size="11.5" font-weight="700" fill="#2A2233">Сборка .dll</text>
+      <text x="456" y="75" font-size="10.5" fill="#2A2233">CIL + метаданные + ссылки</text>
+      <text x="456" y="91" font-size="10.5" fill="#6B5F75">результат в bin/Debug/net10.0</text>
+    </g>
+
+    <line x1="16" y1="128" x2="664" y2="128" stroke="#C9B2D4" stroke-dasharray="5 4"/>
+    <text x="16" y="146" font-family="Consolas,monospace" font-size="9.5" fill="#8E5BC8">ГРАНИЦА: dotnet build ОСТАНАВЛИВАЕТСЯ ЗДЕСЬ · dotnet run ИДЁТ ДАЛЬШЕ</text>
+
+    <text x="16" y="174" font-family="Consolas,monospace" font-size="10" fill="#6B5F75">СТАДИЯ 2 · ЗАПУСК: ЗДЕСЬ ВИДНЫ ОШИБКИ ВЫПОЛНЕНИЯ</text>
+
+    <g font-family="Segoe UI,system-ui,sans-serif">
+      <rect x="16" y="186" width="196" height="86" rx="8" fill="#FBF7FC" stroke="#D5C2DC"/>
+      <text x="30" y="208" font-size="11.5" font-weight="700" fill="#2A2233">CLR загружает сборку</text>
+      <text x="30" y="227" font-size="10.5" fill="#6B5F75">читает метаданные,</text>
+      <text x="30" y="243" font-size="10.5" fill="#6B5F75">проверяет IL</text>
+      <text x="30" y="261" font-size="10.5" fill="#6B5F75">находит точку входа</text>
+
+      <path d="M218 229h28" stroke="#8E5BC8" stroke-width="1.6" fill="none" marker-end="url(#bp-arrow)"/>
+
+      <rect x="252" y="186" width="190" height="86" rx="8" fill="#EFE3F3" stroke="#8E5BC8" stroke-width="1.8"/>
+      <text x="266" y="208" font-size="11.5" font-weight="700" fill="#2A2233">JIT-компилятор</text>
+      <text x="266" y="227" font-size="10.5" fill="#2A2233">переводит методы</text>
+      <text x="266" y="243" font-size="10.5" fill="#2A2233">в машинные команды</text>
+      <text x="266" y="261" font-size="10.5" fill="#5B3E76">по мере вызова</text>
+
+      <path d="M448 229h28" stroke="#8E5BC8" stroke-width="1.6" fill="none" marker-end="url(#bp-arrow)"/>
+
+      <rect x="482" y="186" width="182" height="86" rx="8" fill="#FBF7FC" stroke="#D5C2DC"/>
+      <text x="496" y="208" font-size="11.5" font-weight="700" fill="#2A2233">Работа программы</text>
+      <text x="496" y="227" font-size="10.5" fill="#6B5F75">ввод, расчёт, вывод</text>
+      <text x="496" y="243" font-size="10.5" fill="#6B5F75">исключения и журнал</text>
+      <text x="496" y="261" font-size="10.5" fill="#6B5F75">обращения к файлам</text>
+    </g>
+
+    <g font-family="Segoe UI,system-ui,sans-serif">
+      <rect x="16" y="292" width="314" height="76" rx="8" fill="#FBF7FC" stroke="#D5C2DC"/>
+      <text x="30" y="312" font-size="11" font-weight="700" fill="#8E5BC8">ЧТО ЛОВИТ КОМПИЛЯТОР</text>
+      <text x="30" y="331" font-size="10.5" fill="#2A2233">неизвестное имя, несовпадение типов,</text>
+      <text x="30" y="347" font-size="10.5" fill="#2A2233">неверное число аргументов, две точки входа</text>
+
+      <rect x="350" y="292" width="314" height="76" rx="8" fill="#FBF7FC" stroke="#D5C2DC"/>
+      <text x="364" y="312" font-size="11" font-weight="700" fill="#8E5BC8">ЧТО ЛОВИТ ТОЛЬКО ЗАПУСК</text>
+      <text x="364" y="331" font-size="10.5" fill="#2A2233">деление на ноль, отсутствующий файл,</text>
+      <text x="364" y="347" font-size="10.5" fill="#2A2233">неверный формат данных, ошибка логики</text>
+    </g>
+
+    <text x="16" y="402" font-family="Consolas,monospace" font-size="9.5" fill="#6B5F75">СБОРКА ДОКАЗЫВАЕТ ТОЛЬКО СОВПАДЕНИЕ ТИПОВ, А НЕ ПРАВИЛЬНОСТЬ РАСЧЁТА</text>
+
+    <defs>
+      <marker id="bp-arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#8E5BC8"/></marker>
+    </defs>
+  </svg>
+  <p class="note">Сверху проверка исходников и сборка, снизу загрузка и JIT. Ошибка типов останавливает первую стадию, ошибка данных проявляется только на второй.</p>
+</div>
+</body>
+</html>

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Как читать трассировку Python</title>
+<style>
+  :root { --paper:#EBE0EC; --card:#FBF7FC; --ink:#2A2233; --muted:#6B5F75; --rule:#D5C2DC; --accent:#8E5BC8; --soft:#E4D5EC; --bad:#A8455A; --deep:#4B2E63; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .frame { background:var(--paper); border:1px solid var(--rule); border-radius:12px; padding:16px; }
+  .eyebrow { margin:0 0 6px; font:600 10px/1.2 Consolas,monospace; letter-spacing:.14em; text-transform:uppercase; color:var(--accent); }
+  svg { display:block; width:100%; height:auto; }
+  .row rect { fill:#FBF7FC; stroke:transparent; stroke-width:1.6; transition:fill .15s, stroke .15s; }
+  .row.on rect { fill:#EFE3F3; stroke:#8E5BC8; }
+  .row { cursor:pointer; }
+  .status { min-height:92px; margin-top:8px; padding:10px 12px; border-radius:9px; background:var(--soft); font-size:13px; line-height:1.45; }
+  .status b { color:var(--accent); }
+  .controls { display:flex; gap:6px; flex-wrap:wrap; margin-top:10px; }
+  button { font:600 11.5px/1.1 "Segoe UI",system-ui,sans-serif; padding:8px 10px; border-radius:8px; border:1px solid var(--rule); background:var(--card); color:var(--ink); cursor:pointer; }
+  button:hover { border-color:var(--accent); color:var(--accent); }
+  button.on { background:var(--accent); border-color:var(--accent); color:#fff; }
+  .note { margin:9px 2px 0; font:11.5px/1.5 "Segoe UI",system-ui,sans-serif; color:var(--muted); }
+  @media (max-width:560px) { .frame { padding:12px; } .status { font-size:12.5px; } }
+</style>
+</head>
+<body>
+<div class="frame">
+  <p class="eyebrow">Python · трассировка</p>
+  <svg viewBox="0 0 680 382" role="img" aria-labelledby="tr-title tr-desc">
+    <title id="tr-title">Разбор трассировки снизу вверх</title>
+    <desc id="tr-desc">Три кликабельные строки: тип ошибки KeyError, нижний кадр со строкой 7 и верхний кадр со строкой 11. Нажмите строку, чтобы увидеть, что из неё следует.</desc>
+
+    <rect x="16" y="30" width="648" height="236" rx="9" fill="#FBF7FC" stroke="#D5C2DC"/>
+    <text x="30" y="50" font-family="Consolas,monospace" font-size="9.5" fill="#6B5F75">ТЕРМИНАЛ · l4_bug.py</text>
+
+    <g class="row" data-k="top">
+      <rect x="28" y="60" width="624" height="46" rx="6"/>
+      <text x="38" y="78" font-family="Consolas,monospace" font-size="10" fill="#6B5F75">File "l4_bug.py", line 11, in &lt;module&gt;</text>
+      <text x="38" y="96" font-family="Consolas,monospace" font-size="10.5" fill="#2A2233">print(report("Тверь"))</text>
+    </g>
+
+    <g class="row" data-k="bottom">
+      <rect x="28" y="112" width="624" height="62" rx="6"/>
+      <text x="38" y="130" font-family="Consolas,monospace" font-size="10" fill="#6B5F75">File "l4_bug.py", line 7, in report</text>
+      <text x="38" y="148" font-family="Consolas,monospace" font-size="10.5" fill="#2A2233">positions, reserved = data[site]</text>
+      <text x="38" y="164" font-family="Consolas,monospace" font-size="10.5" fill="#8E5BC8">                      ~~~~^^^^^^</text>
+    </g>
+
+    <g class="row" data-k="error">
+      <rect x="28" y="180" width="624" height="46" rx="6"/>
+      <text x="38" y="198" font-family="Consolas,monospace" font-size="11" font-weight="700" fill="#A8455A">KeyError: 'Тверь'</text>
+      <text x="38" y="215" font-family="Consolas,monospace" font-size="9.5" fill="#6B5F75">тип ошибки и значение, которого не хватило</text>
+    </g>
+
+    <text x="30" y="250" font-family="Consolas,monospace" font-size="9.5" fill="#6B5F75">ПОРЯДОК ВЫПОЛНЕНИЯ: СВЕРХУ ВНИЗ · ПОИСК ПРИЧИНЫ: СНИЗУ ВВЕРХ</text>
+
+    <g font-family="Segoe UI,system-ui,sans-serif">
+      <rect x="16" y="278" width="314" height="58" rx="7" fill="#FBF7FC" stroke="#D5C2DC"/>
+      <text x="28" y="298" font-size="10.5" font-weight="700" fill="#8E5BC8">ЧТО ЧИТАЮТ ПЕРВЫМ</text>
+      <text x="28" y="316" font-size="10.5" fill="#2A2233">последнюю строку: тип и значение</text>
+      <text x="28" y="330" font-size="10.5" fill="#6B5F75">KeyError называет отсутствующий ключ</text>
+
+      <rect x="350" y="278" width="314" height="58" rx="7" fill="#FBF7FC" stroke="#D5C2DC"/>
+      <text x="362" y="298" font-size="10.5" font-weight="700" fill="#8E5BC8">ГДЕ ИСКАТЬ ПРАВКУ</text>
+      <text x="362" y="316" font-size="10.5" fill="#2A2233">нижний кадр: строка 7, data[site]</text>
+      <text x="362" y="330" font-size="10.5" fill="#6B5F75">site равно "Тверь", ключа нет</text>
+    </g>
+
+    <text x="16" y="362" font-family="Consolas,monospace" font-size="9.5" fill="#6B5F75">ВЕРХНИЕ КАДРЫ ПОКАЗЫВАЮТ ПУТЬ, НИЖНИЙ КАДР ПОКАЗЫВАЕТ МЕСТО СБОЯ</text>
+
+    <defs>
+      <marker id="tr-arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#8E5BC8"/></marker>
+    </defs>
+  </svg>
+  <div class="status" id="tr-status"></div>
+  <div class="controls" id="tr-buttons">
+    <button data-k="error" class="on">Тип ошибки</button>
+    <button data-k="bottom">Нижний кадр</button>
+    <button data-k="top">Верхний кадр</button>
+  </div>
+  <p class="note">Нажимайте строки в терминале или кнопки. Схема показывает, что тип ошибки читают в последней строке, а причину ищут в нижнем кадре.</p>
+</div>
+<script>
+(function () {
+  var data = {
+    error: '<b>Последняя строка.</b> KeyError называет тип ошибки и ключ, которого не хватило. Это ответ на вопрос «что случилось», но ещё не ответ на вопрос «почему».',
+    bottom: '<b>Нижний кадр.</b> Строка 7 выполняет data[site], где site равно "Тверь". В словаре есть только Тула и Калуга, поэтому обращение к ключу невозможно. Правку ищут здесь, а не в функции available.',
+    top: '<b>Верхний кадр.</b> Строка 11 показывает, кто вызвал report и с каким аргументом. Это путь к месту сбоя, но причина находится ниже, в кадре report.'
+  };
+  var rows = document.querySelectorAll('.row');
+  var buttons = document.querySelectorAll('#tr-buttons button');
+  var status = document.getElementById('tr-status');
+
+  function apply(key) {
+    rows.forEach(function (r) { r.classList.toggle('on', r.dataset.k === key); });
+    buttons.forEach(function (b) { b.classList.toggle('on', b.dataset.k === key); });
+    status.innerHTML = data[key];
+  }
+  rows.forEach(function (r) { r.addEventListener('click', function () { apply(r.dataset.k); }); });
+  buttons.forEach(function (b) { b.addEventListener('click', function () { apply(b.dataset.k); }); });
+  apply('error');
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Проблема N+1 и способы загрузки</title>
+<style>
+  :root { color-scheme:light; --paper:#EBE0EC; --card:#FFFDFC; --ink:#2A2430; --muted:#6B6272; --rule:#CDBBD6; --accent:#8E5BC8; --soft:#F3EAF4; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .frame { background:var(--paper); border:1px solid var(--rule); border-radius:12px; padding:16px; }
+  .eyebrow { margin:0 0 6px; font:600 10px/1.2 Consolas,monospace; letter-spacing:.14em; text-transform:uppercase; color:var(--accent); }
+  svg { display:block; width:100%; height:auto; }
+  .status { min-height:74px; margin-top:8px; padding:10px 12px; border-radius:9px; background:var(--soft); font-size:12.5px; line-height:1.45; }
+  .status b { color:var(--accent); }
+  .controls { display:flex; gap:6px; flex-wrap:wrap; margin-top:10px; }
+  button { font:600 11.5px/1.1 "Segoe UI",system-ui,sans-serif; padding:8px 10px; border-radius:8px; border:1px solid var(--rule); background:var(--card); color:var(--ink); cursor:pointer; }
+  button:hover { border-color:var(--accent); color:var(--accent); }
+  button.on { background:var(--accent); border-color:var(--accent); color:#fff; }
+  .note { margin:9px 2px 0; font:11.5px/1.5 "Segoe UI",system-ui,sans-serif; color:var(--muted); }
+  @media (max-width:560px) { .frame { padding:12px; } .status { font-size:12px; } }
+</style>
+</head>
+<body>
+<div class="frame">
+  <p class="eyebrow">ORM · N+1</p>
+  <svg viewBox="0 0 680 390" role="img" aria-labelledby="np-title np-desc">
+    <title id="np-title">Число запросов при ленивой и жадной загрузке</title>
+    <desc id="np-desc">Выберите число площадок и способ загрузки. Схема покажет число запросов к базе и текст команд, которые уходят в журнал.</desc>
+
+    <g font-family="Segoe UI,system-ui,sans-serif">
+      <rect x="16" y="22" width="300" height="76" rx="9" fill="#FFFDFC" stroke="#CDBBD6"/>
+      <text x="30" y="42" font-size="10" fill="#6B6272" font-family="Consolas,monospace">СПИСОК ПЛОЩАДОК</text>
+      <text x="30" y="62" font-size="12.5" font-weight="700" fill="#2A2430" id="np-n">N = 2</text>
+      <g id="np-chips"></g>
+
+      <rect x="336" y="22" width="328" height="76" rx="9" fill="#F3EAF4" stroke="#8E5BC8" stroke-width="1.6"/>
+      <text x="350" y="42" font-size="10" fill="#6B6272" font-family="Consolas,monospace">ЗАПРОСОВ К БАЗЕ</text>
+      <text x="350" y="82" font-size="34" font-weight="700" fill="#8E5BC8" id="np-total">3</text>
+      <text x="430" y="82" font-size="11" fill="#6B6272" id="np-formula">1 + N</text>
+
+      <text x="16" y="122" font-size="10" fill="#6B6272" font-family="Consolas,monospace">ЖУРНАЛ ЗАПРОСОВ</text>
+      <rect x="16" y="130" width="648" height="130" rx="8" fill="#FFFDFC" stroke="#CDBBD6"/>
+      <text x="30" y="153" font-size="10.5" fill="#2A2430" font-family="Consolas,monospace" id="np-q1">SELECT ... FROM warehouses</text>
+      <text x="30" y="176" font-size="10.5" fill="#2A2430" font-family="Consolas,monospace" id="np-q2">SELECT ... FROM stock WHERE warehouse_id = ?</text>
+      <text x="30" y="199" font-size="10.5" fill="#6B6272" font-family="Consolas,monospace" id="np-q3">второй запрос повторяется N раз</text>
+      <text x="30" y="226" font-size="10" fill="#8E5BC8" id="np-warn">Число запросов растёт вместе с числом площадок.</text>
+      <text x="30" y="246" font-size="10" fill="#6B6272" id="np-rows">Строк в ответе: N + N × остатки.</text>
+
+      <text x="16" y="284" font-size="10" fill="#6B6272" font-family="Consolas,monospace">ДЛИНА ПОЛОСЫ ПРОПОРЦИОНАЛЬНА ЧИСЛУ ЗАПРОСОВ</text>
+      <rect x="16" y="294" width="648" height="28" rx="7" fill="#FFFDFC" stroke="#CDBBD6"/>
+      <rect x="19" y="297" width="40" height="22" rx="5" fill="#8E5BC8" id="np-bar"/>
+      <text x="640" y="313" font-size="10" text-anchor="end" fill="#6B6272" id="np-bar-label">3</text>
+
+      <rect x="16" y="336" width="648" height="40" rx="8" fill="#F3EAF4" stroke="#CDBBD6"/>
+      <text x="30" y="352" font-size="10" fill="#2A2430" id="np-summary">Ленивая загрузка: один запрос на список и по одному на строку.</text>
+      <text x="30" y="368" font-size="9.5" fill="#6B6272" id="np-summary2">Решение: загрузить связь заранее или запросить проекцию.</text>
+    </g>
+  </svg>
+  <div class="status" id="np-status"></div>
+  <div class="controls" id="np-n-buttons">
+    <button data-n="2" class="on">2 площадки</button>
+    <button data-n="10">10</button>
+    <button data-n="100">100</button>
+  </div>
+  <div class="controls" id="np-mode-buttons">
+    <button data-mode="lazy" class="on">Ленивая</button>
+    <button data-mode="selectin">selectinload</button>
+    <button data-mode="joined">joinedload</button>
+  </div>
+  <p class="note">Сначала выберите способ загрузки, затем число площадок. Сравните, как меняется счётчик и текст запросов.</p>
+</div>
+<script>
+(function () {
+  var data = {
+    lazy: {
+      q1: "SELECT ... FROM warehouses",
+      q2: "SELECT ... FROM stock WHERE warehouse_id = ?",
+      q3: "второй запрос повторяется N раз",
+      warn: "Число запросов растёт вместе с числом площадок.",
+      rows: "Строк в ответе: N + N × остатки.",
+      formula: "1 + N",
+      total: function (n) { return 1 + n; },
+      summary: "Ленивая загрузка: один запрос на список и по одному на строку.",
+      summary2: "Решение: selectinload, joinedload или проекция нужных колонок.",
+      status: "<b>Ленивая загрузка.</b> Сначала читается список площадок, затем при обращении к <code>warehouse.stock</code> выполняется отдельный запрос для каждой строки. На двух площадках это три запроса, на ста уже 101."
+    },
+    selectin: {
+      q1: "SELECT ... FROM warehouses",
+      q2: "SELECT ... FROM stock WHERE warehouse_id IN (?, ...)",
+      q3: "один запрос на всю коллекцию",
+      warn: "Число запросов не зависит от числа площадок.",
+      rows: "Строк в ответе: N + все остатки одним набором.",
+      formula: "2",
+      total: function () { return 2; },
+      summary: "selectinload: второй запрос с IN обслуживает всю коллекцию.",
+      summary2: "Цена: читаются все остатки выбранных площадок, даже если нужна часть.",
+      status: "<b>selectinload.</b> Второй запрос получает остатки для всех площадок одним условием IN. Число запросов постоянное, но объём данных зависит от размера коллекции."
+    },
+    joined: {
+      q1: "SELECT ... FROM warehouses LEFT JOIN stock",
+      q2: "одна команда, строки родителей дублируются",
+      q3: "для двух коллекций строки перемножаются",
+      warn: "Один запрос может вернуть очень много строк.",
+      rows: "Строк в ответе: N × остатки на площадку.",
+      formula: "1",
+      total: function () { return 1; },
+      summary: "joinedload: одна команда с LEFT JOIN.",
+      summary2: "Цена: дублирование колонок родителя и декартово произведение коллекций.",
+      status: "<b>joinedload.</b> Одна команда с соединением. Для одной небольшой коллекции это удобно, для двух коллекций строки перемножаются, и выигрыш исчезает."
+    }
+  };
+  var n = 2, mode = "lazy";
+  var status = document.getElementById("np-status");
+  var chips = document.getElementById("np-chips");
+  var nButtons = document.querySelectorAll("#np-n-buttons button");
+  var modeButtons = document.querySelectorAll("#np-mode-buttons button");
+
+  function drawChips() {
+    chips.innerHTML = "";
+    var count = Math.min(n, 10);
+    for (var i = 0; i < count; i++) {
+      var x = 30 + i * 26, y = 70;
+      var r = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+      r.setAttribute("x", x); r.setAttribute("y", y);
+      r.setAttribute("width", 20); r.setAttribute("height", 18); r.setAttribute("rx", 4);
+      r.setAttribute("fill", "#8E5BC8"); r.setAttribute("opacity", "0.85");
+      chips.appendChild(r);
+    }
+    if (n > 10) {
+      var t = document.createElementNS("http://www.w3.org/2000/svg", "text");
+      t.setAttribute("x", 30 + 10 * 26); t.setAttribute("y", 84);
+      t.setAttribute("font-size", "11"); t.setAttribute("fill", "#2A2430");
+      t.textContent = "и ещё " + (n - 10);
+      chips.appendChild(t);
+    }
+  }
+
+  function render() {
+    var d = data[mode];
+    var total = d.total(n);
+    document.getElementById("np-n").textContent = "N = " + n;
+    document.getElementById("np-total").textContent = total;
+    document.getElementById("np-formula").textContent = d.formula;
+    document.getElementById("np-q1").textContent = d.q1;
+    document.getElementById("np-q2").textContent = d.q2;
+    document.getElementById("np-q3").textContent = d.q3;
+    document.getElementById("np-warn").textContent = d.warn;
+    document.getElementById("np-rows").textContent = d.rows;
+    document.getElementById("np-summary").textContent = d.summary;
+    document.getElementById("np-summary2").textContent = d.summary2;
+    document.getElementById("np-bar-label").textContent = total;
+    var w = Math.max(18, Math.min(600, total * 5.6));
+    document.getElementById("np-bar").setAttribute("width", w);
+    status.innerHTML = d.status;
+    nButtons.forEach(function (b) { b.classList.toggle("on", Number(b.dataset.n) === n); });
+    modeButtons.forEach(function (b) { b.classList.toggle("on", b.dataset.mode === mode); });
+    drawChips();
+  }
+  nButtons.forEach(function (b) { b.addEventListener("click", function () { n = Number(b.dataset.n); render(); }); });
+  modeButtons.forEach(function (b) { b.addEventListener("click", function () { mode = b.dataset.mode; render(); }); });
+  render();
+})();
+</script>
+</body>
+</html>

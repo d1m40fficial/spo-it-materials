@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Диапазон целых типов и переполнение</title>
+<style>
+  :root { --paper:#EBE0EC; --card:#FBF7FC; --ink:#2A2233; --muted:#6B5F75; --rule:#D5C2DC; --accent:#8E5BC8; --soft:#E4D5EC; --bad:#A8455A; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .frame { background:var(--paper); border:1px solid var(--rule); border-radius:12px; padding:16px; }
+  .eyebrow { margin:0 0 6px; font:600 10px/1.2 Consolas,monospace; letter-spacing:.14em; text-transform:uppercase; color:var(--accent); }
+  svg { display:block; width:100%; height:auto; }
+  .status { min-height:76px; margin-top:8px; padding:10px 12px; border-radius:9px; background:var(--soft); font-size:13px; line-height:1.45; }
+  .status b { color:var(--accent); }
+  .controls { display:flex; gap:6px; flex-wrap:wrap; margin-top:10px; }
+  button { font:600 11.5px/1.1 "Segoe UI",system-ui,sans-serif; padding:8px 10px; border-radius:8px; border:1px solid var(--rule); background:var(--card); color:var(--ink); cursor:pointer; }
+  button:hover { border-color:var(--accent); color:var(--accent); }
+  button.on { background:var(--accent); border-color:var(--accent); color:#fff; }
+  .note { margin:9px 2px 0; font:11.5px/1.5 "Segoe UI",system-ui,sans-serif; color:var(--muted); }
+  @media (max-width:560px) { .frame { padding:12px; } .status { font-size:12.5px; } }
+</style>
+</head>
+<body>
+<div class="frame">
+  <p class="eyebrow">Целые числа · границы</p>
+  <svg viewBox="0 0 680 398" role="img" aria-labelledby="io-title io-desc">
+    <title id="io-title">Диапазон целого типа и переход через границу</title>
+    <desc id="io-desc">Выберите byte, short, int или long. Схема покажет минимальное и максимальное значение и результат прибавления единицы к максимуму.</desc>
+
+    <text x="16" y="22" font-family="Consolas,monospace" font-size="10" fill="#6B5F75">ДИАПАЗОН КОНЕЧЕН: ЗНАЧЕНИЕ ХРАНИТСЯ В ФИКСИРОВАННОМ ЧИСЛЕ БИТ</text>
+
+    <text x="340" y="48" text-anchor="middle" font-family="Consolas,monospace" font-size="10" fill="#A8455A">ПЕРЕПОЛНЕНИЕ: МАКСИМУМ ПЛЮС ОДИН</text>
+    <path d="M600 78C500 42 180 42 80 78" stroke="#A8455A" stroke-width="1.5" fill="none" marker-end="url(#io-arrow)"/>
+
+    <line x1="80" y1="100" x2="600" y2="100" stroke="#8E5BC8" stroke-width="2"/>
+    <line x1="80" y1="92" x2="80" y2="108" stroke="#8E5BC8" stroke-width="2"/>
+    <line x1="600" y1="92" x2="600" y2="108" stroke="#8E5BC8" stroke-width="2"/>
+    <polygon points="600,88 594,78 606,78" fill="#A8455A"/>
+    <text id="io-min" x="80" y="126" font-family="Consolas,monospace" font-size="10" fill="#6B5F75">0</text>
+    <text id="io-max" x="600" y="126" text-anchor="end" font-family="Consolas,monospace" font-size="10" fill="#6B5F75">255</text>
+
+    <g font-family="Segoe UI,system-ui,sans-serif">
+      <rect x="140" y="146" width="400" height="126" rx="10" fill="#FBF7FC" stroke="#D5C2DC"/>
+      <text id="io-type" x="340" y="170" text-anchor="middle" font-size="11" font-weight="700" fill="#8E5BC8">BYTE · 1 БАЙТ</text>
+      <text x="340" y="194" text-anchor="middle" font-size="10.5" fill="#6B5F75">максимальное значение плюс один</text>
+      <text id="io-result" x="340" y="236" text-anchor="middle" font-family="Consolas,monospace" font-size="17" font-weight="700" fill="#A8455A">0</text>
+      <text id="io-note" x="340" y="258" text-anchor="middle" font-size="10" fill="#6B5F75">255 + 1 = 0</text>
+    </g>
+
+    <g font-family="Segoe UI,system-ui,sans-serif">
+      <rect x="16" y="292" width="314" height="60" rx="8" fill="#FBF7FC" stroke="#D5C2DC"/>
+      <text x="30" y="312" font-size="10.5" font-weight="700" fill="#8E5BC8">ПОЧЕМУ ТАК</text>
+      <text x="30" y="330" font-size="10.5" fill="#2A2233">старший бит означает знак,</text>
+      <text x="30" y="344" font-size="10.5" fill="#2A2233">сложение идёт по модулю разрядной сетки</text>
+
+      <rect x="350" y="292" width="314" height="60" rx="8" fill="#FBF7FC" stroke="#D5C2DC"/>
+      <text x="364" y="312" font-size="10.5" font-weight="700" fill="#8E5BC8">КАК ЗАМЕТИТЬ</text>
+      <text x="364" y="330" font-size="10.5" fill="#2A2233">checked превращает переход</text>
+      <text x="364" y="344" font-size="10.5" fill="#2A2233">в OverflowException, но не расширяет диапазон</text>
+    </g>
+
+    <text x="16" y="382" font-family="Consolas,monospace" font-size="9.5" fill="#6B5F75">В PYTHON INT РАСТЁТ, ПОКА ХВАТАЕТ ПАМЯТИ; В C# ШИРИНА ТИПА ФИКСИРОВАНА</text>
+
+    <defs>
+      <marker id="io-arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#A8455A"/></marker>
+    </defs>
+  </svg>
+  <div class="status" id="io-status"></div>
+  <div class="controls" id="io-buttons">
+    <button data-k="byte" class="on">byte</button>
+    <button data-k="short">short</button>
+    <button data-k="int">int</button>
+    <button data-k="long">long</button>
+  </div>
+  <p class="note">Нажмите тип. Схема показывает границы и то, какое значение получится после прибавления единицы к максимуму без checked.</p>
+</div>
+<script>
+(function () {
+  var data = {
+    byte: { min: '0', max: '255', result: '0', note: '255 + 1 = 0', type: 'BYTE · 1 БАЙТ', text: '<b>byte.</b> Диапазон от 0 до 255. После 255 счётчик переходит к 0, поэтому количество коробок в byte легко обнуляется.' },
+    short: { min: '-32 768', max: '32 767', result: '-32 768', note: '32 767 + 1 = -32 768', type: 'SHORT · 2 БАЙТА', text: '<b>short.</b> Диапазон от -32 768 до 32 767. Переход через максимум даёт минимум, знак меняется мгновенно.' },
+    int: { min: '-2 147 483 648', max: '2 147 483 647', result: '-2 147 483 648', note: '2 147 483 647 + 1 = -2 147 483 648', type: 'INT · 4 БАЙТА', text: '<b>int.</b> Самый частый тип для счётчиков. После 2 147 483 647 значение становится отрицательным, и отчёт склада может уйти в минус.' },
+    long: { min: '-9 223 372 036 854 775 808', max: '9 223 372 036 854 775 807', result: '-9 223 372 036 854 775 808', note: '9 223 372 036 854 775 807 + 1 = -9 223 372 036 854 775 808', type: 'LONG · 8 БАЙТ', text: '<b>long.</b> Диапазон шире, но тоже конечен. Для годового оборота его обычно хватает, для точных больших вычислений есть BigInteger.' }
+  };
+  var buttons = document.querySelectorAll('#io-buttons button');
+  var status = document.getElementById('io-status');
+  var elMin = document.getElementById('io-min');
+  var elMax = document.getElementById('io-max');
+  var elResult = document.getElementById('io-result');
+  var elNote = document.getElementById('io-note');
+  var elType = document.getElementById('io-type');
+
+  function apply(key) {
+    var d = data[key];
+    elMin.textContent = d.min;
+    elMax.textContent = d.max;
+    elResult.textContent = d.result;
+    elNote.textContent = d.note;
+    elType.textContent = d.type;
+    buttons.forEach(function (b) { b.classList.toggle('on', b.dataset.k === key); });
+    status.innerHTML = d.text;
+  }
+  buttons.forEach(function (b) { b.addEventListener('click', function () { apply(b.dataset.k); }); });
+  apply('byte');
+})();
+</script>
+</body>
+</html>

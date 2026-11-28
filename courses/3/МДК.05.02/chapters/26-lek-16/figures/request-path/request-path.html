@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Путь HTTP-запроса</title>
+<style>
+  :root { --paper:#FAF7F6; --card:#FFFDFC; --ink:#2A2430; --muted:#6B6272; --rule:#E6D9EC; --accent:#8E5BC8; --soft:#EBE0EC; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .frame { background:var(--paper); border:1px solid var(--rule); border-radius:12px; padding:16px; }
+  .eyebrow { margin:0 0 6px; font:600 10px/1.2 Consolas,monospace; letter-spacing:.14em; text-transform:uppercase; color:var(--accent); }
+  svg { display:block; width:100%; height:auto; }
+  .note { margin:10px 2px 0; font:12px/1.5 "Segoe UI",system-ui,sans-serif; color:var(--muted); }
+  @media (max-width:560px) { .frame { padding:12px; } .note { font-size:11.5px; } }
+</style>
+</head>
+<body>
+<div class="frame">
+  <p class="eyebrow">HTTP · путь запроса</p>
+  <svg viewBox="0 0 680 410" role="img" aria-labelledby="rp-title rp-desc">
+    <title id="rp-title">Восемь шагов HTTP-запроса и сбой на каждом шаге</title>
+    <desc id="rp-desc">Слева перечислены шаги от разрешения имени до разбора ответа клиентом, справа указан типичный симптом сбоя на этом шаге.</desc>
+
+    <text x="16" y="24" font-family="Consolas,monospace" font-size="10" fill="#6B6272">ШАГ</text>
+    <text x="440" y="24" font-family="Consolas,monospace" font-size="10" fill="#6B6272">ЧТО ВИДИТ КЛИЕНТ</text>
+    <line x1="16" y1="32" x2="664" y2="32" stroke="#E6D9EC"/>
+
+    <g font-family="Segoe UI,system-ui,sans-serif">
+      <rect x="16" y="42" width="408" height="38" rx="7" fill="#FFFDFC" stroke="#D8C7E2"/>
+      <text x="30" y="59" font-size="12" font-weight="700" fill="#2A2430">1 · DNS: имя превращается в IP</text>
+      <text x="30" y="73" font-size="10" fill="#6B6272">запрос A или AAAA, ответ резолвера, срок жизни записи</text>
+      <text x="440" y="65" font-size="10.5" fill="#8E5BC8">не удалось разрешить имя</text>
+
+      <rect x="16" y="86" width="408" height="38" rx="7" fill="#FFFDFC" stroke="#D8C7E2"/>
+      <text x="30" y="103" font-size="12" font-weight="700" fill="#2A2430">2 · TCP: соединение с портом</text>
+      <text x="30" y="117" font-size="10" fill="#6B6272">SYN, SYN-ACK, ACK, выбор порта 443</text>
+      <text x="440" y="109" font-size="10.5" fill="#8E5BC8">отказ в соединении или таймаут</text>
+
+      <rect x="16" y="130" width="408" height="38" rx="7" fill="#FFFDFC" stroke="#D8C7E2"/>
+      <text x="30" y="147" font-size="12" font-weight="700" fill="#2A2430">3 · TLS: защищённый канал</text>
+      <text x="30" y="161" font-size="10" fill="#6B6272">сертификат, цепочка доверия, ALPN, ключи</text>
+      <text x="440" y="153" font-size="10.5" fill="#8E5BC8">ошибка сертификата или протокола</text>
+
+      <rect x="16" y="174" width="408" height="38" rx="7" fill="#FFFDFC" stroke="#D8C7E2"/>
+      <text x="30" y="191" font-size="12" font-weight="700" fill="#2A2430">4 · HTTP: запрос</text>
+      <text x="30" y="205" font-size="10" fill="#6B6272">метод, путь, версия, заголовки, тело</text>
+      <text x="440" y="197" font-size="10.5" fill="#8E5BC8">нет ответа или ответ 4xx</text>
+
+      <rect x="16" y="218" width="408" height="38" rx="7" fill="#FFFDFC" stroke="#D8C7E2"/>
+      <text x="30" y="235" font-size="12" font-weight="700" fill="#2A2430">5 · конвейер сервера</text>
+      <text x="30" y="249" font-size="10" fill="#6B6272">лимиты тела, журнал, маршрутизация, права</text>
+      <text x="440" y="241" font-size="10.5" fill="#8E5BC8">404, 405, 413, 429</text>
+
+      <rect x="16" y="262" width="408" height="38" rx="7" fill="#FFFDFC" stroke="#D8C7E2"/>
+      <text x="30" y="279" font-size="12" font-weight="700" fill="#2A2430">6 · обработчик и база</text>
+      <text x="30" y="293" font-size="10" fill="#6B6272">бизнес-логика, запрос, транзакция</text>
+      <text x="440" y="285" font-size="10.5" fill="#8E5BC8">500 или таймаут после заголовков</text>
+
+      <rect x="16" y="306" width="408" height="38" rx="7" fill="#FFFDFC" stroke="#D8C7E2"/>
+      <text x="30" y="323" font-size="12" font-weight="700" fill="#2A2430">7 · ответ</text>
+      <text x="30" y="337" font-size="10" fill="#6B6272">код, заголовки, сериализация тела</text>
+      <text x="440" y="329" font-size="10.5" fill="#8E5BC8">502, 503, 504 от промежуточного узла</text>
+
+      <rect x="16" y="350" width="408" height="38" rx="7" fill="#EBE0EC" stroke="#8E5BC8" stroke-width="1.6"/>
+      <text x="30" y="367" font-size="12" font-weight="700" fill="#2A2430">8 · клиент</text>
+      <text x="30" y="381" font-size="10" fill="#6B6272">проверка кода, разбор JSON, обработка ошибки</text>
+      <text x="440" y="373" font-size="10.5" fill="#8E5BC8">ошибка разбора или пустое поле</text>
+    </g>
+
+    <text x="16" y="402" font-family="Consolas,monospace" font-size="9.5" fill="#6B6272">ПЕРВЫЙ НЕВЕРНЫЙ ШАГ СЛЕВА ОБЪЯСНЯЕТ СИМПТОМ СПРАВА</text>
+  </svg>
+  <p class="note">Запрос проходит все шаги сверху вниз. Код состояния появляется только на шагах 4 и 7, поэтому ошибка имени или сертификата не имеет HTTP-кода.</p>
+</div>
+</body>
+</html>

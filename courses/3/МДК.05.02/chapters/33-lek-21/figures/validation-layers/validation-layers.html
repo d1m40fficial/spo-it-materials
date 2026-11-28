@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Четыре уровня валидации</title>
+<style>
+  :root { --paper:#F8F4FA; --card:#FFFDFF; --ink:#241C2B; --muted:#6C6076; --rule:#DCCDE3; --accent:#8E5BC8; --soft:#EBE0EC; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .frame { background:var(--paper); border:1px solid var(--rule); border-radius:12px; padding:16px; }
+  .eyebrow { margin:0 0 6px; font:600 10px/1.2 Consolas,monospace; letter-spacing:.14em; text-transform:uppercase; color:var(--accent); }
+  svg { display:block; width:100%; height:auto; }
+  .lvl rect { fill:var(--card); stroke:#C9B6D4; stroke-width:1.3; }
+  .lvl .num { fill:var(--soft); }
+  .foot { margin:9px 2px 0; font:11.5px/1.5 "Segoe UI",system-ui,sans-serif; color:var(--muted); }
+  @media (max-width:560px) { .frame { padding:12px; } }
+</style>
+</head>
+<body>
+<div class="frame">
+  <p class="eyebrow">Валидация · где ловится ошибка</p>
+  <svg viewBox="0 0 680 292" role="img" aria-labelledby="vl-title vl-desc">
+    <title id="vl-title">Разбор, схема, сервис и база</title>
+    <desc id="vl-desc">Четыре уровня проверки. У каждого свой набор ошибок, своё сообщение и своя цена изменения.</desc>
+
+    <text x="12" y="20" font-family="Consolas,monospace" font-size="9.5" fill="#6C6076">ЗАПРОС</text>
+    <path d="M12 32 H668" stroke="#DCCDE3" stroke-width="1.5" marker-end="url(#a3)"/>
+    <defs>
+      <marker id="a3" viewBox="0 0 8 8" refX="6" refY="4" markerWidth="7" markerHeight="7" orient="auto">
+        <path d="M0 0 L8 4 L0 8 z" fill="#DCCDE3"/>
+      </marker>
+    </defs>
+
+    <g class="lvl">
+      <rect x="12" y="48" width="154" height="156" rx="9"/>
+      <rect x="12" y="48" width="154" height="26" rx="9" class="num"/>
+      <text x="26" y="66" font-size="10" font-weight="700" fill="#8E5BC8" font-family="Consolas,monospace">1 · РАЗБОР</text>
+      <text x="26" y="96" font-size="11.5" font-weight="700">Можно ли прочитать</text>
+      <text x="26" y="116" font-size="10" fill="#6C6076">битый JSON,</text>
+      <text x="26" y="132" font-size="10" fill="#6C6076">неверный тип</text>
+      <text x="26" y="158" font-size="10" font-weight="600" fill="#A34A5C">ответ:</text>
+      <text x="26" y="174" font-size="10">400, общий текст</text>
+      <text x="26" y="190" font-size="10">без списка полей</text>
+    </g>
+
+    <g class="lvl">
+      <rect x="180" y="48" width="154" height="156" rx="9"/>
+      <rect x="180" y="48" width="154" height="26" rx="9" class="num"/>
+      <text x="194" y="66" font-size="10" font-weight="700" fill="#8E5BC8" font-family="Consolas,monospace">2 · СХЕМА</text>
+      <text x="194" y="96" font-size="11.5" font-weight="700">Похоже ли на поле</text>
+      <text x="194" y="116" font-size="10" fill="#6C6076">обязательность,</text>
+      <text x="194" y="132" font-size="10" fill="#6C6076">длина, формат</text>
+      <text x="194" y="158" font-size="10" font-weight="600" fill="#A34A5C">ответ:</text>
+      <text x="194" y="174" font-size="10">400, список</text>
+      <text x="194" y="190" font-size="10">полей и кодов</text>
+    </g>
+
+    <g class="lvl">
+      <rect x="348" y="48" width="154" height="156" rx="9"/>
+      <rect x="348" y="48" width="154" height="26" rx="9" class="num"/>
+      <text x="362" y="66" font-size="10" font-weight="700" fill="#8E5BC8" font-family="Consolas,monospace">3 · СЕРВИС</text>
+      <text x="362" y="96" font-size="11.5" font-weight="700">Имеет ли смысл</text>
+      <text x="362" y="116" font-size="10" fill="#6C6076">каталог, статус,</text>
+      <text x="362" y="132" font-size="10" fill="#6C6076">права, итог</text>
+      <text x="362" y="158" font-size="10" font-weight="600" fill="#A34A5C">ответ:</text>
+      <text x="362" y="174" font-size="10">400 или 409</text>
+      <text x="362" y="190" font-size="10">с причиной</text>
+    </g>
+
+    <g class="lvl">
+      <rect x="516" y="48" width="152" height="156" rx="9"/>
+      <rect x="516" y="48" width="152" height="26" rx="9" class="num"/>
+      <text x="530" y="66" font-size="10" font-weight="700" fill="#8E5BC8" font-family="Consolas,monospace">4 · БАЗА</text>
+      <text x="530" y="96" font-size="11.5" font-weight="700">Целостность</text>
+      <text x="530" y="116" font-size="10" fill="#6C6076">NOT NULL, CHECK,</text>
+      <text x="530" y="132" font-size="10" fill="#6C6076">UNIQUE, внешний ключ</text>
+      <text x="530" y="158" font-size="10" font-weight="600" fill="#A34A5C">ответ:</text>
+      <text x="530" y="174" font-size="10">409 после разбора</text>
+      <text x="530" y="190" font-size="10">или 500</text>
+    </g>
+
+    <text x="12" y="230" font-size="10.5" fill="#6C6076">Чем раньше поймано, тем дешевле:</text>
+    <text x="196" y="230" font-size="10.5" fill="#241C2B">ошибка в форме → ошибка в базе → ошибка в отчёте</text>
+
+    <text x="12" y="258" font-family="Consolas,monospace" font-size="9" fill="#8E5BC8">СХЕМА ПРОВЕРЯЕТ ЗАПИСЬ, СЕРВИС ПРОВЕРЯЕТ СМЫСЛ, БАЗА ДЕРЖИТ ЦЕЛОСТНОСТЬ</text>
+    <text x="12" y="278" font-family="Consolas,monospace" font-size="9" fill="#6C6076">ОДИН И ТОТ ЖЕ НАБОР ПРАВИЛ НЕ ДОЛЖЕН ЖИТЬ ТОЛЬКО В ОДНОМ МЕСТЕ</text>
+  </svg>
+  <p class="foot">Уровни дополняют друг друга. Схема даёт понятное сообщение, сервис знает предметную область, база не пропускает нарушение даже из скрипта импорта.</p>
+</div>
+</body>
+</html>

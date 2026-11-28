@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Путь запроса от кода до строк</title>
+<style>
+  :root { color-scheme:light; --paper:#EBE0EC; --card:#FFFDFC; --ink:#2A2430; --muted:#6B6272; --rule:#CDBBD6; --accent:#8E5BC8; --soft:#F3EAF4; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .frame { background:var(--paper); border:1px solid var(--rule); border-radius:12px; padding:16px; }
+  .eyebrow { margin:0 0 6px; font:600 10px/1.2 Consolas,monospace; letter-spacing:.14em; text-transform:uppercase; color:var(--accent); }
+  svg { display:block; width:100%; height:auto; }
+  .note { margin:9px 2px 0; font:11.5px/1.5 "Segoe UI",system-ui,sans-serif; color:var(--muted); }
+  @media (max-width:560px) { .frame { padding:12px; } }
+</style>
+</head>
+<body>
+<div class="frame">
+  <p class="eyebrow">SQL из кода · путь запроса</p>
+  <svg viewBox="0 0 680 352" role="img" aria-labelledby="qp-title qp-desc">
+    <title id="qp-title">Разбор шаблона до привязки значений</title>
+    <desc id="qp-desc">Код передаёт шаблон и значения. База разбирает шаблон и строит план до того, как получит значения, затем привязывает их и выполняет команду.</desc>
+
+    <g font-family="Segoe UI,system-ui,sans-serif">
+      <rect x="16" y="20" width="648" height="66" rx="9" fill="#FFFDFC" stroke="#8E5BC8" stroke-width="1.6"/>
+      <text x="30" y="40" font-size="11" font-weight="700" fill="#8E5BC8">1. КОД</text>
+      <text x="30" y="59" font-size="10.5" fill="#2A2430" font-family="Consolas,monospace">шаблон: SELECT id, title FROM products WHERE title LIKE ?</text>
+      <text x="30" y="76" font-size="10.5" fill="#2A2430" font-family="Consolas,monospace">значения: ('%Кабель%',)</text>
+
+      <path d="M340 86 L340 100" stroke="#8E5BC8" stroke-width="1.6"/>
+      <path d="M334 94 L340 100 L346 94" fill="none" stroke="#8E5BC8" stroke-width="1.6"/>
+
+      <rect x="16" y="104" width="648" height="62" rx="9" fill="#FFFDFC" stroke="#CDBBD6"/>
+      <text x="30" y="124" font-size="11" font-weight="700" fill="#8E5BC8">2. РАЗБОР ШАБЛОНА</text>
+      <text x="30" y="143" font-size="10.5" fill="#2A2430">Проверка синтаксиса, поиск таблиц и колонок, построение плана. Метки на месте значений ещё пусты.</text>
+      <text x="30" y="159" font-size="10" fill="#6B6272">Значение в этот момент базе неизвестно и на синтаксис влиять не может.</text>
+
+      <path d="M340 166 L340 180" stroke="#8E5BC8" stroke-width="1.6"/>
+      <path d="M334 174 L340 180 L346 174" fill="none" stroke="#8E5BC8" stroke-width="1.6"/>
+
+      <rect x="16" y="184" width="648" height="62" rx="9" fill="#F3EAF4" stroke="#8E5BC8" stroke-width="1.6"/>
+      <text x="30" y="204" font-size="11" font-weight="700" fill="#8E5BC8">3. ПРИВЯЗКА ЗНАЧЕНИЙ</text>
+      <text x="30" y="223" font-size="10.5" fill="#2A2430">Значение занимает место метки как данные: текст, число или NULL. Оно не становится частью текста команды.</text>
+      <text x="30" y="239" font-size="10" fill="#6B6272">Здесь решается, останется апостроф текстом или закроет литерал.</text>
+
+      <path d="M340 246 L340 260" stroke="#8E5BC8" stroke-width="1.6"/>
+      <path d="M334 254 L340 260 L346 254" fill="none" stroke="#8E5BC8" stroke-width="1.6"/>
+
+      <rect x="16" y="264" width="648" height="62" rx="9" fill="#FFFDFC" stroke="#CDBBD6"/>
+      <text x="30" y="284" font-size="11" font-weight="700" fill="#8E5BC8">4. ВЫПОЛНЕНИЕ</text>
+      <text x="30" y="303" font-size="10.5" fill="#2A2430">База выполняет готовый план и возвращает строки. Для повторного вызова шаблон можно не разбирать заново.</text>
+      <text x="30" y="319" font-size="10" fill="#6B6272">Подготовленная команда живёт в соединении и кешируется драйвером.</text>
+    </g>
+  </svg>
+  <p class="note">Шаблон и значения идут разными каналами. Разбор заканчивается до привязки, поэтому значение не может добавить в команду новое условие.</p>
+</div>
+</body>
+</html>

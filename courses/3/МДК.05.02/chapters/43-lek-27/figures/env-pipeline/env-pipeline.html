@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Путь от кода до артефакта</title>
+<style>
+  :root { --paper:#EBE0EC; --card:#FFFDFF; --ink:#2A2430; --muted:#6B5F72; --rule:#D6C4DB; --accent:#8E5BC8; --soft:#F3EAF6; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .frame { background:var(--paper); border:1px solid var(--rule); border-radius:12px; padding:16px; }
+  .eyebrow { margin:0 0 6px; font:600 10px/1.2 Consolas,monospace; letter-spacing:.14em; text-transform:uppercase; color:var(--accent); }
+  svg { display:block; width:100%; height:auto; }
+  .mode { display:none; }
+  .mode.on { display:block; }
+  .status { min-height:70px; margin-top:8px; padding:10px 12px; border-radius:9px; background:var(--soft); font-size:13px; line-height:1.45; }
+  .status b { color:var(--accent); }
+  .controls { display:flex; gap:6px; flex-wrap:wrap; margin-top:10px; }
+  button { font:600 11.5px/1.1 "Segoe UI",system-ui,sans-serif; padding:8px 11px; border-radius:8px; border:1px solid var(--rule); background:var(--card); color:var(--ink); cursor:pointer; }
+  button:hover { border-color:var(--accent); color:var(--accent); }
+  button.on { background:var(--accent); border-color:var(--accent); color:#fff; }
+  .note { margin:9px 2px 0; font:11.5px/1.5 "Segoe UI",system-ui,sans-serif; color:var(--muted); }
+  @media (max-width:560px) { .frame { padding:12px; } .status { font-size:12.5px; } }
+</style>
+</head>
+<body>
+<div class="frame">
+  <p class="eyebrow">Сборка · два пути</p>
+  <svg viewBox="0 0 680 300" role="img" aria-labelledby="ep-title ep-desc">
+    <title id="ep-title">Путь от исходного кода до артефакта в Python и C#</title>
+    <desc id="ep-desc">Четыре шага: окружение или восстановление, установка из замка, проверка и сборка, упаковка артефакта. Переключите вкладку языка.</desc>
+
+    <g class="mode on" data-mode="python">
+      <text x="16" y="20" font-family="Consolas,monospace" font-size="10" fill="#6B5F72">PYTHON: ОКРУЖЕНИЕ, ЗАМОК, АРХИВ</text>
+
+      <g font-family="Segoe UI,system-ui,sans-serif">
+        <rect x="16" y="40" width="146" height="118" rx="9" fill="#FFFDFF" stroke="#C9AFD2"/>
+        <text x="30" y="62" font-size="11.5" font-weight="700" fill="#8E5BC8">01 · окружение</text>
+        <text x="30" y="82" font-size="10.5" fill="#2A2430">Отдельная папка</text>
+        <text x="30" y="98" font-size="10.5" fill="#2A2430">для пакетов</text>
+        <text x="30" y="120" font-family="Consolas,monospace" font-size="9" fill="#6B5F72">python -m venv</text>
+        <text x="30" y="136" font-family="Consolas,monospace" font-size="9" fill="#6B5F72">.venv</text>
+
+        <rect x="182" y="40" width="146" height="118" rx="9" fill="#FFFDFF" stroke="#8E5BC8" stroke-width="2"/>
+        <text x="196" y="62" font-size="11.5" font-weight="700" fill="#8E5BC8">02 · замок</text>
+        <text x="196" y="82" font-size="10.5" fill="#2A2430">Установка всех</text>
+        <text x="196" y="98" font-size="10.5" fill="#2A2430">точных версий</text>
+        <text x="196" y="120" font-family="Consolas,monospace" font-size="9" fill="#6B5F72">pip install -r</text>
+        <text x="196" y="136" font-family="Consolas,monospace" font-size="9" fill="#6B5F72">requirements.lock</text>
+
+        <rect x="348" y="40" width="146" height="118" rx="9" fill="#FFFDFF" stroke="#C9AFD2"/>
+        <text x="362" y="62" font-size="11.5" font-weight="700" fill="#8E5BC8">03 · проверка</text>
+        <text x="362" y="82" font-size="10.5" fill="#2A2430">Совместимость</text>
+        <text x="362" y="98" font-size="10.5" fill="#2A2430">и тесты</text>
+        <text x="362" y="120" font-family="Consolas,monospace" font-size="9" fill="#6B5F72">pip check</text>
+        <text x="362" y="136" font-family="Consolas,monospace" font-size="9" fill="#6B5F72">python -m pytest</text>
+
+        <rect x="514" y="40" width="150" height="118" rx="9" fill="#8E5BC8" stroke="#8E5BC8"/>
+        <text x="528" y="62" font-size="11.5" font-weight="700" fill="#FFF">04 · артефакт</text>
+        <text x="528" y="82" font-size="10.5" fill="#F3EAF6">Один файл .pyz,</text>
+        <text x="528" y="98" font-size="10.5" fill="#F3EAF6">сумма SHA256</text>
+        <text x="528" y="120" font-family="Consolas,monospace" font-size="9" fill="#F3EAF6">python -m zipapp</text>
+        <text x="528" y="136" font-family="Consolas,monospace" font-size="9" fill="#F3EAF6">-m app:main</text>
+      </g>
+
+      <g stroke="#B79AC2" stroke-width="2" fill="none">
+        <path d="M162 99 L178 99"/><path d="M178 99 L173 94 M178 99 L173 104"/>
+        <path d="M328 99 L344 99"/><path d="M344 99 L339 94 M344 99 L339 104"/>
+        <path d="M494 99 L510 99"/><path d="M510 99 L505 94 M510 99 L505 104"/>
+      </g>
+
+      <text x="16" y="190" font-family="Segoe UI,system-ui,sans-serif" font-size="10.5" fill="#6B5F72">Замок собирают в чистом окружении, иначе в него попадёт случайный пакет с машины разработчика.</text>
+      <text x="16" y="210" font-family="Segoe UI,system-ui,sans-serif" font-size="10.5" fill="#6B5F72">Колесо с нативным кодом зависит от платформы: сборка под Windows не гарантирует запуск на Linux.</text>
+    </g>
+
+    <g class="mode" data-mode="dotnet">
+      <text x="16" y="20" font-family="Consolas,monospace" font-size="10" fill="#6B5F72">C#: ВОССТАНОВЛЕНИЕ, СБОРКА, ПУБЛИКАЦИЯ</text>
+
+      <g font-family="Segoe UI,system-ui,sans-serif">
+        <rect x="16" y="40" width="146" height="118" rx="9" fill="#FFFDFF" stroke="#8E5BC8" stroke-width="2"/>
+        <text x="30" y="62" font-size="11.5" font-weight="700" fill="#8E5BC8">01 · restore</text>
+        <text x="30" y="82" font-size="10.5" fill="#2A2430">Пакеты строго</text>
+        <text x="30" y="98" font-size="10.5" fill="#2A2430">по замку</text>
+        <text x="30" y="120" font-family="Consolas,monospace" font-size="9" fill="#6B5F72">dotnet restore</text>
+        <text x="30" y="136" font-family="Consolas,monospace" font-size="9" fill="#6B5F72">--locked-mode</text>
+
+        <rect x="182" y="40" width="146" height="118" rx="9" fill="#FFFDFF" stroke="#C9AFD2"/>
+        <text x="196" y="62" font-size="11.5" font-weight="700" fill="#8E5BC8">02 · build</text>
+        <text x="196" y="82" font-size="10.5" fill="#2A2430">Компиляция</text>
+        <text x="196" y="98" font-size="10.5" fill="#2A2430">в Release</text>
+        <text x="196" y="120" font-family="Consolas,monospace" font-size="9" fill="#6B5F72">dotnet build</text>
+        <text x="196" y="136" font-family="Consolas,monospace" font-size="9" fill="#6B5F72">-c Release</text>
+
+        <rect x="348" y="40" width="146" height="118" rx="9" fill="#FFFDFF" stroke="#C9AFD2"/>
+        <text x="362" y="62" font-size="11.5" font-weight="700" fill="#8E5BC8">03 · publish</text>
+        <text x="362" y="82" font-size="10.5" fill="#2A2430">Готовые файлы</text>
+        <text x="362" y="98" font-size="10.5" fill="#2A2430">в папку dist</text>
+        <text x="362" y="120" font-family="Consolas,monospace" font-size="9" fill="#6B5F72">dotnet publish</text>
+        <text x="362" y="136" font-family="Consolas,monospace" font-size="9" fill="#6B5F72">-c Release -o dist</text>
+
+        <rect x="514" y="40" width="150" height="118" rx="9" fill="#8E5BC8" stroke="#8E5BC8"/>
+        <text x="528" y="62" font-size="11.5" font-weight="700" fill="#FFF">04 · артефакт</text>
+        <text x="528" y="82" font-size="10.5" fill="#F3EAF6">dll, настройки,</text>
+        <text x="528" y="98" font-size="10.5" fill="#F3EAF6">сумма SHA256</text>
+        <text x="528" y="120" font-family="Consolas,monospace" font-size="9" fill="#F3EAF6">Get-FileHash</text>
+        <text x="528" y="136" font-family="Consolas,monospace" font-size="9" fill="#F3EAF6">-Algorithm SHA256</text>
+      </g>
+
+      <g stroke="#B79AC2" stroke-width="2" fill="none">
+        <path d="M162 99 L178 99"/><path d="M178 99 L173 94 M178 99 L173 104"/>
+        <path d="M328 99 L344 99"/><path d="M344 99 L339 94 M344 99 L339 104"/>
+        <path d="M494 99 L510 99"/><path d="M510 99 L505 94 M510 99 L505 104"/>
+      </g>
+
+      <text x="16" y="190" font-family="Segoe UI,system-ui,sans-serif" font-size="10.5" fill="#6B5F72">global.json фиксирует версию SDK, packages.lock.json фиксирует граф NuGet, .csproj задаёт целевую платформу.</text>
+      <text x="16" y="210" font-family="Segoe UI,system-ui,sans-serif" font-size="10.5" fill="#6B5F72">Публикация это отдельный шаг: собранная dll ещё не означает готовый комплект для сервера.</text>
+    </g>
+
+    <text x="16" y="248" font-family="Consolas,monospace" font-size="9.5" fill="#6B5F72">СБОРКА ИЗ ГРЯЗНОГО КАТАЛОГА ПОПАДЁТ В АРТЕФАКТ ВМЕСТЕ С КЕШЕМ И СЕКРЕТАМИ</text>
+    <text x="16" y="270" font-family="Segoe UI,system-ui,sans-serif" font-size="10.5" fill="#6B5F72">Проверка артефакта: состав, запуск на чистой машине, совпадение контрольной суммы.</text>
+  </svg>
+  <div class="status" id="ep-status"></div>
+  <div class="controls" id="ep-buttons">
+    <button data-mode="python" class="on">Python</button>
+    <button data-mode="dotnet">C#</button>
+  </div>
+  <p class="note">Переключите вкладку. Обратите внимание: замок появляется на шаге установки, а артефакт на последнем шаге.</p>
+</div>
+<script>
+(function () {
+  var data = {
+    python: '<b>Python.</b> Виртуальное окружение отделяет пакеты проекта от системных. Установка идёт из замка, где записаны точные версии всех пяти пакетов. pip check проверяет совместимость, zipapp собирает один файл. Артефакт проверяют по составу и контрольной сумме.',
+    dotnet: '<b>C#.</b> restore --locked-mode не даёт незаметно обновить пакеты, build компилирует в Release, publish складывает готовый комплект в dist. Версию SDK задаёт global.json, граф пакетов packages.lock.json. Проверяют запуск на чистой машине, а не только наличие файлов.'
+  };
+  var modes = document.querySelectorAll('.mode');
+  var buttons = document.querySelectorAll('#ep-buttons button');
+  var status = document.getElementById('ep-status');
+
+  function apply(key) {
+    modes.forEach(function (m) { m.classList.toggle('on', m.dataset.mode === key); });
+    buttons.forEach(function (b) { b.classList.toggle('on', b.dataset.mode === key); });
+    status.innerHTML = data[key];
+  }
+  buttons.forEach(function (b) { b.addEventListener('click', function () { apply(b.dataset.mode); }); });
+  apply('python');
+})();
+</script>
+</body>
+</html>

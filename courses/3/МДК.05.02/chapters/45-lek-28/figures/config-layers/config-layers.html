@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Четыре источника настройки и итоговое значение</title>
+<style>
+  :root { --paper:#FAF7F6; --card:#FFFDFC; --ink:#2A2430; --muted:#6B6272; --rule:#E6D9EC; --accent:#8E5BC8; --soft:#EBE0EC; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .frame { background:var(--paper); border:1px solid var(--rule); border-radius:12px; padding:16px; }
+  .eyebrow { margin:0 0 6px; font:600 10px/1.2 Consolas,monospace; letter-spacing:.14em; text-transform:uppercase; color:var(--accent); }
+  svg { display:block; width:100%; height:auto; }
+  .cell { fill:var(--card); stroke:var(--rule); stroke-width:1.1; transition:fill .15s, stroke .15s; }
+  .col.on .cell { fill:#F4EBF8; stroke:var(--accent); stroke-width:1.8; }
+  .head { fill:var(--soft); stroke:var(--rule); stroke-width:1.1; cursor:pointer; }
+  .col.on .head { fill:#E4D3EC; stroke:var(--accent); stroke-width:1.8; }
+  .val { font-size:10.5px; fill:var(--ink); }
+  .src { font-size:8.5px; fill:var(--muted); }
+  .res { font-size:10.5px; font-weight:700; fill:var(--accent); }
+  .h { font-size:9.5px; fill:#4A3B52; font-weight:600; }
+  .p { font-size:10.5px; fill:var(--ink); font-weight:600; }
+  .status { min-height:56px; margin-top:8px; padding:9px 11px; border-radius:9px; background:var(--soft); font-size:12.5px; line-height:1.45; }
+  .status b { color:var(--accent); }
+  .controls { display:flex; gap:6px; flex-wrap:wrap; margin-top:10px; }
+  button { font:600 11.5px/1.1 "Segoe UI",system-ui,sans-serif; padding:8px 10px; border-radius:8px; border:1px solid var(--rule); background:var(--card); color:var(--ink); cursor:pointer; }
+  button:hover { border-color:var(--accent); color:var(--accent); }
+  button.on { background:var(--accent); border-color:var(--accent); color:#fff; }
+  .note { margin:9px 2px 0; font:11.5px/1.5 "Segoe UI",system-ui,sans-serif; color:var(--muted); }
+  @media (max-width:560px) { .frame { padding:12px; } .status { font-size:12px; } }
+</style>
+</head>
+<body>
+<div class="frame">
+  <p class="eyebrow">Слои настройки и порядок старшинства</p>
+  <svg viewBox="0 0 680 288" role="img" aria-labelledby="cl-title cl-desc">
+    <title id="cl-title">Четыре источника настройки и итоговое значение</title>
+    <desc id="cl-desc">Таблица из четырёх параметров и пяти колонок: аргументы командной строки, переменные окружения, файл профиля, значение по умолчанию и итог. Побеждает самый старший заполненный слой.</desc>
+
+    <g class="col" data-col="args">
+      <rect class="head" x="190" y="10" width="90" height="26" rx="6"/>
+      <text class="h" x="235" y="27" text-anchor="middle">Аргументы</text>
+      <rect class="cell" x="190" y="42" width="90" height="44" rx="6"/>
+      <rect class="cell" x="190" y="92" width="90" height="44" rx="6"/>
+      <rect class="cell" x="190" y="142" width="90" height="44" rx="6"/>
+      <rect class="cell" x="190" y="192" width="90" height="44" rx="6"/>
+      <text class="src" x="235" y="68" text-anchor="middle">нет</text>
+      <text class="src" x="235" y="118" text-anchor="middle">нет</text>
+      <text class="src" x="235" y="168" text-anchor="middle">нет</text>
+      <text class="src" x="235" y="218" text-anchor="middle">нет</text>
+    </g>
+
+    <g class="col" data-col="env">
+      <rect class="head" x="284" y="10" width="90" height="26" rx="6"/>
+      <text class="h" x="329" y="27" text-anchor="middle">Окружение</text>
+      <rect class="cell" x="284" y="42" width="90" height="44" rx="6"/>
+      <rect class="cell" x="284" y="92" width="90" height="44" rx="6"/>
+      <rect class="cell" x="284" y="142" width="90" height="44" rx="6"/>
+      <rect class="cell" x="284" y="192" width="90" height="44" rx="6"/>
+      <text class="val" id="env-port" x="329" y="113" text-anchor="middle">нет</text>
+      <text class="val" id="env-secret" x="329" y="213" text-anchor="middle">нет</text>
+      <text class="src" x="329" y="68" text-anchor="middle">нет</text>
+      <text class="src" x="329" y="163" text-anchor="middle">нет</text>
+    </g>
+
+    <g class="col" data-col="file">
+      <rect class="head" x="378" y="10" width="94" height="26" rx="6"/>
+      <text class="h" x="425" y="27" text-anchor="middle">Файл профиля</text>
+      <rect class="cell" x="378" y="42" width="94" height="44" rx="6"/>
+      <rect class="cell" x="378" y="92" width="94" height="44" rx="6"/>
+      <rect class="cell" x="378" y="142" width="94" height="44" rx="6"/>
+      <rect class="cell" x="378" y="192" width="94" height="44" rx="6"/>
+      <text class="val" id="file-db" x="425" y="68" text-anchor="middle">data/sklad.db</text>
+      <text class="val" id="file-port" x="425" y="118" text-anchor="middle">8000</text>
+      <text class="val" id="file-log" x="425" y="168" text-anchor="middle">DEBUG</text>
+      <text class="src" x="425" y="218" text-anchor="middle">нет</text>
+    </g>
+
+    <g class="col" data-col="def">
+      <rect class="head" x="476" y="10" width="86" height="26" rx="6"/>
+      <text class="h" x="519" y="27" text-anchor="middle">Умолчание</text>
+      <rect class="cell" x="476" y="42" width="86" height="44" rx="6"/>
+      <rect class="cell" x="476" y="92" width="86" height="44" rx="6"/>
+      <rect class="cell" x="476" y="142" width="86" height="44" rx="6"/>
+      <rect class="cell" x="476" y="192" width="86" height="44" rx="6"/>
+      <text class="val" x="519" y="68" text-anchor="middle">data/sklad.db</text>
+      <text class="val" x="519" y="118" text-anchor="middle">8000</text>
+      <text class="val" x="519" y="168" text-anchor="middle">INFO</text>
+      <text class="val" x="519" y="218" text-anchor="middle">dev-only</text>
+    </g>
+
+    <g>
+      <rect x="566" y="10" width="98" height="26" rx="6" fill="#E4D3EC" stroke="#8E5BC8"/>
+      <text class="h" x="615" y="27" text-anchor="middle" fill="#5F3A85">Итог</text>
+      <rect x="566" y="42" width="98" height="44" rx="6" fill="#F4EBF8" stroke="#8E5BC8"/>
+      <rect x="566" y="92" width="98" height="44" rx="6" fill="#F4EBF8" stroke="#8E5BC8"/>
+      <rect x="566" y="142" width="98" height="44" rx="6" fill="#F4EBF8" stroke="#8E5BC8"/>
+      <rect x="566" y="192" width="98" height="44" rx="6" fill="#F4EBF8" stroke="#8E5BC8"/>
+      <text class="res" id="res-db" x="615" y="61" text-anchor="middle">data/sklad.db</text>
+      <text class="src" id="res-db-src" x="615" y="77" text-anchor="middle">файл</text>
+      <text class="res" id="res-port" x="615" y="111" text-anchor="middle">8000</text>
+      <text class="src" id="res-port-src" x="615" y="127" text-anchor="middle">файл</text>
+      <text class="res" id="res-log" x="615" y="161" text-anchor="middle">DEBUG</text>
+      <text class="src" id="res-log-src" x="615" y="177" text-anchor="middle">файл</text>
+      <text class="res" id="res-secret" x="615" y="211" text-anchor="middle">dev-only</text>
+      <text class="src" id="res-secret-src" x="615" y="227" text-anchor="middle">умолчание</text>
+    </g>
+
+    <text class="p" x="16" y="68">SKLAD_DB_PATH</text>
+    <text class="p" x="16" y="118">SKLAD_API_PORT</text>
+    <text class="p" x="16" y="168">SKLAD_LOG_LEVEL</text>
+    <text class="p" x="16" y="218">SKLAD_SECRET_KEY</text>
+
+    <text class="src" x="16" y="276">Старшинство убывает слева направо: аргумент важнее окружения, окружение важнее файла, файл важнее умолчания.</text>
+  </svg>
+  <div class="status" id="cl-status"></div>
+  <div class="controls">
+    <button data-profile="dev" class="on">dev</button>
+    <button data-profile="test">test</button>
+    <button data-profile="prod">prod</button>
+    <button id="cl-port" data-on="0">SKLAD_API_PORT=8080</button>
+  </div>
+  <p class="note">Нажмите заголовок колонки, чтобы увидеть, что задаёт этот слой. Профиль меняет файл, кнопка порта добавляет переменную окружения: итог пересчитывается по правилу старшинства.</p>
+</div>
+<script>
+(function () {
+  var profiles = {
+    dev:  { db: 'data/sklad.db', port: '8000', log: 'DEBUG',   secret: 'нет', secretRes: 'dev-only', secretSrc: 'умолчание' },
+    test: { db: 'data/sklad-test.db', port: '8000', log: 'INFO', secret: 'нет', secretRes: 'dev-only', secretSrc: 'умолчание' },
+    prod: { db: 'srv/data/sklad.db', port: '8000', log: 'WARNING', secret: 'задан', secretRes: '***', secretSrc: 'окружение' }
+  };
+  var envPort = false;
+  var profile = 'dev';
+  var status = document.getElementById('cl-status');
+  var $ = function (id) { return document.getElementById(id); };
+
+  var colText = {
+    args: '<b>Аргументы командной строки.</b> Их вводят на один запуск, поэтому слой побеждает всё. В таблице он пуст: служба на сервере запускается без аргументов.',
+    env: '<b>Переменные окружения.</b> Их задаёт площадка, контейнер или CI. Здесь лежат порт и секрет: значения приходят от машины, а не из репозитория.',
+    file: '<b>Файл профиля.</b> Описывает среду целиком: путь к базе, порт, уровень журнала. Файл старше умолчания, но младше окружения.',
+    def: '<b>Значения по умолчанию.</b> Записаны в коде, чтобы проект запускался у нового человека. Для секрета такое значение опасно: оно работает молча.'
+  };
+
+  function render() {
+    var p = profiles[profile];
+    document.querySelectorAll('.col').forEach(function (x) { x.classList.remove('on'); });
+    $('file-db').textContent = p.db;
+    $('file-port').textContent = p.port;
+    $('file-log').textContent = p.log;
+    $('env-port').textContent = envPort ? '8080' : 'нет';
+    $('env-secret').textContent = p.secret;
+
+    $('res-db').textContent = p.db;
+    $('res-db-src').textContent = 'файл';
+    $('res-port').textContent = envPort ? '8080' : p.port;
+    $('res-port-src').textContent = envPort ? 'окружение' : 'файл';
+    $('res-log').textContent = p.log;
+    $('res-log-src').textContent = 'файл';
+    $('res-secret').textContent = p.secretRes;
+    $('res-secret-src').textContent = p.secretSrc;
+
+    status.innerHTML = envPort
+      ? '<b>Порт 8080 взят из окружения.</b> Переменная старше файла профиля и умолчания, поэтому итог меняется без правки кода и пересборки.'
+      : '<b>Порт ' + p.port + ' взят из файла профиля.</b> Окружение порт не задаёт, поэтому побеждает следующий слой. Для ключа подписи в профиле ' + profile + ' итог: ' + p.secretRes + '.';
+  }
+
+  document.querySelectorAll('button[data-profile]').forEach(function (b) {
+    b.addEventListener('click', function () {
+      profile = b.dataset.profile;
+      document.querySelectorAll('button[data-profile]').forEach(function (x) { x.classList.toggle('on', x === b); });
+      render();
+    });
+  });
+  var portBtn = document.getElementById('cl-port');
+  portBtn.addEventListener('click', function () {
+    envPort = !envPort;
+    portBtn.classList.toggle('on', envPort);
+    portBtn.dataset.on = envPort ? '1' : '0';
+    render();
+  });
+  var heads = document.querySelectorAll('.col');
+  heads.forEach(function (g) {
+    g.addEventListener('click', function () {
+      heads.forEach(function (x) { x.classList.toggle('on', x === g); });
+      status.innerHTML = colText[g.dataset.col];
+    });
+  });
+  render();
+})();
+</script>
+</body>
+</html>

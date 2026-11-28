@@ -894,75 +894,26 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <canvas class="shader-bg" width="820" height="300" aria-hidden="true" style="background:linear-gradient(135deg,#08090D,#8E5BC8 58%,#08090D)"></canvas>
 <div class="badges"><span class="pill dark">Занятие 52</span><span class="pill">Разработка кода информационных систем</span></div>
 <div class="hero-panel"><h1>Конфигурация</h1><p class="dek">Один и тот же код запускается на четырёх площадках с разными путями, портами и секретами, и настройки отделяют эти различия от логики.</p></div>
-<div class="glyph" aria-hidden="true">Л28</div></header><section class="outcomes"><b>После этого занятия вы сможете</b><ul><li>Выносить параметры в файл конфигурации</li><li>Переопределять настройку переменной окружения</li><li>Хранить секреты вне репозитория</li></ul></section><nav class="toc"><b>Содержание занятия</b><ol><li><a href="#склад-который-открылся-пустым">Склад, который открылся пустым</a></li><li><a href="#что-считается-настройкой">Что считается настройкой</a></li><li><a href="#три-источника-и-порядок-старшинства">Три источника и порядок старшинства</a></li><li><a href="#файл-среда-и-профиль">Файл, среда и профиль</a></li><li><a href="#секреты-не-живут-в-репозитории">Секреты не живут в репозитории</a></li><li><a href="#проверка-настроек-при-старте">Проверка настроек при старте</a></li><li><a href="#профили-и-расхождения">Профили и расхождения</a></li><li><a href="#типичные-ошибки">Типичные ошибки</a></li><li><a href="#итоги">Итоги</a></li></ol></nav><article class="prose"><h2 id="склад-который-открылся-пустым"><span class="num">01</span>Склад, который открылся пустым</h2>
+<div class="glyph" aria-hidden="true">Л28</div></header><section class="outcomes"><b>После этого занятия вы сможете</b><ul><li>Выносить параметры в файл конфигурации</li><li>Переопределять настройку переменной окружения</li><li>Хранить секреты вне репозитория</li><li>Отличать настройку от данных и бизнес-правила</li><li>Проверять настройки при старте приложения</li></ul></section><nav class="toc"><b>Содержание занятия</b><ol><li><a href="#склад-который-открылся-пустым">Склад, который открылся пустым</a></li><li><a href="#четыре-источника-и-порядок-старшинства">Четыре источника и порядок старшинства</a></li><li><a href="#что-считается-настройкой">Что считается настройкой</a></li><li><a href="#профили-и-механизм-чтения">Профили и механизм чтения</a></li><li><a href="#секреты-не-живут-в-репозитории">Секреты не живут в репозитории</a></li><li><a href="#расхождения-между-средами">Расхождения между средами</a></li><li><a href="#проверка-настроек-при-старте">Проверка настроек при старте</a></li><li><a href="#чек-лист-конфигурации">Чек-лист конфигурации</a></li><li><a href="#типичные-ошибки">Типичные ошибки</a></li><li><a href="#что-перенести-в-учебный-проект">Что перенести в учебный проект</a></li><li><a href="#итоги">Итоги</a></li><li><a href="#источники">Источники</a></li></ol></nav><article class="prose"><h2 id="склад-который-открылся-пустым"><span class="num">01</span>Склад, который открылся пустым</h2>
 <p>В понедельник в 07:50 кладовщик в Твери открыл «Склад+» и увидел пустой список товаров. Приёмка не начиналась, а на площадке уже стояла машина с товаром. Через десять минут то же самое сообщили из Тулы. В Москве система работала, в Калуге работала, а две площадки остались без данных.</p>
 <p>Разбирательство заняло сорок минут. Код приложения был тот же, что и в пятницу. База на сервере тоже была на месте: 4800 позиций, 12 товарных категорий, все накладные. Проблема оказалась в одной строке, которую разработчик писал на своём ноутбуке:</p>
 <div class="codehilite" data-lang="python"><pre><span></span><code><span class="n">DB_PATH</span> <span class="o">=</span> <span class="s2">"data/sklad.db"</span>
 </code></pre></div>
 
-<p>Путь был относительным, и на новой машине он указывал в другой каталог. Приложение не упало: оно создало пустой файл <code>data/sklad.db</code> и продолжило работу. Кладовщик видел не ошибку, а пустой склад. Вторая строка добавляла проблем: порт 8000 на сервере был занят службой мониторинга, поэтому приложение запустилось на другом порту, а балансировщик продолжал отправлять запросы на старый.</p>
+<p>Путь был относительным, и на новой машине он указывал в другой каталог. Приложение не упало: SQLite создаёт файл базы при первом подключении, поэтому служба открыла пустой файл, записала в журнал строку о готовности и продолжила работу. Кладовщик видел не ошибку, а пустой склад. Мониторинг видел процесс и отвечал, что сервис доступен. Вторая строка добавляла проблем: порт 8000 на сервере был занят службой мониторинга, поэтому приложение запустилось на другом порту, а балансировщик продолжал отправлять запросы на старый.</p>
 <p><strong>Настройка это значение, которое отличает один запуск программы от другого, не меняя её логику.</strong> Путь к базе, номер порта, уровень журнала, адрес внешнего сервиса и пароль к нему относятся к настройкам. Формула свободного остатка, структура таблицы и порядок проверки прав относятся к коду и данным. Если для смены значения нужно править исходник и пересобирать приложение, значение попало не на своё место.</p>
+<p>У этой истории неприятное свойство: настройка ломает систему тихо. Ошибка в формуле свободного остатка видна на первом же тесте. Ошибка в пути к базе видна только тогда, когда кладовщик открывает пустой список, а до этого служба выглядит здоровой. Ошибка в секрете может не проявляться месяцами, пока кто-то не попробует подделать токен или подключиться к внешнему сервису с чужим ключом.</p>
+<p>Поэтому у настройки есть три вопроса, на которые проект обязан отвечать письменно. Откуда взялось значение: из кода, из файла, из окружения или из аргумента запуска. Кто его видит: разработчик, служба, контейнер, журнал, архив диагностики. Когда оно применяется: при старте процесса, при перезапуске службы или на лету. Если хотя бы на один вопрос нет ответа, следующее разбирательство снова займёт сорок минут.</p>
 <p>В «Северном складе» 120 сотрудников на четырёх площадках. У каждой площадки свой канал связи, но приложение одно. Если настройки зашиты в код, каждая площадка требует отдельной сборки, а исправление пароля превращается в выпуск новой версии. Если настройки вынесены, один и тот же артефакт запускается в Москве, Твери, Туле и Калуге с разными файлами и переменными.</p>
-<h2 id="что-считается-настройкой"><span class="num">02</span>Что считается настройкой</h2>
-<p>Граница между кодом и настройкой проходит по вопросу «меняется ли это без изменения поведения». Путь к файлу базы меняется при переносе, а запрос <code>SELECT</code> остаётся тем же. Уровень журнала меняется между разработкой и эксплуатацией, а сообщения в журнале остаются теми же. Список из 12 категорий товаров меняется редко и приходит из базы, поэтому это данные, а не настройка приложения.</p>
-<table>
-<thead>
-<tr>
-<th>Параметр</th>
-<th>Разработка</th>
-<th>Эксплуатация</th>
-<th>Почему меняется</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Путь к базе</td>
-<td><code>data/sklad.db</code></td>
-<td><code>data/sklad.db</code> на сервере площадки</td>
-<td>каталог зависит от машины</td>
-</tr>
-<tr>
-<td>Порт API</td>
-<td>8000</td>
-<td>8000 за обратным прокси</td>
-<td>порт занимает другая служба</td>
-</tr>
-<tr>
-<td>Уровень журнала</td>
-<td><code>DEBUG</code></td>
-<td><code>WARNING</code></td>
-<td>объём записей и режим разбора</td>
-</tr>
-<tr>
-<td>Секретный ключ</td>
-<td><code>dev-only</code></td>
-<td>случайная строка</td>
-<td>подпись токенов и сессий</td>
-</tr>
-<tr>
-<td>Адрес внешнего API</td>
-<td><code>http://localhost:9000</code></td>
-<td><code>https://api.severny-sklad.ru</code></td>
-<td>адрес зависит от контура</td>
-</tr>
-<tr>
-<td>Режим отладки</td>
-<td>включён</td>
-<td>выключен</td>
-<td>отладчик не должен быть доступен пользователям</td>
-</tr>
-</tbody>
-</table>
-<p>Есть пограничные случаи. Признак функции, который включает новую форму приёмки для одной площадки, это настройка: поведение меняется, но код остаётся одним. Часовой пояс сервера тоже настройка, хотя он влияет на даты в накладных. А вот правило «резерв не может превышать остаток» настройкой не является: это бизнес-правило, и его изменение требует правки кода и тестов.</p>
-<p>Полезно проверить себя простым вопросом: если значение поменять, должен ли измениться результат работы программы для того же ввода? Для пути к базе результат меняется только потому, что меняются данные. Для формулы резерва результат меняется при тех же данных, значит, это логика. Настройка выбирает, с какими данными и в каком окружении работать, но не решает, как считать.</p>
-<h2 id="три-источника-и-порядок-старшинства"><span class="num">03</span>Три источника и порядок старшинства</h2>
-<p>У настройки обычно несколько источников. Значение по умолчанию записано в коде и работает, когда ничего не задано. Файл конфигурации хранит набор значений для конкретной среды. Переменная окружения переопределяет файл, не требуя правки. Аргумент командной строки переопределяет всё и удобен для разового запуска.</p>
+<p>Идею отделения настроек от кода сформулировали в двенадцати факторах приложения: конфигурация хранится в окружении, а не в коде, потому что код не должен меняться между средами <a href="https://12factor.net/config">The Twelve-Factor App, III. Config</a>. Формулировка полезна как направление, но не как догма. Переменная окружения удобна для плоского значения вроде порта, а вложенная структура, список адресов и типизированная схема в окружении читаются плохо. Поэтому в Python и .NET настройки собирают из нескольких источников, а не только из переменных.</p>
+<h2 id="четыре-источника-и-порядок-старшинства"><span class="num">02</span>Четыре источника и порядок старшинства</h2>
+<p>У настройки обычно несколько источников. Значение по умолчанию записано в коде и работает, когда ничего не задано. Файл конфигурации хранит набор значений для конкретной среды. Переменная окружения переопределяет файл, не требуя правки. Аргумент командной строки переопределяет всё и удобен для разовой проверки.</p>
 <table>
 <thead>
 <tr>
 <th>Источник</th>
-<th>Кто использует</th>
-<th>Когда применяется</th>
+<th>Кто задаёт</th>
+<th>Когда побеждает</th>
 <th>Риск</th>
 </tr>
 </thead>
@@ -994,8 +945,149 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 </tbody>
 </table>
 <p>Порядок старшинства важно зафиксировать в проекте, иначе два разработчика будут уверены в разных вещах. В <code>sklad-plus</code> принято правило: аргумент командной строки важнее переменной окружения, переменная окружения важнее файла, файл важнее значения по умолчанию. Такое правило совпадает с поведением большинства фреймворков и не удивляет нового человека.</p>
+<p>Логика старшинства объясняется просто. Аргумент командной строки вводят осознанно и на один запуск, поэтому он должен победить всё. Переменная окружения приходит от площадки или платформы, которая знает больше, чем файл в репозитории. Файл описывает среду целиком и не должен перебивать точечное указание. Значение по умолчанию нужно только для того, чтобы проект запускался у нового человека без чтения документации.</p>
+<p>У этого порядка есть цена. Чем больше источников, тем труднее ответить, почему конкретный процесс получил конкретное значение. Поэтому в журнал старта пишут не только итоговые параметры, но и то, какие источники найдены. Строка «файл: appsettings.Production.json, окружение: 6 переменных, аргументы: нет» стоит немного, а разбирательство сокращает с сорока минут до одной.</p>
+<figure class="figure" data-fig="config-layers" data-one="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"><iframe title="Figure 1: config-layers" scrolling="no"></iframe><figcaption>Четыре источника и итоговое значение. Нажмите слой, чтобы увидеть, что он задаёт. Переключите профиль и порт в окружении: итоговая колонка покажет, какой источник победил и почему.</figcaption></figure>
+
+<p>Отдельно стоит проговорить, почему значение по умолчанию опасно для секретов и полезно для остального. Для пути к базе значение по умолчанию позволяет новому разработчику запустить проект одной командой. Для секрета значение по умолчанию означает, что при забытой переменной приложение поднимется с известным всем ключом. Поэтому у секрета значение по умолчанию либо отсутствует, либо запрещено в эксплуатационном профиле. Это не мелочь оформления, а разница между удобством и уязвимостью.</p>
+<div class="gate-step" data-gate>
+<p class="gate-action"><button type="button" class="gate-btn" aria-expanded="false"><span class="gate-q" aria-hidden="true">?</span><span>Где провести границу между настройкой, данными и бизнес-правилом, если все три лежат в одном файле?</span></button></p>
+<div class="gate-content" hidden><h2 id="что-считается-настройкой"><span class="num">03</span>Что считается настройкой</h2>
+<p>Граница проходит по вопросу «меняется ли это без изменения поведения». Путь к файлу базы меняется при переносе, а запрос <code>SELECT</code> остаётся тем же. Уровень журнала меняется между разработкой и эксплуатацией, а сообщения в журнале остаются теми же. Список из 12 категорий товаров меняется редко и приходит из базы, поэтому это данные, а не настройка приложения.</p>
+<table>
+<thead>
+<tr>
+<th>Параметр</th>
+<th>Разработка</th>
+<th>Эксплуатация</th>
+<th>Почему меняется</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Путь к базе</td>
+<td><code>data/sklad.db</code></td>
+<td><code>data/sklad.db</code> на сервере площадки</td>
+<td>каталог зависит от машины</td>
+</tr>
+<tr>
+<td>Порт API</td>
+<td>8000</td>
+<td>8000 за обратным прокси</td>
+<td>на площадке порт может быть занят</td>
+</tr>
+<tr>
+<td>Уровень журнала</td>
+<td><code>DEBUG</code></td>
+<td><code>WARNING</code></td>
+<td>объём записей и режим разбора</td>
+</tr>
+<tr>
+<td>Секретный ключ</td>
+<td><code>dev-only</code></td>
+<td>случайная строка</td>
+<td>подпись токенов и сессий</td>
+</tr>
+<tr>
+<td>Адрес внешнего API</td>
+<td><code>http://localhost:9000</code></td>
+<td><code>https://api.severny-sklad.ru</code></td>
+<td>адрес зависит от контура</td>
+</tr>
+<tr>
+<td>Режим отладки</td>
+<td>включён</td>
+<td>выключен</td>
+<td>отладчик не должен быть доступен пользователям</td>
+</tr>
+</tbody>
+</table>
+<p>Есть пограничные случаи. Признак функции, который включает новую форму приёмки для одной площадки, это настройка: поведение меняется, но код остаётся одним. Часовой пояс сервера тоже настройка, хотя он влияет на даты в накладных. А вот правило «резерв не может превышать остаток» настройкой не является: это бизнес-правило, и его изменение требует правки кода и тестов.</p>
+<p>Полезно проверить себя простым вопросом: если значение поменять, должен ли измениться результат работы программы для того же ввода? Для пути к базе результат меняется только потому, что меняются данные. Для формулы резерва результат меняется при тех же данных, значит, это логика. Настройка выбирает, с какими данными и в каком окружении работать, но не решает, как считать.</p>
+<p>По месту применения настройки удобно разделить на пять групп.</p>
+<table>
+<thead>
+<tr>
+<th>Группа</th>
+<th>Примеры</th>
+<th>Где хранят</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Инфраструктура</td>
+<td>путь к базе, порт, каталог журналов</td>
+<td>файл профиля, окружение</td>
+</tr>
+<tr>
+<td>Среда выполнения</td>
+<td>уровень журнала, число рабочих процессов, таймауты</td>
+<td>файл профиля, окружение</td>
+</tr>
+<tr>
+<td>Интеграция</td>
+<td>адреса API, ключи, размер страницы</td>
+<td>окружение, хранилище секретов</td>
+</tr>
+<tr>
+<td>Признаки функций</td>
+<td>включить новую форму приёмки</td>
+<td>база или сервис признаков</td>
+</tr>
+<tr>
+<td>Секреты</td>
+<td>пароль базы, ключ подписи, токен</td>
+<td>хранилище секретов, окружение</td>
+</tr>
+</tbody>
+</table>
+<p>Разделение помогает не тащить всё в один файл. Признаки функций часто меняют без выпуска версии, поэтому им место в базе или отдельном сервисе, а не в файле, который читается при старте. Секреты требуют другого уровня доступа, чем порт. Инфраструктурные значения привязаны к площадке и почти никогда не меняются вместе с кодом.</p>
+<p>У большого числа настроек есть обратная сторона. Каждая настройка это ветка поведения, а каждая ветка это комбинация, которую нужно проверить. Двенадцать независимых флагов дают 4096 сочетаний, и ни один тестовый набор их не покрывает. Поэтому настройку вводят, когда различия реальны и устойчивы, а не когда хочется избежать правки кода. Если значение меняется вместе с логикой и требует новых проверок, это не настройка, а недоредактированный код.</p>
+<p>Второе ограничение связано с сопровождением. Настройку, которую никто не документировал, через год боятся менять. Поэтому у каждой настройки в проекте есть имя, тип, допустимые значения, значение по умолчанию и короткое объяснение. <code>.env.example</code> и схема настроек служат этой цели лучше, чем абзац в переписке.</p>
+<h2 id="профили-и-механизм-чтения"><span class="num">04</span>Профили и механизм чтения</h2>
+<p>Профиль это именованный набор настроек для среды: <code>dev</code>, <code>test</code>, <code>prod</code>. Профиль не является отдельной копией кода. Он выбирает, какие значения подставить и какие проверки включить. В разработке профиль <code>dev</code> разрешает отладочный режим и подробный журнал, в тесте <code>test</code> использует тестовую базу и выключенный отладчик, в эксплуатации <code>prod</code> требует настоящий секрет и минимальный уровень журнала.</p>
+<table>
+<thead>
+<tr>
+<th>Профиль</th>
+<th>База</th>
+<th>Порт</th>
+<th>Журнал</th>
+<th>Отладка</th>
+<th>Кто работает</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>dev</code></td>
+<td><code>data/sklad.db</code></td>
+<td>8000</td>
+<td><code>DEBUG</code></td>
+<td>включена</td>
+<td>разработчик</td>
+</tr>
+<tr>
+<td><code>test</code></td>
+<td><code>data/sklad-test.db</code></td>
+<td>8080</td>
+<td><code>INFO</code></td>
+<td>выключена</td>
+<td>тестировщик</td>
+</tr>
+<tr>
+<td><code>prod</code></td>
+<td><code>data/sklad.db</code></td>
+<td>8000 за прокси</td>
+<td><code>WARNING</code></td>
+<td>выключена</td>
+<td>120 сотрудников</td>
+</tr>
+</tbody>
+</table>
+<p>Профиль задают одной переменной, например <code>SKLAD_ENV=prod</code>. Все остальные модули читают уже готовый объект настроек и не проверяют окружение самостоятельно. Если каждый модуль начнёт спрашивать <code>os.environ</code> напрямую, через месяц никто не сможет сказать, откуда взялось конкретное значение. Одна точка чтения и один объект настроек дают предсказуемость.</p>
+<p>Профиль не должен управлять бизнес-логикой. Если от значения <code>prod</code> зависит, показывать ли кладовщику кнопку удаления накладной, это уже правило предметной области, а не настройка среды. Такое правило должно быть в коде и в правах роли, иначе на тестовом стенде одна ветка поведения, а в эксплуатации другая. Настройка выбирает окружение, но не подменяет правила работы склада.</p>
 <p>Соберём небольшой модуль конфигурации на Python. Он читает четыре параметра, подставляет значения по умолчанию и маскирует секрет при выводе.</p>
-<div class="codehilite" data-lang="python"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<div class="codehilite" data-lang="text"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">env</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">default</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
@@ -1046,49 +1138,12 @@ secret=********
 </code></pre></div>
 
 <p>В Linux те же значения задают командой <code>export SKLAD_API_PORT=8080</code>. Код не изменился, изменилось окружение. Именно это и требуется от конфигурации: один файл программы, разные параметры запуска.</p>
-<p>Обратите внимание на преобразования. <code>os.environ.get</code> всегда возвращает строку или значение по умолчанию. Порт приходится превращать в целое через <code>int</code>, иначе он останется строкой и сравнение с числом даст неожиданный результат. Уровень журнала приводится к верхнему регистру, потому что <code>warning</code> и <code>WARNING</code> должны означать одно и то же. Секрет не печатается целиком: в журнал и на экран попадает только факт его наличия.</p>
+<p>Обратите внимание на преобразования. <code>os.environ.get</code> всегда возвращает строку или значение по умолчанию <a href="https://docs.python.org/3/library/os.html#os.environ">документация Python, os.environ</a>. Порт приходится превращать в целое через <code>int</code>, иначе он останется строкой и сравнение с числом даст неожиданный результат. Уровень журнала приводится к верхнему регистру, потому что <code>warning</code> и <code>WARNING</code> должны означать одно и то же. Секрет не печатается целиком: в журнал и на экран попадает только факт его наличия.</p>
 <p><code>@dataclass(frozen=True)</code> делает объект настроек неизменяемым. Это мелочь, которая ловит ошибку: если какой-то модуль попытается поменять порт уже после старта, программа упадёт сразу, а не будет работать с половиной старых и половиной новых значений. Настройки читают один раз при запуске и передают дальше как готовый объект.</p>
-<div class="gate-step" data-gate>
-<p class="gate-action"><button type="button" class="gate-btn" aria-expanded="false"><span class="gate-q" aria-hidden="true">?</span><span>Откуда приложение возьмёт значение, если в файле настройки его нет?</span></button></p>
-<div class="gate-content" hidden><h2 id="файл-среда-и-профиль"><span class="num">04</span>Файл, среда и профиль</h2>
-<p>Файл конфигурации хранит набор значений, которые относятся к одной среде. Формат выбирают по задаче. <code>.env</code> удобен для небольших проектов и локального запуска: это простые пары «ключ=значение», которые читает библиотека вроде <code>python-dotenv</code> или загрузчик фреймворка. JSON удобен для вложенных настроек и уже используется в C#. TOML читается человеком и поддерживает комментарии. YAML компактен, но чувствителен к отступам.</p>
-<table>
-<thead>
-<tr>
-<th>Формат</th>
-<th>Вложенность</th>
-<th>Комментарии</th>
-<th>Типичное место</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>.env</code></td>
-<td>нет</td>
-<td>да</td>
-<td>локальный запуск, переменные окружения</td>
-</tr>
-<tr>
-<td>JSON</td>
-<td>да</td>
-<td>нет</td>
-<td><code>appsettings.json</code>, обмен с сервисами</td>
-</tr>
-<tr>
-<td>TOML</td>
-<td>да</td>
-<td>да</td>
-<td><code>pyproject.toml</code>, настройки Python</td>
-</tr>
-<tr>
-<td>YAML</td>
-<td>да</td>
-<td>да</td>
-<td>конфигурация развёртывания</td>
-</tr>
-</tbody>
-</table>
-<p>В Python удобно держать настройки в <code>config.py</code> и переопределять их переменными окружения. В C# приложение ASP.NET Core собирает те же слои через <code>builder.Configuration</code>: сначала читает <code>appsettings.json</code>, затем <code>appsettings.{Environment}.json</code>, затем переменные окружения, затем аргументы командной строки. Последний источник побеждает. Имя среды задаёт переменная <code>ASPNETCORE_ENVIRONMENT</code>, а файл для эксплуатации называется <code>appsettings.Production.json</code>.</p>
+<p>Разбор строки в число требует аккуратности. <code>int("8000")</code> работает, <code>int("8 000")</code> падает, <code>int("")</code> падает, а <code>int("8000.0")</code> падает, хотя человек считает такое значение числом. Для логических значений ловушка ещё заметнее: <code>os.environ.get("DEBUG")</code> возвращает строку, а любая непустая строка в Python истинна, поэтому значение <code>"False"</code> включает отладку. Поэтому в проекте нужна одна функция разбора, которая принимает список допустимых вариантов и сообщает об ошибке внятно, а не <code>ValueError</code> без контекста.</p>
+<p>Формат <code>.env</code> тоже имеет правила, которые лучше знать до первой ошибки. Разные загрузчики читают файл по-разному: одни допускают пробелы вокруг знака равенства, другие считают их частью значения, а символ <code>#</code> начинает комментарий только в начале строки. Значение с пробелами обычно берут в кавычки. Пустая строка и отсутствующая переменная это разные вещи: пустая задаёт пустое значение и может победить значение по умолчанию. Поэтому формат фиксируют одним загрузчиком и проверяют тестом, а не смешивают библиотеки в одном проекте.</p>
+<p>Ещё одна тонкость связана с кодировкой и переносами строк. Файл, созданный в Windows, может содержать возврат каретки в конце значения, и тогда пароль перестанет подходить, а сообщение об ошибке будет говорить о неверных учётных данных. Загрузчик обычно обрезает пробелы и переводы строк, но полагаться на это не стоит: значения проверяют на отсутствие управляющих символов, а файлы хранят в UTF-8 без BOM.</p>
+<p>В C# приложение ASP.NET Core собирает те же слои через <code>builder.Configuration</code>. Сначала читается <code>appsettings.json</code>, затем <code>appsettings.{Environment}.json</code>, затем переменные окружения, затем аргументы командной строки. Последний источник побеждает. Имя среды задаёт переменная <code>ASPNETCORE_ENVIRONMENT</code>, а файл для эксплуатации называется <code>appsettings.Production.json</code> <a href="https://learn.microsoft.com/en-us/aspnet/core/fundamentals/environments">документация ASP.NET Core, Environments</a>.</p>
 <div class="codehilite" data-lang="text"><pre><span></span><code><span class="p">{</span>
 <span class="w">  </span><span class="nt">"Sklad"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="nt">"DbPath"</span><span class="p">:</span><span class="w"> </span><span class="s2">"data/sklad.db"</span><span class="p">,</span>
@@ -1098,91 +1153,27 @@ secret=********
 <span class="p">}</span>
 </code></pre></div>
 
-<div class="codehilite" data-lang="text"><pre><span></span><code><span class="p">{</span>
-<span class="w">  </span><span class="nt">"Sklad"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="nt">"DbPath"</span><span class="p">:</span><span class="w"> </span><span class="s2">"data/sklad.db"</span><span class="p">,</span>
-<span class="w">    </span><span class="nt">"ApiPort"</span><span class="p">:</span><span class="w"> </span><span class="mi">8080</span><span class="p">,</span>
-<span class="w">    </span><span class="nt">"LogLevel"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Warning"</span>
-<span class="w">  </span><span class="p">}</span>
-<span class="p">}</span>
-</code></pre></div>
-
 <p>Первый файл относится к разработке, второй к эксплуатации. Общие значения можно оставить в базовом файле, а различия вынести в файл среды. Если значение задано в обоих, побеждает файл среды. Это позволяет не дублировать десяток одинаковых строк и видеть только то, что действительно отличается.</p>
-<p>В C# чтение переменной окружения выглядит так:</p>
-<div class="codehilite" data-lang="text"><pre><span></span><code><span class="k">using</span><span class="w"> </span><span class="nn">System</span><span class="p">;</span>
+<p>Вложенные ключи в переменных окружения разделяют двойным подчёркиванием: <code>Sklad__ApiPort=8080</code> переопределяет <code>Sklad:ApiPort</code>. Правило простое, но его нужно знать, иначе инженер задаст <code>SKLAD_APIPORT</code>, ничего не переопределит и будет искать причину в коде. Типизация в .NET решается через привязку к классу параметров и проверку при старте:</p>
+<div class="codehilite" data-lang="text"><pre><span></span><code><span class="kt">var</span><span class="w"> </span><span class="n">builder</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">WebApplication</span><span class="p">.</span><span class="n">CreateBuilder</span><span class="p">(</span><span class="n">args</span><span class="p">);</span>
 
-<span class="k">class</span><span class="w"> </span><span class="nc">Program</span>
-<span class="p">{</span>
-<span class="w">    </span><span class="k">static</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="nf">Read</span><span class="p">(</span><span class="kt">string</span><span class="w"> </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="n">fallback</span><span class="p">)</span>
-<span class="w">    </span><span class="p">{</span>
-<span class="w">        </span><span class="kt">string</span><span class="w"> </span><span class="k">value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Environment</span><span class="p">.</span><span class="n">GetEnvironmentVariable</span><span class="p">(</span><span class="n">name</span><span class="p">);</span>
-<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="kt">string</span><span class="p">.</span><span class="n">IsNullOrEmpty</span><span class="p">(</span><span class="k">value</span><span class="p">)</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="n">fallback</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="k">value</span><span class="p">;</span>
-<span class="w">    </span><span class="p">}</span>
-
-<span class="w">    </span><span class="k">static</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">Main</span><span class="p">()</span>
-<span class="w">    </span><span class="p">{</span>
-<span class="w">        </span><span class="kt">string</span><span class="w"> </span><span class="n">dbPath</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Read</span><span class="p">(</span><span class="s">"SKLAD_DB_PATH"</span><span class="p">,</span><span class="w"> </span><span class="s">"data/sklad.db"</span><span class="p">);</span>
-<span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">port</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kt">int</span><span class="p">.</span><span class="n">Parse</span><span class="p">(</span><span class="n">Read</span><span class="p">(</span><span class="s">"SKLAD_API_PORT"</span><span class="p">,</span><span class="w"> </span><span class="s">"8000"</span><span class="p">));</span>
-<span class="w">        </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">"db="</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">dbPath</span><span class="p">);</span>
-<span class="w">        </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">"port="</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">port</span><span class="p">);</span>
-<span class="w">    </span><span class="p">}</span>
-<span class="p">}</span>
+<span class="n">builder</span><span class="p">.</span><span class="n">Services</span><span class="p">.</span><span class="n">AddOptions</span><span class="o">&lt;</span><span class="n">SkladOptions</span><span class="o">&gt;</span><span class="p">()</span>
+<span class="w">    </span><span class="p">.</span><span class="n">Bind</span><span class="p">(</span><span class="n">builder</span><span class="p">.</span><span class="n">Configuration</span><span class="p">.</span><span class="n">GetSection</span><span class="p">(</span><span class="s">"Sklad"</span><span class="p">))</span>
+<span class="w">    </span><span class="p">.</span><span class="n">Validate</span><span class="p">(</span><span class="n">o</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">o</span><span class="p">.</span><span class="n">ApiPort</span><span class="w"> </span><span class="k">is</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="k">and</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mi">65535</span><span class="p">,</span><span class="w"> </span><span class="s">"порт вне диапазона"</span><span class="p">)</span>
+<span class="w">    </span><span class="p">.</span><span class="n">Validate</span><span class="p">(</span><span class="n">o</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="o">!</span><span class="kt">string</span><span class="p">.</span><span class="n">IsNullOrWhiteSpace</span><span class="p">(</span><span class="n">o</span><span class="p">.</span><span class="n">DbPath</span><span class="p">),</span><span class="w"> </span><span class="s">"не задан путь к базе"</span><span class="p">)</span>
+<span class="w">    </span><span class="p">.</span><span class="n">ValidateOnStart</span><span class="p">();</span>
 </code></pre></div>
 
-<p>Без переменных окружения программа печатает значения по умолчанию:</p>
-<div class="codehilite" data-lang="text"><pre><span></span><code>db=data/sklad.db
-port=8000
-</code></pre></div>
+<p><code>ValidateOnStart</code> важен тем, что проверка выполняется до приёма первого запроса. Без неё приложение поднимется, ответит ошибкой 500 и будет выглядеть как дефект бизнес-логики. Полное описание провайдеров и порядка чтения есть в документации .NET <a href="https://learn.microsoft.com/en-us/dotnet/core/extensions/configuration">документация .NET, Configuration</a>.</p>
+<p>Отдельно стоит сказать про виртуальное окружение Python, потому что его путают с настройками. <code>python -m venv .venv</code> создаёт изолированный каталог с интерпретатором и библиотеками, а активация меняет путь поиска пакетов <a href="https://docs.python.org/3/library/venv.html">документация Python, venv</a>. Это не конфигурация приложения, а способ зафиксировать зависимости. Однако версия Python и набор пакетов тоже относятся к среде, и их расхождение даёт те же симптомы: локально работает, на сервере нет. Поэтому версии фиксируют в файле зависимостей, а установку выполняют по нему, а не по памяти <a href="https://pip.pypa.io/en/stable/user_guide/">документация pip</a>.</p>
+<p>Настройки тоже проверяют тестами. Достаточно одного теста, который загружает конфигурацию с набором переменных и сравнивает получившиеся значения. Второй тест проверяет отказ на неверном порту или отсутствующем секрете. Такие тесты не требуют базы и выполняются за доли секунды, зато ловят опечатку в имени переменной до запуска приложения. В конвейере эти проверки запускают перед сборкой, чтобы ошибка в настройках не дошла до стенда.</p></div>
+</div>
 
-<p>После установки <code>SKLAD_API_PORT=8080</code> тот же исполняемый файл печатает:</p>
-<div class="codehilite" data-lang="text"><pre><span></span><code>db=data/sklad.db
-port=8080
-</code></pre></div>
-
-<p>Профиль это именованный набор настроек для среды: <code>dev</code>, <code>test</code>, <code>prod</code>. Профиль не является отдельной копией кода. Он выбирает, какие значения подставить и какие проверки включить. В разработке профиль <code>dev</code> разрешает отладочный режим и подробный журнал, в тесте <code>test</code> использует тестовую базу и выключенный отладчик, в эксплуатации <code>prod</code> требует настоящий секрет и минимальный уровень журнала.</p>
-<table>
-<thead>
-<tr>
-<th>Профиль</th>
-<th>База</th>
-<th>Порт</th>
-<th>Журнал</th>
-<th>Отладка</th>
-<th>Кто работает</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>dev</code></td>
-<td><code>data/sklad.db</code></td>
-<td>8000</td>
-<td><code>DEBUG</code></td>
-<td>включена</td>
-<td>разработчик</td>
-</tr>
-<tr>
-<td><code>test</code></td>
-<td><code>data/sklad-test.db</code></td>
-<td>8080</td>
-<td><code>INFO</code></td>
-<td>выключена</td>
-<td>тестировщик</td>
-</tr>
-<tr>
-<td><code>prod</code></td>
-<td><code>data/sklad.db</code></td>
-<td>8000 за прокси</td>
-<td><code>WARNING</code></td>
-<td>выключена</td>
-<td>120 сотрудников</td>
-</tr>
-</tbody>
-</table>
-<p>Профиль задают одной переменной, например <code>SKLAD_ENV=prod</code>. Все остальные модули читают уже готовый объект настроек и не проверяют окружение самостоятельно. Если каждый модуль начнёт спрашивать <code>os.environ</code> напрямую, через месяц никто не сможет сказать, откуда взялось конкретное значение. Одна точка чтения и один объект настроек дают предсказуемость.</p>
-<p>Профиль не должен управлять бизнес-логикой. Если от значения <code>prod</code> зависит, показывать ли кладовщику кнопку удаления накладной, это уже правило предметной области, а не настройка среды. Такое правило должно быть в коде и в правах роли, иначе на тестовом стенде одна ветка поведения, а в эксплуатации другая. Настройка выбирает окружение, но не подменяет правила работы склада.</p>
-<p>Настройки тоже проверяют тестами. Достаточно одного теста, который загружает конфигурацию с набором переменных и сравнивает получившиеся значения. Второй тест проверяет отказ на неверном порту или отсутствующем секрете. Такие тесты не требуют базы и выполняются за доли секунды, зато ловят опечатку в имени переменной до запуска приложения. В конвейере эти проверки запускают перед сборкой, чтобы ошибка в настройках не дошла до стенда.</p>
-<h2 id="секреты-не-живут-в-репозитории"><span class="num">05</span>Секреты не живут в репозитории</h2>
+<div class="gate-step" data-gate>
+<p class="gate-action"><button type="button" class="gate-btn" aria-expanded="false"><span class="gate-q" aria-hidden="true">?</span><span>Что произойдёт с секретом, который попал в переменную окружения на общей машине?</span></button></p>
+<div class="gate-content" hidden><h2 id="секреты-не-живут-в-репозитории"><span class="num">05</span>Секреты не живут в репозитории</h2>
 <p>Пароль к базе, секретный ключ подписи, токен внешнего сервиса и ключ почтового шлюза называются секретами. Их нельзя хранить в Git, даже в приватном репозитории. История коммитов переживает удаление файла: если секрет попал в коммит, он остаётся в истории и доступен всем, у кого есть клон. Удаление строки из последней версии не делает секрет недействительным.</p>
+<p>Угроза шире, чем «кто-то увидит файл». Секрет попадает в журнал сборки, в вывод диагностики, в дамп процесса, в архив, который отправляют в поддержку, в историю командной строки. Переменная окружения видна не только приложению: её читает любой процесс того же пользователя, а при неаккуратной настройке и другие пользователи машины. Поэтому хранение секрета в окружении это компромисс, а не идеальное решение.</p>
 <p>Рабочая схема состоит из двух файлов. Настоящий <code>.env</code> лежит на машине или на сервере, содержит значения и добавлен в <code>.gitignore</code>. Пример <code>.env.example</code> лежит в репозитории, содержит те же имена переменных с пустыми или условными значениями и объясняет, что нужно заполнить.</p>
 <div class="codehilite" data-lang="text"><pre><span></span><code># .env.example
 SKLAD_ENV=dev
@@ -1232,18 +1223,78 @@ data/*.db
 <td>Хранилище секретов</td>
 <td>приложение по роли</td>
 <td>эксплуатация</td>
-<td>сложнее настроить</td>
+<td>сложнее настроить и дороже сопровождать</td>
 </tr>
 </tbody>
 </table>
-<p>В эксплуатации секрет передают переменной окружения или через хранилище секретов. На учебном стенде достаточно переменной и файла с правами <code>600</code>, то есть доступного только владельцу. В Windows права на файл настраивают через свойства безопасности, в Linux командой <code>chmod 600 .env</code>. Смысл один: секрет не должен читаться другими пользователями машины.</p>
-<p>Секрет не печатают в журнал. Даже если очень хочется проверить, какое значение загрузилось, выводят только длину или первые символы. В <code>sklad-plus</code> принято правило: в журнал попадает имя параметра и источник, но не значение. Это спасает от утечки через диагностический архив, который отправляют в поддержку.</p>
-<div class="callout pitfall"><span class="label">Секрет в примере</span><p>Иногда в <code>.env.example</code> оставляют настоящий пароль, чтобы «было понятно». Это тот же секрет в репозитории, только с другим именем файла. В примере допустимы только условные значения вроде <code>change-me</code> и пояснение, где взять настоящее.</p></div></div>
+<p>У хранилища секретов есть своя цена. Приложение должно получить доступ к хранилищу до того, как прочитает первый секрет, а значит, ему нужен собственный начальный ключ. Появляется зависимость от сети и от доступности сервиса: если хранилище недоступно, приложение не стартует. Зато секреты можно выдавать по роли, менять без перезапуска всех служб, отзывать при увольнении сотрудника и видеть, кто их читал.</p>
+<p>В CI секреты передают через переменные репозитория или среды. GitHub Actions маскирует значения в журнале, но маскировка не срабатывает, если секрет преобразовали: закодировали в base64, разрезали на части, вставили в JSON. Секреты не передаются в сборки из форков, а для эксплуатации настраивают среду с правилами защиты и обязательным согласованием <a href="https://docs.github.com/en/actions/security-for-github-actions/security-guides/using-secrets-in-github-actions">GitHub Actions, Using secrets</a>. Полный набор практик, включая ротацию и минимизацию привилегий, собран в памятке OWASP <a href="https://cheatsheetseries.owasp.org/cheatsheets/Secrets_Management_Cheat_Sheet.html">OWASP Secrets Management Cheat Sheet</a>.</p>
+<p>Принцип минимальных привилегий применяют и к секретам, а не только к пользователям. Ключу внешнего сервиса нужен доступ к одному методу, а не ко всему API. Пароль базы выдаётся одной службе и одной схеме, а не администратору СУБД на все базы. У каждого секрета есть владелец и срок жизни: кто выдал, зачем, до какой даты. Раз в квартал список сверяют с теми, кто действительно работает, и отзывают лишнее. Без такой сверки через год в хранилище остаются ключи уволенных сотрудников и токены проектов, закрытых два месяца назад.</p>
+<p>Отдельная проблема это начальный секрет, которым приложение открывает хранилище. Если он лежит в файле рядом, хранилище защищает только от части угроз. На практике выбирают компромисс: служба получает доступ через учётную запись машины, через роль облака или через короткоживущий токен, который выдаёт платформа. Чем короче жизнь начального секрета, тем меньше цена его утечки. Полностью убрать этот секрет удаётся редко, поэтому его выделяют в отдельную категорию и проверяют строже остальных.</p>
+<p>Ротация секрета это не разовая операция при утечке, а регулярная процедура. Если ключ подписи меняют раз в год и никто не помнит, как это делается, то в момент утечки смена займёт часы. Если процедура описана и проверена, смена занимает минуты. Процедура включает выпуск нового значения, его доставку, перезапуск, проверку и отзыв старого.</p>
+<p>Секрет не печатают в журнал. Даже если очень хочется проверить, какое значение загрузилось, выводят только длину или факт наличия. В <code>sklad-plus</code> принято правило: в журнал попадает имя параметра и источник, но не значение. Это спасает от утечки через диагностический архив, который отправляют в поддержку.</p>
+<figure class="figure" data-fig="secret-path" data-one="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"><iframe title="Figure 2: secret-path" scrolling="no"></iframe><figcaption>Путь секрета от источника до журнала. Красные метки показывают места, где значение утекает чаще всего: история Git, журнал сборки, архив диагностики и общий профиль машины.</figcaption></figure>
+
+<div class="callout pitfall"><span class="label">Секрет в примере</span><p>Иногда в <code>.env.example</code> оставляют настоящий пароль, чтобы «было понятно». Это тот же секрет в репозитории, только с другим именем файла. В примере допустимы только условные значения вроде <code>change-me</code> и пояснение, где взять настоящее.</p></div>
+
+<h3>GitLab, 2017: настройка, которая не проверялась</h3>
+<p>Тридцать первого января 2017 года инженер GitLab работал с репликой базы и по ошибке стёр каталог данных на основном сервере. Остановка длилась около 18 часов, а восстановление шло с копии шестичасовой давности. По оценке компании, потеряны данные примерно 5000 проектов, 5000 комментариев и 700 учётных записей за период с 17:20 до 23:30 UTC <a href="https://about.gitlab.com/blog/2017/02/10/postmortem-of-database-outage-of-january-31/">GitLab, Postmortem of database outage</a>.</p>
+<p>Главная часть разбора касается не команды удаления, а конфигурации резервного копирования. Штатная выгрузка <code>pg_dump</code> завершалась ошибкой, потому что запускалась на сервере приложений, где не было каталога данных PostgreSQL, и утилита выбирала версию 9.2 вместо 9.6. Письма об ошибке отклонялись почтовым сервером, а получателя, который заметил бы тишину, не было. Снимки дисков Azure для базы не включали, реплика оказалась разрушена, а снимки LVM не предназначались для аварийного восстановления. Механизмы резервирования выглядели как страховка, и ни один не сработал.</p>
+<p>Урок для темы: <strong>резервное копирование это такая же настройка, как порт и путь, и её нужно проверять запуском, а не наличием в инструкции</strong>. Настройка, которая годами завершается ошибкой и никем не читается, хуже отсутствующей: она создаёт ложную уверенность. Проверка восстановления на тестовой копии занимает час и показывает, работает ли схема до аварии, а не после.</p>
+<h3>Knight Capital, 2012: настройка развёртывания</h3>
+<p>Первого августа 2012 года брокер Knight Capital обновил код маршрутизатора заказов. Новую версию установили на семь серверов из восьми, на восьмом остался старый модуль, а флаг, который должен был включать новую функцию, активировал старую. За 45 минут после открытия рынка маршрутизатор отправил более 4 миллионов заказов вместо 212 клиентских, провёл 397 миллионов акций и получил убыток более 460 миллионов долларов. В 2013 году Комиссия по ценным бумагам США оштрафовала компанию на 12 миллионов и отметила отсутствие надлежащих процедур развёртывания и тестирования <a href="https://www.sec.gov/news/press-release/2013-222">SEC, 2013-222</a>.</p>
+<p>В материалах дела есть деталь, важная для конфигурации. Внутренняя система сформировала 97 автоматических писем об ошибке ещё до открытия рынка, но на них не отреагировали. Это не сбой кода, а сбой контура проверки: сигнал был, но не был связан с процедурой выпуска. Развёртывание, которое не проверяет версию на каждой машине и не читает собственные предупреждения, оставляет систему в состоянии, где часть узлов работает по старым правилам.</p>
+<p>Урок для темы: <strong>конфигурация развёртывания это тоже конфигурация</strong>. Список серверов, версия на каждом, набор включённых флагов и порядок проверки должны быть описаны и проверены, а не подразумеваться. Один узел со старым кодом обнуляет работу всей площадки.</p></div>
 </div>
 
 <div class="gate-step" data-gate>
-<p class="gate-action"><button type="button" class="gate-btn" aria-expanded="false"><span class="gate-q" aria-hidden="true">?</span><span>Что проверить до первого запроса, чтобы приложение не упало на настройках?</span></button></p>
-<div class="gate-content" hidden><h2 id="проверка-настроек-при-старте"><span class="num">06</span>Проверка настроек при старте</h2>
+<p class="gate-action"><button type="button" class="gate-btn" aria-expanded="false"><span class="gate-q" aria-hidden="true">?</span><span>Как проверить, что настройки на сервере совпадают с ожидаемыми, если приложение уже запущено?</span></button></p>
+<div class="gate-content" hidden><h2 id="расхождения-между-средами"><span class="num">06</span>Расхождения между средами</h2>
+<p>Настройки расходятся по четырём причинам: разные имена параметров, разные источники, разные значения по умолчанию и разное время применения. Имена должны совпадать во всех средах. Если в разработке параметр называется <code>DB_PATH</code>, а в эксплуатации <code>SKLAD_DB_PATH</code>, приложение прочитает значение по умолчанию и не заметит подмены.</p>
+<p>Источники тоже нужно проверять. Локальный запуск может читать <code>.env</code>, а сервер получает переменные от службы. Если на сервере <code>.env</code> не загружается, все значения окажутся по умолчанию. Поэтому в журнал при старте пишут, какие источники найдены: файл, окружение, аргументы. Это не раскрывает секреты и сразу показывает расхождение.</p>
+<p>Значения по умолчанию опасны тем, что работают молча. Значение <code>dev-only</code> для секрета удобно в разработке, но в эксплуатации оно означает предсказуемую подпись токенов. Поэтому для секретов значение по умолчанию либо отсутствует, либо запрещено в <code>prod</code>. Для несекретных параметров значение по умолчанию допустимо и полезно: новый разработчик запускает проект без чтения документации.</p>
+<p>Время применения связано с перезапуском. Большинство настроек читается при старте, поэтому изменение файла не действует на работающий процесс. Если инженер поправил порт и не перезапустил службу, он будет искать причину в другом месте. Настройки, которые меняются на лету, выделяют отдельно и описывают в документации.</p>
+<p>Расхождение удобно ловить на ревью. Если настройка описана в схеме, добавление нового параметра в код без строки в <code>.env.example</code> видно в запросе на слияние, как видна ошибка в коде. Схема задаёт имя, тип, обязательность и допустимые значения, а тест проверяет, что пример и реальный загрузчик дают одинаковый набор ключей. Такой тест не требует базы и стоит секунды, но закрывает целый класс ошибок, которые иначе всплывают на сервере.</p>
+<p>Полезно проверять и обратное направление: не осталось ли в репозитории настроек, которых код больше не читает. Мёртвая настройка опаснее отсутствующей, потому что инженер меняет её, ждёт эффекта и не понимает, почему ничего не произошло. Поиск по имени в коде занимает минуту и снимает вопрос. Если параметр нужен только старой версии, его удаляют вместе с поддержкой этой версии, а не оставляют на всякий случай.</p>
+<figure class="figure" data-fig="config-drift" data-one="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"><iframe title="Figure 3: config-drift" scrolling="no"></iframe><figcaption>Четыре причины расхождения настроек и проверка для каждой. Нижняя полоса показывает, что именно проверяет приложение при старте, прежде чем принять первый запрос.</figcaption></figure>
+
+<table>
+<thead>
+<tr>
+<th>Симптом</th>
+<th>Вероятная причина</th>
+<th>Что проверить</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>На новой машине пустая база</td>
+<td>относительный путь и другой рабочий каталог</td>
+<td><code>SKLAD_DB_PATH</code>, текущий каталог службы</td>
+</tr>
+<tr>
+<td>Порт занят</td>
+<td>значение по умолчанию совпало с другой службой</td>
+<td><code>SKLAD_API_PORT</code>, список портов</td>
+</tr>
+<tr>
+<td>Секрет виден в журнале</td>
+<td>вывод объекта настроек целиком</td>
+<td>маскирование и уровень журнала</td>
+</tr>
+<tr>
+<td>В <code>prod</code> работает отладка</td>
+<td>профиль не передан службой</td>
+<td><code>SKLAD_ENV</code>, файл службы</td>
+</tr>
+<tr>
+<td>Изменение не действует</td>
+<td>процесс не перезапущен</td>
+<td>время старта процесса</td>
+</tr>
+</tbody>
+</table>
+<h2 id="проверка-настроек-при-старте"><span class="num">07</span>Проверка настроек при старте</h2>
 <p>Настройки читают один раз, но проверять их нужно до того, как приложение начнёт принимать запросы. Ошибка в порту или отсутствующий секрет должны остановить запуск с понятным сообщением. Иначе приложение поднимется, ответит на первый запрос ошибкой 500 и будет выглядеть как дефект бизнес-логики.</p>
 <div class="codehilite" data-lang="text"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">config</span><span class="w"> </span><span class="kn">import</span> <span class="n">Config</span><span class="p">,</span> <span class="n">load_config</span>
@@ -1305,60 +1356,81 @@ data/*.db
 </tbody>
 </table>
 <p>Проверку путей стоит делать отдельно от проверки значений. Приложение может создать каталог само, но только если ему разрешено писать. На сервере служба работает под отдельным пользователем, и права на каталог <code>data</code> должны быть выданы заранее. Если приложение молча создаёт пустую базу в другом месте, получается ровно та ситуация, с которой началась лекция.</p>
-<h2 id="профили-и-расхождения"><span class="num">07</span>Профили и расхождения</h2>
-<p>Настройки расходятся по четырём причинам: разные имена параметров, разные источники, разные значения по умолчанию и разное время применения. Имена должны совпадать во всех средах. Если в разработке параметр называется <code>DB_PATH</code>, а в эксплуатации <code>SKLAD_DB_PATH</code>, приложение прочитает значение по умолчанию и не заметит подмены.</p>
-<p>Источники тоже нужно проверять. Локальный запуск может читать <code>.env</code>, а сервер получает переменные от службы. Если на сервере <code>.env</code> не загружается, все значения окажутся по умолчанию. Поэтому в журнал при старте пишут, какие источники найдены: файл, окружение, аргументы. Это не раскрывает секреты и сразу показывает расхождение.</p>
-<p>Значения по умолчанию опасны тем, что работают молча. Значение <code>dev-only</code> для секрета удобно в разработке, но в эксплуатации оно означает предсказуемую подпись токенов. Поэтому для секретов значение по умолчанию либо отсутствует, либо запрещено в <code>prod</code>. Для несекретных параметров значение по умолчанию допустимо и полезно: новый разработчик запускает проект без чтения документации.</p>
-<p>Время применения связано с перезапуском. Большинство настроек читается при старте, поэтому изменение файла не действует на работающий процесс. Если инженер поправил порт и не перезапустил службу, он будет искать причину в другом месте. Настройки, которые меняются на лету, выделяют отдельно и описывают в документации.</p>
+<p>Есть ещё одна проверка, которую легко пропустить: согласованность значений между собой. Профиль <code>prod</code> и включённая отладка несовместимы. Внешний адрес API и ключ к нему должны относиться к одному контуру. Путь к базе и каталог резервных копий не должны указывать на один диск, иначе одна авария уничтожит и данные, и копии. Такие пары описывают в схеме настроек и проверяют вместе.</p>
+<p>Проверка при старте не спасает от настройки, которая формально корректна, но семантически неверна. Порт 8080 в диапазоне, но его уже слушает другая служба. Путь существует, но указывает на копию базы недельной давности. Секрет задан, но это тот же секрет, что на тестовом стенде. Поэтому после проверки значений нужна проверка смысла: health check показывает, к какой базе подключилось приложение и сколько в ней записей, а журнал фиксирует профиль и источники.</p>
+<h2 id="чек-лист-конфигурации"><span class="num">08</span>Чек-лист конфигурации</h2>
 <table>
 <thead>
 <tr>
-<th>Симптом</th>
-<th>Вероятная причина</th>
-<th>Что проверить</th>
+<th>Пункт</th>
+<th>Как проверить</th>
+<th>Признак готовности</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>На новой машине пустая база</td>
-<td>относительный путь и другой рабочий каталог</td>
-<td><code>SKLAD_DB_PATH</code>, текущий каталог службы</td>
+<td>Один список имён</td>
+<td>сравнить <code>.env.example</code> и код</td>
+<td>имена совпадают</td>
 </tr>
 <tr>
-<td>Порт занят</td>
-<td>значение по умолчанию совпало с другой службой</td>
-<td><code>SKLAD_API_PORT</code>, список портов</td>
+<td>Порядок старшинства</td>
+<td>прочитать модуль настроек</td>
+<td>правило записано и покрыто тестом</td>
 </tr>
 <tr>
-<td>Секрет виден в журнале</td>
-<td>вывод объекта настроек целиком</td>
-<td>маскирование и уровень журнала</td>
+<td>Типы и значения</td>
+<td>запустить тесты конфигурации</td>
+<td>неверный порт и уровень дают ошибку</td>
 </tr>
 <tr>
-<td>В <code>prod</code> работает отладка</td>
-<td>профиль не передан службой</td>
-<td><code>SKLAD_ENV</code>, файл службы</td>
+<td>Секреты вне репозитория</td>
+<td><code>git status</code>, поиск по истории</td>
+<td>в репозитории только пример</td>
 </tr>
 <tr>
-<td>Изменение не действует</td>
-<td>процесс не перезапущен</td>
-<td>время старта процесса</td>
+<td>Права на файл</td>
+<td>посмотреть владельца и режим</td>
+<td>файл читает только служба</td>
+</tr>
+<tr>
+<td>Проверка при старте</td>
+<td>запустить с пустым окружением</td>
+<td>сообщение об ошибке, а не пустая база</td>
+</tr>
+<tr>
+<td>Журнал источников</td>
+<td>открыть журнал старта</td>
+<td>видно профиль и найденные источники</td>
+</tr>
+<tr>
+<td>Согласованность</td>
+<td>проверить пары значений</td>
+<td>нет <code>prod</code> с отладкой и тестовым ключом</td>
 </tr>
 </tbody>
 </table>
-<h2 id="типичные-ошибки"><span class="num">08</span>Типичные ошибки</h2>
+<h2 id="типичные-ошибки"><span class="num">09</span>Типичные ошибки</h2>
 <p><strong>Путь, привязанный к компьютеру.</strong> В коде остаётся путь к домашней папке конкретного пользователя. На другой машине приложение либо падает, либо создаёт пустую базу. Лечение: относительный путь от каталога проекта и параметр <code>SKLAD_DB_PATH</code>.</p>
 <p><strong>Секрет в репозитории.</strong> Пароль лежит в <code>config.py</code> или в <code>.env</code>, который попал в коммит. Симптом: секрет виден в истории и в любом клоне. Лечение: вынести в переменную, сменить значение, добавить <code>.env</code> в <code>.gitignore</code>.</p>
 <p><strong>Строка вместо числа.</strong> Порт читают как строку и сравнивают с числом. Симптом: проверка <code>port &gt; 1024</code> всегда ложна или падает с <code>TypeError</code>. Лечение: явное преобразование и проверка ошибки преобразования.</p>
 <p><strong>Булево значение из строки.</strong> <code>os.environ.get("DEBUG")</code> возвращает строку <code>"False"</code>, а любая непустая строка в Python истинна. Симптом: отладка включена, хотя в настройке написано <code>False</code>. Лечение: отдельная функция разбора <code>true/false</code> и проверка допустимых значений.</p>
 <p><strong>Разные имена в средах.</strong> В разработке <code>PORT</code>, в эксплуатации <code>SKLAD_API_PORT</code>. Симптом: на сервере всегда 8000. Лечение: один список имён и проверка при старте.</p>
 <p><strong>Файл <code>.env</code> не загружен.</strong> Локально его читает библиотека, на сервере служба запускает приложение без переменных. Симптом: все значения по умолчанию. Лечение: явная загрузка файла или передача переменных в службе.</p>
-<p><strong>Рабочий каталог другой.</strong> Относительный путь <code>data/sklad.db</code> считается от каталога, из которого запущен процесс. Симптом: база создаётся в неожиданном месте. Лечение: <code>WorkingDirectory</code> в службе и проверка каталога при старте.</p>
+<p><strong>Рабочий каталог другой.</strong> Относительный путь <code>data/sklad.db</code> считается от каталога, из которого запущен процесс. Симптом: база создаётся в неожиданном месте. Лечение: явный рабочий каталог службы и проверка каталога при старте.</p>
 <p><strong>Секрет в журнале.</strong> Приложение печатает весь объект настроек при старте. Симптом: пароль в текстовом журнале и в архиве диагностики. Лечение: маскирование и запрет вывода значений секретов.</p>
 <p><strong>Настройка изменена без перезапуска.</strong> Инженер правит файл и ждёт эффекта. Симптом: «изменение не работает». Лечение: перезапуск службы и запись времени старта в журнал.</p>
-<div class="callout key"><span class="label">Одна точка чтения</span><p>Все настройки читает один модуль, остальной код получает готовый объект. Тогда порядок старшинства, преобразования и проверки описаны в одном месте, а не разбросаны по проекту.</p></div>
+<div class="callout key"><span class="label">Одна точка чтения</span><p>Все настройки читает один модуль, остальной код получает готовый объект. Тогда порядок старшинства, преобразования и проверки описаны в одном месте, а не разбросаны по проекту.</p></div></div>
+</div>
 
-<h2 id="итоги"><span class="num">09</span>Итоги</h2>
+<div class="gate-step" data-gate>
+<p class="gate-action"><button type="button" class="gate-btn" aria-expanded="false"><span class="gate-q" aria-hidden="true">?</span><span>Что из проверок конфигурации стоит перенести в учебный проект до первой выкладки на сервер?</span></button></p>
+<div class="gate-content" hidden><h2 id="что-перенести-в-учебный-проект"><span class="num">10</span>Что перенести в учебный проект</h2>
+<p>В <code>sklad-plus</code> настройки уже разошлись по трём местам: путь к базе записан в модуле, порт берётся из значения по умолчанию, а секрет подставляется строкой <code>dev-only</code>. Первый шаг наведения порядка это свести чтение в один модуль и описать все параметры в <code>.env.example</code>. Пока список имён не зафиксирован, любая проверка опирается на догадку.</p>
+<p>Второй шаг это проверка при старте. Достаточно четыре правила: обязательный секрет, диапазон порта, допустимый уровень журнала и доступность каталога базы. Каждое правило сообщает имя параметра и фактическое значение. Проверку запускают в тесте, чтобы она не зависела от ручного запуска приложения.</p>
+<p>Третий шаг это тест конфигурации. Он подставляет набор переменных, загружает настройки и сравнивает результат. Отдельный тест проверяет отказ на неверном порту. Такой тест выполняется за доли секунды и ловит опечатку в имени переменной до того, как она станет ошибкой на сервере.</p>
+<p>Четвёртый шаг это запись в README: какие переменные нужны, что означают, где взять значения. Проверка простая: человек, который не участвовал в разработке, запускает проект по README и не задаёт ни одного вопроса. Если вопрос появился, ответа не хватает в тексте, а не в голове автора.</p>
+<h2 id="итоги"><span class="num">11</span>Итоги</h2>
 <ul>
 <li>Настройка отличает запуски друг от друга, не меняя логику: путь, порт, журнал, адрес и секрет.</li>
 <li>Источники настройки идут по старшинству: аргумент, переменная окружения, файл, значение по умолчанию.</li>
@@ -1366,8 +1438,22 @@ data/*.db
 <li>Секреты хранят вне репозитория, в <code>.env</code> или хранилище секретов, а в репозитории держат только <code>.env.example</code>.</li>
 <li>Профиль выбирает набор настроек для среды, но не создаёт отдельную копию кода.</li>
 <li>Проверка при старте останавливает приложение с понятным сообщением, пока ошибка не дошла до пользователя.</li>
+<li>Резервное копирование и развёртывание тоже конфигурация: их проверяют запуском, а не наличием в инструкции.</li>
 </ul>
-<div class="quiz" data-quiz data-quiz-guard><div class="quiz-who"><label class="quiz-who-label"><span>ФИО</span><input type="text" class="quiz-name" data-quiz-name maxlength="80" autocomplete="off" placeholder="Иванов Иван Иванович"></label><span class="quiz-attempts" data-quiz-attempts>две попытки на лекцию</span><span class="quiz-note" data-who-note hidden></span></div><div class="quiz-q" data-type="single" data-correct="1" data-q="1"><p class="quiz-p"><span class="quiz-no" aria-hidden="true">01</span>Где хранить секрет в эксплуатации?</p><div class="opts"><label class="opt"><input type="radio" name="q196_0" value="3" autocomplete="off"><span>В сообщении коммита</span></label><label class="opt"><input type="radio" name="q196_0" value="2" autocomplete="off"><span>В файле <code>.env.example</code> в репозитории</span></label><label class="opt"><input type="radio" name="q196_0" value="0" autocomplete="off" data-ok><span>В переменной окружения или хранилище секретов</span></label><label class="opt"><input type="radio" name="q196_0" value="1" autocomplete="off"><span>В исходном коде рядом с настройками</span></label></div><p class="quiz-why" hidden>Секрет передают вне репозитория и ограничивают доступ к нему.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="multi" data-correct="3" data-q="2" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">02</span>Какие источники настроек переопределяют друг друга?</p><div class="opts"><label class="opt"><input type="checkbox" name="q196_1" value="0" autocomplete="off" data-ok><span>Файл конфигурации</span></label><label class="opt"><input type="checkbox" name="q196_1" value="1" autocomplete="off" data-ok><span>Переменные окружения</span></label><label class="opt"><input type="checkbox" name="q196_1" value="3" autocomplete="off"><span>Комментарии в исходном коде</span></label><label class="opt"><input type="checkbox" name="q196_1" value="2" autocomplete="off" data-ok><span>Аргументы командной строки</span></label></div><p class="quiz-why" hidden>Источники образуют порядок старшинства, комментарии в нём не участвуют.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="3" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">03</span>Что делать при утечке секрета в историю Git?</p><div class="opts"><label class="opt"><input type="radio" name="q196_2" value="1" autocomplete="off"><span>Удалить строку из последнего коммита и считать вопрос закрытым</span></label><label class="opt"><input type="radio" name="q196_2" value="0" autocomplete="off" data-ok><span>Заменить секрет и очистить историю репозитория</span></label><label class="opt"><input type="radio" name="q196_2" value="2" autocomplete="off"><span>Переименовать файл с секретом</span></label><label class="opt"><input type="radio" name="q196_2" value="3" autocomplete="off"><span>Добавить секрет в <code>.gitignore</code> задним числом</span></label></div><p class="quiz-why" hidden>Секрет остаётся в истории, поэтому его меняют, а историю очищают.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="short" data-q="4" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">04</span>Как называют набор настроек для конкретной среды?</p><input type="text" class="short-answer" data-answers="[&quot;профиль&quot;, &quot;конфигурационный профиль&quot;]" placeholder="Введите ответ" autocomplete="off" spellcheck="false" aria-label="Как называют набор настроек для конкретной среды?"><p class="quiz-why" hidden>Профиль выбирает значения для разработки, теста или эксплуатации.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="5" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">05</span>Что делать, если обязательная настройка отсутствует при старте?</p><div class="opts"><label class="opt"><input type="radio" name="q196_4" value="2" autocomplete="off"><span>Создать пустую базу</span></label><label class="opt"><input type="radio" name="q196_4" value="3" autocomplete="off"><span>Отключить проверку прав</span></label><label class="opt"><input type="radio" name="q196_4" value="0" autocomplete="off" data-ok><span>Остановить запуск с понятным сообщением</span></label><label class="opt"><input type="radio" name="q196_4" value="1" autocomplete="off"><span>Подставить любое значение и продолжить</span></label></div><p class="quiz-why" hidden>Ошибка окружения должна быть видна сразу, а не через час работы.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="multi" data-correct="3" data-q="6" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">06</span>Что входит в проверку настроек при старте?</p><div class="opts"><label class="opt"><input type="checkbox" name="q196_5" value="1" autocomplete="off" data-ok><span>Наличие обязательного секрета</span></label><label class="opt"><input type="checkbox" name="q196_5" value="3" autocomplete="off"><span>Цвет кнопки на главной странице</span></label><label class="opt"><input type="checkbox" name="q196_5" value="2" autocomplete="off" data-ok><span>Доступность каталога для базы</span></label><label class="opt"><input type="checkbox" name="q196_5" value="0" autocomplete="off" data-ok><span>Диапазон порта</span></label></div><p class="quiz-why" hidden>Проверяют значения, от которых зависит запуск и безопасность.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="7" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">07</span>Что произойдёт, если параметр задан и в файле, и в переменной окружения?</p><div class="opts"><label class="opt"><input type="radio" name="q196_6" value="1" autocomplete="off"><span>Файл переопределит переменную окружения</span></label><label class="opt"><input type="radio" name="q196_6" value="2" autocomplete="off"><span>Приложение остановится с конфликтом</span></label><label class="opt"><input type="radio" name="q196_6" value="0" autocomplete="off" data-ok><span>Переменная окружения переопределит значение из файла</span></label><label class="opt"><input type="radio" name="q196_6" value="3" autocomplete="off"><span>Будет использовано среднее значение</span></label></div><p class="quiz-why" hidden>Переменная окружения стоит выше файла в порядке старшинства.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="8" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">08</span>Зачем нужен файл <code>.env.example</code>?</p><div class="opts"><label class="opt"><input type="radio" name="q196_7" value="1" autocomplete="off"><span>Хранить рабочий пароль для быстрого запуска</span></label><label class="opt"><input type="radio" name="q196_7" value="3" autocomplete="off"><span>Хранить историю изменений настроек</span></label><label class="opt"><input type="radio" name="q196_7" value="2" autocomplete="off"><span>Заменить файл <code>.env</code> на сервере</span></label><label class="opt"><input type="radio" name="q196_7" value="0" autocomplete="off" data-ok><span>Показать состав переменных без настоящих значений</span></label></div><p class="quiz-why" hidden>Пример описывает, какие переменные нужны, но не содержит секретов.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="multi" data-correct="3" data-q="9" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">09</span>Какие признаки указывают на проблему с конфигурацией?</p><div class="opts"><label class="opt"><input type="checkbox" name="q196_8" value="2" autocomplete="off" data-ok><span>После переноса создалась пустая база</span></label><label class="opt"><input type="checkbox" name="q196_8" value="3" autocomplete="off"><span>Все тесты проходят на машине разработчика</span></label><label class="opt"><input type="checkbox" name="q196_8" value="0" autocomplete="off" data-ok><span>На тестовой машине приложение слушает другой порт</span></label><label class="opt"><input type="checkbox" name="q196_8" value="1" autocomplete="off" data-ok><span>В журнале появился секретный ключ</span></label></div><p class="quiz-why" hidden>Расхождение окружений и утечка секрета относятся к настройкам.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="10" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">10</span>Почему значение из переменной окружения нужно преобразовывать?</p><div class="opts"><label class="opt"><input type="radio" name="q196_9" value="2" autocomplete="off"><span>Оно хранится в бинарном виде</span></label><label class="opt"><input type="radio" name="q196_9" value="1" autocomplete="off"><span>Оно всегда приходит числом</span></label><label class="opt"><input type="radio" name="q196_9" value="0" autocomplete="off" data-ok><span>Оно всегда приходит строкой</span></label><label class="opt"><input type="radio" name="q196_9" value="3" autocomplete="off"><span>Оно не поддерживает кириллицу</span></label></div><p class="quiz-why" hidden><code>os.environ.get</code> возвращает строку, поэтому порт и флаги разбирают явно.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="11" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">11</span>Что означает профиль <code>prod</code>?</p><div class="opts"><label class="opt"><input type="radio" name="q196_10" value="1" autocomplete="off"><span>Отдельную копию исходного кода</span></label><label class="opt"><input type="radio" name="q196_10" value="3" autocomplete="off"><span>Файл с журналом ошибок</span></label><label class="opt"><input type="radio" name="q196_10" value="2" autocomplete="off"><span>Ветку Git для выпуска</span></label><label class="opt"><input type="radio" name="q196_10" value="0" autocomplete="off" data-ok><span>Набор настроек для эксплуатационного запуска</span></label></div><p class="quiz-why" hidden>Профиль выбирает значения для среды, а код остаётся одним.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="short" data-q="12" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">12</span>Каким способом в Python получают значение переменной окружения?</p><input type="text" class="short-answer" data-answers="[&quot;os.environ.get&quot;, &quot;os.getenv&quot;]" placeholder="Введите ответ" autocomplete="off" spellcheck="false" aria-label="Каким способом в Python получают значение переменной окружения?"><p class="quiz-why" hidden>Обе функции читают переменную и позволяют задать значение по умолчанию.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="13" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">13</span>Почему относительный путь к базе опасен?</p><div class="opts"><label class="opt"><input type="radio" name="q196_12" value="1" autocomplete="off"><span>Он всегда длиннее абсолютного</span></label><label class="opt"><input type="radio" name="q196_12" value="0" autocomplete="off" data-ok><span>Он зависит от рабочего каталога процесса</span></label><label class="opt"><input type="radio" name="q196_12" value="2" autocomplete="off"><span>Его нельзя прочитать в Linux</span></label><label class="opt"><input type="radio" name="q196_12" value="3" autocomplete="off"><span>Он запрещён в SQLite</span></label></div><p class="quiz-why" hidden>Служба может запускаться из другого каталога, и база создастся не там.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="multi" data-correct="3" data-q="14" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">14</span>Какие значения стоит выносить в настройки?</p><div class="opts"><label class="opt"><input type="checkbox" name="q196_13" value="4" autocomplete="off"><span>Структуру таблиц</span></label><label class="opt"><input type="checkbox" name="q196_13" value="2" autocomplete="off" data-ok><span>Уровень журнала</span></label><label class="opt"><input type="checkbox" name="q196_13" value="0" autocomplete="off" data-ok><span>Порт API</span></label><label class="opt"><input type="checkbox" name="q196_13" value="3" autocomplete="off"><span>Формулу свободного остатка</span></label><label class="opt"><input type="checkbox" name="q196_13" value="1" autocomplete="off" data-ok><span>Путь к файлу базы</span></label></div><p class="quiz-why" hidden>Настройки описывают окружение, а не бизнес-правила и схему.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="15" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">15</span>Что относится к настройкам приложения?</p><div class="opts"><label class="opt"><input type="radio" name="q196_14" value="1" autocomplete="off"><span>Формула расчёта свободного остатка</span></label><label class="opt"><input type="radio" name="q196_14" value="0" autocomplete="off" data-ok><span>Путь к файлу базы, порт и уровень журнала</span></label><label class="opt"><input type="radio" name="q196_14" value="2" autocomplete="off"><span>Структура таблицы товаров</span></label><label class="opt"><input type="radio" name="q196_14" value="3" autocomplete="off"><span>Количество товарных категорий в справочнике</span></label></div><p class="quiz-why" hidden>Настройки меняют окружение запуска, а не правила расчёта и структуру данных.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><p class="quiz-note quiz-submit-note" data-quiz-note hidden></p><div class="quiz-result" data-quiz-result hidden aria-live="polite"><span class="label">Результат теста</span><h3>Тест завершён</h3><p class="modal-name-line">ФИО: <b data-student-name></b></p><p class="modal-result" data-modal-result></p><p class="modal-result" data-modal-wrong></p><dl class="modal-times"><div><dt>Время выполнения теста</dt><dd data-test-time>00:00</dd></div><div><dt>Время просмотра лекции</dt><dd data-view-time>00:00</dd></div></dl></div></div></div>
+<h2 id="источники"><span class="num">12</span>Источники</h2>
+<ol>
+<li>The Twelve-Factor App. III. Config. https://12factor.net/config</li>
+<li>Python documentation. venv: creation of virtual environments. https://docs.python.org/3/library/venv.html</li>
+<li>Python documentation. os.environ. https://docs.python.org/3/library/os.html#os.environ</li>
+<li>pip documentation. User guide. https://pip.pypa.io/en/stable/user_guide/</li>
+<li>Microsoft Learn. Configuration in .NET. https://learn.microsoft.com/en-us/dotnet/core/extensions/configuration</li>
+<li>Microsoft Learn. Use multiple environments in ASP.NET Core. https://learn.microsoft.com/en-us/aspnet/core/fundamentals/environments</li>
+<li>GitHub Docs. Using secrets in GitHub Actions. https://docs.github.com/en/actions/security-for-github-actions/security-guides/using-secrets-in-github-actions</li>
+<li>OWASP Cheat Sheet Series. Secrets Management Cheat Sheet. https://cheatsheetseries.owasp.org/cheatsheets/Secrets_Management_Cheat_Sheet.html</li>
+<li>GitLab. Postmortem of database outage of January 31, 2017. https://about.gitlab.com/blog/2017/02/10/postmortem-of-database-outage-of-january-31/</li>
+<li>U.S. Securities and Exchange Commission. SEC Charges Knight Capital With Violations of Market Access Rule, 2013. https://www.sec.gov/news/press-release/2013-222</li>
+</ol>
+<div class="quiz" data-quiz data-quiz-guard><div class="quiz-who"><label class="quiz-who-label"><span>ФИО</span><input type="text" class="quiz-name" data-quiz-name maxlength="80" autocomplete="off" placeholder="Иванов Иван Иванович"></label><span class="quiz-attempts" data-quiz-attempts>две попытки на лекцию</span><span class="quiz-note" data-who-note hidden></span></div><div class="quiz-q" data-type="single" data-correct="1" data-q="1"><p class="quiz-p"><span class="quiz-no" aria-hidden="true">01</span>Что относится к настройкам приложения?</p><div class="opts"><label class="opt"><input type="radio" name="q134_0" value="1" autocomplete="off"><span>Формула расчёта свободного остатка</span></label><label class="opt"><input type="radio" name="q134_0" value="0" autocomplete="off" data-ok><span>Путь к файлу базы, порт и уровень журнала</span></label><label class="opt"><input type="radio" name="q134_0" value="2" autocomplete="off"><span>Структура таблицы товаров</span></label><label class="opt"><input type="radio" name="q134_0" value="3" autocomplete="off"><span>Количество товарных категорий в справочнике</span></label></div><p class="quiz-why" hidden>Настройки меняют окружение запуска, а не правила расчёта и структуру данных.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="multi" data-correct="3" data-q="2" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">02</span>Какие значения стоит выносить в настройки?</p><div class="opts"><label class="opt"><input type="checkbox" name="q134_1" value="4" autocomplete="off"><span>Структуру таблиц</span></label><label class="opt"><input type="checkbox" name="q134_1" value="2" autocomplete="off" data-ok><span>Уровень журнала</span></label><label class="opt"><input type="checkbox" name="q134_1" value="0" autocomplete="off" data-ok><span>Порт API</span></label><label class="opt"><input type="checkbox" name="q134_1" value="3" autocomplete="off"><span>Формулу свободного остатка</span></label><label class="opt"><input type="checkbox" name="q134_1" value="1" autocomplete="off" data-ok><span>Путь к файлу базы</span></label></div><p class="quiz-why" hidden>Настройки описывают окружение, а не бизнес-правила и схему.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="3" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">03</span>Что произойдёт, если параметр задан и в файле, и в переменной окружения?</p><div class="opts"><label class="opt"><input type="radio" name="q134_2" value="1" autocomplete="off"><span>Файл переопределит переменную окружения</span></label><label class="opt"><input type="radio" name="q134_2" value="2" autocomplete="off"><span>Приложение остановится с конфликтом</span></label><label class="opt"><input type="radio" name="q134_2" value="0" autocomplete="off" data-ok><span>Переменная окружения переопределит значение из файла</span></label><label class="opt"><input type="radio" name="q134_2" value="3" autocomplete="off"><span>Будет использовано среднее значение</span></label></div><p class="quiz-why" hidden>Переменная окружения стоит выше файла в порядке старшинства.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="short" data-q="4" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">04</span>Каким способом в Python получают значение переменной окружения?</p><input type="text" class="short-answer" data-answers="[&quot;os.environ.get&quot;, &quot;os.getenv&quot;]" placeholder="Введите ответ" autocomplete="off" spellcheck="false" aria-label="Каким способом в Python получают значение переменной окружения?"><p class="quiz-why" hidden>Обе функции читают переменную и позволяют задать значение по умолчанию.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="5" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">05</span>Почему относительный путь к базе опасен?</p><div class="opts"><label class="opt"><input type="radio" name="q134_4" value="1" autocomplete="off"><span>Он всегда длиннее абсолютного</span></label><label class="opt"><input type="radio" name="q134_4" value="0" autocomplete="off" data-ok><span>Он зависит от рабочего каталога процесса</span></label><label class="opt"><input type="radio" name="q134_4" value="2" autocomplete="off"><span>Его нельзя прочитать в Linux</span></label><label class="opt"><input type="radio" name="q134_4" value="3" autocomplete="off"><span>Он запрещён в SQLite</span></label></div><p class="quiz-why" hidden>Служба может запускаться из другого каталога, и база создастся не там.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="6" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">06</span>Чему учит случай Knight Capital?</p><div class="opts"><label class="opt"><input type="radio" name="q134_5" value="2" autocomplete="off"><span>Слишком подробный журнал приложения</span></label><label class="opt"><input type="radio" name="q134_5" value="3" autocomplete="off"><span>Использование виртуального окружения Python</span></label><label class="opt"><input type="radio" name="q134_5" value="1" autocomplete="off"><span>Отказ от резервного копирования базы</span></label><label class="opt"><input type="radio" name="q134_5" value="0" autocomplete="off" data-ok><span>Неполная выкладка и отсутствие проверки версии на каждом сервере</span></label></div><p class="quiz-why" hidden>Новый код попал не на все серверы, и старый модуль включился вместе с новым флагом.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="short" data-q="7" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">07</span>Как называют значение, которое задаёт площадка и которое переопределяет файл?</p><input type="text" class="short-answer" data-answers="[&quot;переменная окружения&quot;, &quot;переменная среды&quot;]" placeholder="Введите ответ" autocomplete="off" spellcheck="false" aria-label="Как называют значение, которое задаёт площадка и которое переопределяет файл?"><p class="quiz-why" hidden>Переменная окружения старше файла и задаётся на конкретной машине или в контейнере.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="multi" data-correct="3" data-q="8" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">08</span>Какие источники настроек переопределяют друг друга?</p><div class="opts"><label class="opt"><input type="checkbox" name="q134_7" value="0" autocomplete="off" data-ok><span>Файл конфигурации</span></label><label class="opt"><input type="checkbox" name="q134_7" value="1" autocomplete="off" data-ok><span>Переменные окружения</span></label><label class="opt"><input type="checkbox" name="q134_7" value="3" autocomplete="off"><span>Комментарии в исходном коде</span></label><label class="opt"><input type="checkbox" name="q134_7" value="2" autocomplete="off" data-ok><span>Аргументы командной строки</span></label></div><p class="quiz-why" hidden>Источники образуют порядок старшинства, комментарии в нём не участвуют.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="9" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">09</span>Зачем нужен файл <code>.env.example</code>?</p><div class="opts"><label class="opt"><input type="radio" name="q134_8" value="1" autocomplete="off"><span>Хранить рабочий пароль для быстрого запуска</span></label><label class="opt"><input type="radio" name="q134_8" value="3" autocomplete="off"><span>Хранить историю изменений настроек</span></label><label class="opt"><input type="radio" name="q134_8" value="2" autocomplete="off"><span>Заменить файл <code>.env</code> на сервере</span></label><label class="opt"><input type="radio" name="q134_8" value="0" autocomplete="off" data-ok><span>Показать состав переменных без настоящих значений</span></label></div><p class="quiz-why" hidden>Пример описывает, какие переменные нужны, но не содержит секретов.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="10" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">10</span>Что делать, если обязательная настройка отсутствует при старте?</p><div class="opts"><label class="opt"><input type="radio" name="q134_9" value="2" autocomplete="off"><span>Создать пустую базу</span></label><label class="opt"><input type="radio" name="q134_9" value="3" autocomplete="off"><span>Отключить проверку прав</span></label><label class="opt"><input type="radio" name="q134_9" value="0" autocomplete="off" data-ok><span>Остановить запуск с понятным сообщением</span></label><label class="opt"><input type="radio" name="q134_9" value="1" autocomplete="off"><span>Подставить любое значение и продолжить</span></label></div><p class="quiz-why" hidden>Ошибка окружения должна быть видна сразу, а не через час работы.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="multi" data-correct="3" data-q="11" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">11</span>Какие признаки указывают на проблему с конфигурацией?</p><div class="opts"><label class="opt"><input type="checkbox" name="q134_10" value="2" autocomplete="off" data-ok><span>После переноса создалась пустая база</span></label><label class="opt"><input type="checkbox" name="q134_10" value="3" autocomplete="off"><span>Все тесты проходят на машине разработчика</span></label><label class="opt"><input type="checkbox" name="q134_10" value="0" autocomplete="off" data-ok><span>На тестовой машине приложение слушает другой порт</span></label><label class="opt"><input type="checkbox" name="q134_10" value="1" autocomplete="off" data-ok><span>В журнале появился секретный ключ</span></label></div><p class="quiz-why" hidden>Расхождение окружений и утечка секрета относятся к настройкам.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="12" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">12</span>Что делать при утечке секрета в историю Git?</p><div class="opts"><label class="opt"><input type="radio" name="q134_11" value="1" autocomplete="off"><span>Удалить строку из последнего коммита и считать вопрос закрытым</span></label><label class="opt"><input type="radio" name="q134_11" value="0" autocomplete="off" data-ok><span>Заменить секрет и очистить историю репозитория</span></label><label class="opt"><input type="radio" name="q134_11" value="2" autocomplete="off"><span>Переименовать файл с секретом</span></label><label class="opt"><input type="radio" name="q134_11" value="3" autocomplete="off"><span>Добавить секрет в <code>.gitignore</code> задним числом</span></label></div><p class="quiz-why" hidden>Секрет остаётся в истории, поэтому его меняют, а историю очищают.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="short" data-q="13" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">13</span>Как называют набор настроек для конкретной среды?</p><input type="text" class="short-answer" data-answers="[&quot;профиль&quot;, &quot;конфигурационный профиль&quot;]" placeholder="Введите ответ" autocomplete="off" spellcheck="false" aria-label="Как называют набор настроек для конкретной среды?"><p class="quiz-why" hidden>Профиль выбирает значения для разработки, теста или эксплуатации.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="14" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">14</span>Чем платят за большое число настроек?</p><div class="opts"><label class="opt"><input type="radio" name="q134_13" value="1" autocomplete="off"><span>Уменьшением размера артефакта</span></label><label class="opt"><input type="radio" name="q134_13" value="3" autocomplete="off"><span>Обязательным отключением тестов</span></label><label class="opt"><input type="radio" name="q134_13" value="0" autocomplete="off" data-ok><span>Ростом числа комбинаций, которые нужно проверять</span></label><label class="opt"><input type="radio" name="q134_13" value="2" autocomplete="off"><span>Отказом от резервного копирования</span></label></div><p class="quiz-why" hidden>Каждая настройка добавляет ветку поведения и комбинацию для проверки.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="15" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">15</span>Почему значение из переменной окружения нужно преобразовывать?</p><div class="opts"><label class="opt"><input type="radio" name="q134_14" value="2" autocomplete="off"><span>Оно хранится в бинарном виде</span></label><label class="opt"><input type="radio" name="q134_14" value="1" autocomplete="off"><span>Оно всегда приходит числом</span></label><label class="opt"><input type="radio" name="q134_14" value="0" autocomplete="off" data-ok><span>Оно всегда приходит строкой</span></label><label class="opt"><input type="radio" name="q134_14" value="3" autocomplete="off"><span>Оно не поддерживает кириллицу</span></label></div><p class="quiz-why" hidden><code>os.environ.get</code> возвращает строку, поэтому порт и флаги разбирают явно.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><p class="quiz-note quiz-submit-note" data-quiz-note hidden></p><div class="quiz-result" data-quiz-result hidden aria-live="polite"><span class="label">Результат теста</span><h3>Тест завершён</h3><p class="modal-name-line">ФИО: <b data-student-name></b></p><p class="modal-result" data-modal-result></p><p class="modal-result" data-modal-wrong></p><dl class="modal-times"><div><dt>Время выполнения теста</dt><dd data-test-time>00:00</dd></div><div><dt>Время просмотра лекции</dt><dd data-view-time>00:00</dd></div></dl></div></div></div>
 </div></article><nav class="pager"><a class="" href="44-prakt-17.html"><span>← Предыдущее занятие</span>Практика 17. Рецензия пул-реквеста и релизная сборка</a><a class="next" style="text-align:right;margin-left:auto" href="46-lek-29.html"><span>Следующее занятие →</span>Лекция 29. Развёртывание</a></nav></main>
 <div class="modal" data-modal="warn" hidden>
   <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="warn-title">
@@ -1673,6 +1759,29 @@ data/*.db
       });
     });
   });
+})();
+
+(function(){
+  var FIX = "<style>html{color-scheme:__T__!important}html,body{background:transparent!important;margin:0!important}.iso-page{margin:6px auto 4px!important}<\/style><script>window.__errs=[];addEventListener('error',function(e){__errs.push(String(e.message))});<\/script>";
+  function size(f){ try{ var d=f.contentDocument; if(!d||!d.body) return;
+    f.style.height = Math.max(d.documentElement.scrollHeight, d.body.scrollHeight) + 'px'; }catch(e){} }
+  function load(fig){
+    var t='light'; if(fig.dataset.loaded===t) return; fig.dataset.loaded=t;
+    var f=fig.querySelector('iframe'), one=fig.getAttribute('data-one');
+    var b=atob(one || fig.getAttribute('data-light')), bytes=Uint8Array.from(b, function(c){return c.charCodeAt(0)});
+    f.style.colorScheme = 'light';
+    new Response(new Blob([bytes]).stream().pipeThrough(new DecompressionStream('gzip'))).text().then(function(html){
+      if (one) html = html.split('data-theme="dark"').join('data-theme="light"');
+      html = html.replace('</head>', FIX.split('__T__').join('light') + '</head>');
+      f.srcdoc = html;
+    });
+    f.onload=function(){ size(f); setTimeout(function(){size(f)},300); setTimeout(function(){size(f)},1200);
+      try{ new ResizeObserver(function(){size(f)}).observe(f.contentDocument.body); }catch(e){} };
+  }
+  var figs=[].slice.call(document.querySelectorAll('figure.figure'));
+  var io = 'IntersectionObserver' in window ? new IntersectionObserver(function(es){ es.forEach(function(e){ if(e.isIntersecting){ load(e.target); io.unobserve(e.target);} }); }, {rootMargin:'600px'}) : null;
+  figs.forEach(function(f){ io ? io.observe(f) : load(f); });
+  addEventListener('resize', function(){ figs.forEach(function(f){ var i=f.querySelector('iframe'); if(f.dataset.loaded) size(i); }); });
 })();
 
 (function(){

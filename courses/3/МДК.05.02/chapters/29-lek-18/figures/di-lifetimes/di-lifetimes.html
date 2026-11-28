@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Время жизни сервисов</title>
+<style>
+  :root { --paper:#FAF7F6; --card:#FFFDFC; --ink:#2A2430; --muted:#6B6272; --rule:#E6D9EC; --accent:#8E5BC8; --soft:#EBE0EC; --bad:#B3261E; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .frame { background:var(--paper); border:1px solid var(--rule); border-radius:12px; padding:16px; }
+  .eyebrow { margin:0 0 6px; font:600 10px/1.2 Consolas,monospace; letter-spacing:.14em; text-transform:uppercase; color:var(--accent); }
+  svg { display:block; width:100%; height:auto; }
+  .note { margin:10px 2px 0; font:12px/1.5 "Segoe UI",system-ui,sans-serif; color:var(--muted); }
+  @media (max-width:560px) { .frame { padding:12px; } .note { font-size:11.5px; } }
+</style>
+</head>
+<body>
+<div class="frame">
+  <p class="eyebrow">ASP.NET Core · время жизни</p>
+  <svg viewBox="0 0 680 320" role="img" aria-labelledby="dl-title dl-desc">
+    <title id="dl-title">Singleton, scoped и transient на двух запросах</title>
+    <desc id="dl-desc">Один и тот же сервис в трёх режимах. Singleton переиспользуется, scoped создаётся на запрос, transient создаётся при каждом обращении.</desc>
+
+    <text x="290" y="24" text-anchor="middle" font-family="Consolas,monospace" font-size="10" fill="#6B6272">ЗАПРОС 1</text>
+    <text x="510" y="24" text-anchor="middle" font-family="Consolas,monospace" font-size="10" fill="#6B6272">ЗАПРОС 2</text>
+    <line x1="400" y1="34" x2="400" y2="286" stroke="#E6D9EC" stroke-dasharray="4 4"/>
+
+    <g font-family="Segoe UI,system-ui,sans-serif">
+      <text x="16" y="58" font-size="12" font-weight="700" fill="#2A2430">Singleton</text>
+      <text x="16" y="74" font-size="9.5" fill="#6B6272">всё приложение</text>
+      <rect x="270" y="46" width="260" height="42" rx="8" fill="#EBE0EC" stroke="#8E5BC8" stroke-width="1.6"/>
+      <text x="400" y="64" text-anchor="middle" font-size="11" font-weight="700" fill="#2A2430">один экземпляр</text>
+      <text x="400" y="79" text-anchor="middle" font-size="9.5" fill="#2A2430">живёт до остановки процесса</text>
+
+      <text x="16" y="128" font-size="12" font-weight="700" fill="#2A2430">Scoped</text>
+      <text x="16" y="144" font-size="9.5" fill="#6B6272">один запрос</text>
+      <rect x="240" y="116" width="120" height="42" rx="8" fill="#FFFDFC" stroke="#8E5BC8" stroke-width="1.6"/>
+      <text x="300" y="134" text-anchor="middle" font-size="11" font-weight="700" fill="#2A2430">экземпляр A</text>
+      <text x="300" y="149" text-anchor="middle" font-size="9.5" fill="#6B6272">освобождается</text>
+      <rect x="460" y="116" width="120" height="42" rx="8" fill="#FFFDFC" stroke="#8E5BC8" stroke-width="1.6"/>
+      <text x="520" y="134" text-anchor="middle" font-size="11" font-weight="700" fill="#2A2430">экземпляр B</text>
+      <text x="520" y="149" text-anchor="middle" font-size="9.5" fill="#6B6272">новый на запрос</text>
+
+      <text x="16" y="208" font-size="12" font-weight="700" fill="#2A2430">Transient</text>
+      <text x="16" y="224" font-size="9.5" fill="#6B6272">каждое обращение</text>
+      <rect x="236" y="190" width="56" height="42" rx="8" fill="#FFFDFC" stroke="#D8C7E2"/>
+      <text x="264" y="208" text-anchor="middle" font-size="10" font-weight="700" fill="#2A2430">A1</text>
+      <text x="264" y="222" text-anchor="middle" font-size="8.5" fill="#6B6272">вызов 1</text>
+      <rect x="300" y="190" width="56" height="42" rx="8" fill="#FFFDFC" stroke="#D8C7E2"/>
+      <text x="328" y="208" text-anchor="middle" font-size="10" font-weight="700" fill="#2A2430">A2</text>
+      <text x="328" y="222" text-anchor="middle" font-size="8.5" fill="#6B6272">вызов 2</text>
+      <rect x="456" y="190" width="56" height="42" rx="8" fill="#FFFDFC" stroke="#D8C7E2"/>
+      <text x="484" y="208" text-anchor="middle" font-size="10" font-weight="700" fill="#2A2430">B1</text>
+      <text x="484" y="222" text-anchor="middle" font-size="8.5" fill="#6B6272">вызов 1</text>
+      <rect x="520" y="190" width="56" height="42" rx="8" fill="#FFFDFC" stroke="#D8C7E2"/>
+      <text x="548" y="208" text-anchor="middle" font-size="10" font-weight="700" fill="#2A2430">B2</text>
+      <text x="548" y="222" text-anchor="middle" font-size="8.5" fill="#6B6272">вызов 2</text>
+    </g>
+
+    <line x1="120" y1="248" x2="120" y2="280" stroke="#B3261E" stroke-width="1.4" stroke-dasharray="4 3" marker-end="url(#arw-d)"/>
+    <text x="134" y="268" font-family="Segoe UI,system-ui,sans-serif" font-size="10.5" fill="#B3261E">singleton не может держать scoped: объект переживёт запрос</text>
+
+    <text x="16" y="304" font-family="Consolas,monospace" font-size="9.5" fill="#6B6272">ЧЕМ КОРОЧЕ ВРЕМЯ ЖИЗНИ, ТЕМ ЧАЩЕ СОЗДАНИЕ И ТЕМ МЕНЬШЕ ОБЩЕГО СОСТОЯНИЯ</text>
+
+    <defs>
+      <marker id="arw-d" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#B3261E"/></marker>
+    </defs>
+  </svg>
+  <p class="note">Две вертикальные колонки это два последовательных запроса. Singleton один на оба, scoped по одному на каждый, transient создаётся на каждое обращение внутри запроса.</p>
+</div>
+</body>
+</html>

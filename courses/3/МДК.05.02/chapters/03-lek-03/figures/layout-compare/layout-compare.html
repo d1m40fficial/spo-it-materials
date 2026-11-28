@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Плоская раскладка и src-layout</title>
+<style>
+  :root { --paper:#FBF8FC; --card:#FFFFFF; --ink:#2A2430; --muted:#6B6175; --rule:#E0D3E6; --accent:#8E5BC8; --soft:#EBE0EC; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .frame { background:var(--paper); border:1px solid var(--rule); border-radius:12px; padding:14px; }
+  .eyebrow { margin:0 0 6px; font:600 10px/1.2 Consolas,monospace; letter-spacing:.14em; text-transform:uppercase; color:var(--accent); }
+  svg { display:block; width:100%; height:auto; }
+  .panel { display:none; }
+  .panel.on { display:block; }
+  .controls { display:flex; gap:6px; flex-wrap:wrap; margin-top:10px; }
+  button { font:600 11.5px/1.2 "Segoe UI",system-ui,sans-serif; padding:8px 12px; border-radius:8px; border:1px solid var(--rule); background:var(--card); color:var(--ink); cursor:pointer; }
+  button:hover { border-color:var(--accent); color:var(--accent); }
+  button.on { background:var(--accent); border-color:var(--accent); color:#fff; }
+  .note { margin:9px 2px 0; font:11.5px/1.5 "Segoe UI",system-ui,sans-serif; color:var(--muted); }
+  @media (max-width:560px) { .frame { padding:10px; } }
+</style>
+</head>
+<body>
+<div class="frame">
+  <p class="eyebrow">Структура · две раскладки</p>
+  <svg viewBox="0 0 680 322" role="img" aria-labelledby="lc2-title lc2-desc">
+    <title id="lc2-title">Плоская раскладка и src-layout</title>
+    <desc id="lc2-desc">Слева дерево файлов, справа команда запуска, поведение импорта и последствие для тестов. Переключайте раскладку кнопками.</desc>
+
+    <g font-family="Segoe UI,system-ui,sans-serif">
+      <text x="14" y="22" font-family="Consolas,monospace" font-size="9.5" fill="#6B6175">ДЕРЕВО</text>
+      <text x="330" y="22" font-family="Consolas,monospace" font-size="9.5" fill="#6B6175">ЧТО ПРОИСХОДИТ</text>
+
+      <g class="panel on" data-k="flat">
+        <rect x="14" y="32" width="290" height="230" rx="9" fill="#FFFFFF" stroke="#D9C9E2"/>
+        <g font-family="Consolas,monospace" font-size="12" fill="#2A2430">
+          <text x="30" y="58">sklad-plus/</text>
+          <text x="30" y="80">main.py</text>
+          <text x="30" y="102">sklad/</text>
+          <text x="52" y="124">__init__.py</text>
+          <text x="52" y="146">service/</text>
+          <text x="74" y="168">stock.py</text>
+          <text x="30" y="190">tests/</text>
+          <text x="52" y="212">test_stock.py</text>
+          <text x="30" y="234">pyproject.toml</text>
+        </g>
+
+        <rect x="320" y="32" width="346" height="66" rx="9" fill="#EBE0EC" stroke="#8E5BC8"/>
+        <text x="336" y="54" font-size="10" fill="#6B6175">запуск</text>
+        <text x="336" y="76" font-family="Consolas,monospace" font-size="12" fill="#2A2430">python main.py</text>
+
+        <text x="320" y="122" font-size="11" font-weight="600" fill="#2A2430">импорт находит файл рядом с запуском</text>
+        <text x="320" y="142" font-size="11" fill="#6B6175">тест может взять старую копию из корня,</text>
+        <text x="320" y="160" font-size="11" fill="#6B6175">а не тот модуль, который проверяют</text>
+
+        <rect x="320" y="180" width="346" height="82" rx="9" fill="#FFFFFF" stroke="#D9C9E2"/>
+        <text x="336" y="202" font-size="11" font-weight="600" fill="#A85672">риск</text>
+        <text x="336" y="222" font-size="11" fill="#6B6175">одноимённый модуль в корне перекрывает</text>
+        <text x="336" y="240" font-size="11" fill="#6B6175">пакет, и поведение зависит от каталога,</text>
+        <text x="336" y="258" font-size="11" fill="#6B6175">из которого запущена команда</text>
+      </g>
+
+      <g class="panel" data-k="src">
+        <rect x="14" y="32" width="290" height="230" rx="9" fill="#FFFFFF" stroke="#D9C9E2"/>
+        <g font-family="Consolas,monospace" font-size="12" fill="#2A2430">
+          <text x="30" y="58">sklad-plus/</text>
+          <text x="30" y="80">src/</text>
+          <text x="52" y="102">sklad/</text>
+          <text x="74" y="124">__init__.py</text>
+          <text x="74" y="146">service/</text>
+          <text x="96" y="168">stock.py</text>
+          <text x="30" y="190">tests/</text>
+          <text x="52" y="212">test_stock.py</text>
+          <text x="30" y="234">pyproject.toml</text>
+        </g>
+
+        <rect x="320" y="32" width="346" height="66" rx="9" fill="#EBE0EC" stroke="#8E5BC8"/>
+        <text x="336" y="54" font-size="10" fill="#6B6175">запуск</text>
+        <text x="336" y="76" font-family="Consolas,monospace" font-size="12" fill="#2A2430">python -m sklad</text>
+
+        <text x="320" y="122" font-size="11" font-weight="600" fill="#2A2430">импорт находит установленный пакет</text>
+        <text x="320" y="142" font-size="11" fill="#6B6175">случайный файл из корня не участвует,</text>
+        <text x="320" y="160" font-size="11" fill="#6B6175">тест проверяет собранный код</text>
+
+        <rect x="320" y="180" width="346" height="82" rx="9" fill="#FFFFFF" stroke="#D9C9E2"/>
+        <text x="336" y="202" font-size="11" font-weight="600" fill="#8E5BC8">цена</text>
+        <text x="336" y="222" font-size="11" fill="#6B6175">нужна установка в режиме разработки,</text>
+        <text x="336" y="240" font-size="11" fill="#6B6175">зато команда запуска одинакова</text>
+        <text x="336" y="258" font-size="11" fill="#6B6175">на любой машине</text>
+      </g>
+
+      <text x="14" y="288" font-size="11" fill="#6B6175">Выбор раскладки фиксируют один раз и выдерживают во всём проекте.</text>
+      <text x="14" y="306" font-size="11" fill="#6B6175">Смешение двух раскладок дороже любой из них.</text>
+    </g>
+  </svg>
+  <div class="controls" id="lc2-buttons">
+    <button data-k="flat" class="on">Плоская раскладка</button>
+    <button data-k="src">src-layout</button>
+  </div>
+  <p class="note">Нажмите кнопку. Сравните, откуда берётся модуль при импорте и что при этом проверяет тест.</p>
+</div>
+<script>
+(function () {
+  var panels = document.querySelectorAll('.panel');
+  var buttons = document.querySelectorAll('#lc2-buttons button');
+  function apply(key) {
+    panels.forEach(function (p) { p.classList.toggle('on', p.dataset.k === key); });
+    buttons.forEach(function (b) { b.classList.toggle('on', b.dataset.k === key); });
+  }
+  buttons.forEach(function (b) { b.addEventListener('click', function () { apply(b.dataset.k); }); });
+  apply('flat');
+})();
+</script>
+</body>
+</html>

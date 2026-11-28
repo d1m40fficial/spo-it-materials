@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Четыре случая компрометации цепочки поставок</title>
+<style>
+  :root { --paper:#EBE0EC; --card:#FFFDFF; --ink:#2A2430; --muted:#6B5F72; --rule:#D6C4DB; --accent:#8E5BC8; --soft:#F3EAF6; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .frame { background:var(--paper); border:1px solid var(--rule); border-radius:12px; padding:16px; }
+  .eyebrow { margin:0 0 6px; font:600 10px/1.2 Consolas,monospace; letter-spacing:.14em; text-transform:uppercase; color:var(--accent); }
+  svg { display:block; width:100%; height:auto; }
+  .case { cursor:pointer; }
+  .case rect { fill:var(--card); stroke:#C9AFD2; stroke-width:1.4; transition:fill .15s, stroke .15s; }
+  .case.on rect { fill:#F3EAF6; stroke:var(--accent); stroke-width:2.2; }
+  .case text { font-family:"Segoe UI",system-ui,sans-serif; pointer-events:none; }
+  .status { min-height:76px; margin-top:8px; padding:10px 12px; border-radius:9px; background:var(--soft); font-size:13px; line-height:1.45; }
+  .status b { color:var(--accent); }
+  .controls { display:flex; gap:6px; flex-wrap:wrap; margin-top:10px; }
+  button { font:600 11px/1.1 "Segoe UI",system-ui,sans-serif; padding:8px 9px; border-radius:8px; border:1px solid var(--rule); background:var(--card); color:var(--ink); cursor:pointer; }
+  button:hover { border-color:var(--accent); color:var(--accent); }
+  button.on { background:var(--accent); border-color:var(--accent); color:#fff; }
+  .note { margin:9px 2px 0; font:11.5px/1.5 "Segoe UI",system-ui,sans-serif; color:var(--muted); }
+  @media (max-width:560px) { .frame { padding:12px; } .status { font-size:12.5px; } button { font-size:10px; } }
+</style>
+</head>
+<body>
+<div class="frame">
+  <p class="eyebrow">Зависимости · риски</p>
+  <svg viewBox="0 0 680 320" role="img" aria-labelledby="sc-title sc-desc">
+    <title id="sc-title">Четыре случая компрометации цепочки поставок</title>
+    <desc id="sc-desc">left-pad в 2016, event-stream в 2018, SolarWinds в 2020 и xz-utils в 2024. Нажмите карточку, чтобы увидеть, где сломалась защита.</desc>
+
+    <line x1="20" y1="44" x2="660" y2="44" stroke="#D6C4DB" stroke-width="2"/>
+    <g font-family="Consolas,monospace" font-size="10" fill="#8E5BC8">
+      <text x="52" y="34">2016</text>
+      <text x="220" y="34">2018</text>
+      <text x="388" y="34">2020</text>
+      <text x="556" y="34">2024</text>
+    </g>
+    <g fill="#8E5BC8">
+      <circle cx="58" cy="44" r="4"/><circle cx="226" cy="44" r="4"/>
+      <circle cx="394" cy="44" r="4"/><circle cx="562" cy="44" r="4"/>
+    </g>
+
+    <g class="case" data-k="leftpad">
+      <rect x="16" y="62" width="150" height="150" rx="9"/>
+      <text x="30" y="88" font-size="12.5" font-weight="700" fill="#2A2430">left-pad</text>
+      <text x="30" y="108" font-size="10.5" fill="#6B5F72">пакет исчез</text>
+      <text x="30" y="124" font-size="10.5" fill="#6B5F72">из реестра</text>
+      <text x="30" y="152" font-size="10" fill="#8E5BC8">реестр</text>
+      <text x="30" y="168" font-size="10" fill="#8E5BC8">не архив</text>
+      <text x="30" y="194" font-size="10" fill="#2A2430">сборки встали</text>
+    </g>
+
+    <g class="case" data-k="eventstream">
+      <rect x="182" y="62" width="150" height="150" rx="9"/>
+      <text x="196" y="88" font-size="12.5" font-weight="700" fill="#2A2430">event-stream</text>
+      <text x="196" y="108" font-size="10.5" fill="#6B5F72">права перешли</text>
+      <text x="196" y="124" font-size="10.5" fill="#6B5F72">другому человеку</text>
+      <text x="196" y="152" font-size="10" fill="#8E5BC8">доверие</text>
+      <text x="196" y="168" font-size="10" fill="#8E5BC8">к владельцу</text>
+      <text x="196" y="194" font-size="10" fill="#2A2430">вредоносный код</text>
+    </g>
+
+    <g class="case" data-k="solarwinds">
+      <rect x="348" y="62" width="150" height="150" rx="9"/>
+      <text x="362" y="88" font-size="12.5" font-weight="700" fill="#2A2430">SolarWinds</text>
+      <text x="362" y="108" font-size="10.5" fill="#6B5F72">подписанный</text>
+      <text x="362" y="124" font-size="10.5" fill="#6B5F72">вредоносный файл</text>
+      <text x="362" y="152" font-size="10" fill="#8E5BC8">конвейер</text>
+      <text x="362" y="168" font-size="10" fill="#8E5BC8">и ключ подписи</text>
+      <text x="362" y="194" font-size="10" fill="#2A2430">тысячи установок</text>
+    </g>
+
+    <g class="case" data-k="xz">
+      <rect x="514" y="62" width="150" height="150" rx="9"/>
+      <text x="528" y="88" font-size="12.5" font-weight="700" fill="#2A2430">xz-utils</text>
+      <text x="528" y="108" font-size="10.5" fill="#6B5F72">сборочный скрипт</text>
+      <text x="528" y="124" font-size="10.5" fill="#6B5F72">вне Git</text>
+      <text x="528" y="152" font-size="10" fill="#8E5BC8">архив релиза</text>
+      <text x="528" y="168" font-size="10" fill="#8E5BC8">не равен коду</text>
+      <text x="528" y="194" font-size="10" fill="#2A2430">бэкдор в liblzma</text>
+    </g>
+
+    <text x="16" y="242" font-family="Consolas,monospace" font-size="9.5" fill="#6B5F72">ЗАМОК ВЕРСИЙ ЗАЩИЩАЕТ ОТ ВЫБОРА ДРУГОЙ ВЕРСИИ, НО НЕ ОТ ПОДМЕНЫ ИСТОЧНИКА</text>
+    <text x="16" y="264" font-family="Segoe UI,system-ui,sans-serif" font-size="10.5" fill="#6B5F72">Нажмите карточку, чтобы увидеть, какой шаг цепочки сломался.</text>
+  </svg>
+  <div class="status" id="sc-status"></div>
+  <div class="controls" id="sc-buttons">
+    <button data-k="leftpad" class="on">left-pad, 2016</button>
+    <button data-k="eventstream">event-stream, 2018</button>
+    <button data-k="solarwinds">SolarWinds, 2020</button>
+    <button data-k="xz">xz-utils, 2024</button>
+  </div>
+  <p class="note">Общее у случаев одно: проект получает чужой код, и доверие к нему нужно проверять на каждом шаге, а не только при первом подключении.</p>
+</div>
+<script>
+(function () {
+  var data = {
+    leftpad: '<b>left-pad, 2016.</b> Автор удалил свои пакеты из реестра после конфликта из-за имени. Код проекта не менялся, но установка перестала работать. Замок версий не помогает, если пакет исчез: нужен внутренний репозиторий или архив пакетов.',
+    eventstream: '<b>event-stream, 2018.</b> Сопровождающий передал права новому человеку, тот добавил вредоносную зависимость и выпустил версию. Доверие к пакету включает доверие к текущему владельцу и к истории передачи прав.',
+    solarwinds: '<b>SolarWinds, 2020.</b> Вредоносная библиотека попала в обновление на этапе сборки и была подписана настоящим сертификатом компании. Проверка подписи подтвердила издателя, но не безопасность конвейера. Защищать нужно доступы, сборочные системы и ключи.',
+    xz: '<b>xz-utils, 2024.</b> Бэкдор срабатывал при сборке из архивов 5.6.0 и 5.6.1: файл build-to-host.m4, которого не было в Git, запускал скрытый скрипт. Проверка кода в Git не доказывает, что архив собран из этого кода. Нужны воспроизводимая сборка и сравнение артефактов.'
+  };
+  var cards = document.querySelectorAll('.case');
+  var buttons = document.querySelectorAll('#sc-buttons button');
+  var status = document.getElementById('sc-status');
+
+  function apply(key) {
+    cards.forEach(function (c) { c.classList.toggle('on', c.dataset.k === key); });
+    buttons.forEach(function (b) { b.classList.toggle('on', b.dataset.k === key); });
+    status.innerHTML = data[key];
+  }
+  cards.forEach(function (c) { c.addEventListener('click', function () { apply(c.dataset.k); }); });
+  buttons.forEach(function (b) { b.addEventListener('click', function () { apply(b.dataset.k); }); });
+  apply('leftpad');
+})();
+</script>
+</body>
+</html>
