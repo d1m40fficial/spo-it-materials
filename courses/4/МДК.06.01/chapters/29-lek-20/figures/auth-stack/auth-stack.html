@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Слои входа в систему</title>
+<style>
+  :root { --paper:#EDE5D2; --card:#FBF7EC; --ink:#2B2518; --muted:#6B6047; --accent:#9A7300; --rule:#CDBE9C; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .frame { background:var(--paper); border:1px solid var(--rule); border-radius:12px; padding:16px 16px 12px; }
+  .eyebrow { margin:0 0 8px; font:600 9px/1.2 Consolas,monospace; letter-spacing:.14em; text-transform:uppercase; color:var(--accent); }
+  svg { display:block; width:100%; height:auto; }
+  .note { margin:10px 2px 0; font:11px/1.5 Consolas,monospace; color:var(--muted); }
+  @media (max-width:560px) { .frame { padding:12px 10px 10px; } }
+</style>
+</head>
+<body>
+<div class="frame">
+  <p class="eyebrow">Безопасность · вход и права</p>
+  <svg viewBox="0 0 680 312" role="img" aria-labelledby="as-title as-desc">
+    <title id="as-title">Пять слоёв входа</title>
+    <desc id="as-desc">Идентификация, аутентификация, сессия, авторизация и журнал. Для каждого слоя указана мера и типичный отказ.</desc>
+
+    <rect x="0" y="0" width="680" height="312" fill="#FBF7EC" rx="8"/>
+
+    <g font-family="Consolas,monospace" font-size="7.6" fill="#6B6047">
+      <text x="18" y="20">СЛОЙ</text>
+      <text x="150" y="20">МЕРА</text>
+      <text x="420" y="20">ТИПИЧНЫЙ ОТКАЗ</text>
+    </g>
+
+    <g>
+      <rect x="14" y="28" width="652" height="46" rx="7" fill="#EDE5D2" stroke="#CDBE9C"/>
+      <text x="26" y="48" font-family="Consolas,monospace" font-size="9" fill="#9A7300">1. ИДЕНТИФИКАЦИЯ</text>
+      <text x="26" y="64" font-family="Consolas,monospace" font-size="7.2" fill="#6B6047">кто заявляет имя</text>
+      <text x="150" y="48" font-family="Consolas,monospace" font-size="8" fill="#2B2518">уникальный логин, без общих записей</text>
+      <text x="150" y="64" font-family="Consolas,monospace" font-size="7.4" fill="#6B6047">привязка к человеку или сервису</text>
+      <text x="420" y="48" font-family="Consolas,monospace" font-size="7.6" fill="#2B2518">логин sklad_tver на всю смену</text>
+      <text x="420" y="64" font-family="Consolas,monospace" font-size="7.2" fill="#8C826C">действие нельзя связать с человеком</text>
+    </g>
+    <g>
+      <rect x="14" y="80" width="652" height="46" rx="7" fill="#EDE5D2" stroke="#CDBE9C"/>
+      <text x="26" y="100" font-family="Consolas,monospace" font-size="9" fill="#9A7300">2. АУТЕНТИФИКАЦИЯ</text>
+      <text x="26" y="116" font-family="Consolas,monospace" font-size="7.2" fill="#6B6047">чем доказывает</text>
+      <text x="150" y="100" font-family="Consolas,monospace" font-size="8" fill="#2B2518">длинный пароль, блок-лист, второй фактор</text>
+      <text x="150" y="116" font-family="Consolas,monospace" font-size="7.4" fill="#6B6047">ключ или passkey для критичных ролей</text>
+      <text x="420" y="100" font-family="Consolas,monospace" font-size="7.6" fill="#2B2518">пароль на стикере, без MFA</text>
+      <text x="420" y="116" font-family="Consolas,monospace" font-size="7.2" fill="#8C826C">кража пароля открывает вход</text>
+    </g>
+    <g>
+      <rect x="14" y="132" width="652" height="46" rx="7" fill="#EDE5D2" stroke="#CDBE9C"/>
+      <text x="26" y="152" font-family="Consolas,monospace" font-size="9" fill="#9A7300">3. СЕССИЯ</text>
+      <text x="26" y="168" font-family="Consolas,monospace" font-size="7.2" fill="#6B6047">что помнит вход</text>
+      <text x="150" y="152" font-family="Consolas,monospace" font-size="8" fill="#2B2518">новая сессия после входа, срок бездействия</text>
+      <text x="150" y="168" font-family="Consolas,monospace" font-size="7.4" fill="#6B6047">HttpOnly, Secure, выход на сервере</text>
+      <text x="420" y="152" font-family="Consolas,monospace" font-size="7.6" fill="#2B2518">сессия живёт после увольнения</text>
+      <text x="420" y="168" font-family="Consolas,monospace" font-size="7.2" fill="#8C826C">блокировка не закрывает доступ</text>
+    </g>
+    <g>
+      <rect x="14" y="184" width="652" height="46" rx="7" fill="#EDE5D2" stroke="#CDBE9C"/>
+      <text x="26" y="204" font-family="Consolas,monospace" font-size="9" fill="#9A7300">4. АВТОРИЗАЦИЯ</text>
+      <text x="26" y="220" font-family="Consolas,monospace" font-size="7.2" fill="#6B6047">что разрешено</text>
+      <text x="150" y="204" font-family="Consolas,monospace" font-size="8" fill="#2B2518">роль на каждом запросе, проверка объекта</text>
+      <text x="150" y="220" font-family="Consolas,monospace" font-size="7.4" fill="#6B6047">не только скрыть кнопку, но и запретить API</text>
+      <text x="420" y="204" font-family="Consolas,monospace" font-size="7.6" fill="#2B2518">смена номера в адресе открывает чужой заказ</text>
+      <text x="420" y="220" font-family="Consolas,monospace" font-size="7.2" fill="#8C826C">проверка только в интерфейсе</text>
+    </g>
+    <g>
+      <rect x="14" y="236" width="652" height="46" rx="7" fill="#E4D2A4" stroke="#9A7300"/>
+      <text x="26" y="256" font-family="Consolas,monospace" font-size="9" fill="#7A5B00">5. ЖУРНАЛ</text>
+      <text x="26" y="272" font-family="Consolas,monospace" font-size="7.2" fill="#6B6047">что осталось</text>
+      <text x="150" y="256" font-family="Consolas,monospace" font-size="8" fill="#2B2518">кто, когда, что сделал, с какого адреса</text>
+      <text x="150" y="272" font-family="Consolas,monospace" font-size="7.4" fill="#6B6047">запись только на добавление, единое время</text>
+      <text x="420" y="256" font-family="Consolas,monospace" font-size="7.6" fill="#2B2518">журнал правит администратор</text>
+      <text x="420" y="272" font-family="Consolas,monospace" font-size="7.2" fill="#8C826C">разбор упирается в недоверие к записи</text>
+    </g>
+
+    <text x="14" y="300" font-family="Consolas,monospace" font-size="7.4" fill="#9A7300">ЕСЛИ ХОТЯ БЫ ОДИН СЛОЙ НЕ ПРОВЕРЕН, ОСТАЛЬНЫЕ ДАЮТ ЛОЖНОЕ ЧУВСТВО ЗАЩИТЫ</text>
+  </svg>
+  <p class="note">Пароль отвечает только за второй слой. Права, сессии и журнал настраиваются отдельно, и каждый слой проверяют своим сценарием.</p>
+</div>
+</body>
+</html>

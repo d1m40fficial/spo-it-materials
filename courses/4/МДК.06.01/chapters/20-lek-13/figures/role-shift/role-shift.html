@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Что меняется у роли</title>
+<style>
+  :root { --paper:#EDE5D2; --card:#FBF6E9; --ink:#2b2517; --muted:#6b5f45; --rule:#cdbf9f; --accent:#9A7300; --soft:#F3E9CE; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .demo { background:var(--paper); border:1px solid var(--rule); border-radius:14px; padding:16px; }
+  .head { display:flex; justify-content:space-between; align-items:flex-end; gap:12px; padding-bottom:8px; border-bottom:1px solid var(--rule); }
+  .eyebrow { margin:0 0 4px; font:600 9.5px/1.2 Consolas,monospace; letter-spacing:.14em; text-transform:uppercase; color:var(--accent); }
+  h3 { margin:0; font-size:19px; line-height:1.2; }
+  .hint { font:10.5px/1.35 Consolas,monospace; color:var(--muted); white-space:nowrap; }
+  svg { display:block; width:100%; height:auto; margin-top:6px; }
+  .col-head { font:700 8.5px Consolas,monospace; letter-spacing:.08em; text-transform:uppercase; }
+  .item { font:8px/1.25 Consolas,monospace; }
+  .role { font:700 13px "Segoe UI",system-ui,sans-serif; text-anchor:middle; }
+  .sub { font:8px Consolas,monospace; fill:var(--muted); text-anchor:middle; }
+  .controls { display:flex; gap:6px; flex-wrap:wrap; margin-top:10px; }
+  button { font:600 11px/1 "Segoe UI",system-ui,sans-serif; padding:8px 9px; border-radius:8px; border:1px solid var(--rule); background:var(--card); color:var(--ink); cursor:pointer; }
+  button:hover { border-color:var(--accent); color:var(--accent); }
+  button.on { background:var(--accent); border-color:var(--accent); color:#fff; }
+  @media (max-width:560px) { .demo { padding:11px; } .hint { display:none; } }
+</style>
+</head>
+<body>
+<div class="demo">
+  <div class="head">
+    <div><p class="eyebrow">Организационное изменение · роль</p><h3>Что уходит и что появляется</h3></div>
+    <div class="hint">выберите роль</div>
+  </div>
+  <svg viewBox="0 0 680 300" role="img" aria-labelledby="rs-title rs-desc">
+    <title id="rs-title">Изменение обязанностей по ролям</title>
+    <desc id="rs-desc">Для выбранной роли показано, какие действия уходят, какие появляются и чем подтверждается новая обязанность.</desc>
+
+    <text id="roleName" class="role" x="340" y="24">менеджер по продажам</text>
+    <text id="roleSub" class="sub" x="340" y="40">было: звонок на склад и бумажная заявка</text>
+
+    <rect x="14" y="56" width="204" height="212" rx="10" fill="#FBF6E9" stroke="#cdbf9f"/>
+    <rect x="238" y="56" width="204" height="212" rx="10" fill="#F3E9CE" stroke="#9A7300"/>
+    <rect x="462" y="56" width="204" height="212" rx="10" fill="#FBF6E9" stroke="#cdbf9f"/>
+
+    <text class="col-head" x="116" y="78" text-anchor="middle" fill="#6b5f45">уходит</text>
+    <text class="col-head" x="340" y="78" text-anchor="middle" fill="#9A7300">появляется</text>
+    <text class="col-head" x="564" y="78" text-anchor="middle" fill="#6b5f45">чем подтверждается</text>
+
+    <text id="out1" class="item" x="116" y="112" text-anchor="middle"></text>
+    <text id="out2" class="item" x="116" y="140" text-anchor="middle"></text>
+    <text id="out3" class="item" x="116" y="168" text-anchor="middle"></text>
+
+    <text id="in1" class="item" x="340" y="112" text-anchor="middle"></text>
+    <text id="in2" class="item" x="340" y="140" text-anchor="middle"></text>
+    <text id="in3" class="item" x="340" y="168" text-anchor="middle"></text>
+
+    <text id="pr1" class="item" x="564" y="112" text-anchor="middle"></text>
+    <text id="pr2" class="item" x="564" y="140" text-anchor="middle"></text>
+    <text id="pr3" class="item" x="564" y="168" text-anchor="middle"></text>
+
+    <text x="340" y="246" text-anchor="middle" font-family="Consolas,monospace" font-size="7.4" fill="#6b5f45">подтверждение превращает пожелание в обязанность</text>
+  </svg>
+  <div class="controls">
+    <button data-k="sales" class="on">Менеджер по продажам</button>
+    <button data-k="store">Кладовщик</button>
+    <button data-k="fin">Бухгалтер</button>
+    <button data-k="buy">Закупщик</button>
+    <button data-k="boss">Руководитель</button>
+  </div>
+</div>
+<script>
+(function () {
+  var data = {
+    sales: {
+      name: 'менеджер по продажам',
+      sub: 'было: звонок на склад и бумажная заявка',
+      out: ['звонки на склад', 'бумажные заявки', 'проверка остатка вручную'],
+      inn: ['проверка резерва', 'срок в карточке заказа', 'работа с отказом'],
+      pro: ['резерв в системе', 'статус заказа', 'комментарий к отказу']
+    },
+    store: {
+      name: 'кладовщик',
+      sub: 'было: накладная, журнал смены, ручная сверка',
+      out: ['журнал смены', 'ручная сверка', 'звонки о расхождениях'],
+      inn: ['задание на комплектацию', 'скан при приёмке', 'акт расхождения'],
+      pro: ['скан', 'статус документа', 'причина расхождения']
+    },
+    fin: {
+      name: 'бухгалтер',
+      sub: 'было: сверка счетов по почте и ручной перенос',
+      out: ['сверка по почте', 'ручной перенос сумм', 'сбор бумажных счетов'],
+      inn: ['выгрузка из системы', 'разбор расхождений', 'проверка периода'],
+      pro: ['сверка в системе', 'отметка о расхождении', 'закрытый период']
+    },
+    buy: {
+      name: 'закупщик',
+      sub: 'было: заявка в Excel и пересылка файлов',
+      out: ['заявка в Excel', 'пересылка файлов', 'ручной контроль срока'],
+      inn: ['заявка со сроком', 'статус поставки', 'работа с просрочкой'],
+      pro: ['номер заявки', 'история статусов', 'отметка о просрочке']
+    },
+    boss: {
+      name: 'руководитель',
+      sub: 'было: сбор цифр по отделам раз в неделю',
+      out: ['сбор цифр по отделам', 'недельная сводка', 'ручные запросы'],
+      inn: ['отчёт в любой момент', 'решение по отклонению', 'разбор с ролью'],
+      pro: ['отчёт', 'протокол решения', 'запись в журнале']
+    }
+  };
+  var ids = ['out1','out2','out3','in1','in2','in3','pr1','pr2','pr3'];
+  var buttons = document.querySelectorAll('button[data-k]');
+  function apply(key) {
+    var d = data[key];
+    document.getElementById('roleName').textContent = d.name;
+    document.getElementById('roleSub').textContent = d.sub;
+    ids.forEach(function (id, i) {
+      var arr = i < 3 ? d.out : (i < 6 ? d.inn : d.pro);
+      document.getElementById(id).textContent = arr[i % 3];
+    });
+    buttons.forEach(function (b) { b.classList.toggle('on', b.dataset.k === key); });
+  }
+  buttons.forEach(function (b) { b.addEventListener('click', function () { apply(b.dataset.k); }); });
+  apply('sales');
+})();
+</script>
+</body>
+</html>

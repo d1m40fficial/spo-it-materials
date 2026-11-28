@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Маршрут согласования заказа</title>
+<style>
+  :root { --paper:#EDE5D2; --card:#FFFDF7; --ink:#2B2519; --muted:#6E6350; --rule:#D6C7A8; --accent:#9A7300; --soft:#F3EAD3; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .demo { background:var(--paper); border:1px solid var(--rule); border-radius:12px; padding:16px; }
+  .head { display:flex; justify-content:space-between; align-items:flex-end; gap:14px; padding-bottom:8px; border-bottom:1px solid var(--rule); }
+  .eyebrow { margin:0 0 3px; font:600 9.5px/1.2 Consolas,monospace; letter-spacing:.14em; text-transform:uppercase; color:var(--accent); }
+  h3 { margin:0; font-size:18px; line-height:1.2; }
+  .hint { font:10.5px/1.3 Consolas,monospace; color:var(--muted); white-space:nowrap; }
+  svg { display:block; width:100%; height:auto; margin-top:8px; }
+  .step rect { fill:#FFFDF7; stroke:#C9B996; stroke-width:1.3; transition:fill .2s, stroke .2s; }
+  .step.on rect { fill:#F3EAD3; stroke:#9A7300; stroke-width:1.8; }
+  .step.skip rect { fill:#F7F0DF; stroke:#C9B996; stroke-dasharray:4 3; }
+  .step text { text-anchor:middle; }
+  .step .role { font-family:Consolas,monospace; font-size:8px; fill:#6E6350; }
+  .step.on .role { fill:#9A7300; }
+  .step .act { font-size:9.5px; fill:#2B2519; }
+  .step.skip .act { fill:#8A8375; }
+  .status { min-height:58px; margin-top:6px; padding:10px 12px; border-radius:8px; background:var(--soft); font-size:12.5px; line-height:1.45; }
+  .status b { color:var(--accent); }
+  .controls { display:flex; gap:6px; flex-wrap:wrap; margin-top:9px; }
+  button { font:600 11.5px/1 "Segoe UI",system-ui,sans-serif; padding:8px 10px; border-radius:8px; border:1px solid var(--rule); background:var(--card); color:var(--ink); cursor:pointer; }
+  button:hover { border-color:var(--accent); color:var(--accent); }
+  button.on { background:var(--accent); border-color:var(--accent); color:#fff; }
+  @media (max-width:560px) { .demo { padding:12px; } .hint { display:none; } }
+</style>
+</head>
+<body>
+<div class="demo">
+  <div class="head">
+    <div><p class="eyebrow">Настройка · маршрут</p><h3>Какой путь пройдёт заказ</h3></div>
+    <div class="hint">выберите условия заказа</div>
+  </div>
+  <svg viewBox="0 0 680 312" role="img" aria-labelledby="rf-title rf-desc">
+    <title id="rf-title">Маршрут согласования заказа с условиями</title>
+    <desc id="rf-desc">Пять шагов: менеджер, согласование скидки, согласование отсрочки, резервирование, комплектация. Условия включают или пропускают шаги.</desc>
+
+    <g class="step" id="s1" data-x="16">
+      <rect x="16" y="42" width="112" height="86" rx="8"/>
+      <text x="72" y="62" class="role">МЕНЕДЖЕР</text>
+      <text x="72" y="84" class="act">создаёт</text>
+      <text x="72" y="100" class="act">заказ</text>
+      <text x="72" y="118" class="role">15 минут</text>
+    </g>
+    <g class="step" id="s2" data-x="150">
+      <rect x="150" y="42" width="112" height="86" rx="8"/>
+      <text x="206" y="62" class="role">КОММЕРЧЕСКИЙ</text>
+      <text x="206" y="80" class="act">сумма больше</text>
+      <text x="206" y="94" class="act">500 тыс. или</text>
+      <text x="206" y="108" class="act">скидка больше 5%</text>
+      <text x="206" y="120" class="role">2 часа</text>
+    </g>
+    <g class="step" id="s3" data-x="284">
+      <rect x="284" y="42" width="112" height="86" rx="8"/>
+      <text x="340" y="62" class="role">БУХГАЛТЕР</text>
+      <text x="340" y="80" class="act">отсрочка</text>
+      <text x="340" y="94" class="act">больше 14 дней</text>
+      <text x="340" y="120" class="role">4 часа</text>
+    </g>
+    <g class="step" id="s4" data-x="418">
+      <rect x="418" y="42" width="112" height="86" rx="8"/>
+      <text x="474" y="62" class="role">СИСТЕМА</text>
+      <text x="474" y="84" class="act">резерв</text>
+      <text x="474" y="100" class="act">товара</text>
+      <text x="474" y="118" class="role">сразу</text>
+    </g>
+    <g class="step" id="s5" data-x="552">
+      <rect x="552" y="42" width="112" height="86" rx="8"/>
+      <text x="608" y="62" class="role">КЛАДОВЩИК</text>
+      <text x="608" y="84" class="act">комплектация</text>
+      <text x="608" y="100" class="act">заказа</text>
+      <text x="608" y="118" class="role">1 час</text>
+    </g>
+
+    <g id="links"></g>
+
+    <rect x="16" y="160" width="648" height="44" rx="7" fill="#FFFDF7" stroke="#D6C7A8"/>
+    <text x="30" y="178" font-family="Consolas,monospace" font-size="8" fill="#6E6350">ЕСЛИ ШАГ ПРОСРОЧЕН</text>
+    <text x="30" y="195" font-size="10.5" fill="#2B2519">документ поднимается на уровень выше, руководитель получает уведомление, заместитель уже назначен</text>
+
+    <text x="16" y="230" font-family="Consolas,monospace" font-size="9" fill="#9A7300">УСЛОВИЕ ДОЛЖНО БЫТЬ ОДНОЗНАЧНЫМ</text>
+    <text x="16" y="248" font-size="10.5" fill="#2B2519">«сумма больше 500 тысяч» без указания, с НДС или без, даёт два разных маршрута для одного заказа</text>
+    <text x="16" y="266" font-size="10.5" fill="#2B2519">«скидка больше 5 процентов» требует правила округления: 4,96 или 5,04 ведут себя по-разному</text>
+    <text x="16" y="290" font-size="10" fill="#6E6350">Пропущенный шаг показан пунктиром: он есть в системе, но к этому заказу не применяется.</text>
+
+    <defs>
+      <marker id="arw-rf" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#9A7300"/></marker>
+    </defs>
+  </svg>
+  <div class="status" id="status"></div>
+  <div class="controls" id="cases"></div>
+</div>
+<script>
+(function () {
+  var cases = {
+    small: { name:'100 тыс., скидка 3%', steps:[1,4,5],
+      text:'<b>Простой заказ.</b> Согласование директора и бухгалтера не нужно: сумма ниже порога, отсрочка в норме. Заказ идёт от менеджера сразу к резерву и комплектации.' },
+    big: { name:'600 тыс., скидка 3%', steps:[1,2,4,5],
+      text:'<b>Крупный заказ.</b> Сумма выше 500 тысяч включает шаг коммерческого директора. Срок шага 2 часа, при просрочке работает эскалация.' },
+    defer: { name:'100 тыс., отсрочка 20 дней', steps:[1,3,4,5],
+      text:'<b>Отсрочка платежа.</b> Сумма ниже порога, но отсрочка больше 14 дней добавляет согласование бухгалтера. Без него резерв не создаётся.' },
+    both: { name:'600 тыс., скидка 10%, отсрочка 20 дней', steps:[1,2,3,4,5],
+      text:'<b>Оба условия.</b> Заказ проходит оба согласования. Если согласующий в отпуске, шаг выполняет заместитель, иначе маршрут встаёт.' }
+  };
+  var current = 'small';
+  var status = document.getElementById('status');
+  var box = document.getElementById('cases');
+  var links = document.getElementById('links');
+  var steps = [1,2,3,4,5].map(function (i) { return document.getElementById('s' + i); });
+  var NS = 'http://www.w3.org/2000/svg';
+
+  function apply(k) {
+    current = k;
+    var c = cases[k];
+    steps.forEach(function (el, i) {
+      var on = c.steps.indexOf(i + 1) !== -1;
+      el.setAttribute('class', 'step ' + (on ? 'on' : 'skip'));
+    });
+    links.innerHTML = '';
+    for (var i = 0; i < c.steps.length - 1; i++) {
+      var a = c.steps[i], b = c.steps[i + 1];
+      var g = document.createElementNS(NS, 'g');
+      var p = document.createElementNS(NS, 'path');
+      var path;
+      if (b === a + 1) {
+        path = 'M' + (16 + (a - 1) * 134 + 112) + ' 85h14';
+      } else {
+        var x1 = 16 + (a - 1) * 134 + 112, x2 = 16 + (b - 1) * 134;
+        path = 'M' + x1 + ' 100 C' + (x1 + 18) + ' 146,' + (x2 - 18) + ' 146,' + x2 + ' 100';
+      }
+      p.setAttribute('d', path);
+      p.setAttribute('fill', 'none');
+      p.setAttribute('stroke', '#9A7300');
+      p.setAttribute('stroke-width', '1.6');
+      p.setAttribute('marker-end', 'url(#arw-rf)');
+      g.appendChild(p);
+      links.appendChild(g);
+    }
+    status.innerHTML = c.text;
+    box.querySelectorAll('button').forEach(function (btn) {
+      btn.className = btn.getAttribute('data-k') === k ? 'on' : '';
+    });
+  }
+
+  Object.keys(cases).forEach(function (k) {
+    var b = document.createElement('button');
+    b.textContent = cases[k].name;
+    b.setAttribute('data-k', k);
+    b.addEventListener('click', function () { apply(k); });
+    box.appendChild(b);
+  });
+
+  apply(current);
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Угрозы и уровни копий</title>
+<style>
+  :root { --paper:#EDE5D2; --card:#FBF7EC; --ink:#2B2518; --muted:#6B6047; --accent:#9A7300; --rule:#CDBE9C; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .frame { background:var(--paper); border:1px solid var(--rule); border-radius:12px; padding:16px 16px 12px; }
+  .eyebrow { margin:0 0 8px; font:600 9px/1.2 Consolas,monospace; letter-spacing:.14em; text-transform:uppercase; color:var(--accent); }
+  svg { display:block; width:100%; height:auto; }
+  .note { margin:10px 2px 0; font:11px/1.5 Consolas,monospace; color:var(--muted); }
+  @media (max-width:560px) { .frame { padding:12px 10px 10px; } }
+</style>
+</head>
+<body>
+<div class="frame">
+  <p class="eyebrow">Копирование · угрозы и уровни</p>
+  <svg viewBox="0 0 680 306" role="img" aria-labelledby="tm-title tm-desc">
+    <title id="tm-title">Какие копии переживают какие угрозы</title>
+    <desc id="tm-desc">Таблица угроз и четырёх уровней хранения: рабочая база, NAS, офлайн-диск и облако. Показано, где копия выживает, где риск, а где потеря.</desc>
+
+    <rect x="0" y="0" width="680" height="306" fill="#FBF7EC" rx="8"/>
+
+    <g font-family="Consolas,monospace" font-size="7.4" fill="#6B6047">
+      <text x="18" y="22">УГРОЗА</text>
+      <text x="250" y="22" text-anchor="middle">РАБОЧАЯ БАЗА</text>
+      <text x="360" y="22" text-anchor="middle">NAS</text>
+      <text x="470" y="22" text-anchor="middle">ОФЛАЙН-ДИСК</text>
+      <text x="585" y="22" text-anchor="middle">ОБЛАКО</text>
+    </g>
+
+    <g font-family="Consolas,monospace" font-size="7.6">
+      <g>
+        <text x="18" y="48" fill="#2B2518">Отказ диска</text>
+        <rect x="200" y="36" width="100" height="18" rx="4" fill="#E4D2A4"/><text x="250" y="49" text-anchor="middle" fill="#7A5B00">потеря</text>
+        <rect x="310" y="36" width="100" height="18" rx="4" fill="#E4D2A4"/><text x="360" y="49" text-anchor="middle" fill="#7A5B00">есть</text>
+        <rect x="420" y="36" width="100" height="18" rx="4" fill="#E4D2A4"/><text x="470" y="49" text-anchor="middle" fill="#7A5B00">есть</text>
+        <rect x="530" y="36" width="110" height="18" rx="4" fill="#E4D2A4"/><text x="585" y="49" text-anchor="middle" fill="#7A5B00">есть</text>
+      </g>
+      <g>
+        <text x="18" y="78" fill="#2B2518">Случайное удаление</text>
+        <rect x="200" y="66" width="100" height="18" rx="4" fill="#F1E9D8" stroke="#CDBE9C"/><text x="250" y="79" text-anchor="middle" fill="#6B6047">потеря</text>
+        <rect x="310" y="66" width="100" height="18" rx="4" fill="#E4D2A4"/><text x="360" y="79" text-anchor="middle" fill="#7A5B00">есть</text>
+        <rect x="420" y="66" width="100" height="18" rx="4" fill="#E4D2A4"/><text x="470" y="79" text-anchor="middle" fill="#7A5B00">есть</text>
+        <rect x="530" y="66" width="110" height="18" rx="4" fill="#E4D2A4"/><text x="585" y="79" text-anchor="middle" fill="#7A5B00">есть</text>
+      </g>
+      <g>
+        <text x="18" y="108" fill="#2B2518">Ошибочный скрипт</text>
+        <rect x="200" y="96" width="100" height="18" rx="4" fill="#F1E9D8" stroke="#CDBE9C"/><text x="250" y="109" text-anchor="middle" fill="#6B6047">потеря</text>
+        <rect x="310" y="96" width="100" height="18" rx="4" fill="#E4D2A4"/><text x="360" y="109" text-anchor="middle" fill="#7A5B00">есть</text>
+        <rect x="420" y="96" width="100" height="18" rx="4" fill="#E4D2A4"/><text x="470" y="109" text-anchor="middle" fill="#7A5B00">есть</text>
+        <rect x="530" y="96" width="110" height="18" rx="4" fill="#E4D2A4"/><text x="585" y="109" text-anchor="middle" fill="#7A5B00">есть</text>
+      </g>
+      <g>
+        <text x="18" y="138" fill="#2B2518">Шифровальщик</text>
+        <rect x="200" y="126" width="100" height="18" rx="4" fill="#F1E9D8" stroke="#CDBE9C"/><text x="250" y="139" text-anchor="middle" fill="#6B6047">потеря</text>
+        <rect x="310" y="126" width="100" height="18" rx="4" fill="#F1E9D8" stroke="#CDBE9C"/><text x="360" y="139" text-anchor="middle" fill="#6B6047">риск</text>
+        <rect x="420" y="126" width="100" height="18" rx="4" fill="#E4D2A4"/><text x="470" y="139" text-anchor="middle" fill="#7A5B00">есть</text>
+        <rect x="530" y="126" width="110" height="18" rx="4" fill="#F1E9D8" stroke="#CDBE9C"/><text x="585" y="139" text-anchor="middle" fill="#6B6047">риск</text>
+      </g>
+      <g>
+        <text x="18" y="168" fill="#2B2518">Пожар или кража</text>
+        <rect x="200" y="156" width="100" height="18" rx="4" fill="#F1E9D8" stroke="#CDBE9C"/><text x="250" y="169" text-anchor="middle" fill="#6B6047">потеря</text>
+        <rect x="310" y="156" width="100" height="18" rx="4" fill="#F1E9D8" stroke="#CDBE9C"/><text x="360" y="169" text-anchor="middle" fill="#6B6047">риск</text>
+        <rect x="420" y="156" width="100" height="18" rx="4" fill="#E4D2A4"/><text x="470" y="169" text-anchor="middle" fill="#7A5B00">есть</text>
+        <rect x="530" y="156" width="110" height="18" rx="4" fill="#E4D2A4"/><text x="585" y="169" text-anchor="middle" fill="#7A5B00">есть</text>
+      </g>
+      <g>
+        <text x="18" y="198" fill="#2B2518">Кража носителя</text>
+        <rect x="200" y="186" width="100" height="18" rx="4" fill="#F1E9D8" stroke="#CDBE9C"/><text x="250" y="199" text-anchor="middle" fill="#6B6047">потеря</text>
+        <rect x="310" y="186" width="100" height="18" rx="4" fill="#F1E9D8" stroke="#CDBE9C"/><text x="360" y="199" text-anchor="middle" fill="#6B6047">риск</text>
+        <rect x="420" y="186" width="100" height="18" rx="4" fill="#F1E9D8" stroke="#CDBE9C"/><text x="470" y="199" text-anchor="middle" fill="#6B6047">риск</text>
+        <rect x="530" y="186" width="110" height="18" rx="4" fill="#E4D2A4"/><text x="585" y="199" text-anchor="middle" fill="#7A5B00">есть</text>
+      </g>
+    </g>
+
+    <g font-family="Consolas,monospace" font-size="7.2">
+      <text x="18" y="234" fill="#9A7300">«ЕСТЬ» ЗНАЧИТ, ЧТО ЭТА КОПИЯ МОЖЕТ ПЕРЕЖИТЬ УГРОЗУ, А НЕ ЧТО ОНА УЖЕ ПРОВЕРЕНА.</text>
+      <text x="18" y="250" fill="#6B6047">шифровальщик ищет доступные копии, поэтому NAS и облако без изоляции попадают в зону риска</text>
+      <text x="18" y="266" fill="#6B6047">офлайн-диск защищает от сети, но не от пожара в том же кабинете</text>
+    </g>
+
+    <rect x="18" y="276" width="644" height="22" rx="5" fill="#EDE5D2" stroke="#CDBE9C"/>
+    <text x="30" y="290" font-family="Consolas,monospace" font-size="7.2" fill="#9A7300">ОДНА УГРОЗА НЕ ПОКРЫВАЕТ ВСЁ: НУЖНЫ РАЗНЫЕ НОСИТЕЛИ, РАЗНЫЕ ПЛОЩАДКИ И ПРОВЕРКА</text>
+  </svg>
+  <p class="note">Таблица показывает, зачем нужны разные уровни. Ни один уровень не заменяет остальные, и ни одна клетка не заменяет пробное восстановление.</p>
+</div>
+</body>
+</html>

@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Роли в проекте внедрения</title>
+<style>
+  :root { --paper:#FAF7EF; --card:#FFFDF8; --ink:#2A2620; --muted:#6B6252; --rule:#E3D8C2; --accent:#9A7300; --soft:#EDE5D2; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .frame { background:var(--paper); border:1px solid var(--rule); border-radius:12px; padding:16px; }
+  .eyebrow { margin:0 0 6px; font:600 10px/1.2 Consolas,monospace; letter-spacing:.14em; text-transform:uppercase; color:var(--accent); }
+  svg { display:block; width:100%; height:auto; }
+  .role rect { fill:#FFFDF8; stroke:#C9BCA2; stroke-width:1.3; transition:fill .15s, stroke .15s; }
+  .role.on rect { fill:#EDE5D2; stroke:#9A7300; stroke-width:2.2; }
+  .role text { font-family:"Segoe UI",system-ui,sans-serif; }
+  .status { min-height:62px; margin-top:8px; padding:10px 12px; border-radius:9px; background:var(--soft); font-size:13px; line-height:1.45; }
+  .status b { color:var(--accent); }
+  .controls { display:flex; gap:6px; flex-wrap:wrap; margin-top:10px; }
+  button { font:600 11.5px/1.1 "Segoe UI",system-ui,sans-serif; padding:8px 9px; border-radius:8px; border:1px solid var(--rule); background:var(--card); color:var(--ink); cursor:pointer; }
+  button:hover { border-color:var(--accent); color:var(--accent); }
+  button.on { background:var(--accent); border-color:var(--accent); color:#fff; }
+  .note { margin:9px 2px 0; font:11.5px/1.5 "Segoe UI",system-ui,sans-serif; color:var(--muted); }
+  @media (max-width:560px) { .frame { padding:12px; } .status { font-size:12.5px; } }
+</style>
+</head>
+<body>
+<div class="frame">
+  <p class="eyebrow">Внедрение · роли</p>
+  <svg viewBox="0 0 680 292" role="img" aria-labelledby="rm-title rm-desc">
+    <title id="rm-title">Шесть ролей проекта внедрения</title>
+    <desc id="rm-desc">Заказчик, владелец процесса, пользователь, интегратор, администратор ИС и куратор. Нажмите роль, чтобы увидеть зону ответственности и предмет спора.</desc>
+
+    <g class="role" data-k="customer">
+      <rect x="16" y="28" width="206" height="98" rx="9"/>
+      <text x="30" y="50" font-size="13" font-weight="700" fill="#2A2620">Заказчик</text>
+      <text x="30" y="68" font-size="10.5" fill="#6B6252">интерес: результат и бюджет</text>
+      <text x="30" y="86" font-size="10.5" fill="#2A2620">утверждает цели, сроки,</text>
+      <text x="30" y="101" font-size="10.5" fill="#2A2620">изменения и принимает работу</text>
+      <text x="30" y="118" font-size="10" fill="#9A7300">решение: продолжать или нет</text>
+    </g>
+
+    <g class="role" data-k="owner">
+      <rect x="236" y="28" width="206" height="98" rx="9"/>
+      <text x="250" y="50" font-size="13" font-weight="700" fill="#2A2620">Владелец процесса</text>
+      <text x="250" y="68" font-size="10.5" fill="#6B6252">интерес: правила работы</text>
+      <text x="250" y="86" font-size="10.5" fill="#2A2620">согласует целевой процесс</text>
+      <text x="250" y="101" font-size="10.5" fill="#2A2620">и критерии приёмки</text>
+      <text x="250" y="118" font-size="10" fill="#9A7300">решение: как правильно</text>
+    </g>
+
+    <g class="role" data-k="user">
+      <rect x="456" y="28" width="208" height="98" rx="9"/>
+      <text x="470" y="50" font-size="13" font-weight="700" fill="#2A2620">Пользователь</text>
+      <text x="470" y="68" font-size="10.5" fill="#6B6252">интерес: удобство работы</text>
+      <text x="470" y="86" font-size="10.5" fill="#2A2620">выполняет операции</text>
+      <text x="470" y="101" font-size="10.5" fill="#2A2620">и сообщает о замечаниях</text>
+      <text x="470" y="118" font-size="10" fill="#9A7300">решение: как удобнее</text>
+    </g>
+
+    <g class="role" data-k="integrator">
+      <rect x="16" y="142" width="206" height="98" rx="9"/>
+      <text x="30" y="164" font-size="13" font-weight="700" fill="#2A2620">Интегратор</text>
+      <text x="30" y="182" font-size="10.5" fill="#6B6252">интерес: выполнить договор</text>
+      <text x="30" y="200" font-size="10.5" fill="#2A2620">настройка, миграция,</text>
+      <text x="30" y="215" font-size="10.5" fill="#2A2620">интеграция, обучение</text>
+      <text x="30" y="232" font-size="10" fill="#9A7300">решение: как настроить</text>
+    </g>
+
+    <g class="role" data-k="admin">
+      <rect x="236" y="142" width="206" height="98" rx="9"/>
+      <text x="250" y="164" font-size="13" font-weight="700" fill="#2A2620">Администратор ИС</text>
+      <text x="250" y="182" font-size="10.5" fill="#6B6252">интерес: устойчивость</text>
+      <text x="250" y="200" font-size="10.5" fill="#2A2620">доступы, копии, обновления,</text>
+      <text x="250" y="215" font-size="10.5" fill="#2A2620">журналы</text>
+      <text x="250" y="232" font-size="10" fill="#9A7300">решение: можно ли выпускать</text>
+    </g>
+
+    <g class="role" data-k="curator">
+      <rect x="456" y="142" width="208" height="98" rx="9"/>
+      <text x="470" y="164" font-size="13" font-weight="700" fill="#2A2620">Куратор проекта</text>
+      <text x="470" y="182" font-size="10.5" fill="#6B6252">интерес: снять конфликты</text>
+      <text x="470" y="200" font-size="10.5" fill="#2A2620">решает спорные вопросы</text>
+      <text x="470" y="215" font-size="10.5" fill="#2A2620">между подразделениями</text>
+      <text x="470" y="232" font-size="10" fill="#9A7300">решение: кто уступит</text>
+    </g>
+
+    <text x="16" y="270" font-family="Consolas,monospace" font-size="9.5" fill="#6B6252">ОДИН ЧЕЛОВЕК МОЖЕТ СОВМЕЩАТЬ РОЛИ, НО ЗОНЫ ОТВЕТСТВЕННОСТИ ОСТАЮТСЯ РАЗНЫМИ</text>
+  </svg>
+  <div class="status" id="rm-status"></div>
+  <div class="controls" id="rm-buttons">
+    <button data-k="customer" class="on">Заказчик</button>
+    <button data-k="owner">Владелец процесса</button>
+    <button data-k="user">Пользователь</button>
+    <button data-k="integrator">Интегратор</button>
+    <button data-k="admin">Администратор ИС</button>
+    <button data-k="curator">Куратор</button>
+  </div>
+  <p class="note">Нажмите роль на схеме или кнопку. Сравните, кто отвечает за правило, кто за настройку и кто за устойчивость после передачи.</p>
+</div>
+<script>
+(function () {
+  var data = {
+    customer: '<b>Заказчик.</b> Отвечает за результат проекта перед организацией: утверждает цель, бюджет, сроки и изменения, подписывает акт. Не решает, как именно настроить резерв, но решает, стоит ли продолжать проект в таком виде.',
+    owner: '<b>Владелец процесса.</b> Отвечает за правила работы подразделения и согласует целевой процесс. Спор о сроке резерва или правах менеджера адресуется ему, а не интегратору. Он же подтверждает, что описание работы в отчёте соответствует действительности.',
+    user: '<b>Пользователь.</b> Выполняет операции и первым замечает, что система мешает работе. Его интерес не всегда совпадает с интересом владельца процесса: удобство отдельного рабочего места может противоречить общему правилу.',
+    integrator: '<b>Интегратор.</b> Отвечает за настройку, миграцию, интеграцию и обучение по договору. Он объясняет последствия вариантов, но не присваивает себе право решать, как должна работать организация.',
+    admin: '<b>Администратор ИС.</b> Отвечает за доступы, резервные копии, обновления и журналы. Его лучше включить в проект с самого начала: тот, кто будет сопровождать систему, должен участвовать в её настройке и приёмке.',
+    curator: '<b>Куратор проекта.</b> Снимает конфликты между подразделениями, когда у продаж и склада разные интересы. Он не заменяет владельца процесса, а помогает принять решение на уровне выше подразделения.'
+  };
+  var cards = document.querySelectorAll('.role');
+  var buttons = document.querySelectorAll('#rm-buttons button');
+  var status = document.getElementById('rm-status');
+
+  function apply(key) {
+    cards.forEach(function (c) { c.classList.toggle('on', c.dataset.k === key); });
+    buttons.forEach(function (b) { b.classList.toggle('on', b.dataset.k === key); });
+    status.innerHTML = data[key];
+  }
+  cards.forEach(function (c) { c.addEventListener('click', function () { apply(c.dataset.k); }); });
+  buttons.forEach(function (b) { b.addEventListener('click', function () { apply(b.dataset.k); }); });
+  apply('customer');
+})();
+</script>
+</body>
+</html>

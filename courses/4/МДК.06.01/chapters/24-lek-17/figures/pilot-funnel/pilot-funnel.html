@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Путь опытной эксплуатации</title>
+<style>
+  :root { --paper:#F7F1E3; --card:#FFFDF6; --ink:#2A2620; --muted:#6B6459; --accent:#9A7300; --soft:#EDE5D2; --rule:#D8CBB0; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .demo { background:var(--paper); border:1px solid var(--rule); border-radius:14px; padding:16px; }
+  .head { display:flex; justify-content:space-between; align-items:flex-end; gap:14px; padding-bottom:8px; border-bottom:1px solid var(--rule); }
+  .eyebrow { margin:0 0 4px; font:600 10px/1.2 Consolas,monospace; letter-spacing:.13em; text-transform:uppercase; color:var(--accent); }
+  h3 { margin:0; font-size:19px; line-height:1.2; }
+  .hint { font:11px/1.4 Consolas,monospace; color:var(--muted); white-space:nowrap; }
+  svg { display:block; width:100%; height:auto; margin-top:8px; }
+  .zone rect { fill:var(--card); stroke:#8C8171; stroke-width:1.2; cursor:pointer; transition:fill .18s, stroke .18s; }
+  .zone.on rect { fill:var(--soft); stroke:var(--accent); stroke-width:2.2; }
+  .zone text { font-family:Consolas,monospace; text-anchor:middle; fill:var(--ink); font-size:8px; pointer-events:none; }
+  .zone .cap { font-size:9px; font-weight:600; fill:var(--accent); }
+  .zone .small { font-size:7.2px; fill:var(--muted); }
+  .status { min-height:54px; margin-top:8px; padding:10px 12px; border-radius:9px; background:var(--soft); font-size:12.5px; line-height:1.45; }
+  .status b { color:var(--accent); }
+  @media (max-width:560px) { .demo { padding:11px; } .hint { display:none; } }
+</style>
+</head>
+<body>
+<div class="demo">
+  <div class="head">
+    <div><p class="eyebrow">Опытная эксплуатация · этапы</p><h3>От участка до решения</h3></div>
+    <div class="hint">нажмите на этап</div>
+  </div>
+  <svg viewBox="0 0 680 258" role="img" aria-label="Четыре этапа опытной эксплуатации">
+    <g class="zone" data-k="site">
+      <rect x="16" y="20" width="148" height="126" rx="9"/>
+      <text x="90" y="42" class="cap">1. участок</text>
+      <text x="90" y="64">типичные процессы</text>
+      <text x="90" y="80" class="small">объём и данные</text>
+      <text x="90" y="96" class="small">близость команды</text>
+      <text x="90" y="118">результат:</text>
+      <text x="90" y="134" class="small">выбранный склад</text>
+    </g>
+    <g class="zone" data-k="group">
+      <rect x="180" y="20" width="148" height="126" rx="9"/>
+      <text x="254" y="42" class="cap">2. группа</text>
+      <text x="254" y="64">все роли</text>
+      <text x="254" y="80" class="small">обучение и доступы</text>
+      <text x="254" y="96" class="small">управляемый размер</text>
+      <text x="254" y="118">результат:</text>
+      <text x="254" y="134" class="small">14 человек</text>
+    </g>
+    <g class="zone on" data-k="run">
+      <rect x="344" y="20" width="148" height="126" rx="9"/>
+      <text x="418" y="42" class="cap">3. наблюдение</text>
+      <text x="418" y="64">журнал замечаний</text>
+      <text x="418" y="80" class="small">метрики и обходы</text>
+      <text x="418" y="96" class="small">ежедневный разбор</text>
+      <text x="418" y="118">результат:</text>
+      <text x="418" y="134" class="small">доказательства</text>
+    </g>
+    <g class="zone" data-k="exit">
+      <rect x="508" y="20" width="156" height="126" rx="9"/>
+      <text x="586" y="42" class="cap">4. решение</text>
+      <text x="586" y="64">критерии выхода</text>
+      <text x="586" y="80" class="small">пакет доказательств</text>
+      <text x="586" y="96" class="small">передача поддержке</text>
+      <text x="586" y="118">результат:</text>
+      <text x="586" y="134" class="small">промышленный режим</text>
+    </g>
+    <g stroke="#8C8171" stroke-width="1.4" fill="none" marker-end="url(#arw3)">
+      <path d="M164 83h10"/><path d="M328 83h10"/><path d="M492 83h10"/>
+    </g>
+    <text x="340" y="180" text-anchor="middle" font-family="Consolas,monospace" font-size="8" fill="#6B6459">путь назад к старому способу сохраняется до решения о переходе</text>
+    <text x="340" y="208" text-anchor="middle" font-family="Consolas,monospace" font-size="8" fill="#9A7300">ЭТАП ЗАКАНЧИВАЕТСЯ НЕ ПО КАЛЕНДАРЮ, А ПО КРИТЕРИЯМ</text>
+    <text x="340" y="234" text-anchor="middle" font-family="Consolas,monospace" font-size="7.4" fill="#6B6459">наблюдение без права остановить раскатку превращается в имитацию</text>
+    <defs><marker id="arw3" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#8C8171"/></marker></defs>
+  </svg>
+  <div class="status" id="status"></div>
+</div>
+<script>
+(function () {
+  var data = {
+    site: '<b>Участок.</b> Выбирают склад, похожий на остальные по процессам, объёму и качеству данных. Самый простой участок даёт ложную уверенность: результат не переносится на Москву и Калугу.',
+    group: '<b>Группа.</b> Четырнадцать человек покрывают все роли: приёмку, комплектацию, продажи, бухгалтерию, администрирование. Размер ограничен пропускной способностью поддержки, а не удобством.',
+    run: '<b>Наблюдение.</b> Замечания идут в один журнал, классифицируются при разборе, получают владельца и срок. Метрики считают за период, а не за удачный день. Критичное замечание без обхода останавливает этап.',
+    exit: '<b>Решение.</b> Комиссия смотрит пакет доказательств: журнал, метрики, обучение, документацию, копии, поддержку. Переход оформляют документом, старый способ отключают в конкретную дату.'
+  };
+  var zones = document.querySelectorAll('.zone');
+  var status = document.getElementById('status');
+  function apply(k) {
+    zones.forEach(function (z) { z.classList.toggle('on', z.dataset.k === k); });
+    status.innerHTML = data[k];
+  }
+  zones.forEach(function (z) { z.addEventListener('click', function () { apply(z.dataset.k); }); });
+  apply('run');
+})();
+</script>
+</body>
+</html>

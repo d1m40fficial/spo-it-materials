@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Плохой и рабочий вопрос интервью</title>
+<style>
+  :root { --paper:#FAF7EF; --card:#FFFDF8; --ink:#2A2620; --muted:#6B6252; --rule:#E3D8C2; --accent:#9A7300; --soft:#EDE5D2; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .frame { background:var(--paper); border:1px solid var(--rule); border-radius:12px; padding:16px; }
+  .eyebrow { margin:0 0 6px; font:600 10px/1.2 Consolas,monospace; letter-spacing:.14em; text-transform:uppercase; color:var(--accent); }
+  svg { display:block; width:100%; height:auto; }
+  .status { min-height:66px; margin-top:8px; padding:10px 12px; border-radius:9px; background:var(--soft); font-size:13px; line-height:1.45; }
+  .status b { color:var(--accent); }
+  .controls { display:flex; gap:6px; flex-wrap:wrap; margin-top:10px; }
+  button { font:600 11.5px/1.1 "Segoe UI",system-ui,sans-serif; padding:8px 10px; border-radius:8px; border:1px solid var(--rule); background:var(--card); color:var(--ink); cursor:pointer; }
+  button:hover { border-color:var(--accent); color:var(--accent); }
+  button.on { background:var(--accent); border-color:var(--accent); color:#fff; }
+  .note { margin:9px 2px 0; font:11.5px/1.5 "Segoe UI",system-ui,sans-serif; color:var(--muted); }
+  @media (max-width:560px) { .frame { padding:12px; } .status { font-size:12.5px; } }
+</style>
+</head>
+<body>
+<div class="frame">
+  <p class="eyebrow">Обследование · вопросы</p>
+  <svg viewBox="0 0 680 272" role="img" aria-labelledby="qq-title qq-desc">
+    <title id="qq-title">Как переформулировать вопрос интервью</title>
+    <desc id="qq-desc">Сверху плохой вопрос, снизу рабочий. Кнопки переключают примеры: подсказка, оценка человека, мнение вместо факта, память вместо наблюдения.</desc>
+
+    <g font-family="Segoe UI,system-ui,sans-serif">
+      <text x="16" y="22" font-family="Consolas,monospace" font-size="9" fill="#6B6252">ПЛОХОЙ ВОПРОС</text>
+      <rect x="16" y="30" width="648" height="62" rx="9" fill="#FFFFFF" stroke="#C9BCA2"/>
+      <text x="32" y="58" font-size="13" fill="#6B6252" id="q-bad-1"></text>
+      <text x="32" y="78" font-size="13" fill="#6B6252" id="q-bad-2"></text>
+
+      <path d="M340 94 L340 116" stroke="#9A7300" stroke-width="1.6" marker-end="url(#qq-arw)"/>
+      <defs>
+        <marker id="qq-arw" markerWidth="8" markerHeight="7" refX="7" refY="3.5" orient="auto">
+          <polygon points="0 0, 8 3.5, 0 7" fill="#9A7300"/>
+        </marker>
+      </defs>
+
+      <text x="16" y="136" font-family="Consolas,monospace" font-size="9" fill="#9A7300">РАБОЧИЙ ВОПРОС</text>
+      <rect x="16" y="144" width="648" height="62" rx="9" fill="#EDE5D2" stroke="#9A7300" stroke-width="1.6"/>
+      <text x="32" y="172" font-size="13" fill="#2A2620" id="q-good-1"></text>
+      <text x="32" y="192" font-size="13" fill="#2A2620" id="q-good-2"></text>
+    </g>
+
+    <text x="16" y="232" font-family="Consolas,monospace" font-size="9" fill="#6B6252">ВОПРОС О ДЕЙСТВИИ ДАЁТ ФАКТ. ВОПРОС О ГОТОВОМ ВЫВОДЕ ДАЁТ СОГЛАСИЕ.</text>
+  </svg>
+  <div class="status" id="qq-status"></div>
+  <div class="controls" id="qq-buttons">
+    <button data-k="0" class="on">Подсказка</button>
+    <button data-k="1">Оценка</button>
+    <button data-k="2">Мнение</button>
+    <button data-k="3">Память</button>
+  </div>
+  <p class="note">Нажмите кнопку. Сравните, что меняется: объект вопроса, формулировка или способ проверки.</p>
+</div>
+<script>
+(function () {
+  var data = [
+    {
+      bad1: '«Вы же проверяете остатки в Excel?»',
+      bad2: '',
+      good1: '«Как вы узнаёте, есть ли товар на складе?»',
+      good2: '',
+      why: '<b>Подсказка.</b> Первый вопрос содержит готовый ответ, и собеседнику проще согласиться. Рабочий вопрос спрашивает о действии и не подсказывает, где именно проверяют остатки.'
+    },
+    {
+      bad1: '«Почему вы так медленно работаете?»',
+      bad2: '',
+      good1: '«Какие шаги занимают больше всего времени?»',
+      good2: '',
+      why: '<b>Оценка человека.</b> Вопрос оценивает сотрудника и вызывает защиту. Рабочий вопрос переводит разговор на шаги операции, где можно найти причину задержки.'
+    },
+    {
+      bad1: '«Вам нравится новая система?»',
+      bad2: '',
+      good1: '«Что изменится в вашей работе после запуска?»',
+      good2: '',
+      why: '<b>Мнение вместо факта.</b> Симпатия не показывает, что изменится в операции. Рабочий вопрос спрашивает о будущих действиях и ожидаемых изменениях, которые можно проверить.'
+    },
+    {
+      bad1: '«Сколько времени занимает заказ?»',
+      bad2: '',
+      good1: '«Покажите, как вы оформили последний заказ».',
+      good2: '',
+      why: '<b>Память вместо наблюдения.</b> Человек плохо помнит длительность, но хорошо помнит последний случай. Просьба показать даёт числа, документы и обходные пути.'
+    }
+  ];
+  var buttons = document.querySelectorAll('#qq-buttons button');
+  var status = document.getElementById('qq-status');
+  var bad1 = document.getElementById('q-bad-1');
+  var bad2 = document.getElementById('q-bad-2');
+  var good1 = document.getElementById('q-good-1');
+  var good2 = document.getElementById('q-good-2');
+
+  function apply(i) {
+    var d = data[i];
+    bad1.textContent = d.bad1;
+    bad2.textContent = d.bad2;
+    good1.textContent = d.good1;
+    good2.textContent = d.good2;
+    status.innerHTML = d.why;
+    buttons.forEach(function (b) { b.classList.toggle('on', b.dataset.k === String(i)); });
+  }
+  buttons.forEach(function (b) { b.addEventListener('click', function () { apply(Number(b.dataset.k)); }); });
+  apply(0);
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RPO и RTO для разных систем</title>
+<style>
+  :root { --paper:#EDE5D2; --card:#FBF7EC; --ink:#2B2518; --muted:#6B6047; --accent:#9A7300; --soft:#E4D2A4; --rule:#CDBE9C; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .demo { background:var(--paper); border:1px solid var(--rule); border-radius:12px; padding:14px; }
+  .head { display:flex; justify-content:space-between; align-items:flex-end; gap:12px; border-bottom:1px solid var(--rule); padding-bottom:8px; }
+  .eyebrow { margin:0 0 3px; font:600 9px/1.2 Consolas,monospace; letter-spacing:.13em; text-transform:uppercase; color:var(--accent); }
+  h3 { margin:0; font-size:18px; line-height:1.2; }
+  .hint { font:10px/1.3 Consolas,monospace; color:var(--muted); text-align:right; }
+  svg { display:block; width:100%; height:auto; margin-top:6px; }
+  .card rect { fill:#FBF7EC; stroke:#B6A57E; stroke-width:1.2; transition:fill .18s,stroke .18s; cursor:pointer; }
+  .card.on rect { fill:var(--soft); stroke:var(--accent); stroke-width:2; }
+  .card text { font-family:Consolas,monospace; font-size:7.2px; fill:#2B2518; pointer-events:none; }
+  .card .name { font-size:8.6px; fill:#9A7300; }
+  .card .val { font-size:9.4px; fill:#2B2518; }
+  .status { min-height:44px; margin-top:8px; padding:9px 11px; border-radius:8px; background:var(--card); border:1px solid var(--rule); font-size:12px; line-height:1.45; }
+  .status b { color:var(--accent); }
+  .controls { display:flex; gap:6px; flex-wrap:wrap; margin-top:9px; }
+  button { font:600 11px/1 "Segoe UI",system-ui,sans-serif; padding:7px 9px; border-radius:7px; border:1px solid var(--rule); background:var(--card); color:var(--ink); cursor:pointer; }
+  button:hover { border-color:var(--accent); color:var(--accent); }
+  button.on { background:var(--accent); border-color:var(--accent); color:#fff; }
+  @media (max-width:560px) { .demo { padding:10px; } h3 { font-size:16px; } .hint { display:none; } }
+</style>
+</head>
+<body>
+<div class="demo">
+  <div class="head">
+    <div><p class="eyebrow">Копирование · два числа</p><h3>Сколько можно потерять и как быстро вернуть</h3></div>
+    <div class="hint">выберите систему</div>
+  </div>
+
+  <svg viewBox="0 0 680 334" role="img" aria-label="Пять систем с разными RPO и RTO">
+    <g class="card" data-k="sklad">
+      <rect x="14" y="14" width="206" height="118" rx="8"/>
+      <text x="26" y="32" class="name">СКЛАД</text>
+      <text x="26" y="50" class="val">RPO 15 минут</text>
+      <text x="26" y="66" class="val">RTO 2 часа</text>
+      <text x="26" y="84">журналы каждые 15 минут</text>
+      <text x="26" y="98">полная копия ночью</text>
+      <text x="26" y="116" fill="#6B6047">потеря 12 заказов</text>
+    </g>
+    <g class="card" data-k="shop">
+      <rect x="236" y="14" width="206" height="118" rx="8"/>
+      <text x="248" y="32" class="name">ИНТЕРНЕТ-МАГАЗИН</text>
+      <text x="248" y="50" class="val">RPO 5 минут</text>
+      <text x="248" y="66" class="val">RTO 1 час</text>
+      <text x="248" y="84">реплика и журналы</text>
+      <text x="248" y="98">полная копия раз в сутки</text>
+      <text x="248" y="116" fill="#6B6047">потеря нескольких оплат</text>
+    </g>
+    <g class="card" data-k="accounting">
+      <rect x="458" y="14" width="208" height="118" rx="8"/>
+      <text x="470" y="32" class="name">БУХГАЛТЕРИЯ</text>
+      <text x="470" y="50" class="val">RPO 1 час</text>
+      <text x="470" y="66" class="val">RTO 8 часов</text>
+      <text x="470" y="84">копия каждый час</text>
+      <text x="470" y="98">полная копия ночью</text>
+      <text x="470" y="116" fill="#6B6047">потеря одного часа проводок</text>
+    </g>
+    <g class="card" data-k="study">
+      <rect x="14" y="150" width="206" height="118" rx="8"/>
+      <text x="26" y="168" class="name">УЧЕБНАЯ ИС</text>
+      <text x="26" y="186" class="val">RPO 24 часа</text>
+      <text x="26" y="202" class="val">RTO 8 часов</text>
+      <text x="26" y="220">ночная полная копия</text>
+      <text x="26" y="234">недельная архивная</text>
+      <text x="26" y="252" fill="#6B6047">потеря дня учебных работ</text>
+    </g>
+    <g class="card" data-k="archive">
+      <rect x="236" y="150" width="206" height="118" rx="8"/>
+      <text x="248" y="168" class="name">АРХИВ ДОКУМЕНТОВ</text>
+      <text x="248" y="186" class="val">RPO 24 часа</text>
+      <text x="248" y="202" class="val">RTO 72 часа</text>
+      <text x="248" y="220">ежедневная копия</text>
+      <text x="248" y="234">месячные архивы</text>
+      <text x="248" y="252" fill="#6B6047">потеря дня, но не истории</text>
+    </g>
+    <rect x="458" y="150" width="208" height="118" rx="8" fill="#EDE5D2" stroke="#CDBE9C"/>
+    <text x="470" y="170" font-family="Consolas,monospace" font-size="7.4" fill="#6B6047">ЧЕМ МЕНЬШЕ RPO,</text>
+    <text x="470" y="184" font-family="Consolas,monospace" font-size="7.4" fill="#6B6047">ТЕМ ЧАЩЕ КОПИИ.</text>
+    <text x="470" y="202" font-family="Consolas,monospace" font-size="7.4" fill="#9A7300">ЧЕМ МЕНЬШЕ RTO,</text>
+    <text x="470" y="216" font-family="Consolas,monospace" font-size="7.4" fill="#9A7300">ТЕМ БОЛЬШЕ РЕПЕТИЦИЙ.</text>
+    <text x="470" y="240" font-family="Consolas,monospace" font-size="7" fill="#6B6047">числа задаёт владелец процесса</text>
+    <text x="470" y="254" font-family="Consolas,monospace" font-size="7" fill="#6B6047">а не администратор</text>
+
+    <text x="14" y="292" font-family="Consolas,monospace" font-size="7.4" fill="#9A7300">RPO ОТВЕЧАЕТ НА ВОПРОС «СКОЛЬКО ДАННЫХ ТЕРЯЕМ», RTO НА ВОПРОС «КАК ДОЛГО СТОИМ»</text>
+    <text x="14" y="308" font-family="Consolas,monospace" font-size="7.2" fill="#6B6047">RTO включает обнаружение, решение, восстановление, проверку и переключение пользователей</text>
+  </svg>
+
+  <div class="status" id="status"></div>
+  <div class="controls" id="controls"></div>
+</div>
+<script>
+(function () {
+  var data = {
+    sklad: '<b>Склад.</b> Потеря 15 минут это около 12 заказов. Нужны журналы транзакций каждые 15 минут и полная копия ночью. Проверка: восстановить базу на 14:06 и сверить заказы.',
+    shop: '<b>Интернет-магазин.</b> Потеря 5 минут заметна клиенту и платёжной системе. Нужны реплика, журналы и ежедневная полная копия. Реплика не заменяет копию от ошибочного скрипта.',
+    accounting: '<b>Бухгалтерия.</b> Час проводок можно восстановить по документам, но это ручная работа. Ежечасная копия и ночная полная дают разумный баланс.',
+    study: '<b>Учебная ИС.</b> Потеря дня учебных работ допустима, если оценки и заявки можно восстановить. Достаточно ночной полной и недельной архивной копии.',
+    archive: '<b>Архив документов.</b> Важна не скорость, а глубина и читаемость через годы. Поэтому ежедневная копия, месячные архивы и проверка старого формата.'
+  };
+  var cards = document.querySelectorAll('.card');
+  var controls = document.getElementById('controls');
+  var status = document.getElementById('status');
+  var order = ['sklad', 'shop', 'accounting', 'study', 'archive'];
+  var names = { sklad:'Склад', shop:'Магазин', accounting:'Бухгалтерия', study:'Учебная ИС', archive:'Архив' };
+
+  order.forEach(function (key, i) {
+    var b = document.createElement('button');
+    b.type = 'button';
+    b.textContent = names[key];
+    b.dataset.k = key;
+    if (i === 0) b.className = 'on';
+    b.addEventListener('click', function () { apply(key); });
+    controls.appendChild(b);
+  });
+
+  function apply(key) {
+    cards.forEach(function (c) { c.classList.toggle('on', c.dataset.k === key); });
+    controls.querySelectorAll('button').forEach(function (b) { b.classList.toggle('on', b.dataset.k === key); });
+    status.innerHTML = data[key];
+  }
+  apply('sklad');
+})();
+</script>
+</body>
+</html>

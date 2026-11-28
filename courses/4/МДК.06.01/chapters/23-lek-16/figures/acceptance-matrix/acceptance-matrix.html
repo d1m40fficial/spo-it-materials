@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Матрица проверок</title>
+<style>
+  :root { --paper:#F7F1E3; --card:#FFFDF6; --ink:#2A2620; --muted:#6B6459; --accent:#9A7300; --soft:#EDE5D2; --rule:#D8CBB0; --bad:#9B3A2E; --warn:#8A6412; --ok:#3D6B45; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .demo { background:var(--paper); border:1px solid var(--rule); border-radius:14px; padding:16px; }
+  .head { display:flex; justify-content:space-between; align-items:flex-end; gap:14px; padding-bottom:8px; border-bottom:1px solid var(--rule); }
+  .eyebrow { margin:0 0 4px; font:600 10px/1.2 Consolas,monospace; letter-spacing:.13em; text-transform:uppercase; color:var(--accent); }
+  h3 { margin:0; font-size:19px; line-height:1.2; }
+  .hint { font:11px/1.4 Consolas,monospace; color:var(--muted); white-space:nowrap; }
+  svg { display:block; width:100%; height:auto; margin-top:8px; }
+  svg text { font-family:Consolas,monospace; fill:var(--ink); }
+  .lbl { font-size:7.4px; fill:var(--muted); letter-spacing:.05em; }
+  .val { font-size:8.6px; }
+  .verdict { font-size:10px; font-weight:700; }
+  .controls { display:flex; gap:6px; flex-wrap:wrap; margin-top:9px; }
+  button { font:600 11.5px/1 "Segoe UI",system-ui,sans-serif; padding:8px 10px; border-radius:9px; border:1px solid var(--rule); background:var(--card); color:var(--ink); cursor:pointer; }
+  button:hover { border-color:var(--accent); color:var(--accent); }
+  button.on { background:var(--accent); border-color:var(--accent); color:#FFFDF6; }
+  .note { margin:8px 2px 0; font-size:11.5px; line-height:1.45; color:var(--muted); }
+  @media (max-width:560px) { .demo { padding:11px; } .hint { display:none; } }
+</style>
+</head>
+<body>
+<div class="demo">
+  <div class="head">
+    <div><p class="eyebrow">Приёмка · программа</p><h3>Что именно проверяют</h3></div>
+    <div class="hint">выберите проверку</div>
+  </div>
+  <svg viewBox="0 0 680 292" role="img" aria-label="Карточка проверки: данные, действие, ожидаемый и фактический результат">
+    <rect x="16" y="16" width="648" height="186" rx="10" fill="#FFFDF6" stroke="#D8CBB0"/>
+    <text x="32" y="38" class="lbl">ПРОВЕРКА</text>
+    <text x="32" y="56" class="val" id="cid" font-size="11" fill="#9A7300">П-04 · возврат товара</text>
+    <line x1="32" y1="66" x2="648" y2="66" stroke="#EDE5D2"/>
+
+    <text x="32" y="86" class="lbl">ДАННЫЕ</text>
+    <text x="32" y="103" class="val" id="cdata">возврат 31, две упаковки саморезов</text>
+
+    <text x="32" y="125" class="lbl">ДЕЙСТВИЕ</text>
+    <text x="32" y="142" class="val" id="cact">провести возврат и открыть карточку заказа</text>
+
+    <text x="360" y="86" class="lbl">ОЖИДАЛОСЬ</text>
+    <text x="360" y="103" class="val" id="cexp">резерв снят, остаток вырос на 2</text>
+
+    <text x="360" y="125" class="lbl">ФАКТ</text>
+    <text x="360" y="142" class="val" id="cfact" fill="#9B3A2E">резерв остался 2, остаток вырос на 2</text>
+
+    <text x="32" y="170" class="lbl">ВЕРДИКТ</text>
+    <text x="32" y="188" class="verdict" id="cverd" fill="#9B3A2E">не соответствует · приёмку приостановить</text>
+
+    <text x="340" y="224" text-anchor="middle" class="lbl">ПРОВЕРКА ЗАКРЫВАЕТ ТРЕБОВАНИЕ ТОЛЬКО ВМЕСТЕ С ДАННЫМИ И КРИТЕРИЕМ</text>
+    <text x="340" y="250" text-anchor="middle" font-size="9" fill="#9A7300" id="crule">критичная проверка: обход отсутствует</text>
+    <text x="340" y="274" text-anchor="middle" font-size="8" fill="#6B6459" id="cowner">ответственный: старший кладовщик</text>
+  </svg>
+  <div class="controls">
+    <button data-k="p1">П-01 приёмка</button>
+    <button data-k="p4" class="on">П-04 возврат</button>
+    <button data-k="p6">П-06 выгрузка</button>
+    <button data-k="p8">П-08 копия</button>
+  </div>
+  <p class="note" id="note">Красная проверка блокирует подпись. Жёлтая даёт замечание со сроком. Зелёная закрывает требование.</p>
+</div>
+<script>
+(function () {
+  var data = {
+    p1: {
+      id: 'П-01 · приёмка товара', data: 'накладная 471, цемент 100, факт 98',
+      act: 'провести накладную и открыть остаток', exp: 'остаток 98, расхождение 2',
+      fact: 'остаток 98, расхождение 2', verd: 'соответствует', color: '#3D6B45',
+      rule: 'критичная проверка: расхождение сохраняется', owner: 'ответственный: кладовщик приёмки',
+      note: 'Зелёная проверка закрывает требование «приёмка с расхождением».'
+    },
+    p4: {
+      id: 'П-04 · возврат товара', data: 'возврат 31, две упаковки саморезов',
+      act: 'провести возврат и открыть карточку заказа', exp: 'резерв снят, остаток вырос на 2',
+      fact: 'резерв остался 2, остаток вырос на 2', verd: 'не соответствует · приёмку приостановить', color: '#9B3A2E',
+      rule: 'критичная проверка: обход отсутствует', owner: 'ответственный: старший кладовщик',
+      note: 'Красная проверка блокирует подпись, даже если остальные пункты прошли.'
+    },
+    p6: {
+      id: 'П-06 · выгрузка в бухгалтерию', data: 'три счёта за день',
+      act: 'выгрузить счета и сверить суммы', exp: 'суммы совпадают до копейки',
+      fact: 'расхождение 2 копейки на третьем счёте', verd: 'существенное отклонение · устранить до запуска', color: '#8A6412',
+      rule: 'жёлтая проверка: обход вручную недопустим', owner: 'ответственный: главный бухгалтер',
+      note: 'Жёлтая проверка не блокирует приёмку сама по себе, но требует срока и проверки исправления.'
+    },
+    p8: {
+      id: 'П-08 · восстановление из копии', data: 'копия за 14 апреля',
+      act: 'восстановить копию в отдельную базу', exp: 'заказы и остатки на месте',
+      fact: 'заказы и остатки на месте, время 38 минут', verd: 'соответствует', color: '#3D6B45',
+      rule: 'критичная проверка: время восстановления записано', owner: 'ответственный: администратор ИС',
+      note: 'Зелёная проверка подтверждает не только копию, но и реальное время восстановления.'
+    }
+  };
+  var buttons = document.querySelectorAll('button[data-k]');
+  var note = document.getElementById('note');
+  function set(id, text, color) {
+    var el = document.getElementById(id);
+    el.textContent = text;
+    if (color) el.setAttribute('fill', color);
+  }
+  function apply(k) {
+    var d = data[k];
+    set('cid', d.id, '#9A7300');
+    set('cdata', d.data);
+    set('cact', d.act);
+    set('cexp', d.exp);
+    set('cfact', d.fact, d.color);
+    set('cverd', d.verd, d.color);
+    set('crule', d.rule, '#9A7300');
+    set('cowner', d.owner, '#6B6459');
+    note.textContent = d.note;
+    buttons.forEach(function (b) { b.classList.toggle('on', b.dataset.k === k); });
+  }
+  buttons.forEach(function (b) { b.addEventListener('click', function () { apply(b.dataset.k); }); });
+  apply('p4');
+})();
+</script>
+</body>
+</html>

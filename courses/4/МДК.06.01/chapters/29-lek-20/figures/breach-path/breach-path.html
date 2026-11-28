@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Путь атаки и меры защиты</title>
+<style>
+  :root { --paper:#EDE5D2; --card:#FBF7EC; --ink:#2B2518; --muted:#6B6047; --accent:#9A7300; --rule:#CDBE9C; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .frame { background:var(--paper); border:1px solid var(--rule); border-radius:12px; padding:16px 16px 12px; }
+  .eyebrow { margin:0 0 8px; font:600 9px/1.2 Consolas,monospace; letter-spacing:.14em; text-transform:uppercase; color:var(--accent); }
+  svg { display:block; width:100%; height:auto; }
+  .note { margin:10px 2px 0; font:11px/1.5 Consolas,monospace; color:var(--muted); }
+  @media (max-width:560px) { .frame { padding:12px 10px 10px; } }
+</style>
+</head>
+<body>
+<div class="frame">
+  <p class="eyebrow">Безопасность · путь атаки</p>
+  <svg viewBox="0 0 680 330" role="img" aria-labelledby="bp-title bp-desc">
+    <title id="bp-title">Шесть шагов атаки и меры защиты</title>
+    <desc id="bp-desc">Разведка, первоначальный доступ, закрепление, повышение прав, сбор данных, выгрузка. Под каждым шагом указана мера, которая его затрудняет.</desc>
+
+    <rect x="0" y="0" width="680" height="330" fill="#FBF7EC" rx="8"/>
+
+    <g font-family="Consolas,monospace">
+      <g>
+        <rect x="18" y="34" width="202" height="96" rx="8" fill="#EDE5D2" stroke="#CDBE9C"/>
+        <text x="30" y="52" font-size="8" fill="#9A7300">1. РАЗВЕДКА</text>
+        <text x="30" y="68" font-size="7" fill="#2B2518">открытые сервисы, утёкшие</text>
+        <text x="30" y="80" font-size="7" fill="#2B2518">адреса, версии библиотек</text>
+        <line x1="30" y1="90" x2="208" y2="90" stroke="#CDBE9C"/>
+        <text x="30" y="104" font-size="6.8" fill="#6B6047">мера: реестр сервисов,</text>
+        <text x="30" y="116" font-size="6.8" fill="#6B6047">закрыть лишнее, обновления</text>
+      </g>
+      <g>
+        <rect x="238" y="34" width="202" height="96" rx="8" fill="#EDE5D2" stroke="#CDBE9C"/>
+        <text x="250" y="52" font-size="8" fill="#9A7300">2. ПЕРВОНАЧАЛЬНЫЙ ДОСТУП</text>
+        <text x="250" y="68" font-size="7" fill="#2B2518">фишинг, слабый пароль,</text>
+        <text x="250" y="80" font-size="7" fill="#2B2518">уязвимость на периметре</text>
+        <line x1="250" y1="90" x2="428" y2="90" stroke="#CDBE9C"/>
+        <text x="250" y="104" font-size="6.8" fill="#6B6047">мера: MFA, блок-лист,</text>
+        <text x="250" y="116" font-size="6.8" fill="#6B6047">срок устранения уязвимостей</text>
+      </g>
+      <g>
+        <rect x="458" y="34" width="202" height="96" rx="8" fill="#EDE5D2" stroke="#CDBE9C"/>
+        <text x="470" y="52" font-size="8" fill="#9A7300">3. ЗАКРЕПЛЕНИЕ</text>
+        <text x="470" y="68" font-size="7" fill="#2B2518">новая учётная запись,</text>
+        <text x="470" y="80" font-size="7" fill="#2B2518">ключ, задача по расписанию</text>
+        <line x1="470" y1="90" x2="648" y2="90" stroke="#CDBE9C"/>
+        <text x="470" y="104" font-size="6.8" fill="#6B6047">мера: контроль изменений,</text>
+        <text x="470" y="116" font-size="6.8" fill="#6B6047">оповещение о новых записях</text>
+      </g>
+
+      <g>
+        <rect x="18" y="170" width="202" height="96" rx="8" fill="#EDE5D2" stroke="#CDBE9C"/>
+        <text x="30" y="188" font-size="8" fill="#9A7300">4. ПОВЫШЕНИЕ ПРАВ</text>
+        <text x="30" y="204" font-size="7" fill="#2B2518">лишняя роль, ошибка</text>
+        <text x="30" y="216" font-size="7" fill="#2B2518">конфигурации, чужой доступ</text>
+        <line x1="30" y1="226" x2="208" y2="226" stroke="#CDBE9C"/>
+        <text x="30" y="240" font-size="6.8" fill="#6B6047">мера: минимальные привилегии,</text>
+        <text x="30" y="252" font-size="6.8" fill="#6B6047">разделение обязанностей</text>
+      </g>
+      <g>
+        <rect x="238" y="170" width="202" height="96" rx="8" fill="#EDE5D2" stroke="#CDBE9C"/>
+        <text x="250" y="188" font-size="8" fill="#9A7300">5. СБОР ДАННЫХ</text>
+        <text x="250" y="204" font-size="7" fill="#2B2518">выгрузка отчётов, доступ</text>
+        <text x="250" y="216" font-size="7" fill="#2B2518">к базе, копии в папках</text>
+        <line x1="250" y1="226" x2="428" y2="226" stroke="#CDBE9C"/>
+        <text x="250" y="240" font-size="6.8" fill="#6B6047">мера: журнал выгрузок,</text>
+        <text x="250" y="252" font-size="6.8" fill="#6B6047">лимиты и оповещения</text>
+      </g>
+      <g>
+        <rect x="458" y="170" width="202" height="96" rx="8" fill="#E4D2A4" stroke="#9A7300"/>
+        <text x="470" y="188" font-size="8" fill="#7A5B00">6. ВЫГРУЗКА И УЩЕРБ</text>
+        <text x="470" y="204" font-size="7" fill="#2B2518">шифрование данных,</text>
+        <text x="470" y="216" font-size="7" fill="#2B2518">удаление доступных копий</text>
+        <line x1="470" y1="226" x2="648" y2="226" stroke="#CDBE9C"/>
+        <text x="470" y="240" font-size="6.8" fill="#6B6047">мера: сегментация, офлайн-копии,</text>
+        <text x="470" y="252" font-size="6.8" fill="#6B6047">план реакции и восстановления</text>
+      </g>
+    </g>
+
+    <g stroke="#9A7300" stroke-width="1.4" fill="none" marker-end="url(#arw)">
+      <path d="M220 82 H234"/>
+      <path d="M440 82 H454"/>
+      <path d="M559 130 V150 H119 V166"/>
+      <path d="M220 218 H234"/>
+      <path d="M440 218 H454"/>
+    </g>
+    <defs>
+      <marker id="arw" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+        <polygon points="0 0, 8 3, 0 6" fill="#9A7300"/>
+      </marker>
+    </defs>
+
+    <text x="18" y="296" font-family="Consolas,monospace" font-size="7.4" fill="#9A7300">ОДНА МЕРА НЕ ОСТАНАВЛИВАЕТ АТАКУ, НО КАЖДАЯ ЗАСТАВЛЯЕТ НАРУШИТЕЛЯ ТРАТИТЬ ВРЕМЯ</text>
+    <text x="18" y="312" font-family="Consolas,monospace" font-size="7.2" fill="#6B6047">журнал нужен на каждом шаге: без него нельзя понять, где именно атака прошла дальше</text>
+  </svg>
+  <p class="note">Схема не описывает конкретную атаку, а показывает типичную последовательность. Меры выбирают под модель нарушителя и цену данных.</p>
+</div>
+</body>
+</html>

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Трассировка требования</title>
+<style>
+  :root { --paper:#EDE5D2; --card:#FFFDF7; --ink:#2B2519; --muted:#6E6350; --rule:#D6C7A8; --accent:#9A7300; --soft:#F3EAD3; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .frame { background:var(--paper); border:1px solid var(--rule); border-radius:12px; padding:16px 16px 12px; }
+  .eyebrow { margin:0 0 6px; font:600 9.5px/1.2 Consolas,monospace; letter-spacing:.14em; text-transform:uppercase; color:var(--accent); }
+  svg { display:block; width:100%; height:auto; }
+  .note { margin:8px 2px 0; font:11px/1.5 Consolas,monospace; color:var(--muted); }
+</style>
+</head>
+<body>
+<div class="frame">
+  <p class="eyebrow">Требования · трассировка</p>
+  <svg viewBox="0 0 680 322" role="img" aria-labelledby="tc-title tc-desc">
+    <title id="tc-title">Цепочка трассировки от проблемы до приёмки</title>
+    <desc id="tc-desc">Проблема из обследования связана с требованием, критерием, тестом и результатом приёмки. Обратная стрелка показывает тест без требования.</desc>
+
+    <rect x="16" y="34" width="100" height="96" rx="7" fill="#F7F0DF" stroke="#C9B996"/>
+    <text x="66" y="52" text-anchor="middle" font-family="Consolas,monospace" font-size="7.5" fill="#6E6350">ПРОБЛЕМА</text>
+    <text x="66" y="72" text-anchor="middle" font-size="8.5" fill="#2B2519">4 файла</text>
+    <text x="66" y="86" text-anchor="middle" font-size="8.5" fill="#2B2519">остатков</text>
+    <text x="66" y="102" text-anchor="middle" font-size="8.5" fill="#2B2519">сверка 9 мин</text>
+    <text x="66" y="120" text-anchor="middle" font-size="7.5" fill="#8A6A2A">источник</text>
+
+    <rect x="156" y="34" width="100" height="96" rx="7" fill="#FFFDF7" stroke="#9A7300" stroke-width="1.6"/>
+    <text x="206" y="52" text-anchor="middle" font-family="Consolas,monospace" font-size="7.5" fill="#9A7300">ФТ-01</text>
+    <text x="206" y="72" text-anchor="middle" font-size="8.5" fill="#2B2519">резерв</text>
+    <text x="206" y="86" text-anchor="middle" font-size="8.5" fill="#2B2519">при оформлении</text>
+    <text x="206" y="100" text-anchor="middle" font-size="8.5" fill="#2B2519">заказа</text>
+    <text x="206" y="120" text-anchor="middle" font-size="7.5" fill="#8A6A2A">требование</text>
+
+    <rect x="296" y="34" width="100" height="96" rx="7" fill="#FFFDF7" stroke="#C9B996"/>
+    <text x="346" y="52" text-anchor="middle" font-family="Consolas,monospace" font-size="7.5" fill="#6E6350">КРИТЕРИЙ</text>
+    <text x="346" y="72" text-anchor="middle" font-size="8.5" fill="#2B2519">резерв равен</text>
+    <text x="346" y="86" text-anchor="middle" font-size="8.5" fill="#2B2519">количеству,</text>
+    <text x="346" y="100" text-anchor="middle" font-size="8.5" fill="#2B2519">остаток 0</text>
+    <text x="346" y="120" text-anchor="middle" font-size="7.5" fill="#8A6A2A">проверка</text>
+
+    <rect x="436" y="34" width="100" height="96" rx="7" fill="#FFFDF7" stroke="#C9B996"/>
+    <text x="486" y="52" text-anchor="middle" font-family="Consolas,monospace" font-size="7.5" fill="#6E6350">ТЕСТ Т-01</text>
+    <text x="486" y="72" text-anchor="middle" font-size="8.5" fill="#2B2519">повторный</text>
+    <text x="486" y="86" text-anchor="middle" font-size="8.5" fill="#2B2519">заказ отклонён</text>
+    <text x="486" y="100" text-anchor="middle" font-size="8.5" fill="#2B2519">с сообщением</text>
+    <text x="486" y="120" text-anchor="middle" font-size="7.5" fill="#8A6A2A">доказательство</text>
+
+    <rect x="576" y="34" width="88" height="96" rx="7" fill="#F7F0DF" stroke="#C9B996"/>
+    <text x="620" y="52" text-anchor="middle" font-family="Consolas,monospace" font-size="7.5" fill="#6E6350">ПРИЁМКА</text>
+    <text x="620" y="72" text-anchor="middle" font-size="8.5" fill="#2B2519">сценарий</text>
+    <text x="620" y="86" text-anchor="middle" font-size="8.5" fill="#2B2519">пройден</text>
+    <text x="620" y="100" text-anchor="middle" font-size="8.5" fill="#2B2519">заказчиком</text>
+    <text x="620" y="120" text-anchor="middle" font-size="7.5" fill="#8A6A2A">результат</text>
+
+    <g stroke="#9A7300" stroke-width="1.4" fill="none" marker-end="url(#arw-tc)">
+      <path d="M116 60h34"/><path d="M256 60h34"/><path d="M396 60h34"/><path d="M536 60h34"/>
+    </g>
+
+    <path d="M486 148v26H246v-26" stroke="#8A6A2A" stroke-width="1.2" stroke-dasharray="4 3" fill="none" marker-end="url(#arw-tc2)"/>
+    <text x="366" y="190" text-anchor="middle" font-family="Consolas,monospace" font-size="8" fill="#8A6A2A">ОБРАТНАЯ ТРАССИРОВКА: ТЕСТ БЕЗ ТРЕБОВАНИЯ ПРОВЕРЯЕТ ЛИШНЕЕ</text>
+
+    <rect x="16" y="206" width="648" height="44" rx="7" fill="#FFFDF7" stroke="#D6C7A8"/>
+    <text x="30" y="224" font-family="Consolas,monospace" font-size="8" fill="#6E6350">ПОКРЫТИЕ</text>
+    <text x="30" y="241" font-size="10.5" fill="#2B2519">24 требования · 21 критерий · 19 тестов · 5 требований пока без проверки</text>
+
+    <text x="16" y="272" font-family="Consolas,monospace" font-size="9" fill="#9A7300">ПРАВИЛО</text>
+    <text x="16" y="290" font-size="10.5" fill="#2B2519">Требование без теста не будет проверено, а тест без требования проверяет то, чего не просили.</text>
+    <text x="16" y="308" font-size="10.5" fill="#2B2519">Матрица нужна при изменении: она показывает, какие тесты и модули затронуты.</text>
+
+    <defs>
+      <marker id="arw-tc" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#9A7300"/></marker>
+      <marker id="arw-tc2" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#8A6A2A"/></marker>
+    </defs>
+  </svg>
+  <p class="note">Слева направо идёт прямая цепочка, снизу показана обратная проверка: каждый тест должен опираться на требование.</p>
+</div>
+</body>
+</html>

@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Выбор метрики эффекта</title>
+<style>
+  :root { --paper:#EDE5D2; --card:#FBF7EC; --ink:#2B2518; --muted:#6B6047; --accent:#9A7300; --soft:#E4D2A4; --rule:#CDBE9C; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .demo { background:var(--paper); border:1px solid var(--rule); border-radius:12px; padding:16px; }
+  .head { display:flex; justify-content:space-between; align-items:flex-end; gap:12px; border-bottom:1px solid var(--rule); padding-bottom:9px; }
+  .eyebrow { margin:0 0 4px; font:600 9px/1.2 Consolas,monospace; letter-spacing:.13em; text-transform:uppercase; color:var(--accent); }
+  h3 { margin:0; font-size:18px; line-height:1.2; }
+  .hint { font:10px/1.3 Consolas,monospace; color:var(--muted); text-align:right; }
+  svg { display:block; width:100%; height:auto; margin-top:8px; }
+  .node rect { fill:#FBF7EC; stroke:#B6A57E; stroke-width:1.2; transition:fill .18s,stroke .18s; cursor:pointer; }
+  .node.on rect { fill:var(--soft); stroke:var(--accent); stroke-width:2; }
+  .node text { font-family:Consolas,monospace; font-size:8px; fill:#2B2518; text-anchor:middle; pointer-events:none; }
+  .node .sub { font-size:6.6px; fill:#6B6047; }
+  .status { min-height:86px; margin-top:8px; padding:10px 12px; border-radius:8px; background:var(--card); border:1px solid var(--rule); font-size:12px; line-height:1.5; }
+  .status b { color:var(--accent); }
+  .status .row { margin:2px 0; }
+  .controls { display:flex; gap:6px; flex-wrap:wrap; margin-top:10px; }
+  button { font:600 11px/1 "Segoe UI",system-ui,sans-serif; padding:8px 10px; border-radius:7px; border:1px solid var(--rule); background:var(--card); color:var(--ink); cursor:pointer; }
+  button:hover { border-color:var(--accent); color:var(--accent); }
+  button.on { background:var(--accent); border-color:var(--accent); color:#fff; }
+  @media (max-width:560px) { .demo { padding:11px; } h3 { font-size:16px; } .hint { display:none; } }
+</style>
+</head>
+<body>
+<div class="demo">
+  <div class="head">
+    <div><p class="eyebrow">Оценка эффекта · метрики</p><h3>Что измеряем и чем платим</h3></div>
+    <div class="hint">нажмите цель или узел</div>
+  </div>
+
+  <svg viewBox="0 0 680 236" role="img" aria-label="Дерево метрик: цель внедрения и четыре группы показателей">
+    <rect x="250" y="12" width="180" height="38" rx="7" fill="#9A7300"/>
+    <text x="340" y="28" font-family="Consolas,monospace" font-size="8.4" fill="#fff" text-anchor="middle">ЦЕЛЬ ВНЕДРЕНИЯ</text>
+    <text x="340" y="41" font-family="Consolas,monospace" font-size="6.8" fill="#F4E8CB" text-anchor="middle">решение, а не отчёт</text>
+
+    <g stroke="#9A7300" stroke-width="1.3" fill="none">
+      <path d="M340 50 V70"/>
+      <path d="M340 70 H88 V96"/>
+      <path d="M340 70 H252 V96"/>
+      <path d="M340 70 H428 V96"/>
+      <path d="M340 70 H592 V96"/>
+    </g>
+
+    <g class="node" data-k="time">
+      <rect x="10" y="96" width="156" height="48" rx="7"/>
+      <text x="88" y="114">ВРЕМЯ</text>
+      <text x="88" y="127" class="sub">медиана и 9-й дециль</text>
+    </g>
+    <g class="node" data-k="errors">
+      <rect x="174" y="96" width="156" height="48" rx="7"/>
+      <text x="252" y="114">ОШИБКИ</text>
+      <text x="252" y="127" class="sub">доля заказов с расхождением</text>
+    </g>
+    <g class="node" data-k="money">
+      <rect x="338" y="96" width="156" height="48" rx="7"/>
+      <text x="416" y="114">ДЕНЬГИ</text>
+      <text x="416" y="127" class="sub">стоимость на заказ</text>
+    </g>
+    <g class="node" data-k="satisfaction">
+      <rect x="502" y="96" width="168" height="48" rx="7"/>
+      <text x="586" y="114">УДОВЛЕТВОРЁННОСТЬ</text>
+      <text x="586" y="127" class="sub">клиент и сотрудник</text>
+    </g>
+
+    <g stroke="#B6A57E" stroke-width="1" stroke-dasharray="3 3">
+      <path d="M88 144 V168"/><path d="M252 144 V168"/><path d="M416 144 V168"/><path d="M586 144 V168"/>
+    </g>
+    <g font-family="Consolas,monospace" font-size="6.6" fill="#6B6047" text-anchor="middle">
+      <text x="88" y="182">контрметрика:</text><text x="88" y="193">ошибки</text>
+      <text x="252" y="182">контрметрика:</text><text x="252" y="193">время на исправление</text>
+      <text x="416" y="182">контрметрика:</text><text x="416" y="193">удовлетворённость</text>
+      <text x="586" y="182">контрметрика:</text><text x="586" y="193">повторные обращения</text>
+    </g>
+    <text x="340" y="222" font-family="Consolas,monospace" font-size="7.2" fill="#9A7300" text-anchor="middle">У КАЖДОЙ МЕТРИКИ ЕСТЬ ФОРМУЛА, ИСТОЧНИК И ЦЕНА УЛУЧШЕНИЯ</text>
+  </svg>
+
+  <div class="status" id="status"></div>
+  <div class="controls">
+    <button data-k="time" class="on">Скорость</button>
+    <button data-k="errors">Ошибки</button>
+    <button data-k="money">Деньги</button>
+    <button data-k="satisfaction">Удовлетворённость</button>
+  </div>
+</div>
+<script>
+(function () {
+  var data = {
+    time: '<div class="row"><b>Метрика:</b> медиана времени заказа и девятый дециль.</div><div class="row"><b>Формула:</b> время от первого контакта до подтверждения, минуты.</div><div class="row"><b>Источник:</b> журнал звонков и хронометраж, не только карточка системы.</div><div class="row"><b>Ловушка:</b> замер только последнего шага завышает эффект.</div><div class="row"><b>Цена:</b> скорость может вырасти за счёт ошибок.</div>',
+    errors: '<div class="row"><b>Метрика:</b> доля заказов с расхождением и стоимость одной ошибки.</div><div class="row"><b>Формула:</b> заказы с ошибкой разделить на все заказы периода.</div><div class="row"><b>Источник:</b> акты расхождений, возвраты, повторные доставки.</div><div class="row"><b>Ловушка:</b> общее число ошибок не сравнивает склады разного размера.</div><div class="row"><b>Цена:</b> борьба с ошибками может замедлить операцию.</div>',
+    money: '<div class="row"><b>Метрика:</b> стоимость обработки одного заказа.</div><div class="row"><b>Формула:</b> труд, потери от ошибок и расходы на систему на заказ.</div><div class="row"><b>Источник:</b> табель, возвраты, счета за сопровождение.</div><div class="row"><b>Ловушка:</b> сэкономленное время не равно деньгам без роста объёма.</div><div class="row"><b>Цена:</b> экономия может достигаться выгоранием сотрудников.</div>',
+    satisfaction: '<div class="row"><b>Метрика:</b> средняя оценка по шкале 1-5 и доля ответивших.</div><div class="row"><b>Формула:</b> сумма оценок разделить на число ответов.</div><div class="row"><b>Источник:</b> короткий опрос клиента и сотрудника.</div><div class="row"><b>Ловушка:</b> отвечают самые довольные или самые злые.</div><div class="row"><b>Цена:</b> опросы отнимают время и утомляют людей.</div>'
+  };
+  var nodes = document.querySelectorAll('.node');
+  var buttons = document.querySelectorAll('button[data-k]');
+  var status = document.getElementById('status');
+
+  function apply(key) {
+    nodes.forEach(function (n) { n.classList.toggle('on', n.dataset.k === key); });
+    buttons.forEach(function (b) { b.classList.toggle('on', b.dataset.k === key); });
+    status.innerHTML = data[key];
+  }
+  nodes.forEach(function (n) { n.addEventListener('click', function () { apply(n.dataset.k); }); });
+  buttons.forEach(function (b) { b.addEventListener('click', function () { apply(b.dataset.k); }); });
+  apply('time');
+})();
+</script>
+</body>
+</html>

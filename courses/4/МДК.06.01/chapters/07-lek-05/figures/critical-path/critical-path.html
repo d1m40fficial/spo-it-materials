@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Критический путь и задержки</title>
+<style>
+  :root { --paper:#EDE5D2; --card:#FFFDF7; --ink:#2B2519; --muted:#6E6350; --rule:#D6C7A8; --accent:#9A7300; --soft:#F3EAD3; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .demo { background:var(--paper); border:1px solid var(--rule); border-radius:12px; padding:16px; }
+  .head { display:flex; justify-content:space-between; align-items:flex-end; gap:14px; padding-bottom:8px; border-bottom:1px solid var(--rule); }
+  .eyebrow { margin:0 0 3px; font:600 9.5px/1.2 Consolas,monospace; letter-spacing:.14em; text-transform:uppercase; color:var(--accent); }
+  h3 { margin:0; font-size:18px; line-height:1.2; }
+  .hint { font:10.5px/1.3 Consolas,monospace; color:var(--muted); white-space:nowrap; }
+  svg { display:block; width:100%; height:auto; margin-top:6px; }
+  .rowbg { fill:transparent; }
+  .rowbg.sel { fill:#F3EAD3; }
+  .bar { fill:#FFFDF7; stroke:#C9B996; stroke-width:1.2; }
+  .bar.crit { fill:#F3EAD3; stroke:#9A7300; stroke-width:1.6; }
+  .fl { fill:url(#hatch); stroke:#C9B996; stroke-width:.9; stroke-dasharray:2 2; }
+  .lbl { font-family:Consolas,monospace; font-size:8.5px; fill:#6E6350; }
+  .lbl.crit { fill:#9A7300; }
+  .day { font-family:Consolas,monospace; font-size:7px; fill:#8A6A2A; }
+  .status { min-height:58px; margin-top:6px; padding:10px 12px; border-radius:8px; background:var(--soft); font-size:12.5px; line-height:1.45; }
+  .status b { color:var(--accent); }
+  .controls { display:flex; gap:6px; flex-wrap:wrap; margin-top:9px; }
+  button { font:600 11.5px/1 "Segoe UI",system-ui,sans-serif; padding:7px 9px; border-radius:8px; border:1px solid var(--rule); background:var(--card); color:var(--ink); cursor:pointer; }
+  button:hover { border-color:var(--accent); color:var(--accent); }
+  button.on { background:var(--accent); border-color:var(--accent); color:#fff; }
+  button.act { border-color:#B9A36B; }
+  @media (max-width:560px) { .demo { padding:12px; } .hint { display:none; } }
+</style>
+</head>
+<body>
+<div class="demo">
+  <div class="head">
+    <div><p class="eyebrow">План · расчёт сроков</p><h3>Что сдвигает финиш</h3></div>
+    <div class="hint">выберите работу и добавьте дни</div>
+  </div>
+  <svg viewBox="0 0 680 318" role="img" aria-labelledby="cp-title cp-desc">
+    <title id="cp-title">Диаграмма работ с критическим путём и резервом</title>
+    <desc id="cp-desc">Полосы работ A до H по дням. Критические работы выделены, у работы D показан резерв. Задержку можно добавить кнопками.</desc>
+    <g id="ticks"></g>
+    <g id="rows"></g>
+    <line x1="52" y1="272" x2="640" y2="272" stroke="#C9B996"/>
+    <text x="52" y="288" font-family="Consolas,monospace" font-size="7.5" fill="#6E6350">день 1</text>
+    <text x="600" y="288" font-family="Consolas,monospace" font-size="7.5" fill="#6E6350">день 60</text>
+    <text x="52" y="306" font-family="Consolas,monospace" font-size="8" fill="#9A7300">золотая полоса: работа критического пути, резерва нет</text>
+    <defs>
+      <pattern id="hatch" width="5" height="5" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+        <line x1="0" y1="0" x2="0" y2="5" stroke="#D6C7A8" stroke-width="1.4"/>
+      </pattern>
+    </defs>
+  </svg>
+  <div class="status" id="status"></div>
+  <div class="controls" id="tasks"></div>
+  <div class="controls">
+    <button class="act" id="plus1">+1 день</button>
+    <button class="act" id="plus3">+3 дня</button>
+    <button id="reset">Сбросить</button>
+  </div>
+</div>
+<script>
+(function () {
+  var base = { A:10, B:8, C:12, D:10, E:5, F:10, G:8, H:3 };
+  var names = { A:'требования', B:'настройка', C:'миграция', D:'интеграция', E:'обучение', F:'пилот', G:'тираж', H:'приёмка' };
+  var order = ['A','B','C','D','E','F','G','H'];
+  var preds = { A:[], B:['A'], C:['B'], D:['B'], E:['C','D'], F:['E'], G:['F'], H:['G'] };
+  var succ = { A:['B'], B:['C','D'], C:['E'], D:['E'], E:['F'], F:['G'], G:['H'], H:[] };
+  var durs = {}, selected = 'D';
+  var NS = 'http://www.w3.org/2000/svg';
+  var rowsG = document.getElementById('rows');
+  var ticksG = document.getElementById('ticks');
+  var status = document.getElementById('status');
+  var taskBox = document.getElementById('tasks');
+  var X0 = 52, STEP = 30, DAY = 9.6, W = 9; // W: label column width offsets
+  var refs = {};
+
+  order.forEach(function (k) { durs[k] = base[k]; });
+
+  function el(name, attrs) {
+    var e = document.createElementNS(NS, name);
+    for (var a in attrs) e.setAttribute(a, attrs[a]);
+    return e;
+  }
+
+  function calc() {
+    var ES = {}, EF = {}, LS = {}, LF = {}, FL = {};
+    order.forEach(function (k) {
+      var s = 1;
+      preds[k].forEach(function (p) { if (EF[p] + 1 > s) s = EF[p] + 1; });
+      ES[k] = s; EF[k] = s + durs[k] - 1;
+    });
+    var finish = 0;
+    order.forEach(function (k) { if (EF[k] > finish) finish = EF[k]; });
+    order.slice().reverse().forEach(function (k) {
+      var lf = finish;
+      if (succ[k].length) {
+        lf = Infinity;
+        succ[k].forEach(function (s) { if (LS[s] - 1 < lf) lf = LS[s] - 1; });
+      }
+      LF[k] = lf; LS[k] = lf - durs[k] + 1; FL[k] = LS[k] - ES[k];
+    });
+    return { ES:ES, EF:EF, LS:LS, LF:LF, FL:FL, finish:finish };
+  }
+
+  function build() {
+    for (var d = 1; d <= 60; d += 10) {
+      var x = X0 + (d - 1) * DAY;
+      ticksG.appendChild(el('line', { x1:x, y1:26, x2:x, y2:272, stroke:'#D6C7A8', 'stroke-width':'.7', 'stroke-dasharray':'2 3' }));
+      ticksG.appendChild(el('text', { x:x, y:20, 'text-anchor':'middle', 'font-family':'Consolas,monospace', 'font-size':'7', fill:'#8A6A2A' })).textContent = d;
+    }
+    order.forEach(function (k, i) {
+      var y = 34 + i * STEP;
+      var g = el('g', { 'data-k':k });
+      g.appendChild(el('rect', { x:8, y:y - 4, width:660, height:26, rx:4, class:'rowbg' }));
+      var t = el('text', { x:46, y:y + 13, 'text-anchor':'end', class:'lbl' });
+      t.textContent = k + ' ' + durs[k];
+      g.appendChild(t);
+      var bar = el('rect', { y:y, height:18, rx:3, class:'bar' });
+      g.appendChild(bar);
+      var fl = el('rect', { y:y, height:18, rx:3, class:'fl' });
+      g.appendChild(fl);
+      var day = el('text', { x:0, y:y + 12, 'text-anchor':'end', class:'day' });
+      g.appendChild(day);
+      g.addEventListener('click', function () { selected = k; render(); });
+      rowsG.appendChild(g);
+      refs[k] = { g:g, bar:bar, fl:fl, lbl:t, day:day };
+    });
+  }
+
+  function render() {
+    var r = calc();
+    order.forEach(function (k, i) {
+      var o = refs[k], y = 34 + i * STEP;
+      var crit = r.FL[k] === 0;
+      o.bar.setAttribute('x', X0 + (r.ES[k] - 1) * DAY);
+      o.bar.setAttribute('width', durs[k] * DAY);
+      o.bar.setAttribute('class', 'bar' + (crit ? ' crit' : ''));
+      o.lbl.setAttribute('class', 'lbl' + (crit ? ' crit' : ''));
+      o.lbl.textContent = k + ' ' + durs[k];
+      var fw = r.FL[k] * DAY;
+      o.fl.setAttribute('x', X0 + r.EF[k] * DAY);
+      o.fl.setAttribute('width', Math.max(0, fw));
+      o.fl.style.display = fw > 1 ? '' : 'none';
+      o.day.setAttribute('x', X0 + (r.EF[k] - 1) * DAY + durs[k] * DAY - 4);
+      o.day.textContent = 'день ' + r.EF[k];
+      o.g.querySelector('.rowbg').setAttribute('class', 'rowbg' + (selected === k ? ' sel' : ''));
+    });
+    var cp = order.filter(function (k) { return r.FL[k] === 0; }).join(', ');
+    var msg = '<b>Финиш: день ' + r.finish + '.</b> Критический путь: ' + cp + '. ';
+    if (r.FL.D > 0) msg += 'У работы D резерв ' + r.FL.D + ' дн., поэтому её задержка внутри резерва финиш не двигает.';
+    else msg += 'У работы D резерва больше нет: она стала критической.';
+    msg += ' Выбрана работа ' + selected + ' (' + names[selected] + '), длительность ' + durs[selected] + ' дн.';
+    status.innerHTML = msg;
+  }
+
+  order.forEach(function (k) {
+    var b = document.createElement('button');
+    b.textContent = k;
+    b.setAttribute('data-k', k);
+    if (k === selected) b.className = 'on';
+    b.addEventListener('click', function () { selected = k; render(); });
+    taskBox.appendChild(b);
+  });
+
+  function markButtons() {
+    taskBox.querySelectorAll('button').forEach(function (b) {
+      b.className = b.getAttribute('data-k') === selected ? 'on' : '';
+    });
+  }
+  var oldRender = render;
+  render = function () { oldRender(); markButtons(); };
+
+  document.getElementById('plus1').addEventListener('click', function () { durs[selected] += 1; render(); });
+  document.getElementById('plus3').addEventListener('click', function () { durs[selected] += 3; render(); });
+  document.getElementById('reset').addEventListener('click', function () {
+    order.forEach(function (k) { durs[k] = base[k]; });
+    selected = 'D'; render();
+  });
+
+  build();
+  render();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Путь дефекта</title>
+<style>
+  :root { --paper:#EDE5D2; --ink:#2A2618; --muted:#6F6449; --accent:#9A7300; --rule:#D8CCB2; --card:#FBF7EC; --soft:#F3EAD6; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .frame { background:var(--paper); border:1px solid var(--rule); border-radius:14px; padding:14px; }
+  .eyebrow { margin:0 0 4px; font:600 10px/1.2 Consolas,monospace; letter-spacing:.12em; text-transform:uppercase; color:var(--accent); }
+  h3 { margin:0 0 4px; font-size:19px; line-height:1.2; }
+  svg { display:block; width:100%; height:auto; margin-top:4px; }
+  .note { margin:8px 2px 0; font-size:12.5px; line-height:1.45; color:var(--ink); }
+  .note b { color:var(--accent); }
+</style>
+</head>
+<body>
+<div class="frame">
+  <p class="eyebrow">Дефект · жизненный цикл</p>
+  <h3>От находки до регрессии</h3>
+  <svg viewBox="0 0 680 236" role="img" aria-label="Путь дефекта от обнаружения до регрессионного набора">
+    <defs>
+      <marker id="arw-d" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#9A7300"/></marker>
+      <marker id="arw-g" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#6F6449"/></marker>
+    </defs>
+    <g font-family="Segoe UI,system-ui,sans-serif" text-anchor="middle">
+      <g>
+        <rect x="12" y="30" width="98" height="46" rx="7" fill="#FBF7EC" stroke="#9A7300" stroke-width="1.4"/>
+        <text x="61" y="50" font-size="12" fill="#2A2618">обнаружен</text>
+        <text x="61" y="66" font-size="10.5" fill="#6F6449">прогон или работа</text>
+      </g>
+      <g>
+        <rect x="126" y="30" width="98" height="46" rx="7" fill="#FBF7EC" stroke="#9A7300" stroke-width="1.4"/>
+        <text x="175" y="50" font-size="12" fill="#2A2618">зарегистрирован</text>
+        <text x="175" y="66" font-size="10.5" fill="#6F6449">шаги и данные</text>
+      </g>
+      <g>
+        <rect x="240" y="30" width="98" height="46" rx="7" fill="#F3EAD6" stroke="#9A7300" stroke-width="1.8"/>
+        <text x="289" y="50" font-size="12" fill="#2A2618">триаж</text>
+        <text x="289" y="66" font-size="10.5" fill="#6F6449">критичность и приоритет</text>
+      </g>
+      <g>
+        <rect x="354" y="30" width="98" height="46" rx="7" fill="#FBF7EC" stroke="#9A7300" stroke-width="1.4"/>
+        <text x="403" y="50" font-size="12" fill="#2A2618">исправлен</text>
+        <text x="403" y="66" font-size="10.5" fill="#6F6449">с ссылкой на причину</text>
+      </g>
+      <g>
+        <rect x="468" y="30" width="98" height="46" rx="7" fill="#FBF7EC" stroke="#9A7300" stroke-width="1.4"/>
+        <text x="517" y="50" font-size="12" fill="#2A2618">проверен</text>
+        <text x="517" y="66" font-size="10.5" fill="#6F6449">повторный прогон</text>
+      </g>
+      <g>
+        <rect x="582" y="30" width="86" height="46" rx="7" fill="#F3EAD6" stroke="#9A7300" stroke-width="1.8"/>
+        <text x="625" y="50" font-size="12" fill="#2A2618">регрессия</text>
+        <text x="625" y="66" font-size="10.5" fill="#6F6449">тест навсегда</text>
+      </g>
+    </g>
+    <g stroke="#9A7300" stroke-width="1.6" fill="none" marker-end="url(#arw-d)">
+      <path d="M110 53h12"/><path d="M224 53h12"/><path d="M338 53h12"/><path d="M452 53h12"/><path d="M566 53h12"/>
+    </g>
+
+    <g font-family="Segoe UI,system-ui,sans-serif" text-anchor="middle">
+      <rect x="126" y="128" width="126" height="40" rx="7" fill="#FBF7EC" stroke="#D8CCB2" stroke-width="1.2"/>
+      <text x="189" y="145" font-size="11.5" fill="#2A2618">дубликат</text>
+      <text x="189" y="160" font-size="10.5" fill="#6F6449">закрыть со ссылкой</text>
+      <rect x="468" y="128" width="140" height="40" rx="7" fill="#FBF7EC" stroke="#D8CCB2" stroke-width="1.2"/>
+      <text x="538" y="145" font-size="11.5" fill="#2A2618">не воспроизводится</text>
+      <text x="538" y="160" font-size="10.5" fill="#6F6449">оставить условия и частоту</text>
+    </g>
+    <g stroke="#6F6449" stroke-width="1.3" fill="none" stroke-dasharray="4 3" marker-end="url(#arw-g)">
+      <path d="M175 78v46"/>
+      <path d="M517 78v46"/>
+    </g>
+    <text x="340" y="200" text-anchor="middle" font-family="Consolas,monospace" font-size="10.5" fill="#6F6449">ЗАКРЫТЫЙ ДЕФЕКТ БЕЗ ТЕСТА ВОЗВРАЩАЕТСЯ В СЛЕДУЮЩЕМ ВЫПУСКЕ</text>
+    <text x="340" y="222" text-anchor="middle" font-family="Consolas,monospace" font-size="10.5" fill="#9A7300">ТРИАЖ РЕШАЕТ, ЧТО ИСПРАВЛЯТЬ СЕЙЧАС, А ЧТО МОЖЕТ ЖДАТЬ</text>
+  </svg>
+  <p class="note"><b>Дубликат не удаляют.</b> Он хранит историю находки и показывает, сколько людей столкнулись с одной и той же ошибкой.</p>
+</div>
+</body>
+</html>

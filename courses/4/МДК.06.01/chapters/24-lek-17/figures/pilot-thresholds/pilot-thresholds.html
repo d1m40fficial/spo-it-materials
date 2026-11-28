@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Пороги выхода</title>
+<style>
+  :root { --paper:#F7F1E3; --card:#FFFDF6; --ink:#2A2620; --muted:#6B6459; --accent:#9A7300; --soft:#EDE5D2; --rule:#D8CBB0; --ok:#3D6B45; --bad:#9B3A2E; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .demo { background:var(--paper); border:1px solid var(--rule); border-radius:14px; padding:16px; }
+  .head { display:flex; justify-content:space-between; align-items:flex-end; gap:14px; padding-bottom:8px; border-bottom:1px solid var(--rule); }
+  .eyebrow { margin:0 0 4px; font:600 10px/1.2 Consolas,monospace; letter-spacing:.13em; text-transform:uppercase; color:var(--accent); }
+  h3 { margin:0; font-size:19px; line-height:1.2; }
+  .hint { font:11px/1.4 Consolas,monospace; color:var(--muted); white-space:nowrap; }
+  svg { display:block; width:100%; height:auto; margin-top:8px; }
+  svg text { font-family:Consolas,monospace; fill:var(--ink); }
+  .lbl { font-size:8px; fill:var(--muted); }
+  .val { font-size:9px; font-weight:700; }
+  .track { fill:#E7DCC5; }
+  .status { min-height:58px; margin-top:8px; padding:10px 12px; border-radius:9px; background:var(--soft); font-size:12.5px; line-height:1.45; }
+  .status b { color:var(--accent); }
+  .controls { display:flex; gap:6px; flex-wrap:wrap; margin-top:9px; }
+  button { font:600 11.5px/1 "Segoe UI",system-ui,sans-serif; padding:8px 10px; border-radius:9px; border:1px solid var(--rule); background:var(--card); color:var(--ink); cursor:pointer; }
+  button:hover { border-color:var(--accent); color:var(--accent); }
+  button.on { background:var(--accent); border-color:var(--accent); color:#FFFDF6; }
+  @media (max-width:560px) { .demo { padding:11px; } .hint { display:none; } }
+</style>
+</head>
+<body>
+<div class="demo">
+  <div class="head">
+    <div><p class="eyebrow">Опытная эксплуатация · критерии</p><h3>Четыре недели и порог</h3></div>
+    <div class="hint">выберите неделю</div>
+  </div>
+  <svg viewBox="0 0 680 286" role="img" aria-label="Метрики четырёх недель опытной эксплуатации">
+    <text x="24" y="26" class="lbl">ДОЛЯ ЗАКАЗОВ В СИСТЕМЕ · ПОРОГ 95%</text>
+    <rect x="300" y="40" width="320" height="18" rx="4" class="track"/>
+    <rect id="bar1" x="300" y="40" width="262" height="18" rx="4" fill="#9A7300"/>
+    <line x1="604" y1="34" x2="604" y2="64" stroke="#9B3A2E" stroke-width="1.6"/>
+    <text x="24" y="54" class="val" id="v1">96%</text>
+
+    <text x="24" y="92" class="lbl">МЕДИАНА ОФОРМЛЕНИЯ · ПОРОГ 7 МИН</text>
+    <rect x="300" y="106" width="320" height="18" rx="4" class="track"/>
+    <rect id="bar2" x="300" y="106" width="224" height="18" rx="4" fill="#9A7300"/>
+    <line x1="524" y1="100" x2="524" y2="130" stroke="#9B3A2E" stroke-width="1.6"/>
+    <text x="24" y="120" class="val" id="v2">7,1 мин</text>
+
+    <text x="24" y="158" class="lbl">ЗАМЕЧАНИЯ</text>
+    <text x="24" y="180" class="val" id="v3">критичных: 0</text>
+    <text x="24" y="200" class="val" id="v4">существенных без обхода: 0</text>
+    <text x="24" y="220" class="val" id="v5">существенных с обходом: 3</text>
+
+    <rect x="360" y="150" width="260" height="82" rx="8" fill="#FFFDF6" stroke="#D8CBB0"/>
+    <text x="374" y="170" class="lbl">ВЕРДИКТ ПО ВСЕМ КРИТЕРИЯМ</text>
+    <text x="374" y="192" class="val" id="verdict" fill="#9B3A2E">не готово</text>
+    <text x="374" y="212" class="lbl" id="reason">время оформления выше порога</text>
+
+    <text x="340" y="262" text-anchor="middle" font-family="Consolas,monospace" font-size="7.6" fill="#6B6459">порог проверяют по всем критериям сразу, а не по одному удачному показателю</text>
+  </svg>
+  <div class="status" id="status"></div>
+  <div class="controls">
+    <button data-k="w1">Неделя 1</button>
+    <button data-k="w2">Неделя 2</button>
+    <button data-k="w3" class="on">Неделя 3</button>
+    <button data-k="w4">Неделя 4</button>
+  </div>
+</div>
+<script>
+(function () {
+  var data = {
+    w1: { share: 82, time: 8.5, crit: 1, no: 2, with: 2, ready: false,
+      reason: 'критичное замечание, доля заказов и время', note: 'Первая неделя: двойной ввод, критичное замечание по возврату. Этап продолжается, пороги не двигают.' },
+    w2: { share: 91, time: 7.6, crit: 0, no: 2, with: 3, ready: false,
+      reason: 'доля заказов и два замечания без обхода', note: 'Вторая неделя: критичное закрыто, но часть заказов ещё в Excel и два замечания без обхода.' },
+    w3: { share: 96, time: 7.1, crit: 0, no: 0, with: 3, ready: false,
+      reason: 'медиана оформления 7,1 мин выше порога', note: 'Третья неделя: почти все заказы в системе, но медиана чуть выше семи минут. Этап продлевают, а не округляют.' },
+    w4: { share: 97, time: 6.8, crit: 0, no: 0, with: 2, ready: true,
+      reason: 'все пороги выполнены', note: 'Четвёртая неделя: все критерии выполнены, открытые существенные замечания имеют обход и срок. Можно готовить решение о переходе.' }
+  };
+  var buttons = document.querySelectorAll('button[data-k]');
+  var status = document.getElementById('status');
+  function set(id, text, color) {
+    var el = document.getElementById(id);
+    el.textContent = text;
+    if (color) el.setAttribute('fill', color);
+  }
+  function apply(k) {
+    var d = data[k];
+    document.getElementById('bar1').setAttribute('width', String(Math.max(2, d.share * 3.2)));
+    document.getElementById('bar2').setAttribute('width', String(Math.max(2, d.time * 32)));
+    set('v1', d.share + '%');
+    set('v2', String(d.time).replace('.', ',') + ' мин');
+    set('v3', 'критичных: ' + d.crit);
+    set('v4', 'существенных без обхода: ' + d.no);
+    set('v5', 'существенных с обходом: ' + d.with);
+    set('verdict', d.ready ? 'готово к переходу' : 'не готово', d.ready ? '#3D6B45' : '#9B3A2E');
+    set('reason', d.reason);
+    status.innerHTML = '<b>' + (d.ready ? 'Порог пройден.' : 'Порог не пройден.') + '</b> ' + d.note;
+    buttons.forEach(function (b) { b.classList.toggle('on', b.dataset.k === k); });
+    var bars = [document.getElementById('bar1'), document.getElementById('bar2')];
+    bars.forEach(function (b) { b.setAttribute('fill', d.ready ? '#3D6B45' : '#9A7300'); });
+  }
+  buttons.forEach(function (b) { b.addEventListener('click', function () { apply(b.dataset.k); }); });
+  apply('w3');
+})();
+</script>
+</body>
+</html>

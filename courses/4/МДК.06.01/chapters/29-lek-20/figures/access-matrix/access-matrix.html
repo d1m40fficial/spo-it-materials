@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Матрица доступа по ролям</title>
+<style>
+  :root { --paper:#EDE5D2; --card:#FBF7EC; --ink:#2B2518; --muted:#6B6047; --accent:#9A7300; --soft:#E4D2A4; --rule:#CDBE9C; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .demo { background:var(--paper); border:1px solid var(--rule); border-radius:12px; padding:14px; }
+  .head { display:flex; justify-content:space-between; align-items:flex-end; gap:12px; border-bottom:1px solid var(--rule); padding-bottom:8px; }
+  .eyebrow { margin:0 0 3px; font:600 9px/1.2 Consolas,monospace; letter-spacing:.13em; text-transform:uppercase; color:var(--accent); }
+  h3 { margin:0; font-size:18px; line-height:1.2; }
+  .hint { font:10px/1.3 Consolas,monospace; color:var(--muted); text-align:right; }
+  svg { display:block; width:100%; height:auto; margin-top:6px; }
+  .role { cursor:pointer; }
+  .role rect { fill:#FBF7EC; stroke:#B6A57E; stroke-width:1.2; transition:fill .18s,stroke .18s; }
+  .role.on rect { fill:var(--soft); stroke:var(--accent); stroke-width:2; }
+  .role text { font-family:Consolas,monospace; font-size:8px; fill:#2B2518; text-anchor:middle; pointer-events:none; }
+  .status { min-height:48px; margin-top:8px; padding:9px 11px; border-radius:8px; background:var(--card); border:1px solid var(--rule); font-size:12px; line-height:1.45; }
+  .status b { color:var(--accent); }
+  .controls { display:flex; gap:6px; flex-wrap:wrap; margin-top:9px; }
+  button { font:600 11px/1 "Segoe UI",system-ui,sans-serif; padding:7px 9px; border-radius:7px; border:1px solid var(--rule); background:var(--card); color:var(--ink); cursor:pointer; }
+  button:hover { border-color:var(--accent); color:var(--accent); }
+  button.on { background:var(--accent); border-color:var(--accent); color:#fff; }
+  @media (max-width:560px) { .demo { padding:10px; } h3 { font-size:16px; } .hint { display:none; } }
+</style>
+</head>
+<body>
+<div class="demo">
+  <div class="head">
+    <div><p class="eyebrow">Безопасность · доступ</p><h3>Кто что видит</h3></div>
+    <div class="hint">выберите роль</div>
+  </div>
+
+  <svg viewBox="0 0 680 292" role="img" aria-label="Матрица доступа шести ролей к шести объектам">
+    <g font-family="Consolas,monospace" font-size="8" fill="#6B6047">
+      <text x="18" y="18">ОБЪЕКТ</text>
+      <text x="250" y="18">ЧТО РАЗРЕШЕНО</text>
+      <text x="620" y="18" text-anchor="end">ДОСТУП</text>
+    </g>
+
+    <g id="rows" font-family="Consolas,monospace">
+      <g data-i="0"><rect x="14" y="26" width="652" height="36" rx="6" fill="#FBF7EC" stroke="#CDBE9C"/><text x="24" y="48" font-size="9" fill="#2B2518">Заказы</text><text x="250" y="48" font-size="8" fill="#2B2518" class="val">создаёт и меняет свои</text><rect x="626" y="37" width="28" height="14" rx="3" fill="#9A7300" class="mark"/></g>
+      <g data-i="1"><rect x="14" y="66" width="652" height="36" rx="6" fill="#FBF7EC" stroke="#CDBE9C"/><text x="24" y="88" font-size="9" fill="#2B2518">Остатки</text><text x="250" y="88" font-size="8" fill="#2B2518" class="val">читает все склады</text><rect x="626" y="77" width="28" height="14" rx="3" fill="#9A7300" class="mark"/></g>
+      <g data-i="2"><rect x="14" y="106" width="652" height="36" rx="6" fill="#FBF7EC" stroke="#CDBE9C"/><text x="24" y="128" font-size="9" fill="#2B2518">Закупки</text><text x="250" y="128" font-size="8" fill="#2B2518" class="val">нет доступа</text><rect x="626" y="117" width="28" height="14" rx="3" fill="none" stroke="#8C826C" class="mark"/></g>
+      <g data-i="3"><rect x="14" y="146" width="652" height="36" rx="6" fill="#FBF7EC" stroke="#CDBE9C"/><text x="24" y="168" font-size="9" fill="#2B2518">Отчёты</text><text x="250" y="168" font-size="8" fill="#2B2518" class="val">свои</text><rect x="626" y="157" width="28" height="14" rx="3" fill="#9A7300" class="mark"/></g>
+      <g data-i="4"><rect x="14" y="186" width="652" height="36" rx="6" fill="#FBF7EC" stroke="#CDBE9C"/><text x="24" y="208" font-size="9" fill="#2B2518">Пользователи</text><text x="250" y="208" font-size="8" fill="#2B2518" class="val">нет доступа</text><rect x="626" y="197" width="28" height="14" rx="3" fill="none" stroke="#8C826C" class="mark"/></g>
+      <g data-i="5"><rect x="14" y="226" width="652" height="36" rx="6" fill="#FBF7EC" stroke="#CDBE9C"/><text x="24" y="248" font-size="9" fill="#2B2518">Настройки</text><text x="250" y="248" font-size="8" fill="#2B2518" class="val">нет доступа</text><rect x="626" y="237" width="28" height="14" rx="3" fill="none" stroke="#8C826C" class="mark"/></g>
+    </g>
+    <text x="14" y="280" font-family="Consolas,monospace" font-size="7.4" fill="#9A7300">ЗАПОЛНЕННЫЙ МАРКЕР: ДОСТУП ЕСТЬ. КОНТУР: ДОСТУПА НЕТ.</text>
+  </svg>
+
+  <div class="status" id="status"></div>
+  <div class="controls" id="controls"></div>
+</div>
+<script>
+(function () {
+  var roles = {
+    manager: {
+      name: 'Менеджер',
+      rows: ['создаёт и меняет свои', 'читает все склады', 'нет доступа', 'свои', 'нет доступа', 'нет доступа'],
+      allow: [1,1,0,1,0,0],
+      note: '<b>Типичная ошибка:</b> выдать менеджеру права старшего коллеги. Он получает чужие заказы и закупочные цены, хотя ведёт только своих клиентов.'
+    },
+    storekeeper: {
+      name: 'Кладовщик',
+      rows: ['читает', 'меняет свой склад', 'читает', 'своего склада', 'нет доступа', 'нет доступа'],
+      allow: [1,1,1,1,0,0],
+      note: '<b>Типичная ошибка:</b> оставить доступ к закупкам «чтобы видел, вдруг понадобится». Закупочные цены не нужны для приёмки товара.'
+    },
+    accountant: {
+      name: 'Бухгалтер',
+      rows: ['читает', 'читает', 'читает', 'финансовые', 'нет доступа', 'нет доступа'],
+      allow: [1,1,1,1,0,0],
+      note: '<b>Типичная ошибка:</b> дать бухгалтеру менять остатки. Финансовый учёт и складской учёт должны сходиться, а не править друг друга.'
+    },
+    director: {
+      name: 'Руководитель',
+      rows: ['читает все', 'читает', 'читает', 'все', 'читает список', 'нет доступа'],
+      allow: [1,1,1,1,1,0],
+      note: '<b>Типичная ошибка:</b> выдать руководителю администратора «чтобы всё посмотрел». Просмотр не требует права менять настройки.'
+    },
+    admin: {
+      name: 'Администратор',
+      rows: ['настраивает', 'настраивает', 'настраивает', 'все', 'управляет', 'меняет'],
+      allow: [1,1,1,1,1,1],
+      note: '<b>Типичная ошибка:</b> работать под этой записью постоянно. Для повседневных задач нужна обычная учётная запись.'
+    },
+    contractor: {
+      name: 'Подрядчик',
+      rows: ['нет доступа', 'нет доступа', 'нет доступа', 'нет доступа', 'нет доступа', 'по заявке'],
+      allow: [0,0,0,0,0,1],
+      note: '<b>Типичная ошибка:</b> выдать постоянный пароль администратора. Нужна отдельная запись на время работ и журнал действий.'
+    }
+  };
+  var order = ['manager', 'storekeeper', 'accountant', 'director', 'admin', 'contractor'];
+  var rows = document.querySelectorAll('#rows g');
+  var controls = document.getElementById('controls');
+  var status = document.getElementById('status');
+
+  order.forEach(function (key, i) {
+    var b = document.createElement('button');
+    b.type = 'button';
+    b.textContent = roles[key].name;
+    b.dataset.k = key;
+    if (i === 0) b.className = 'on';
+    b.addEventListener('click', function () { apply(key); });
+    controls.appendChild(b);
+  });
+
+  function apply(key) {
+    var r = roles[key];
+    rows.forEach(function (row, i) {
+      row.querySelector('.val').textContent = r.rows[i];
+      var mark = row.querySelector('.mark');
+      mark.setAttribute('fill', r.allow[i] ? '#9A7300' : 'none');
+      mark.setAttribute('stroke', r.allow[i] ? '#9A7300' : '#8C826C');
+    });
+    controls.querySelectorAll('button').forEach(function (b) { b.classList.toggle('on', b.dataset.k === key); });
+    status.innerHTML = r.note;
+  }
+  apply('manager');
+})();
+</script>
+</body>
+</html>

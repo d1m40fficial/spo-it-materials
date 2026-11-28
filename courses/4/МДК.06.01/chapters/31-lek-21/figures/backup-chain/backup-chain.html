@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Цепочка копий и два пути восстановления</title>
+<style>
+  :root { --paper:#EDE5D2; --card:#FBF7EC; --ink:#2B2518; --muted:#6B6047; --accent:#9A7300; --rule:#CDBE9C; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .frame { background:var(--paper); border:1px solid var(--rule); border-radius:12px; padding:16px 16px 12px; }
+  .eyebrow { margin:0 0 8px; font:600 9px/1.2 Consolas,monospace; letter-spacing:.14em; text-transform:uppercase; color:var(--accent); }
+  svg { display:block; width:100%; height:auto; }
+  .note { margin:10px 2px 0; font:11px/1.5 Consolas,monospace; color:var(--muted); }
+  @media (max-width:560px) { .frame { padding:12px 10px 10px; } }
+</style>
+</head>
+<body>
+<div class="frame">
+  <p class="eyebrow">Копирование · неделя и восстановление</p>
+  <svg viewBox="0 0 680 352" role="img" aria-labelledby="bc-title bc-desc">
+    <title id="bc-title">Полная, разностные и инкрементные копии за неделю</title>
+    <desc id="bc-desc">В воскресенье полная копия, каждый день разностная, в среду каждый час инкрементная. Показаны два пути восстановления.</desc>
+
+    <rect x="0" y="0" width="680" height="352" fill="#FBF7EC" rx="8"/>
+
+    <g font-family="Consolas,monospace" font-size="7" fill="#6B6047" text-anchor="middle">
+      <text x="70" y="24">ВОСКРЕСЕНЬЕ</text>
+      <text x="160" y="24">ПОНЕДЕЛЬНИК</text>
+      <text x="250" y="24">ВТОРНИК</text>
+      <text x="340" y="24">СРЕДА</text>
+      <text x="430" y="24">ЧЕТВЕРГ</text>
+      <text x="520" y="24">ПЯТНИЦА</text>
+      <text x="610" y="24">СУББОТА</text>
+    </g>
+
+    <line x1="30" y1="190" x2="650" y2="190" stroke="#CDBE9C"/>
+    <g font-family="Consolas,monospace" font-size="7" fill="#6B6047" text-anchor="end">
+      <text x="26" y="62">4,2 ГБ</text>
+      <text x="26" y="128">1 ГБ</text>
+      <text x="26" y="188">0</text>
+    </g>
+
+    <g>
+      <rect x="38" y="55" width="64" height="135" rx="3" fill="#9A7300"/>
+      <text x="70" y="48" font-family="Consolas,monospace" font-size="7" fill="#9A7300" text-anchor="middle">ПОЛНАЯ</text>
+      <text x="70" y="204" font-family="Consolas,monospace" font-size="6.8" fill="#2B2518" text-anchor="middle">2:00</text>
+
+      <rect x="128" y="142" width="64" height="48" rx="3" fill="#D8C48C"/>
+      <rect x="218" y="136" width="64" height="54" rx="3" fill="#D8C48C"/>
+      <rect x="308" y="130" width="64" height="60" rx="3" fill="#D8C48C"/>
+      <rect x="398" y="124" width="64" height="66" rx="3" fill="#D8C48C"/>
+      <rect x="488" y="118" width="64" height="72" rx="3" fill="#D8C48C"/>
+      <rect x="578" y="112" width="64" height="78" rx="3" fill="#D8C48C"/>
+
+      <g font-family="Consolas,monospace" font-size="6.6" fill="#2B2518" text-anchor="middle">
+        <text x="160" y="204">180 МБ</text>
+        <text x="250" y="204">240 МБ</text>
+        <text x="340" y="204">300 МБ</text>
+        <text x="430" y="204">360 МБ</text>
+        <text x="520" y="204">420 МБ</text>
+        <text x="610" y="204">480 МБ</text>
+      </g>
+      <text x="218" y="130" font-family="Consolas,monospace" font-size="6.6" fill="#6B6047" text-anchor="middle">РАЗНОСТНЫЕ, РАСТУТ</text>
+    </g>
+
+    <g>
+      <rect x="300" y="214" width="80" height="18" rx="3" fill="#F3EAD4" stroke="#CDBE9C"/>
+      <g fill="#9A7300">
+        <rect x="304" y="219" width="3" height="8"/><rect x="310" y="219" width="3" height="8"/>
+        <rect x="316" y="219" width="3" height="8"/><rect x="322" y="219" width="3" height="8"/>
+        <rect x="328" y="219" width="3" height="8"/><rect x="334" y="219" width="3" height="8"/>
+        <rect x="340" y="219" width="3" height="8"/><rect x="346" y="219" width="3" height="8"/>
+        <rect x="352" y="219" width="3" height="8"/><rect x="358" y="219" width="3" height="8"/>
+        <rect x="364" y="219" width="3" height="8"/><rect x="370" y="219" width="3" height="8"/>
+      </g>
+      <text x="340" y="246" font-family="Consolas,monospace" font-size="6.6" fill="#6B6047" text-anchor="middle">ИНКРЕМЕНТНЫЕ КАЖДЫЙ ЧАС</text>
+    </g>
+
+    <g>
+      <rect x="34" y="266" width="292" height="64" rx="7" fill="#EDE5D2" stroke="#CDBE9C"/>
+      <text x="46" y="283" font-family="Consolas,monospace" font-size="7.4" fill="#9A7300">ПУТЬ 1: ПОЛНАЯ + СРЕДА</text>
+      <text x="46" y="298" font-family="Consolas,monospace" font-size="7" fill="#2B2518">два файла, около 40 минут</text>
+      <text x="46" y="312" font-family="Consolas,monospace" font-size="6.8" fill="#6B6047">быстро, но потеря до 2:00 среды</text>
+
+      <rect x="342" y="266" width="304" height="64" rx="7" fill="#EDE5D2" stroke="#9A7300"/>
+      <text x="354" y="283" font-family="Consolas,monospace" font-size="7.4" fill="#9A7300">ПУТЬ 2: ПОЛНАЯ + ВСЕ ИНКРЕМЕНТНЫЕ</text>
+      <text x="354" y="298" font-family="Consolas,monospace" font-size="7" fill="#2B2518">цепочка файлов, до 2 часов</text>
+      <text x="354" y="312" font-family="Consolas,monospace" font-size="6.8" fill="#6B6047">точно на нужный час, но любая ступень важна</text>
+    </g>
+
+    <text x="34" y="346" font-family="Consolas,monospace" font-size="7" fill="#6B6047">разностная отвечает «что изменилось с воскресенья», инкрементная «что изменилось с прошлого файла»</text>
+  </svg>
+  <p class="note">Чем короче RPO, тем больше ступеней в цепочке и тем важнее проверять каждую. Синтетическая полная копия укорачивает цепочку без чтения всей базы.</p>
+</div>
+</body>
+</html>

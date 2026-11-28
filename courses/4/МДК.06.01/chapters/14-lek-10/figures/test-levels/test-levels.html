@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Уровни тестирования</title>
+<style>
+  :root { --paper:#EDE5D2; --card:#FBF7EC; --ink:#2A2618; --muted:#6F6449; --accent:#9A7300; --rule:#D8CCB2; --soft:#F3EAD6; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .demo { background:var(--paper); border:1px solid var(--rule); border-radius:14px; padding:14px; }
+  .head { display:flex; justify-content:space-between; align-items:flex-end; gap:12px; padding-bottom:8px; border-bottom:1px solid var(--rule); }
+  .eyebrow { margin:0 0 4px; font:600 10px/1.2 Consolas,monospace; letter-spacing:.12em; text-transform:uppercase; color:var(--accent); }
+  h3 { margin:0; font-size:19px; line-height:1.2; }
+  .hint { font:11px/1.4 Consolas,monospace; color:var(--muted); white-space:nowrap; }
+  svg { display:block; width:100%; height:auto; margin-top:6px; }
+  .lv rect { fill:var(--card); stroke:var(--rule); stroke-width:1.2; transition:fill .2s, stroke .2s; cursor:pointer; }
+  .lv.on rect { fill:var(--soft); stroke:var(--accent); stroke-width:2; }
+  .lv text { font-family:"Segoe UI",system-ui,sans-serif; fill:var(--ink); text-anchor:middle; pointer-events:none; }
+  .lv .name { font-size:13px; font-weight:600; }
+  .lv .scope { font-size:11px; fill:var(--muted); }
+  .status { min-height:92px; margin-top:8px; padding:10px 12px; border-radius:9px; background:var(--soft); font-size:13px; line-height:1.45; }
+  .status b { color:var(--accent); }
+  .status span { display:block; margin-top:3px; }
+  .controls { display:flex; gap:6px; flex-wrap:wrap; margin-top:8px; }
+  button { font:600 11.5px/1 "Segoe UI",system-ui,sans-serif; padding:8px 9px; border-radius:9px; border:1px solid var(--rule); background:var(--card); color:var(--ink); cursor:pointer; }
+  button:hover { border-color:var(--accent); color:var(--accent); }
+  button.on { background:var(--accent); border-color:var(--accent); color:#fff; }
+  @media (max-width:560px) { .demo { padding:11px; } .hint { display:none; } }
+</style>
+</head>
+<body>
+<div class="demo">
+  <div class="head">
+    <div><p class="eyebrow">Тестирование · уровни</p><h3>Что доказывает проверка</h3></div>
+    <div class="hint">нажмите уровень</div>
+  </div>
+  <svg viewBox="0 0 680 214" role="img" aria-label="Четыре уровня тестирования и их объекты">
+    <g class="lv" data-k="unit">
+      <rect x="18" y="62" width="148" height="90" rx="8"/>
+      <text x="92" y="92" class="name">модульное</text>
+      <text x="92" y="112" class="scope">функция, класс</text>
+      <text x="92" y="132" class="scope">быстро и точно</text>
+    </g>
+    <g class="lv" data-k="integration">
+      <rect x="180" y="48" width="148" height="104" rx="8"/>
+      <text x="254" y="82" class="name">интеграционное</text>
+      <text x="254" y="102" class="scope">связь компонентов</text>
+      <text x="254" y="122" class="scope">формат и стык</text>
+    </g>
+    <g class="lv" data-k="system">
+      <rect x="342" y="34" width="148" height="118" rx="8"/>
+      <text x="416" y="72" class="name">системное</text>
+      <text x="416" y="92" class="scope">вся система</text>
+      <text x="416" y="112" class="scope">сквозной сценарий</text>
+    </g>
+    <g class="lv" data-k="acceptance">
+      <rect x="504" y="20" width="158" height="132" rx="8"/>
+      <text x="583" y="62" class="name">приёмочное</text>
+      <text x="583" y="82" class="scope">бизнес-процесс</text>
+      <text x="583" y="102" class="scope">данные заказчика</text>
+      <text x="583" y="122" class="scope">критерии приёмки</text>
+    </g>
+    <text x="340" y="180" text-anchor="middle" font-family="Consolas,monospace" font-size="11" fill="#6F6449">чем правее уровень, тем шире объект и тем дороже пропущенная ошибка</text>
+    <text x="340" y="200" text-anchor="middle" font-family="Consolas,monospace" font-size="11" fill="#9A7300">УРОВНИ ДОПОЛНЯЮТ ДРУГ ДРУГА, А НЕ ЗАМЕНЯЮТ</text>
+  </svg>
+  <div class="status" id="status" aria-live="polite"></div>
+  <div class="controls">
+    <button data-k="unit" class="on">Модульное</button>
+    <button data-k="integration">Интеграционное</button>
+    <button data-k="system">Системное</button>
+    <button data-k="acceptance">Приёмочное</button>
+  </div>
+</div>
+<script>
+(function () {
+  var data = {
+    unit: '<b>Модульное.</b> Объект: одна функция или класс. Вопрос: правильно ли считается значение.<span>Доказательство: зелёный набор тестов у разработчика. Ошибка: тест подтверждает формулу, но не проверяет, с какими данными её вызвали.</span>',
+    integration: '<b>Интеграционное.</b> Объект: связь приложения и базы, двух систем, документа и строк. Вопрос: доходят ли данные без искажений.<span>Доказательство: прогон обмена и сверка результата. Ошибка: компоненты проверены по отдельности, а формат на стыке не совпал.</span>',
+    system: '<b>Системное.</b> Объект: система целиком. Вопрос: работают ли сквозные сценарии и нефункциональные свойства.<span>Доказательство: путь от заказа до счёта на данных, близких к рабочим. Ошибка: проверены экраны, но не проверена последовательность операций.</span>',
+    acceptance: '<b>Приёмочное.</b> Объект: бизнес-процесс заказчика. Вопрос: решает ли система задачу склада.<span>Доказательство: протокол по согласованным критериям. Ошибка: приёмка без критериев превращается в спор о впечатлениях.</span>'
+  };
+  var cols = document.querySelectorAll('.lv');
+  var buttons = document.querySelectorAll('button[data-k]');
+  var status = document.getElementById('status');
+  function apply(key) {
+    cols.forEach(function (c) { c.classList.toggle('on', c.dataset.k === key); });
+    buttons.forEach(function (b) { b.classList.toggle('on', b.dataset.k === key); });
+    status.innerHTML = data[key];
+  }
+  cols.forEach(function (c) { c.addEventListener('click', function () { apply(c.dataset.k); }); });
+  buttons.forEach(function (b) { b.addEventListener('click', function () { apply(b.dataset.k); }); });
+  apply('unit');
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Где ловится дефект импорта</title>
+<style>
+  :root { --paper:#EDE5D2; --card:#FFFDF7; --ink:#2B2618; --muted:#6B6250; --accent:#9A7300; --soft:#F6EEDC; --rule:rgba(43,38,24,.18); }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .frame { background:var(--paper); border:1px solid var(--rule); border-radius:14px; padding:16px 16px 12px; }
+  .head { display:flex; justify-content:space-between; align-items:flex-end; gap:12px; border-bottom:1px solid var(--rule); padding-bottom:9px; }
+  .eyebrow { margin:0 0 4px; font:600 10px/1.2 Consolas,monospace; letter-spacing:.14em; text-transform:uppercase; color:var(--accent); }
+  h3 { margin:0; font-size:19px; line-height:1.2; }
+  .hint { font:11px/1.4 Consolas,monospace; color:var(--muted); text-align:right; }
+  svg { display:block; width:100%; height:auto; margin-top:8px; }
+  .scenarios { display:flex; gap:6px; flex-wrap:wrap; margin-top:9px; }
+  button { font:600 11.5px/1.25 "Segoe UI",system-ui,sans-serif; padding:7px 9px; border-radius:8px; border:1px solid var(--rule); background:var(--card); color:var(--ink); cursor:pointer; text-align:left; }
+  button:hover { border-color:var(--accent); color:var(--accent); }
+  button.on { background:var(--accent); border-color:var(--accent); color:#fff; }
+  .panel { margin-top:9px; padding:10px 11px; border-radius:9px; background:var(--card); border:1px solid var(--rule); }
+  .scenario { margin:0 0 7px; font-size:12.5px; line-height:1.4; }
+  .scenario b { color:var(--accent); }
+  table { width:100%; border-collapse:collapse; font:11.5px/1.4 Consolas,monospace; }
+  td { padding:3px 0; vertical-align:top; }
+  td:first-child { color:var(--muted); width:28%; }
+  @media (max-width:560px) { .frame { padding:12px; } .head { display:block; } .hint { text-align:left; margin-top:3px; } h3 { font-size:17px; } }
+</style>
+</head>
+<body>
+<div class="frame">
+  <div class="head">
+    <div><p class="eyebrow">Импорт · проверки по слоям</p><h3>Где ловится дефект</h3></div>
+    <div class="hint">выберите дефект</div>
+  </div>
+
+  <svg viewBox="0 0 680 176" role="img" aria-labelledby="it-title it-desc">
+    <title id="it-title">Слои проверки импорта</title>
+    <desc id="it-desc">Структура, тип и формат в первом ряду; бизнес-правило, связь и уникальность во втором. Выбранный слой подсвечивается.</desc>
+    <g font-family="Consolas,monospace" text-anchor="middle">
+      <g class="layer" data-layer="structure">
+        <rect x="20" y="22" width="196" height="48" rx="8" fill="#FFFDF7" stroke="#2B2618"/>
+        <text x="118" y="41" font-size="11" font-weight="700" fill="#2B2618">Структура</text>
+        <text x="118" y="57" font-size="9" fill="#6B6250">файл, заголовки, ключи</text>
+      </g>
+      <g class="layer" data-layer="type">
+        <rect x="242" y="22" width="196" height="48" rx="8" fill="#FFFDF7" stroke="#2B2618"/>
+        <text x="340" y="41" font-size="11" font-weight="700" fill="#2B2618">Тип</text>
+        <text x="340" y="57" font-size="9" fill="#6B6250">число, дата, логическое</text>
+      </g>
+      <g class="layer" data-layer="format">
+        <rect x="464" y="22" width="196" height="48" rx="8" fill="#FFFDF7" stroke="#2B2618"/>
+        <text x="562" y="41" font-size="11" font-weight="700" fill="#2B2618">Формат</text>
+        <text x="562" y="57" font-size="9" fill="#6B6250">длина, шаблон, диапазон</text>
+      </g>
+
+      <g class="layer" data-layer="business">
+        <rect x="20" y="88" width="196" height="48" rx="8" fill="#FFFDF7" stroke="#2B2618"/>
+        <text x="118" y="107" font-size="11" font-weight="700" fill="#2B2618">Бизнес-правило</text>
+        <text x="118" y="123" font-size="9" fill="#6B6250">смысл и обязательность</text>
+      </g>
+      <g class="layer" data-layer="ref">
+        <rect x="242" y="88" width="196" height="48" rx="8" fill="#FFFDF7" stroke="#2B2618"/>
+        <text x="340" y="107" font-size="11" font-weight="700" fill="#2B2618">Связь</text>
+        <text x="340" y="123" font-size="9" fill="#6B6250">внешний ключ существует</text>
+      </g>
+      <g class="layer" data-layer="unique">
+        <rect x="464" y="88" width="196" height="48" rx="8" fill="#FFFDF7" stroke="#2B2618"/>
+        <text x="562" y="107" font-size="11" font-weight="700" fill="#2B2618">Уникальность</text>
+        <text x="562" y="123" font-size="9" fill="#6B6250">ключ не повторяется</text>
+      </g>
+    </g>
+    <text x="340" y="163" text-anchor="middle" font-family="Consolas,monospace" font-size="9.5" fill="#6B6250">чем раньше слой, тем дешевле исправление: до записи в рабочую таблицу</text>
+  </svg>
+
+  <div class="scenarios">
+    <button data-key="sep" class="on">Точка с запятой в названии</button>
+    <button data-key="bom">BOM перед заголовком</button>
+    <button data-key="lead0">ИНН с ведущим нулём</button>
+    <button data-key="money">Сумма текстом</button>
+    <button data-key="dup">Дубль ключа</button>
+    <button data-key="missing">Нет обязательного поля</button>
+    <button data-key="nullzero">null вместо нуля</button>
+  </div>
+
+  <div class="panel">
+    <p class="scenario" id="it-scenario"></p>
+    <table>
+      <tr><td>слой</td><td id="it-layer"></td></tr>
+      <tr><td>что видит проверка</td><td id="it-check"></td></tr>
+      <tr><td>действие</td><td id="it-action"></td></tr>
+      <tr><td>в журнале</td><td id="it-log"></td></tr>
+    </table>
+  </div>
+</div>
+
+<script>
+(function () {
+  var data = {
+    sep: { layer:'structure', title:'Точка с запятой в названии', check:'В строке 14 получилось 6 полей вместо 5: название разорвано разделителем.', action:'Файл не принят целиком. Строка и пакет возвращаются источнику.', log:'line 14, rule field_count, expected 5, got 6' },
+    bom: { layer:'structure', title:'BOM перед заголовком', check:'Первый заголовок называется \\uFEFFexternal_id, колонка external_id не найдена.', action:'Снять метку и прочитать файл заново. Без этого не грузить.', log:'header_mismatch, column external_id missing' },
+    lead0: { layer:'format', title:'ИНН с ведущим нулём', check:'Значение 0071234567 прочитано как число 71234567, длина 8 вместо 10.', action:'Карантин. Источник должен выгружать ИНН строкой.', log:'row 217, field inn, value 71234567, rule inn_length' },
+    money: { layer:'type', title:'Сумма текстом', check:'credit_limit равен "много" и не приводится к DECIMAL(12,2).', action:'Карантин строки, остальные записи загружаются.', log:'row 88, field credit_limit, value много, rule decimal' },
+    dup: { layer:'unique', title:'Дубль ключа', check:'external_id C-1002 встречается в строках 41 и 77.', action:'Вторую строку в карантин. Политика upsert не должна молча выбирать последнюю.', log:'duplicate key C-1002, rows 41 and 77' },
+    missing: { layer:'business', title:'Нет обязательного поля', check:'У записи 305 отсутствует ключ inn.', action:'Карантин: обязательное значение нельзя выдумать.', log:'row 305, field inn, rule required' },
+    nullzero: { layer:'business', title:'null вместо нуля', check:'credit_limit равен null: значение не задано, а не равно нулю.', action:'Сохранить NULL. Подставлять 0 нельзя, это законный лимит.', log:'row 12, field credit_limit, null preserved' }
+  };
+  var current = 'sep';
+  var layers = document.querySelectorAll('.layer');
+  var buttons = document.querySelectorAll('button[data-key]');
+  var $ = function (id) { return document.getElementById(id); };
+
+  function apply() {
+    var d = data[current];
+    $('it-scenario').innerHTML = '<b>' + d.title + '.</b> ' + d.check;
+    $('it-layer').textContent = d.layer === 'structure' ? 'структура' : d.layer === 'type' ? 'тип' : d.layer === 'format' ? 'формат' : d.layer === 'business' ? 'бизнес-правило' : d.layer === 'ref' ? 'связь' : 'уникальность';
+    $('it-check').textContent = d.check;
+    $('it-action').textContent = d.action;
+    $('it-log').textContent = d.log;
+    Array.prototype.forEach.call(layers, function (g) {
+      var on = g.getAttribute('data-layer') === d.layer;
+      g.classList.toggle('on', on);
+      var r = g.querySelector('rect');
+      r.setAttribute('fill', on ? '#F6EEDC' : '#FFFDF7');
+      r.setAttribute('stroke', on ? '#9A7300' : '#2B2618');
+      r.setAttribute('stroke-width', on ? '2' : '1');
+    });
+  }
+
+  Array.prototype.forEach.call(buttons, function (b) {
+    b.addEventListener('click', function () {
+      current = b.getAttribute('data-key');
+      Array.prototype.forEach.call(buttons, function (x) { x.classList.toggle('on', x === b); });
+      apply();
+    });
+  });
+  apply();
+})();
+</script>
+</body>
+</html>

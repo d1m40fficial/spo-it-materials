@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Из пожелания в требование</title>
+<style>
+  :root { --paper:#EDE5D2; --card:#FFFDF7; --ink:#2B2519; --muted:#6E6350; --rule:#D6C7A8; --accent:#9A7300; --soft:#F3EAD3; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .frame { background:var(--paper); border:1px solid var(--rule); border-radius:12px; padding:16px 16px 12px; }
+  .eyebrow { margin:0 0 6px; font:600 9.5px/1.2 Consolas,monospace; letter-spacing:.14em; text-transform:uppercase; color:var(--accent); }
+  svg { display:block; width:100%; height:auto; }
+  .note { margin:8px 2px 0; font:11px/1.5 Consolas,monospace; color:var(--muted); }
+</style>
+</head>
+<body>
+<div class="frame">
+  <p class="eyebrow">Требования · структура записи</p>
+  <svg viewBox="0 0 680 330" role="img" aria-labelledby="ra-title ra-desc">
+    <title id="ra-title">Путь от пожелания к проверяемому требованию</title>
+    <desc id="ra-desc">Пожелание без числа превращается в требование с условием, действием и результатом, а затем в критерий проверки и тест.</desc>
+
+    <text x="16" y="22" font-family="Consolas,monospace" font-size="9" fill="#6E6350">ПОЖЕЛАНИЕ</text>
+    <text x="228" y="22" font-family="Consolas,monospace" font-size="9" fill="#9A7300">ТРЕБОВАНИЕ</text>
+    <text x="492" y="22" font-family="Consolas,monospace" font-size="9" fill="#6E6350">КРИТЕРИЙ ПРОВЕРКИ</text>
+
+    <rect x="16" y="32" width="176" height="126" rx="8" fill="#F7F0DF" stroke="#C9B996" stroke-dasharray="4 3"/>
+    <text x="28" y="56" font-size="12" fill="#2B2519">«Система должна</text>
+    <text x="28" y="74" font-size="12" fill="#2B2519">работать быстро»</text>
+    <text x="28" y="102" font-size="10" fill="#8A6A2A">нет числа</text>
+    <text x="28" y="118" font-size="10" fill="#8A6A2A">нет условия</text>
+    <text x="28" y="134" font-size="10" fill="#8A6A2A">нет способа проверки</text>
+
+    <path d="M198 95h22" stroke="#9A7300" stroke-width="1.6" marker-end="url(#arw-ra)"/>
+
+    <rect x="228" y="32" width="252" height="126" rx="8" fill="#FFFDF7" stroke="#9A7300" stroke-width="1.8"/>
+    <text x="242" y="54" font-family="Consolas,monospace" font-size="9" fill="#9A7300">НФТ-01</text>
+    <text x="242" y="74" font-size="10.5" fill="#6E6350">Условие</text>
+    <text x="312" y="74" font-size="10.5" fill="#2B2519">40 одновременных пользователей</text>
+    <text x="242" y="94" font-size="10.5" fill="#6E6350">Действие</text>
+    <text x="312" y="94" font-size="10.5" fill="#2B2519">открыть карточку товара</text>
+    <text x="242" y="114" font-size="10.5" fill="#6E6350">Результат</text>
+    <text x="312" y="114" font-size="10.5" fill="#2B2519">не дольше 2 секунд</text>
+    <text x="242" y="140" font-size="9.5" fill="#8A6A2A">источник: жалобы менеджеров на скорость</text>
+
+    <path d="M486 95h18" stroke="#9A7300" stroke-width="1.6" marker-end="url(#arw-ra)"/>
+
+    <rect x="512" y="32" width="152" height="126" rx="8" fill="#FFFDF7" stroke="#C9B996"/>
+    <text x="524" y="54" font-family="Consolas,monospace" font-size="9" fill="#6E6350">ДАНО</text>
+    <text x="524" y="70" font-size="10" fill="#2B2519">тестовая база</text>
+    <text x="524" y="84" font-size="10" fill="#2B2519">и 40 сеансов</text>
+    <text x="524" y="104" font-family="Consolas,monospace" font-size="9" fill="#6E6350">КОГДА</text>
+    <text x="524" y="120" font-size="10" fill="#2B2519">карточка открыта</text>
+    <text x="524" y="140" font-family="Consolas,monospace" font-size="9" fill="#6E6350">ТОГДА</text>
+    <text x="566" y="140" font-size="10" fill="#9A7300">не более 2 с</text>
+
+    <rect x="16" y="184" width="648" height="54" rx="8" fill="#FFFDF7" stroke="#D6C7A8"/>
+    <text x="30" y="203" font-family="Consolas,monospace" font-size="8.5" fill="#6E6350">ЦЕПОЧКА</text>
+    <text x="30" y="224" font-size="11" fill="#2B2519">проблема обследования → требование → критерий → тест → результат приёмки</text>
+
+    <text x="16" y="266" font-family="Consolas,monospace" font-size="9" fill="#9A7300">ПРОВЕРКА</text>
+    <text x="16" y="284" font-size="10.5" fill="#2B2519">Требование без числа и условия остаётся пожеланием, даже если записано в договоре.</text>
+    <text x="16" y="302" font-size="10.5" fill="#2B2519">Критерий не объясняет, как устроена система: он называет наблюдаемый результат.</text>
+
+    <defs>
+      <marker id="arw-ra" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto"><polygon points="0 0, 9 3.5, 0 7" fill="#9A7300"/></marker>
+    </defs>
+  </svg>
+  <p class="note">Слева пожелание, в центре требование с условием и результатом, справа проверка по шагам «дано, когда, тогда».</p>
+</div>
+</body>
+</html>

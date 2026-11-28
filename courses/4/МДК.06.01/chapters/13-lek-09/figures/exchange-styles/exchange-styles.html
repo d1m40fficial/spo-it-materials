@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Четыре способа обмена</title>
+<style>
+  :root { --paper:#EDE5D2; --card:#FFFDF7; --ink:#2B2618; --muted:#6B6250; --accent:#9A7300; --soft:#F6EEDC; --rule:rgba(43,38,24,.18); }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .frame { background:var(--paper); border:1px solid var(--rule); border-radius:14px; padding:16px 16px 12px; }
+  .eyebrow { margin:0 0 8px; font:600 10px/1.2 Consolas,monospace; letter-spacing:.14em; text-transform:uppercase; color:var(--accent); }
+  svg { display:block; width:100%; height:auto; }
+  .note { margin:9px 2px 0; font:11.5px/1.5 "Segoe UI",system-ui,sans-serif; color:var(--muted); }
+  .note b { color:var(--ink); }
+</style>
+</head>
+<body>
+<div class="frame">
+  <p class="eyebrow">Интеграция · способы обмена</p>
+  <svg viewBox="0 0 680 300" role="img" aria-labelledby="es-title es-desc">
+    <title id="es-title">Файл, API, очередь и шина</title>
+    <desc id="es-desc">Четыре карточки: задержка, подтверждение, поведение при отказе и типичная задача для каждого способа.</desc>
+
+    <g font-family="Segoe UI,system-ui,sans-serif">
+      <rect x="16" y="14" width="316" height="118" rx="10" fill="#FFFDF7" stroke="#2B2618"/>
+      <rect x="16" y="14" width="6" height="118" rx="3" fill="#9A7300"/>
+      <text x="34" y="38" font-size="14" font-weight="700" fill="#2B2618">Файл</text>
+      <text x="34" y="56" font-size="10" fill="#6B6250">выгрузка в папку и квитанция</text>
+      <text x="34" y="76" font-size="10" fill="#2B2618">задержка: минуты и часы</text>
+      <text x="34" y="92" font-size="10" fill="#2B2618">подтверждение: квитанция</text>
+      <text x="34" y="108" font-size="10" fill="#2B2618">отказ: файл ждёт получателя</text>
+      <text x="34" y="124" font-size="10" fill="#9A7300">редкие пакеты, нет API</text>
+
+      <rect x="348" y="14" width="316" height="118" rx="10" fill="#FFFDF7" stroke="#9A7300" stroke-width="1.6"/>
+      <rect x="348" y="14" width="6" height="118" rx="3" fill="#9A7300"/>
+      <text x="366" y="38" font-size="14" font-weight="700" fill="#2B2618">API</text>
+      <text x="366" y="56" font-size="10" fill="#6B6250">запрос и ответ по сети</text>
+      <text x="366" y="76" font-size="10" fill="#2B2618">задержка: секунды</text>
+      <text x="366" y="92" font-size="10" fill="#2B2618">подтверждение: код ответа</text>
+      <text x="366" y="108" font-size="10" fill="#2B2618">отказ: вызывающий ждёт и решает</text>
+      <text x="366" y="124" font-size="10" fill="#9A7300">заказ, остаток, статус</text>
+
+      <rect x="16" y="150" width="316" height="118" rx="10" fill="#FFFDF7" stroke="#2B2618"/>
+      <rect x="16" y="150" width="6" height="118" rx="3" fill="#9A7300"/>
+      <text x="34" y="174" font-size="14" font-weight="700" fill="#2B2618">Очередь</text>
+      <text x="34" y="192" font-size="10" fill="#6B6250">посредник между системами</text>
+      <text x="34" y="212" font-size="10" fill="#2B2618">задержка: секунды</text>
+      <text x="34" y="228" font-size="10" fill="#2B2618">подтверждение: ack брокера</text>
+      <text x="34" y="244" font-size="10" fill="#2B2618">отказ: сообщение ждёт в очереди</text>
+      <text x="34" y="260" font-size="10" fill="#9A7300">пики, несколько потребителей</text>
+
+      <rect x="348" y="150" width="316" height="118" rx="10" fill="#FFFDF7" stroke="#2B2618"/>
+      <rect x="348" y="150" width="6" height="118" rx="3" fill="#9A7300"/>
+      <text x="366" y="174" font-size="14" font-weight="700" fill="#2B2618">Шина</text>
+      <text x="366" y="192" font-size="10" fill="#6B6250">маршрутизация и преобразование</text>
+      <text x="366" y="212" font-size="10" fill="#2B2618">задержка: секунды</text>
+      <text x="366" y="228" font-size="10" fill="#2B2618">подтверждение: через слой шины</text>
+      <text x="366" y="244" font-size="10" fill="#2B2618">отказ: сложнее найти звено</text>
+      <text x="366" y="260" font-size="10" fill="#9A7300">много систем и форматов</text>
+    </g>
+
+    <line x1="16" y1="286" x2="664" y2="286" stroke="#C9B98D" stroke-width="1"/>
+    <text x="340" y="298" text-anchor="middle" font-family="Consolas,monospace" font-size="9.5" fill="#6B6250">файл и очередь развязывают системы во времени, API связывает их в один момент</text>
+  </svg>
+  <p class="note"><b>Читайте по строкам внутри карточки:</b> задержка, подтверждение, поведение при отказе, типичная задача. Шина не быстрее очереди, она нужна из-за числа систем, а не из-за скорости.</p>
+</div>
+</body>
+</html>

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Путь миграции</title>
+<style>
+  :root { --paper:#EDE5D2; --card:#FFFDF7; --ink:#2B2618; --muted:#6B6250; --accent:#9A7300; --soft:#F6EEDC; --rule:rgba(43,38,24,.18); }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .frame { background:var(--paper); border:1px solid var(--rule); border-radius:14px; padding:16px 16px 12px; }
+  .eyebrow { margin:0 0 8px; font:600 10px/1.2 Consolas,monospace; letter-spacing:.14em; text-transform:uppercase; color:var(--accent); }
+  svg { display:block; width:100%; height:auto; }
+  .note { margin:9px 2px 0; font:11.5px/1.5 "Segoe UI",system-ui,sans-serif; color:var(--muted); }
+  .note b { color:var(--ink); }
+</style>
+</head>
+<body>
+<div class="frame">
+  <p class="eyebrow">Миграция · путь и доказательства</p>
+  <svg viewBox="0 0 680 262" role="img" aria-labelledby="mp-title mp-desc">
+    <title id="mp-title">Этапы миграции данных</title>
+    <desc id="mp-desc">Инвентаризация, профиль, правила, staging, загрузка и сверка. Карантин, crosswalk и откат показаны отдельными ветками.</desc>
+
+    <g font-family="Consolas,monospace" text-anchor="middle">
+      <g>
+        <rect x="14" y="30" width="98" height="78" rx="8" fill="#FFFDF7" stroke="#2B2618"/>
+        <text x="63" y="48" font-size="8" fill="#9A7300">01</text>
+        <text x="63" y="63" font-size="11" font-weight="700" fill="#2B2618">Инвента-</text>
+        <text x="63" y="76" font-size="11" font-weight="700" fill="#2B2618">ризация</text>
+        <text x="63" y="92" font-size="8" fill="#6B6250">источники</text>
+        <text x="63" y="103" font-size="8" fill="#6B6250">владельцы</text>
+      </g>
+      <g>
+        <rect x="122" y="30" width="98" height="78" rx="8" fill="#FFFDF7" stroke="#2B2618"/>
+        <text x="171" y="48" font-size="8" fill="#9A7300">02</text>
+        <text x="171" y="65" font-size="11" font-weight="700" fill="#2B2618">Профиль</text>
+        <text x="171" y="92" font-size="8" fill="#6B6250">строки</text>
+        <text x="171" y="103" font-size="8" fill="#6B6250">дубли, формы</text>
+      </g>
+      <g>
+        <rect x="230" y="30" width="98" height="78" rx="8" fill="#F6EEDC" stroke="#9A7300" stroke-width="1.6"/>
+        <text x="279" y="48" font-size="8" fill="#9A7300">03</text>
+        <text x="279" y="65" font-size="11" font-weight="700" fill="#2B2618">Правила</text>
+        <text x="279" y="92" font-size="8" fill="#6B6250">маппинг</text>
+        <text x="279" y="103" font-size="8" fill="#6B6250">очистка</text>
+      </g>
+      <g>
+        <rect x="338" y="30" width="98" height="78" rx="8" fill="#FFFDF7" stroke="#2B2618"/>
+        <text x="387" y="48" font-size="8" fill="#9A7300">04</text>
+        <text x="387" y="65" font-size="11" font-weight="700" fill="#2B2618">Staging</text>
+        <text x="387" y="92" font-size="8" fill="#6B6250">проверка</text>
+        <text x="387" y="103" font-size="8" fill="#6B6250">пакет</text>
+      </g>
+      <g>
+        <rect x="446" y="30" width="98" height="78" rx="8" fill="#FFFDF7" stroke="#2B2618"/>
+        <text x="495" y="48" font-size="8" fill="#9A7300">05</text>
+        <text x="495" y="65" font-size="11" font-weight="700" fill="#2B2618">Загрузка</text>
+        <text x="495" y="92" font-size="8" fill="#6B6250">транзакция</text>
+        <text x="495" y="103" font-size="8" fill="#6B6250">повтор</text>
+      </g>
+      <g>
+        <rect x="554" y="30" width="112" height="78" rx="8" fill="#F6EEDC" stroke="#9A7300" stroke-width="1.6"/>
+        <text x="610" y="48" font-size="8" fill="#9A7300">06</text>
+        <text x="610" y="65" font-size="11" font-weight="700" fill="#2B2618">Сверка</text>
+        <text x="610" y="92" font-size="8" fill="#6B6250">ключи, суммы</text>
+        <text x="610" y="103" font-size="8" fill="#6B6250">протокол</text>
+      </g>
+    </g>
+
+    <g stroke="#6B6250" stroke-width="1.4" fill="none" marker-end="url(#arw-mp)">
+      <path d="M112 69h8"/><path d="M220 69h8"/><path d="M328 69h8"/><path d="M436 69h8"/><path d="M544 69h8"/>
+    </g>
+
+    <g font-family="Consolas,monospace">
+      <rect x="338" y="132" width="98" height="38" rx="7" fill="#FFFDF7" stroke="#B9A36B" stroke-dasharray="3 3"/>
+      <text x="387" y="148" text-anchor="middle" font-size="8" fill="#6B6250">КАРАНТИН</text>
+      <text x="387" y="161" text-anchor="middle" font-size="8" fill="#2B2618">плохие строки</text>
+      <path d="M387 108v20" stroke="#9A7300" stroke-width="1.3" stroke-dasharray="3 3" marker-end="url(#arw-mp2)"/>
+
+      <rect x="230" y="132" width="98" height="38" rx="7" fill="#FFFDF7" stroke="#B9A36B" stroke-dasharray="3 3"/>
+      <text x="279" y="148" text-anchor="middle" font-size="8" fill="#6B6250">CROSSWALK</text>
+      <text x="279" y="161" text-anchor="middle" font-size="8" fill="#2B2618">старый → новый</text>
+      <path d="M279 108v20" stroke="#9A7300" stroke-width="1.3" stroke-dasharray="3 3" marker-end="url(#arw-mp2)"/>
+
+      <rect x="446" y="132" width="98" height="38" rx="7" fill="#FFFDF7" stroke="#B9A36B" stroke-dasharray="3 3"/>
+      <text x="495" y="148" text-anchor="middle" font-size="8" fill="#6B6250">ОТКАТ</text>
+      <text x="495" y="161" text-anchor="middle" font-size="8" fill="#2B2618">удалить пакет</text>
+      <path d="M495 108v20" stroke="#9A7300" stroke-width="1.3" stroke-dasharray="3 3" marker-end="url(#arw-mp2)"/>
+    </g>
+
+    <rect x="14" y="194" width="652" height="44" rx="8" fill="#FFFDF7" stroke="#C9B98D"/>
+    <text x="28" y="211" font-family="Consolas,monospace" font-size="8" fill="#9A7300">СРАВНИВАТЬ НЕ СЫРОЕ, А ОЖИДАЕМОЕ</text>
+    <text x="28" y="227" font-family="Consolas,monospace" font-size="9.5" fill="#2B2618">1850 клиентов, 137 дублей, 1713 после слияния. Сверка идёт по 1713, а не по 1850.</text>
+
+    <text x="340" y="254" text-anchor="middle" font-family="Consolas,monospace" font-size="8" fill="#6B6250">каждый этап оставляет артефакт: реестр, профиль, маппинг, журнал, протокол</text>
+
+    <defs>
+      <marker id="arw-mp" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#6B6250"/></marker>
+      <marker id="arw-mp2" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#9A7300"/></marker>
+    </defs>
+  </svg>
+  <p class="note"><b>Читайте слева направо.</b> Карантин, crosswalk и откат не отдельные этапы, а страховки: они работают внутри пути и должны быть готовы до загрузки.</p>
+</div>
+</body>
+</html>

@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Сверка после очистки</title>
+<style>
+  :root { --paper:#EDE5D2; --card:#FFFDF7; --ink:#2B2618; --muted:#6B6250; --accent:#9A7300; --soft:#F6EEDC; --rule:rgba(43,38,24,.18); }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .frame { background:var(--paper); border:1px solid var(--rule); border-radius:14px; padding:16px 16px 12px; }
+  .head { display:flex; justify-content:space-between; align-items:flex-end; gap:12px; border-bottom:1px solid var(--rule); padding-bottom:9px; }
+  .eyebrow { margin:0 0 4px; font:600 10px/1.2 Consolas,monospace; letter-spacing:.14em; text-transform:uppercase; color:var(--accent); }
+  h3 { margin:0; font-size:19px; line-height:1.2; }
+  .hint { font:11px/1.4 Consolas,monospace; color:var(--muted); text-align:right; }
+  svg { display:block; width:100%; height:auto; margin-top:8px; }
+  .modes, .objs { display:flex; gap:6px; flex-wrap:wrap; margin-top:8px; }
+  button { font:600 11.5px/1 "Segoe UI",system-ui,sans-serif; padding:7px 9px; border-radius:8px; border:1px solid var(--rule); background:var(--card); color:var(--ink); cursor:pointer; }
+  button:hover { border-color:var(--accent); color:var(--accent); }
+  button.on { background:var(--accent); border-color:var(--accent); color:#fff; }
+  .panel { margin-top:9px; padding:10px 11px; border-radius:9px; background:var(--card); border:1px solid var(--rule); }
+  .verdict { font-size:12.5px; line-height:1.45; margin:0 0 7px; }
+  .verdict b { color:var(--accent); }
+  table { width:100%; border-collapse:collapse; font:11.5px/1.35 Consolas,monospace; }
+  td { padding:2px 0; vertical-align:top; }
+  td:first-child { color:var(--muted); width:31%; }
+  @media (max-width:560px) { .frame { padding:12px; } .head { display:block; } .hint { text-align:left; margin-top:3px; } h3 { font-size:17px; } }
+</style>
+</head>
+<body>
+<div class="frame">
+  <div class="head">
+    <div><p class="eyebrow">Миграция · сверка</p><h3>С чем сравнивать после переноса</h3></div>
+    <div class="hint">выберите объект и режим</div>
+  </div>
+
+  <svg viewBox="0 0 680 232" role="img" aria-labelledby="rc-title rc-desc">
+    <title id="rc-title">Сравнение количества до и после очистки</title>
+    <desc id="rc-desc">Две полосы: до и после. Под ними показано объяснение расхождения и ожидаемое значение.</desc>
+    <text id="rc-obj" x="16" y="22" font-family="Consolas,monospace" font-size="13" font-weight="700" fill="#2B2618">Клиенты</text>
+    <text id="rc-sub" x="16" y="39" font-family="Consolas,monospace" font-size="9.5" fill="#6B6250">записей в источнике и в приёмнике</text>
+
+    <text x="16" y="76" font-family="Consolas,monospace" font-size="10" fill="#6B6250">до</text>
+    <rect x="64" y="62" width="420" height="22" rx="4" fill="#E4D6B4"/>
+    <rect id="rc-before" x="64" y="62" width="420" height="22" rx="4" fill="#C9AE6A"/>
+    <text id="rc-before-val" x="494" y="78" font-family="Consolas,monospace" font-size="11" fill="#2B2618">1 850</text>
+
+    <text x="16" y="116" font-family="Consolas,monospace" font-size="10" fill="#6B6250">после</text>
+    <rect x="64" y="102" width="420" height="22" rx="4" fill="#E4D6B4"/>
+    <rect id="rc-after" x="64" y="102" width="420" height="22" rx="4" fill="#9A7300"/>
+    <text id="rc-after-val" x="494" y="118" font-family="Consolas,monospace" font-size="11" fill="#2B2618">1 713</text>
+
+    <rect id="rc-delta-bg" x="566" y="62" width="98" height="62" rx="8" fill="#F6EEDC" stroke="#C9B98D"/>
+    <text id="rc-delta" x="615" y="88" text-anchor="middle" font-family="Consolas,monospace" font-size="10" fill="#9A7300">137 меньше</text>
+    <text x="615" y="104" text-anchor="middle" font-family="Consolas,monospace" font-size="8" fill="#6B6250">после очистки</text>
+
+    <line x1="64" y1="142" x2="664" y2="142" stroke="#C9B98D" stroke-width="1"/>
+    <text id="rc-sum-label" x="16" y="164" font-family="Consolas,monospace" font-size="9" fill="#6B6250">Сумма по загруженным заказам</text>
+    <text id="rc-sum" x="16" y="181" font-family="Consolas,monospace" font-size="11" fill="#2B2618">не применяется</text>
+    <text x="16" y="207" font-family="Consolas,monospace" font-size="9" fill="#6B6250">Полоса масштабирована по значению «до», поэтому малая разница видна как малая.</text>
+  </svg>
+
+  <div class="objs">
+    <button data-obj="clients" class="on">Клиенты</button>
+    <button data-obj="products">Товары</button>
+    <button data-obj="orders">Заказы</button>
+    <button data-obj="stock">Остатки</button>
+  </div>
+  <div class="modes">
+    <button data-mode="raw">Сырое сравнение</button>
+    <button data-mode="expected" class="on">После очистки</button>
+  </div>
+
+  <div class="panel">
+    <p class="verdict" id="rc-verdict"></p>
+    <table>
+      <tr><td>до</td><td id="rc-p-before"></td></tr>
+      <tr><td>после</td><td id="rc-p-after"></td></tr>
+      <tr><td>ожидаемо</td><td id="rc-p-expected"></td></tr>
+      <tr><td>объяснение</td><td id="rc-p-reason"></td></tr>
+    </table>
+  </div>
+</div>
+
+<script>
+(function () {
+  var data = {
+    clients: { name:'Клиенты', before:1850, after:1713, expected:1713, reason:'137 дублей клиентов слиты по ИНН и названию.', sum:null },
+    products: { name:'Товары', before:4200, after:4116, expected:4116, reason:'84 дубля товаров слиты по коду и единице измерения.', sum:null },
+    orders: { name:'Заказы', before:26000, after:25988, expected:25988, reason:'12 заказов ушли в карантин и ждут решения владельца.', sum:'1 283 940 112,55' },
+    stock: { name:'Остатки', before:16800, after:16800, expected:16800, reason:'Число строк не изменилось, но остатки пересчитаны по четырём складам.', sum:null }
+  };
+  var obj = 'clients', mode = 'expected';
+  var fmt = function (n) { return n.toLocaleString('ru-RU'); };
+  var $ = function (id) { return document.getElementById(id); };
+
+  function apply() {
+    var d = data[obj];
+    var max = d.before || 1;
+    $('rc-obj').textContent = d.name;
+    $('rc-before').setAttribute('width', String(420));
+    $('rc-after').setAttribute('width', String(Math.max(6, 420 * d.after / max)));
+    $('rc-before-val').textContent = fmt(d.before);
+    $('rc-after-val').textContent = fmt(d.after);
+    var diff = d.before - d.after;
+    $('rc-delta').textContent = diff === 0 ? 'без изменений' : fmt(diff) + ' меньше';
+
+    $('rc-p-before').textContent = fmt(d.before);
+    $('rc-p-after').textContent = fmt(d.after);
+    $('rc-p-expected').textContent = fmt(d.expected);
+    $('rc-p-reason').textContent = d.reason;
+
+    if (d.sum) {
+      $('rc-sum-label').textContent = 'Сумма по загруженным заказам';
+      $('rc-sum').textContent = d.sum + ' (до и после)';
+    } else {
+      $('rc-sum-label').textContent = 'Сумма';
+      $('rc-sum').textContent = 'для этого объекта не применяется';
+    }
+
+    if (mode === 'raw') {
+      $('rc-verdict').innerHTML = '<b>Сырое сравнение.</b> До ' + fmt(d.before) + ', после ' + fmt(d.after) + '. Расхождение ' + fmt(diff) + '. Если считать это потерей, проверка остановит миграцию зря: часть записей исчезла по правилу очистки.';
+    } else {
+      $('rc-verdict').innerHTML = '<b>Ожидаемо после очистки.</b> Должно остаться ' + fmt(d.expected) + ', фактически ' + fmt(d.after) + '. ' + (d.expected === d.after ? 'Сходится, расхождение объяснено.' : 'Не сходится, ищите причину до переключения.');
+    }
+  }
+
+  var objButtons = document.querySelectorAll('button[data-obj]');
+  var modeButtons = document.querySelectorAll('button[data-mode]');
+  Array.prototype.forEach.call(objButtons, function (b) {
+    b.addEventListener('click', function () {
+      obj = b.getAttribute('data-obj');
+      Array.prototype.forEach.call(objButtons, function (x) { x.classList.toggle('on', x === b); });
+      apply();
+    });
+  });
+  Array.prototype.forEach.call(modeButtons, function (b) {
+    b.addEventListener('click', function () {
+      mode = b.getAttribute('data-mode');
+      Array.prototype.forEach.call(modeButtons, function (x) { x.classList.toggle('on', x === b); });
+      apply();
+    });
+  });
+  apply();
+})();
+</script>
+</body>
+</html>

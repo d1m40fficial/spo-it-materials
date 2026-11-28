@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Какие метрики смотреть</title>
+<style>
+  :root { --bg:#EDE5D2; --paper:#FBF6EA; --ink:#2B2A26; --muted:#6B6250; --accent:#9A7300; --soft:#F3EAD3; --rule:#D8CBB0; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .frame { background:var(--bg); border:1px solid var(--rule); border-radius:12px; padding:16px 16px 12px; }
+  .eyebrow { margin:0 0 4px; font:600 9px/1.3 Consolas,monospace; letter-spacing:.16em; text-transform:uppercase; color:var(--accent); }
+  h3 { margin:0 0 4px; font-size:18px; line-height:1.2; }
+  svg { display:block; width:100%; height:auto; }
+  .status { min-height:44px; margin-top:6px; padding:9px 11px; border-radius:8px; background:var(--soft); font-size:12px; line-height:1.45; }
+  .status b { color:var(--accent); }
+  .controls { display:flex; gap:6px; flex-wrap:wrap; margin-top:9px; }
+  button { font:600 11.5px/1 "Segoe UI",system-ui,sans-serif; padding:8px 10px; border-radius:8px; border:1px solid var(--rule); background:#FFFDF7; color:var(--ink); cursor:pointer; }
+  button:hover { border-color:var(--accent); color:var(--accent); }
+  button.on { background:var(--accent); border-color:var(--accent); color:#fff; }
+  .note { margin:8px 2px 0; font:12px/1.5 Consolas,monospace; color:var(--muted); }
+  @media (max-width:560px) { .frame { padding:12px; } h3 { font-size:16px; } }
+</style>
+</head>
+<body>
+<div class="frame">
+  <p class="eyebrow">Метрики · выбор</p>
+  <h3>Что смотреть перед решением</h3>
+  <svg viewBox="0 0 680 246" role="img" aria-labelledby="mc-t mc-d">
+    <title id="mc-t">Набор метрик под конкретное решение</title>
+    <desc id="mc-d">Для выбранного решения показаны метрики, которые на него отвечают, контрметрика и число, которое вводит в заблуждение.</desc>
+
+    <g font-family="'Segoe UI',system-ui,sans-serif">
+      <rect x="14" y="14" width="196" height="214" rx="10" fill="#F3EAD3" stroke="#9A7300" stroke-width="1.2"/>
+      <text x="28" y="36" font-family="Consolas,monospace" font-size="8.5" letter-spacing="1.2" fill="#9A7300">РЕШЕНИЕ</text>
+      <g id="mc-decision"></g>
+
+      <rect x="222" y="14" width="210" height="214" rx="10" fill="#FFFDF7" stroke="#D8CBB0"/>
+      <text x="236" y="36" font-family="Consolas,monospace" font-size="8.5" letter-spacing="1.2" fill="#6B6250">СМОТРЕТЬ</text>
+      <g id="mc-look"></g>
+
+      <rect x="444" y="14" width="222" height="214" rx="10" fill="#FFFDF7" stroke="#D8CBB0"/>
+      <text x="458" y="36" font-family="Consolas,monospace" font-size="8.5" letter-spacing="1.2" fill="#6B6250">КОНТРМЕТРИКА</text>
+      <g id="mc-control"></g>
+      <text x="458" y="112" font-family="Consolas,monospace" font-size="8.5" letter-spacing="1.2" fill="#9A7300">ОБМАНКА</text>
+      <g id="mc-trap"></g>
+    </g>
+  </svg>
+  <div class="status" id="mc-status" aria-live="polite"></div>
+  <div class="controls" role="group" aria-label="Решение">
+    <button type="button" data-k="accept" class="on" aria-pressed="true">Принимать систему</button>
+    <button type="button" data-k="extend" aria-pressed="false">Продлевать договор</button>
+    <button type="button" data-k="hire" aria-pressed="false">Нанять специалиста</button>
+  </div>
+  <p class="note">Метрика отвечает на вопрос «и что дальше». Если после числа нельзя принять решение, число лишнее.</p>
+</div>
+<script>
+(function () {
+  var NS = 'http://www.w3.org/2000/svg';
+  var data = {
+    accept: {
+      decision: ['принимать', 'систему'],
+      look: ['доля требований,', 'проверенных на приёмке', 'открытые дефекты', 'по критичности', 'время операции', 'до и после'],
+      control: ['ошибки комплектации', 'и повторные открытия'],
+      trap: ['среднее время без', 'разреза по типам заказов'],
+      why: 'Среднее время скрывает, что часть заказов оформляют вручную и она выпадает из замера. Решение принимают по медиане и по доле операций в системе.'
+    },
+    extend: {
+      decision: ['продлевать', 'договор'],
+      look: ['сроки реакции', 'по приоритетам', 'доля решённых', 'без эскалации', 'динамика открытых', 'дефектов'],
+      control: ['стоимость часа', 'поддержки'],
+      trap: ['число закрытых заявок', 'без повторных'],
+      why: 'Число закрытых заявок растёт и при повторных открытиях. Без доли повторных и соблюдения сроков оно показывает активность, а не качество.'
+    },
+    hire: {
+      decision: ['нанимать', 'специалиста'],
+      look: ['очередь на конец дня', 'p90 времени решения', 'доля просроченных', 'заявок'],
+      control: ['доля повторных', 'открытий'],
+      trap: ['средняя загрузка', 'за месяц с отпуском'],
+      why: 'Месяц с отпуском завышает очередь и загрузку. Численность планируют по p90 и по сезонности, а не по одному удобному месяцу.'
+    }
+  };
+  function setLines(id, lines, x, y, step, size, weight, fill) {
+    var g = document.getElementById(id);
+    while (g.firstChild) g.removeChild(g.firstChild);
+    lines.forEach(function (line, i) {
+      var t = document.createElementNS(NS, 'text');
+      t.setAttribute('x', x);
+      t.setAttribute('y', y + i * step);
+      t.setAttribute('font-size', size);
+      t.setAttribute('fill', fill);
+      if (weight) t.setAttribute('font-weight', weight);
+      t.textContent = line;
+      g.appendChild(t);
+    });
+  }
+  function apply(key) {
+    var d = data[key];
+    setLines('mc-decision', d.decision, 28, 66, 20, 13, '600', '#2B2A26');
+    setLines('mc-look', d.look, 236, 60, 14, 9.5, '', '#2B2A26');
+    setLines('mc-control', d.control, 458, 58, 14, 9.5, '', '#2B2A26');
+    setLines('mc-trap', d.trap, 458, 132, 14, 9.5, '', '#6B6250');
+    document.getElementById('mc-status').innerHTML = '<b>Почему обманка.</b> ' + d.why;
+    [].slice.call(document.querySelectorAll('button[data-k]')).forEach(function (b) {
+      var on = b.dataset.k === key;
+      b.classList.toggle('on', on);
+      b.setAttribute('aria-pressed', on ? 'true' : 'false');
+    });
+  }
+  [].slice.call(document.querySelectorAll('button[data-k]')).forEach(function (b) {
+    b.addEventListener('click', function () { apply(b.dataset.k); });
+  });
+  apply('accept');
+})();
+</script>
+</body>
+</html>

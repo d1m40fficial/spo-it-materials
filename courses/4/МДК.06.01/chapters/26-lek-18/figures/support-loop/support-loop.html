@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Путь обращения</title>
+<style>
+  :root { --paper:#F7F1E3; --card:#FFFDF6; --ink:#2A2620; --muted:#6B6459; --accent:#9A7300; --soft:#EDE5D2; --rule:#D8CBB0; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .demo { background:var(--paper); border:1px solid var(--rule); border-radius:14px; padding:16px; }
+  .head { display:flex; justify-content:space-between; align-items:flex-end; gap:14px; padding-bottom:8px; border-bottom:1px solid var(--rule); }
+  .eyebrow { margin:0 0 4px; font:600 10px/1.2 Consolas,monospace; letter-spacing:.13em; text-transform:uppercase; color:var(--accent); }
+  h3 { margin:0; font-size:19px; line-height:1.2; }
+  .hint { font:11px/1.4 Consolas,monospace; color:var(--muted); white-space:nowrap; }
+  svg { display:block; width:100%; height:auto; margin-top:8px; }
+  .zone rect { fill:var(--card); stroke:#8C8171; stroke-width:1.2; cursor:pointer; transition:fill .18s, stroke .18s; }
+  .zone.on rect { fill:var(--soft); stroke:var(--accent); stroke-width:2.2; }
+  .zone text { font-family:Consolas,monospace; text-anchor:middle; fill:var(--ink); font-size:7.4px; pointer-events:none; }
+  .zone .cap { font-size:8.2px; font-weight:600; fill:var(--accent); }
+  .zone .small { font-size:6.8px; fill:var(--muted); }
+  .status { min-height:56px; margin-top:8px; padding:10px 12px; border-radius:9px; background:var(--soft); font-size:12.5px; line-height:1.45; }
+  .status b { color:var(--accent); }
+  @media (max-width:560px) { .demo { padding:11px; } .hint { display:none; } }
+</style>
+</head>
+<body>
+<div class="demo">
+  <div class="head">
+    <div><p class="eyebrow">Сопровождение · обращение</p><h3>От заявки до разбора</h3></div>
+    <div class="hint">нажмите на шаг</div>
+  </div>
+  <svg viewBox="0 0 680 236" role="img" aria-label="Шесть шагов обработки обращения">
+    <g class="zone" data-k="reg">
+      <rect x="16" y="26" width="100" height="98" rx="8"/>
+      <text x="66" y="46" class="cap">1. регистрация</text>
+      <text x="66" y="66">один канал</text>
+      <text x="66" y="82" class="small">автор, данные</text>
+      <text x="66" y="98" class="small">время</text>
+      <text x="66" y="116" class="small">номер</text>
+    </g>
+    <g class="zone" data-k="triage">
+      <rect x="128" y="26" width="100" height="98" rx="8"/>
+      <text x="178" y="46" class="cap">2. триаж</text>
+      <text x="178" y="66">влияние</text>
+      <text x="178" y="82" class="small">срочность</text>
+      <text x="178" y="98" class="small">приоритет</text>
+      <text x="178" y="116" class="small">владелец</text>
+    </g>
+    <g class="zone on" data-k="diag">
+      <rect x="240" y="26" width="100" height="98" rx="8"/>
+      <text x="290" y="46" class="cap">3. диагностика</text>
+      <text x="290" y="66">журналы</text>
+      <text x="290" y="82" class="small">данные</text>
+      <text x="290" y="98" class="small">воспроизведение</text>
+      <text x="290" y="116" class="small">причина</text>
+    </g>
+    <g class="zone" data-k="work">
+      <rect x="352" y="26" width="100" height="98" rx="8"/>
+      <text x="402" y="46" class="cap">4. обход</text>
+      <text x="402" y="66">работа не стоит</text>
+      <text x="402" y="82" class="small">или исправление</text>
+      <text x="402" y="98" class="small">срок</text>
+      <text x="402" y="116" class="small">ответственный</text>
+    </g>
+    <g class="zone" data-k="verify">
+      <rect x="464" y="26" width="100" height="98" rx="8"/>
+      <text x="514" y="46" class="cap">5. проверка</text>
+      <text x="514" y="66">пользователь</text>
+      <text x="514" y="82" class="small">подтвердил</text>
+      <text x="514" y="98" class="small">результат</text>
+      <text x="514" y="116" class="small">данные целы</text>
+    </g>
+    <g class="zone" data-k="close">
+      <rect x="576" y="26" width="88" height="98" rx="8"/>
+      <text x="620" y="46" class="cap">6. разбор</text>
+      <text x="620" y="66">причина</text>
+      <text x="620" y="82" class="small">вывод</text>
+      <text x="620" y="98" class="small">владелец</text>
+      <text x="620" y="116" class="small">срок</text>
+    </g>
+    <g stroke="#8C8171" stroke-width="1.3" fill="none" marker-end="url(#arw5)">
+      <path d="M116 75h10"/><path d="M228 75h10"/><path d="M340 75h10"/><path d="M452 75h10"/><path d="M564 75h10"/>
+    </g>
+    <rect x="16" y="150" width="648" height="52" rx="8" fill="#FFFDF6" stroke="#D8CBB0"/>
+    <text x="30" y="170" font-family="Consolas,monospace" font-size="7.2" fill="#6B6459">ЗАКРЫТИЕ БЕЗ ПОДТВЕРЖДЕНИЯ</text>
+    <text x="30" y="189" font-family="Consolas,monospace" font-size="7.6" fill="#2A2620">возвращает обращение в очередь и увеличивает долю повторных</text>
+    <text x="340" y="224" text-anchor="middle" font-family="Consolas,monospace" font-size="7.4" fill="#9A7300">РАЗБОР ПРИЧИНЫ ОТДЕЛЁН ОТ ЗАКРЫТИЯ ЗАЯВКИ</text>
+    <defs><marker id="arw5" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#8C8171"/></marker></defs>
+  </svg>
+  <div class="status" id="status"></div>
+</div>
+<script>
+(function () {
+  var data = {
+    reg: '<b>Регистрация.</b> Обращение получает номер, автора, время и данные. Даже звонок попадает в журнал: без записи его нельзя посчитать, передать и проверить.',
+    triage: '<b>Триаж.</b> Влияние и срочность дают приоритет. Приоритет ставит разборщик, а не автор: пользователь видит свою боль, поддержка видит систему.',
+    diag: '<b>Диагностика.</b> Проверяют журналы, воспроизводят случай на данных, отделяют дефект от ошибки обучения. Результат: причина или гипотеза с планом проверки.',
+    work: '<b>Обход или исправление.</b> Пока причина не устранена, бизнес работает по обходу. У работы есть владелец и срок, обход записан, чтобы им могли воспользоваться другие смены.',
+    verify: '<b>Проверка.</b> Пользователь подтверждает результат на своей операции. Закрытие без подтверждения возвращает обращение и портит показатель повторных.',
+    close: '<b>Разбор.</b> Причина разбирается отдельно: что позволило сбою произойти и что изменить в профилактике. У вывода есть владелец и срок.'
+  };
+  var zones = document.querySelectorAll('.zone');
+  var status = document.getElementById('status');
+  function apply(k) {
+    zones.forEach(function (z) { z.classList.toggle('on', z.dataset.k === k); });
+    status.innerHTML = data[k];
+  }
+  zones.forEach(function (z) { z.addEventListener('click', function () { apply(z.dataset.k); }); });
+  apply('diag');
+})();
+</script>
+</body>
+</html>

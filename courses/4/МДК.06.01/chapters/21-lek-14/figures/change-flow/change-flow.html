@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Путь изменения</title>
+<style>
+  :root { --paper:#EDE5D2; --card:#FBF6E9; --ink:#2b2517; --muted:#6b5f45; --rule:#cdbf9f; --accent:#9A7300; --soft:#F3E9CE; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .demo { background:var(--paper); border:1px solid var(--rule); border-radius:14px; padding:16px; }
+  .head { display:flex; justify-content:space-between; align-items:flex-end; gap:12px; padding-bottom:8px; border-bottom:1px solid var(--rule); }
+  .eyebrow { margin:0 0 4px; font:600 9.5px/1.2 Consolas,monospace; letter-spacing:.14em; text-transform:uppercase; color:var(--accent); }
+  h3 { margin:0; font-size:19px; line-height:1.2; }
+  .hint { font:10.5px/1.35 Consolas,monospace; color:var(--muted); white-space:nowrap; }
+  svg { display:block; width:100%; height:auto; margin-top:6px; }
+  .stage rect { fill:#FBF6E9; stroke:#8d7d5b; stroke-width:1.3; cursor:pointer; transition:fill .2s, stroke .2s; }
+  .stage.on rect { fill:var(--soft); stroke:var(--accent); stroke-width:2.2; }
+  .stage text { font:7.4px Consolas,monospace; fill:#2b2517; text-anchor:middle; pointer-events:none; }
+  .stage .num { font:700 8px Consolas,monospace; fill:#9A7300; }
+  .field { font:7.6px Consolas,monospace; fill:#2b2517; }
+  .label { font:700 7.2px Consolas,monospace; fill:#6b5f45; letter-spacing:.08em; }
+  .controls { display:flex; gap:6px; flex-wrap:wrap; margin-top:8px; }
+  button { font:600 11px/1 "Segoe UI",system-ui,sans-serif; padding:7px 9px; border-radius:8px; border:1px solid var(--rule); background:var(--card); color:var(--ink); cursor:pointer; }
+  button:hover { border-color:var(--accent); color:var(--accent); }
+  button.on { background:var(--accent); border-color:var(--accent); color:#fff; }
+  @media (max-width:560px) { .demo { padding:11px; } .hint { display:none; } }
+</style>
+</head>
+<body>
+<div class="demo">
+  <div class="head">
+    <div><p class="eyebrow">Изменение · маршрут</p><h3>От запроса до записи в журнале</h3></div>
+    <div class="hint">нажмите этап</div>
+  </div>
+  <svg viewBox="0 0 680 300" role="img" aria-labelledby="cf-title cf-desc">
+    <title id="cf-title">Маршрут изменения</title>
+    <desc id="cf-desc">Шесть этапов: запрос, оценка влияния, решение, работа, проверка, журнал. Для каждого показан результат, владелец и типичный сбой.</desc>
+
+    <g class="stage" data-k="req"><rect x="16" y="30" width="98" height="56" rx="8"/><text class="num" x="65" y="49">1</text><text x="65" y="64">запрос</text></g>
+    <g class="stage" data-k="assess"><rect x="126" y="30" width="98" height="56" rx="8"/><text class="num" x="175" y="49">2</text><text x="175" y="64">оценка</text></g>
+    <g class="stage" data-k="decide"><rect x="236" y="30" width="98" height="56" rx="8"/><text class="num" x="285" y="49">3</text><text x="285" y="64">решение</text></g>
+    <g class="stage" data-k="work"><rect x="346" y="30" width="98" height="56" rx="8"/><text class="num" x="395" y="49">4</text><text x="395" y="64">работа</text></g>
+    <g class="stage" data-k="check"><rect x="456" y="30" width="98" height="56" rx="8"/><text class="num" x="505" y="49">5</text><text x="505" y="64">проверка</text></g>
+    <g class="stage" data-k="log"><rect x="566" y="30" width="98" height="56" rx="8"/><text class="num" x="615" y="49">6</text><text x="615" y="64">журнал</text></g>
+
+    <g stroke="#8d7d5b" stroke-width="1.2" fill="none">
+      <path d="M114 58h8"/><path d="M224 58h8"/><path d="M334 58h8"/><path d="M444 58h8"/><path d="M554 58h8"/>
+    </g>
+
+    <rect x="16" y="108" width="648" height="166" rx="9" fill="#FBF6E9" stroke="#cdbf9f"/>
+    <text class="label" x="32" y="128">РЕЗУЛЬТАТ ЭТАПА</text>
+    <text id="f1" class="field" x="32" y="148"></text>
+    <text class="label" x="32" y="178">КТО ОТВЕЧАЕТ</text>
+    <text id="f2" class="field" x="32" y="198"></text>
+    <text class="label" x="32" y="228">ТИПИЧНЫЙ СБОЙ</text>
+    <text id="f3" class="field" x="32" y="248"></text>
+
+    <text x="664" y="128" text-anchor="end" font-family="Consolas,monospace" font-size="7" fill="#9A7300">один маршрут для всех изменений</text>
+  </svg>
+  <div class="controls">
+    <button data-k="req" class="on">Запрос</button>
+    <button data-k="assess">Оценка</button>
+    <button data-k="decide">Решение</button>
+    <button data-k="work">Работа</button>
+    <button data-k="check">Проверка</button>
+    <button data-k="log">Журнал</button>
+  </div>
+</div>
+<script>
+(function () {
+  var data = {
+    req: ['карточка: что изменится, зачем и к какому сроку', 'автор запроса вместе с владельцем процесса', 'формулировка «сделайте удобно» без результата'],
+    assess: ['шесть сторон влияния и оценка часов по каждой', 'аналитик, администратор, бухгалтер, руководитель склада', 'посчитана только разработка, обучение забыто'],
+    decide: ['протокол: принять, отложить, урезать или отклонить', 'комитет по изменениям или руководитель проекта', 'устное «да, давай» без ответственного и даты'],
+    work: ['изменение в отдельной ветке и на тестовой среде', 'разработчик и администратор ИС', 'правка сразу на рабочей системе'],
+    check: ['новый сценарий, регрессия и запись о результате', 'тестировщик вместе с пользователем', 'проверено только новое поле, старое не тронуто'],
+    log: ['запись с версией, проверкой и планом отката', 'руководитель проекта или секретарь комитета', 'история осталась в чате и памяти администратора']
+  };
+  var stages = document.querySelectorAll('.stage');
+  var buttons = document.querySelectorAll('button[data-k]');
+  function apply(key) {
+    var d = data[key];
+    document.getElementById('f1').textContent = d[0];
+    document.getElementById('f2').textContent = d[1];
+    document.getElementById('f3').textContent = d[2];
+    stages.forEach(function (s) { s.classList.toggle('on', s.dataset.k === key); });
+    buttons.forEach(function (b) { b.classList.toggle('on', b.dataset.k === key); });
+  }
+  stages.forEach(function (s) { s.addEventListener('click', function () { apply(s.dataset.k); }); });
+  buttons.forEach(function (b) { b.addEventListener('click', function () { apply(b.dataset.k); }); });
+  apply('req');
+})();
+</script>
+</body>
+</html>

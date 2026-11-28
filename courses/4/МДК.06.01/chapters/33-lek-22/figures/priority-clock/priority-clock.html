@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Сроки реакции и решения</title>
+<style>
+  :root { --bg:#EDE5D2; --paper:#FBF6EA; --ink:#2B2A26; --muted:#6B6250; --accent:#9A7300; --soft:#F3EAD3; --rule:#D8CBB0; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .frame { background:var(--bg); border:1px solid var(--rule); border-radius:12px; padding:16px 16px 12px; }
+  .eyebrow { margin:0 0 4px; font:600 9px/1.3 Consolas,monospace; letter-spacing:.16em; text-transform:uppercase; color:var(--accent); }
+  h3 { margin:0 0 4px; font-size:18px; line-height:1.2; }
+  svg { display:block; width:100%; height:auto; }
+  .status { min-height:46px; margin-top:6px; padding:9px 11px; border-radius:8px; background:var(--soft); font-size:12px; line-height:1.45; }
+  .status b { color:var(--accent); }
+  .controls { display:flex; gap:6px; flex-wrap:wrap; margin-top:9px; }
+  button { font:600 11.5px/1 "Segoe UI",system-ui,sans-serif; padding:8px 10px; border-radius:8px; border:1px solid var(--rule); background:#FFFDF7; color:var(--ink); cursor:pointer; }
+  button:hover { border-color:var(--accent); color:var(--accent); }
+  button.on { background:var(--accent); border-color:var(--accent); color:#fff; }
+  .note { margin:8px 2px 0; font:11px/1.5 Consolas,monospace; color:var(--muted); }
+  @media (max-width:560px) { .frame { padding:12px; } h3 { font-size:16px; } }
+</style>
+</head>
+<body>
+<div class="frame">
+  <p class="eyebrow">Поддержка · сроки</p>
+  <h3>Сколько времени есть у обращения</h3>
+  <svg viewBox="0 0 680 222" role="img" aria-labelledby="pc-t pc-d">
+    <title id="pc-t">Сроки реакции и решения по приоритетам</title>
+    <desc id="pc-d">Для выбранного приоритета показаны срок первой реакции и срок решения на логарифмической шкале от пятнадцати минут до семидесяти двух часов.</desc>
+
+    <g font-family="'Segoe UI',system-ui,sans-serif">
+      <text x="14" y="46" font-size="11.5" font-weight="600" fill="#2B2A26">реакция</text>
+      <text x="14" y="96" font-size="11.5" font-weight="600" fill="#2B2A26">решение</text>
+
+      <rect x="90" y="34" width="510" height="18" rx="5" fill="#FFFDF7" stroke="#D8CBB0"/>
+      <rect id="pc-react" x="90" y="34" width="0" height="18" rx="5" fill="#9A7300"/>
+      <rect x="90" y="84" width="510" height="18" rx="5" fill="#FFFDF7" stroke="#D8CBB0"/>
+      <rect id="pc-solve" x="90" y="84" width="0" height="18" rx="5" fill="#9A7300"/>
+
+      <text id="pc-react-v" x="610" y="47" font-size="11" fill="#2B2A26">15 мин</text>
+      <text id="pc-solve-v" x="610" y="97" font-size="11" fill="#2B2A26">4 часа</text>
+
+      <g stroke="#B9A97F" stroke-width="1" font-family="Consolas,monospace" font-size="8.5" fill="#6B6250">
+        <line x1="90" y1="106" x2="90" y2="114"/><text x="90" y="128" text-anchor="start">15 мин</text>
+        <line x1="215" y1="106" x2="215" y2="114"/><text x="215" y="128" text-anchor="middle">1 ч</text>
+        <line x1="340" y1="106" x2="340" y2="114"/><text x="340" y="128" text-anchor="middle">4 ч</text>
+        <line x1="402" y1="106" x2="402" y2="114"/><text x="402" y="128" text-anchor="middle">8 ч</text>
+        <line x1="501" y1="106" x2="501" y2="114"/><text x="501" y="128" text-anchor="middle">24 ч</text>
+        <line x1="600" y1="106" x2="600" y2="114"/><text x="600" y="128" text-anchor="end">72 ч</text>
+      </g>
+
+      <text id="pc-esc" x="14" y="158" font-size="10.5" fill="#2B2A26"></text>
+      <text id="pc-notify" x="14" y="178" font-size="10.5" fill="#2B2A26"></text>
+      <text x="14" y="202" font-family="Consolas,monospace" font-size="8.5" fill="#6B6250">шкала логарифмическая: важен порядок, а не миллиметры</text>
+    </g>
+  </svg>
+  <div class="status" id="pc-status" aria-live="polite"></div>
+  <div class="controls" role="group" aria-label="Приоритет обращения">
+    <button type="button" data-k="crit" class="on" aria-pressed="true">Критический</button>
+    <button type="button" data-k="high" aria-pressed="false">Высокий</button>
+    <button type="button" data-k="mid" aria-pressed="false">Средний</button>
+    <button type="button" data-k="low" aria-pressed="false">Низкий</button>
+  </div>
+  <p class="note">Срок первой реакции и срок решения это разные обещания. Первое можно выполнить одной фразой, второе требует работы.</p>
+</div>
+<script>
+(function () {
+  var data = {
+    crit: { label: 'критический', react: 0.25, solve: 4, esc: 'эскалация: через 1 час без решения', notify: 'уведомляют: директор и руководитель склада', why: 'склад не отгружает, база недоступна: каждый час простоя дороже переработки.' },
+    high: { label: 'высокий', react: 0.5, solve: 8, esc: 'эскалация: через 2 часа без решения', notify: 'уведомляют: руководитель подразделения', why: 'заблокирован участок или роль: работа идёт с обходом и теряет время.' },
+    mid: { label: 'средний', react: 2, solve: 24, esc: 'эскалация: через 8 часов', notify: 'никого не уведомляют', why: 'есть обходной способ, но он тратит время пользователя.' },
+    low: { label: 'низкий', react: 4, solve: 72, esc: 'эскалация: через 2 рабочих дня', notify: 'никого не уведомляют', why: 'вопрос, пожелание или обучение: работа ставится в очередь.' }
+  };
+  var start = 90, span = 510, min = 0.25, max = 72;
+  var logMin = Math.log(min), logMax = Math.log(max);
+  function pos(h) { return start + span * (Math.log(h) - logMin) / (logMax - logMin); }
+  function fmt(h) {
+    if (h < 1) return Math.round(h * 60) + ' мин';
+    if (h === 4) return '4 часа';
+    if (h === 8) return '8 часов';
+    if (h === 24) return '24 часа';
+    if (h === 72) return '72 часа';
+    return h + ' ч';
+  }
+  var barR = document.getElementById('pc-react');
+  var barS = document.getElementById('pc-solve');
+  var valR = document.getElementById('pc-react-v');
+  var valS = document.getElementById('pc-solve-v');
+  var esc = document.getElementById('pc-esc');
+  var notify = document.getElementById('pc-notify');
+  var status = document.getElementById('pc-status');
+  var buttons = [].slice.call(document.querySelectorAll('button[data-k]'));
+
+  function apply(key) {
+    var d = data[key];
+    var wr = Math.max(3, pos(d.react) - start);
+    var ws = Math.max(3, pos(d.solve) - start);
+    barR.setAttribute('width', wr.toFixed(1));
+    barS.setAttribute('width', ws.toFixed(1));
+    valR.textContent = fmt(d.react);
+    valS.textContent = fmt(d.solve);
+    esc.textContent = d.esc;
+    notify.textContent = d.notify;
+    status.innerHTML = '<b>' + d.label + '.</b> ' + d.why;
+    buttons.forEach(function (b) {
+      var on = b.dataset.k === key;
+      b.classList.toggle('on', on);
+      b.setAttribute('aria-pressed', on ? 'true' : 'false');
+    });
+  }
+  buttons.forEach(function (b) { b.addEventListener('click', function () { apply(b.dataset.k); }); });
+  apply('crit');
+})();
+</script>
+</body>
+</html>

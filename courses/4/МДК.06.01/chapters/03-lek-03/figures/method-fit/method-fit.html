@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Какой метод обследования выбрать</title>
+<style>
+  :root { --paper:#FAF7EF; --card:#FFFDF8; --ink:#2A2620; --muted:#6B6252; --rule:#E3D8C2; --accent:#9A7300; --soft:#EDE5D2; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .frame { background:var(--paper); border:1px solid var(--rule); border-radius:12px; padding:16px; }
+  .eyebrow { margin:0 0 6px; font:600 10px/1.2 Consolas,monospace; letter-spacing:.14em; text-transform:uppercase; color:var(--accent); }
+  svg { display:block; width:100%; height:auto; }
+  .row rect.hit { fill:transparent; stroke:transparent; }
+  .row.on rect.hit { fill:#EDE5D2; stroke:#9A7300; stroke-width:1.6; }
+  .row text { font-family:"Segoe UI",system-ui,sans-serif; }
+  .status { min-height:66px; margin-top:8px; padding:10px 12px; border-radius:9px; background:var(--soft); font-size:13px; line-height:1.45; }
+  .status b { color:var(--accent); }
+  .controls { display:flex; gap:6px; flex-wrap:wrap; margin-top:10px; }
+  button { font:600 11.5px/1.1 "Segoe UI",system-ui,sans-serif; padding:8px 9px; border-radius:8px; border:1px solid var(--rule); background:var(--card); color:var(--ink); cursor:pointer; }
+  button:hover { border-color:var(--accent); color:var(--accent); }
+  button.on { background:var(--accent); border-color:var(--accent); color:#fff; }
+  .note { margin:9px 2px 0; font:11.5px/1.5 "Segoe UI",system-ui,sans-serif; color:var(--muted); }
+  @media (max-width:560px) { .frame { padding:12px; } .status { font-size:12.5px; } }
+</style>
+</head>
+<body>
+<div class="frame">
+  <p class="eyebrow">Обследование · методы</p>
+  <svg viewBox="0 0 680 304" role="img" aria-labelledby="mf-title mf-desc">
+    <title id="mf-title">Пять методов обследования и их свойства</title>
+    <desc id="mf-desc">Интервью, анкета, наблюдение, документы и статистика. Для каждого метода показаны охват, глубина причин и стоимость времени. Нажмите метод, чтобы увидеть, когда его выбирать.</desc>
+
+    <g font-family="Consolas,monospace" font-size="9" fill="#6B6252">
+      <text x="16" y="20">МЕТОД</text>
+      <text x="214" y="20">ОХВАТ</text>
+      <text x="310" y="20">ГЛУБИНА ПРИЧИН</text>
+      <text x="442" y="20">ВРЕМЯ</text>
+    </g>
+    <line x1="16" y1="28" x2="664" y2="28" stroke="#E3D8C2"/>
+
+    <g class="row" data-k="interview">
+      <rect class="hit" x="10" y="34" width="660" height="42" rx="6"/>
+      <text x="16" y="59" font-size="12.5" font-weight="700" fill="#2A2620">Интервью</text>
+      <circle cx="224" cy="55" r="5" fill="#9A7300"/><circle cx="244" cy="55" r="5" fill="#E3D8C2"/><circle cx="264" cy="55" r="5" fill="#E3D8C2"/>
+      <circle cx="330" cy="55" r="5" fill="#9A7300"/><circle cx="350" cy="55" r="5" fill="#9A7300"/><circle cx="370" cy="55" r="5" fill="#9A7300"/>
+      <circle cx="462" cy="55" r="5" fill="#9A7300"/><circle cx="482" cy="55" r="5" fill="#9A7300"/><circle cx="502" cy="55" r="5" fill="#9A7300"/>
+      <text x="530" y="59" font-size="10.5" fill="#6B6252">причины и скрытые шаги</text>
+    </g>
+
+    <g class="row" data-k="survey">
+      <rect class="hit" x="10" y="78" width="660" height="42" rx="6"/>
+      <text x="16" y="103" font-size="12.5" font-weight="700" fill="#2A2620">Анкета</text>
+      <circle cx="224" cy="99" r="5" fill="#9A7300"/><circle cx="244" cy="99" r="5" fill="#9A7300"/><circle cx="264" cy="99" r="5" fill="#9A7300"/>
+      <circle cx="330" cy="99" r="5" fill="#9A7300"/><circle cx="350" cy="99" r="5" fill="#E3D8C2"/><circle cx="370" cy="99" r="5" fill="#E3D8C2"/>
+      <circle cx="462" cy="99" r="5" fill="#9A7300"/><circle cx="482" cy="99" r="5" fill="#9A7300"/><circle cx="502" cy="99" r="5" fill="#E3D8C2"/>
+      <text x="530" y="103" font-size="10.5" fill="#6B6252">сравнимые ответы</text>
+    </g>
+
+    <g class="row" data-k="observe">
+      <rect class="hit" x="10" y="122" width="660" height="42" rx="6"/>
+      <text x="16" y="147" font-size="12.5" font-weight="700" fill="#2A2620">Наблюдение</text>
+      <circle cx="224" cy="143" r="5" fill="#9A7300"/><circle cx="244" cy="143" r="5" fill="#E3D8C2"/><circle cx="264" cy="143" r="5" fill="#E3D8C2"/>
+      <circle cx="330" cy="143" r="5" fill="#9A7300"/><circle cx="350" cy="143" r="5" fill="#9A7300"/><circle cx="370" cy="143" r="5" fill="#9A7300"/>
+      <circle cx="462" cy="143" r="5" fill="#9A7300"/><circle cx="482" cy="143" r="5" fill="#9A7300"/><circle cx="502" cy="143" r="5" fill="#9A7300"/>
+      <text x="530" y="147" font-size="10.5" fill="#6B6252">фактические действия и время</text>
+    </g>
+
+    <g class="row" data-k="docs">
+      <rect class="hit" x="10" y="166" width="660" height="42" rx="6"/>
+      <text x="16" y="191" font-size="12.5" font-weight="700" fill="#2A2620">Документы</text>
+      <circle cx="224" cy="187" r="5" fill="#9A7300"/><circle cx="244" cy="187" r="5" fill="#9A7300"/><circle cx="264" cy="187" r="5" fill="#E3D8C2"/>
+      <circle cx="330" cy="187" r="5" fill="#9A7300"/><circle cx="350" cy="187" r="5" fill="#9A7300"/><circle cx="370" cy="187" r="5" fill="#E3D8C2"/>
+      <circle cx="462" cy="187" r="5" fill="#9A7300"/><circle cx="482" cy="187" r="5" fill="#E3D8C2"/><circle cx="502" cy="187" r="5" fill="#E3D8C2"/>
+      <text x="530" y="191" font-size="10.5" fill="#6B6252">правила и следы операций</text>
+    </g>
+
+    <g class="row" data-k="stats">
+      <rect class="hit" x="10" y="210" width="660" height="42" rx="6"/>
+      <text x="16" y="235" font-size="12.5" font-weight="700" fill="#2A2620">Статистика</text>
+      <circle cx="224" cy="231" r="5" fill="#9A7300"/><circle cx="244" cy="231" r="5" fill="#9A7300"/><circle cx="264" cy="231" r="5" fill="#9A7300"/>
+      <circle cx="330" cy="231" r="5" fill="#9A7300"/><circle cx="350" cy="231" r="5" fill="#E3D8C2"/><circle cx="370" cy="231" r="5" fill="#E3D8C2"/>
+      <circle cx="462" cy="231" r="5" fill="#9A7300"/><circle cx="482" cy="231" r="5" fill="#E3D8C2"/><circle cx="502" cy="231" r="5" fill="#E3D8C2"/>
+      <text x="530" y="235" font-size="10.5" fill="#6B6252">объёмы, частоты, динамика</text>
+    </g>
+
+    <text x="16" y="276" font-family="Consolas,monospace" font-size="9" fill="#6B6252">ТРИ ТОЧКИ ЗНАЧИТ ВЫСОКОЕ ЗНАЧЕНИЕ, ОДНА ТОЧКА НИЗКОЕ. ЭТО ОРИЕНТИР, А НЕ ИЗМЕРЕНИЕ.</text>
+    <text x="16" y="293" font-family="Segoe UI,system-ui,sans-serif" font-size="10.5" fill="#6B6252">Методы дополняют друг друга: интервью даёт причины, статистика проверяет масштаб.</text>
+  </svg>
+  <div class="status" id="mf-status"></div>
+  <div class="controls" id="mf-buttons">
+    <button data-k="interview" class="on">Интервью</button>
+    <button data-k="survey">Анкета</button>
+    <button data-k="observe">Наблюдение</button>
+    <button data-k="docs">Документы</button>
+    <button data-k="stats">Статистика</button>
+  </div>
+  <p class="note">Нажмите метод. Сравните охват и глубину: универсального метода нет, поэтому выводы подтверждают несколькими источниками.</p>
+</div>
+<script>
+(function () {
+  var data = {
+    interview: '<b>Интервью.</b> Даёт причины, логику и скрытые шаги, но охватывает мало людей и требует много времени. Выбирают, когда нужно понять, почему работа устроена именно так, и когда есть доступ к исполнителям.',
+    survey: '<b>Анкета.</b> Даёт сравнимую картину по многим людям, но не позволяет уточнить ответ и зависит от доли возврата. Выбирают, когда респондентов много, а вопросы одинаковые.',
+    observe: '<b>Наблюдение.</b> Показывает фактические действия и время, но наблюдатель влияет на поведение. Выбирают, когда слова расходятся с делом или нужно измерить длительность шагов.',
+    docs: '<b>Документы.</b> Показывают официальные правила и следы операций, но не объясняют мотивы и обходные пути. Выбирают, когда нужно найти противоречия и места повторного ввода.',
+    stats: '<b>Статистика.</b> Показывает объёмы, частоты и динамику, но зависит от качества учёта. Выбирают, когда нужно оценить масштаб проблемы или проверить вывод на большой выборке.'
+  };
+  var rows = document.querySelectorAll('.row');
+  var buttons = document.querySelectorAll('#mf-buttons button');
+  var status = document.getElementById('mf-status');
+
+  function apply(key) {
+    rows.forEach(function (r) { r.classList.toggle('on', r.dataset.k === key); });
+    buttons.forEach(function (b) { b.classList.toggle('on', b.dataset.k === key); });
+    status.innerHTML = data[key];
+  }
+  rows.forEach(function (r) { r.addEventListener('click', function () { apply(r.dataset.k); }); });
+  buttons.forEach(function (b) { b.addEventListener('click', function () { apply(b.dataset.k); }); });
+  apply('interview');
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Учения на отказ обмена</title>
+<style>
+  :root { --paper:#EDE5D2; --card:#FFFDF7; --ink:#2B2618; --muted:#6B6250; --accent:#9A7300; --soft:#F6EEDC; --rule:rgba(43,38,24,.18); }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .frame { background:var(--paper); border:1px solid var(--rule); border-radius:14px; padding:16px 16px 12px; }
+  .head { display:flex; justify-content:space-between; align-items:flex-end; gap:12px; border-bottom:1px solid var(--rule); padding-bottom:9px; }
+  .eyebrow { margin:0 0 4px; font:600 10px/1.2 Consolas,monospace; letter-spacing:.14em; text-transform:uppercase; color:var(--accent); }
+  h3 { margin:0; font-size:19px; line-height:1.2; }
+  .hint { font:11px/1.4 Consolas,monospace; color:var(--muted); text-align:right; }
+  svg { display:block; width:100%; height:auto; margin-top:8px; }
+  .scenarios { display:flex; gap:6px; flex-wrap:wrap; margin-top:9px; }
+  button { font:600 11.5px/1.25 "Segoe UI",system-ui,sans-serif; padding:7px 9px; border-radius:8px; border:1px solid var(--rule); background:var(--card); color:var(--ink); cursor:pointer; text-align:left; }
+  button:hover { border-color:var(--accent); color:var(--accent); }
+  button.on { background:var(--accent); border-color:var(--accent); color:#fff; }
+  .panel { margin-top:9px; padding:10px 11px; border-radius:9px; background:var(--card); border:1px solid var(--rule); }
+  .scenario { margin:0 0 7px; font-size:12.5px; line-height:1.4; }
+  .scenario b { color:var(--accent); }
+  table { width:100%; border-collapse:collapse; font:11.5px/1.4 Consolas,monospace; }
+  td { padding:3px 0; vertical-align:top; }
+  td:first-child { color:var(--muted); width:28%; }
+  @media (max-width:560px) { .frame { padding:12px; } .head { display:block; } .hint { text-align:left; margin-top:3px; } h3 { font-size:17px; } }
+</style>
+</head>
+<body>
+<div class="frame">
+  <div class="head">
+    <div><p class="eyebrow">Интеграция · отказ</p><h3>Что увидит пользователь</h3></div>
+    <div class="hint">выберите сбой</div>
+  </div>
+
+  <svg viewBox="0 0 680 196" role="img" aria-labelledby="fd-title fd-desc">
+    <title id="fd-title">Сайт, канал обмена и склад</title>
+    <desc id="fd-desc">Схема показывает, что происходит с заказом при сбое канала: сайт, канал и склад. Статус и сообщение пользователю меняются.</desc>
+    <g font-family="Consolas,monospace" text-anchor="middle">
+      <rect x="28" y="40" width="150" height="64" rx="9" fill="#FFFDF7" stroke="#2B2618"/>
+      <text x="103" y="65" font-size="13" font-weight="700" fill="#2B2618">Сайт</text>
+      <text x="103" y="83" font-size="9" fill="#6B6250">принимает заказ</text>
+
+      <rect id="fd-channel-box" x="222" y="40" width="236" height="64" rx="9" fill="#F6EEDC" stroke="#9A7300" stroke-width="1.8" stroke-dasharray="4 3"/>
+      <text x="340" y="64" font-size="11" font-weight="700" fill="#2B2618">канал обмена</text>
+      <text id="fd-channel" x="340" y="84" font-size="10" fill="#9A7300">таймаут</text>
+
+      <rect x="502" y="40" width="150" height="64" rx="9" fill="#FFFDF7" stroke="#2B2618"/>
+      <text x="577" y="65" font-size="13" font-weight="700" fill="#2B2618">Склад+</text>
+      <text x="577" y="83" font-size="9" fill="#6B6250">владелец заказа</text>
+
+      <line x1="178" y1="60" x2="218" y2="60" stroke="#6B6250" stroke-width="1.4" marker-end="url(#arw-fd)"/>
+      <line x1="458" y1="60" x2="498" y2="60" stroke="#6B6250" stroke-width="1.4" marker-end="url(#arw-fd)"/>
+      <line x1="218" y1="86" x2="178" y2="86" stroke="#9A7300" stroke-width="1.4" stroke-dasharray="3 3" marker-end="url(#arw-fd2)"/>
+
+      <rect x="222" y="126" width="236" height="34" rx="8" fill="#FFFDF7" stroke="#B9A36B"/>
+      <text id="fd-status" x="340" y="147" font-size="10" fill="#9A7300">ответ не пришёл</text>
+
+      <text x="28" y="146" font-size="9" fill="#6B6250">покупатель видит:</text>
+      <text id="fd-user" x="28" y="162" font-size="10" fill="#2B2618">заказ принят</text>
+      <text x="502" y="146" font-size="9" fill="#6B6250">склад:</text>
+      <text id="fd-stock" x="502" y="162" font-size="10" fill="#2B2618">заказ принят</text>
+    </g>
+    <text x="340" y="184" text-anchor="middle" font-family="Consolas,monospace" font-size="9" fill="#6B6250">отказ канала не должен превращаться в потерю заказа</text>
+    <defs>
+      <marker id="arw-fd" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#6B6250"/></marker>
+      <marker id="arw-fd2" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#9A7300"/></marker>
+    </defs>
+  </svg>
+
+  <div class="scenarios">
+    <button data-key="timeout" class="on">Таймаут после отправки</button>
+    <button data-key="e503">Склад отвечает 503</button>
+    <button data-key="duplicate">Повторная доставка</button>
+    <button data-key="stock">Файл остатков не пришёл</button>
+    <button data-key="queue">Очередь счетов недоступна</button>
+    <button data-key="customer">Справочник устарел</button>
+  </div>
+
+  <div class="panel">
+    <p class="scenario" id="fd-scenario"></p>
+    <table>
+      <tr><td>пользователь видит</td><td id="fd-p-user"></td></tr>
+      <tr><td>система делает</td><td id="fd-p-system"></td></tr>
+      <tr><td>где смотреть</td><td id="fd-p-look"></td></tr>
+      <tr><td>нельзя</td><td id="fd-p-never"></td></tr>
+    </table>
+  </div>
+</div>
+
+<script>
+(function () {
+  var data = {
+    timeout: { channel:'таймаут', status:'ответ не пришёл', user:'заказ принят', stock:'заказ принят', system:'заказ и сообщение сохранены в outbox, повтор по ключу', look:'outbox, order_number, возраст записи', never:'создавать второй заказ', title:'Таймаут после отправки' },
+    e503: { channel:'503', status:'временная недоступность', user:'заказ принят', stock:'заказ не принят', system:'пауза, предохранитель, повтор с разбросом', look:'код 503, Retry-After, число повторов', never:'повторять плотным циклом', title:'Склад отвечает 503' },
+    duplicate: { channel:'повтор', status:'сообщение пришло дважды', user:'заказ принят', stock:'один заказ', system:'идемпотентный приёмник, ключ сообщения', look:'таблица обработанных ключей', never:'создавать два заказа', title:'Повторная доставка' },
+    stock: { channel:'файл не пришёл', status:'данные устарели', user:'данные на 09:15', stock:'остатки не обновлены', system:'последний снимок, алерт администратору', look:'возраст файла, журнал обмена', never:'показывать ноль вместо остатка', title:'Файл остатков не пришёл' },
+    queue: { channel:'очередь недоступна', status:'счёт в очереди', user:'счёт в очереди', stock:'счёт не ушёл', system:'outbox, повтор, ручная выгрузка после порога', look:'глубина очереди, oldest pending', never:'терять счёт', title:'Очередь счетов недоступна' },
+    customer: { channel:'справочник устарел', status:'данные на вчера', user:'старые данные', stock:'заказы идут', system:'работа на прежнем справочнике, уведомление', look:'дата выгрузки, номер пакета', never:'блокировать заказы из-за справочника', title:'Справочник клиентов устарел' }
+  };
+  var current = 'timeout';
+  var buttons = document.querySelectorAll('button[data-key]');
+  var $ = function (id) { return document.getElementById(id); };
+
+  function apply() {
+    var d = data[current];
+    $('fd-channel').textContent = d.channel;
+    $('fd-status').textContent = d.status;
+    $('fd-user').textContent = d.user;
+    $('fd-stock').textContent = d.stock;
+    $('fd-scenario').innerHTML = '<b>' + d.title + '.</b> Канал ведёт себя не так, как в спокойном сценарии.';
+    $('fd-p-user').textContent = d.user;
+    $('fd-p-system').textContent = d.system;
+    $('fd-p-look').textContent = d.look;
+    $('fd-p-never').textContent = d.never;
+    $('fd-channel-box').setAttribute('stroke', d.status === 'данные устарели' || d.status === 'данные на вчера' ? '#8A6A00' : '#9A7300');
+  }
+
+  Array.prototype.forEach.call(buttons, function (b) {
+    b.addEventListener('click', function () {
+      current = b.getAttribute('data-key');
+      Array.prototype.forEach.call(buttons, function (x) { x.classList.toggle('on', x === b); });
+      apply();
+    });
+  });
+  apply();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Анатомия метрики</title>
+<style>
+  :root { --bg:#EDE5D2; --paper:#FBF6EA; --ink:#2B2A26; --muted:#6B6250; --accent:#9A7300; --soft:#F3EAD3; --rule:#D8CBB0; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .frame { background:var(--bg); border:1px solid var(--rule); border-radius:12px; padding:16px 16px 12px; }
+  .eyebrow { margin:0 0 6px; font:600 9px/1.3 Consolas,monospace; letter-spacing:.16em; text-transform:uppercase; color:var(--accent); }
+  svg { display:block; width:100%; height:auto; }
+  .note { margin:8px 2px 0; font:11px/1.5 Consolas,monospace; color:var(--muted); }
+</style>
+</head>
+<body>
+<div class="frame">
+  <p class="eyebrow">Метрики · устройство числа</p>
+  <svg viewBox="0 0 680 290" role="img" aria-labelledby="mcard-t mcard-d">
+    <title id="mcard-t">Из чего состоит метрика</title>
+    <desc id="mcard-d">Слева карточка метрики с формулой, источником, периодом, владельцем, базовой линией и порогом. Справа контрметрика и решение, которое принимают по этим числам.</desc>
+    <defs>
+      <marker id="mcard-arw" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+        <polygon points="0 0, 8 3, 0 6" fill="#9A7300"/>
+      </marker>
+    </defs>
+
+    <g font-family="'Segoe UI',system-ui,sans-serif">
+      <rect x="14" y="14" width="404" height="222" rx="10" fill="#FFFDF7" stroke="#9A7300" stroke-width="1.3"/>
+      <text x="30" y="36" font-family="Consolas,monospace" font-size="8.5" letter-spacing="1.4" fill="#9A7300">МЕТРИКА</text>
+      <text x="30" y="58" font-size="13.5" font-weight="600" fill="#2B2A26">время оформления заказа</text>
+
+      <g font-size="9.5" fill="#2B2A26">
+        <text x="30" y="88" fill="#6B6250">формула</text>
+        <text x="128" y="88">медиана от «создан» до «проведён»</text>
+        <text x="30" y="114" fill="#6B6250">источник</text>
+        <text x="128" y="114">журнал системы, 40 заказов</text>
+        <text x="30" y="140" fill="#6B6250">период</text>
+        <text x="128" y="140">4 недели, заказы на 3-7 строк</text>
+        <text x="30" y="166" fill="#6B6250">владелец</text>
+        <text x="128" y="166">коммерческий директор</text>
+        <text x="30" y="192" fill="#6B6250">базовая линия</text>
+        <text x="128" y="192">18 минут, февраль</text>
+        <text x="30" y="218" fill="#6B6250">порог</text>
+        <text x="128" y="218">7 минут, тревога при 9</text>
+      </g>
+
+      <rect x="432" y="14" width="234" height="104" rx="10" fill="#F3EAD3" stroke="#9A7300" stroke-width="1.2"/>
+      <text x="446" y="36" font-family="Consolas,monospace" font-size="8.5" letter-spacing="1.2" fill="#9A7300">КОНТРМЕТРИКА</text>
+      <text x="446" y="57" font-size="11.5" font-weight="600" fill="#2B2A26">ошибки комплектации</text>
+      <text x="446" y="75" font-size="9.5" fill="#2B2A26">2 процента, цель 2</text>
+      <text x="446" y="90" font-size="9.5" fill="#2B2A26">растёт, если ускорять</text>
+      <text x="446" y="104" font-size="9.5" fill="#2B2A26">приёмку</text>
+
+      <rect x="432" y="132" width="234" height="104" rx="10" fill="#FFFDF7" stroke="#D8CBB0"/>
+      <text x="446" y="154" font-family="Consolas,monospace" font-size="8.5" letter-spacing="1.2" fill="#6B6250">РЕШЕНИЕ</text>
+      <text x="446" y="176" font-size="10.5" fill="#2B2A26">принять запуск</text>
+      <text x="446" y="196" font-size="10.5" fill="#2B2A26">доработать</text>
+      <text x="446" y="216" font-size="10.5" fill="#2B2A26">перенести на месяц</text>
+
+      <path d="M418 110 L432 74" stroke="#9A7300" stroke-width="1.3" fill="none" stroke-dasharray="3 3" marker-end="url(#mcard-arw)"/>
+      <path d="M418 150 L432 182" stroke="#9A7300" stroke-width="1.3" fill="none" marker-end="url(#mcard-arw)"/>
+
+      <text x="14" y="262" font-size="9.5" fill="#2B2A26">Число становится метрикой, когда известны формула, источник, период, владелец, база и порог.</text>
+      <text x="14" y="280" font-size="9.5" fill="#6B6250">Контрметрика не даёт ускорить процесс ценой качества.</text>
+    </g>
+  </svg>
+  <p class="note">Одна и та же цифра «7,4 минуты» означает разное, если считать её по-разному: по всем заказам, по медиане или по трём вечерним.</p>
+</div>
+</body>
+</html>

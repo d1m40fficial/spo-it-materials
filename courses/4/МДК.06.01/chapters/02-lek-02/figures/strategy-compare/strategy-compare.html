@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Четыре стратегии внедрения на одной шкале</title>
+<style>
+  :root { --paper:#FAF7EF; --card:#FFFDF8; --ink:#2A2620; --muted:#6B6252; --rule:#E3D8C2; --accent:#9A7300; --soft:#EDE5D2; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .frame { background:var(--paper); border:1px solid var(--rule); border-radius:12px; padding:16px; }
+  .eyebrow { margin:0 0 6px; font:600 10px/1.2 Consolas,monospace; letter-spacing:.14em; text-transform:uppercase; color:var(--accent); }
+  svg { display:block; width:100%; height:auto; }
+  .row rect.hit { fill:transparent; stroke:transparent; }
+  .row.on rect.hit { fill:#EDE5D2; stroke:#9A7300; stroke-width:1.6; }
+  .row text { font-family:"Segoe UI",system-ui,sans-serif; }
+  .status { min-height:66px; margin-top:8px; padding:10px 12px; border-radius:9px; background:var(--soft); font-size:13px; line-height:1.45; }
+  .status b { color:var(--accent); }
+  .controls { display:flex; gap:6px; flex-wrap:wrap; margin-top:10px; }
+  button { font:600 11.5px/1.1 "Segoe UI",system-ui,sans-serif; padding:8px 9px; border-radius:8px; border:1px solid var(--rule); background:var(--card); color:var(--ink); cursor:pointer; }
+  button:hover { border-color:var(--accent); color:var(--accent); }
+  button.on { background:var(--accent); border-color:var(--accent); color:#fff; }
+  .note { margin:9px 2px 0; font:11.5px/1.5 "Segoe UI",system-ui,sans-serif; color:var(--muted); }
+  @media (max-width:560px) { .frame { padding:12px; } .status { font-size:12.5px; } }
+</style>
+</head>
+<body>
+<div class="frame">
+  <p class="eyebrow">Внедрение · стратегии</p>
+  <svg viewBox="0 0 680 322" role="img" aria-labelledby="sc-title sc-desc">
+    <title id="sc-title">Последовательная, параллельная, пилотная и поэтапная стратегии</title>
+    <desc id="sc-desc">Пять фаз перехода и две полосы: старая и новая система. Нажмите строку или кнопку, чтобы увидеть условия выбора и цену стратегии.</desc>
+
+    <g font-family="Segoe UI,system-ui,sans-serif" font-size="9.5" fill="#6B6252">
+      <text x="180" y="18">подготовка</text>
+      <text x="274" y="18">запуск</text>
+      <text x="368" y="18">стабилизация</text>
+      <text x="462" y="18">расширение</text>
+      <text x="556" y="18">работа</text>
+    </g>
+    <g stroke="#E3D8C2" stroke-width="1">
+      <line x1="180" y1="24" x2="180" y2="252"/>
+      <line x1="274" y1="24" x2="274" y2="252"/>
+      <line x1="368" y1="24" x2="368" y2="252"/>
+      <line x1="462" y1="24" x2="462" y2="252"/>
+      <line x1="556" y1="24" x2="556" y2="252"/>
+      <line x1="650" y1="24" x2="650" y2="252"/>
+    </g>
+
+    <g class="row" data-k="seq">
+      <rect class="hit" x="12" y="28" width="646" height="52" rx="7"/>
+      <text x="20" y="49" font-size="12.5" font-weight="700" fill="#2A2620">одна дата</text>
+      <text x="20" y="66" font-size="9.5" fill="#6B6252">все и сразу</text>
+      <rect x="180" y="34" width="188" height="12" rx="3" fill="#CFC4AE"/>
+      <text x="190" y="44" font-size="8.5" fill="#2A2620">старая</text>
+      <rect x="368" y="50" width="282" height="12" rx="3" fill="#9A7300"/>
+      <text x="378" y="60" font-size="8.5" fill="#FFFFFF">новая</text>
+    </g>
+
+    <g class="row" data-k="par">
+      <rect class="hit" x="12" y="84" width="646" height="52" rx="7"/>
+      <text x="20" y="105" font-size="12.5" font-weight="700" fill="#2A2620">параллельно</text>
+      <text x="20" y="122" font-size="9.5" fill="#6B6252">две системы</text>
+      <rect x="180" y="90" width="282" height="12" rx="3" fill="#CFC4AE"/>
+      <text x="190" y="100" font-size="8.5" fill="#2A2620">старая</text>
+      <rect x="274" y="106" width="376" height="12" rx="3" fill="#9A7300"/>
+      <text x="284" y="116" font-size="8.5" fill="#FFFFFF">новая</text>
+      <rect x="274" y="90" width="188" height="12" rx="3" fill="none" stroke="#9A7300" stroke-dasharray="3 2"/>
+    </g>
+
+    <g class="row" data-k="pilot">
+      <rect class="hit" x="12" y="140" width="646" height="52" rx="7"/>
+      <text x="20" y="161" font-size="12.5" font-weight="700" fill="#2A2620">пилот</text>
+      <text x="20" y="178" font-size="9.5" fill="#6B6252">одна площадка</text>
+      <rect x="180" y="146" width="470" height="12" rx="3" fill="#CFC4AE"/>
+      <text x="190" y="156" font-size="8.5" fill="#2A2620">остальные площадки</text>
+      <rect x="368" y="162" width="94" height="12" rx="3" fill="#B88900"/>
+      <text x="378" y="172" font-size="8.5" fill="#FFFFFF">пилот</text>
+      <rect x="462" y="162" width="188" height="12" rx="3" fill="#9A7300"/>
+      <text x="472" y="172" font-size="8.5" fill="#FFFFFF">расширение</text>
+    </g>
+
+    <g class="row" data-k="phase">
+      <rect class="hit" x="12" y="196" width="646" height="52" rx="7"/>
+      <text x="20" y="217" font-size="12.5" font-weight="700" fill="#2A2620">поэтапно</text>
+      <text x="20" y="234" font-size="9.5" fill="#6B6252">модули или площадки</text>
+      <rect x="180" y="202" width="282" height="12" rx="3" fill="#CFC4AE"/>
+      <text x="190" y="212" font-size="8.5" fill="#2A2620">старая</text>
+      <rect x="368" y="218" width="94" height="12" rx="3" fill="#9A7300"/>
+      <rect x="462" y="218" width="94" height="12" rx="3" fill="#B88900"/>
+      <rect x="556" y="218" width="94" height="12" rx="3" fill="#D6A520"/>
+      <text x="378" y="228" font-size="8.5" fill="#FFFFFF">этап 1</text>
+      <text x="472" y="228" font-size="8.5" fill="#FFFFFF">этап 2</text>
+      <text x="566" y="228" font-size="8.5" fill="#2A2620">этап 3</text>
+    </g>
+
+    <text x="16" y="266" font-family="Consolas,monospace" font-size="9" fill="#6B6252">СХЕМА КАЧЕСТВЕННАЯ: ДЛИНА ПОЛОС ПОКАЗЫВАЕТ ПОРЯДОК, А НЕ КАЛЕНДАРНЫЕ СРОКИ</text>
+    <text x="16" y="284" font-family="Segoe UI,system-ui,sans-serif" font-size="10.5" fill="#6B6252">Серая полоса: старая работа. Золотая: новая система. Штрих: период, когда две системы работают вместе.</text>
+    <text x="16" y="302" font-family="Segoe UI,system-ui,sans-serif" font-size="10.5" fill="#6B6252">У пилота новая система сначала работает на одной площадке, затем расширяется на остальные.</text>
+  </svg>
+  <div class="status" id="sc-status"></div>
+  <div class="controls" id="sc-buttons">
+    <button data-k="seq" class="on">Одна дата</button>
+    <button data-k="par">Параллельно</button>
+    <button data-k="pilot">Пилот</button>
+    <button data-k="phase">Поэтапно</button>
+  </div>
+  <p class="note">Нажмите строку или кнопку. Обратите внимание не на название, а на участок, где две системы пересекаются.</p>
+</div>
+<script>
+(function () {
+  var data = {
+    seq: '<b>Одна дата.</b> Быстро и дешево, пока всё идёт по плану. Ошибка проявляется сразу у всех, откат почти невозможен. Уместна при одной площадке, типовых процессах и проверенной системе.',
+    par: '<b>Параллельно.</b> Надёжно, потому что результат сверяется ежедневно. Платите временем людей и рискуете привыканием к двойному вводу. Нужна дата окончания и критерий совпадения.',
+    pilot: '<b>Пилот.</b> Риск ограничен площадкой. Площадка должна быть типичной, сотрудники обычными, а критерии выхода заданы до старта. Иначе успех не переносится на остальных.',
+    phase: '<b>Поэтапно.</b> Нагрузка распределена, ошибки учитываются на следующем шаге. Требует целостной модели данных и временных связей между частями. Подходит для похожих площадок.'
+  };
+  var rows = document.querySelectorAll('.row');
+  var buttons = document.querySelectorAll('#sc-buttons button');
+  var status = document.getElementById('sc-status');
+
+  function apply(key) {
+    rows.forEach(function (r) { r.classList.toggle('on', r.dataset.k === key); });
+    buttons.forEach(function (b) { b.classList.toggle('on', b.dataset.k === key); });
+    status.innerHTML = data[key];
+  }
+  rows.forEach(function (r) { r.addEventListener('click', function () { apply(r.dataset.k); }); });
+  buttons.forEach(function (b) { b.addEventListener('click', function () { apply(b.dataset.k); }); });
+  apply('seq');
+})();
+</script>
+</body>
+</html>

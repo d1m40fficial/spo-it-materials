@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Четыре вида разрывов</title>
+<style>
+  :root { --paper:#EDE5D2; --card:#FFFDF7; --ink:#2B2519; --muted:#6E6350; --rule:#D6C7A8; --accent:#9A7300; --soft:#F3EAD3; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .demo { background:var(--paper); border:1px solid var(--rule); border-radius:12px; padding:16px; }
+  .head { display:flex; justify-content:space-between; align-items:flex-end; gap:14px; padding-bottom:8px; border-bottom:1px solid var(--rule); }
+  .eyebrow { margin:0 0 3px; font:600 9.5px/1.2 Consolas,monospace; letter-spacing:.14em; text-transform:uppercase; color:var(--accent); }
+  h3 { margin:0; font-size:18px; line-height:1.2; }
+  .hint { font:10.5px/1.3 Consolas,monospace; color:var(--muted); white-space:nowrap; }
+  svg { display:block; width:100%; height:auto; margin-top:8px; }
+  .card { cursor:pointer; }
+  .card rect { fill:#FFFDF7; stroke:#C9B996; stroke-width:1.3; transition:fill .2s, stroke .2s; }
+  .card.on rect { fill:var(--soft); stroke:var(--accent); stroke-width:2; }
+  .card text { text-anchor:middle; }
+  .card .big { font-family:Consolas,monospace; font-size:11px; fill:#6E6350; }
+  .card.on .big { fill:var(--accent); }
+  .card .t { font-size:11.5px; fill:#2B2519; }
+  .card .s { font-size:9.5px; fill:#6E6350; }
+  .status { min-height:74px; margin-top:6px; padding:10px 12px; border-radius:8px; background:var(--soft); font-size:12.5px; line-height:1.45; }
+  .status b { color:var(--accent); }
+  .row { display:block; }
+  .controls { display:flex; gap:6px; flex-wrap:wrap; margin-top:9px; }
+  button { font:600 11.5px/1 "Segoe UI",system-ui,sans-serif; padding:8px 10px; border-radius:8px; border:1px solid var(--rule); background:var(--card); color:var(--ink); cursor:pointer; }
+  button:hover { border-color:var(--accent); color:var(--accent); }
+  button.on { background:var(--accent); border-color:var(--accent); color:#fff; }
+  @media (max-width:560px) { .demo { padding:12px; } .hint { display:none; } }
+</style>
+</head>
+<body>
+<div class="demo">
+  <div class="head">
+    <div><p class="eyebrow">Gap-анализ · виды разрывов</p><h3>Чего именно не хватает</h3></div>
+    <div class="hint">выберите вид разрыва</div>
+  </div>
+  <svg viewBox="0 0 680 224" role="img" aria-labelledby="gt-title gt-desc">
+    <title id="gt-title">Четыре вида разрывов между текущим и целевым состоянием</title>
+    <desc id="gt-desc">Функциональный, данных, регламентный и компетенционный разрыв. Нажатие на карточку показывает пример и способ закрытия.</desc>
+
+    <text x="16" y="22" font-family="Consolas,monospace" font-size="9" fill="#6E6350">КАК ЕСТЬ</text>
+    <line x1="92" y1="18" x2="664" y2="18" stroke="#C9B996" stroke-dasharray="4 4"/>
+    <text x="560" y="12" font-family="Consolas,monospace" font-size="9" fill="#6E6350">КАК ДОЛЖНО БЫТЬ</text>
+
+    <g class="card" data-k="func">
+      <rect x="16" y="34" width="152" height="118" rx="9"/>
+      <text x="92" y="58" class="big">ФУНКЦИИ</text>
+      <text x="92" y="80" class="t">действия нет</text>
+      <text x="92" y="98" class="s">нельзя зарезервировать</text>
+      <text x="92" y="114" class="s">товар под заказ</text>
+      <text x="92" y="138" class="s">закрывается настройкой</text>
+    </g>
+    <g class="card" data-k="data">
+      <rect x="184" y="34" width="152" height="118" rx="9"/>
+      <text x="260" y="58" class="big">ДАННЫЕ</text>
+      <text x="260" y="80" class="t">сведений нет</text>
+      <text x="260" y="98" class="s">17 дублей клиентов,</text>
+      <text x="260" y="114" class="s">остатки за вчера</text>
+      <text x="260" y="138" class="s">закрывается очисткой</text>
+    </g>
+    <g class="card" data-k="rule">
+      <rect x="352" y="34" width="152" height="118" rx="9"/>
+      <text x="428" y="58" class="big">РЕГЛАМЕНТ</text>
+      <text x="428" y="80" class="t">правила нет</text>
+      <text x="428" y="98" class="s">приёмка тянется</text>
+      <text x="428" y="114" class="s">до следующей смены</text>
+      <text x="428" y="138" class="s">закрывается договорённостью</text>
+    </g>
+    <g class="card" data-k="skill">
+      <rect x="520" y="34" width="144" height="118" rx="9"/>
+      <text x="592" y="58" class="big">КОМПЕТЕНЦИИ</text>
+      <text x="592" y="80" class="t">не умеют</text>
+      <text x="592" y="98" class="s">кладовщик не</text>
+      <text x="592" y="114" class="s">работал с резервом</text>
+      <text x="592" y="138" class="s">закрывается обучением</text>
+    </g>
+
+    <text x="16" y="182" font-family="Consolas,monospace" font-size="8.5" fill="#9A7300">ОДИН РАЗРЫВ</text>
+    <text x="112" y="182" font-size="10.5" fill="#2B2519">редко закрывается одним действием: функция без данных и правила не даёт результата</text>
+    <text x="16" y="206" font-family="Consolas,monospace" font-size="9" fill="#6E6350">Разрыв отвечает на вопрос «чего не хватает», а не «кто виноват».</text>
+  </svg>
+  <div class="status" id="status"></div>
+  <div class="controls">
+    <button data-k="func" class="on">Функции</button>
+    <button data-k="data">Данные</button>
+    <button data-k="rule">Регламент</button>
+    <button data-k="skill">Компетенции</button>
+  </div>
+</div>
+<script>
+(function () {
+  var data = {
+    func: '<span class="row"><b>Функциональный разрыв.</b> Нужного действия в системе нет. Пример: остаток нельзя зарезервировать, поэтому сверка идёт вручную. Закрывается настройкой или доработкой, а проверяется сценарием с резервом.</span>',
+    data: '<span class="row"><b>Разрыв в данных.</b> Сведения неполны, устарели или противоречат друг другу. Пример: 17 дублей клиентов и остатки во вчерашнем файле. Закрывается очисткой, правилом уникальности и сверкой, а не новой кнопкой.</span>',
+    rule: '<span class="row"><b>Регламентный разрыв.</b> Правило работы не описано или не выполняется. Пример: приёмка закрывается на следующий день, поэтому остаток всегда вчерашний. Закрывается регламентом, сроком и ответственным.</span>',
+    skill: '<span class="row"><b>Компетенционный разрыв.</b> Люди не умеют работать по-новому. Пример: кладовщик не пользовался резервом и обходит его вручную. Закрывается обучением, памяткой и проверкой на рабочем месте.</span>'
+  };
+  var cards = document.querySelectorAll('.card');
+  var buttons = document.querySelectorAll('button[data-k]');
+  var status = document.getElementById('status');
+  function apply(k) {
+    cards.forEach(function (c) { c.classList.toggle('on', c.dataset.k === k); });
+    buttons.forEach(function (b) { b.classList.toggle('on', b.dataset.k === k); });
+    status.innerHTML = data[k];
+  }
+  cards.forEach(function (c) { c.addEventListener('click', function () { apply(c.dataset.k); }); });
+  buttons.forEach(function (b) { b.addEventListener('click', function () { apply(b.dataset.k); }); });
+  apply('func');
+})();
+</script>
+</body>
+</html>

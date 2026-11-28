@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Четыре уровня оценки обучения</title>
+<style>
+  :root { --paper:#EDE5D2; --card:#FBF7EC; --ink:#2A2618; --muted:#6F6449; --accent:#9A7300; --rule:#D8CCB2; --soft:#F3EAD6; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .demo { background:var(--paper); border:1px solid var(--rule); border-radius:14px; padding:14px; }
+  .head { display:flex; justify-content:space-between; align-items:flex-end; gap:12px; padding-bottom:8px; border-bottom:1px solid var(--rule); }
+  .eyebrow { margin:0 0 4px; font:600 10px/1.2 Consolas,monospace; letter-spacing:.12em; text-transform:uppercase; color:var(--accent); }
+  h3 { margin:0; font-size:19px; line-height:1.2; }
+  .hint { font:11px/1.4 Consolas,monospace; color:var(--muted); white-space:nowrap; }
+  svg { display:block; width:100%; height:auto; margin-top:6px; }
+  .lv rect { fill:var(--card); stroke:var(--rule); stroke-width:1.2; transition:fill .2s, stroke .2s; cursor:pointer; }
+  .lv.on rect { fill:var(--soft); stroke:var(--accent); stroke-width:2; }
+  .lv text { font-family:"Segoe UI",system-ui,sans-serif; fill:var(--ink); text-anchor:middle; pointer-events:none; }
+  .lv .name { font-size:13px; font-weight:600; }
+  .lv .scope { font-size:11px; fill:var(--muted); }
+  .status { min-height:96px; margin-top:8px; padding:10px 12px; border-radius:9px; background:var(--soft); font-size:13px; line-height:1.45; }
+  .status b { color:var(--accent); }
+  .status span { display:block; margin-top:3px; }
+  .controls { display:flex; gap:6px; flex-wrap:wrap; margin-top:8px; }
+  button { font:600 11.5px/1 "Segoe UI",system-ui,sans-serif; padding:8px 9px; border-radius:9px; border:1px solid var(--rule); background:var(--card); color:var(--ink); cursor:pointer; }
+  button:hover { border-color:var(--accent); color:var(--accent); }
+  button.on { background:var(--accent); border-color:var(--accent); color:#fff; }
+  @media (max-width:560px) { .demo { padding:11px; } .hint { display:none; } }
+</style>
+</head>
+<body>
+<div class="demo">
+  <div class="head">
+    <div><p class="eyebrow">Обучение · оценка</p><h3>Что измеряет уровень</h3></div>
+    <div class="hint">нажмите уровень</div>
+  </div>
+  <svg viewBox="0 0 680 210" role="img" aria-label="Четыре уровня оценки обучения по Киркпатрику">
+    <g class="lv" data-k="reaction">
+      <rect x="18" y="34" width="150" height="118" rx="8"/>
+      <text x="93" y="66" class="name">1. Реакция</text>
+      <text x="93" y="88" class="scope">понравилось?</text>
+      <text x="93" y="108" class="scope">анкета</text>
+      <text x="93" y="128" class="scope">дёшево</text>
+    </g>
+    <g class="lv" data-k="learning">
+      <rect x="180" y="34" width="150" height="118" rx="8"/>
+      <text x="255" y="66" class="name">2. Усвоение</text>
+      <text x="255" y="88" class="scope">знает и умеет?</text>
+      <text x="255" y="108" class="scope">задание</text>
+      <text x="255" y="128" class="scope">наблюдение</text>
+    </g>
+    <g class="lv" data-k="behavior">
+      <rect x="342" y="34" width="150" height="118" rx="8"/>
+      <text x="417" y="66" class="name">3. Поведение</text>
+      <text x="417" y="88" class="scope">делает на работе?</text>
+      <text x="417" y="108" class="scope">журнал</text>
+      <text x="417" y="128" class="scope">первая неделя</text>
+    </g>
+    <g class="lv" data-k="results">
+      <rect x="504" y="34" width="158" height="118" rx="8"/>
+      <text x="583" y="66" class="name">4. Результат</text>
+      <text x="583" y="88" class="scope">что изменилось?</text>
+      <text x="583" y="108" class="scope">время, ошибки</text>
+      <text x="583" y="128" class="scope">метрики проекта</text>
+    </g>
+    <text x="340" y="182" text-anchor="middle" font-family="Consolas,monospace" font-size="11" fill="#6F6449">уровни не подменяют друг друга: анкета не доказывает навык</text>
+    <text x="340" y="200" text-anchor="middle" font-family="Consolas,monospace" font-size="10.5" fill="#9A7300">САМЫЙ ЧЕСТНЫЙ УРОВЕНЬ ДЛЯ ВНЕДРЕНИЯ ЭТО ПОВЕДЕНИЕ</text>
+  </svg>
+  <div class="status" id="status" aria-live="polite"></div>
+  <div class="controls">
+    <button data-k="reaction" class="on">Реакция</button>
+    <button data-k="learning">Усвоение</button>
+    <button data-k="behavior">Поведение</button>
+    <button data-k="results">Результат</button>
+  </div>
+</div>
+<script>
+(function () {
+  var data = {
+    reaction: '<b>1. Реакция.</b> Вопрос: было ли занятие полезным и понятным.<span>Доказательство: короткая анкета после занятия. Ошибка: высокую оценку «всё понравилось» принимают за навык.</span>',
+    learning: '<b>2. Усвоение.</b> Вопрос: изменились ли знания и умение.<span>Доказательство: практическое задание, наблюдение, проверка по чек-листу. Ошибка: тест на узнавание вместо выполнения операции.</span>',
+    behavior: '<b>3. Поведение.</b> Вопрос: делает ли человек так на работе через неделю.<span>Доказательство: журнал операций, наблюдение, обратная связь руководителя. Ошибка: замер сразу после занятия, пока действует подсказка.</span>',
+    results: '<b>4. Результат.</b> Вопрос: что изменилось в работе.<span>Доказательство: время операции, доля ошибок, число заказов в системе. Ошибка: приписать обучению эффект другого изменения.</span>'
+  };
+  var cols = document.querySelectorAll('.lv');
+  var buttons = document.querySelectorAll('button[data-k]');
+  var status = document.getElementById('status');
+  function apply(key) {
+    cols.forEach(function (c) { c.classList.toggle('on', c.dataset.k === key); });
+    buttons.forEach(function (b) { b.classList.toggle('on', b.dataset.k === key); });
+    status.innerHTML = data[key];
+  }
+  cols.forEach(function (c) { c.addEventListener('click', function () { apply(c.dataset.k); }); });
+  buttons.forEach(function (b) { b.addEventListener('click', function () { apply(b.dataset.k); }); });
+  apply('reaction');
+})();
+</script>
+</body>
+</html>

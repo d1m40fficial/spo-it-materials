@@ -299,6 +299,11 @@ a { color: var(--accent); text-underline-offset: 3px; }
 .figure.pending { border: 1.5px dashed var(--rule); border-radius: var(--radius); padding: 18px 20px; background: var(--card); margin: 30px 0; }
 .figure.pending .fig-no { font: 600 11px var(--font-mono); color: var(--accent); letter-spacing: .06em; text-transform: uppercase; }
 .figure.pending p { margin: 6px 0 0; color: var(--ink-2); font-size: 14.5px; }
+.video-figure { margin: 34px -8px; }
+.video-frame { border-radius: var(--radius); overflow: hidden; border: 1px solid var(--rule); background: #000; box-shadow: 0 24px 50px rgba(20, 18, 12, .12); }
+.video-frame video { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; background: #000; }
+.video-figure figcaption { display: flex; gap: 10px; align-items: baseline; font-size: 14px; color: var(--ink-2); padding: 10px 12px 0; }
+.video-figure figcaption .fig-no { flex: none; font: 600 11px var(--font-mono); color: var(--accent); letter-spacing: .06em; text-transform: uppercase; }
 
 .pager { display: flex; justify-content: space-between; gap: 12px; margin-top: 48px; padding-top: 18px; border-top: 1px solid var(--rule); font-size: 14px; }
 .pager a { text-decoration: none; color: var(--ink); max-width: 48%; }
@@ -888,7 +893,7 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 <canvas class="shader-bg" width="820" height="300" aria-hidden="true" style="background:linear-gradient(135deg,#08090D,#9A7300 58%,#08090D)"></canvas>
 <div class="badges"><span class="pill dark">Занятие 3</span><span class="pill">Внедрение информационных систем</span></div>
 <div class="hero-panel"><h1>Обследование организации</h1><p class="dek">Обследование даёт факты о текущей работе, на которых строятся требования и решения проекта.</p></div>
-<div class="glyph" aria-hidden="true">Л3</div></header><section class="outcomes"><b>После этого занятия вы сможете</b><ul><li>Подбирать метод обследования под тип сведений и доступное время</li><li>Отличать факты от мнений при сборе сведений</li><li>Составлять вопросник для интервью с сотрудником организации</li></ul></section><nav class="toc"><b>Содержание занятия</b><ol><li><a href="#с-чего-начинается-обследование">С чего начинается обследование</a></li><li><a href="#интервью">Интервью</a></li><li><a href="#анкетирование">Анкетирование</a></li><li><a href="#наблюдение">Наблюдение</a></li><li><a href="#анализ-документов">Анализ документов</a></li><li><a href="#факты-мнения-и-проверка-источников">Факты, мнения и проверка источников</a></li><li><a href="#план-обследования">План обследования</a></li><li><a href="#карта-процессов">Карта процессов</a></li><li><a href="#отчёт-об-обследовании">Отчёт об обследовании</a></li><li><a href="#ошибки-обследования">Ошибки обследования</a></li><li><a href="#итоги">Итоги</a></li></ol></nav><article class="prose"><h2 id="с-чего-начинается-обследование"><span class="num">01</span>С чего начинается обследование</h2>
+<div class="glyph" aria-hidden="true">Л3</div></header><section class="outcomes"><b>После этого занятия вы сможете</b><ul><li>Подбирать метод обследования под тип сведений и доступное время</li><li>Отличать факты от мнений при сборе сведений</li><li>Составлять вопросник для интервью с сотрудником организации</li><li>Планировать выборку и проверять вывод по нескольким источникам</li><li>Оформлять отчёт об обследовании с подтверждениями и числами</li></ul></section><nav class="toc"><b>Содержание занятия</b><ol><li><a href="#с-чего-начинается-обследование">С чего начинается обследование</a></li><li><a href="#как-выбрать-метод">Как выбрать метод</a></li><li><a href="#цикл-обследования">Цикл обследования</a></li><li><a href="#план-обследования">План обследования</a></li><li><a href="#интервью">Интервью</a></li><li><a href="#анкетирование">Анкетирование</a></li><li><a href="#наблюдение">Наблюдение</a></li><li><a href="#анализ-документов-и-статистики">Анализ документов и статистики</a></li><li><a href="#факты-мнения-и-проверка-источников">Факты, мнения и проверка источников</a></li><li><a href="#карта-процессов-и-отчёт">Карта процессов и отчёт</a></li><li><a href="#реальные-обследования-которые-не-состоялись">Реальные обследования, которые не состоялись</a></li><li><a href="#ошибки-обследования">Ошибки обследования</a></li><li><a href="#итоги">Итоги</a></li><li><a href="#источники">Источники</a></li></ol></nav><article class="prose"><h2 id="с-чего-начинается-обследование"><span class="num">01</span>С чего начинается обследование</h2>
 <p>Команда внедрения приезжает в «Северный склад» впервые. Директор проводит её по офису, показывает стеллажи, говорит: «У нас всё просто, заказы принимают менеджеры, склад собирает, бухгалтерия выставляет счета». Через два часа выясняется, что менеджеры принимают заказы по-разному, часть клиентов закреплена за конкретным сотрудником, а остатки в четырёх файлах Excel обновляются в разное время.</p>
 <p>Обследование нужно именно для того, чтобы увидеть эту разницу между официальным описанием и реальной работой. <strong>Обследование это сбор и проверка сведений о том, как организация работает сейчас, какие документы и данные при этом используются и где возникают потери.</strong> Его результат становится основой требований, плана внедрения и критериев приёмки.</p>
 <p>Собирать всё подряд бессмысленно: отчёт на двести страниц никто не прочитает, а время сотрудников стоит дорого. Обследование начинается с вопроса, какое решение предстоит принять. Если нужно понять, почему заказ оформляется восемнадцать минут, то и сведения нужны о шагах заказа, а не о корпоративной культуре компании. Если нужно оценить объём миграции, то важны количество записей, дубли и качество справочников.</p>
@@ -929,173 +934,24 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 </tbody>
 </table>
 <p>Пять методов закрывают эти задачи: интервью, анкетирование, наблюдение, анализ документов и анализ статистики. У каждого своя цена и своя область применения.</p>
-<h2 id="интервью"><span class="num">02</span>Интервью</h2>
-<p>Интервью даёт то, чего нет в документах: логику действий и объяснение причин. Менеджер может рассказать, что перед оформлением заказа он звонит на склад, потому что в файле остатки вчерашние. В накладной этого не видно, а в разговоре видно сразу.</p>
-<p>Интервью бывает трёх видов. Структурированное идёт по заранее составленному списку вопросов, ответы легко сравнивать. Полуструктурированное имеет план, но позволяет углубиться в неожиданную деталь. Свободное похоже на разговор без плана и годится для первого знакомства с руководителем, но плохо подходит для сбора фактов.</p>
-<p>Для внедрения чаще всего используют полуструктурированное интервью. План готовят заранее: цель разговора, кто участвует, какие темы нужно закрыть, сколько времени есть. Вопросы делятся на три группы.</p>
-<p><strong>Открытые</strong> приглашают рассказать: «Опишите, что происходит от звонка клиента до отгрузки». <strong>Закрытые</strong> уточняют факт: «Сколько заказов в день вы оформляете?». <strong>Уточняющие</strong> проверяют деталь: «Что вы делаете, если товара не хватает?». Хороший план чередует открытые и уточняющие вопросы, а закрытые оставляет для чисел.</p>
-<table>
-<thead>
-<tr>
-<th>Плохой вопрос</th>
-<th>Почему плох</th>
-<th>Рабочий вариант</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Вы же проверяете остатки в Excel?</td>
-<td>подсказывает ответ</td>
-<td>Как вы узнаёте, есть ли товар на складе?</td>
-</tr>
-<tr>
-<td>Почему вы так медленно работаете?</td>
-<td>оценивает человека</td>
-<td>Какие шаги занимают больше всего времени?</td>
-</tr>
-<tr>
-<td>Вам нравится новая система?</td>
-<td>мнение вместо факта</td>
-<td>Что изменится в вашей работе после запуска?</td>
-</tr>
-<tr>
-<td>Сколько времени занимает заказ?</td>
-<td>ответ по памяти</td>
-<td>Покажите, как оформили последний заказ</td>
-</tr>
-</tbody>
-</table>
-<p>Последний вопрос особенно полезен. Человек плохо помнит длительность операций, но хорошо помнит последний случай. Если попросить показать конкретный заказ, появятся числа, названия документов и обходные пути, о которых сотрудник не стал бы рассказывать в общем разговоре.</p>
-<p>Записывать интервью лучше вдвоём: один ведёт разговор, второй фиксирует факты, числа и цитаты. Запись на диктофон удобна, но требует согласия собеседника. Протокол интервью содержит дату, участников, вопросы и ответы в сжатом виде, а также список того, что нужно проверить другими методами.</p>
-<div class="gate-step" data-gate>
-<p class="gate-action"><button type="button" class="gate-btn" aria-expanded="false"><span class="gate-q" aria-hidden="true">?</span><span>Почему разговор только с директором не заменяет интервью с кладовщиком?</span></button></p>
-<div class="gate-content" hidden><h2 id="анкетирование"><span class="num">03</span>Анкетирование</h2>
-<p>Анкета нужна, когда респондентов много и вопросы одинаковые. В «Северном складе» сорок менеджеров по продажам в четырёх городах. Провести с каждым интервью значит потратить недели, а задать всем двенадцать одинаковых вопросов можно за день.</p>
-<p>Анкета строится из закрытых вопросов со шкалой и нескольких открытых. Закрытые вопросы дают сравнимую картину: «Сколько заказов в день вы оформляете: до 5, от 5 до 15, больше 15». Открытые добавляют детали: «Опишите случай, когда заказ пришлось переделывать». Шкала должна быть понятной: варианты не пересекаются и покрывают все возможные ответы.</p>
-<p>Главная слабость анкеты в том, что её можно не заполнить. Из сорока разосланных форм вернётся двадцать пять, и это будут не случайные люди, а те, у кого есть время и интерес. Если отвечали только недовольные, картина исказится. Поэтому анкету дополняют напоминанием, раздают на совещании или заполняют вместе с группой, а долю возврата указывают в отчёте.</p>
-<table>
-<thead>
-<tr>
-<th>Метод</th>
-<th>Что даёт</th>
-<th>Ограничение</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Интервью</td>
-<td>причины, логику, скрытые шаги</td>
-<td>дорого по времени, мало людей</td>
-</tr>
-<tr>
-<td>Анкета</td>
-<td>сравнимую картину по многим людям</td>
-<td>низкая доля возврата, нет уточнений</td>
-</tr>
-<tr>
-<td>Наблюдение</td>
-<td>фактические действия и время</td>
-<td>наблюдатель влияет на поведение</td>
-</tr>
-<tr>
-<td>Документы</td>
-<td>официальные правила и следы операций</td>
-<td>не показывают обходные пути</td>
-</tr>
-<tr>
-<td>Статистика</td>
-<td>объёмы, частоты, динамику</td>
-<td>зависит от качества учёта</td>
-</tr>
-</tbody>
-</table>
-<h2 id="наблюдение"><span class="num">04</span>Наблюдение</h2>
-<p>Наблюдение показывает, что люди делают на самом деле. Менеджер говорит, что проверяет остатки в системе, а наблюдение показывает, что он открывает три файла Excel и звонит на склад. Это не обман, а привычка, о которой человек не задумывается.</p>
-<p>Наблюдение бывает открытым и скрытым. Скрытое в офисе трудно организовать и этически сомнительно, поэтому используют открытое: сотрудника предупреждают, объясняют цель и просят разрешения сесть рядом. Наблюдатель не вмешивается, не подсказывает и не оценивает, он фиксирует шаги, время и документы.</p>
-<p>Полезный приём называется хронометраж. Наблюдатель засекает длительность каждого шага операции на нескольких примерах. Для «Северного склада» замеряют десять заказов в течение дня. Результат раскладывается по этапам.</p>
-<table>
-<thead>
-<tr>
-<th>Этап заказа</th>
-<th>Среднее время</th>
-<th>Что происходит</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>приём заявки</td>
-<td>4 минуты</td>
-<td>звонок или письмо, уточнение позиций</td>
-</tr>
-<tr>
-<td>проверка остатков</td>
-<td>9 минут</td>
-<td>сверка четырёх файлов и звонок на склад</td>
-</tr>
-<tr>
-<td>оформление</td>
-<td>3 минуты</td>
-<td>заполнение формы и расчёт скидки</td>
-</tr>
-<tr>
-<td>согласование</td>
-<td>2 минуты</td>
-<td>подтверждение у коммерческого директора</td>
-</tr>
-<tr>
-<td>итого</td>
-<td>18 минут</td>
-<td>цель проекта 7 минут</td>
-</tr>
-</tbody>
-</table>
-<p>Такая таблица сразу показывает, где искать улучшение. Сокращать приём заявки бессмысленно, он занимает четыре минуты из восемнадцати. Главный резерв в проверке остатков: девять минут ручной сверки исчезают, когда остатки обновляются в реальном времени.</p>
-<p>У наблюдения есть искажение, которое называют эффектом наблюдателя. Люди работают аккуратнее, когда на них смотрят. Поэтому одного наблюдения мало: его сравнивают с документами и статистикой.</p></div>
-</div>
+<h2 id="как-выбрать-метод"><span class="num">02</span>Как выбрать метод</h2>
+<p>Метод выбирают не по привычке команды, а по четырём признакам. <strong>Тип сведения</strong>: нужны причины, числа, правила или фактические действия. <strong>Число людей</strong>: поговорить с тремя или опросить сорок. <strong>Цена ошибки</strong>: если вывод повлияет на критичный процесс, нужен второй источник. <strong>Доступное время</strong>: час на интервью или неделя на анкету.</p>
+<p>Из этих признаков складывается простая логика. Причины и скрытые шаги даёт интервью. Массовую картину даёт анкета. Фактическую длительность и отклонения даёт наблюдение. Официальные правила и следы операций дают документы. Масштаб и динамику даёт статистика. Ни один метод не отвечает сразу на все вопросы, поэтому план почти всегда комбинированный.</p>
+<p>Для «Северного склада» комбинация выглядит так. Сначала интервью с коммерческим директором и заведующим складом: они задают границы процесса и называют ограничения. Затем интервью с тремя менеджерами и двумя кладовщиками: они показывают, как работают на самом деле. Потом наблюдение за десятью заказами и хронометраж: появляются минуты по этапам. Анкета для сорока менеджеров проверяет, насколько типичны найденные отклонения. Документы и выгрузки дают объём заказов, долю возвратов и число дублей в справочниках.</p>
+<p>Такой набор не является обязательным шаблоном. В небольшом проекте можно обойтись интервью, наблюдением и выгрузкой. В крупном добавляются фокус-группы, анализ журналов и проверка данных. Важно не количество методов, а покрытие решений: для каждого вывода должно быть понятно, откуда он взялся и чем подтверждён.</p>
+<figure class="figure" data-fig="method-fit" data-one="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"><iframe title="Figure 1: method-fit" scrolling="no"></iframe><figcaption>Пять методов и их свойства. Нажмите метод, чтобы увидеть, когда его выбирать. Обратите внимание: у интервью и наблюдения высокая глубина причин, но низкий охват, поэтому их дополняют анкетой и статистикой.</figcaption></figure>
 
-<div class="gate-step" data-gate>
-<p class="gate-action"><button type="button" class="gate-btn" aria-expanded="false"><span class="gate-q" aria-hidden="true">?</span><span>Что можно узнать из документов, чего не расскажут сотрудники?</span></button></p>
-<div class="gate-content" hidden><h2 id="анализ-документов"><span class="num">05</span>Анализ документов</h2>
-<p>Документы показывают официальную сторону работы: что должно происходить по правилам и что осталось после операций. В «Северном складе» это накладные, счета, прайс-листы, договоры с поставщиками, должностные инструкции и переписка с клиентами.</p>
-<p>Накладная рассказывает, кто собрал заказ, когда его отгрузили и какие позиции в него вошли. Счёт показывает, как оформляются цены и скидки. Прайс-лист выявляет, что у компании несколько версий цен и не все менеджеры используют актуальную. Должностная инструкция объясняет, кто формально отвечает за проверку остатков, и это может расходиться с тем, что происходит на самом деле.</p>
-<p>Анализ документов ищет четыре вещи: противоречия между правилами и практикой, пропущенные шаги, дублирующие документы и точки, где данные вводятся вручную. Если накладная печатается из Excel, а потом номер вручную переносится в другой файл, это место потери данных.</p>
-<p>Статистика дополняет документы числами. Из выгрузки заказов за месяц видно, сколько заказов в день, какая доля возвратов, сколько времени проходит от заказа до отгрузки. Важно проверять, откуда взялись числа: если ошибки комплектации считают по жалобам клиентов, реальная доля ошибок выше, потому что не все жалуются.</p>
-<p>Выборка нужна, когда данных слишком много. Не нужно просматривать все накладные за год. Достаточно взять тридцать документов за последний месяц, распределив их по складам и типам клиентов. Выборка должна быть объяснена в отчёте: за какой период, по какому признаку, сколько документов.</p>
-<h2 id="факты-мнения-и-проверка-источников"><span class="num">06</span>Факты, мнения и проверка источников</h2>
-<p>Обследование тонет в мнениях, если их не отделять от фактов. Утверждение «менеджеры работают медленно» это мнение. Утверждение «оформление заказа занимает 18 минут по замеру десяти заказов» это факт. Утверждение «после запуска станет быстрее» это предположение, которое нужно проверить.</p>
-<table>
-<thead>
-<tr>
-<th>Тип утверждения</th>
-<th>Пример</th>
-<th>Что с ним делать</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Факт</td>
-<td>в файле 14 листов, остатки обновляются раз в день</td>
-<td>использовать как основу</td>
-</tr>
-<tr>
-<td>Мнение</td>
-<td>кладовщики не хотят работать в новой системе</td>
-<td>проверить причинами и наблюдением</td>
-</tr>
-<tr>
-<td>Предположение</td>
-<td>автоматизация сократит время вдвое</td>
-<td>превратить в проверяемую гипотезу</td>
-</tr>
-</tbody>
-</table>
-<p>Надёжность сведений повышает триангуляция: один и тот же вывод подтверждается из двух или трёх независимых источников. Менеджер говорит, что остатки проверяет в системе, наблюдение показывает Excel, а статистика фиксирует звонки на склад. Все три источника указывают на одно: остатки в системе не вызывают доверия. Такой вывод можно класть в основу требований.</p>
-<p>Триангуляция не требует согласия всех источников. Наоборот, расхождение часто самое ценное: сотрудник говорит, что ошибок нет, а журнал возвратов показывает шесть процентов. Задача обследования не обвинить, а понять причину расхождения.</p></div>
-</div>
+<p>У обследования есть три границы, которые полезно назвать до первого интервью. <strong>Граница по процессам</strong>: описываются только те процессы, которые затрагивает система или которые влияют на цель проекта. <strong>Граница по времени</strong>: сбор заканчивается, когда решения могут быть приняты, а не когда собраны все возможные факты. <strong>Граница по людям</strong>: обследование не оценивает сотрудников и не ищет виновных, оно описывает работу.</p>
+<p>Эти границы защищают от двух крайностей. Первая: прийти с пустым блокнотом и записывать всё, что скажут. Вторая: прийти с готовым выводом и искать подтверждение. В обоих случаях отчёт получается большим, а решение остаётся без опоры.</p>
+<h2 id="цикл-обследования"><span class="num">03</span>Цикл обследования</h2>
+<p>Обследование удобно представлять не как список методов, а как цикл. Сначала определяется решение, которое нужно принять. Затем составляется план: какие вопросы, к кому, каким методом и в какие сроки. Потом идёт сбор. Каждый факт записывается с источником и датой. Затем сведения проверяются на противоречия и подтверждаются другими источниками. И только после этого собирается отчёт.</p>
+<figure class="figure" data-fig="survey-loop" data-one="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"><iframe title="Figure 2: survey-loop" scrolling="no"></iframe><figcaption>Цикл обследования: цель, план, сбор, запись, проверка и отчёт. Стрелки показывают, что новые вопросы возвращаются в план, а не откладываются до конца.</figcaption></figure>
 
-<div class="gate-step" data-gate>
-<p class="gate-action"><button type="button" class="gate-btn" aria-expanded="false"><span class="gate-q" aria-hidden="true">?</span><span>Как из разрозненных записей получается отчёт об обследовании?</span></button></p>
-<div class="gate-content" hidden><h2 id="план-обследования"><span class="num">07</span>План обследования</h2>
+<p>Цикл повторяется. После первого интервью появляется новая причина, которую нужно проверить наблюдением. После наблюдения обнаруживается документ, которого не было в плане. После анализа документа возникает вопрос к статистике. Обследование не является линейным проходом по пяти методам, но у него есть точка остановки: когда решение можно принять с достаточной уверенностью.</p>
+<p>Полезно вести <strong>журнал обследования</strong>. В нём фиксируются дата, источник, метод, факт, ссылка на запись и статус проверки. Журнал не заменяет отчёт, но спасает от ситуации, когда через неделю никто не помнит, откуда взялось число.</p>
+<p>Отдельно фиксируются снимки экрана и копии документов. Они помогают показать проблему, но могут содержать персональные данные и коммерческую тайну. Поэтому копии хранятся в согласованном месте, доступ ограничен, а в отчёт попадают только нужные фрагменты. Ссылка на источник должна быть проверяемой, но не обязана раскрывать лишние сведения.</p>
+<p>Есть и этическая сторона. Сотрудников предупреждают о цели обследования, о том, кто увидит записи и как будет использоваться информация. Скрытое наблюдение в офисе трудно организовать законно и этично, а обещание анонимности нужно выполнять. Если люди боятся, что рассказ о ручной сверке приведёт к наказанию, они покажут официальную версию, и обследование потеряет смысл.</p>
+<h2 id="план-обследования"><span class="num">04</span>План обследования</h2>
 <p>План обследования это таблица, где для каждой задачи указано, что нужно узнать, у кого, каким методом и какой результат ожидается. Без плана команда ходит по офису и собирает случайные впечатления.</p>
 <table>
 <thead>
@@ -1140,10 +996,198 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 </tbody>
 </table>
 <p>В плане также указывают даты, ответственных и правила фиксации. Хорошая практика: после каждого интервью в тот же день перенести записи в общий документ, пока помнишь контекст. Через неделю разрозненные заметки теряют смысл.</p>
-<h2 id="карта-процессов"><span class="num">08</span>Карта процессов</h2>
+<p>План проверяют на полноту тремя вопросами. Покрывает ли он все решения, которые нужно принять. Есть ли для каждого важного вывода второй источник. Не перегружен ли он методами, которые ничего не добавят. Если на вопрос уже ответили документы, не нужно ради полноты проводить ещё пять интервью.</p>
+<p>Полезно провести <strong>пилот инструмента</strong>. Один вопросник тестируется на двух сотрудниках, один маршрут наблюдения на пяти операциях. Пилот показывает, какие вопросы непонятны, сколько времени занимает интервью и какие данные вообще не собираются. Исправлять инструмент после десяти интервью дороже, чем после двух.</p>
+<p>В план входит и <strong>согласование доступа</strong>. Нужно заранее договориться, кого можно опросить, какие документы можно посмотреть, где можно наблюдать и сколько времени сотрудник может потратить. Если доступ согласуется в день встречи, часть людей откажется, а часть даст формальные ответы.</p>
+<div class="gate-step" data-gate>
+<p class="gate-action"><button type="button" class="gate-btn" aria-expanded="false"><span class="gate-q" aria-hidden="true">?</span><span>Почему разговор только с директором не заменяет интервью с кладовщиком?</span></button></p>
+<div class="gate-content" hidden><h2 id="интервью"><span class="num">05</span>Интервью</h2>
+<p>Интервью даёт то, чего нет в документах: логику действий и объяснение причин. Менеджер может рассказать, что перед оформлением заказа он звонит на склад, потому что в файле остатки вчерашние. В накладной этого не видно, а в разговоре видно сразу.</p>
+<p>Интервью бывает трёх видов. Структурированное идёт по заранее составленному списку вопросов, ответы легко сравнивать. Полуструктурированное имеет план, но позволяет углубиться в неожиданную деталь. Свободное похоже на разговор без плана и годится для первого знакомства с руководителем, но плохо подходит для сбора фактов.</p>
+<p>Для внедрения чаще всего используют полуструктурированное интервью. План готовят заранее: цель разговора, кто участвует, какие темы нужно закрыть, сколько времени есть. Вопросы делятся на три группы.</p>
+<p><strong>Открытые</strong> приглашают рассказать: «Опишите, что происходит от звонка клиента до отгрузки». <strong>Закрытые</strong> уточняют факт: «Сколько заказов в день вы оформляете?». <strong>Уточняющие</strong> проверяют деталь: «Что вы делаете, если товара не хватает?». Хороший план чередует открытые и уточняющие вопросы, а закрытые оставляет для чисел.</p>
+<table>
+<thead>
+<tr>
+<th>Плохой вопрос</th>
+<th>Почему плох</th>
+<th>Рабочий вариант</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Вы же проверяете остатки в Excel?</td>
+<td>подсказывает ответ</td>
+<td>Как вы узнаёте, есть ли товар на складе?</td>
+</tr>
+<tr>
+<td>Почему вы так медленно работаете?</td>
+<td>оценивает человека</td>
+<td>Какие шаги занимают больше всего времени?</td>
+</tr>
+<tr>
+<td>Вам нравится новая система?</td>
+<td>мнение вместо факта</td>
+<td>Что изменится в вашей работе после запуска?</td>
+</tr>
+<tr>
+<td>Сколько времени занимает заказ?</td>
+<td>ответ по памяти</td>
+<td>Покажите, как оформили последний заказ</td>
+</tr>
+</tbody>
+</table>
+<figure class="figure" data-fig="question-quality" data-one="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"><iframe title="Figure 3: question-quality" scrolling="no"></iframe><figcaption>Четыре пары вопросов. Нажмите кнопку, чтобы увидеть, как подсказка, оценка, мнение и память заменяются вопросом о действии. Обратите внимание на объект вопроса, а не только на вежливость формулировки.</figcaption></figure>
+
+<p>Последний вопрос особенно полезен. Человек плохо помнит длительность операций, но хорошо помнит последний случай. Если попросить показать конкретный заказ, появятся числа, названия документов и обходные пути, о которых сотрудник не стал бы рассказывать в общем разговоре.</p>
+<p>Есть приём, который называют <strong>критическим случаем</strong>. Сотрудника просят вспомнить не обычный день, а случай, когда что-то пошло не так: заказ потерялся, товар не пришёл, клиент отказался. Критический случай показывает правила, которые действуют только в исключениях. Именно там чаще всего и находятся требования, пропущенные в официальном описании.</p>
+<p>Записывать интервью лучше вдвоём: один ведёт разговор, второй фиксирует факты, числа и цитаты. Запись на диктофон удобна, но требует согласия собеседника. Протокол интервью содержит дату, участников, вопросы и ответы в сжатом виде, а также список того, что нужно проверить другими методами.</p>
+<p>Интервью с руководителем и интервью с исполнителем отвечают на разные вопросы. Руководитель знает, как должно быть, какие есть цели и ограничения. Исполнитель знает, как происходит на самом деле, какие обходы существуют и где инструкция расходится с практикой. Если поговорить только с руководителем, получится официальная модель процесса. Если только с исполнителем, не будет контекста целей и ограничений.</p>
+<p>Групповое интервью экономит время, но имеет риск. В группе говорит самый уверенный или самый старший, а остальные соглашаются. Полезно сначала собрать индивидуальные ответы, а затем обсудить расхождения в группе. Так появляется не общее мнение, а карта различий.</p>
+<h2 id="анкетирование"><span class="num">06</span>Анкетирование</h2>
+<p>Анкета нужна, когда респондентов много и вопросы одинаковые. В «Северном складе» сорок менеджеров по продажам в четырёх городах. Провести с каждым интервью значит потратить недели, а задать всем двенадцать одинаковых вопросов можно за день.</p>
+<p>Анкета строится из закрытых вопросов со шкалой и нескольких открытых. Закрытые вопросы дают сравнимую картину: «Сколько заказов в день вы оформляете: до 5, от 5 до 15, больше 15». Открытые добавляют детали: «Опишите случай, когда заказ пришлось переделывать». Шкала должна быть понятной: варианты не пересекаются и покрывают все возможные ответы.</p>
+<p>Главная слабость анкеты в том, что её можно не заполнить. Из сорока разосланных форм вернётся двадцать пять, и это будут не случайные люди, а те, у кого есть время и интерес. Если отвечали только недовольные, картина исказится. Поэтому анкету дополняют напоминанием, раздают на совещании или заполняют вместе с группой, а долю возврата указывают в отчёте.</p>
+<p>Проблема возврата не является особенностью одной компании. Исследования методов опроса показывают, что доля ответов в телефонных опросах падала годами и в 2018 году составляла около 6 процентов <a href="https://www.pewresearch.org/topic/methodological-research/survey-methods/telephone-surveys/">Pew Research Center</a>. Для внутренней анкеты условия другие, но вывод тот же: те, кто ответил, не обязательно представляют всех.</p>
+<p>Есть три способа снизить смещение. Первый: увеличить охват и напоминать. Второй: провести анкету в рабочее время вместе с группой, а не просить заполнить дома. Третий: проверить вывод на подвыборке интервью. Если анкета показывает, что большинство менеджеров проверяет остатки в системе, а десять интервью показывают Excel, доверять анкете рано.</p>
+<p>Вопросы в анкете проверяют на однозначность. «Как часто вы сталкиваетесь с ошибками» без вариантов частоты даёт несравнимые ответы. «Сколько раз за последнюю неделю заказ пришлось переделывать: 0, 1-2, 3-5, больше 5» даёт число, которое можно сопоставить.</p>
+<p>На результат влияет и порядок вопросов. Если сначала спросить «мешает ли вам старая система», а потом «сколько времени занимает заказ», ответ на второй вопрос будет завышен. Поэтому нейтральные фактические вопросы ставят раньше оценочных, а анонимность объясняют до начала, а не в конце.</p>
+<p>Формулировки должны быть понятны без специального словаря. «Как часто возникает расхождение остатков» может означать разное для менеджера и бухгалтера. Лучше спросить о конкретном случае: «За последнюю неделю были заказы, где остаток в файле не совпал со складом?». Конкретный случай снижает разброс толкований и даёт проверяемый ответ.</p>
+<table>
+<thead>
+<tr>
+<th>Метод</th>
+<th>Что даёт</th>
+<th>Ограничение</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Интервью</td>
+<td>причины, логику, скрытые шаги</td>
+<td>дорого по времени, мало людей</td>
+</tr>
+<tr>
+<td>Анкета</td>
+<td>сравнимую картину по многим людям</td>
+<td>низкая доля возврата, нет уточнений</td>
+</tr>
+<tr>
+<td>Наблюдение</td>
+<td>фактические действия и время</td>
+<td>наблюдатель влияет на поведение</td>
+</tr>
+<tr>
+<td>Документы</td>
+<td>официальные правила и следы операций</td>
+<td>не показывают обходные пути</td>
+</tr>
+<tr>
+<td>Статистика</td>
+<td>объёмы, частоты, динамику</td>
+<td>зависит от качества учёта</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+
+<div class="gate-step" data-gate>
+<p class="gate-action"><button type="button" class="gate-btn" aria-expanded="false"><span class="gate-q" aria-hidden="true">?</span><span>Что можно узнать, наблюдая, чего не скажут в интервью?</span></button></p>
+<div class="gate-content" hidden><h2 id="наблюдение"><span class="num">07</span>Наблюдение</h2>
+<p>Наблюдение показывает, что люди делают на самом деле. Менеджер говорит, что проверяет остатки в системе, а наблюдение показывает, что он открывает три файла Excel и звонит на склад. Это не обман, а привычка, о которой человек не задумывается.</p>
+<p>Наблюдение бывает открытым и скрытым. Скрытое в офисе трудно организовать и этически сомнительно, поэтому используют открытое: сотрудника предупреждают, объясняют цель и просят разрешения сесть рядом. Наблюдатель не вмешивается, не подсказывает и не оценивает, он фиксирует шаги, время и документы.</p>
+<p>Полезный приём называется хронометраж. Наблюдатель засекает длительность каждого шага операции на нескольких примерах. Для «Северного склада» замеряют десять заказов в течение дня. Результат раскладывается по этапам.</p>
+<table>
+<thead>
+<tr>
+<th>Этап заказа</th>
+<th>Среднее время</th>
+<th>Что происходит</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>приём заявки</td>
+<td>4 минуты</td>
+<td>звонок или письмо, уточнение позиций</td>
+</tr>
+<tr>
+<td>проверка остатков</td>
+<td>9 минут</td>
+<td>сверка четырёх файлов и звонок на склад</td>
+</tr>
+<tr>
+<td>оформление</td>
+<td>3 минуты</td>
+<td>заполнение формы и расчёт скидки</td>
+</tr>
+<tr>
+<td>согласование</td>
+<td>2 минуты</td>
+<td>подтверждение у коммерческого директора</td>
+</tr>
+<tr>
+<td>итого</td>
+<td>18 минут</td>
+<td>цель проекта 7 минут</td>
+</tr>
+</tbody>
+</table>
+<p>Такая таблица сразу показывает, где искать улучшение. Сокращать приём заявки бессмысленно, он занимает четыре минуты из восемнадцати. Главный резерв в проверке остатков: девять минут ручной сверки исчезают, когда остатки обновляются в реальном времени.</p>
+<p>У наблюдения есть искажение, которое называют эффектом наблюдателя. Люди работают аккуратнее, когда на них смотрят. Поэтому одного наблюдения мало: его сравнивают с документами и статистикой. В исследованиях эффект Хоторна обсуждают десятилетиями, и однозначного вывода о его величине нет <a href="https://doi.org/10.1037/0021-9010.69.2.334">Adair, 1984</a>. Для практики достаточно помнить: поведение под наблюдением может отличаться от обычного.</p>
+<p>Есть и обратный эффект: наблюдатель начинает видеть то, что ожидал. Если он пришёл доказать, что Excel плох, он заметит каждую ошибку и пропустит удачные обходы. Поэтому в листе наблюдения фиксируются не оценки, а действия и время.</p>
+<p>Лист наблюдения должен быть простым. Колонки: шаг, начало, конец, исполнитель, документ, что произошло, комментарий. Если колонок двадцать, наблюдатель перестанет успевать и начнёт восстанавливать события по памяти.</p>
+<p>Наблюдать нужно в разные периоды. Утро, конец дня, день после выходного и день инвентаризации дают разные картины. Если выбрать только спокойный вторник, получится средний процесс без пиков, а именно пики часто показывают, где система не выдерживает.</p>
+<h2 id="анализ-документов-и-статистики"><span class="num">08</span>Анализ документов и статистики</h2>
+<p>Документы показывают официальную сторону работы: что должно происходить по правилам и что осталось после операций. В «Северном складе» это накладные, счета, прайс-листы, договоры с поставщиками, должностные инструкции и переписка с клиентами.</p>
+<p>Накладная рассказывает, кто собрал заказ, когда его отгрузили и какие позиции в него вошли. Счёт показывает, как оформляются цены и скидки. Прайс-лист выявляет, что у компании несколько версий цен и не все менеджеры используют актуальную. Должностная инструкция объясняет, кто формально отвечает за проверку остатков, и это может расходиться с тем, что происходит на самом деле.</p>
+<p>Анализ документов ищет четыре вещи: противоречия между правилами и практикой, пропущенные шаги, дублирующие документы и точки, где данные вводятся вручную. Если накладная печатается из Excel, а потом номер вручную переносится в другой файл, это место потери данных.</p>
+<p>Документ полезно читать не только на содержание, но и на следы. Исправления, подписи, повторные распечатки, разные версии одного файла показывают, где процесс дал сбой. Если в папке лежат три прайса с разными датами, вопрос не в том, какой из них правильный, а в том, почему одновременно существуют три.</p>
+<p>Статистика дополняет документы числами. Из выгрузки заказов за месяц видно, сколько заказов в день, какая доля возвратов, сколько времени проходит от заказа до отгрузки. Важно проверять, откуда взялись числа: если ошибки комплектации считают по жалобам клиентов, реальная доля ошибок выше, потому что не все жалуются.</p>
+<p>У статистики есть три ловушки. Первая: разные определения. «Ошибка комплектации» может означать неверный товар, неверное количество или опоздание. Пока определение не согласовано, числа несравнимы. Вторая: пропуски. Если журнал ведётся только по отгруженным заказам, отменённые не попадут в расчёт. Третья: изменение правил. Если в середине месяца изменили форму заказа, сравнение «до и после» покажет эффект формы, а не процесса.</p>
+<p>Выборка нужна, когда данных слишком много. Не нужно просматривать все накладные за год. Достаточно взять тридцать документов за последний месяц, распределив их по складам и типам клиентов. Выборка должна быть объяснена в отчёте: за какой период, по какому признаку, сколько документов.</p>
+<p>Выборка не обязана быть случайной в статистическом смысле, но она должна быть обоснованной. Если проверяются ошибки комплектации, берут заказы из разных складов, разных дней недели и разного объёма. Если проверяются только крупные заказы, вывод будет описывать крупные заказы, а не весь поток.</p>
+<p>Полезно считать не только среднее. Среднее время заказа может быть восемнадцать минут, но половина заказов оформляется за двенадцать, а небольшая часть за тридцать. Среднее скрывает разброс, а разброс часто и есть проблема. Поэтому в отчёте рядом со средним указывают минимум, максимум и число наблюдений.</p></div>
+</div>
+
+<div class="gate-step" data-gate>
+<p class="gate-action"><button type="button" class="gate-btn" aria-expanded="false"><span class="gate-q" aria-hidden="true">?</span><span>Как из разрозненных записей получается проверяемый отчёт?</span></button></p>
+<div class="gate-content" hidden><h2 id="факты-мнения-и-проверка-источников"><span class="num">09</span>Факты, мнения и проверка источников</h2>
+<p>Обследование тонет в мнениях, если их не отделять от фактов. Утверждение «менеджеры работают медленно» это мнение. Утверждение «оформление заказа занимает 18 минут по замеру десяти заказов» это факт. Утверждение «после запуска станет быстрее» это предположение, которое нужно проверить.</p>
+<table>
+<thead>
+<tr>
+<th>Тип утверждения</th>
+<th>Пример</th>
+<th>Что с ним делать</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Факт</td>
+<td>в файле 14 листов, остатки обновляются раз в день</td>
+<td>использовать как основу</td>
+</tr>
+<tr>
+<td>Мнение</td>
+<td>кладовщики не хотят работать в новой системе</td>
+<td>проверить причинами и наблюдением</td>
+</tr>
+<tr>
+<td>Предположение</td>
+<td>автоматизация сократит время вдвое</td>
+<td>превратить в проверяемую гипотезу</td>
+</tr>
+</tbody>
+</table>
+<p>Надёжность сведений повышает триангуляция: один и тот же вывод подтверждается из двух или трёх независимых источников. Менеджер говорит, что остатки проверяет в системе, наблюдение показывает Excel, а статистика фиксирует звонки на склад. Все три источника указывают на одно: остатки в системе не вызывают доверия. Такой вывод можно класть в основу требований.</p>
+<p>Триангуляция не требует согласия всех источников. Наоборот, расхождение часто самое ценное: сотрудник говорит, что ошибок нет, а журнал возвратов показывает шесть процентов. Задача обследования не обвинить, а понять причину расхождения.</p>
+<p>Есть три типовые причины расхождения. <strong>Разные определения</strong>: сотрудник считает ошибкой только возврат, а журнал считает любую правку. <strong>Разная память</strong>: человек помнит удачные дни. <strong>Разный интерес</strong>: сотрудник опасается, что ошибки приведут к наказанию. Причина расхождения указывается в отчёте рядом с выводом.</p>
+<p>Предположения превращаются в гипотезы. «Автоматизация сократит время вдвое» становится «после включения резервирования время проверки остатков сократится с 9 до 2 минут». Гипотеза содержит метрику, baseline и условие проверки. Если её нельзя проверить, это лозунг.</p>
+<h2 id="карта-процессов-и-отчёт"><span class="num">10</span>Карта процессов и отчёт</h2>
 <p>Карта процесса показывает работу как последовательность шагов. У каждого шага есть исполнитель, вход, выход и время. Для приёма заказа карта выглядит так: клиент звонит, менеджер уточняет позиции, проверяет остатки по файлам, при необходимости звонит на склад, оформляет заказ в Excel, согласует скидку, отправляет подтверждение.</p>
 <p>Карту удобно рисовать таблицей или схемой в draw.io. Главное требование: на карте видны не только действия, но и документы, которые появляются на каждом шаге, и места, где данные вводятся повторно. Именно повторный ввод показывает, где система сэкономит время.</p>
-<h2 id="отчёт-об-обследовании"><span class="num">09</span>Отчёт об обследовании</h2>
+<p>На карте полезно отмечать три типа отклонений. <strong>Повторный ввод</strong>: одно и то же значение вводится в двух местах. <strong>Ожидание</strong>: шаг ждёт другого человека или документа. <strong>Возврат</strong>: заказ возвращается на предыдущий шаг из-за ошибки. Отклонения показывают потери лучше, чем перечень должностей.</p>
 <p>Отчёт собирает результаты в один документ. Типовая структура: цель и рамки обследования, методы и источники, карта ключевых процессов, перечень проблем с числами, ограничения, приложения с протоколами и выгрузками.</p>
 <p>Перечень проблем оформляется таблицей. У каждой проблемы есть описание, подтверждение, влияние и приоритет. Подтверждение это ссылка на источник: протокол интервью, замер, документ. Влияние измеряется в понятных величинах: минуты, проценты, рубли, число ошибок.</p>
 <table>
@@ -1183,21 +1227,85 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
 </tbody>
 </table>
 <p>Отчёт заканчивается выводами, а не списком жалоб. Вывод отвечает, какие процессы дают наибольшие потери и что нужно уточнить на этапе требований. Отчёт об обследовании подписывает владелец процесса, а не только руководитель проекта: именно он подтверждает, что описание работы соответствует действительности.</p>
-<h2 id="ошибки-обследования"><span class="num">10</span>Ошибки обследования</h2>
+<p>Хороший отчёт отвечает на вопрос «что с этим делать». Если проблема описана, но не связано ни одно требование, она остаётся красивой строкой. Поэтому рядом с приоритетом полезно указывать, какое решение она затрагивает: настройка, доработка, обучение или изменение регламента.</p>
+<p>У отчёта есть версия. После обсуждения с владельцами процессов появляются уточнения, и старый вариант нельзя оставлять рядом с новым без пометки. На первой странице указывают дату, автора, версию и статус: черновик, на согласовании, утверждён. Такой порядок кажется бюрократическим, но он спасает от спора о том, какой документ считался основанием требований.</p>
+<h2 id="реальные-обследования-которые-не-состоялись"><span class="num">11</span>Реальные обследования, которые не состоялись</h2>
+<p>Три известных проекта показывают, что происходит, когда сбор фактов заменяют предположениями. В каждом случае отчётность была, а понимания работы не хватило.</p>
+<h3>Лондонская скорая помощь, 1992</h3>
+<p>26 октября 1992 года в Лондонской службе скорой помощи включили компьютерную систему диспетчеризации. Комиссия по расследованию установила, что ни система, ни пользователи не были готовы к полному запуску. Программное обеспечение было неполным, не настроенным и не полностью проверенным. Надёжность оборудования под полной нагрузкой не проверялась, переход на резервный сервер тоже. Сотрудники не были полностью обучены, а бумажный резервный вариант отсутствовал <a href="https://www.dcs.gla.ac.uk/~johnson/teaching/safety/reports/las.pdf">London Ambulance Service Inquiry, 1993</a>.</p>
+<p>4 ноября 1992 года система упала из-за небольшой программной ошибки. Автоматическое переключение на резервную систему не было проверено, и вся система остановилась. В отчёте также сказано, что у большинства пользователей не было чувства владения системой: они ожидали отказа, а не помогали ему не случиться.</p>
+<p>Отдельный урок касается фактов и слухов. В прессе появились сообщения о смертях из-за задержек скорой. Комиссия специально отметила, что ни один коронерский суд не установил, что позднее прибытие машины стало причиной смерти <a href="https://www.dcs.gla.ac.uk/~johnson/teaching/safety/reports/las.pdf">London Ambulance Service Inquiry, 1993</a>. Это хороший пример проверки источника: драматичная версия расходится с выводами расследования.</p>
+<p>Урок для обследования: <strong>готовность пользователей и обучение являются такими же фактами, как состояние кода</strong>. Их нужно проверять наблюдением и упражнением, а не докладом руководителя.</p>
+<h3>Квинсленд, 2010</h3>
+<p>14 марта 2010 года в Квинсленде запустили систему расчёта заработной платы для здравоохранения. До этого было десять неудачных попыток запуска. После включения тысячи сотрудников получали неверные суммы, а для обработки выплат пришлось задействовать около тысячи человек вручную. Комиссия оценила стоимость исправления и сопровождения примерно в 1,2 млрд долларов за восемь лет, а число затронутых сотрудников в 78 тысяч <a href="http://www.healthpayrollinquiry.qld.gov.au/__data/assets/pdf_file/0014/207203/Queensland-Health-Payroll-System-Commission-of-Inquiry-Report-31-July-2013.pdf">Queensland Health Payroll Inquiry, 2013</a>.</p>
+<p>Причины, описанные в отчёте, связаны со сбором требований. Сложные правила оплаты не были поняты и проверены до настройки. Проект двигался по графику, который не учитывал реальную сложность. Тестирование не покрыло разнообразие ситуаций, а решение о запуске принималось под давлением.</p>
+<p>Урок для обследования: <strong>исключения нужно собирать так же тщательно, как основной процесс</strong>. Если спросить только про обычную выплату, сложные надбавки останутся за рамками описания и проявятся при первой нестандартной ситуации.</p>
+<h3>NHS NPfIT, 2011</h3>
+<p>Национальная программа ИТ в здравоохранении Англии должна была заменить локальные системы едиными электронными картами. Проверка 2011 года показала, что за семь лет в больницы северного, центрального и восточного регионов поставили только четыре системы из 97 запланированных. 2,7 млрд фунтов на системы медицинских записей не дали соразмерной отдачи, а на интеграцию существующих систем требовалось не менее 220 млн фунтов <a href="https://www.nao.org.uk/reports/the-national-programme-for-it-in-the-nhs-an-update-on-the-delivery-of-detailed-care-records-systems/">NAO, 2011</a>.</p>
+<p>Аудиторы отметили, что централизованная модель плохо учитывала различия между больницами, а местные организации не могли влиять на продукт. Системы давали административный эффект, но не те клинические возможности, ради которых программа начиналась.</p>
+<p>Урок для обследования: <strong>обследование проводится на каждой площадке, а не только в центральном офисе</strong>. Национальная спецификация может быть верной в среднем и неверной в конкретной больнице.</p>
+<table>
+<thead>
+<tr>
+<th>Проект</th>
+<th>Что не собрали</th>
+<th>Чем обернулось</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Лондонская скорая</td>
+<td>готовность пользователей и обучение</td>
+<td>отказ системы и потеря доверия</td>
+</tr>
+<tr>
+<td>Квинсленд</td>
+<td>исключения в правилах оплаты</td>
+<td>массовые неверные выплаты</td>
+</tr>
+<tr>
+<td>NHS NPfIT</td>
+<td>различия между площадками</td>
+<td>системы не дали ожидаемого эффекта</td>
+</tr>
+</tbody>
+</table>
+<p>Общее у трёх случаев одно: проблема была не в отсутствии отчёта, а в отсутствии фактов, которые этот отчёт должен был содержать.</p>
+<p>Есть и различие в масштабе. Лондонская история показывает цену непроверенной готовности пользователей. Квинсленд показывает цену непонятых исключений. NPfIT показывает цену усреднённой картины, в которой исчезли различия площадок. Для обследования это три разных вопроса к плану: проверили ли обучение, собрали ли исключения, побывали ли на каждой площадке.</p></div>
+</div>
+
+<div class="gate-step" data-gate>
+<p class="gate-action"><button type="button" class="gate-btn" aria-expanded="false"><span class="gate-q" aria-hidden="true">?</span><span>Почему обследование проваливается даже при большом отчёте?</span></button></p>
+<div class="gate-content" hidden><h2 id="ошибки-обследования"><span class="num">12</span>Ошибки обследования</h2>
 <p><strong>Вопросы с подсказкой.</strong> «Вам же мешает Excel?» подталкивает к нужному ответу. Спрашивают о действиях, а не о готовом выводе.</p>
 <p><strong>Только руководство.</strong> Директор знает, как должно быть, а не как происходит. Картину даёт разговор с исполнителями.</p>
 <p><strong>Сбор без цели.</strong> Команда копирует все документы подряд, а потом не может объяснить, зачем они нужны.</p>
 <p><strong>Отчёт без чисел.</strong> «Много ручной работы» невозможно проверить и невозможно использовать в требованиях.</p>
 <p><strong>Спор с сотрудником.</strong> Обследование не ищет виновного. Если данные расходятся, выясняют причину, а не доказывают правоту.</p>
-<h2 id="итоги"><span class="num">11</span>Итоги</h2>
+<p><strong>Один источник.</strong> Вывод, основанный только на словах или только на документе, хрупок. Нужна проверка вторым методом.</p>
+<p><strong>Отчёт без владельца.</strong> Если документ не подписан владельцем процесса, он остаётся версией консультанта и не становится основой требований.</p>
+<h2 id="итоги"><span class="num">13</span>Итоги</h2>
 <ul>
 <li>Обследование собирает факты о текущей работе и опирается на цель проекта, а не на полноту.</li>
 <li>Интервью даёт причины, анкета охват, наблюдение фактические действия, документы следы операций, статистика объёмы.</li>
 <li>Хороший вопрос спрашивает о конкретном случае, а не о воспоминании.</li>
 <li>Факты подтверждаются триангуляцией, мнения проверяются, предположения превращаются в гипотезы.</li>
 <li>Результат обследования это карта процессов, перечень проблем с числами и отчёт, подписанный владельцем процесса.</li>
+<li>Реальные проекты показывают, что большой отчёт не заменяет проверенных фактов о работе.</li>
 </ul>
-<div class="quiz" data-quiz data-quiz-guard><div class="quiz-who"><label class="quiz-who-label"><span>ФИО</span><input type="text" class="quiz-name" data-quiz-name maxlength="80" autocomplete="off" placeholder="Иванов Иван Иванович"></label><span class="quiz-attempts" data-quiz-attempts>две попытки на лекцию</span><span class="quiz-note" data-who-note hidden></span></div><div class="quiz-q" data-type="single" data-correct="1" data-q="1"><p class="quiz-p"><span class="quiz-no" aria-hidden="true">01</span>Что такое триангуляция при обследовании?</p><div class="opts"><label class="opt"><input type="radio" name="q161_0" value="2" autocomplete="off"><span>Три способа построить диаграмму</span></label><label class="opt"><input type="radio" name="q161_0" value="0" autocomplete="off" data-ok><span>Подтверждение вывода из нескольких независимых источников</span></label><label class="opt"><input type="radio" name="q161_0" value="1" autocomplete="off"><span>Три интервью с одним сотрудником</span></label><label class="opt"><input type="radio" name="q161_0" value="3" autocomplete="off"><span>Разделение отчёта на три части</span></label></div><p class="quiz-why" hidden>Триангуляция повышает надёжность сведений.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="multi" data-correct="3" data-q="2" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">02</span>Какие методы подходят для сбора ожиданий сорока менеджеров?</p><div class="opts"><label class="opt"><input type="checkbox" name="q161_1" value="1" autocomplete="off" data-ok><span>Групповое заполнение формы на совещании</span></label><label class="opt"><input type="checkbox" name="q161_1" value="3" autocomplete="off"><span>Просмотр всех накладных за год</span></label><label class="opt"><input type="checkbox" name="q161_1" value="0" autocomplete="off" data-ok><span>Анкета с закрытыми и открытыми вопросами</span></label><label class="opt"><input type="checkbox" name="q161_1" value="4" autocomplete="off"><span>Скрытое наблюдение за каждым рабочим местом</span></label><label class="opt"><input type="checkbox" name="q161_1" value="2" autocomplete="off" data-ok><span>Выборочные интервью для уточнения</span></label></div><p class="quiz-why" hidden>Для широкого охвата нужна анкета, интервью дополняют картину.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="3" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">03</span>Что относится к закрытым вопросам интервью?</p><div class="opts"><label class="opt"><input type="radio" name="q161_2" value="2" autocomplete="off"><span>Что вы делаете, если товара не хватает?</span></label><label class="opt"><input type="radio" name="q161_2" value="0" autocomplete="off" data-ok><span>Сколько заказов в день вы оформляете?</span></label><label class="opt"><input type="radio" name="q161_2" value="3" autocomplete="off"><span>Почему проверка остатков занимает так много времени?</span></label><label class="opt"><input type="radio" name="q161_2" value="1" autocomplete="off"><span>Опишите, что происходит от звонка до отгрузки.</span></label></div><p class="quiz-why" hidden>Закрытый вопрос предполагает конкретный, часто числовой ответ.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="short" data-q="4" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">04</span>Как называется документ, который собирает карту процессов и перечень проблем по итогам сбора сведений?</p><input type="text" class="short-answer" data-answers="[&quot;отчёт об обследовании&quot;, &quot;отчет об обследовании&quot;]" placeholder="Введите ответ" autocomplete="off" spellcheck="false" aria-label="Как называется документ, который собирает карту процессов и перечень проблем по итогам сбора сведений?"><p class="quiz-why" hidden>Отчёт об обследовании подписывает владелец процесса.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="5" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">05</span>Кто подтверждает, что описание работы в отчёте соответствует действительности?</p><div class="opts"><label class="opt"><input type="radio" name="q161_4" value="2" autocomplete="off"><span>Разработчик системы</span></label><label class="opt"><input type="radio" name="q161_4" value="0" autocomplete="off" data-ok><span>Владелец процесса</span></label><label class="opt"><input type="radio" name="q161_4" value="3" autocomplete="off"><span>Сотрудник службы поддержки</span></label><label class="opt"><input type="radio" name="q161_4" value="1" autocomplete="off"><span>Поставщик лицензий</span></label></div><p class="quiz-why" hidden>Владелец процесса отвечает за правила работы подразделения.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="multi" data-correct="3" data-q="6" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">06</span>Какие ошибки типичны при обследовании?</p><div class="opts"><label class="opt"><input type="checkbox" name="q161_5" value="2" autocomplete="off" data-ok><span>Отчёт без чисел и источников</span></label><label class="opt"><input type="checkbox" name="q161_5" value="1" autocomplete="off" data-ok><span>Разговор только с руководством</span></label><label class="opt"><input type="checkbox" name="q161_5" value="3" autocomplete="off"><span>Проверка выводов по нескольким источникам</span></label><label class="opt"><input type="checkbox" name="q161_5" value="4" autocomplete="off"><span>Фиксация протокола в день интервью</span></label><label class="opt"><input type="checkbox" name="q161_5" value="0" autocomplete="off" data-ok><span>Вопросы с подсказкой</span></label></div><p class="quiz-why" hidden>Эти ошибки искажают картину и обесценивают отчёт.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="7" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">07</span>Для чего проводится обследование организации?</p><div class="opts"><label class="opt"><input type="radio" name="q161_6" value="1" autocomplete="off"><span>Чтобы сразу настроить роли и справочники</span></label><label class="opt"><input type="radio" name="q161_6" value="2" autocomplete="off"><span>Чтобы заменить техническое задание договором</span></label><label class="opt"><input type="radio" name="q161_6" value="3" autocomplete="off"><span>Чтобы обучить сотрудников работе в системе</span></label><label class="opt"><input type="radio" name="q161_6" value="0" autocomplete="off" data-ok><span>Чтобы получить факты о текущей работе и её потерях</span></label></div><p class="quiz-why" hidden>Обследование описывает текущее состояние и его проблемы.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="8" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">08</span>В чём главное ограничение анкетирования?</p><div class="opts"><label class="opt"><input type="radio" name="q161_7" value="3" autocomplete="off"><span>Отсутствие сравнимых данных</span></label><label class="opt"><input type="radio" name="q161_7" value="0" autocomplete="off" data-ok><span>Низкая доля возврата и невозможность уточнить ответ</span></label><label class="opt"><input type="radio" name="q161_7" value="2" autocomplete="off"><span>Невозможность охватить много сотрудников</span></label><label class="opt"><input type="radio" name="q161_7" value="1" autocomplete="off"><span>Слишком высокая стоимость проведения</span></label></div><p class="quiz-why" hidden>Анкету заполняют не все, а уточнить ответ на месте нельзя.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="multi" data-correct="3" data-q="9" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">09</span>Какие вопросы подсказывают собеседнику желаемый ответ?</p><div class="opts"><label class="opt"><input type="checkbox" name="q161_8" value="0" autocomplete="off" data-ok><span>Вы же проверяете остатки в Excel?</span></label><label class="opt"><input type="checkbox" name="q161_8" value="4" autocomplete="off"><span>Как вы узнаёте, есть ли товар на складе?</span></label><label class="opt"><input type="checkbox" name="q161_8" value="1" autocomplete="off" data-ok><span>Вам ведь мешает старая система?</span></label><label class="opt"><input type="checkbox" name="q161_8" value="3" autocomplete="off"><span>Покажите, как вы оформили последний заказ.</span></label><label class="opt"><input type="checkbox" name="q161_8" value="2" autocomplete="off" data-ok><span>Вы согласны, что работать станет проще?</span></label></div><p class="quiz-why" hidden>Подсказка содержит готовый вывод, и собеседник его подтверждает.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="10" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">10</span>Что показывает хронометраж?</p><div class="opts"><label class="opt"><input type="radio" name="q161_9" value="3" autocomplete="off"><span>Число сотрудников на площадке</span></label><label class="opt"><input type="radio" name="q161_9" value="2" autocomplete="off"><span>Официальный норматив из инструкции</span></label><label class="opt"><input type="radio" name="q161_9" value="0" autocomplete="off" data-ok><span>Фактическую длительность каждого шага операции</span></label><label class="opt"><input type="radio" name="q161_9" value="1" autocomplete="off"><span>Мнение сотрудника о скорости работы</span></label></div><p class="quiz-why" hidden>Хронометраж измеряет время шагов по факту.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="11" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">11</span>Как формулируется проблема в отчёте об обследовании?</p><div class="opts"><label class="opt"><input type="radio" name="q161_10" value="1" autocomplete="off"><span>Через оценку работы сотрудников</span></label><label class="opt"><input type="radio" name="q161_10" value="3" autocomplete="off"><span>Через название модуля системы</span></label><label class="opt"><input type="radio" name="q161_10" value="0" autocomplete="off" data-ok><span>Через наблюдаемый факт с числом и источником</span></label><label class="opt"><input type="radio" name="q161_10" value="2" autocomplete="off"><span>Через пожелание к будущей системе</span></label></div><p class="quiz-why" hidden>Проблема должна подтверждаться источником и измеряться.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="short" data-q="12" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">12</span>Как называется метод, при котором наблюдатель засекает длительность каждого шага операции?</p><input type="text" class="short-answer" data-answers="[&quot;хронометраж&quot;, &quot;хронометрирование&quot;]" placeholder="Введите ответ" autocomplete="off" spellcheck="false" aria-label="Как называется метод, при котором наблюдатель засекает длительность каждого шага операции?"><p class="quiz-why" hidden>Хронометраж даёт фактические числа вместо воспоминаний.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="13" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">13</span>Зачем в отчёте указывать выборку документов?</p><div class="opts"><label class="opt"><input type="radio" name="q161_12" value="1" autocomplete="off"><span>Чтобы увеличить объём отчёта</span></label><label class="opt"><input type="radio" name="q161_12" value="3" autocomplete="off"><span>Чтобы заменить хронометраж</span></label><label class="opt"><input type="radio" name="q161_12" value="2" autocomplete="off"><span>Чтобы скрыть источники сведений</span></label><label class="opt"><input type="radio" name="q161_12" value="0" autocomplete="off" data-ok><span>Чтобы объяснить, на каких данных сделан вывод</span></label></div><p class="quiz-why" hidden>Выборка делает вывод проверяемым.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="multi" data-correct="3" data-q="14" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">14</span>Какие сведения даёт анализ документов?</p><div class="opts"><label class="opt"><input type="checkbox" name="q161_13" value="0" autocomplete="off" data-ok><span>Официальные правила и следы выполненных операций</span></label><label class="opt"><input type="checkbox" name="q161_13" value="2" autocomplete="off" data-ok><span>Места повторного ввода данных</span></label><label class="opt"><input type="checkbox" name="q161_13" value="3" autocomplete="off"><span>Причины сопротивления сотрудников</span></label><label class="opt"><input type="checkbox" name="q161_13" value="4" autocomplete="off"><span>Личные планы менеджеров</span></label><label class="opt"><input type="checkbox" name="q161_13" value="1" autocomplete="off" data-ok><span>Противоречия между правилами и практикой</span></label></div><p class="quiz-why" hidden>Документы показывают правила и следы работы, но не мотивы людей.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="15" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">15</span>Какой метод даёт причины действий сотрудника?</p><div class="opts"><label class="opt"><input type="radio" name="q161_14" value="1" autocomplete="off"><span>Анализ статистики</span></label><label class="opt"><input type="radio" name="q161_14" value="2" autocomplete="off"><span>Хронометраж</span></label><label class="opt"><input type="radio" name="q161_14" value="3" autocomplete="off"><span>Просмотр должностной инструкции</span></label><label class="opt"><input type="radio" name="q161_14" value="0" autocomplete="off" data-ok><span>Интервью</span></label></div><p class="quiz-why" hidden>Причины и логику работы выясняют в разговоре.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><p class="quiz-note quiz-submit-note" data-quiz-note hidden></p><div class="quiz-result" data-quiz-result hidden aria-live="polite"><span class="label">Результат теста</span><h3>Тест завершён</h3><p class="modal-name-line">ФИО: <b data-student-name></b></p><p class="modal-result" data-modal-result></p><p class="modal-result" data-modal-wrong></p><dl class="modal-times"><div><dt>Время выполнения теста</dt><dd data-test-time>00:00</dd></div><div><dt>Время просмотра лекции</dt><dd data-view-time>00:00</dd></div></dl></div></div></div>
+<h2 id="источники"><span class="num">14</span>Источники</h2>
+<ol>
+<li>ISO/IEC/IEEE 29148:2018. Systems and software engineering. Life cycle processes. Requirements engineering. https://www.iso.org/standard/72089.html</li>
+<li>IEEE Computer Society. SWEBOK Guide v4.0. https://www.computer.org/education/bodies-of-knowledge/software-engineering/v4</li>
+<li>ISO 9241-210:2019. Ergonomics of human-system interaction. Human-centred design for interactive systems. https://www.iso.org/standard/77520.html</li>
+<li>Page D., Williams P., Boyd D. Report of the Inquiry into the London Ambulance Service, 1993. https://www.dcs.gla.ac.uk/~johnson/teaching/safety/reports/las.pdf</li>
+<li>Queensland Health Payroll System Commission of Inquiry. Report, 2013. http://www.healthpayrollinquiry.qld.gov.au/__data/assets/pdf_file/0014/207203/Queensland-Health-Payroll-System-Commission-of-Inquiry-Report-31-July-2013.pdf</li>
+<li>National Audit Office. The National Programme for IT in the NHS: an update on the delivery of detailed care records systems, 2011. https://www.nao.org.uk/reports/the-national-programme-for-it-in-the-nhs-an-update-on-the-delivery-of-detailed-care-records-systems/</li>
+<li>Adair J. The Hawthorne effect: A reconsideration of the methodological artifact. Journal of Applied Psychology, 1984. https://doi.org/10.1037/0021-9010.69.2.334</li>
+<li>Pew Research Center. Telephone Surveys. https://www.pewresearch.org/topic/methodological-research/survey-methods/telephone-surveys/</li>
+<li>Axelos. ITIL 4. https://www.axelos.com/best-practice-solutions/itil</li>
+</ol>
+<div class="quiz" data-quiz data-quiz-guard><div class="quiz-who"><label class="quiz-who-label"><span>ФИО</span><input type="text" class="quiz-name" data-quiz-name maxlength="80" autocomplete="off" placeholder="Иванов Иван Иванович"></label><span class="quiz-attempts" data-quiz-attempts>две попытки на лекцию</span><span class="quiz-note" data-who-note hidden></span></div><div class="quiz-q" data-type="single" data-correct="1" data-q="1"><p class="quiz-p"><span class="quiz-no" aria-hidden="true">01</span>Что относится к закрытым вопросам интервью?</p><div class="opts"><label class="opt"><input type="radio" name="q140_0" value="2" autocomplete="off"><span>Что вы делаете, если товара не хватает?</span></label><label class="opt"><input type="radio" name="q140_0" value="0" autocomplete="off" data-ok><span>Сколько заказов в день вы оформляете?</span></label><label class="opt"><input type="radio" name="q140_0" value="3" autocomplete="off"><span>Почему проверка остатков занимает так много времени?</span></label><label class="opt"><input type="radio" name="q140_0" value="1" autocomplete="off"><span>Опишите, что происходит от звонка до отгрузки.</span></label></div><p class="quiz-why" hidden>Закрытый вопрос предполагает конкретный, часто числовой ответ.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="multi" data-correct="3" data-q="2" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">02</span>Какие методы подходят для сбора ожиданий сорока менеджеров?</p><div class="opts"><label class="opt"><input type="checkbox" name="q140_1" value="1" autocomplete="off" data-ok><span>Групповое заполнение формы на совещании</span></label><label class="opt"><input type="checkbox" name="q140_1" value="3" autocomplete="off"><span>Просмотр всех накладных за год</span></label><label class="opt"><input type="checkbox" name="q140_1" value="0" autocomplete="off" data-ok><span>Анкета с закрытыми и открытыми вопросами</span></label><label class="opt"><input type="checkbox" name="q140_1" value="4" autocomplete="off"><span>Скрытое наблюдение за каждым рабочим местом</span></label><label class="opt"><input type="checkbox" name="q140_1" value="2" autocomplete="off" data-ok><span>Выборочные интервью для уточнения</span></label></div><p class="quiz-why" hidden>Для широкого охвата нужна анкета, интервью дополняют картину.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="3" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">03</span>Для чего проводится обследование организации?</p><div class="opts"><label class="opt"><input type="radio" name="q140_2" value="1" autocomplete="off"><span>Чтобы сразу настроить роли и справочники</span></label><label class="opt"><input type="radio" name="q140_2" value="2" autocomplete="off"><span>Чтобы заменить техническое задание договором</span></label><label class="opt"><input type="radio" name="q140_2" value="3" autocomplete="off"><span>Чтобы обучить сотрудников работе в системе</span></label><label class="opt"><input type="radio" name="q140_2" value="0" autocomplete="off" data-ok><span>Чтобы получить факты о текущей работе и её потерях</span></label></div><p class="quiz-why" hidden>Обследование описывает текущее состояние и его проблемы.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="short" data-q="4" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">04</span>Как называется метод, при котором наблюдатель засекает длительность каждого шага операции?</p><input type="text" class="short-answer" data-answers="[&quot;хронометраж&quot;, &quot;хронометрирование&quot;]" placeholder="Введите ответ" autocomplete="off" spellcheck="false" aria-label="Как называется метод, при котором наблюдатель засекает длительность каждого шага операции?"><p class="quiz-why" hidden>Хронометраж даёт фактические числа вместо воспоминаний.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="5" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">05</span>Как формулируется проблема в отчёте об обследовании?</p><div class="opts"><label class="opt"><input type="radio" name="q140_4" value="1" autocomplete="off"><span>Через оценку работы сотрудников</span></label><label class="opt"><input type="radio" name="q140_4" value="3" autocomplete="off"><span>Через название модуля системы</span></label><label class="opt"><input type="radio" name="q140_4" value="0" autocomplete="off" data-ok><span>Через наблюдаемый факт с числом и источником</span></label><label class="opt"><input type="radio" name="q140_4" value="2" autocomplete="off"><span>Через пожелание к будущей системе</span></label></div><p class="quiz-why" hidden>Проблема должна подтверждаться источником и измеряться.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="6" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">06</span>Какой метод даёт причины действий сотрудника?</p><div class="opts"><label class="opt"><input type="radio" name="q140_5" value="1" autocomplete="off"><span>Анализ статистики</span></label><label class="opt"><input type="radio" name="q140_5" value="2" autocomplete="off"><span>Хронометраж</span></label><label class="opt"><input type="radio" name="q140_5" value="3" autocomplete="off"><span>Просмотр должностной инструкции</span></label><label class="opt"><input type="radio" name="q140_5" value="0" autocomplete="off" data-ok><span>Интервью</span></label></div><p class="quiz-why" hidden>Причины и логику работы выясняют в разговоре.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="multi" data-correct="3" data-q="7" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">07</span>Какие вопросы подсказывают собеседнику желаемый ответ?</p><div class="opts"><label class="opt"><input type="checkbox" name="q140_6" value="0" autocomplete="off" data-ok><span>Вы же проверяете остатки в Excel?</span></label><label class="opt"><input type="checkbox" name="q140_6" value="4" autocomplete="off"><span>Как вы узнаёте, есть ли товар на складе?</span></label><label class="opt"><input type="checkbox" name="q140_6" value="1" autocomplete="off" data-ok><span>Вам ведь мешает старая система?</span></label><label class="opt"><input type="checkbox" name="q140_6" value="3" autocomplete="off"><span>Покажите, как вы оформили последний заказ.</span></label><label class="opt"><input type="checkbox" name="q140_6" value="2" autocomplete="off" data-ok><span>Вы согласны, что работать станет проще?</span></label></div><p class="quiz-why" hidden>Подсказка содержит готовый вывод, и собеседник его подтверждает.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="8" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">08</span>Кто подтверждает, что описание работы в отчёте соответствует действительности?</p><div class="opts"><label class="opt"><input type="radio" name="q140_7" value="2" autocomplete="off"><span>Разработчик системы</span></label><label class="opt"><input type="radio" name="q140_7" value="0" autocomplete="off" data-ok><span>Владелец процесса</span></label><label class="opt"><input type="radio" name="q140_7" value="3" autocomplete="off"><span>Сотрудник службы поддержки</span></label><label class="opt"><input type="radio" name="q140_7" value="1" autocomplete="off"><span>Поставщик лицензий</span></label></div><p class="quiz-why" hidden>Владелец процесса отвечает за правила работы подразделения.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="short" data-q="9" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">09</span>Как называют подтверждение вывода из нескольких независимых источников?</p><input type="text" class="short-answer" data-answers="[&quot;триангуляция&quot;, &quot;триангулирование&quot;]" placeholder="Введите ответ" autocomplete="off" spellcheck="false" aria-label="Как называют подтверждение вывода из нескольких независимых источников?"><p class="quiz-why" hidden>Триангуляция повышает надёжность сведений.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="10" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">10</span>Что такое триангуляция при обследовании?</p><div class="opts"><label class="opt"><input type="radio" name="q140_9" value="2" autocomplete="off"><span>Три способа построить диаграмму</span></label><label class="opt"><input type="radio" name="q140_9" value="0" autocomplete="off" data-ok><span>Подтверждение вывода из нескольких независимых источников</span></label><label class="opt"><input type="radio" name="q140_9" value="1" autocomplete="off"><span>Три интервью с одним сотрудником</span></label><label class="opt"><input type="radio" name="q140_9" value="3" autocomplete="off"><span>Разделение отчёта на три части</span></label></div><p class="quiz-why" hidden>Триангуляция повышает надёжность сведений.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="11" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">11</span>В чём главное ограничение анкетирования?</p><div class="opts"><label class="opt"><input type="radio" name="q140_10" value="3" autocomplete="off"><span>Отсутствие сравнимых данных</span></label><label class="opt"><input type="radio" name="q140_10" value="0" autocomplete="off" data-ok><span>Низкая доля возврата и невозможность уточнить ответ</span></label><label class="opt"><input type="radio" name="q140_10" value="2" autocomplete="off"><span>Невозможность охватить много сотрудников</span></label><label class="opt"><input type="radio" name="q140_10" value="1" autocomplete="off"><span>Слишком высокая стоимость проведения</span></label></div><p class="quiz-why" hidden>Анкету заполняют не все, а уточнить ответ на месте нельзя.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="multi" data-correct="3" data-q="12" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">12</span>Какие сведения даёт анализ документов?</p><div class="opts"><label class="opt"><input type="checkbox" name="q140_11" value="0" autocomplete="off" data-ok><span>Официальные правила и следы выполненных операций</span></label><label class="opt"><input type="checkbox" name="q140_11" value="2" autocomplete="off" data-ok><span>Места повторного ввода данных</span></label><label class="opt"><input type="checkbox" name="q140_11" value="3" autocomplete="off"><span>Причины сопротивления сотрудников</span></label><label class="opt"><input type="checkbox" name="q140_11" value="4" autocomplete="off"><span>Личные планы менеджеров</span></label><label class="opt"><input type="checkbox" name="q140_11" value="1" autocomplete="off" data-ok><span>Противоречия между правилами и практикой</span></label></div><p class="quiz-why" hidden>Документы показывают правила и следы работы, но не мотивы людей.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="13" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">13</span>Что показывает хронометраж?</p><div class="opts"><label class="opt"><input type="radio" name="q140_12" value="3" autocomplete="off"><span>Число сотрудников на площадке</span></label><label class="opt"><input type="radio" name="q140_12" value="2" autocomplete="off"><span>Официальный норматив из инструкции</span></label><label class="opt"><input type="radio" name="q140_12" value="0" autocomplete="off" data-ok><span>Фактическую длительность каждого шага операции</span></label><label class="opt"><input type="radio" name="q140_12" value="1" autocomplete="off"><span>Мнение сотрудника о скорости работы</span></label></div><p class="quiz-why" hidden>Хронометраж измеряет время шагов по факту.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="short" data-q="14" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">14</span>Как называется документ, который собирает карту процессов и перечень проблем по итогам сбора сведений?</p><input type="text" class="short-answer" data-answers="[&quot;отчёт об обследовании&quot;, &quot;отчет об обследовании&quot;]" placeholder="Введите ответ" autocomplete="off" spellcheck="false" aria-label="Как называется документ, который собирает карту процессов и перечень проблем по итогам сбора сведений?"><p class="quiz-why" hidden>Отчёт об обследовании подписывает владелец процесса.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><div class="quiz-q" data-type="single" data-correct="1" data-q="15" hidden><p class="quiz-p"><span class="quiz-no" aria-hidden="true">15</span>Зачем в отчёте указывать выборку документов?</p><div class="opts"><label class="opt"><input type="radio" name="q140_14" value="1" autocomplete="off"><span>Чтобы увеличить объём отчёта</span></label><label class="opt"><input type="radio" name="q140_14" value="3" autocomplete="off"><span>Чтобы заменить хронометраж</span></label><label class="opt"><input type="radio" name="q140_14" value="2" autocomplete="off"><span>Чтобы скрыть источники сведений</span></label><label class="opt"><input type="radio" name="q140_14" value="0" autocomplete="off" data-ok><span>Чтобы объяснить, на каких данных сделан вывод</span></label></div><p class="quiz-why" hidden>Выборка делает вывод проверяемым.</p><div class="quiz-actions"><button type="button" class="quiz-answer" data-answer>Ответить</button><span class="quiz-note" data-note hidden></span></div></div><p class="quiz-note quiz-submit-note" data-quiz-note hidden></p><div class="quiz-result" data-quiz-result hidden aria-live="polite"><span class="label">Результат теста</span><h3>Тест завершён</h3><p class="modal-name-line">ФИО: <b data-student-name></b></p><p class="modal-result" data-modal-result></p><p class="modal-result" data-modal-wrong></p><dl class="modal-times"><div><dt>Время выполнения теста</dt><dd data-test-time>00:00</dd></div><div><dt>Время просмотра лекции</dt><dd data-view-time>00:00</dd></div></dl></div></div></div>
 </div></article><nav class="pager"><a class="" href="02-lek-02.html"><span>← Предыдущее занятие</span>Лекция 2. Стратегии внедрения</a><a class="next" style="text-align:right;margin-left:auto" href="04-prakt-01.html"><span>Следующее занятие →</span>Практика 1. Карта процессов и интервью</a></nav></main>
 <div class="modal" data-modal="warn" hidden>
   <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="warn-title">
@@ -1503,6 +1611,29 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
       });
     });
   });
+})();
+
+(function(){
+  var FIX = "<style>html{color-scheme:__T__!important}html,body{background:transparent!important;margin:0!important}.iso-page{margin:6px auto 4px!important}<\/style><script>window.__errs=[];addEventListener('error',function(e){__errs.push(String(e.message))});<\/script>";
+  function size(f){ try{ var d=f.contentDocument; if(!d||!d.body) return;
+    f.style.height = Math.max(d.documentElement.scrollHeight, d.body.scrollHeight) + 'px'; }catch(e){} }
+  function load(fig){
+    var t='light'; if(fig.dataset.loaded===t) return; fig.dataset.loaded=t;
+    var f=fig.querySelector('iframe'), one=fig.getAttribute('data-one');
+    var b=atob(one || fig.getAttribute('data-light')), bytes=Uint8Array.from(b, function(c){return c.charCodeAt(0)});
+    f.style.colorScheme = 'light';
+    new Response(new Blob([bytes]).stream().pipeThrough(new DecompressionStream('gzip'))).text().then(function(html){
+      if (one) html = html.split('data-theme="dark"').join('data-theme="light"');
+      html = html.replace('</head>', FIX.split('__T__').join('light') + '</head>');
+      f.srcdoc = html;
+    });
+    f.onload=function(){ size(f); setTimeout(function(){size(f)},300); setTimeout(function(){size(f)},1200);
+      try{ new ResizeObserver(function(){size(f)}).observe(f.contentDocument.body); }catch(e){} };
+  }
+  var figs=[].slice.call(document.querySelectorAll('figure.figure'));
+  var io = 'IntersectionObserver' in window ? new IntersectionObserver(function(es){ es.forEach(function(e){ if(e.isIntersecting){ load(e.target); io.unobserve(e.target);} }); }, {rootMargin:'600px'}) : null;
+  figs.forEach(function(f){ io ? io.observe(f) : load(f); });
+  addEventListener('resize', function(){ figs.forEach(function(f){ var i=f.querySelector('iframe'); if(f.dataset.loaded) size(i); }); });
 })();
 
 (function(){

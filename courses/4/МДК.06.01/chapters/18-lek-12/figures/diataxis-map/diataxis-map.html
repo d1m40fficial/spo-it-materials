@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Четыре типа документации</title>
+<style>
+  :root { --paper:#EDE5D2; --card:#FBF7EC; --ink:#2A2618; --muted:#6F6449; --accent:#9A7300; --rule:#D8CCB2; --soft:#F3EAD6; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .demo { background:var(--paper); border:1px solid var(--rule); border-radius:14px; padding:14px; }
+  .head { display:flex; justify-content:space-between; align-items:flex-end; gap:12px; padding-bottom:8px; border-bottom:1px solid var(--rule); }
+  .eyebrow { margin:0 0 4px; font:600 10px/1.2 Consolas,monospace; letter-spacing:.12em; text-transform:uppercase; color:var(--accent); }
+  h3 { margin:0; font-size:19px; line-height:1.2; }
+  .hint { font:11px/1.4 Consolas,monospace; color:var(--muted); white-space:nowrap; }
+  svg { display:block; width:100%; height:auto; margin-top:6px; }
+  .q rect { fill:var(--card); stroke:var(--rule); stroke-width:1.2; transition:fill .2s, stroke .2s; cursor:pointer; }
+  .q.on rect { fill:var(--soft); stroke:var(--accent); stroke-width:2; }
+  .q text { font-family:"Segoe UI",system-ui,sans-serif; fill:var(--ink); text-anchor:middle; pointer-events:none; }
+  .q .name { font-size:14px; font-weight:600; }
+  .q .sub { font-size:11px; fill:var(--muted); }
+  .status { min-height:96px; margin-top:8px; padding:10px 12px; border-radius:9px; background:var(--soft); font-size:13px; line-height:1.45; }
+  .status b { color:var(--accent); }
+  .status span { display:block; margin-top:3px; }
+  .controls { display:flex; gap:6px; flex-wrap:wrap; margin-top:8px; }
+  button { font:600 11.5px/1 "Segoe UI",system-ui,sans-serif; padding:8px 9px; border-radius:9px; border:1px solid var(--rule); background:var(--card); color:var(--ink); cursor:pointer; }
+  button:hover { border-color:var(--accent); color:var(--accent); }
+  button.on { background:var(--accent); border-color:var(--accent); color:#fff; }
+  @media (max-width:560px) { .demo { padding:11px; } .hint { display:none; } }
+</style>
+</head>
+<body>
+<div class="demo">
+  <div class="head">
+    <div><p class="eyebrow">Документация · типы</p><h3>Учиться, решать, искать, понимать</h3></div>
+    <div class="hint">нажмите квадрант</div>
+  </div>
+  <svg viewBox="0 0 680 278" role="img" aria-label="Четыре типа документации: урок, инструкция, справочник и объяснение">
+    <text x="170" y="18" text-anchor="middle" font-family="Consolas,monospace" font-size="10.5" fill="#6F6449">УЧУСЬ</text>
+    <text x="510" y="18" text-anchor="middle" font-family="Consolas,monospace" font-size="10.5" fill="#6F6449">РАБОТАЮ</text>
+
+    <g class="q" data-k="tutorial">
+      <rect x="18" y="28" width="304" height="102" rx="8"/>
+      <text x="170" y="58" class="name">обучающий урок</text>
+      <text x="170" y="80" class="sub">первый опыт, маленькие шаги</text>
+      <text x="170" y="100" class="sub">пример: первый заказ целиком</text>
+      <text x="170" y="120" class="sub">ошибка: спрятать шаги в теории</text>
+    </g>
+    <g class="q" data-k="howto">
+      <rect x="18" y="142" width="304" height="102" rx="8"/>
+      <text x="170" y="172" class="name">инструкция</text>
+      <text x="170" y="194" class="sub">конкретная задача опытного человека</text>
+      <text x="170" y="214" class="sub">пример: отменить отгрузку</text>
+      <text x="170" y="234" class="sub">ошибка: пересказать всё меню</text>
+    </g>
+    <g class="q" data-k="explanation">
+      <rect x="338" y="28" width="324" height="102" rx="8"/>
+      <text x="500" y="58" class="name">объяснение</text>
+      <text x="500" y="80" class="sub">почему так устроено</text>
+      <text x="500" y="100" class="sub">пример: как резерв влияет на остаток</text>
+      <text x="500" y="120" class="sub">ошибка: заменить объяснением шаги</text>
+    </g>
+    <g class="q" data-k="reference">
+      <rect x="338" y="142" width="324" height="102" rx="8"/>
+      <text x="500" y="172" class="name">справочник</text>
+      <text x="500" y="194" class="sub">поля, коды, статусы, ограничения</text>
+      <text x="500" y="214" class="sub">пример: статусы заказа</text>
+      <text x="500" y="234" class="sub">ошибка: добавить пошаговый сценарий</text>
+    </g>
+    <text x="340" y="266" text-anchor="middle" font-family="Consolas,monospace" font-size="10.5" fill="#9A7300">ОДИН ТЕКСТ НЕ МОЖЕТ ОТВЕЧАТЬ НА ВСЕ ЧЕТЫРЕ ВОПРОСА</text>
+  </svg>
+  <div class="status" id="status" aria-live="polite"></div>
+  <div class="controls">
+    <button data-k="tutorial" class="on">Урок</button>
+    <button data-k="howto">Инструкция</button>
+    <button data-k="reference">Справочник</button>
+    <button data-k="explanation">Объяснение</button>
+  </div>
+</div>
+<script>
+(function () {
+  var data = {
+    tutorial: '<b>Обучающий урок.</b> Цель: дать первый успешный опыт и не отпугнуть.<span>Читатель: новичок. Пример: провести один заказ от начала до конца. Ошибка: поместить в урок полный список параметров.</span>',
+    howto: '<b>Инструкция.</b> Цель: решить конкретную задачу.<span>Читатель: опытный пользователь. Пример: отменить отгрузку и проверить резерв. Ошибка: описать всё меню вместо нужной операции.</span>',
+    reference: '<b>Справочник.</b> Цель: дать точный параметр или правило.<span>Читатель: тот, кто ищет поле, код или статус. Пример: таблица статусов заказа. Ошибка: вставить в справочник пошаговый сценарий.</span>',
+    explanation: '<b>Объяснение.</b> Цель: показать причину и устройство.<span>Читатель: тот, кто хочет понять. Пример: почему отмена возвращает резерв. Ошибка: заменить объяснением инструкцию.</span>'
+  };
+  var cols = document.querySelectorAll('.q');
+  var buttons = document.querySelectorAll('button[data-k]');
+  var status = document.getElementById('status');
+  function apply(key) {
+    cols.forEach(function (c) { c.classList.toggle('on', c.dataset.k === key); });
+    buttons.forEach(function (b) { b.classList.toggle('on', b.dataset.k === key); });
+    status.innerHTML = data[key];
+  }
+  cols.forEach(function (c) { c.addEventListener('click', function () { apply(c.dataset.k); }); });
+  buttons.forEach(function (b) { b.addEventListener('click', function () { apply(b.dataset.k); }); });
+  apply('tutorial');
+})();
+</script>
+</body>
+</html>

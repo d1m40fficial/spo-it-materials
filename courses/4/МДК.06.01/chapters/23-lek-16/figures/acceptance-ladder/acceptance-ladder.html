@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Контуры приёмки</title>
+<style>
+  :root { --paper:#F7F1E3; --card:#FFFDF6; --ink:#2A2620; --muted:#6B6459; --accent:#9A7300; --soft:#EDE5D2; --rule:#D8CBB0; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; background:transparent; color:var(--ink); font-family:"Segoe UI",system-ui,sans-serif; }
+  .demo { background:var(--paper); border:1px solid var(--rule); border-radius:14px; padding:16px; }
+  .head { display:flex; justify-content:space-between; align-items:flex-end; gap:14px; padding-bottom:8px; border-bottom:1px solid var(--rule); }
+  .eyebrow { margin:0 0 4px; font:600 10px/1.2 Consolas,monospace; letter-spacing:.13em; text-transform:uppercase; color:var(--accent); }
+  h3 { margin:0; font-size:19px; line-height:1.2; }
+  .hint { font:11px/1.4 Consolas,monospace; color:var(--muted); white-space:nowrap; }
+  svg { display:block; width:100%; height:auto; margin-top:8px; }
+  .zone rect { fill:var(--card); stroke:#8C8171; stroke-width:1.2; cursor:pointer; transition:fill .18s, stroke .18s; }
+  .zone.on rect { fill:var(--soft); stroke:var(--accent); stroke-width:2.2; }
+  .zone text { font-family:Consolas,monospace; text-anchor:middle; fill:var(--ink); font-size:8px; pointer-events:none; }
+  .zone .cap { font-size:9px; font-weight:600; fill:var(--accent); }
+  .zone .small { font-size:7.2px; fill:var(--muted); }
+  .status { min-height:54px; margin-top:8px; padding:10px 12px; border-radius:9px; background:var(--soft); font-size:12.5px; line-height:1.45; }
+  .status b { color:var(--accent); }
+  .controls { display:flex; gap:7px; flex-wrap:wrap; margin-top:9px; }
+  button { font:600 11.5px/1 "Segoe UI",system-ui,sans-serif; padding:8px 10px; border-radius:9px; border:1px solid var(--rule); background:var(--card); color:var(--ink); cursor:pointer; }
+  button:hover { border-color:var(--accent); color:var(--accent); }
+  button.on { background:var(--accent); border-color:var(--accent); color:#FFFDF6; }
+  @media (max-width:560px) { .demo { padding:11px; } .hint { display:none; } }
+</style>
+</head>
+<body>
+<div class="demo">
+  <div class="head">
+    <div><p class="eyebrow">Приёмка · контуры</p><h3>Кто и что доказывает</h3></div>
+    <div class="hint">нажмите на контур</div>
+  </div>
+  <svg viewBox="0 0 680 246" role="img" aria-label="Три контура приёмки: предварительный, приёмочный и государственный">
+    <g class="zone" data-k="pre">
+      <rect x="16" y="18" width="200" height="150" rx="10"/>
+      <text x="116" y="40" class="cap">предварительный</text>
+      <text x="116" y="64">у интегратора</text>
+      <text x="116" y="82" class="small">тестовые данные</text>
+      <text x="116" y="98" class="small">полный регресс</text>
+      <text x="116" y="118">цель: найти ошибки</text>
+      <text x="116" y="136" class="small">документ: отчёт команды</text>
+      <text x="116" y="158" class="small">акт не подписывают</text>
+    </g>
+    <g class="zone on" data-k="accept">
+      <rect x="240" y="18" width="200" height="150" rx="10"/>
+      <text x="340" y="40" class="cap">приёмочный</text>
+      <text x="340" y="64">у заказчика</text>
+      <text x="340" y="82" class="small">реальные данные</text>
+      <text x="340" y="98" class="small">бизнес-сценарии</text>
+      <text x="340" y="118">цель: доказать результат</text>
+      <text x="340" y="136" class="small">документ: протокол и акт</text>
+      <text x="340" y="158" class="small">подписывает комиссия</text>
+    </g>
+    <g class="zone" data-k="state">
+      <rect x="464" y="18" width="200" height="150" rx="10"/>
+      <text x="564" y="40" class="cap">государственный</text>
+      <text x="564" y="64">по регламенту</text>
+      <text x="564" y="82" class="small">нормативные требования</text>
+      <text x="564" y="98" class="small">защита информации</text>
+      <text x="564" y="118">цель: ввод в эксплуатацию</text>
+      <text x="564" y="136" class="small">документ: акт комиссии</text>
+      <text x="564" y="158" class="small">свой порядок согласований</text>
+    </g>
+    <g stroke="#8C8171" stroke-width="1.4" fill="none" marker-end="url(#arw)">
+      <path d="M216 93h18"/><path d="M440 93h18"/>
+    </g>
+    <text x="340" y="196" text-anchor="middle" font-family="Consolas,monospace" font-size="8" fill="#6B6459">один объект проверки, разные доказательства</text>
+    <text x="340" y="224" text-anchor="middle" font-family="Consolas,monospace" font-size="8" fill="#9A7300">ПРИЁМКА ПОДТВЕРЖДАЕТ СООТВЕТСТВИЕ, А НЕ УВЕРЕННОСТЬ ДОКЛАДЧИКА</text>
+    <defs><marker id="arw" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#8C8171"/></marker></defs>
+  </svg>
+  <div class="status" id="status"></div>
+  <div class="controls">
+    <button data-k="pre">Предварительный</button>
+    <button data-k="accept" class="on">Приёмочный</button>
+    <button data-k="state">Государственный</button>
+  </div>
+</div>
+<script>
+(function () {
+  var data = {
+    pre: '<b>Предварительный контур.</b> Команда проверяет систему на тестовых данных по той же программе, что будет у заказчика. Результат: список отклонений и решение, можно ли предъявлять систему. Акт здесь не подписывают.',
+    accept: '<b>Приёмочный контур.</b> Комиссия заказчика проверяет реальные сценарии на реальных данных. Результат: протокол с вердиктами и акт, который фиксирует, что именно принято и с какими условиями.',
+    state: '<b>Государственный контур.</b> Проверка идёт по нормативному регламенту, а требования берут не только из договора. Результат: акт установленной формы и разрешение на ввод в эксплуатацию.'
+  };
+  var zones = document.querySelectorAll('.zone');
+  var buttons = document.querySelectorAll('button[data-k]');
+  var status = document.getElementById('status');
+  function apply(k) {
+    zones.forEach(function (z) { z.classList.toggle('on', z.dataset.k === k); });
+    buttons.forEach(function (b) { b.classList.toggle('on', b.dataset.k === k); });
+    status.innerHTML = data[k];
+  }
+  zones.forEach(function (z) { z.addEventListener('click', function () { apply(z.dataset.k); }); });
+  buttons.forEach(function (b) { b.addEventListener('click', function () { apply(b.dataset.k); }); });
+  apply('accept');
+})();
+</script>
+</body>
+</html>
