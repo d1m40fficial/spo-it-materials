@@ -477,6 +477,14 @@ Dybå и Dingsøyr в 2008 году опубликовали системати�
 9. Software Engineering Institute. Agile Project Success and Failure: The Story of the FBI Sentinel Program. https://www.sei.cmu.edu/library/agile-project-success-and-failure-the-story-of-the-fbi-sentinel-program/
 10. DORA. Software Delivery Performance Metrics. https://dora.dev/guides/dora-metrics-four-keys/
 
+## Видеоразбор
+
+Чем Agile отличается от Scrum и Kanban и почему доска сама по себе не ускоряет работу.
+
+::video https://vkvideo.ru/video_ext.php?oid=-243783037&id=456239019&hd=1 | 3. Agile, Scrum и Kanban
+
+## Тест
+
 ::quiz
 Q: Что такое Agile?
 + Набор ценностей для работы в условиях изменений

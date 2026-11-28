@@ -5,7 +5,8 @@ Supports:
   Voice: kokoro[:voice_id]  (local Kokoro-82M via HyperFrames, cached per scene, synced via Parakeet)
   Voice: gemini[:voice]     (cloud Gemini TTS via GEMINI_API_KEY, cached per scene, synced via Parakeet)
   Voice: edge[:voice]       (Microsoft Edge TTS, e.g. ru-RU-DmitryNeural, cached per scene, synced via Parakeet)
-  Voice: piper[:voice]      (offline Piper voice, e.g. ru_RU-ruslan-medium, cached per scene, synced via Parakeet)  Voice: path/to/audio.m4a  (bring-your-own recording, aligned via Parakeet)"""
+  Voice: piper[:voice]      (offline Piper voice, e.g. ru_RU-ruslan-medium, cached per scene, synced via Parakeet)
+  Voice: onecore[:voice]    (Windows OneCore TTS, e.g. Pavel, cached per scene, synced via Parakeet)  Voice: path/to/audio.m4a  (bring-your-own recording, aligned via Parakeet)"""
 import argparse, asyncio, base64, difflib, hashlib, importlib.util, json, os, re, subprocess, sys, tempfile, time, urllib.error, urllib.request, wave
 
 import numpy as np
@@ -238,6 +239,18 @@ def synth_piper(text, voice_id, out_wav):
         die("Piper TTS failed:\n" + p.stderr.decode(errors="replace")[-800:])
 
 
+def synth_onecore(text, voice_id, out_wav):
+    """Windows OneCore TTS (Microsoft Pavel and other installed voices), offline."""
+    script = os.path.join(os.path.dirname(os.path.abspath(__file__)), "onecore_tts.ps1")
+    if not os.path.isfile(script):
+        die(f"OneCore helper not found: {script}")
+    p = subprocess.run(["powershell", "-NoProfile", "-ExecutionPolicy", "Bypass", "-File", script,
+                        "-Text", text, "-Out", out_wav, "-Voice", voice_id],
+                       capture_output=True, text=True)
+    if p.returncode or not os.path.isfile(out_wav) or os.path.getsize(out_wav) < 800:
+        die("OneCore TTS failed:\n" + (p.stdout + p.stderr)[-800:])
+
+
 def trim_and_pad_scene(raw_audio, out_wav, is_last=False):
     """Trim leading/trailing dead air, add crisp natural breath margins, and quantize to exact video frames."""
     with tempfile.TemporaryDirectory() as tmp:
@@ -458,7 +471,7 @@ def main():
         print(f"Aligned {len(words)} words ({dur:.2f}s) -> {paths['words']} and {paths['transcript']}")
         return
 
-    # mode in ("kokoro", "gemini", "edge", "piper")
+    # mode in ("kokoro", "gemini", "edge", "piper", "onecore")
     if not script["scenes"]:
         die("script.md has no rows under '## Scenes'")
     speed = float(setting(script, "voice speed", "1.0"))
@@ -490,6 +503,8 @@ def main():
                         synth_edge(text, voice_val, raw)
                     elif mode == "piper":
                         synth_piper(text, voice_val, raw)
+                    elif mode == "onecore":
+                        synth_onecore(text, voice_val, raw)
                     else:
                         synth_gemini(text, voice_val, model, style_prompt, raw)
                     trim_and_pad_scene(raw, c_wav, is_last=is_last)

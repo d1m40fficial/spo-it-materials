@@ -8,6 +8,8 @@ description: "Turn any topic, article, codebase, or URL into a ~1-minute explain
 Input: a topic, article, codebase, or rough notes. Output: a single `renders/<slug>-vN.mp4` at 1920x1080 (`16:9`) and 30 fps (or `9:16` / `1:1` when requested), plus the `script.md`, `media/`, and `graphics/` files that produced it (pass `--share` to `render.py` only when a smaller 720p copy in `renders/share/` is requested).
 
 You write the script, narration, and scene code; the scripts fetch media, synthesize voice, align words, compile HyperFrames, render MP4, run 10-check QA, and serve the review page. Commands, `script.md` syntax, engine APIs, and `style.json` keys live in [reference.md](reference.md).
+The 4-scene lesson series workflow (Russian male voice, tokenized world, VK iframe) is in
+[SERIES.md](SERIES.md).
 
 On first use, run `setup.sh` (or `setup.sh --voice` when using spoken narration). If tools are missing, list them and ask before installing. If needed, put `GEMINI_API_KEY=...` in `~/.config/video-explainer/.env` rather than chat.
 

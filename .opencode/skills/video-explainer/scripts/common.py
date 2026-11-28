@@ -576,6 +576,10 @@ def resolve_voice(script_data, project_root=None):
         return ("piper", "ru_RU-ruslan-medium")
     if low.startswith("piper:"):
         return ("piper", val.split(":", 1)[1].strip() or "ru_RU-ruslan-medium")
+    if low == "onecore":
+        return ("onecore", "Pavel")
+    if low.startswith("onecore:"):
+        return ("onecore", val.split(":", 1)[1].strip() or "Pavel")
     path = os.path.expanduser(val)
     if project_root and not os.path.isabs(path):
         path = os.path.join(project_root, path)

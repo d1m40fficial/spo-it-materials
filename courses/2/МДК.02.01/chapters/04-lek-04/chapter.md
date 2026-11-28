@@ -526,6 +526,14 @@ MoSCoW пришёл из DSDM и описан Agile Business Consortium. Важ�
 9. Report of the Inquiry into the London Ambulance Service. 1993. http://www0.cs.ucl.ac.uk/staff/a.finkelstein/las.html
 10. MacGibbon A. Review of the Events Surrounding the 2016 eCensus. 2016. http://parlinfo.aph.gov.au/parlInfo/download/publications/tabledpapers/a41f4f25-a08e-49a7-9b5f-d2c8af94f5c5/upload_pdf/Review%20of%20the%202016%20eCensus%20-%20final%20report.pdf
 
+## Видеоразбор
+
+Как превратить «сделайте удобно» в проверяемую историю с критериями приёмки.
+
+::video https://vkvideo.ru/video_ext.php?oid=-243783037&id=456239020&hd=1 | 4. Требования и user stories
+
+## Тест
+
 ::quiz
 Q: Что такое требование?
 + Описание нужного поведения или качества с проверкой

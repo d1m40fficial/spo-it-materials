@@ -1,0 +1,209 @@
+<template id="world-tpl">
+  <div data-composition-id="world-comp" data-width="1920" data-height="1080" data-duration="72.00">
+    <div class="st-stage paper">
+      <canvas id="backdrop" class="st-backdrop" data-layout-allow-overflow"></canvas>
+      <div id="cam-shake" class="st-cam-shake"><div id="cam-pivot" class="st-cam-pivot"><div id="cam" class="st-cam">
+
+        <div class="line" id="line" style="left:-1010px;top:118px;width:2020px"></div>
+        <svg class="line-svg" width="2100" height="60" viewBox="-1050 -30 2100 60" style="left:-1050px;top:88px" data-layout-allow-overflow>
+          <path id="trace" d="M -880 0 H 880" fill="none" stroke="[[ACCENT]]" stroke-width="4" stroke-dasharray="14 12" opacity="0"/>
+        </svg>
+
+        <div class="bg-word" data-layout-ignore id="bg2" style="left:520px;top:-330px">[[BG2]]</div>
+        <div class="bg-word" data-layout-ignore id="bg3" style="left:1500px;top:-350px">[[BG3]]</div>
+
+        <div class="case" id="case" style="left:-310px;top:-260px">
+          <div class="case-bar"><i></i><i></i><i></i><span>[[CASE_BAR]]</span></div>
+          <div class="case-title">[[CASE_TITLE]]</div>
+          <div class="case-line">[[CASE_L1]]</div>
+          <div class="case-line">[[CASE_L2]]</div>
+          <div class="case-tag">[[CASE_TAG]]</div>
+        </div>
+        <div class="chip bad" id="fail1" style="left:-520px;top:-300px">[[CHIP1]]</div>
+        <div class="chip bad" id="fail2" style="left:500px;top:-310px">[[CHIP2]]</div>
+        <div class="chip bad" id="fail3" style="left:500px;top:-70px">[[CHIP3]]</div>
+        <div class="stamp" id="crash" style="left:-120px;top:-380px">[[STAMP1]]</div>
+
+        <div class="station" id="st1" style="left:-900px;top:40px"><span>1</span></div>
+        <div class="station" id="st2" style="left:-450px;top:40px"><span>2</span></div>
+        <div class="station" id="st3" style="left:0px;top:40px"><span>3</span></div>
+        <div class="station" id="st4" style="left:450px;top:40px"><span>4</span></div>
+        <div class="station" id="st5" style="left:900px;top:40px"><span>5</span></div>
+
+        <div class="st-label" id="lb1" style="left:-900px;top:150px">[[ST1]]</div>
+        <div class="st-label" id="lb2" style="left:-450px;top:150px">[[ST2]]</div>
+        <div class="st-label" id="lb3" style="left:0px;top:150px">[[ST3]]</div>
+        <div class="st-label" id="lb4" style="left:450px;top:150px">[[ST4]]</div>
+        <div class="st-label" id="lb5" style="left:900px;top:150px">[[ST5]]</div>
+
+        <div class="artifact" id="a1" style="left:-900px;top:-220px">[[ART1]]</div>
+        <div class="artifact" id="a2" style="left:-450px;top:-220px">[[ART2]]</div>
+        <div class="artifact" id="a3" style="left:0px;top:-220px">[[ART3]]</div>
+        <div class="artifact" id="a4" style="left:450px;top:-220px">[[ART4]]</div>
+        <div class="artifact" id="a5" style="left:900px;top:-220px">[[ART5]]</div>
+
+        <div class="product" id="product" style="left:0px;top:-400px">
+          <div class="product-head">[[PRODUCT_HEAD]]</div>
+          <div class="product-line"></div>
+          <div class="product-line short"></div>
+          <div class="product-tag">[[PRODUCT_TAG]]</div>
+        </div>
+
+        <div class="big-num" id="numL" style="left:-620px;top:-300px;color:[[LEFT_COLOR]]">[[LEFT_NUM]]</div>
+        <div class="num-label left" id="labL" style="left:-620px;top:-190px">[[LEFT_LABEL]]</div>
+        <div class="big-num" id="numR" style="left:620px;top:-300px;color:[[RIGHT_COLOR]]">[[RIGHT_NUM]]</div>
+        <div class="num-label right" id="labR" style="left:620px;top:-190px">[[RIGHT_LABEL]]</div>
+        <div class="note" id="case-note" style="left:-260px;top:-500px">[[NOTE]]</div>
+        <div class="chip early" id="early" style="left:-780px;top:250px">[[EARLY]]</div>
+        <div class="chip late" id="late" style="left:640px;top:250px">[[LATE]]</div>
+
+        <div class="final" id="final" style="left:-560px;top:-500px">[[FINAL]]</div>
+        <div class="ok-stamp" id="okstamp" style="left:620px;top:-380px">[[STAMP4]]</div>
+
+      </div></div></div>
+    </div>
+
+    <script>
+      const stage = ExplainerStage.create("world-comp");
+      const S = (id) => stage.scene(id).start;
+      const D = (id) => stage.scene(id).end - stage.scene(id).start;
+      const F = (id, f) => S(id) + D(id) * f;
+
+      stage.camInit({ x: 0, y: 10, scale: 1.18 })
+        .setDrift({ x: 16, y: 11, scale: 0.03, rot: 0.3, speed: 0.85 })
+        .mountBackdrop("#backdrop", { preset: "paper", onDraw: (ctx, t, cam) => {
+          ctx.save();
+          ctx.globalAlpha = 0.5;
+          ctx.strokeStyle = "#DFD8CB";
+          ctx.lineWidth = 1;
+          const step = 64, ox = ((cam.x * 0.06) % step + step) % step;
+          for (let x = -step; x < 1920 + step; x += step) {
+            ctx.beginPath(); ctx.moveTo(x + ox, 0); ctx.lineTo(x + ox, 1080); ctx.stroke();
+          }
+          for (let y = 0; y < 1080 + step; y += step) {
+            ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(1920, y); ctx.stroke();
+          }
+          ctx.restore();
+        }});
+
+      // s01: the case card and the symptoms
+      stage.camTo(0.2, { scale: 1.24, y: 0, dur: 3.5, ease: "none" });
+      stage.popIn("#fail1", F("s01", 0.2), { y: 14 });
+      stage.popIn("#fail2", F("s01", 0.34), { y: 14 });
+      stage.popIn("#fail3", F("s01", 0.48), { y: 14 });
+      stage.stampSlam("#crash", F("s01", 0.7), { rot: -9 });
+      stage.camTo(F("s01", 0.55), { scale: 1.32, y: -10, dur: 4.0, ease: "none" });
+
+      // s02: the five-part model
+      ["#case", "#fail1", "#fail2", "#fail3", "#crash"].forEach((sel) => {
+        stage.fadeOut(sel, S("s02"), 0.4);
+      });
+      stage.camTo(S("s02"), { x: 0, y: -40, scale: 0.95, dur: 1.3 });
+      stage.popIn("#line", S("s02") + 0.4, { y: 0 });
+      ["#st1", "#st2", "#st3", "#st4", "#st5"].forEach((sel, i) => {
+        stage.popIn(sel, F("s02", 0.14 + i * 0.09), { fromScale: 0.6, y: 0 });
+      });
+      ["#lb1", "#lb2", "#lb3", "#lb4", "#lb5"].forEach((sel, i) => {
+        stage.popIn(sel, F("s02", 0.16 + i * 0.09), { y: 10 });
+      });
+      stage.drawStroke("#trace", F("s02", 0.58), 1.0);
+      ["#a1", "#a2", "#a3", "#a4", "#a5"].forEach((sel, i) => {
+        stage.popIn(sel, F("s02", 0.6 + i * 0.075), { y: 18 });
+      });
+      stage.popIn("#product", F("s02", 0.9), { y: 22, fromScale: 0.94 });
+      stage.camTo(F("s02", 0.2), { scale: 0.99, y: -45, dur: D("s02") * 0.75, ease: "none" });
+
+      // s03: the price or the contrast
+      ["#a1", "#a2", "#a3", "#a4", "#a5"].forEach((sel) => {
+        stage.fadeOut(sel, S("s03"), 0.35);
+      });
+      stage.fadeOut("#product", S("s03"), 0.35);
+      stage.camTo(S("s03"), { x: -360, y: -20, scale: 1.0, dur: 1.1 });
+      stage.popIn("#numL", F("s03", 0.08), { y: 18 });
+      stage.popIn("#labL", F("s03", 0.12), { y: 12 });
+      stage.popIn("#early", F("s03", 0.24), { y: 14 });
+      stage.popIn("#case-note", F("s03", 0.3), { y: 20 });
+      stage.camTo(F("s03", 0.52), { x: 360, y: -30, scale: 0.98, dur: 1.6 });
+      ["#numL", "#labL", "#early"].forEach((sel) => {
+        stage.fadeOut(sel, F("s03", 0.54), 0.35);
+      });
+      stage.popIn("#numR", F("s03", 0.6), { y: 18 });
+      stage.popIn("#labR", F("s03", 0.64), { y: 12 });
+      stage.popIn("#late", F("s03", 0.78), { y: 14 });
+      stage.kineticPunch("#numR", F("s03", 0.8), { fromScale: 1.2 });
+
+      // s04: the takeaway
+      ["#numL", "#labL", "#numR", "#labR", "#case-note", "#early", "#late"].forEach((sel) => {
+        stage.fadeOut(sel, S("s04"), 0.4);
+      });
+      stage.camTo(S("s04"), { x: 0, y: -30, scale: 0.9, dur: 1.2 });
+      stage.camTo(S("s04") + 1.4, { scale: 0.97, y: -60, dur: D("s04") * 0.72, ease: "none" });
+      stage.popIn("#final", F("s04", 0.45), { y: 24 });
+      stage.stampSlam("#okstamp", F("s04", 0.78), { rot: 7 });
+      stage.finalize();
+    </script>
+
+    <style>
+      .st-cam { font-family: Inter, "Segoe UI", Arial, sans-serif; }
+      .line { position: absolute; height: 4px; border-radius: 2px; background: [[ACCENT]]; opacity: .28; }
+      .line-svg { position: absolute; }
+
+      .case {
+        position: absolute; width: 620px; min-height: 330px; padding: 46px 38px 30px;
+        border-radius: 22px; background: #FFFDF7; border: 3px solid #DCD3C3;
+        box-shadow: 0 34px 70px #1A19161F;
+      }
+      .case-bar { position: absolute; inset: 0 0 auto; height: 30px; border-radius: 19px 19px 0 0;
+        background: #EAE4D8; display: flex; align-items: center; gap: 6px; padding: 0 14px; }
+      .case-bar i { width: 8px; height: 8px; border-radius: 50%; background: #C9C1B2; }
+      .case-bar span { margin-left: 8px; font: 600 12px ui-monospace, Consolas, monospace; color: #5A5549; }
+      .case-title { font: 800 46px/1.05 Inter, sans-serif; color: #1F1D18; letter-spacing: -.02em; margin-bottom: 18px; }
+      .case-line { font: 500 27px/1.45 Inter, sans-serif; color: #4A463B; }
+      .case-tag { position: absolute; left: 38px; bottom: 26px; padding: 8px 16px; border-radius: 999px;
+        background: #FBE9E5; color: #8E2A20; font: 700 18px/1 Inter, sans-serif; }
+
+      .chip, .artifact, .note {
+        position: absolute; transform: translate(-50%, -50%); white-space: nowrap;
+        padding: 12px 20px; border-radius: 12px; background: #fff; border: 2px solid #E2DACB;
+        font: 600 24px/1 Inter, sans-serif; color: #2B2921; box-shadow: 0 12px 26px #1A191614;
+      }
+      .chip.bad { border-color: #C0392B; color: #8E2A20; background: #FBE9E5; }
+      .chip.early { border-color: #1D9E75; color: #0F5A43; background: #E4F5EF; }
+      .chip.late { border-color: #C0392B; color: #8E2A20; background: #FBE9E5; }
+      .artifact { font-size: 22px; border-color: #BBD9CC; color: #145A44; background: #F1FAF6; }
+      .artifact::before { content: ""; position: absolute; left: 50%; bottom: -195px; width: 2px; height: 190px;
+        background: #BBD9CC; transform: translateX(-50%); }
+
+      .stamp { position: absolute; transform: translate(-50%, -50%) rotate(-9deg); padding: 10px 26px;
+        border: 5px solid #C0392B; border-radius: 10px; color: #C0392B;
+        font: 800 42px/1 Inter, sans-serif; letter-spacing: .04em; opacity: .92; background: #FFFDF7; }
+      .ok-stamp { position: absolute; transform: translate(-50%, -50%) rotate(7deg); padding: 12px 30px;
+        border: 6px solid #1D9E75; border-radius: 12px; color: #157A5B;
+        font: 800 48px/1 Inter, sans-serif; letter-spacing: .04em; background: #FFFDF6; }
+
+      .station { position: absolute; width: 96px; height: 96px; margin: -48px 0 0 -48px; border-radius: 24px;
+        background: #fff; border: 3px solid #1D9E75; display: grid; place-items: center;
+        box-shadow: 0 14px 28px #1A191614; }
+      .station span { font: 700 38px/1 Inter, sans-serif; color: #157A5B; }
+      .st-label { position: absolute; transform: translate(-50%, 0); font: 700 22px/1 Inter, sans-serif;
+        color: #3A362D; white-space: nowrap; }
+      .product { position: absolute; transform: translate(-50%, 0); width: 330px; padding: 26px 26px 22px;
+        border-radius: 18px; background: #fff; border: 3px solid #DCD3C3; box-shadow: 0 26px 50px #1A19161A; }
+      .product-head { font: 800 34px/1 Inter, sans-serif; color: #145A44; margin-bottom: 20px; }
+      .product-line { height: 10px; border-radius: 5px; background: #E7E0D2; margin-bottom: 12px; }
+      .product-line.short { width: 66%; }
+      .product-tag { margin-top: 18px; font: 600 16px/1.2 Inter, sans-serif; color: #6B6558; }
+
+      .big-num { position: absolute; transform: translate(-50%, -50%); font: 800 128px/1 Inter, sans-serif;
+        color: #C0392B; letter-spacing: -.03em; white-space: nowrap; }
+      .big-num.right { color: #157A5B; }
+      .num-label { position: absolute; transform: translate(-50%, -50%); font: 700 30px/1.15 Inter, sans-serif;
+        color: #3A362D; white-space: nowrap; }
+      .bar { position: absolute; width: 64px; border-radius: 10px 10px 0 0; background: #1D9E75; }
+      .note { font-size: 25px; background: #FFFDF6; border-color: #DCD3C3; color: #2B2921; }
+      .final { position: absolute; font: 800 96px/1.02 Inter, sans-serif; color: #145A44; letter-spacing: -.03em; }
+      .bg-word { position: absolute; transform: translate(-50%, -50%); white-space: nowrap;
+        font: 800 230px/0.86 Inter, sans-serif; color: #1D9E75; opacity: .055; letter-spacing: -.05em; }
+    </style>
+  </div>
+</template>

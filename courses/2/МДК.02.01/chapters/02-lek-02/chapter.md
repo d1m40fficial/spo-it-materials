@@ -475,6 +475,14 @@ Larman и Basili в обзоре истории показывают, что т�
 7. U.S. Department of Justice, Office of the Inspector General. The Federal Bureau of Investigation’s Management of the Trilogy Information Technology Modernization Project. Audit Report 05-07, 2005. https://oig.justice.gov/sites/default/files/legacy/reports/FBI/a0507/final.pdf
 8. National Audit Office. The National Programme for IT in the NHS: an update on the delivery of detailed care records systems. 2011. https://www.nao.org.uk/reports/the-national-programme-for-it-in-the-nhs/
 
+## Видеоразбор
+
+Почему одной команде нужен водопад, а другой итерации, и как выбрать модель по риску.
+
+::video https://vkvideo.ru/video_ext.php?oid=-243783037&id=456239018&hd=1 | 2. Модели процесса
+
+## Тест
+
 ::quiz
 Q: Что задаёт модель процесса?
 + Порядок фаз, точки обратной связи и управление изменениями
