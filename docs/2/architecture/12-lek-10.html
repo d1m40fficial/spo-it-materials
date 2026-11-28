@@ -1486,33 +1486,12 @@ span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 
     var max=document.documentElement.scrollHeight-window.innerHeight;
     return max>0?Math.min(100,Math.max(0,window.scrollY/max*100)):100;
   }
-  function gatePct(){
-    var steps=[].slice.call(document.querySelectorAll('.gate-step'));
-    if(!steps.length) return null;
-    var n=steps.length;
-    var open=steps.filter(function(step){ return step.classList.contains('open'); });
-    var article=document.querySelector('article.prose')||document.querySelector('.prose');
-    var view=window.scrollY+window.innerHeight;
-    if(!open.length){
-      if(!article) return 0;
-      var articleTop=article.getBoundingClientRect().top+window.scrollY;
-      var firstTop=steps[0].getBoundingClientRect().top+window.scrollY;
-      var span=Math.max(1, firstTop-articleTop);
-      var done=Math.min(1,Math.max(0,(view-articleTop)/span));
-      return done/(n+1)*100;
-    }
-    var last=open[open.length-1];
-    var box=last.getBoundingClientRect();
-    var top=box.top+window.scrollY;
-    var height=last.offsetHeight||box.height||1;
-    var seen=Math.min(1,Math.max(0,(view-top)/height));
-    return Math.min(100,Math.max(0,(1+(open.length-1)+seen)/(n+1)*100));
-  }
+  var maxPct=0;
   function update(){
-    var pct=gatePct();
-    if(pct===null) pct=scrollPct();
-    fill.style.width=pct.toFixed(2)+'%';
-    bar.setAttribute('aria-valuenow', String(Math.round(pct)));
+    var pct=scrollPct();
+    if(pct>maxPct) maxPct=pct;
+    fill.style.width=maxPct.toFixed(2)+'%';
+    bar.setAttribute('aria-valuenow', String(Math.round(maxPct)));
   }
   function onScroll(){ if(ticking) return; ticking=true;
     requestAnimationFrame(function(){update();ticking=false;}); }
