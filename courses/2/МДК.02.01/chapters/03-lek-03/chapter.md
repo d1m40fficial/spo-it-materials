@@ -481,7 +481,7 @@ Dybå и Dingsøyr в 2008 году опубликовали системати�
 
 Чем Agile отличается от Scrum и Kanban и почему доска сама по себе не ускоряет работу.
 
-::video https://vkvideo.ru/video_ext.php?oid=-243783037&id=456239019&hd=1 | 3. Agile, Scrum и Kanban
+::video https://vkvideo.ru/video_ext.php?oid=-243783037&id=456239023&hd=1 | 3. Agile, Scrum и Kanban
 
 ## Тест
 

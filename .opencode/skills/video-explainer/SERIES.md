@@ -1,38 +1,31 @@
-# 4-scene lesson explainers
+# Lesson explainers: series workflow
 
-This is the series workflow used for МДК.02.01. It builds one 60-75 second Russian
-video per lecture, with a male voice, burned-in captions, and a VK iframe on the site.
+This is the workflow used for МДК.02.01. One Russian video per lecture, with a male voice,
+burned-in captions, and a VK iframe on the site. Length is 60-180 seconds when the idea
+needs room.
 
-## Script
+## One visual idea per lecture
 
-Four scenes, 120-150 spoken words total:
+There is no reusable final composition. Every lecture gets its own metaphor and the camera
+moves through it. Reusing the same stations or cards with new labels is not enough.
 
-1. **Hook.** One concrete case: two projects, a broken archive, the phrase «сделайте
-   удобно». Name the tension in the first three seconds.
-2. **Mechanism.** Five steps, models, or artifacts on one line. This is the teachable core.
-3. **Contrast.** Two numbers or two states side by side: early vs late feedback, a yearly
-   plan vs a two-week sprint, «быстро» vs two seconds, an archive vs commits.
-4. **Takeaway.** One sentence that answers the hook, then a stamp.
+- **Process models:** a route map. A waterfall staircase with a late return arrow, three
+  short loops for iterations, a V with paired verification links, risk rings, and a
+  compass for the choice.
+- **Agile:** a yearly calendar collapses into a Scrum loop and a Kanban conveyor, then
+  two lanes for product and support.
+- **Requirements:** a vague phrase becomes a story card, then acceptance checks and a test.
+- **Git:** snapshots, an index, a commit chain and branches.
 
-Set `Voice: edge:ru-RU-DmitryNeural`. If the Edge endpoint is rate-limited, use
-`Voice: onecore:Pavel` (offline Windows male) or `Voice: piper:ru_RU-ruslan-medium`
-(last resort: Ruslan puts stress on «тЕсты»). Keep `Captions: on`; `narrate.py` snaps
-Parakeet's words back to the script, so case endings stay correct.
+Keep the shared look: paper background, Inter, the course accent, captions at the bottom.
+Change the composition, not the brand.
 
-## Graphics
+## Voice and captions
 
-`assets/series-world.html` is the tokenized four-scene world. Replace tokens such as
-`[[CASE_TITLE]]`, `[[ST1]]`, `[[ART1]]`, `[[LEFT_NUM]]`, `[[RIGHT_NUM]]`, `[[NOTE]]`,
-`[[FINAL]]`, `[[STAMP1]]`, `[[STAMP4]]`, `[[LEFT_COLOR]]`, `[[RIGHT_COLOR]]`,
-`[[BG2]]`, `[[BG3]]` and `[[ACCENT]]`. It gives:
-
-- a case card with three symptoms and a red stamp;
-- five stations with artifact chips above them;
-- two big numbers with labels, a note, and early/late chips;
-- a final line and a green stamp.
-
-Choreography uses scene fractions, not word cues, so it survives small timing changes.
-The camera drifts every scene; the left number fades before the pan to the right.
+Preferred male voice: `Voice: onecore:Pavel` (offline Windows) or
+`Voice: edge:ru-RU-DmitryNeural` when the cloud endpoint accepts requests. Piper
+`ru_RU-ruslan-medium` is the last resort; it puts stress on «тЕсты». Keep `Captions: on`:
+`narrate.py` snaps Parakeet's words back to the script, so case endings stay correct.
 
 ## Build and QA
 
@@ -43,14 +36,14 @@ render.py <project>
 qa.py <project>
 ```
 
-Require 10/10 checks and zero layout errors. Keep the master 1920×1080 MP4 for VK; do
-not put it under `courses/*/*/media/` root, because the site builder copies that folder.
+Require 10/10 checks and zero layout errors. Render 1920×1080; keep the master for VK.
+Do not put masters under `courses/*/*/media/` root, because the site builder copies that
+folder.
 
 ## VK and the site
 
 Upload each master with the title `N. Lesson title`, e.g. `2. Модели процесса`, into the
-subject playlist. The public VK page URL `https://vkvideo.ru/video-<oid>_<id>` becomes an
-iframe URL:
+subject playlist. The public page `https://vkvideo.ru/video-<oid>_<id>` becomes an iframe:
 
 ```
 https://vkvideo.ru/video_ext.php?oid=-<oid>&id=<id>&hd=1
@@ -70,8 +63,8 @@ One sentence about the video.
 ::quiz
 ```
 
-Rebuild the site, then commit and push. The site builder renders a responsive iframe and
-does not copy local video files.
+Rebuild the site, then commit and push. The builder renders a responsive iframe and does
+not copy local video files.
 
 ## Handoff
 
